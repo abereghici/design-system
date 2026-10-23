@@ -14,6 +14,7 @@
     ]
   },
   "exports": {
+    "./base.css": "./src/base/base.css",
     "./*": "./src/*/index.ts",
     "./icons/*": "./src/icons/*.tsx"
   },

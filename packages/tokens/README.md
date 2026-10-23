@@ -13,6 +13,11 @@ The Bereghici design system's tokens. The source is DTCG 2025.10 JSON in three t
 | `@platform/tokens/fonts.css`   | `dist/fonts.css`      | The `@font-face` sheet for Figtree and Noto Serif: one face per family and subset. See [Fonts](#fonts).                                                                                                                                                                                                                      |
 | `@platform/tokens/fonts/*`     | `fonts/*` (committed) | The variable woff2 files and their SIL Open Font License texts.                                                                                                                                                                                                                                                              |
 
+Two source exports exist for documentation (the Storybook foundations pages in `@platform/ui`), not for product code:
+
+- `@platform/tokens/source/{primitive,semantic,component}.tokens.json`: the DTCG source files.
+- `@platform/tokens/contrast-matrix`: the AA contrast pairs and the WCAG ratio formula, the same module the build check uses.
+
 Apps declare the layer order first (`@layer ab.reset, ab.tokens, ab.base, ab.components;`) and then import `tokens.css`. Unlayered app CSS always wins over the design system.
 
 ## Theme contract
@@ -84,7 +89,7 @@ The build stops with a `TokenCheckError` that lists every problem when:
 3. **A themed color is missing a Theme**, or a token that isn't a themed color carries one.
 4. **A media override is malformed**: it holds a literal, points at a component token, sits on a non-semantic token, or gives per-Theme values on a token that isn't a themed color.
 5. **An animated token can't be registered**: it isn't a component token, its `$type` has no `@property` syntax, it differs per Theme, or its value isn't computationally independent.
-6. **An allowed pairing is below WCAG 2.2 AA in any Theme**: text on every surface and background it may sit on at 4.5:1, icons and borders at 3:1, and `on-{role}` content on its `bold` fill at 4.5:1 (207 checks per Theme from the source, plus 6 for Alert: `text-subtle` at 4.5:1 and each status icon at 3:1 on the status `subtle` fills). The matrix is in `src/contrast.ts`. A pair whose token is missing, or whose color is translucent, fails too. Media overrides are not in the matrix, as in the source.
+6. **An allowed pairing is below WCAG 2.2 AA in any Theme**: text on every surface and background it may sit on at 4.5:1, icons and borders at 3:1, and `on-{role}` content on its `bold` fill at 4.5:1 (207 checks per Theme from the source, plus 6 for Alert: `text-subtle` at 4.5:1 and each status icon at 3:1 on the status `subtle` fills). The matrix is in `src/contrast-matrix.ts`. A pair whose token is missing, or whose color is translucent, fails too. Media overrides are not in the matrix, as in the source.
 
 Contrast runs only when the other checks pass.
 

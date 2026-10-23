@@ -1,0 +1,11 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+
+import * as ElevationStories from "./elevation.stories";
+
+<Meta of={ElevationStories} />
+
+# Elevation
+
+Generated from the token source (`@platform/tokens/source/*.tokens.json`), so it follows every token change.
+
+<Canvas of={ElevationStories.Levels} sourceState="none" />
