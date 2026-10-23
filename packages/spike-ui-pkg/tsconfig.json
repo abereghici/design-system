@@ -1,0 +1,7 @@
+{
+  "extends": "@platform/typescript-config/react.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true
+  },
+  "include": ["src", "oxlint.config.ts"]
+}

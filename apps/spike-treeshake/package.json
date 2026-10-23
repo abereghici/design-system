@@ -1,0 +1,33 @@
+{
+  "name": "@platform/spike-treeshake",
+  "version": "0.0.0",
+  "private": true,
+  "description": "SPIKE (#5): Next 16 app proving tree-shaking and React Compiler on workspace source. Delete in #7/#13.",
+  "type": "module",
+  "scripts": {
+    "build": "next build",
+    "analyze": "next analyze --output --snapshot spike && next analyze export --snapshot spike > .next/bundle-graph.jsonl",
+    "check-types": "next typegen && tsc",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "test": "pnpm run build && pnpm run analyze && vitest run"
+  },
+  "dependencies": {
+    "@platform/spike-ui-pkg": "workspace:*",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@platform/oxlint-config": "workspace:*",
+    "@platform/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "babel-plugin-react-compiler": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

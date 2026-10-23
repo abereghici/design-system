@@ -1,0 +1,36 @@
+{
+  "name": "@platform/spike-ui-pkg",
+  "version": "0.0.0",
+  "private": true,
+  "description": "SPIKE (#5): throwaway stand-in for @platform/ui. Delete in #7/#13.",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    "./base.css": "./src/base.css",
+    "./button": "./src/button/button.tsx",
+    "./card": "./src/card/card.tsx",
+    "./dialog": "./src/dialog/dialog.tsx",
+    "./icons/check": "./src/icons/check.tsx",
+    "./icons/close": "./src/icons/close.tsx",
+    "./icons/star": "./src/icons/star.tsx"
+  },
+  "scripts": {
+    "check-types": "tsc",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
+  },
+  "devDependencies": {
+    "@platform/oxlint-config": "workspace:*",
+    "@platform/typescript-config": "workspace:*",
+    "@types/react": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "react": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "catalog:"
+  }
+}

@@ -1,0 +1,4 @@
+.button {
+  --spike-marker: spike-marker-button-css;
+  display: inline-flex;
+}
