@@ -56,12 +56,17 @@ Roles.test("sets each specimen in its role", async ({ canvas }) => {
 });
 
 // Romanian ș and ț (U+0219, U+021B) sit only in the latin-ext subsets (packages/tokens/src/fonts.ts).
+// `document.fonts.ready` can settle before layout has requested a face, so load the faces that
+// cover "șț" directly: an empty list means no face covers them, a missing file rejects.
 Roles.test("loads the latin-ext faces the sample text needs", async () => {
-  await document.fonts.ready;
-  await expect([
-    document.fonts.check('500 16px "Noto Serif"', "șț"),
-    document.fonts.check('400 16px "Figtree"', "șț"),
-  ]).toEqual([true, true]);
+  const faces = await Promise.all([
+    document.fonts.load('500 16px "Noto Serif"', "șț"),
+    document.fonts.load('400 16px "Figtree"', "șț"),
+  ]);
+  await expect(faces.map((list) => list.map((face) => face.status))).toEqual([
+    ["loaded"],
+    ["loaded"],
+  ]);
 });
 
 export const FontFamilies = meta.story({ render: () => <Families /> });
