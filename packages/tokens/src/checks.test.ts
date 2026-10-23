@@ -1,0 +1,149 @@
+import { expect, test } from "vitest";
+
+import { buildTokens, TokenCheckError } from "./build.ts";
+import { srgb, themed, validTokens } from "./test-fixtures.ts";
+
+// Tier rules (R1–R3)
+
+test("a component token that skips the semantic tier fails the build", async () => {
+  const tokens = validTokens();
+  tokens.component["card-background-color"] = {
+    $type: "color",
+    $value: "{primitive.palette-moss-900}",
+  };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-card-background-color: a component token must reference a semantic token, not a primitive token",
+  );
+});
+
+test("a semantic token holding a literal fails the build", async () => {
+  const tokens = validTokens();
+  tokens.semantic["radius-md"] = { $type: "dimension", $value: { value: 10, unit: "px" } };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-radius-md: a semantic token must reference a primitive token, not hold a literal",
+  );
+});
+
+test("a primitive token that references another token fails the build", async () => {
+  const tokens = validTokens();
+  tokens.primitive["palette-moss-950"] = {
+    $type: "color",
+    $value: "{primitive.palette-moss-900}",
+  };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-palette-moss-950: a primitive token must hold a literal, not reference another token",
+  );
+});
+
+test("every problem is reported at once, as a TokenCheckError", async () => {
+  const tokens = validTokens();
+  tokens.component["card-background-color"] = {
+    $type: "color",
+    $value: "{primitive.palette-moss-900}",
+  };
+  tokens.component["button-border-radius"] = {
+    $type: "dimension",
+    $value: "{primitive.dimension-8}",
+  };
+  const build = buildTokens({ tokens });
+  await expect(build).rejects.toBeInstanceOf(TokenCheckError);
+  await expect(build).rejects.toHaveProperty("problems", [
+    "--ab-card-background-color: a component token must reference a semantic token, not a primitive token",
+    "--ab-button-border-radius: a component token must reference a semantic token, not a primitive token",
+  ]);
+});
+
+// Naming grammar and Dictionary (R7)
+
+test("a semantic color name with a word outside the Dictionary fails the build", async () => {
+  const tokens = validTokens();
+  tokens.semantic["color-text-shiny"] = themed("palette-sage-950", "palette-night-50");
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-color-text-shiny: uses words outside the Dictionary: shiny",
+  );
+});
+
+test("a component token name with a word outside the Dictionary fails the build", async () => {
+  const tokens = validTokens();
+  tokens.component["button-huge-border-radius"] = {
+    $type: "dimension",
+    $value: "{semantic.radius-sm}",
+  };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-button-huge-border-radius: uses words outside the Dictionary: huge",
+  );
+});
+
+test("a primitive name outside the tier grammar fails the build", async () => {
+  const tokens = validTokens();
+  tokens.primitive["moss-dark"] = { $type: "color", $value: srgb("#263316") };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-moss-dark: does not match the primitive grammar",
+  );
+});
+
+// Theme completeness
+
+test("a themed color without a dark Theme value fails the build", async () => {
+  const tokens = validTokens();
+  tokens.semantic["color-text-subtle"] = {
+    $type: "color",
+    $value: "{primitive.palette-sage-950}",
+  };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    '--ab-color-text-subtle: a themed color needs a value for every Theme; missing: dark (add $extensions["com.bereghici.theme"].dark)',
+  );
+});
+
+test("brand colors are fixed, so they need no dark value", async () => {
+  await expect(buildTokens({ tokens: validTokens() })).resolves.toBeDefined();
+});
+
+test("a component token cannot carry its own Theme values", async () => {
+  const tokens = validTokens();
+  tokens.component["card-background-color"] = {
+    $type: "color",
+    $value: "{semantic.color-surface-default}",
+    $extensions: { "com.bereghici.theme": { dark: "{semantic.color-text-default}" } },
+  };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-card-background-color: only semantic colors are themed; component tokens follow the semantic tokens they reference",
+  );
+});
+
+// AA contrast (WCAG 2.2 SC 1.4.3 and 1.4.11)
+
+test("a text pair below 4.5:1 in one Theme fails the build", async () => {
+  const tokens = validTokens();
+  tokens.semantic["color-text-default"] = themed("palette-sage-950", "palette-night-950");
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "[dark] --ab-color-text-default on --ab-color-surface-default: 1.00:1, needs 4.5:1",
+  );
+});
+
+test("contrast follows the WCAG 2.2 formula and a near miss still fails", async () => {
+  const tokens = validTokens();
+  // #777777 on white is 4.48:1, the classic just-below-AA grey.
+  tokens.primitive["palette-sage-400"] = { $type: "color", $value: srgb("#777777") };
+  tokens.semantic["color-text-subtle"] = themed("palette-sage-400", "palette-night-50");
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "[light] --ab-color-text-subtle on --ab-color-surface-default: 4.48:1, needs 4.5:1",
+  );
+});
+
+test("a non-text pair below 3:1 fails the build", async () => {
+  const tokens = validTokens();
+  tokens.semantic["color-border-default"] = themed("palette-sage-0", "palette-night-50");
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "[light] --ab-color-border-default on --ab-color-surface-default: 1.00:1, needs 3:1",
+  );
+});
+
+test("an on-{role} pair is checked against its bold fill", async () => {
+  const tokens = validTokens();
+  tokens.semantic["color-background-accent-bold"] = themed("palette-moss-900", "palette-night-50");
+  tokens.semantic["color-text-on-accent"] = themed("palette-sage-0", "palette-night-50");
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "[dark] --ab-color-text-on-accent on --ab-color-background-accent-bold: 1.00:1, needs 4.5:1",
+  );
+});

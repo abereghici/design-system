@@ -1,0 +1,70 @@
+{
+  "semantic": {
+    "color-surface-default": {
+      "$type": "color",
+      "$value": "{primitive.palette-sage-0}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-950}"
+        }
+      }
+    },
+    "color-text-default": {
+      "$type": "color",
+      "$value": "{primitive.palette-sage-950}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-50}"
+        }
+      }
+    },
+    "color-text-subtle": {
+      "$type": "color",
+      "$value": "{primitive.palette-sage-700}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-300}"
+        }
+      }
+    },
+    "color-border-default": {
+      "$type": "color",
+      "$value": "{primitive.palette-sage-500}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-500}"
+        }
+      }
+    },
+    "color-background-accent-bold": {
+      "$type": "color",
+      "$value": "{primitive.palette-moss-900}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-lichen-200}"
+        }
+      }
+    },
+    "color-text-on-accent": {
+      "$type": "color",
+      "$value": "{primitive.palette-sage-0}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-moss-900}"
+        }
+      }
+    },
+    "color-brand-moss": {
+      "$type": "color",
+      "$value": "{primitive.palette-moss-900}"
+    },
+    "space-inset-md": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-12}"
+    },
+    "radius-sm": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-8}"
+    }
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "primitive": {
+    "palette-sage-0": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1.0, 1.0, 1.0],
+        "hex": "#ffffff"
+      }
+    },
+    "palette-sage-500": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.5216, 0.5255, 0.502],
+        "hex": "#858680"
+      }
+    },
+    "palette-sage-700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.3255, 0.3412, 0.3137],
+        "hex": "#535750"
+      }
+    },
+    "palette-sage-950": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0902, 0.098, 0.0784],
+        "hex": "#171914"
+      }
+    },
+    "palette-night-50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9333, 0.9373, 0.9137],
+        "hex": "#eeefe9"
+      }
+    },
+    "palette-night-300": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.6353, 0.651, 0.6157],
+        "hex": "#a2a69d"
+      }
+    },
+    "palette-night-500": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.4118, 0.4275, 0.3882],
+        "hex": "#696d63"
+      }
+    },
+    "palette-night-950": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0706, 0.0824, 0.0588],
+        "hex": "#12150f"
+      }
+    },
+    "palette-moss-900": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.149, 0.2, 0.0863],
+        "hex": "#263316"
+      }
+    },
+    "palette-lichen-200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9255, 0.9176, 0.7882],
+        "hex": "#eceac9"
+      }
+    },
+    "dimension-8": {
+      "$type": "dimension",
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      }
+    },
+    "dimension-12": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      }
+    }
+  }
+}

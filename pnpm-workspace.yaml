@@ -30,6 +30,7 @@ catalog:
   react-18: npm:react@18.3.1
   react-dom: 19.3.1
   react-dom-18: npm:react-dom@18.3.1
+  style-dictionary: 5.7.0
   turbo: 2.11.10
   typescript: 7.0.2
   vite: 8.3.5

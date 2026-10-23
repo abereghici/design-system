@@ -1,0 +1,4 @@
+{
+  "extends": "@platform/typescript-config/node.json",
+  "include": ["src", "scripts", "oxlint.config.ts"]
+}

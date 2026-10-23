@@ -1,0 +1,24 @@
+{
+  "component": {
+    "button-primary-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold}"
+    },
+    "button-primary-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-on-accent}"
+    },
+    "button-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "button-md-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "input-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default}"
+    }
+  }
+}
