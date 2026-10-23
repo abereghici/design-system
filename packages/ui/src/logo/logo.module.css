@@ -1,0 +1,9 @@
+@layer ab.components {
+  .root {
+    flex-shrink: 0;
+    min-inline-size: var(--ab-logo-min-size);
+    min-block-size: var(--ab-logo-min-size);
+    color: var(--ab-logo-color);
+    stroke-width: var(--ab-logo-stroke-width);
+  }
+}

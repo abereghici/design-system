@@ -24,6 +24,10 @@ _Avoid_: Overlay (as a generic term), portal, modal (unless it blocks the page)
 A bubbling, `ab-`-prefixed DOM event (`ab-press`, `ab-toggle`, `ab-confirm`, `ab-dismiss`, `ab-appear`) a component dispatches at a moment an app may want to answer with sound or haptics. Carries the component name and a `reason`.
 _Avoid_: Sound event, haptic event, callback
 
+**Icon**:
+A glyph from the carved icon set on the 24-unit grid, stroked in the surrounding text colour; decorative unless it has a label. Each one is its own component (`SearchIcon`).
+_Avoid_: Glyph (as a component name), symbol, pictogram
+
 **Logo**:
 The Stâlpul cerului brand sign, rendered as a component.
 _Avoid_: Mark, brand mark

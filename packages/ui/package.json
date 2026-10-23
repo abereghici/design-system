@@ -14,17 +14,19 @@
     ]
   },
   "exports": {
-    "./button": "./src/button/button.tsx",
-    "./events": "./src/events/events.ts"
+    "./*": "./src/*/index.ts",
+    "./icons/*": "./src/icons/*.tsx"
   },
   "scripts": {
     "storybook": "storybook dev --port 6006",
     "build-storybook": "storybook build",
-    "check-types": "tsc --noEmit",
+    "check-types": "tsc --noEmit && tsc --noEmit -p scripts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
+    "size": "size-limit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "icons": "node scripts/icons.ts"
   },
   "dependencies": {
     "@platform/tokens": "workspace:*"
@@ -32,20 +34,26 @@
   "devDependencies": {
     "@platform/oxlint-config": "workspace:*",
     "@platform/typescript-config": "workspace:*",
+    "@size-limit/esbuild": "catalog:",
+    "@size-limit/file": "catalog:",
     "@storybook/addon-a11y": "catalog:",
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-vitest": "catalog:",
     "@storybook/react-vite": "catalog:",
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "@vitest/browser-playwright": "catalog:",
+    "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
     "playwright": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "size-limit": "catalog:",
     "storybook": "catalog:",
+    "svgo": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:"
