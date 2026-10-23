@@ -26,6 +26,9 @@
     "test": {
       "dependsOn": ["transit"]
     },
+    "size": {
+      "dependsOn": ["transit"]
+    },
     "test:watch": {
       "cache": false,
       "persistent": true

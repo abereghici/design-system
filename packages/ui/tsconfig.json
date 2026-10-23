@@ -4,5 +4,12 @@
     "types": ["vite/client"],
     "allowImportingTsExtensions": true
   },
-  "include": ["src", ".storybook", "vite.config.ts", "vitest.config.ts", "oxlint.config.ts"]
+  "include": [
+    "src",
+    ".storybook",
+    ".size-limit.ts",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "oxlint.config.ts"
+  ]
 }
