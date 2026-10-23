@@ -1,0 +1,11 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+
+import * as MotionStories from "./motion.stories";
+
+<Meta of={MotionStories} />
+
+# Motion
+
+Generated from the token source (`@platform/tokens/source/*.tokens.json`), so it follows every token change. Curves are plotted from the easing values.
+
+<Canvas of={MotionStories.Tokens} sourceState="none" />

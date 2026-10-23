@@ -101,11 +101,18 @@ export function InEachTheme({ children }: { children: ReactNode }) {
   );
 }
 
+/** A filled square in one color token (decorative: the table row names it). */
+export function Chip({ name }: { name: string }) {
+  return (
+    <span aria-hidden="true" className={styles["swatch"]} style={{ "--swatch": cssVar(name) }} />
+  );
+}
+
 /** A filled square in one color token, drawn in each Theme (decorative: the row names it). */
 export function Swatch({ name }: { name: string }) {
   return (
     <InEachTheme>
-      <span aria-hidden="true" className={styles["swatch"]} style={{ "--swatch": cssVar(name) }} />
+      <Chip name={name} />
     </InEachTheme>
   );
 }

@@ -37,6 +37,10 @@
       vertical-align: top;
     }
 
+    & tbody th {
+      white-space: nowrap;
+    }
+
     & thead th {
       font: var(--ab-type-label-md);
       color: var(--ab-color-text-subtle);

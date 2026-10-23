@@ -40,7 +40,7 @@ const sources: Readonly<Record<Tier, Readonly<Record<string, SourceToken>>>> = {
 };
 
 /** A property of an object value, or undefined for anything else. */
-const field = (value: unknown, key: string): unknown =>
+export const field = (value: unknown, key: string): unknown =>
   typeof value === "object" && value !== null ? Reflect.get(value, key) : undefined;
 
 const toToken = (tier: Tier, name: string, source: SourceToken): Token => {
@@ -90,6 +90,16 @@ export function describe(value: unknown): string {
   if (target !== undefined) return target.name;
   if (typeof value === "string" || typeof value === "number") return String(value);
   if (Array.isArray(value)) return value.map((item) => describe(item)).join(", ");
+  const [light, dark] = [field(value, "light"), field(value, "dark")];
+  if (light !== undefined && dark !== undefined) {
+    return `${describe(light)} light · ${describe(dark)} dark`;
+  }
+  // A DTCG shadow layer, in `box-shadow` order.
+  const layer = ["offsetX", "offsetY", "blur", "spread", "color"].map((key) => field(value, key));
+  if (layer.every((part) => part !== undefined)) {
+    const inset = field(value, "inset") === true ? "inset " : "";
+    return `${inset}${layer.map((part) => describe(part)).join(" ")}`;
+  }
   const [hex, amount, unit] = [field(value, "hex"), field(value, "value"), field(value, "unit")];
   if (typeof hex === "string") return hex;
   if (typeof amount === "number" && typeof unit === "string") return `${amount}${unit}`;

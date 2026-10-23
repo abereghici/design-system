@@ -38,4 +38,15 @@ Contrast.test("finds no pair below its minimum", async ({ canvas }) => {
   await expect(canvas.queryAllByRole("cell", { name: /below/v })).toEqual([]);
 });
 
+// Each Theme's tables sit in a `data-theme` subtree (Theme contract): dark color-surface-default
+// is palette-night-950 #12150f, light is palette-sage-0 #ffffff.
+Contrast.test("paints each table in its own Theme", async ({ canvas }) => {
+  const background = (theme: string) =>
+    getComputedStyle(canvas.getByRole("region", { name: `${theme} Theme` })).backgroundColor;
+  await expect([background("Light"), background("Dark")]).toEqual([
+    "rgb(255, 255, 255)",
+    "rgb(18, 21, 15)",
+  ]);
+});
+
 export const Focus = meta.story({ render: () => <FocusAndTarget /> });
