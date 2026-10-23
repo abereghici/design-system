@@ -66,3 +66,13 @@ _Avoid_: Shadow, z-depth
 **Material**:
 A translucent, blurred fill reserved for floating chrome above content.
 _Avoid_: Glass, frosted, blur
+
+### Type
+
+**Type role**:
+The job a piece of text does (heading, display, body, label, data, code, overline, kbd), at a size (`xs`–`lg`). One role fixes family, size, weight and line height together (`type-body-md`).
+_Avoid_: Text style, font style, type scale step
+
+**Subset**:
+One file of a family that covers one `unicode-range` (`latin` or `latin-ext`). The browser fetches a subset only when the page uses a character in its range.
+_Avoid_: Font slice, charset

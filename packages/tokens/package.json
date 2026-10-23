@@ -5,11 +5,14 @@
   "type": "module",
   "exports": {
     "./tokens.css": "./dist/tokens.css",
-    "./tokens.json": "./dist/tokens.json"
+    "./tokens.json": "./dist/tokens.json",
+    "./fonts.css": "./dist/fonts.css",
+    "./fonts/*": "./fonts/*"
   },
   "scripts": {
     "build": "node scripts/build.ts",
     "check-types": "tsc --noEmit",
+    "fonts": "node scripts/fonts.ts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "test": "vitest run",
@@ -18,10 +21,15 @@
   "devDependencies": {
     "@platform/oxlint-config": "workspace:*",
     "@platform/typescript-config": "workspace:*",
+    "@types/fontkit": "catalog:",
     "@types/node": "catalog:",
+    "@types/subset-font": "catalog:",
+    "fflate": "catalog:",
+    "fontkit": "catalog:",
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
     "style-dictionary": "catalog:",
+    "subset-font": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }
