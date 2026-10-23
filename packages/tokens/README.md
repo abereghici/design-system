@@ -6,10 +6,12 @@ The Bereghici design system's tokens. The source is DTCG 2025.10 JSON in three t
 
 `pnpm build` writes to `dist/`:
 
-| Export                         | File               | What it is                                                                                                                                                                                                                                                                                                                   |
-| ------------------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@platform/tokens/tokens.css`  | `dist/tokens.css`  | Every token as an `--ab-*` custom property inside `@layer ab.tokens`. Semantic and component tokens point at the tier below with `var()`. Themed colors use `light-dark()`. Media overrides follow as `@media` blocks, and animated tokens are registered with `@property` ahead of the layer.                               |
-| `@platform/tokens/tokens.json` | `dist/tokens.json` | The claude.ai Design System artifact's token shape: flat `{ name, value, usage }` lists per family (`color`, `spacing`, `radius`), with the light Theme first and literal values only. There is no `var()`, `light-dark()`, `color-mix()` and no named color. Type, motion, shadow and blur tokens are not listed yet (#14). |
+| Export                         | File                  | What it is                                                                                                                                                                                                                                                                                                                   |
+| ------------------------------ | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@platform/tokens/tokens.css`  | `dist/tokens.css`     | Every token as an `--ab-*` custom property inside `@layer ab.tokens`. Semantic and component tokens point at the tier below with `var()`. Themed colors use `light-dark()`. Media overrides follow as `@media` blocks, and animated tokens are registered with `@property` ahead of the layer.                               |
+| `@platform/tokens/tokens.json` | `dist/tokens.json`    | The claude.ai Design System artifact's token shape: flat `{ name, value, usage }` lists per family (`color`, `spacing`, `radius`), with the light Theme first and literal values only. There is no `var()`, `light-dark()`, `color-mix()` and no named color. Type, motion, shadow and blur tokens are not listed yet (#14). |
+| `@platform/tokens/fonts.css`   | `dist/fonts.css`      | The `@font-face` sheet for Figtree and Noto Serif: one face per family and subset. See [Fonts](#fonts).                                                                                                                                                                                                                      |
+| `@platform/tokens/fonts/*`     | `fonts/*` (committed) | The variable woff2 files and their SIL Open Font License texts.                                                                                                                                                                                                                                                              |
 
 Apps declare the layer order first (`@layer ab.reset, ab.tokens, ab.base, ab.components;`) and then import `tokens.css`. Unlayered app CSS always wins over the design system.
 
@@ -84,10 +86,45 @@ The build stops with a `TokenCheckError` that lists every problem when:
 
 Contrast runs only when the other checks pass.
 
+## Fonts
+
+Two variable families, self-hosted from their upstream OFL sources, each split into a `latin` and a `latin-ext` file:
+
+| Family     | Axes                        | Use                              | latin    | latin-ext |
+| ---------- | --------------------------- | -------------------------------- | -------- | --------- |
+| Figtree    | wght 300–900                | Body, labels, data and overlines | 20.7 KB  | 10.0 KB   |
+| Noto Serif | wght 100–900, wdth 62.5–100 | Headings and display statements  | 100.4 KB | 341.4 KB  |
+
+Code uses the system monospace stack, with no webfont.
+
+- **Import `fonts.css` once**, next to `tokens.css`: `import "@platform/tokens/fonts.css";`. Each `@font-face` has its subset's `unicode-range`, so a browser downloads a file only when the page has a character in that range. A page of plain English text never fetches the latin-ext files. Faces use `font-display: swap`.
+- **Preload exactly one file: Figtree latin.** It is the body text face, and it is the file almost every page needs. Don't preload latin-ext or Noto Serif: a preload ignores `unicode-range`, so it would download them on every page. In a Next.js root layout (Turbopack):
+
+  ```tsx
+  import "@platform/tokens/fonts.css";
+  import figtreeLatin from "@platform/tokens/fonts/Figtree-latin.woff2" with {
+    turbopackModuleType: "asset",
+  };
+  import { preload } from "react-dom";
+
+  export default function RootLayout({ children }: { children: React.ReactNode }) {
+    preload(figtreeLatin, { as: "font", type: "font/woff2" });
+    // …
+  }
+  ```
+
+  The import resolves to the same hashed URL the stylesheet requests, and React adds `crossorigin` to font preloads. TypeScript needs `declare module "*.woff2" { const url: string; export default url; }`. Without a bundler, the equivalent is `<link rel="preload" href="…/Figtree-latin.woff2" as="font" type="font/woff2" crossorigin>`, where `href` is the URL the stylesheet requests.
+
+- **Licence.** Both families are under the SIL Open Font License 1.1. The licence texts ship next to the files (`fonts/Figtree-OFL.txt`, `fonts/NotoSerif-OFL.txt`).
+- **Rebuilding.** `pnpm fonts` downloads the pinned upstream files (the commit and release google/fonts ships), checks their sha256, subsets them with HarfBuzz and rewrites `fonts/`. Run it only to move to a new upstream release, then commit the result. The subset ranges and descriptors live in `src/fonts.ts`.
+
+The evidence for these choices, and for leaving `font-size-adjust` out, is in `docs/research/variable-fonts.md`.
+
 ## Scripts
 
-| Script                          | Does                                                                                |
-| ------------------------------- | ----------------------------------------------------------------------------------- |
-| `pnpm build`                    | Checks the source and writes `dist/tokens.css` and `dist/tokens.json`               |
-| `pnpm test`                     | Vitest: feeds token sets to `buildTokens()` and asserts on its outputs and failures |
-| `pnpm lint`, `pnpm check-types` | Oxlint (`oxlint.config.ts`) and `tsc --noEmit`                                      |
+| Script                          | Does                                                                                                                                  |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm build`                    | Checks the source and writes `dist/tokens.css`, `dist/tokens.json` and `dist/fonts.css`                                               |
+| `pnpm fonts`                    | Rebuilds the committed `fonts/` from the pinned upstream sources (network)                                                            |
+| `pnpm test`                     | Vitest: feeds token sets to `buildTokens()` and asserts on its outputs and failures, and checks the font files and `@font-face` sheet |
+| `pnpm lint`, `pnpm check-types` | Oxlint (`oxlint.config.ts`) and `tsc --noEmit`                                                                                        |

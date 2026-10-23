@@ -12,9 +12,5 @@ export default defineConfig({
       "error",
       { allow: ["server-only", "@total-typescript/ts-reset/dom"] },
     ],
-    // SPIKE: off for this throwaway app. React `children: ReactNode` and Playwright fixtures
-    // (`page`, `request`) are mutable library types, so every component and test trips it.
-    // Whether the shared React preset should relax it is for the first real app/package to settle.
-    "typescript/prefer-readonly-parameter-types": "off",
   },
 });
