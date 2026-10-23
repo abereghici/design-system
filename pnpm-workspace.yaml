@@ -20,6 +20,8 @@ allowBuilds:
 
 catalog:
   "@playwright/test": 1.64.1
+  "@size-limit/esbuild": 14.3.0
+  "@size-limit/file": 14.3.0
   "@storybook/addon-a11y": 10.6.3
   "@storybook/addon-docs": 10.6.3
   "@storybook/addon-vitest": 10.6.3
@@ -46,9 +48,11 @@ catalog:
   react-18: npm:react@18.3.1
   react-dom: 19.3.1
   react-dom-18: npm:react-dom@18.3.1
+  size-limit: 14.3.0
   storybook: 10.6.3
   style-dictionary: 5.7.0
   subset-font: 2.9.0
+  svgo: 4.1.0
   turbo: 2.11.10
   typescript: 7.0.2
   vite: 8.3.5
