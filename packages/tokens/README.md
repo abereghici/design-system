@@ -13,6 +13,11 @@ The Bereghici design system's tokens. The source is DTCG 2025.10 JSON in three t
 | `@platform/tokens/fonts.css`   | `dist/fonts.css`      | The `@font-face` sheet for Figtree and Noto Serif: one face per family and subset. See [Fonts](#fonts).                                                                                                                                                                                                                      |
 | `@platform/tokens/fonts/*`     | `fonts/*` (committed) | The variable woff2 files and their SIL Open Font License texts.                                                                                                                                                                                                                                                              |
 
+Two source exports exist for documentation (the Storybook foundations pages in `@platform/ui`), not for product code:
+
+- `@platform/tokens/source/{primitive,semantic,component}.tokens.json`: the DTCG source files.
+- `@platform/tokens/contrast-matrix`: the AA contrast pairs and the WCAG ratio formula, the same module the build check uses.
+
 Apps declare the layer order first (`@layer ab.reset, ab.tokens, ab.base, ab.components;`) and then import `tokens.css`. Unlayered app CSS always wins over the design system.
 
 ## Theme contract
