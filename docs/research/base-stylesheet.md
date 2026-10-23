@@ -69,7 +69,7 @@ Observed engine differences: WebKit serialises a 1.6 × 17px line height as `27.
 - **Concentric radius.** The radius page computes outer − padding = inner from the component tokens that nest corners: DropdownMenu, ContextMenu, SegmentedControl and Command. The source card's "Dialog → card 16 − 4 = 12" has no matching token pair (`dialog-padding` is 24), so it isn't listed.
 - **Type specimen (Q10-4).** `type.stories.tsx` `Roles` renders every `typography` token (17 roles) in its role, using Romanian sample text. The test checks that the latin-ext faces loaded (`document.fonts.check(…, "șț")`). With an ASCII-only sample, that test fails in all three engines.
 - **Motion.** Curves are static SVG plots computed from the easing values: cubic Bézier, `ease` (CSS Easing 1 defines it as `cubic-bezier(0.25, 0.1, 0.25, 1)`) and `linear()` points. Nothing animates, so screenshots are deterministic.
-- **Logo and iconography.** These pages show the rules and the `logo-*` / `icon-*` / `size-icon-*` / `stroke-width-*` tokens. The Logo and icon components come from #11, which had not merged when this ticket finished. Once it lands, add the rendered Logo sizes (16 · 24 · 32 · 48) and the icon grid to `brand.tsx`.
+- **Logo and iconography.** The Logo page renders `@platform/ui/logo` at the brand book's 16 · 24 · 32 · 48 px in the interface color, plus brand moss on lichen and brand lichen on moss, with 24px clear space (half the 48px width). Both are followed by the rules and the `logo-*` tokens. The Iconography page shows the rules and the `icon-*` / `size-icon-*` / `stroke-width-*` tokens, and it embeds #11's `Foundations/Icons` gallery story so the 42 glyphs aren't drawn a second time.
 
 ## Trap: Vite's default target breaks Themes in built Storybook
 

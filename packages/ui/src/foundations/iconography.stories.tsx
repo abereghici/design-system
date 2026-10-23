@@ -6,8 +6,8 @@ import { cellText, tokenRow } from "../testing/table.ts";
 
 const meta = preview.meta({ title: "Foundations/Iconography", tags: ["!autodocs"] });
 
-// The icon set itself comes with the icon and Logo pipeline; this story shows the construction
-// rules and the tokens icons are drawn with.
+// The construction rules and the tokens icons are drawn with; the icon set is the
+// Foundations/Icons gallery (src/icon-gallery), which the Iconography docs page embeds.
 export const Guidelines = meta.story({ render: () => <IconographyGuidelines /> });
 
 // icon-md-size = size-icon-md (dimension-20); icon-md-stroke-width = stroke-width-md (1.75).

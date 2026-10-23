@@ -1,7 +1,8 @@
 // The brand book's prose pages: principles, personality, Logo and iconography. The text is the
 // brand owner's copy from the source design system (project/README.md), with the spec's renames
 // (Logo for "mark", Separator for "divider").
-import { Rules, Section, Swatch, TokenTable } from "./docs.tsx";
+import { Logo } from "../logo/logo.tsx";
+import { cssVar, Rules, Section, Swatch, TokenTable } from "./docs.tsx";
 import styles from "./docs.module.css";
 import { tokens, type Token } from "./tokens.ts";
 
@@ -185,6 +186,45 @@ export function Personality() {
           ],
         ]}
       />
+    </Section>
+  );
+}
+
+const LOGO_SIZES = [16, 24, 32, 48] as const;
+
+/** The Logo at the brand book's sizes in the interface color, and in the brand colors. */
+export function LogoSpecimen() {
+  return (
+    <Section
+      title="Logo"
+      lead="One color: the interface's Logo color in UI (it follows the Theme), brand moss or brand lichen on imagery."
+    >
+      <div className={styles["specimens"]}>
+        {LOGO_SIZES.map((size) => (
+          <Logo key={size} width={size} height={size} label={`Bereghici Logo, ${size}px`} />
+        ))}
+      </div>
+      <div className={styles["specimens"]}>
+        <span
+          className={styles["ground"]}
+          style={{ backgroundColor: cssVar("color-brand-lichen") }}
+        >
+          <Logo
+            width={48}
+            height={48}
+            label="Bereghici Logo, brand moss"
+            style={{ color: cssVar("color-brand-moss") }}
+          />
+        </span>
+        <span className={styles["ground"]} style={{ backgroundColor: cssVar("color-brand-moss") }}>
+          <Logo
+            width={48}
+            height={48}
+            label="Bereghici Logo, brand lichen"
+            style={{ color: cssVar("color-brand-lichen") }}
+          />
+        </span>
+      </div>
     </Section>
   );
 }

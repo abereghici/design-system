@@ -116,4 +116,18 @@
       color: var(--ab-color-text-subtle);
     }
   }
+
+  .specimens {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--ab-space-inline-xl);
+  }
+
+  /* Clear space around the 48px Logo: half its width, 24px (brand book). */
+  .ground {
+    display: inline-grid;
+    padding: var(--ab-space-inset-xl);
+    border-radius: var(--ab-radius-md);
+  }
 }
