@@ -24,10 +24,13 @@ import type { SizeLimitConfig } from "size-limit";
 const budgets: Readonly<Record<string, `${number} B` | `${number} kB`>> = {
   button: "420 B",
   events: "20 B",
+  icon: "400 B",
+  logo: "410 B",
 };
 
-/** Brotli budget of any one icon (`src/icons/<name>.tsx`). Icons are generated, so one value. */
-const iconBudget = "1 kB";
+/** Brotli budget of any one icon (`src/icons/<name>.tsx`), Icon itself included. Icons are
+ * generated, so one value: the largest measured (`sun`, 503 B) plus about 10%. */
+const iconBudget = "560 B";
 
 // React is a peer dependency: apps pay for it once, so it is not part of any subpath's cost.
 const ignore = ["react", "react-dom"];
