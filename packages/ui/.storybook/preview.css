@@ -1,0 +1,15 @@
+/*
+ * Storybook plays the app here. Spec #1: "Layer order `ab.reset, ab.tokens, ab.base, ab.components`,
+ * declared first by the app." The first `@layer` statement fixes the order of those layers
+ * (https://developer.mozilla.org/en-US/docs/Web/CSS/@layer), however the stylesheets that fill
+ * them arrive later.
+ */
+@layer ab.reset, ab.tokens, ab.base, ab.components;
+
+@import "@platform/tokens/tokens.css";
+
+/* App-level page colours, unlayered like any app CSS. The base stylesheet (#12) replaces this. */
+body {
+  background-color: var(--ab-color-surface-default);
+  color: var(--ab-color-text-default);
+}

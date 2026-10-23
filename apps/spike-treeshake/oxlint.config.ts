@@ -13,10 +13,5 @@ export default defineConfig({
       "error",
       { allow: ["**/*.css", "@total-typescript/ts-reset/dom"] },
     ],
-    // SPIKE-local; see packages/spike-ui-pkg/oxlint.config.ts.
-    "typescript/prefer-readonly-parameter-types": [
-      "error",
-      { allow: [{ from: "package", name: "ReactNode", package: "@types/react" }] },
-    ],
   },
 });
