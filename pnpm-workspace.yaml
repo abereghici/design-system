@@ -6,13 +6,43 @@ catalogMode: strict
 catalogPrune: true
 trustPolicy: no-downgrade
 
+# esbuild's postinstall only re-checks its platform binary, which pnpm already installs
+# from esbuild's optionalDependencies, so its script stays off.
+allowBuilds:
+  esbuild: false
+
 catalog:
+  "@playwright/test": 1.64.1
+  "@total-typescript/ts-reset": 0.6.1
+  "@types/node": 26.6.5
+  "@types/react": 19.3.0
+  "@types/react-dom": 19.3.0
   "@vitest/browser-playwright": 5.0.5
+  babel-plugin-react-compiler: 1.0.0
+  esbuild: 0.28.2
+  next: 16.4.3
   oxfmt: 0.74.0
   oxlint: 1.89.0
   oxlint-tsgolint: 7.0.2004
   playwright: 1.64.1
+  react: 19.3.1
+  # React 18 under an alias: the Design System artifact type's default preview runtime (spike #3 baseline).
+  react-18: npm:react@18.3.1
+  react-dom: 19.3.1
+  react-dom-18: npm:react-dom@18.3.1
   turbo: 2.11.10
   typescript: 7.0.2
   vite: 8.3.5
   vitest: 5.0.5
+
+minimumReleaseAgeExclude:
+  - "@next/env@16.4.3"
+  - "@next/swc-darwin-arm64@16.4.3"
+  - "@next/swc-darwin-x64@16.4.3"
+  - "@next/swc-linux-arm64-gnu@16.4.3"
+  - "@next/swc-linux-arm64-musl@16.4.3"
+  - "@next/swc-linux-x64-gnu@16.4.3"
+  - "@next/swc-linux-x64-musl@16.4.3"
+  - "@next/swc-win32-arm64-msvc@16.4.3"
+  - "@next/swc-win32-x64-msvc@16.4.3"
+  - next@16.4.3

@@ -17,3 +17,6 @@ coverage
 
 # Vitest attachments (failure screenshots)
 .vitest
+
+# Claude Code agent worktrees
+.claude/worktrees/
