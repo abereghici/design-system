@@ -187,3 +187,25 @@ Two Oxlint findings came up that the real `@platform/ui` will hit too. Both are 
 3. Apps set `reactCompiler: true` and add `babel-plugin-react-compiler`. Nothing else is needed for workspace source.
 4. Turn this spike's test into the CI check from `performance.md` recommendation 3, "a built client chunk contains compiler output for `@platform/ui`". Use the analyzer-graph edge to `react/compiler-runtime.js`, which doesn't depend on minified names.
 5. Delete `packages/spike-ui-pkg` and `apps/spike-treeshake` once the UI scaffold (#7) and the subpath-exports and size-budget work (#13) cover the same assertions.
+
+## Applied to `@platform/ui` (#13)
+
+The spike packages were deleted in #13. The spike app became `apps/ui-next-fixture`, which consumes the real `@platform/ui`. Its `test/build-output.test.ts` keeps the analyzer-graph checks, and `test/exports.test.ts` checks resolution.
+
+- **Exports are two patterns, not one entry per component.** `"./*": "./src/*/index.ts"` and `"./icons/*": "./src/icons/*.tsx"`. Node's packages docs (https://nodejs.org/docs/latest-v26.x/api/packages.md, "Subpath patterns"):
+
+  > "For packages with a small number of exports or imports, we recommend explicitly listing each exports subpath entry. But for packages that have large numbers of subpaths, this might cause `package.json` bloat and maintenance issues."
+
+  > "All instances of `*` on the right hand side will then be replaced with this value, including if it contains any `/` separators."
+
+  The `src/<name>/index.ts` target follows Base UI. Its source `packages/react/package.json` at `v1.9.0` lists `"./button": "./src/button/index.ts"` and `"./dialog": "./src/dialog/index.ts"`, one entry per component.
+
+- **Without `"."`, the root cannot be imported.** In the fixture, Node's resolver throws `ERR_PACKAGE_PATH_NOT_EXPORTED`, Vite throws `"." is not exported`, and TypeScript fails to resolve the root. All three were observed.
+- **The `index.ts` re-export is pruned only with `sideEffects`.** With `"sideEffects": ["*.css"]`, `src/button/index.ts` is absent from the graph, and the page's import goes straight to `button.tsx`. With the field removed, the graph gains `[project]/packages/ui/src/button/index.ts [app-rsc] (ecmascript) <locals>`. Both were observed with Next 16.4.3.
+- **`import.meta.resolve` does not check that the target exists.** With Node 26.12.1, `@platform/ui/nope` resolves to `…/src/nope/index.ts` without throwing. So a pattern target that is missing on disk fails only when it is loaded (observed). The fixture test checks existence itself.
+- **Proof the fixture checks can fail.** Each control was a temporary edit:
+  - `sideEffects` removed: the index-pruning test failed.
+  - `"use no memo"` in Button: the compiler-runtime test failed.
+  - Button importing `listen` from `src/testing/` as a value: the "nothing ships from outside" test failed.
+  - A side-effect-only `import "../testing/listen.ts"` was dropped from the graph, as the `sideEffects` declaration says it may be, so that control did not trip the test.
+  - Adding `"."` to `exports`: check-types failed with "Unused '@ts-expect-error' directive".
