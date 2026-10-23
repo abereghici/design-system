@@ -1,0 +1,28 @@
+{
+  "name": "@platform/tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./tokens.css": "./dist/tokens.css",
+    "./tokens.json": "./dist/tokens.json"
+  },
+  "scripts": {
+    "build": "node scripts/build.ts",
+    "check-types": "tsc --noEmit",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@platform/oxlint-config": "workspace:*",
+    "@platform/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "style-dictionary": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
