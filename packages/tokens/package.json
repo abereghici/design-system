@@ -7,7 +7,9 @@
     "./tokens.css": "./dist/tokens.css",
     "./tokens.json": "./dist/tokens.json",
     "./fonts.css": "./dist/fonts.css",
-    "./fonts/*": "./fonts/*"
+    "./fonts/*": "./fonts/*",
+    "./contrast-matrix": "./src/contrast-matrix.ts",
+    "./source/*.tokens.json": "./src/tokens/*.tokens.json"
   },
   "scripts": {
     "build": "node scripts/build.ts",

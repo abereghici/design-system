@@ -14,6 +14,7 @@
     ]
   },
   "exports": {
+    "./base.css": "./src/base/base.css",
     "./button": "./src/button/button.tsx",
     "./events": "./src/events/events.ts"
   },

@@ -1,0 +1,41 @@
+import preview from "#.storybook/preview";
+import { expect, within } from "storybook/test";
+
+import { ContrastMatrix, FocusAndTarget } from "./accessibility.tsx";
+
+const meta = preview.meta({
+  title: "Foundations/Accessibility",
+  tags: ["!autodocs"],
+});
+
+export const Contrast = meta.story({ render: () => <ContrastMatrix /> });
+
+// The source design system's validator checks 207 pairs per Theme: 8 text and 16 non-text
+// roles on 8 backgrounds, plus 15 explicit pairs (notes/source-artifact.md).
+Contrast.test("lists every pair of the AA matrix in both Themes", async ({ canvas }) => {
+  for (const theme of ["Light", "Dark"]) {
+    const table = within(canvas.getByRole("region", { name: `${theme} Theme` }));
+    await expect(table.getAllByRole("cell", { name: /:1/v })).toHaveLength(207);
+  }
+});
+
+// The tightest results of the source matrix (notes/source-artifact.md): light text 4.56,
+// light non-text 3.05, dark text 4.58, dark non-text 3.06.
+Contrast.test("shows the computed ratio of each pair", async ({ canvas }) => {
+  const cell = (theme: string, row: string, column: string) =>
+    within(canvas.getByRole("region", { name: `${theme} Theme` }))
+      .getByRole("row", { name: new RegExp(`^${row} `, "v") })
+      .querySelector(`[data-background="${column}"]`)?.textContent;
+  await expect([
+    cell("Light", "text-subtlest", "background-neutral-subtle-pressed"),
+    cell("Light", "border-warning", "background-neutral-subtle-pressed"),
+    cell("Dark", "text-subtlest", "background-accent-subtle"),
+    cell("Dark", "border-default", "background-accent-subtle"),
+  ]).toEqual(["4.56:1", "3.05:1", "4.58:1", "3.06:1"]);
+});
+
+Contrast.test("finds no pair below its minimum", async ({ canvas }) => {
+  await expect(canvas.queryAllByRole("cell", { name: /below/v })).toEqual([]);
+});
+
+export const Focus = meta.story({ render: () => <FocusAndTarget /> });
