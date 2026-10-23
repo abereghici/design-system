@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 /** A DTCG 2025.10 sRGB color with its hex fallback. */
 export const srgb = (hex: string) => ({
   colorSpace: "srgb",
@@ -12,28 +14,37 @@ export const themed = (light: string, dark: string) => ({
   $extensions: { "com.bereghici.theme": { dark: `{primitive.${dark}}` } },
 });
 
-/** A small, valid token set using real source values (#ffffff, #12150f, #263316…). */
+const isGroup = (value: unknown): value is Record<string, object> =>
+  typeof value === "object" && value !== null;
+
+/** One tier of the package's own source, as a fresh object. */
+const sourceTier = (tier: string): Record<string, object> => {
+  const file: unknown = JSON.parse(
+    readFileSync(new URL(`tokens/${tier}.tokens.json`, import.meta.url), "utf8"),
+  );
+  const group: unknown = isGroup(file) ? Reflect.get(file, tier) : undefined;
+  if (!isGroup(group)) throw new Error(`src/tokens/${tier}.tokens.json has no "${tier}" group`);
+  return group;
+};
+
+/**
+ * The package's own token set (every source token), as a fresh object to mutate. Each test
+ * breaks one rule in a set that otherwise passes every check, contrast included.
+ */
 export const validTokens = () => ({
-  primitive: {
-    "palette-sage-0": { $type: "color", $value: srgb("#ffffff") },
-    "palette-sage-950": { $type: "color", $value: srgb("#171914") },
-    "palette-night-50": { $type: "color", $value: srgb("#eeefe9") },
-    "palette-night-950": { $type: "color", $value: srgb("#12150f") },
-    "palette-moss-900": { $type: "color", $value: srgb("#263316") },
-    "dimension-8": { $type: "dimension", $value: { value: 8, unit: "px" } },
-  } as Record<string, object>,
-  semantic: {
-    "color-surface-default": themed("palette-sage-0", "palette-night-950"),
-    "color-text-default": themed("palette-sage-950", "palette-night-50"),
-    "color-brand-moss": {
-      $type: "color",
-      $description: "Identity hue Moss, fixed in both themes.",
-      $value: "{primitive.palette-moss-900}",
-    },
-    "radius-sm": { $type: "dimension", $value: "{primitive.dimension-8}" },
-  } as Record<string, object>,
-  component: {
-    "card-background-color": { $type: "color", $value: "{semantic.color-surface-default}" },
-    "button-border-radius": { $type: "dimension", $value: "{semantic.radius-sm}" },
-  } as Record<string, object>,
+  primitive: sourceTier("primitive"),
+  semantic: sourceTier("semantic"),
+  component: sourceTier("component"),
 });
+
+/** Replaces one member of a composite token's `$value` (e.g. a type style's `fontWeight`). */
+export const setMember = (
+  group: Readonly<Record<string, object>>,
+  name: string,
+  member: string,
+  value: unknown,
+): void => {
+  const composite: unknown = Reflect.get(group[name] ?? {}, "$value");
+  if (!isGroup(composite)) throw new Error(`${name} is not a composite token`);
+  Reflect.set(composite, member, value);
+};

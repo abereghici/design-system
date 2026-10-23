@@ -6,10 +6,10 @@ The Bereghici design system's tokens. The source is DTCG 2025.10 JSON in three t
 
 `pnpm build` writes to `dist/`:
 
-| Export                         | File               | What it is                                                                                                                                                                                                                                                    |
-| ------------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@platform/tokens/tokens.css`  | `dist/tokens.css`  | Every token as an `--ab-*` custom property inside `@layer ab.tokens`. Semantic and component tokens point at the tier below with `var()`. Themed colors use `light-dark()`.                                                                                   |
-| `@platform/tokens/tokens.json` | `dist/tokens.json` | The claude.ai Design System artifact's token shape: flat `{ name, value, usage }` lists per family (`color`, `spacing`, `radius`), with the light Theme first and literal values only. There is no `var()`, `light-dark()`, `color-mix()` and no named color. |
+| Export                         | File               | What it is                                                                                                                                                                                                                                                                                                                   |
+| ------------------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@platform/tokens/tokens.css`  | `dist/tokens.css`  | Every token as an `--ab-*` custom property inside `@layer ab.tokens`. Semantic and component tokens point at the tier below with `var()`. Themed colors use `light-dark()`. Media overrides follow as `@media` blocks, and animated tokens are registered with `@property` ahead of the layer.                               |
+| `@platform/tokens/tokens.json` | `dist/tokens.json` | The claude.ai Design System artifact's token shape: flat `{ name, value, usage }` lists per family (`color`, `spacing`, `radius`), with the light Theme first and literal values only. There is no `var()`, `light-dark()`, `color-mix()` and no named color. Type, motion, shadow and blur tokens are not listed yet (#14). |
 
 Apps declare the layer order first (`@layer ab.reset, ab.tokens, ab.base, ab.components;`) and then import `tokens.css`. Unlayered app CSS always wins over the design system.
 
@@ -43,14 +43,44 @@ Source files live in `src/tokens/`, one per tier: `primitive.tokens.json`, `sema
 
 - **`$description`** becomes the token's `usage` in `tokens.json`.
 
+### The full set
+
+`src/tokens/` holds every token of the source design system: 210 primitive, 294 semantic and 413 component tokens. It was ported from the artifact's per-tier CSS (`archived/tokens/{1-primitive,2-semantic,3-component}/*.css`), which is more faithful than its DTCG export, with `$description` taken from the artifact's `tokens.json`. Component words follow spec #1's renames: `divider` → `separator`, `menu` → `dropdown-menu` and `context-menu` (both carry Menu's 27 tokens), `command-palette` → `command`, `mark` → `logo`.
+
+Value types:
+
+| `$type`                                                         | Value                                                                                                                                                                     |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `color`                                                         | A DTCG color object; translucent steps (`palette-*-aNN`) add `alpha`. `palette-transparent` is `alpha: 0`. CSS gets hex, or `rgba()` when translucent.                    |
+| `dimension`                                                     | `{ value, unit }` in `px` or `rem`. Three values DTCG can't express stay CSS strings: the fluid `font-size-{min}-{max}` (`clamp(… vi)`) and the `em` letter spacings.     |
+| `duration`, `cubicBezier`, `fontFamily`, `fontWeight`, `number` | DTCG values (`{ value: 70, unit: "ms" }`, `[0.23, 1, 0.32, 1]`, `["Figtree", "system-ui", "sans-serif"]`, `500`, `1.6`).                                                  |
+| `string`                                                        | CSS values DTCG has no type for: the `linear()` springs, `ease`, `linear`, `font-variant-numeric-*` and `text-transform-*`.                                               |
+| `typography`                                                    | A type style. CSS gets the `font` shorthand of `var()`s, as in the source; `letterSpacing` stays its own `type-*-letter-spacing` token, because `font` can't set it.      |
+| `shadow`                                                        | An Elevation: one layer, or a list of layers and references to `elevation-ring` / `elevation-highlight`. CSS gets a `box-shadow` list of `var()`s (always with a spread). |
+
+- **Composites may reference semantic tokens in exactly two ways** (the source's documented exceptions to R2): a type style may use its own `type-*-font-size`, and an Elevation may use `elevation-ring`, `elevation-highlight` and `color-shadow-*`. Every other member references a primitive token.
+- **Media overrides** sit on semantic tokens under `$extensions["com.bereghici.media"]`, a map from a media query to a reference. A themed color gives one per Theme as `{ "light": …, "dark": … }`. An override may point at a primitive token, or at another semantic token (the source's "more contrast steps up one emphasis level"). The source has 22: more contrast (3), reduced transparency (3), reduced motion (10), coarse pointers (4) and narrow viewports, `(width < 760px)` (2).
+
+  ```json
+  "space-section": {
+    "$type": "dimension",
+    "$value": "{primitive.dimension-88}",
+    "$extensions": { "com.bereghici.media": { "(width < 760px)": "{primitive.dimension-64}" } }
+  }
+  ```
+
+- **Animated tokens** are component tokens marked `"$extensions": { "com.bereghici.animated": true }`. The build registers each with `@property { syntax; inherits: false; initial-value }`, because an unregistered custom property can't interpolate and an inherited one restyles its whole subtree when it changes (`docs/research/performance.md`). The value must be the same in every Theme and computationally independent (`px`, `ms`, a number or an opaque color; no `rem`). With `inherits: false` the token is read from the element itself, so override it on the component's element, not on an ancestor. No source token is animated yet.
+
 ## Checks
 
 The build stops with a `TokenCheckError` that lists every problem when:
 
-1. **A tier rule is broken** (R1–R3): a primitive token references another token, a semantic token holds a literal or references something other than a primitive token, or a component token references something other than a semantic token.
-2. **A name breaks its tier's grammar or uses a word outside the Dictionary** (R7). The grammar and Dictionary are carried over unchanged from the source design system, in `src/naming.ts`.
+1. **A tier rule is broken** (R1–R3): a primitive token references another token, a semantic token holds a literal or references something other than a primitive token (apart from the two composite exceptions above), or a component token references something other than a semantic token.
+2. **A name breaks its tier's grammar or uses a word outside the Dictionary** (R7). The grammar and Dictionary are the source validator's, in `src/naming.ts`, with the spec's component renames and `stroke-width-2xl` added.
 3. **A themed color is missing a Theme**, or a token that isn't a themed color carries one.
-4. **An allowed pairing is below WCAG 2.2 AA in any Theme**: text on every surface and background it may sit on at 4.5:1, icons and borders at 3:1, and `on-{role}` content on its `bold` fill at 4.5:1. The matrix is in `src/contrast.ts`. Pairs whose tokens aren't defined yet are skipped.
+4. **A media override is malformed**: it holds a literal, points at a component token, sits on a non-semantic token, or gives per-Theme values on a token that isn't a themed color.
+5. **An animated token can't be registered**: it isn't a component token, its `$type` has no `@property` syntax, it differs per Theme, or its value isn't computationally independent.
+6. **An allowed pairing is below WCAG 2.2 AA in any Theme**: text on every surface and background it may sit on at 4.5:1, icons and borders at 3:1, and `on-{role}` content on its `bold` fill at 4.5:1 (207 checks per Theme). The matrix is in `src/contrast.ts`. A pair whose token is missing, or whose color is translucent, fails too. Media overrides are not in the matrix, as in the source.
 
 Contrast runs only when the other checks pass.
 

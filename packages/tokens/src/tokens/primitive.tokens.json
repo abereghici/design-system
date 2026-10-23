@@ -2,30 +2,106 @@
   "primitive": {
     "palette-sage-0": {
       "$type": "color",
+      "$description": "Sage · light-theme neutrals, step 0 · identity anchor (a fixed brand value). Feeds `ab-color-surface-default` (light), `ab-color-surface-floating` (light), `ab-color-text-on-accent` (light), `ab-color-text-on-success` (light), `ab-color-text-on-danger` (light), `ab-color-icon-on-accent` (light), `ab-color-material-thin` under `(prefers-reduced-transparency: reduce)`, `ab-color-material-regular` under `(prefers-reduced-transparency: reduce)`, `ab-color-material-thick` under `(prefers-reduced-transparency: reduce)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "colorSpace": "srgb",
-        "components": [1.0, 1.0, 1.0],
+        "components": [1, 1, 1],
         "hex": "#ffffff"
+      }
+    },
+    "palette-sage-50": {
+      "$type": "color",
+      "$description": "Sage · light-theme neutrals, step 50 · identity anchor (a fixed brand value). Feeds `ab-color-brand-sage`, `ab-color-surface-raised` (light), `ab-color-background-neutral-subtle-hovered` (light), `ab-color-background-selected` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9529, 0.9608, 0.9333],
+        "hex": "#f3f5ee"
+      }
+    },
+    "palette-sage-100": {
+      "$type": "color",
+      "$description": "Sage · light-theme neutrals, step 100 · identity anchor (a fixed brand value). Feeds `ab-color-surface-nested` (light), `ab-color-background-neutral-subtle-pressed` (light), `ab-color-background-disabled` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9176, 0.9216, 0.8902],
+        "hex": "#eaebe3"
+      }
+    },
+    "palette-sage-200": {
+      "$type": "color",
+      "$description": "Sage · light-theme neutrals, step 200 · identity anchor (a fixed brand value). Feeds `ab-color-border-subtle` (light), `ab-color-border-disabled` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.8824, 0.8902, 0.8627],
+        "hex": "#e1e3dc"
+      }
+    },
+    "palette-sage-300": {
+      "$type": "color",
+      "$description": "Sage · light-theme neutrals, step 300. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.7569, 0.7647, 0.7373],
+        "hex": "#c1c3bc"
+      }
+    },
+    "palette-sage-400": {
+      "$type": "color",
+      "$description": "Sage · light-theme neutrals, step 400. Feeds `ab-color-text-disabled` (light), `ab-color-icon-disabled` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.6392, 0.6431, 0.6196],
+        "hex": "#a3a49e"
       }
     },
     "palette-sage-500": {
       "$type": "color",
+      "$description": "Sage · light-theme neutrals, step 500 · identity anchor (a fixed brand value). Feeds `ab-color-border-default` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "colorSpace": "srgb",
         "components": [0.5216, 0.5255, 0.502],
         "hex": "#858680"
       }
     },
+    "palette-sage-600": {
+      "$type": "color",
+      "$description": "Sage · light-theme neutrals, step 600 · identity anchor (a fixed brand value). Feeds `ab-color-text-subtlest` (light), `ab-color-icon-subtlest` (light), `ab-color-border-default-hovered` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.4078, 0.4157, 0.3922],
+        "hex": "#686a64"
+      }
+    },
     "palette-sage-700": {
       "$type": "color",
+      "$description": "Sage · light-theme neutrals, step 700 · identity anchor (a fixed brand value). Feeds `ab-color-text-subtle` (light), `ab-color-icon-subtle` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "colorSpace": "srgb",
         "components": [0.3255, 0.3412, 0.3137],
         "hex": "#535750"
       }
     },
+    "palette-sage-800": {
+      "$type": "color",
+      "$description": "Sage · light-theme neutrals, step 800. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.2431, 0.2549, 0.2314],
+        "hex": "#3e413b"
+      }
+    },
+    "palette-sage-900": {
+      "$type": "color",
+      "$description": "Sage · light-theme neutrals, step 900. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.1647, 0.1725, 0.1529],
+        "hex": "#2a2c27"
+      }
+    },
     "palette-sage-950": {
       "$type": "color",
+      "$description": "Sage · light-theme neutrals, step 950 · identity anchor (a fixed brand value). Feeds `ab-color-text-default` (light), `ab-color-text-on-warning` (light), `ab-color-text-on-highlight`, `ab-color-icon-default` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "colorSpace": "srgb",
         "components": [0.0902, 0.098, 0.0784],
@@ -34,65 +110,1484 @@
     },
     "palette-night-50": {
       "$type": "color",
+      "$description": "Night · dark-theme neutrals, step 50 · identity anchor (a fixed brand value). Feeds `ab-color-text-inverse` (light), `ab-color-background-neutral-bold` (dark), `ab-color-text-default` (dark), `ab-color-icon-default` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "colorSpace": "srgb",
         "components": [0.9333, 0.9373, 0.9137],
         "hex": "#eeefe9"
       }
     },
+    "palette-night-100": {
+      "$type": "color",
+      "$description": "Night · dark-theme neutrals, step 100. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.8314, 0.8392, 0.8118],
+        "hex": "#d4d6cf"
+      }
+    },
+    "palette-night-200": {
+      "$type": "color",
+      "$description": "Night · dark-theme neutrals, step 200. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.7333, 0.7451, 0.7137],
+        "hex": "#bbbeb6"
+      }
+    },
     "palette-night-300": {
       "$type": "color",
+      "$description": "Night · dark-theme neutrals, step 300 · identity anchor (a fixed brand value). Feeds `ab-color-text-subtle` (dark), `ab-color-icon-subtle` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "colorSpace": "srgb",
         "components": [0.6353, 0.651, 0.6157],
         "hex": "#a2a69d"
       }
     },
+    "palette-night-400": {
+      "$type": "color",
+      "$description": "Night · dark-theme neutrals, step 400 · identity anchor (a fixed brand value). Feeds `ab-color-text-subtlest` (dark), `ab-color-icon-subtlest` (dark), `ab-color-border-default-hovered` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.5216, 0.5412, 0.5059],
+        "hex": "#858a81"
+      }
+    },
     "palette-night-500": {
       "$type": "color",
+      "$description": "Night · dark-theme neutrals, step 500 · identity anchor (a fixed brand value). Feeds `ab-color-border-default` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "colorSpace": "srgb",
         "components": [0.4118, 0.4275, 0.3882],
         "hex": "#696d63"
       }
     },
+    "palette-night-600": {
+      "$type": "color",
+      "$description": "Night · dark-theme neutrals, step 600. Feeds `ab-color-text-disabled` (dark), `ab-color-icon-disabled` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.2941, 0.3098, 0.2706],
+        "hex": "#4b4f45"
+      }
+    },
+    "palette-night-700": {
+      "$type": "color",
+      "$description": "Night · dark-theme neutrals, step 700 · identity anchor (a fixed brand value). Feeds `ab-color-border-subtle` (dark), `ab-color-border-disabled` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.1804, 0.1961, 0.1608],
+        "hex": "#2e3229"
+      }
+    },
+    "palette-night-800": {
+      "$type": "color",
+      "$description": "Night · dark-theme neutrals, step 800 · identity anchor (a fixed brand value). Feeds `ab-color-background-neutral-bold` (light), `ab-color-surface-nested` (dark), `ab-color-background-neutral-subtle-pressed` (dark), `ab-color-background-selected` (dark), `ab-color-background-accent-subtle` (dark), `ab-color-background-disabled` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.1176, 0.1333, 0.102],
+        "hex": "#1e221a"
+      }
+    },
+    "palette-night-900": {
+      "$type": "color",
+      "$description": "Night · dark-theme neutrals, step 900 · identity anchor (a fixed brand value). Feeds `ab-color-surface-raised` (dark), `ab-color-surface-floating` (dark), `ab-color-background-neutral-subtle-hovered` (dark), `ab-color-material-thin` under `(prefers-reduced-transparency: reduce)`, `ab-color-material-regular` under `(prefers-reduced-transparency: reduce)`, `ab-color-material-thick` under `(prefers-reduced-transparency: reduce)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0941, 0.1059, 0.0784],
+        "hex": "#181b14"
+      }
+    },
     "palette-night-950": {
       "$type": "color",
+      "$description": "Night · dark-theme neutrals, step 950 · identity anchor (a fixed brand value). Feeds `ab-color-surface-default` (dark), `ab-color-text-inverse` (dark), `ab-color-text-on-success` (dark), `ab-color-text-on-warning` (dark), `ab-color-text-on-danger` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "colorSpace": "srgb",
         "components": [0.0706, 0.0824, 0.0588],
         "hex": "#12150f"
       }
     },
+    "palette-moss-50": {
+      "$type": "color",
+      "$description": "Moss · brand green, step 50. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9529, 0.9765, 0.9333],
+        "hex": "#f3f9ee"
+      }
+    },
+    "palette-moss-100": {
+      "$type": "color",
+      "$description": "Moss · brand green, step 100. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9216, 0.949, 0.898],
+        "hex": "#ebf2e5"
+      }
+    },
+    "palette-moss-200": {
+      "$type": "color",
+      "$description": "Moss · brand green, step 200. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.8588, 0.8941, 0.8235],
+        "hex": "#dbe4d2"
+      }
+    },
+    "palette-moss-300": {
+      "$type": "color",
+      "$description": "Moss · brand green, step 300. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.7569, 0.8, 0.7176],
+        "hex": "#c1ccb7"
+      }
+    },
+    "palette-moss-400": {
+      "$type": "color",
+      "$description": "Moss · brand green, step 400. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.6353, 0.6824, 0.5882],
+        "hex": "#a2ae96"
+      }
+    },
+    "palette-moss-500": {
+      "$type": "color",
+      "$description": "Moss · brand green, step 500. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.5176, 0.5686, 0.4627],
+        "hex": "#849176"
+      }
+    },
+    "palette-moss-600": {
+      "$type": "color",
+      "$description": "Moss · brand green, step 600. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.4039, 0.4549, 0.349],
+        "hex": "#677459"
+      }
+    },
+    "palette-moss-700": {
+      "$type": "color",
+      "$description": "Moss · brand green, step 700. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.3059, 0.3608, 0.251],
+        "hex": "#4e5c40"
+      }
+    },
+    "palette-moss-800": {
+      "$type": "color",
+      "$description": "Moss · brand green, step 800. Feeds `ab-color-background-accent-bold-hovered` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.2275, 0.2784, 0.1647],
+        "hex": "#3a472a"
+      }
+    },
     "palette-moss-900": {
       "$type": "color",
+      "$description": "Moss · brand green, step 900 · identity anchor (a fixed brand value). Feeds `ab-color-brand-moss`, `ab-color-background-accent-bold` (light), `ab-color-text-accent` (light), `ab-color-text-selected` (light), `ab-color-icon-accent` (light), `ab-color-icon-selected` (light), `ab-color-border-accent` (light), `ab-color-border-focused` (light), `ab-color-border-selected` (light), `ab-color-text-on-accent` (dark), `ab-color-icon-on-accent` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "colorSpace": "srgb",
         "components": [0.149, 0.2, 0.0863],
         "hex": "#263316"
       }
     },
+    "palette-moss-950": {
+      "$type": "color",
+      "$description": "Moss · brand green, step 950. Feeds `ab-color-background-accent-bold-pressed` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0667, 0.098, 0.0235],
+        "hex": "#111906"
+      }
+    },
+    "palette-lichen-50": {
+      "$type": "color",
+      "$description": "Lichen · pale yellow-green, step 50. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9765, 0.9765, 0.8824],
+        "hex": "#f9f9e1"
+      }
+    },
+    "palette-lichen-100": {
+      "$type": "color",
+      "$description": "Lichen · pale yellow-green, step 100 · identity anchor (a fixed brand value). Feeds `ab-color-brand-lichen`, `ab-color-background-accent-subtle` (light), `ab-color-background-accent-bold-hovered` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9412, 0.9373, 0.8157],
+        "hex": "#f0efd0"
+      }
+    },
     "palette-lichen-200": {
       "$type": "color",
+      "$description": "Lichen · pale yellow-green, step 200 · identity anchor (a fixed brand value). Feeds `ab-color-background-accent-bold` (dark), `ab-color-text-accent` (dark), `ab-color-text-selected` (dark), `ab-color-icon-accent` (dark), `ab-color-icon-selected` (dark), `ab-color-border-accent` (dark), `ab-color-border-focused` (dark), `ab-color-border-selected` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "colorSpace": "srgb",
         "components": [0.9255, 0.9176, 0.7882],
         "hex": "#eceac9"
       }
     },
+    "palette-lichen-300": {
+      "$type": "color",
+      "$description": "Lichen · pale yellow-green, step 300. Feeds `ab-color-background-accent-bold-pressed` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.8157, 0.8078, 0.6941],
+        "hex": "#d0ceb1"
+      }
+    },
+    "palette-lichen-400": {
+      "$type": "color",
+      "$description": "Lichen · pale yellow-green, step 400. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.6863, 0.6784, 0.5765],
+        "hex": "#afad93"
+      }
+    },
+    "palette-lichen-500": {
+      "$type": "color",
+      "$description": "Lichen · pale yellow-green, step 500. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.5608, 0.5529, 0.4667],
+        "hex": "#8f8d77"
+      }
+    },
+    "palette-lichen-600": {
+      "$type": "color",
+      "$description": "Lichen · pale yellow-green, step 600. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.4392, 0.4314, 0.3608],
+        "hex": "#706e5c"
+      }
+    },
+    "palette-lichen-700": {
+      "$type": "color",
+      "$description": "Lichen · pale yellow-green, step 700. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.3333, 0.3294, 0.2706],
+        "hex": "#555445"
+      }
+    },
+    "palette-lichen-800": {
+      "$type": "color",
+      "$description": "Lichen · pale yellow-green, step 800. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.2431, 0.2392, 0.1922],
+        "hex": "#3e3d31"
+      }
+    },
+    "palette-lichen-900": {
+      "$type": "color",
+      "$description": "Lichen · pale yellow-green, step 900. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.1569, 0.1569, 0.1216],
+        "hex": "#28281f"
+      }
+    },
+    "palette-lichen-950": {
+      "$type": "color",
+      "$description": "Lichen · pale yellow-green, step 950. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0902, 0.0863, 0.0627],
+        "hex": "#171610"
+      }
+    },
+    "palette-ember-50": {
+      "$type": "color",
+      "$description": "Ember · peach → marigold, step 50. Feeds `ab-color-background-warning-subtle` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1, 0.9608, 0.9176],
+        "hex": "#fff5ea"
+      }
+    },
+    "palette-ember-100": {
+      "$type": "color",
+      "$description": "Ember · peach → marigold, step 100 · identity anchor (a fixed brand value). Feeds `ab-color-brand-peach`, `ab-color-background-highlight`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1, 0.8471, 0.6745],
+        "hex": "#ffd8ac"
+      }
+    },
+    "palette-ember-200": {
+      "$type": "color",
+      "$description": "Ember · peach → marigold, step 200 · identity anchor (a fixed brand value). Feeds `ab-color-background-warning-bold` (dark), `ab-color-text-warning` (dark), `ab-color-icon-warning` (dark), `ab-color-border-warning` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9804, 0.7373, 0.5255],
+        "hex": "#fabc86"
+      }
+    },
+    "palette-ember-300": {
+      "$type": "color",
+      "$description": "Ember · peach → marigold, step 300. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9608, 0.6745, 0.4118],
+        "hex": "#f5ac69"
+      }
+    },
+    "palette-ember-400": {
+      "$type": "color",
+      "$description": "Ember · peach → marigold, step 400 · identity anchor (a fixed brand value). Feeds `ab-color-brand-ember`, `ab-color-background-warning-bold` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9412, 0.6078, 0.2824],
+        "hex": "#f09b48"
+      }
+    },
+    "palette-ember-500": {
+      "$type": "color",
+      "$description": "Ember · peach → marigold, step 500. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.851, 0.5255, 0.1882],
+        "hex": "#d98630"
+      }
+    },
+    "palette-ember-600": {
+      "$type": "color",
+      "$description": "Ember · peach → marigold, step 600 · identity anchor (a fixed brand value). Feeds `ab-color-icon-warning` (light), `ab-color-border-warning` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.7647, 0.4471, 0.0588],
+        "hex": "#c3720f"
+      }
+    },
+    "palette-ember-700": {
+      "$type": "color",
+      "$description": "Ember · peach → marigold, step 700. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.5725, 0.3373, 0.0745],
+        "hex": "#925613"
+      }
+    },
+    "palette-ember-800": {
+      "$type": "color",
+      "$description": "Ember · peach → marigold, step 800. Feeds `ab-color-text-warning` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.4196, 0.2353, 0.0118],
+        "hex": "#6b3c03"
+      }
+    },
+    "palette-ember-900": {
+      "$type": "color",
+      "$description": "Ember · peach → marigold, step 900. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.2667, 0.1412, 0.0118],
+        "hex": "#442403"
+      }
+    },
+    "palette-ember-950": {
+      "$type": "color",
+      "$description": "Ember · peach → marigold, step 950. Feeds `ab-color-background-warning-subtle` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.1412, 0.0667, 0.0039],
+        "hex": "#241101"
+      }
+    },
+    "palette-clay-50": {
+      "$type": "color",
+      "$description": "Clay · red, step 50. Feeds `ab-color-background-danger-subtle` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1, 0.9569, 0.949],
+        "hex": "#fff4f2"
+      }
+    },
+    "palette-clay-100": {
+      "$type": "color",
+      "$description": "Clay · red, step 100. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1, 0.8784, 0.851],
+        "hex": "#ffe0d9"
+      }
+    },
+    "palette-clay-200": {
+      "$type": "color",
+      "$description": "Clay · red, step 200. Feeds `ab-color-background-danger-bold-hovered` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1, 0.749, 0.698],
+        "hex": "#ffbfb2"
+      }
+    },
+    "palette-clay-300": {
+      "$type": "color",
+      "$description": "Clay · red, step 300 · identity anchor (a fixed brand value). Feeds `ab-color-background-danger-bold` (dark), `ab-color-text-danger` (dark), `ab-color-icon-danger` (dark), `ab-color-border-danger` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9137, 0.6, 0.5373],
+        "hex": "#e99989"
+      }
+    },
+    "palette-clay-400": {
+      "$type": "color",
+      "$description": "Clay · red, step 400. Feeds `ab-color-background-danger-bold-pressed` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.8275, 0.4941, 0.4275],
+        "hex": "#d37e6d"
+      }
+    },
+    "palette-clay-500": {
+      "$type": "color",
+      "$description": "Clay · red, step 500. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.7451, 0.3882, 0.3216],
+        "hex": "#be6352"
+      }
+    },
+    "palette-clay-600": {
+      "$type": "color",
+      "$description": "Clay · red, step 600 · identity anchor (a fixed brand value). Feeds `ab-color-background-danger-bold` (light), `ab-color-text-danger` (light), `ab-color-icon-danger` (light), `ab-color-border-danger` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.6588, 0.2824, 0.2157],
+        "hex": "#a84837"
+      }
+    },
+    "palette-clay-700": {
+      "$type": "color",
+      "$description": "Clay · red, step 700. Feeds `ab-color-background-danger-bold-hovered` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.5137, 0.2039, 0.149],
+        "hex": "#833426"
+      }
+    },
+    "palette-clay-800": {
+      "$type": "color",
+      "$description": "Clay · red, step 800. Feeds `ab-color-background-danger-bold-pressed` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.3882, 0.1412, 0.098],
+        "hex": "#632419"
+      }
+    },
+    "palette-clay-900": {
+      "$type": "color",
+      "$description": "Clay · red, step 900. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.2706, 0.0784, 0.0471],
+        "hex": "#45140c"
+      }
+    },
+    "palette-clay-950": {
+      "$type": "color",
+      "$description": "Clay · red, step 950. Feeds `ab-color-background-danger-subtle` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.1725, 0.0314, 0.0157],
+        "hex": "#2c0804"
+      }
+    },
+    "palette-fern-50": {
+      "$type": "color",
+      "$description": "Fern · success green, step 50. Feeds `ab-color-background-success-subtle` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9255, 0.9882, 0.9373],
+        "hex": "#ecfcef"
+      }
+    },
+    "palette-fern-100": {
+      "$type": "color",
+      "$description": "Fern · success green, step 100. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.8784, 0.9608, 0.898],
+        "hex": "#e0f5e5"
+      }
+    },
+    "palette-fern-200": {
+      "$type": "color",
+      "$description": "Fern · success green, step 200. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.7882, 0.9059, 0.8157],
+        "hex": "#c9e7d0"
+      }
+    },
+    "palette-fern-300": {
+      "$type": "color",
+      "$description": "Fern · success green, step 300. Feeds `ab-color-background-success-bold` (dark), `ab-color-text-success` (dark), `ab-color-icon-success` (dark), `ab-color-border-success` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.651, 0.8196, 0.6902],
+        "hex": "#a6d1b0"
+      }
+    },
+    "palette-fern-400": {
+      "$type": "color",
+      "$description": "Fern · success green, step 400. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.4745, 0.7098, 0.5373],
+        "hex": "#79b589"
+      }
+    },
+    "palette-fern-500": {
+      "$type": "color",
+      "$description": "Fern · success green, step 500. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.2941, 0.6039, 0.3882],
+        "hex": "#4b9a63"
+      }
+    },
+    "palette-fern-600": {
+      "$type": "color",
+      "$description": "Fern · success green, step 600. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.1216, 0.4863, 0.2667],
+        "hex": "#1f7c44"
+      }
+    },
+    "palette-fern-700": {
+      "$type": "color",
+      "$description": "Fern · success green, step 700. Feeds `ab-color-background-success-bold` (light), `ab-color-text-success` (light), `ab-color-icon-success` (light), `ab-color-border-success` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0824, 0.3725, 0.1961],
+        "hex": "#155f32"
+      }
+    },
+    "palette-fern-800": {
+      "$type": "color",
+      "$description": "Fern · success green, step 800. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0549, 0.2745, 0.1412],
+        "hex": "#0e4624"
+      }
+    },
+    "palette-fern-900": {
+      "$type": "color",
+      "$description": "Fern · success green, step 900. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0314, 0.1843, 0.0863],
+        "hex": "#082f16"
+      }
+    },
+    "palette-fern-950": {
+      "$type": "color",
+      "$description": "Fern · success green, step 950. Feeds `ab-color-background-success-subtle` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0157, 0.1098, 0.0471],
+        "hex": "#041c0c"
+      }
+    },
+    "palette-night-950-a64": {
+      "$type": "color",
+      "$description": "64% night-950. Feeds `ab-color-backdrop`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0706, 0.0824, 0.0588],
+        "alpha": 0.64,
+        "hex": "#12150f"
+      }
+    },
+    "palette-sage-0-a56": {
+      "$type": "color",
+      "$description": "56% sage-0. Feeds `ab-color-material-thin` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1, 1, 1],
+        "alpha": 0.56,
+        "hex": "#ffffff"
+      }
+    },
+    "palette-sage-0-a72": {
+      "$type": "color",
+      "$description": "72% sage-0. Feeds `ab-color-material-regular` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1, 1, 1],
+        "alpha": 0.72,
+        "hex": "#ffffff"
+      }
+    },
+    "palette-sage-0-a80": {
+      "$type": "color",
+      "$description": "80% sage-0. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1, 1, 1],
+        "alpha": 0.8,
+        "hex": "#ffffff"
+      }
+    },
+    "palette-sage-0-a90": {
+      "$type": "color",
+      "$description": "90% sage-0. Feeds `ab-color-material-thick` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1, 1, 1],
+        "alpha": 0.9,
+        "hex": "#ffffff"
+      }
+    },
+    "palette-night-900-a56": {
+      "$type": "color",
+      "$description": "56% night-900. Feeds `ab-color-material-thin` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0941, 0.1059, 0.0784],
+        "alpha": 0.56,
+        "hex": "#181b14"
+      }
+    },
+    "palette-night-900-a72": {
+      "$type": "color",
+      "$description": "72% night-900. Feeds `ab-color-material-regular` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0941, 0.1059, 0.0784],
+        "alpha": 0.72,
+        "hex": "#181b14"
+      }
+    },
+    "palette-night-900-a80": {
+      "$type": "color",
+      "$description": "80% night-900. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0941, 0.1059, 0.0784],
+        "alpha": 0.8,
+        "hex": "#181b14"
+      }
+    },
+    "palette-night-900-a90": {
+      "$type": "color",
+      "$description": "90% night-900. Feeds `ab-color-material-thick` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0941, 0.1059, 0.0784],
+        "alpha": 0.9,
+        "hex": "#181b14"
+      }
+    },
+    "palette-night-950-a08": {
+      "$type": "color",
+      "$description": "8% night-950. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0706, 0.0824, 0.0588],
+        "alpha": 0.08,
+        "hex": "#12150f"
+      }
+    },
+    "palette-night-950-a12": {
+      "$type": "color",
+      "$description": "12% night-950. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0706, 0.0824, 0.0588],
+        "alpha": 0.12,
+        "hex": "#12150f"
+      }
+    },
+    "palette-night-950-a16": {
+      "$type": "color",
+      "$description": "16% night-950. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0706, 0.0824, 0.0588],
+        "alpha": 0.16,
+        "hex": "#12150f"
+      }
+    },
+    "palette-night-950-a24": {
+      "$type": "color",
+      "$description": "24% night-950. Feeds `ab-color-shadow-ambient` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0706, 0.0824, 0.0588],
+        "alpha": 0.24,
+        "hex": "#12150f"
+      }
+    },
+    "palette-night-950-a40": {
+      "$type": "color",
+      "$description": "40% night-950. Feeds `ab-color-shadow-key` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0706, 0.0824, 0.0588],
+        "alpha": 0.4,
+        "hex": "#12150f"
+      }
+    },
+    "palette-night-950-a48": {
+      "$type": "color",
+      "$description": "48% night-950. Feeds `ab-color-shadow-deep` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0706, 0.0824, 0.0588],
+        "alpha": 0.48,
+        "hex": "#12150f"
+      }
+    },
+    "palette-moss-950-a06": {
+      "$type": "color",
+      "$description": "6% moss-950. Feeds `ab-color-shadow-ambient` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0667, 0.098, 0.0235],
+        "alpha": 0.06,
+        "hex": "#111906"
+      }
+    },
+    "palette-moss-950-a10": {
+      "$type": "color",
+      "$description": "10% moss-950. Feeds `ab-color-shadow-ring` (light), `ab-color-shadow-key` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0667, 0.098, 0.0235],
+        "alpha": 0.1,
+        "hex": "#111906"
+      }
+    },
+    "palette-moss-950-a14": {
+      "$type": "color",
+      "$description": "14% moss-950. Feeds `ab-color-shadow-deep` (light). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0667, 0.098, 0.0235],
+        "alpha": 0.14,
+        "hex": "#111906"
+      }
+    },
+    "palette-sage-0-a06": {
+      "$type": "color",
+      "$description": "6% sage-0. Feeds `ab-color-shadow-highlight` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1, 1, 1],
+        "alpha": 0.06,
+        "hex": "#ffffff"
+      }
+    },
+    "palette-sage-0-a10": {
+      "$type": "color",
+      "$description": "10% sage-0. Feeds `ab-color-shadow-ring` (dark). Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1, 1, 1],
+        "alpha": 0.1,
+        "hex": "#ffffff"
+      }
+    },
+    "palette-sage-0-a14": {
+      "$type": "color",
+      "$description": "14% sage-0. Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1, 1, 1],
+        "alpha": 0.14,
+        "hex": "#ffffff"
+      }
+    },
+    "palette-transparent": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0, 0, 0],
+        "alpha": 0,
+        "hex": "#000000"
+      }
+    },
+    "dimension-0": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-elevation-ring`, `ab-elevation-highlight`, `ab-elevation-raised`, `ab-elevation-overlay`, `ab-elevation-toast`, `ab-elevation-modal`, `ab-motion-distance-swap` under `(prefers-reduced-motion: reduce)`, `ab-motion-distance-expand` under `(prefers-reduced-motion: reduce)`, `ab-motion-distance-entrance` under `(prefers-reduced-motion: reduce)`, `ab-motion-blur-swap` under `(prefers-reduced-motion: reduce)`, `ab-motion-blur-entrance` under `(prefers-reduced-motion: reduce)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      }
+    },
+    "dimension-1": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-elevation-ring`, `ab-elevation-highlight`, `ab-elevation-raised`, `ab-border-width-default`, `ab-underline-thickness`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 1,
+        "unit": "px"
+      }
+    },
+    "dimension-2": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-elevation-raised`, `ab-elevation-overlay`, `ab-space-inset-2xs`, `ab-border-width-thick`, `ab-focus-ring-width`, `ab-motion-blur-swap`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      }
+    },
+    "dimension-3": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-focus-ring-offset`, `ab-underline-offset`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 3,
+        "unit": "px"
+      }
+    },
+    "dimension-4": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-elevation-overlay`, `ab-elevation-toast`, `ab-elevation-modal`, `ab-space-inline-xs`, `ab-space-inset-xs`, `ab-space-stack-xs`, `ab-motion-blur-entrance`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      }
+    },
+    "dimension-5": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-radius-xs`, `ab-motion-distance-swap`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 5,
+        "unit": "px"
+      }
+    },
+    "dimension-6": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-size-indicator`, `ab-motion-distance-expand`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 6,
+        "unit": "px"
+      }
+    },
     "dimension-8": {
       "$type": "dimension",
+      "$description": "Feeds `ab-elevation-overlay`, `ab-elevation-modal`, `ab-space-inline-sm`, `ab-space-inset-sm`, `ab-space-stack-sm`, `ab-radius-sm`, `ab-motion-distance-entrance`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "value": 8,
         "unit": "px"
       }
     },
+    "dimension-10": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-radius-md`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 10,
+        "unit": "px"
+      }
+    },
     "dimension-12": {
       "$type": "dimension",
+      "$description": "Feeds `ab-elevation-toast`, `ab-space-inline-md`, `ab-space-inset-md`, `ab-radius-lg`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "value": 12,
         "unit": "px"
       }
+    },
+    "dimension-16": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-space-inset-lg`, `ab-space-stack-md`, `ab-size-icon-sm`, `ab-size-mark-min`, `ab-radius-xl`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      }
+    },
+    "dimension-20": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-space-inline-lg`, `ab-size-icon-md`, `ab-layout-gutter` under `(max-width: 759.98px)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 20,
+        "unit": "px"
+      }
+    },
+    "dimension-24": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-elevation-overlay`, `ab-elevation-modal`, `ab-space-inline-xl`, `ab-space-inset-xl`, `ab-space-stack-lg`, `ab-size-icon-lg`, `ab-size-control-xs`, `ab-size-target-min`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 24,
+        "unit": "px"
+      }
+    },
+    "dimension-32": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-elevation-toast`, `ab-space-stack-xl`, `ab-size-icon-xl`, `ab-size-control-md`, `ab-size-toggle`, `ab-layout-gutter`, `ab-size-control-xs` under `(pointer: coarse)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      }
+    },
+    "dimension-36": {
+      "$type": "dimension",
+      "$description": "Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 36,
+        "unit": "px"
+      }
+    },
+    "dimension-40": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-size-control-lg`, `ab-size-control-sm` under `(pointer: coarse)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 40,
+        "unit": "px"
+      }
+    },
+    "dimension-44": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-size-target-recommended`, `ab-size-control-md` under `(pointer: coarse)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 44,
+        "unit": "px"
+      }
+    },
+    "dimension-48": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-space-stack-2xl`, `ab-size-control-lg` under `(pointer: coarse)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 48,
+        "unit": "px"
+      }
+    },
+    "dimension-64": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-elevation-modal`, `ab-space-section` under `(max-width: 759.98px)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 64,
+        "unit": "px"
+      }
+    },
+    "dimension-88": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-space-section`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 88,
+        "unit": "px"
+      }
+    },
+    "dimension-112": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-layout-label-column-width`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 112,
+        "unit": "px"
+      }
+    },
+    "dimension-680": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-size-container-lg`, `ab-layout-column-width`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 680,
+        "unit": "px"
+      }
+    },
+    "dimension-760": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-breakpoint-md`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 760,
+        "unit": "px"
+      }
+    },
+    "dimension-7": {
+      "$type": "dimension",
+      "$description": "Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 7,
+        "unit": "px"
+      }
+    },
+    "dimension-9": {
+      "$type": "dimension",
+      "$description": "Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 9,
+        "unit": "px"
+      }
+    },
+    "dimension-14": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-size-icon-xs`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 14,
+        "unit": "px"
+      }
+    },
+    "dimension-18": {
+      "$type": "dimension",
+      "$description": "Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 18,
+        "unit": "px"
+      }
+    },
+    "dimension-28": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-size-control-sm`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 28,
+        "unit": "px"
+      }
+    },
+    "dimension-224": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-size-container-2xs`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 224,
+        "unit": "px"
+      }
+    },
+    "dimension-320": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-size-container-xs`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 320,
+        "unit": "px"
+      }
+    },
+    "dimension-420": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-size-container-sm`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 420,
+        "unit": "px"
+      }
+    },
+    "dimension-560": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-size-container-md`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 560,
+        "unit": "px"
+      }
+    },
+    "dimension-9999": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-radius-full`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 9999,
+        "unit": "px"
+      }
+    },
+    "stroke-width-150": {
+      "$type": "number",
+      "$description": "Feeds `ab-stroke-width-sm`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 1.5
+    },
+    "stroke-width-175": {
+      "$type": "number",
+      "$description": "Feeds `ab-stroke-width-md`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 1.75
+    },
+    "stroke-width-200": {
+      "$type": "number",
+      "$description": "Feeds `ab-stroke-width-lg`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 2
+    },
+    "stroke-width-250": {
+      "$type": "number",
+      "$description": "Feeds `ab-stroke-width-xl`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 2.5
+    },
+    "stroke-width-300": {
+      "$type": "number",
+      "$description": "Feeds `ab-stroke-width-2xl`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 3
+    },
+    "scale-90": {
+      "$type": "number",
+      "$description": "Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 0.9
+    },
+    "scale-95": {
+      "$type": "number",
+      "$description": "Feeds `ab-motion-scale-enter-modal`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 0.95
+    },
+    "scale-97": {
+      "$type": "number",
+      "$description": "Feeds `ab-motion-scale-pressed`, `ab-motion-scale-enter`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 0.97
+    },
+    "scale-100": {
+      "$type": "number",
+      "$description": "Feeds `ab-motion-scale-pressed` under `(prefers-reduced-motion: reduce)`, `ab-motion-scale-enter` under `(prefers-reduced-motion: reduce)`, `ab-motion-scale-enter-modal` under `(prefers-reduced-motion: reduce)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 1
+    },
+    "z-index-0": {
+      "$type": "number",
+      "$description": "Feeds `ab-z-index-base`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 0
+    },
+    "z-index-100": {
+      "$type": "number",
+      "$description": "Feeds `ab-z-index-raised`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 100
+    },
+    "z-index-200": {
+      "$type": "number",
+      "$description": "Feeds `ab-z-index-sticky`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 200
+    },
+    "z-index-300": {
+      "$type": "number",
+      "$description": "Feeds `ab-z-index-dropdown`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 300
+    },
+    "z-index-400": {
+      "$type": "number",
+      "$description": "Feeds `ab-z-index-backdrop`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 400
+    },
+    "z-index-500": {
+      "$type": "number",
+      "$description": "Feeds `ab-z-index-modal`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 500
+    },
+    "z-index-600": {
+      "$type": "number",
+      "$description": "Feeds `ab-z-index-toast`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 600
+    },
+    "z-index-700": {
+      "$type": "number",
+      "$description": "Feeds `ab-z-index-tooltip`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 700
+    },
+    "blur-12": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-material-blur-thin`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      }
+    },
+    "blur-20": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-material-blur-regular`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 20,
+        "unit": "px"
+      }
+    },
+    "blur-32": {
+      "$type": "dimension",
+      "$description": "Feeds `ab-material-blur-thick`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      }
+    },
+    "saturate-150": {
+      "$type": "number",
+      "$description": "Feeds `ab-material-saturate-thin`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 1.5
+    },
+    "saturate-180": {
+      "$type": "number",
+      "$description": "Feeds `ab-material-saturate-regular`, `ab-material-saturate-thick`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 1.8
+    },
+    "opacity-40": {
+      "$type": "number",
+      "$description": "Feeds `ab-opacity-disabled`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 0.4
+    },
+    "opacity-64": {
+      "$type": "number",
+      "$description": "Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 0.64
+    },
+    "font-family-noto-serif": {
+      "$type": "fontFamily",
+      "$value": ["Noto Serif", "Georgia", "serif"]
+    },
+    "font-family-figtree": {
+      "$type": "fontFamily",
+      "$value": ["Figtree", "system-ui", "sans-serif"]
+    },
+    "font-family-system-mono": {
+      "$type": "fontFamily",
+      "$value": ["ui-monospace", "SF Mono", "Menlo", "Consolas", "monospace"]
+    },
+    "font-size-11": {
+      "$type": "dimension",
+      "$value": {
+        "value": 0.6875,
+        "unit": "rem"
+      }
+    },
+    "font-size-12": {
+      "$type": "dimension",
+      "$value": {
+        "value": 0.75,
+        "unit": "rem"
+      }
+    },
+    "font-size-13": {
+      "$type": "dimension",
+      "$value": {
+        "value": 0.8125,
+        "unit": "rem"
+      }
+    },
+    "font-size-14": {
+      "$type": "dimension",
+      "$value": {
+        "value": 0.875,
+        "unit": "rem"
+      }
+    },
+    "font-size-15": {
+      "$type": "dimension",
+      "$value": {
+        "value": 0.9375,
+        "unit": "rem"
+      }
+    },
+    "font-size-17": {
+      "$type": "dimension",
+      "$value": {
+        "value": 1.0625,
+        "unit": "rem"
+      }
+    },
+    "font-size-19-21": {
+      "$type": "dimension",
+      "$value": "clamp(1.1875rem, 1.1386rem + 0.2174vi, 1.3125rem)"
+    },
+    "font-size-24-26": {
+      "$type": "dimension",
+      "$value": "clamp(1.5rem, 1.4511rem + 0.2174vi, 1.625rem)"
+    },
+    "font-size-29-33": {
+      "$type": "dimension",
+      "$value": "clamp(1.8125rem, 1.7147rem + 0.4348vi, 2.0625rem)"
+    },
+    "font-weight-400": {
+      "$type": "fontWeight",
+      "$value": 400
+    },
+    "font-weight-500": {
+      "$type": "fontWeight",
+      "$value": 500
+    },
+    "line-height-100": {
+      "$type": "number",
+      "$value": 1
+    },
+    "line-height-115": {
+      "$type": "number",
+      "$value": 1.15
+    },
+    "line-height-120": {
+      "$type": "number",
+      "$value": 1.2
+    },
+    "line-height-130": {
+      "$type": "number",
+      "$value": 1.3
+    },
+    "line-height-140": {
+      "$type": "number",
+      "$value": 1.4
+    },
+    "line-height-155": {
+      "$type": "number",
+      "$value": 1.55
+    },
+    "line-height-160": {
+      "$type": "number",
+      "$value": 1.6
+    },
+    "letter-spacing-minus-20": {
+      "$type": "dimension",
+      "$value": "-0.02em"
+    },
+    "letter-spacing-minus-15": {
+      "$type": "dimension",
+      "$value": "-0.015em"
+    },
+    "letter-spacing-minus-10": {
+      "$type": "dimension",
+      "$value": "-0.01em"
+    },
+    "letter-spacing-0": {
+      "$type": "dimension",
+      "$value": "0em"
+    },
+    "letter-spacing-80": {
+      "$type": "dimension",
+      "$value": "0.08em"
+    },
+    "font-variant-numeric-tabular-nums": {
+      "$type": "string",
+      "$value": "tabular-nums"
+    },
+    "font-variant-numeric-normal": {
+      "$type": "string",
+      "$value": "normal"
+    },
+    "text-transform-uppercase": {
+      "$type": "string",
+      "$value": "uppercase"
+    },
+    "text-transform-none": {
+      "$type": "string",
+      "$value": "none"
+    },
+    "duration-0": {
+      "$type": "duration",
+      "$value": {
+        "value": 0,
+        "unit": "ms"
+      }
+    },
+    "duration-70": {
+      "$type": "duration",
+      "$value": {
+        "value": 70,
+        "unit": "ms"
+      }
+    },
+    "duration-100": {
+      "$type": "duration",
+      "$value": {
+        "value": 100,
+        "unit": "ms"
+      }
+    },
+    "duration-120": {
+      "$type": "duration",
+      "$value": {
+        "value": 120,
+        "unit": "ms"
+      }
+    },
+    "duration-125": {
+      "$type": "duration",
+      "$value": {
+        "value": 125,
+        "unit": "ms"
+      }
+    },
+    "duration-150": {
+      "$type": "duration",
+      "$value": {
+        "value": 150,
+        "unit": "ms"
+      }
+    },
+    "duration-200": {
+      "$type": "duration",
+      "$value": {
+        "value": 200,
+        "unit": "ms"
+      }
+    },
+    "duration-250": {
+      "$type": "duration",
+      "$value": {
+        "value": 250,
+        "unit": "ms"
+      }
+    },
+    "duration-300": {
+      "$type": "duration",
+      "$value": {
+        "value": 300,
+        "unit": "ms"
+      }
+    },
+    "duration-700": {
+      "$type": "duration",
+      "$value": {
+        "value": 700,
+        "unit": "ms"
+      }
+    },
+    "easing-ease-out-strong": {
+      "$type": "cubicBezier",
+      "$value": [0.23, 1, 0.32, 1]
+    },
+    "easing-ease-in-out-strong": {
+      "$type": "cubicBezier",
+      "$value": [0.77, 0, 0.175, 1]
+    },
+    "easing-ease-out-ios": {
+      "$type": "cubicBezier",
+      "$value": [0.32, 0.72, 0, 1]
+    },
+    "easing-ease": {
+      "$type": "string",
+      "$value": "ease"
+    },
+    "easing-linear": {
+      "$type": "string",
+      "$value": "linear"
+    },
+    "duration-180": {
+      "$type": "duration",
+      "$value": {
+        "value": 180,
+        "unit": "ms"
+      }
+    },
+    "duration-400": {
+      "$type": "duration",
+      "$value": {
+        "value": 400,
+        "unit": "ms"
+      }
+    },
+    "duration-500": {
+      "$type": "duration",
+      "$value": {
+        "value": 500,
+        "unit": "ms"
+      }
+    },
+    "duration-4000": {
+      "$type": "duration",
+      "$value": {
+        "value": 4000,
+        "unit": "ms"
+      }
+    },
+    "duration-6000": {
+      "$type": "duration",
+      "$value": {
+        "value": 6000,
+        "unit": "ms"
+      }
+    },
+    "easing-spring-snappy": {
+      "$type": "string",
+      "$value": "linear(0, .2459 6.6%, .5833 13.9%, .8241 21.5%, .9581 29.4%, 1.0158 38.1%, 1.0262 47.6%, 1.0138 58.6%, 1.0012 72.5%, .9985 100%)"
+    },
+    "easing-spring-gentle": {
+      "$type": "string",
+      "$value": "linear(0, .1641 5.4%, .4592 12.2%, .7175 19.4%, .8889 27.3%, .9816 36.1%, 1.0158 46.3%, 1.0151 58.2%, 1.0031 73.6%, 1)"
+    },
+    "easing-spring-bouncy": {
+      "$type": "string",
+      "$value": "linear(0, .3027 7.3%, .7216 15.6%, 1.0258 24.8%, 1.1155 31.2%, 1.1102 37.9%, 1.0379 49.5%, .9894 63.4%, .9977 81%, 1)"
     }
   }
 }

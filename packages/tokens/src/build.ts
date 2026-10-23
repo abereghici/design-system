@@ -8,6 +8,9 @@ import { cssFormat } from "./css-format.ts";
 export { TokenCheckError };
 export type { ArtifactTokens };
 
+const isDurationObject = (value: unknown): value is { value: unknown; unit: unknown } =>
+  typeof value === "object" && value !== null && "value" in value && "unit" in value;
+
 /** The package's DTCG source: one file per tier, each a top-level group named after it. */
 export const SOURCE_GLOB = `${import.meta.dirname}/tokens/*.tokens.json`;
 
@@ -42,12 +45,30 @@ export async function buildTokens(input: BuildInput): Promise<BuildOutput> {
           // The top-level group is the tier; the rest of the path is the token's name.
           transform: (token) => `ab-${token.path.slice(1).join("-")}`,
         },
+        "ab/duration": {
+          type: "value",
+          // DTCG durations are `{ value, unit }` objects; CSS takes them as written (`70ms`).
+          filter: (token) => token.$type === "duration" && isDurationObject(token.$value),
+          transform: (token) => {
+            const duration: unknown = token.$value;
+            return isDurationObject(duration)
+              ? `${String(duration.value)}${String(duration.unit)}`
+              : String(duration);
+          },
+        },
       },
       formats: { "ab/css": cssFormat },
     },
     platforms: {
       web: {
-        transforms: ["ab/name", "color/css", "size/rem"],
+        transforms: [
+          "ab/name",
+          "color/css",
+          "size/rem",
+          "ab/duration",
+          "cubicBezier/css",
+          "fontFamily/css",
+        ],
         files: [{ destination: "tokens.css", format: "ab/css" }],
       },
     },

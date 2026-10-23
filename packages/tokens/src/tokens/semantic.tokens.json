@@ -1,7 +1,33 @@
 {
   "semantic": {
+    "color-brand-moss": {
+      "$type": "color",
+      "$description": "Identity hue Moss, fixed in both themes. For the mark, imagery and print only; never an interface role. Ink of `assets/marks/stalpul-cerului-moss.svg`.",
+      "$value": "{primitive.palette-moss-900}"
+    },
+    "color-brand-lichen": {
+      "$type": "color",
+      "$description": "Identity hue Lichen, fixed in both themes. For the mark, imagery and print only; never an interface role. Ink of `assets/marks/stalpul-cerului-lichen.svg`, and the ground behind the moss mark in avatars.",
+      "$value": "{primitive.palette-lichen-100}"
+    },
+    "color-brand-sage": {
+      "$type": "color",
+      "$description": "Identity hue Sage, fixed in both themes. For the mark, imagery and print only; never an interface role.",
+      "$value": "{primitive.palette-sage-50}"
+    },
+    "color-brand-peach": {
+      "$type": "color",
+      "$description": "Identity hue Peach, fixed in both themes. For the mark, imagery and print only; never an interface role.",
+      "$value": "{primitive.palette-ember-100}"
+    },
+    "color-brand-ember": {
+      "$type": "color",
+      "$description": "Identity hue Ember, fixed in both themes. For the mark, imagery and print only; never an interface role.",
+      "$value": "{primitive.palette-ember-400}"
+    },
     "color-surface-default": {
       "$type": "color",
+      "$description": "The page. Every text role from `ab-color-text-default` to `-danger` reads on it: lowest 5.48 light, 5.22 dark.",
       "$value": "{primitive.palette-sage-0}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -9,8 +35,238 @@
         }
       }
     },
+    "color-surface-raised": {
+      "$type": "color",
+      "$description": "One step from the page. Every text role from `ab-color-text-default` to `-danger` reads on it: lowest 4.98 light, 4.93 dark.",
+      "$value": "{primitive.palette-sage-50}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-900}"
+        }
+      }
+    },
+    "color-surface-nested": {
+      "$type": "color",
+      "$description": "A panel inside a raised panel. Every text role from `ab-color-text-default` to `-danger` reads on it: lowest 4.56 light, 4.58 dark.",
+      "$value": "{primitive.palette-sage-100}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-800}"
+        }
+      }
+    },
+    "color-surface-floating": {
+      "$type": "color",
+      "$description": "Menus, popovers and dialogs. Every text role from `ab-color-text-default` to `-danger` reads on it: lowest 5.48 light, 4.93 dark.",
+      "$value": "{primitive.palette-sage-0}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-900}"
+        }
+      }
+    },
+    "color-background-neutral-subtle": {
+      "$type": "color",
+      "$value": "{primitive.palette-transparent}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-transparent}"
+        }
+      }
+    },
+    "color-background-neutral-subtle-hovered": {
+      "$type": "color",
+      "$description": "Hover fill of quiet controls, rows and menu items (the rest state is transparent).",
+      "$value": "{primitive.palette-sage-50}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-900}"
+        }
+      }
+    },
+    "color-background-neutral-subtle-pressed": {
+      "$type": "color",
+      "$description": "Pressed fill of quiet controls, rows and menu items.",
+      "$value": "{primitive.palette-sage-100}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-800}"
+        }
+      }
+    },
+    "color-background-selected": {
+      "$type": "color",
+      "$description": "Fill of the current item in a set.",
+      "$value": "{primitive.palette-sage-50}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-800}"
+        }
+      }
+    },
+    "color-background-accent-bold": {
+      "$type": "color",
+      "$description": "The single brand action fill (primary button, checked controls). Text on it is `ab-color-text-on-accent` (13.40 light, 10.96 dark).",
+      "$value": "{primitive.palette-moss-900}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-lichen-200}"
+        }
+      }
+    },
+    "color-background-accent-bold-hovered": {
+      "$type": "color",
+      "$description": "Hovered state of `ab-color-background-accent-bold`.",
+      "$value": "{primitive.palette-moss-800}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-lichen-100}"
+        }
+      }
+    },
+    "color-background-accent-bold-pressed": {
+      "$type": "color",
+      "$description": "Pressed state of `ab-color-background-accent-bold`.",
+      "$value": "{primitive.palette-moss-950}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-lichen-300}"
+        }
+      }
+    },
+    "color-background-accent-subtle": {
+      "$type": "color",
+      "$description": "Subtle accent fill; text roles read on it.",
+      "$value": "{primitive.palette-lichen-100}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-800}"
+        }
+      }
+    },
+    "color-background-success-bold": {
+      "$type": "color",
+      "$description": "Filled success state. Text on it is `ab-color-text-on-success` (7.74 light, 10.85 dark).",
+      "$value": "{primitive.palette-fern-700}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-fern-300}"
+        }
+      }
+    },
+    "color-background-success-subtle": {
+      "$type": "color",
+      "$description": "Tinted success fill (tags, toasts). Text on it is `ab-color-text-success` (7.27 light, 10.51 dark).",
+      "$value": "{primitive.palette-fern-50}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-fern-950}"
+        }
+      }
+    },
+    "color-background-warning-bold": {
+      "$type": "color",
+      "$description": "Filled warning state. Text on it is `ab-color-text-on-warning` (8.00 light, 11.06 dark).",
+      "$value": "{primitive.palette-ember-400}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-ember-200}"
+        }
+      }
+    },
+    "color-background-warning-subtle": {
+      "$type": "color",
+      "$description": "Tinted warning fill (tags, toasts). Text on it is `ab-color-text-warning` (8.58 light, 10.91 dark).",
+      "$value": "{primitive.palette-ember-50}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-ember-950}"
+        }
+      }
+    },
+    "color-background-danger-bold": {
+      "$type": "color",
+      "$description": "Filled danger state (danger button). Text on it is `ab-color-text-on-danger` (5.76 light, 8.23 dark).",
+      "$value": "{primitive.palette-clay-600}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-clay-300}"
+        }
+      }
+    },
+    "color-background-danger-bold-hovered": {
+      "$type": "color",
+      "$description": "Hovered state of `ab-color-background-danger-bold`.",
+      "$value": "{primitive.palette-clay-700}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-clay-200}"
+        }
+      }
+    },
+    "color-background-danger-bold-pressed": {
+      "$type": "color",
+      "$description": "Pressed state of `ab-color-background-danger-bold`.",
+      "$value": "{primitive.palette-clay-800}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-clay-400}"
+        }
+      }
+    },
+    "color-background-danger-subtle": {
+      "$type": "color",
+      "$description": "Tinted danger fill (tags, toasts). Text on it is `ab-color-text-danger` (5.34 light, 8.20 dark).",
+      "$value": "{primitive.palette-clay-50}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-clay-950}"
+        }
+      }
+    },
+    "color-background-neutral-bold": {
+      "$type": "color",
+      "$description": "Inverse fill for tooltips; content on it uses `ab-color-text-inverse`. Text on it is `ab-color-text-inverse` (13.98 light, 15.93 dark).",
+      "$value": "{primitive.palette-night-800}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-50}"
+        }
+      }
+    },
+    "color-background-highlight": {
+      "$type": "color",
+      "$description": "Behind one marked phrase per page. Text on it is `ab-color-text-on-highlight` (13.22 light, 13.22 dark).",
+      "$value": "{primitive.palette-ember-100}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-ember-100}"
+        }
+      }
+    },
+    "color-background-disabled": {
+      "$type": "color",
+      "$description": "Fill of an unavailable control (exempt from contrast).",
+      "$value": "{primitive.palette-sage-100}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-800}"
+        }
+      }
+    },
+    "color-backdrop": {
+      "$type": "color",
+      "$description": "The dimming layer behind a modal (Dialog, Sheet, CommandPalette).",
+      "$value": "{primitive.palette-night-950-a64}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-950-a64}"
+        }
+      }
+    },
     "color-text-default": {
       "$type": "color",
+      "$description": "Primary copy and headings, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 14.75 light, 13.98 dark (needs 4.5:1).",
       "$value": "{primitive.palette-sage-950}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -20,6 +276,7 @@
     },
     "color-text-subtle": {
       "$type": "color",
+      "$description": "Secondary text, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 6.14 light, 6.53 dark (needs 4.5:1).",
       "$value": "{primitive.palette-sage-700}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -27,17 +284,22 @@
         }
       }
     },
-    "color-border-default": {
+    "color-text-subtlest": {
       "$type": "color",
-      "$value": "{primitive.palette-sage-500}",
+      "$description": "Lowest-contrast text that still passes AA (helper text, hints), on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 4.56 light, 4.58 dark (needs 4.5:1).",
+      "$value": "{primitive.palette-sage-600}",
       "$extensions": {
         "com.bereghici.theme": {
-          "dark": "{primitive.palette-night-500}"
+          "dark": "{primitive.palette-night-400}"
+        },
+        "com.bereghici.media": {
+          "(prefers-contrast: more)": "{semantic.color-text-subtle}"
         }
       }
     },
-    "color-background-accent-bold": {
+    "color-text-accent": {
       "$type": "color",
+      "$description": "Accent text and links, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 4.5:1).",
       "$value": "{primitive.palette-moss-900}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -45,8 +307,69 @@
         }
       }
     },
+    "color-text-selected": {
+      "$type": "color",
+      "$description": "The current item in a set, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 4.5:1).",
+      "$value": "{primitive.palette-moss-900}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-lichen-200}"
+        }
+      }
+    },
+    "color-text-success": {
+      "$type": "color",
+      "$description": "Success state, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 6.44 light, 9.52 dark (needs 4.5:1).",
+      "$value": "{primitive.palette-fern-700}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-fern-300}"
+        }
+      }
+    },
+    "color-text-warning": {
+      "$type": "color",
+      "$description": "Warning state, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 7.70 light, 9.70 dark (needs 4.5:1).",
+      "$value": "{primitive.palette-ember-800}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-ember-200}"
+        }
+      }
+    },
+    "color-text-danger": {
+      "$type": "color",
+      "$description": "Danger state and errors, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 4.80 light, 7.22 dark (needs 4.5:1).",
+      "$value": "{primitive.palette-clay-600}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-clay-300}"
+        }
+      }
+    },
+    "color-text-disabled": {
+      "$type": "color",
+      "$description": "An unavailable control (exempt from contrast); pair with `aria-disabled` and an explanation.",
+      "$value": "{primitive.palette-sage-400}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-600}"
+        }
+      }
+    },
+    "color-text-inverse": {
+      "$type": "color",
+      "$description": "Content on `ab-color-background-neutral-bold` (tooltips): 13.98 light, 15.93 dark.",
+      "$value": "{primitive.palette-night-50}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-950}"
+        }
+      }
+    },
     "color-text-on-accent": {
       "$type": "color",
+      "$description": "Content on `ab-color-background-accent-bold` (rest, hovered, pressed): lowest 9.93 light, 8.39 dark.",
       "$value": "{primitive.palette-sage-0}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -54,17 +377,1509 @@
         }
       }
     },
-    "color-brand-moss": {
+    "color-text-on-success": {
       "$type": "color",
-      "$value": "{primitive.palette-moss-900}"
+      "$description": "Content on `ab-color-background-success-bold`: lowest 7.74 light, 10.85 dark.",
+      "$value": "{primitive.palette-sage-0}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-950}"
+        }
+      }
+    },
+    "color-text-on-warning": {
+      "$type": "color",
+      "$description": "Content on `ab-color-background-warning-bold`: lowest 8.00 light, 11.06 dark.",
+      "$value": "{primitive.palette-sage-950}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-950}"
+        }
+      }
+    },
+    "color-text-on-danger": {
+      "$type": "color",
+      "$description": "Content on `ab-color-background-danger-bold` (rest, hovered, pressed): lowest 5.76 light, 6.12 dark.",
+      "$value": "{primitive.palette-sage-0}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-950}"
+        }
+      }
+    },
+    "color-text-on-highlight": {
+      "$type": "color",
+      "$description": "Content on `ab-color-background-highlight`: lowest 13.22 light, 13.22 dark.",
+      "$value": "{primitive.palette-sage-950}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-sage-950}"
+        }
+      }
+    },
+    "color-icon-default": {
+      "$type": "color",
+      "$description": "Primary glyphs, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 14.75 light, 13.98 dark (needs 3:1).",
+      "$value": "{primitive.palette-sage-950}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-50}"
+        }
+      }
+    },
+    "color-icon-subtle": {
+      "$type": "color",
+      "$description": "Secondary glyphs, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 6.14 light, 6.53 dark (needs 3:1).",
+      "$value": "{primitive.palette-sage-700}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-300}"
+        }
+      }
+    },
+    "color-icon-subtlest": {
+      "$type": "color",
+      "$description": "Lowest-contrast glyphs that still passes AA (helper text, hints), on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 4.56 light, 4.58 dark (needs 3:1).",
+      "$value": "{primitive.palette-sage-600}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-400}"
+        },
+        "com.bereghici.media": {
+          "(prefers-contrast: more)": "{semantic.color-icon-subtle}"
+        }
+      }
+    },
+    "color-icon-accent": {
+      "$type": "color",
+      "$description": "Accent glyphs, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 3:1).",
+      "$value": "{primitive.palette-moss-900}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-lichen-200}"
+        }
+      }
+    },
+    "color-icon-selected": {
+      "$type": "color",
+      "$description": "The current item in a set, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 3:1).",
+      "$value": "{primitive.palette-moss-900}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-lichen-200}"
+        }
+      }
+    },
+    "color-icon-success": {
+      "$type": "color",
+      "$description": "Success state, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 6.44 light, 9.52 dark (needs 3:1).",
+      "$value": "{primitive.palette-fern-700}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-fern-300}"
+        }
+      }
+    },
+    "color-icon-warning": {
+      "$type": "color",
+      "$description": "Warning state, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 3.05 light, 9.70 dark (needs 3:1).",
+      "$value": "{primitive.palette-ember-600}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-ember-200}"
+        }
+      }
+    },
+    "color-icon-danger": {
+      "$type": "color",
+      "$description": "Danger state and errors, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 4.80 light, 7.22 dark (needs 3:1).",
+      "$value": "{primitive.palette-clay-600}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-clay-300}"
+        }
+      }
+    },
+    "color-icon-disabled": {
+      "$type": "color",
+      "$description": "An unavailable control (exempt from contrast); pair with `aria-disabled` and an explanation.",
+      "$value": "{primitive.palette-sage-400}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-600}"
+        }
+      }
+    },
+    "color-icon-on-accent": {
+      "$type": "color",
+      "$description": "Content on `ab-color-background-accent-bold` (rest, hovered, pressed): lowest 9.93 light, 8.39 dark.",
+      "$value": "{primitive.palette-sage-0}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-moss-900}"
+        }
+      }
+    },
+    "color-border-subtle": {
+      "$type": "color",
+      "$description": "Decorative hairline between rows and sections (1.29 light, 1.41 dark on the page, below 3:1 by rule): never the only boundary of a control. Steps up to `ab-color-border-default` under increased contrast.",
+      "$value": "{primitive.palette-sage-200}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-700}"
+        },
+        "com.bereghici.media": {
+          "(prefers-contrast: more)": "{semantic.color-border-default}"
+        }
+      }
+    },
+    "color-border-default": {
+      "$type": "color",
+      "$description": "Control edges that must be seen, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 3.06 light, 3.06 dark (needs 3:1).",
+      "$value": "{primitive.palette-sage-500}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-500}"
+        }
+      }
+    },
+    "color-border-default-hovered": {
+      "$type": "color",
+      "$description": "Hovered control edge, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 4.56 light, 4.58 dark (needs 3:1).",
+      "$value": "{primitive.palette-sage-600}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-400}"
+        }
+      }
+    },
+    "color-border-accent": {
+      "$type": "color",
+      "$description": "Accent edge, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 3:1).",
+      "$value": "{primitive.palette-moss-900}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-lichen-200}"
+        }
+      }
+    },
+    "color-border-focused": {
+      "$type": "color",
+      "$description": "The 2px focus ring (`ab-focus-ring-width`, offset `ab-focus-ring-offset`) on every interactive element, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 3:1).",
+      "$value": "{primitive.palette-moss-900}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-lichen-200}"
+        }
+      }
+    },
+    "color-border-selected": {
+      "$type": "color",
+      "$description": "Edge of the current item in a set, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 3:1).",
+      "$value": "{primitive.palette-moss-900}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-lichen-200}"
+        }
+      }
+    },
+    "color-border-success": {
+      "$type": "color",
+      "$description": "Success edge, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 6.44 light, 9.52 dark (needs 3:1).",
+      "$value": "{primitive.palette-fern-700}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-fern-300}"
+        }
+      }
+    },
+    "color-border-warning": {
+      "$type": "color",
+      "$description": "Warning edge, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 3.05 light, 9.70 dark (needs 3:1).",
+      "$value": "{primitive.palette-ember-600}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-ember-200}"
+        }
+      }
+    },
+    "color-border-danger": {
+      "$type": "color",
+      "$description": "Danger edge (invalid fields), on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 4.80 light, 7.22 dark (needs 3:1).",
+      "$value": "{primitive.palette-clay-600}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-clay-300}"
+        }
+      }
+    },
+    "color-border-disabled": {
+      "$type": "color",
+      "$description": "Edge of an unavailable control (exempt from contrast).",
+      "$value": "{primitive.palette-sage-200}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-700}"
+        }
+      }
+    },
+    "color-material-thin": {
+      "$type": "color",
+      "$description": "Translucent thin fill for floating chrome (menus, the command palette), always with `ab-material-blur-thin`; never for in-flow content or long text. Solid floating surface under reduced transparency.",
+      "$value": "{primitive.palette-sage-0-a56}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-900-a56}"
+        },
+        "com.bereghici.media": {
+          "(prefers-reduced-transparency: reduce)": {
+            "light": "{primitive.palette-sage-0}",
+            "dark": "{primitive.palette-night-900}"
+          }
+        }
+      }
+    },
+    "color-material-regular": {
+      "$type": "color",
+      "$description": "Translucent regular fill for floating chrome (menus, the command palette), always with `ab-material-blur-regular`; never for in-flow content or long text. Solid floating surface under reduced transparency.",
+      "$value": "{primitive.palette-sage-0-a72}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-900-a72}"
+        },
+        "com.bereghici.media": {
+          "(prefers-reduced-transparency: reduce)": {
+            "light": "{primitive.palette-sage-0}",
+            "dark": "{primitive.palette-night-900}"
+          }
+        }
+      }
+    },
+    "color-material-thick": {
+      "$type": "color",
+      "$description": "Translucent thick fill for floating chrome (menus, the command palette), always with `ab-material-blur-thick`; never for in-flow content or long text. Solid floating surface under reduced transparency.",
+      "$value": "{primitive.palette-sage-0-a90}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-900-a90}"
+        },
+        "com.bereghici.media": {
+          "(prefers-reduced-transparency: reduce)": {
+            "light": "{primitive.palette-sage-0}",
+            "dark": "{primitive.palette-night-900}"
+          }
+        }
+      }
+    },
+    "color-shadow-ring": {
+      "$type": "color",
+      "$description": "Hairline ring colour inside `ab-elevation-*`; separates a floating layer on any background. Moss-tinted in light, deep night in dark.",
+      "$value": "{primitive.palette-moss-950-a10}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-sage-0-a10}"
+        }
+      }
+    },
+    "color-shadow-highlight": {
+      "$type": "color",
+      "$value": "{primitive.palette-transparent}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-sage-0-a06}"
+        }
+      }
+    },
+    "color-shadow-ambient": {
+      "$type": "color",
+      "$description": "Contact-shadow colour inside `ab-elevation-*`. Moss-tinted in light, deep night in dark.",
+      "$value": "{primitive.palette-moss-950-a06}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-950-a24}"
+        }
+      }
+    },
+    "color-shadow-key": {
+      "$type": "color",
+      "$description": "Key-shadow colour inside `ab-elevation-overlay` and `ab-elevation-toast`. Moss-tinted in light, deep night in dark.",
+      "$value": "{primitive.palette-moss-950-a10}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-950-a40}"
+        }
+      }
+    },
+    "color-shadow-deep": {
+      "$type": "color",
+      "$description": "Key-shadow colour inside `ab-elevation-modal`. Moss-tinted in light, deep night in dark.",
+      "$value": "{primitive.palette-moss-950-a14}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-night-950-a48}"
+        }
+      }
+    },
+    "material-blur-thin": {
+      "$type": "dimension",
+      "$value": "{primitive.blur-12}"
+    },
+    "material-blur-regular": {
+      "$type": "dimension",
+      "$value": "{primitive.blur-20}"
+    },
+    "material-blur-thick": {
+      "$type": "dimension",
+      "$value": "{primitive.blur-32}"
+    },
+    "material-saturate-thin": {
+      "$type": "number",
+      "$value": "{primitive.saturate-150}"
+    },
+    "material-saturate-regular": {
+      "$type": "number",
+      "$value": "{primitive.saturate-180}"
+    },
+    "material-saturate-thick": {
+      "$type": "number",
+      "$value": "{primitive.saturate-180}"
+    },
+    "opacity-disabled": {
+      "$type": "number",
+      "$value": "{primitive.opacity-40}"
+    },
+    "elevation-ring": {
+      "$type": "shadow",
+      "$value": {
+        "color": "{semantic.color-shadow-ring}",
+        "offsetX": "{primitive.dimension-0}",
+        "offsetY": "{primitive.dimension-0}",
+        "blur": "{primitive.dimension-0}",
+        "spread": "{primitive.dimension-1}"
+      }
+    },
+    "elevation-highlight": {
+      "$type": "shadow",
+      "$value": {
+        "color": "{semantic.color-shadow-highlight}",
+        "offsetX": "{primitive.dimension-0}",
+        "offsetY": "{primitive.dimension-1}",
+        "blur": "{primitive.dimension-0}",
+        "spread": "{primitive.dimension-0}",
+        "inset": true
+      }
+    },
+    "elevation-raised": {
+      "$type": "shadow",
+      "$value": [
+        "{semantic.elevation-ring}",
+        "{semantic.elevation-highlight}",
+        {
+          "color": "{semantic.color-shadow-ambient}",
+          "offsetX": "{primitive.dimension-0}",
+          "offsetY": "{primitive.dimension-1}",
+          "blur": "{primitive.dimension-2}",
+          "spread": "{primitive.dimension-0}"
+        }
+      ]
+    },
+    "elevation-overlay": {
+      "$type": "shadow",
+      "$value": [
+        "{semantic.elevation-ring}",
+        "{semantic.elevation-highlight}",
+        {
+          "color": "{semantic.color-shadow-ambient}",
+          "offsetX": "{primitive.dimension-0}",
+          "offsetY": "{primitive.dimension-2}",
+          "blur": "{primitive.dimension-4}",
+          "spread": "{primitive.dimension-0}"
+        },
+        {
+          "color": "{semantic.color-shadow-key}",
+          "offsetX": "{primitive.dimension-0}",
+          "offsetY": "{primitive.dimension-8}",
+          "blur": "{primitive.dimension-24}",
+          "spread": "{primitive.dimension-0}"
+        }
+      ]
+    },
+    "elevation-toast": {
+      "$type": "shadow",
+      "$value": [
+        "{semantic.elevation-ring}",
+        "{semantic.elevation-highlight}",
+        {
+          "color": "{semantic.color-shadow-ambient}",
+          "offsetX": "{primitive.dimension-0}",
+          "offsetY": "{primitive.dimension-4}",
+          "blur": "{primitive.dimension-12}",
+          "spread": "{primitive.dimension-0}"
+        },
+        {
+          "color": "{semantic.color-shadow-key}",
+          "offsetX": "{primitive.dimension-0}",
+          "offsetY": "{primitive.dimension-12}",
+          "blur": "{primitive.dimension-32}",
+          "spread": "{primitive.dimension-0}"
+        }
+      ]
+    },
+    "elevation-modal": {
+      "$type": "shadow",
+      "$value": [
+        "{semantic.elevation-ring}",
+        "{semantic.elevation-highlight}",
+        {
+          "color": "{semantic.color-shadow-ambient}",
+          "offsetX": "{primitive.dimension-0}",
+          "offsetY": "{primitive.dimension-4}",
+          "blur": "{primitive.dimension-8}",
+          "spread": "{primitive.dimension-0}"
+        },
+        {
+          "color": "{semantic.color-shadow-deep}",
+          "offsetX": "{primitive.dimension-0}",
+          "offsetY": "{primitive.dimension-24}",
+          "blur": "{primitive.dimension-64}",
+          "spread": "{primitive.dimension-0}"
+        }
+      ]
+    },
+    "type-heading-lg-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-noto-serif}"
+    },
+    "type-heading-lg-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-29-33}"
+    },
+    "type-heading-lg-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-500}"
+    },
+    "type-heading-lg-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-120}"
+    },
+    "type-heading-lg-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-minus-20}"
+    },
+    "type-heading-lg": {
+      "$type": "typography",
+      "$description": "Serif title. Fluid 29→33px between 360px and 1280px viewports (`ab-font-size-29-33`); the size shown is the 1280px end. In CSS: `font: var(--ab-type-heading-lg)` plus `letter-spacing: var(--ab-type-heading-lg-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-noto-serif}",
+        "fontSize": "{primitive.font-size-29-33}",
+        "fontWeight": "{primitive.font-weight-500}",
+        "lineHeight": "{primitive.line-height-120}",
+        "letterSpacing": "{primitive.letter-spacing-minus-20}"
+      }
+    },
+    "type-heading-md-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-noto-serif}"
+    },
+    "type-heading-md-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-24-26}"
+    },
+    "type-heading-md-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-500}"
+    },
+    "type-heading-md-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-115}"
+    },
+    "type-heading-md-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-minus-15}"
+    },
+    "type-heading-md": {
+      "$type": "typography",
+      "$description": "Serif title. Fluid 24→26px between 360px and 1280px viewports (`ab-font-size-24-26`); the size shown is the 1280px end. In CSS: `font: var(--ab-type-heading-md)` plus `letter-spacing: var(--ab-type-heading-md-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-noto-serif}",
+        "fontSize": "{primitive.font-size-24-26}",
+        "fontWeight": "{primitive.font-weight-500}",
+        "lineHeight": "{primitive.line-height-115}",
+        "letterSpacing": "{primitive.letter-spacing-minus-15}"
+      }
+    },
+    "type-heading-sm-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-noto-serif}"
+    },
+    "type-heading-sm-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-19-21}"
+    },
+    "type-heading-sm-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-500}"
+    },
+    "type-heading-sm-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-130}"
+    },
+    "type-heading-sm-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-minus-10}"
+    },
+    "type-heading-sm": {
+      "$type": "typography",
+      "$description": "Serif title. Fluid 19→21px between 360px and 1280px viewports (`ab-font-size-19-21`); the size shown is the 1280px end. In CSS: `font: var(--ab-type-heading-sm)` plus `letter-spacing: var(--ab-type-heading-sm-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-noto-serif}",
+        "fontSize": "{primitive.font-size-19-21}",
+        "fontWeight": "{primitive.font-weight-500}",
+        "lineHeight": "{primitive.line-height-130}",
+        "letterSpacing": "{primitive.letter-spacing-minus-10}"
+      }
+    },
+    "type-heading-xs-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-noto-serif}"
+    },
+    "type-heading-xs-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-17}"
+    },
+    "type-heading-xs-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-500}"
+    },
+    "type-heading-xs-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-140}"
+    },
+    "type-heading-xs-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-minus-10}"
+    },
+    "type-heading-xs": {
+      "$type": "typography",
+      "$description": "Serif title. In CSS: `font: var(--ab-type-heading-xs)` plus `letter-spacing: var(--ab-type-heading-xs-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-noto-serif}",
+        "fontSize": "{primitive.font-size-17}",
+        "fontWeight": "{primitive.font-weight-500}",
+        "lineHeight": "{primitive.line-height-140}",
+        "letterSpacing": "{primitive.letter-spacing-minus-10}"
+      }
+    },
+    "type-display-md-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-noto-serif}"
+    },
+    "type-display-md-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-24-26}"
+    },
+    "type-display-md-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-400}"
+    },
+    "type-display-md-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-130}"
+    },
+    "type-display-md-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-minus-10}"
+    },
+    "type-display-md": {
+      "$type": "typography",
+      "$description": "Serif statement. Fluid 24→26px between 360px and 1280px viewports (`ab-font-size-24-26`); the size shown is the 1280px end. In CSS: `font: var(--ab-type-display-md)` plus `letter-spacing: var(--ab-type-display-md-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-noto-serif}",
+        "fontSize": "{primitive.font-size-24-26}",
+        "fontWeight": "{primitive.font-weight-400}",
+        "lineHeight": "{primitive.line-height-130}",
+        "letterSpacing": "{primitive.letter-spacing-minus-10}"
+      }
+    },
+    "type-body-lg-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-body-lg-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-19-21}"
+    },
+    "type-body-lg-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-400}"
+    },
+    "type-body-lg-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-155}"
+    },
+    "type-body-lg-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-0}"
+    },
+    "type-body-lg": {
+      "$type": "typography",
+      "$description": "Sans reading text. Fluid 19→21px between 360px and 1280px viewports (`ab-font-size-19-21`); the size shown is the 1280px end. In CSS: `font: var(--ab-type-body-lg)` plus `letter-spacing: var(--ab-type-body-lg-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{primitive.font-size-19-21}",
+        "fontWeight": "{primitive.font-weight-400}",
+        "lineHeight": "{primitive.line-height-155}",
+        "letterSpacing": "{primitive.letter-spacing-0}"
+      }
+    },
+    "type-body-md-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-body-md-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-17}"
+    },
+    "type-body-md-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-400}"
+    },
+    "type-body-md-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-160}"
+    },
+    "type-body-md-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-0}"
+    },
+    "type-body-md": {
+      "$type": "typography",
+      "$description": "Sans reading text. In CSS: `font: var(--ab-type-body-md)` plus `letter-spacing: var(--ab-type-body-md-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{primitive.font-size-17}",
+        "fontWeight": "{primitive.font-weight-400}",
+        "lineHeight": "{primitive.line-height-160}",
+        "letterSpacing": "{primitive.letter-spacing-0}"
+      }
+    },
+    "type-body-sm-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-body-sm-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-15}"
+    },
+    "type-body-sm-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-400}"
+    },
+    "type-body-sm-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-160}"
+    },
+    "type-body-sm-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-0}"
+    },
+    "type-body-sm": {
+      "$type": "typography",
+      "$description": "Sans reading text. In CSS: `font: var(--ab-type-body-sm)` plus `letter-spacing: var(--ab-type-body-sm-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{primitive.font-size-15}",
+        "fontWeight": "{primitive.font-weight-400}",
+        "lineHeight": "{primitive.line-height-160}",
+        "letterSpacing": "{primitive.letter-spacing-0}"
+      }
+    },
+    "type-body-xs-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-body-xs-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-14}"
+    },
+    "type-body-xs-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-400}"
+    },
+    "type-body-xs-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-160}"
+    },
+    "type-body-xs-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-0}"
+    },
+    "type-body-xs": {
+      "$type": "typography",
+      "$description": "Sans reading text. In CSS: `font: var(--ab-type-body-xs)` plus `letter-spacing: var(--ab-type-body-xs-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{primitive.font-size-14}",
+        "fontWeight": "{primitive.font-weight-400}",
+        "lineHeight": "{primitive.line-height-160}",
+        "letterSpacing": "{primitive.letter-spacing-0}"
+      }
+    },
+    "type-label-lg-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-label-lg-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-15}"
+    },
+    "type-label-lg-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-500}"
+    },
+    "type-label-lg-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-100}"
+    },
+    "type-label-lg-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-0}"
+    },
+    "type-label-lg": {
+      "$type": "typography",
+      "$description": "Sans control text. In CSS: `font: var(--ab-type-label-lg)` plus `letter-spacing: var(--ab-type-label-lg-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{primitive.font-size-15}",
+        "fontWeight": "{primitive.font-weight-500}",
+        "lineHeight": "{primitive.line-height-100}",
+        "letterSpacing": "{primitive.letter-spacing-0}"
+      }
+    },
+    "type-label-sm-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-label-sm-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-13}"
+    },
+    "type-label-sm-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-500}"
+    },
+    "type-label-sm-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-120}"
+    },
+    "type-label-sm-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-0}"
+    },
+    "type-label-sm": {
+      "$type": "typography",
+      "$description": "Dense UI text: menus, tabs, inputs, buttons. In CSS: `font: var(--ab-type-label-sm)` plus `letter-spacing: var(--ab-type-label-sm-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{semantic.type-label-sm-font-size}",
+        "fontWeight": "{primitive.font-weight-500}",
+        "lineHeight": "{primitive.line-height-120}",
+        "letterSpacing": "{primitive.letter-spacing-0}"
+      }
+    },
+    "type-kbd-sm-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-kbd-sm-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-11}"
+    },
+    "type-kbd-sm-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-500}"
+    },
+    "type-kbd-sm-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-100}"
+    },
+    "type-kbd-sm-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-0}"
+    },
+    "type-kbd-sm-font-variant-numeric": {
+      "$type": "string",
+      "$value": "{primitive.font-variant-numeric-tabular-nums}"
+    },
+    "type-kbd-sm": {
+      "$type": "typography",
+      "$description": "Shortcut hints (Kbd). Set with tabular figures. In CSS: `font: var(--ab-type-kbd-sm)` plus `letter-spacing: var(--ab-type-kbd-sm-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{semantic.type-kbd-sm-font-size}",
+        "fontWeight": "{primitive.font-weight-500}",
+        "lineHeight": "{primitive.line-height-100}",
+        "letterSpacing": "{primitive.letter-spacing-0}"
+      }
+    },
+    "type-label-md-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-label-md-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-14}"
+    },
+    "type-label-md-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-500}"
+    },
+    "type-label-md-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-160}"
+    },
+    "type-label-md-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-0}"
+    },
+    "type-label-md": {
+      "$type": "typography",
+      "$description": "Sans control text. In CSS: `font: var(--ab-type-label-md)` plus `letter-spacing: var(--ab-type-label-md-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{primitive.font-size-14}",
+        "fontWeight": "{primitive.font-weight-500}",
+        "lineHeight": "{primitive.line-height-160}",
+        "letterSpacing": "{primitive.letter-spacing-0}"
+      }
+    },
+    "type-data-md-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-data-md-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-13}"
+    },
+    "type-data-md-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-500}"
+    },
+    "type-data-md-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-100}"
+    },
+    "type-data-md-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-minus-10}"
+    },
+    "type-data-md-font-variant-numeric": {
+      "$type": "string",
+      "$value": "{primitive.font-variant-numeric-tabular-nums}"
+    },
+    "type-data-md": {
+      "$type": "typography",
+      "$description": "Tabular figures. Set with tabular figures. In CSS: `font: var(--ab-type-data-md)` plus `letter-spacing: var(--ab-type-data-md-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{primitive.font-size-13}",
+        "fontWeight": "{primitive.font-weight-500}",
+        "lineHeight": "{primitive.line-height-100}",
+        "letterSpacing": "{primitive.letter-spacing-minus-10}"
+      }
+    },
+    "type-data-sm-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-data-sm-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-12}"
+    },
+    "type-data-sm-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-400}"
+    },
+    "type-data-sm-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-100}"
+    },
+    "type-data-sm-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-minus-10}"
+    },
+    "type-data-sm-font-variant-numeric": {
+      "$type": "string",
+      "$value": "{primitive.font-variant-numeric-tabular-nums}"
+    },
+    "type-data-sm": {
+      "$type": "typography",
+      "$description": "Tabular figures. Set with tabular figures. In CSS: `font: var(--ab-type-data-sm)` plus `letter-spacing: var(--ab-type-data-sm-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{primitive.font-size-12}",
+        "fontWeight": "{primitive.font-weight-400}",
+        "lineHeight": "{primitive.line-height-100}",
+        "letterSpacing": "{primitive.letter-spacing-minus-10}"
+      }
+    },
+    "type-code-md-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-system-mono}"
+    },
+    "type-code-md-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-13}"
+    },
+    "type-code-md-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-400}"
+    },
+    "type-code-md-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-160}"
+    },
+    "type-code-md-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-minus-10}"
+    },
+    "type-code-md": {
+      "$type": "typography",
+      "$description": "Monospace code. In CSS: `font: var(--ab-type-code-md)` plus `letter-spacing: var(--ab-type-code-md-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-system-mono}",
+        "fontSize": "{primitive.font-size-13}",
+        "fontWeight": "{primitive.font-weight-400}",
+        "lineHeight": "{primitive.line-height-160}",
+        "letterSpacing": "{primitive.letter-spacing-minus-10}"
+      }
+    },
+    "type-overline-sm-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-overline-sm-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-11}"
+    },
+    "type-overline-sm-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-400}"
+    },
+    "type-overline-sm-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-100}"
+    },
+    "type-overline-sm-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-80}"
+    },
+    "type-overline-sm-font-variant-numeric": {
+      "$type": "string",
+      "$value": "{primitive.font-variant-numeric-tabular-nums}"
+    },
+    "type-overline-sm-text-transform": {
+      "$type": "string",
+      "$value": "{primitive.text-transform-uppercase}"
+    },
+    "type-overline-sm": {
+      "$type": "typography",
+      "$description": "Uppercase group label. Set with tabular figures and uppercase. In CSS: `font: var(--ab-type-overline-sm)` plus `letter-spacing: var(--ab-type-overline-sm-letter-spacing)`.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{primitive.font-size-11}",
+        "fontWeight": "{primitive.font-weight-400}",
+        "lineHeight": "{primitive.line-height-100}",
+        "letterSpacing": "{primitive.letter-spacing-80}"
+      }
+    },
+    "space-inline-xs": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-4}"
+    },
+    "space-inline-sm": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-8}"
+    },
+    "space-inline-md": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-12}"
+    },
+    "space-inline-lg": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-20}"
+    },
+    "space-inline-xl": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-24}"
+    },
+    "space-inset-2xs": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-2}"
+    },
+    "space-inset-xs": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-4}"
+    },
+    "space-inset-sm": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-8}"
     },
     "space-inset-md": {
       "$type": "dimension",
       "$value": "{primitive.dimension-12}"
     },
+    "space-inset-lg": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-16}"
+    },
+    "space-inset-xl": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-24}"
+    },
+    "space-stack-xs": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-4}"
+    },
+    "space-stack-sm": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-8}"
+    },
+    "space-stack-md": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-16}"
+    },
+    "space-stack-lg": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-24}"
+    },
+    "space-stack-xl": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-32}"
+    },
+    "space-stack-2xl": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-48}"
+    },
+    "space-section": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-88}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(width < 760px)": "{primitive.dimension-64}"
+        }
+      }
+    },
+    "size-icon-xs": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-14}"
+    },
+    "size-icon-sm": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-16}"
+    },
+    "size-icon-md": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-20}"
+    },
+    "size-icon-lg": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-24}"
+    },
+    "size-icon-xl": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-32}"
+    },
+    "size-control-xs": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-24}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(pointer: coarse)": "{primitive.dimension-32}"
+        }
+      }
+    },
+    "size-control-sm": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-28}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(pointer: coarse)": "{primitive.dimension-40}"
+        }
+      }
+    },
+    "size-control-md": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-32}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(pointer: coarse)": "{primitive.dimension-44}"
+        }
+      }
+    },
+    "size-control-lg": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-40}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(pointer: coarse)": "{primitive.dimension-48}"
+        }
+      }
+    },
+    "size-toggle": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-32}"
+    },
+    "size-indicator": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-6}"
+    },
+    "size-mark-min": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-16}"
+    },
+    "size-target-min": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-24}"
+    },
+    "size-target-recommended": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-44}"
+    },
+    "size-container-2xs": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-224}"
+    },
+    "size-container-xs": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-320}"
+    },
+    "size-container-sm": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-420}"
+    },
+    "size-container-md": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-560}"
+    },
+    "size-container-lg": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-680}"
+    },
+    "radius-xs": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-5}"
+    },
     "radius-sm": {
       "$type": "dimension",
       "$value": "{primitive.dimension-8}"
+    },
+    "radius-md": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-10}"
+    },
+    "radius-lg": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-12}"
+    },
+    "radius-xl": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-16}"
+    },
+    "radius-full": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-9999}"
+    },
+    "border-width-default": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-1}"
+    },
+    "border-width-thick": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-2}"
+    },
+    "focus-ring-width": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-2}"
+    },
+    "focus-ring-offset": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-3}"
+    },
+    "underline-thickness": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-1}"
+    },
+    "underline-offset": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-3}"
+    },
+    "stroke-width-sm": {
+      "$type": "number",
+      "$value": "{primitive.stroke-width-150}"
+    },
+    "stroke-width-md": {
+      "$type": "number",
+      "$value": "{primitive.stroke-width-175}"
+    },
+    "stroke-width-lg": {
+      "$type": "number",
+      "$value": "{primitive.stroke-width-200}"
+    },
+    "stroke-width-xl": {
+      "$type": "number",
+      "$value": "{primitive.stroke-width-250}"
+    },
+    "stroke-width-2xl": {
+      "$type": "number",
+      "$value": "{primitive.stroke-width-300}"
+    },
+    "z-index-base": {
+      "$type": "number",
+      "$value": "{primitive.z-index-0}"
+    },
+    "z-index-raised": {
+      "$type": "number",
+      "$value": "{primitive.z-index-100}"
+    },
+    "z-index-sticky": {
+      "$type": "number",
+      "$value": "{primitive.z-index-200}"
+    },
+    "z-index-dropdown": {
+      "$type": "number",
+      "$value": "{primitive.z-index-300}"
+    },
+    "z-index-backdrop": {
+      "$type": "number",
+      "$value": "{primitive.z-index-400}"
+    },
+    "z-index-modal": {
+      "$type": "number",
+      "$value": "{primitive.z-index-500}"
+    },
+    "z-index-toast": {
+      "$type": "number",
+      "$value": "{primitive.z-index-600}"
+    },
+    "z-index-tooltip": {
+      "$type": "number",
+      "$value": "{primitive.z-index-700}"
+    },
+    "layout-column-width": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-680}"
+    },
+    "layout-gutter": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-32}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(width < 760px)": "{primitive.dimension-20}"
+        }
+      }
+    },
+    "layout-label-column-width": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-112}"
+    },
+    "breakpoint-md": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-760}"
+    },
+    "motion-easing-enter": {
+      "$type": "cubicBezier",
+      "$value": "{primitive.easing-ease-out-strong}"
+    },
+    "motion-easing-exit": {
+      "$type": "cubicBezier",
+      "$value": "{primitive.easing-ease-out-strong}"
+    },
+    "motion-easing-move": {
+      "$type": "cubicBezier",
+      "$value": "{primitive.easing-ease-in-out-strong}"
+    },
+    "motion-easing-drawer": {
+      "$type": "cubicBezier",
+      "$value": "{primitive.easing-ease-out-ios}"
+    },
+    "motion-easing-color": {
+      "$type": "string",
+      "$value": "{primitive.easing-ease}"
+    },
+    "motion-easing-constant": {
+      "$type": "string",
+      "$value": "{primitive.easing-linear}"
+    },
+    "motion-easing-spring": {
+      "$type": "string",
+      "$value": "{primitive.easing-spring-snappy}"
+    },
+    "motion-easing-spring-gentle": {
+      "$type": "string",
+      "$value": "{primitive.easing-spring-gentle}"
+    },
+    "motion-easing-spring-bouncy": {
+      "$type": "string",
+      "$value": "{primitive.easing-spring-bouncy}"
+    },
+    "motion-duration-press": {
+      "$type": "duration",
+      "$value": "{primitive.duration-100}"
+    },
+    "motion-duration-hover-in": {
+      "$type": "duration",
+      "$value": "{primitive.duration-120}"
+    },
+    "motion-duration-hover-out": {
+      "$type": "duration",
+      "$value": "{primitive.duration-250}"
+    },
+    "motion-duration-tooltip": {
+      "$type": "duration",
+      "$value": "{primitive.duration-125}"
+    },
+    "motion-duration-exit": {
+      "$type": "duration",
+      "$value": "{primitive.duration-150}"
+    },
+    "motion-duration-swap": {
+      "$type": "duration",
+      "$value": "{primitive.duration-200}"
+    },
+    "motion-duration-popover": {
+      "$type": "duration",
+      "$value": "{primitive.duration-200}"
+    },
+    "motion-duration-expand": {
+      "$type": "duration",
+      "$value": "{primitive.duration-250}"
+    },
+    "motion-duration-modal": {
+      "$type": "duration",
+      "$value": "{primitive.duration-250}"
+    },
+    "motion-duration-drawer": {
+      "$type": "duration",
+      "$value": "{primitive.duration-300}"
+    },
+    "motion-duration-entrance": {
+      "$type": "duration",
+      "$value": "{primitive.duration-700}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(prefers-reduced-motion: reduce)": "{primitive.duration-200}"
+        }
+      }
+    },
+    "motion-duration-spring": {
+      "$type": "duration",
+      "$value": "{primitive.duration-400}"
+    },
+    "motion-duration-spring-gentle": {
+      "$type": "duration",
+      "$value": "{primitive.duration-500}"
+    },
+    "motion-duration-toggle": {
+      "$type": "duration",
+      "$value": "{primitive.duration-180}"
+    },
+    "motion-duration-toast": {
+      "$type": "duration",
+      "$value": "{primitive.duration-4000}"
+    },
+    "motion-duration-toast-persistent": {
+      "$type": "duration",
+      "$value": "{primitive.duration-6000}"
+    },
+    "motion-delay-stagger": {
+      "$type": "duration",
+      "$value": "{primitive.duration-70}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(prefers-reduced-motion: reduce)": "{primitive.duration-0}"
+        }
+      }
+    },
+    "motion-delay-tooltip": {
+      "$type": "duration",
+      "$value": "{primitive.duration-500}"
+    },
+    "motion-duration-loop": {
+      "$type": "duration",
+      "$value": "{primitive.duration-700}"
+    },
+    "motion-scale-pressed": {
+      "$type": "number",
+      "$value": "{primitive.scale-97}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(prefers-reduced-motion: reduce)": "{primitive.scale-100}"
+        }
+      }
+    },
+    "motion-scale-enter": {
+      "$type": "number",
+      "$value": "{primitive.scale-97}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(prefers-reduced-motion: reduce)": "{primitive.scale-100}"
+        }
+      }
+    },
+    "motion-scale-enter-modal": {
+      "$type": "number",
+      "$value": "{primitive.scale-95}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(prefers-reduced-motion: reduce)": "{primitive.scale-100}"
+        }
+      }
+    },
+    "motion-distance-swap": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-5}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(prefers-reduced-motion: reduce)": "{primitive.dimension-0}"
+        }
+      }
+    },
+    "motion-distance-expand": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-6}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(prefers-reduced-motion: reduce)": "{primitive.dimension-0}"
+        }
+      }
+    },
+    "motion-distance-entrance": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-8}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(prefers-reduced-motion: reduce)": "{primitive.dimension-0}"
+        }
+      }
+    },
+    "motion-blur-swap": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-2}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(prefers-reduced-motion: reduce)": "{primitive.dimension-0}"
+        }
+      }
+    },
+    "motion-blur-entrance": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-4}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(prefers-reduced-motion: reduce)": "{primitive.dimension-0}"
+        }
+      }
     }
   }
 }
