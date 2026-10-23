@@ -1,0 +1,26 @@
+{
+  "name": "@platform/spike-floating",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Throwaway spike for ticket #4: popover, anchor positioning and invoker commands across Chromium, Firefox and WebKit. Not part of the design system.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "check-types": "tsc --noEmit",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@platform/oxlint-config": "workspace:*",
+    "@platform/typescript-config": "workspace:*",
+    "@vitest/browser-playwright": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "playwright": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  }
+}
