@@ -18,6 +18,8 @@ export default defineConfig({
             package: "style-dictionary",
             name: ["Dictionary", "DesignTokens", "TransformedToken", "FormatFnArguments"],
           },
+          // fflate's zip entry info, only read by the unzip filter in scripts/fonts.ts.
+          { from: "package", package: "fflate", name: "UnzipFileInfo" },
         ],
       },
     ],
