@@ -1,0 +1,3 @@
+# Design system components are built on the web platform, not a headless UI library
+
+The design system's React components are built directly on native elements and APIs (`<dialog>`, `popover`, invoker commands, CSS anchor positioning, `<details name>`, `inert`, `:user-invalid`), with script added only where the platform has no answer (roving focus, typeahead, `aria-activedescendant`). We rejected Base UI and React Aria: they duplicate in script what the platform now does natively, they bring their own positioning and focus engines, and they would tie the public API to a third party's. The cost is that we own the hard WAI-ARIA patterns (menu, combobox, tabs, command palette) and their tests.

@@ -42,6 +42,7 @@ The agreed technology stack for the platform monorepo: web apps, the design syst
 ## Conventions
 
 - ESM-only packages; `"type": "module"` everywhere.
+- TS/JS is written against the latest ECMAScript edition: `target` and `lib` in `@platform/typescript-config` are the newest edition the pinned TypeScript names (`es2025` with TypeScript 7.0.2, whose options stop at `es2025` before `esnext`), raised in the same change that bumps TypeScript. Prefer the modern built-ins over hand-rolled or library equivalents (iterator helpers, `Set` methods, `Object.groupBy`, `Promise.withResolvers`, `Intl.*`). Finished-edition features only; an `esnext.*` lib is added per package for a specific shipped feature (e.g. `esnext.temporal`, see ADR-0004). Browser code is also bound by the Baseline floor (ADR-0002).
 - Shared dependency versions are pinned once in the pnpm `catalog:`.
 - `erasableSyntaxOnly`: no `enum` or `namespace`, so Node can run `.ts` files directly through type stripping.
 - ts-reset in apps only, never in libraries: each app has a `src/reset.d.ts` containing only `import "@total-typescript/ts-reset";` (browser apps import `@total-typescript/ts-reset/dom`).
