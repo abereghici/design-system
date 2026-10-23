@@ -106,8 +106,13 @@ const checkPair = (requirement: Requirement, theme: ThemeId, dictionary: Diction
   const { foreground, background, minimum } = requirement;
   const fg = dictionary.tokenMap.get(`{semantic.color-${foreground}}`);
   const bg = dictionary.tokenMap.get(`{semantic.color-${background}}`);
-  // Pairs whose tokens aren't in the set yet are skipped.
-  if (fg === undefined || bg === undefined) return [];
+  if (fg === undefined || bg === undefined) {
+    // As in the source validator, a pair that can't be resolved is a failure.
+    const missing = [fg === undefined ? foreground : [], bg === undefined ? background : []].flat();
+    return [
+      `[${theme}] --ab-color-${foreground} on --ab-color-${background}: ${missing.map((name) => `--ab-color-${name}`).join(" and ")} ${missing.length > 1 ? "are" : "is"} not defined, so the pair can't be checked`,
+    ];
+  }
   const label = `[${theme}] --${fg.name} on --${bg.name}`;
   const fgColor = String(valueIn(fg, theme, dictionary));
   const bgColor = String(valueIn(bg, theme, dictionary));

@@ -1,9 +1,11 @@
 import type { Tier } from "./tiers.ts";
 
 /*
- * The naming grammar and Dictionary, carried over unchanged from the source design system's
- * validator (`project/scripts/lib/tokens.cjs` in the claude.ai artifact). Names here are
- * without the `ab-` prefix. A new word is a Dictionary change: add it here.
+ * The naming grammar and Dictionary, carried over from the source design system's validator
+ * (`project/scripts/lib/tokens.cjs` in the claude.ai artifact). Two deliberate changes: the
+ * component words follow spec #1's renames, and `stroke-width-2xl` (which the source's own
+ * tokens use) is allowed. Names here are without the `ab-` prefix. A new word is a Dictionary
+ * change: add it here.
  */
 
 /** Tier 1: names state the value (`palette-{hue}-{step}`, `dimension-{px}`, …). */
@@ -29,7 +31,7 @@ const SEMANTIC = [
   /^size-mark-min$/v,
   /^radius-(xs|sm|md|lg|xl|full)$/v,
   /^border-width-(default|thick)$/v,
-  /^stroke-width-(sm|md|lg|xl)$/v,
+  /^stroke-width-(sm|md|lg|xl|2xl)$/v,
   /^focus-ring-(width|offset)$/v,
   /^underline-(thickness|offset)$/v,
   /^z-index-(base|raised|sticky|dropdown|backdrop|modal|toast|tooltip)$/v,
@@ -76,7 +78,11 @@ const COLOR_WORDS = new Set([
   "ember",
 ]);
 
-/** Tier 3: `{component}-{variant}-{element}-{property}-{state}`. Longer names first. */
+/**
+ * Tier 3: `{component}-{variant}-{element}-{property}-{state}`. Longer names first. The source's
+ * words are renamed to spec #1's component names: divider → separator, menu → dropdown-menu and
+ * context-menu, command-palette → command, mark → logo.
+ */
 const COMPONENTS = [
   "status-dot",
   "icon-button",
@@ -84,9 +90,9 @@ const COMPONENTS = [
   "input",
   "link",
   "tag",
-  "divider",
+  "separator",
   "icon",
-  "mark",
+  "logo",
   "kbd",
   "checkbox",
   "radio",
@@ -96,7 +102,8 @@ const COMPONENTS = [
   "segmented-control",
   "tabs",
   "accordion",
-  "menu",
+  "dropdown-menu",
+  "context-menu",
   "popover",
   "tooltip",
   "dialog",
@@ -104,7 +111,7 @@ const COMPONENTS = [
   "toast",
   "badge",
   "card",
-  "command-palette",
+  "command",
   "spinner",
 ];
 

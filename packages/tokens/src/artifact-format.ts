@@ -30,10 +30,32 @@ export interface ArtifactTokens {
 
 type Family = "color" | "spacing" | "radius";
 
-/** Which artifact family a token is listed in; add a branch here when a new `$type` lands. */
-const familyOf = (token: TransformedToken): Family => {
+/** Lengths that belong to the type and material families, which this format doesn't list yet. */
+const NOT_SPACING = /font-size|letter-spacing|blur/v;
+
+/** `$type`s the artifact has no family for here yet (type, motion, shadow; see #14). */
+const UNLISTED = new Set([
+  "cubicBezier",
+  "duration",
+  "fontFamily",
+  "fontWeight",
+  "number",
+  "shadow",
+  "string",
+  "typography",
+]);
+
+/**
+ * Which artifact family a token is listed in, or `undefined` when it is deliberately left out.
+ * An unknown `$type` throws, so a new one has to be mapped here on purpose.
+ */
+const familyOf = (token: TransformedToken): Family | undefined => {
   if (token.$type === "color") return "color";
-  if (token.$type === "dimension") return token.name.includes("radius") ? "radius" : "spacing";
+  if (token.$type === "dimension") {
+    if (NOT_SPACING.test(token.name)) return undefined;
+    return token.name.includes("radius") ? "radius" : "spacing";
+  }
+  if (UNLISTED.has(String(token.$type))) return undefined;
   throw new Error(
     `--${token.name}: no artifact family for $type "${String(token.$type)}" (see src/artifact-format.ts)`,
   );
@@ -55,6 +77,7 @@ const themedColor = (token: TransformedToken, dictionary: Dictionary): ThemedCol
 export const toArtifactTokens = (dictionary: Dictionary): ArtifactTokens => {
   const byFamily = Map.groupBy(inTierOrder(dictionary.allTokens), (token) => familyOf(token));
   const listed = (family: Family) => byFamily.get(family) ?? [];
+  // `Map.groupBy` keys the left-out tokens under `undefined`; `listed` never reads that group.
   return {
     name: "Bereghici Design System",
     version: 1,
