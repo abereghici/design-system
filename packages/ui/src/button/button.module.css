@@ -1,0 +1,9 @@
+@layer ab.components {
+  .root {
+    border: 0;
+    border-radius: var(--ab-button-border-radius);
+    padding-inline: var(--ab-button-md-padding-inline);
+    background-color: var(--ab-button-primary-background-color);
+    color: var(--ab-button-primary-text-color);
+  }
+}
