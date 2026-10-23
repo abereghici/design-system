@@ -39,7 +39,7 @@ Take a workspace package consumed as source, with per-component subpath `exports
 
 ### Experiments
 
-`apps/spike-treeshake/app/page.tsx` imports only `@platform/spike-ui-pkg/button` (a `'use client'` component with state and a CSS Module) and `@platform/spike-ui-pkg/icons/check`. The root layout imports `@platform/spike-ui-pkg/base.css` for its side effect. The package also exports `card`, `dialog` and the icons `close` and `star`, which nobody imports.
+`apps/spike-treeshake/src/app/page.tsx` imports only `@platform/spike-ui-pkg/button` (a `'use client'` component with state and a CSS Module) and `@platform/spike-ui-pkg/icons/check`. The root layout imports `@platform/spike-ui-pkg/base.css` for its side effect. The package also exports `card`, `dialog` and the icons `close` and `star`, which nobody imports.
 
 Button imports `cx` from an internal barrel, `src/internal/index.ts`, which also re-exports `unusedHelper`, a pure function, and `UnusedContext`, a top-level `createContext(...)` call.
 
@@ -177,7 +177,7 @@ The `transpilePackages` page, quoted in `docs/research/performance.md`, says Tur
 
 Two Oxlint findings came up that the real `@platform/ui` will hit too. Both are handled locally in the spike configs only:
 
-- `typescript/prefer-readonly-parameter-types` (pedantic) flags every `children: ReactNode` prop, even inside `Readonly<…>`, because `ReactNode` is not deeply readonly. The rule's documented `allow` option takes `{ "from": "package", "name": "ReactNode", "package": "@types/react" }` (https://oxc.rs/docs/guide/usage/linter/rules/typescript/prefer-readonly-parameter-types.html), and that entry clears the error.
+- `typescript/prefer-readonly-parameter-types` (pedantic) flags every `children: ReactNode` prop, even inside `Readonly<…>`, because `ReactNode` is not deeply readonly. The rule's documented `allow` option takes `{ "from": "package", "name": "ReactNode", "package": "@types/react" }` (https://oxc.rs/docs/guide/usage/linter/rules/typescript/prefer-readonly-parameter-types.html), and that entry clears the error. Spike #2 (`apps/spike-rsc-namespace`) turned the rule off instead. Keeping it on with this `allow` entry is the narrower fix.
 - `import/no-unassigned-import` flags `import "…/base.css"`. Its documented example `{ "allow": ["**/*.css"] }` (https://oxc.rs/docs/guide/usage/linter/rules/import/no-unassigned-import.html) also matches a bare package specifier ending in `.css`, as verified in the spike app.
 
 ## Recommendations

@@ -21,6 +21,7 @@
   "devDependencies": {
     "@platform/oxlint-config": "workspace:*",
     "@platform/typescript-config": "workspace:*",
+    "@total-typescript/ts-reset": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
