@@ -27,11 +27,15 @@ catalog:
   "@total-typescript/ts-reset": 0.6.1
   "@types/node": 26.6.5
   "@types/react": 19.3.0
+  "@types/fontkit": 2.0.9
   "@types/react-dom": 19.3.0
+  "@types/subset-font": 2.3.0
   "@vitejs/plugin-react": 6.1.2
   "@vitest/browser-playwright": 5.0.5
   babel-plugin-react-compiler: 1.0.0
   esbuild: 0.28.2
+  fflate: 0.8.3
+  fontkit: 2.0.4
   next: 16.4.3
   oxfmt: 0.74.0
   oxlint: 1.89.0
@@ -44,6 +48,7 @@ catalog:
   react-dom-18: npm:react-dom@18.3.1
   storybook: 10.6.3
   style-dictionary: 5.7.0
+  subset-font: 2.9.0
   turbo: 2.11.10
   typescript: 7.0.2
   vite: 8.3.5
