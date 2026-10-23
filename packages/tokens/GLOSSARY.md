@@ -55,7 +55,7 @@ _Avoid_: Primary color, brand color
 The color marking the one emphasised phrase on a page.
 
 **Brand color**:
-A fixed identity hue for the mark, imagery and print, never used for interface roles.
+A fixed identity hue for the Logo, imagery and print, never used for interface roles.
 
 ### Depth
 

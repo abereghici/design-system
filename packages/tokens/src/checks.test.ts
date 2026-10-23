@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
 
 import { buildTokens, TokenCheckError } from "./build.ts";
-import { srgb, themed, validTokens } from "./test-fixtures.ts";
+import { setMember, srgb, themed, validTokens } from "./test-fixtures.ts";
 
 // Tier rules (R1–R3)
 
@@ -48,9 +48,33 @@ test("every problem is reported at once, as a TokenCheckError", async () => {
   const build = buildTokens({ tokens });
   await expect(build).rejects.toBeInstanceOf(TokenCheckError);
   await expect(build).rejects.toHaveProperty("problems", [
-    "--ab-card-background-color: a component token must reference a semantic token, not a primitive token",
     "--ab-button-border-radius: a component token must reference a semantic token, not a primitive token",
+    "--ab-card-background-color: a component token must reference a semantic token, not a primitive token",
   ]);
+});
+
+test("a type style may use its own semantic font size, but no other semantic token", async () => {
+  const tokens = validTokens();
+  setMember(tokens.semantic, "type-label-sm", "fontWeight", "{semantic.radius-sm}");
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-type-label-sm: a semantic token must reference a primitive token, not a semantic token",
+  );
+});
+
+test("a composite member holding a literal fails the build", async () => {
+  const tokens = validTokens();
+  setMember(tokens.semantic, "type-label-sm", "lineHeight", 1.2);
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-type-label-sm: a semantic token must reference a primitive token, not hold a literal",
+  );
+});
+
+test("an Elevation may compose the ring and shadow colors, but no other semantic color", async () => {
+  const tokens = validTokens();
+  setMember(tokens.semantic, "elevation-ring", "color", "{semantic.color-text-default}");
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-elevation-ring: a semantic token must reference a primitive token, not a semantic token",
+  );
 });
 
 // Naming grammar and Dictionary (R7)
@@ -80,6 +104,41 @@ test("a primitive name outside the tier grammar fails the build", async () => {
   await expect(buildTokens({ tokens })).rejects.toThrow(
     "--ab-moss-dark: does not match the primitive grammar",
   );
+});
+
+test("component tokens use the spec's component names", async () => {
+  const tokens = validTokens();
+  for (const component of ["separator", "dropdown-menu", "context-menu", "command", "logo"]) {
+    tokens.component[`${component}-border-color`] = {
+      $type: "color",
+      $value: "{semantic.color-border-default}",
+    };
+  }
+  tokens.semantic["color-border-default"] = themed("palette-sage-950", "palette-night-50");
+  await expect(buildTokens({ tokens })).resolves.toBeDefined();
+});
+
+test.each([
+  ["divider", "names no component in the Dictionary"],
+  ["menu", "names no component in the Dictionary"],
+  ["mark", "names no component in the Dictionary"],
+  ["command-palette", "uses words outside the Dictionary: palette"],
+])("the source's old component name %s is outside the Dictionary", async (component, problem) => {
+  const tokens = validTokens();
+  tokens.component[`${component}-border-radius`] = {
+    $type: "dimension",
+    $value: "{semantic.radius-sm}",
+  };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    `--ab-${component}-border-radius: ${problem}`,
+  );
+});
+
+test("stroke-width-2xl, used by the Logo, is a valid semantic name", async () => {
+  const tokens = validTokens();
+  tokens.primitive["stroke-width-300"] = { $type: "number", $value: 3 };
+  tokens.semantic["stroke-width-2xl"] = { $type: "number", $value: "{primitive.stroke-width-300}" };
+  await expect(buildTokens({ tokens })).resolves.toBeDefined();
 });
 
 // Theme completeness
@@ -112,6 +171,26 @@ test("a component token cannot carry its own Theme values", async () => {
 });
 
 // AA contrast (WCAG 2.2 SC 1.4.3 and 1.4.11)
+
+test("a contrast pair whose token is missing fails the build", async () => {
+  const tokens = validTokens();
+  delete tokens.semantic["color-text-on-highlight"];
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "[light] --ab-color-text-on-highlight on --ab-color-background-highlight: --ab-color-text-on-highlight is not defined, so the pair can't be checked",
+  );
+});
+
+test("a translucent color in the contrast matrix fails the build", async () => {
+  const tokens = validTokens();
+  tokens.semantic["color-surface-raised"] = themed("palette-sage-0-a90", "palette-night-900");
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "[light] --ab-color-text-default on --ab-color-surface-raised: cannot check contrast of #171914 on rgba(255, 255, 255, 0.9) (needs opaque sRGB colors)",
+  );
+});
+
+test("the source's full matrix passes in both Themes", async () => {
+  await expect(buildTokens({ tokens: validTokens() })).resolves.toBeDefined();
+});
 
 test("a text pair below 4.5:1 in one Theme fails the build", async () => {
   const tokens = validTokens();
