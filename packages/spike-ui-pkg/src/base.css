@@ -1,0 +1,4 @@
+/* Imported only for its side effect (like the future base stylesheet): must not be dropped. */
+:root {
+  --spike-marker: spike-marker-base-css;
+}

@@ -1,0 +1,30 @@
+{
+  "name": "@platform/design-sync-spike",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Spike #3: proves a Design System artifact preview runs on React 19 shipped under components/lib/. Throwaway; the preview-bundle ticket replaces it.",
+  "type": "module",
+  "scripts": {
+    "build": "node src/cli.ts",
+    "check-types": "tsc --noEmit",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@platform/oxlint-config": "workspace:*",
+    "@platform/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "esbuild": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "playwright": "catalog:",
+    "react": "catalog:",
+    "react-18": "catalog:",
+    "react-dom": "catalog:",
+    "react-dom-18": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
