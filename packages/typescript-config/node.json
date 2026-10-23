@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "lib": ["es2025", "ESNext.Collection", "ESNext.Temporal"],
+    "types": ["node"],
+    "module": "nodenext",
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "extends": "@platform/typescript-config/base.json",
+  "compilerOptions": {
+    "module": "nodenext",
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  },
+  "include": ["src", "oxlint.config.ts"]
+}

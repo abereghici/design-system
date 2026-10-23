@@ -1,0 +1,16 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+.next/
+coverage
+
+# Turbo
+.turbo
+
+# Env
+.env*.local
+
+# OS
+.DS_Store
