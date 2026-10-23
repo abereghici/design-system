@@ -1,0 +1,31 @@
+@layer ab.components {
+  /*
+   * Size rules stay at (0,1,0), `:where()` adding nothing, so a host component's descendant rule
+   * (`.root svg`, 0,1,1) can size icons a consumer passes in. CSS beats the `stroke-width`
+   * presentation attribute, which counts as an author rule with specificity 0 (SVG 2, §6.6).
+   */
+  .root {
+    flex-shrink: 0;
+    inline-size: var(--ab-icon-md-size);
+    block-size: var(--ab-icon-md-size);
+    stroke-width: var(--ab-icon-md-stroke-width);
+  }
+
+  .root:where([data-size="sm"]) {
+    inline-size: var(--ab-icon-sm-size);
+    block-size: var(--ab-icon-sm-size);
+    stroke-width: var(--ab-icon-sm-stroke-width);
+  }
+
+  .root:where([data-size="lg"]) {
+    inline-size: var(--ab-icon-lg-size);
+    block-size: var(--ab-icon-lg-size);
+    stroke-width: var(--ab-icon-lg-stroke-width);
+  }
+
+  .root:where([data-size="xl"]) {
+    inline-size: var(--ab-icon-xl-size);
+    block-size: var(--ab-icon-xl-size);
+    stroke-width: var(--ab-icon-xl-stroke-width);
+  }
+}

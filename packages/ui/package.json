@@ -20,12 +20,13 @@
   "scripts": {
     "storybook": "storybook dev --port 6006",
     "build-storybook": "storybook build",
-    "check-types": "tsc --noEmit",
+    "check-types": "tsc --noEmit && tsc --noEmit -p scripts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "size": "size-limit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "icons": "node scripts/icons.ts"
   },
   "dependencies": {
     "@platform/tokens": "workspace:*"
@@ -44,6 +45,7 @@
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "@vitest/browser-playwright": "catalog:",
+    "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
     "playwright": "catalog:",
@@ -51,6 +53,7 @@
     "react-dom": "catalog:",
     "size-limit": "catalog:",
     "storybook": "catalog:",
+    "svgo": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:"
