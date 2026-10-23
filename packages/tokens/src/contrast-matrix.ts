@@ -67,6 +67,17 @@ export const CONTRAST_PAIRS = [
   ["text-warning", "background-warning-subtle"],
   ["text-default", "background-danger-subtle"],
   ["text-danger", "background-danger-subtle"],
+  // Not in the source: Alert's description sits on the status subtle fills (ticket #15).
+  ["text-subtle", "background-success-subtle"],
+  ["text-subtle", "background-warning-subtle"],
+  ["text-subtle", "background-danger-subtle"],
+] as const;
+
+/** Not in the source: Alert's status icon on its own subtle fill (ticket #15), 3:1. */
+export const CONTRAST_NON_TEXT_PAIRS = [
+  ["icon-success", "background-success-subtle"],
+  ["icon-warning", "background-warning-subtle"],
+  ["icon-danger", "background-danger-subtle"],
 ] as const;
 
 export interface ContrastRequirement {
@@ -83,6 +94,11 @@ export const CONTRAST_REQUIREMENTS: readonly ContrastRequirement[] = [
     CONTRAST_BACKGROUNDS.map((background) => ({ foreground, background, minimum: 3 })),
   ),
   ...CONTRAST_PAIRS.map(([foreground, background]) => ({ foreground, background, minimum: 4.5 })),
+  ...CONTRAST_NON_TEXT_PAIRS.map(([foreground, background]) => ({
+    foreground,
+    background,
+    minimum: 3,
+  })),
 ];
 
 /** WCAG 2.2 relative luminance of an sRGB `#rrggbb` color. */

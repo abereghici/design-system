@@ -218,6 +218,26 @@ test("a non-text pair below 3:1 fails the build", async () => {
   );
 });
 
+// Alert (ticket #15) puts its description and status icon on the status subtle fills.
+test("a status icon is checked at 3:1 against its subtle fill", async () => {
+  const tokens = validTokens();
+  tokens.semantic["color-background-danger-subtle"] = themed("palette-clay-50", "palette-clay-300");
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "[dark] --ab-color-icon-danger on --ab-color-background-danger-subtle: 1.00:1, needs 3:1",
+  );
+});
+
+test("subtle text is checked at 4.5:1 against a status subtle fill", async () => {
+  const tokens = validTokens();
+  tokens.semantic["color-background-success-subtle"] = themed(
+    "palette-fern-50",
+    "palette-night-300",
+  );
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "[dark] --ab-color-text-subtle on --ab-color-background-success-subtle: 1.00:1, needs 4.5:1",
+  );
+});
+
 test("an on-{role} pair is checked against its bold fill", async () => {
   const tokens = validTokens();
   tokens.semantic["color-background-accent-bold"] = themed("palette-moss-900", "palette-night-50");

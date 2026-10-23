@@ -1,6 +1,7 @@
 import {
   CONTRAST_BACKGROUNDS,
   CONTRAST_NON_TEXT,
+  CONTRAST_NON_TEXT_PAIRS,
   CONTRAST_PAIRS,
   CONTRAST_TEXT,
   contrastRatio,
@@ -96,10 +97,20 @@ function Grid({
   );
 }
 
+// Text on fills at 4.5:1, and (ticket #15) status icons on their subtle fills at 3:1.
+const FILL_PAIRS = [
+  ...CONTRAST_PAIRS.map(([foreground, background]) => ({ foreground, background, minimum: 4.5 })),
+  ...CONTRAST_NON_TEXT_PAIRS.map(([foreground, background]) => ({
+    foreground,
+    background,
+    minimum: 3,
+  })),
+];
+
 function Pairs({ theme }: { theme: ThemeId }) {
   return (
     <table className={styles["matrix"]}>
-      <caption>Content on fills · 4.5:1</caption>
+      <caption>Content on fills · text 4.5:1, icons 3:1</caption>
       <thead>
         <tr>
           <th scope="col">Content</th>
@@ -108,7 +119,7 @@ function Pairs({ theme }: { theme: ThemeId }) {
         </tr>
       </thead>
       <tbody>
-        {CONTRAST_PAIRS.map(([foreground, background]) => (
+        {FILL_PAIRS.map(({ foreground, background, minimum }) => (
           <tr key={`${foreground} ${background}`}>
             <th scope="row">
               <code>{foreground}</code>
@@ -119,9 +130,9 @@ function Pairs({ theme }: { theme: ThemeId }) {
             <Cell
               foreground={foreground}
               background={background}
-              minimum={4.5}
+              minimum={minimum}
               theme={theme}
-              text
+              text={minimum === 4.5}
             />
           </tr>
         ))}

@@ -54,6 +54,8 @@ Source files live in `src/tokens/`, one per tier: `primitive.tokens.json`, `sema
 
 `src/tokens/` holds every token of the source design system: 210 primitive, 294 semantic and 413 component tokens. It was ported from the artifact's per-tier CSS (`archived/tokens/{1-primitive,2-semantic,3-component}/*.css`), which is more faithful than its DTCG export, with `$description` taken from the artifact's `tokens.json`. Component words follow spec #1's renames: `divider` → `separator`, `menu` → `dropdown-menu` and `context-menu` (both carry Menu's 27 tokens), `command-palette` → `command`, `mark` → `logo`.
 
+On top of the source, 79 component tokens for the phase-1 components are proposed in `packages/ui/specs/` (ticket #15), with the Dictionary words they need: components `skip-link`, `empty-state`, `avatar`, `skeleton`, `progress`, `meter` and `alert`, and elements `pulse` and `value`. They await the brand owner's approval with the specs.
+
 Value types:
 
 | `$type`                                                         | Value                                                                                                                                                                     |
@@ -87,7 +89,7 @@ The build stops with a `TokenCheckError` that lists every problem when:
 3. **A themed color is missing a Theme**, or a token that isn't a themed color carries one.
 4. **A media override is malformed**: it holds a literal, points at a component token, sits on a non-semantic token, or gives per-Theme values on a token that isn't a themed color.
 5. **An animated token can't be registered**: it isn't a component token, its `$type` has no `@property` syntax, it differs per Theme, or its value isn't computationally independent.
-6. **An allowed pairing is below WCAG 2.2 AA in any Theme**: text on every surface and background it may sit on at 4.5:1, icons and borders at 3:1, and `on-{role}` content on its `bold` fill at 4.5:1 (207 checks per Theme). The matrix is in `src/contrast.ts`. A pair whose token is missing, or whose color is translucent, fails too. Media overrides are not in the matrix, as in the source.
+6. **An allowed pairing is below WCAG 2.2 AA in any Theme**: text on every surface and background it may sit on at 4.5:1, icons and borders at 3:1, and `on-{role}` content on its `bold` fill at 4.5:1 (207 checks per Theme from the source, plus 6 for Alert: `text-subtle` at 4.5:1 and each status icon at 3:1 on the status `subtle` fills). The matrix is in `src/contrast-matrix.ts`. A pair whose token is missing, or whose color is translucent, fails too. Media overrides are not in the matrix, as in the source.
 
 Contrast runs only when the other checks pass.
 
