@@ -67,6 +67,17 @@ const PAIRS = [
   ["text-warning", "background-warning-subtle"],
   ["text-default", "background-danger-subtle"],
   ["text-danger", "background-danger-subtle"],
+  // Not in the source: Alert's description sits on the status subtle fills (ticket #15).
+  ["text-subtle", "background-success-subtle"],
+  ["text-subtle", "background-warning-subtle"],
+  ["text-subtle", "background-danger-subtle"],
+] as const;
+
+/** Not in the source: Alert's status icon on its own subtle fill (ticket #15), 3:1. */
+const NON_TEXT_PAIRS = [
+  ["icon-success", "background-success-subtle"],
+  ["icon-warning", "background-warning-subtle"],
+  ["icon-danger", "background-danger-subtle"],
 ] as const;
 
 interface Requirement {
@@ -83,6 +94,7 @@ const REQUIREMENTS: readonly Requirement[] = [
     BACKGROUNDS.map((background) => ({ foreground, background, minimum: 3 })),
   ),
   ...PAIRS.map(([foreground, background]) => ({ foreground, background, minimum: 4.5 })),
+  ...NON_TEXT_PAIRS.map(([foreground, background]) => ({ foreground, background, minimum: 3 })),
 ];
 
 const OPAQUE_HEX = /^#[0-9a-f]{6}$/iv;

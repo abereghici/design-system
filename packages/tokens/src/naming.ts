@@ -113,6 +113,14 @@ const COMPONENTS = [
   "card",
   "command",
   "spinner",
+  // Phase 1 components with no source guide (ticket #15 specs, packages/ui/specs/).
+  "skip-link",
+  "empty-state",
+  "avatar",
+  "skeleton",
+  "progress",
+  "meter",
+  "alert",
 ];
 
 const PROPERTIES = [
@@ -198,6 +206,9 @@ const MODIFIERS = new Set([
   "picker",
   "backdrop",
   "stack",
+  // Ticket #15: the far end of the Skeleton pulse, and the value text of Progress and Meter.
+  "pulse",
+  "value",
 ]);
 
 const outsideDictionary = (words: readonly string[]) =>
