@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(DISABLE_TELEMETRY=1 pnpm dlx modern-web-guidance@latest *)",
+      "Bash(pnpm dlx modern-web-guidance@latest *)"
+    ]
+  }
+}

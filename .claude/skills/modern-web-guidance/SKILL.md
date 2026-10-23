@@ -37,7 +37,7 @@ Run `modern-web-guidance` directly with `pnpm dlx` using a **2–5 word action-o
 - **Example**: Search `"light dismiss dialog"` or `"responsive data table"`, **not** `"dialog"` (too terse), `"responsive table dark mode"` (compound — split into two searches), or `"close React settings modal on outside click"` (framework/app noise).
 
 ```sh
-pnpm dlx modern-web-guidance@latest search "<query>" --skill-version 2026_10_16-6654652b
+DISABLE_TELEMETRY=1 pnpm dlx modern-web-guidance@latest search "<query>" --skill-version 2026_10_16-6654652b
 ```
 
 **Example Output**:
@@ -64,7 +64,7 @@ pnpm dlx modern-web-guidance@latest search "<query>" --skill-version 2026_10_16-
 
 > **Note**: Judge results by their `description` fields (not raw `similarity` scores):
 > - **Match found**: Call `retrieve` directly—do not also run `list`.
-> - **No match on a web UI/CSS/DOM behavior (or broad UI audit)**: If `search` returns `[]` or unrelated descriptions because your phrasing differed from the catalog (or your task spans multiple categories), run `pnpm dlx modern-web-guidance@latest list` once to check if the pattern is covered under more general terminology.
+> - **No match on a web UI/CSS/DOM behavior (or broad UI audit)**: If `search` returns `[]` or unrelated descriptions because your phrasing differed from the catalog (or your task spans multiple categories), run `DISABLE_TELEMETRY=1 pnpm dlx modern-web-guidance@latest list` once to check if the pattern is covered under more general terminology.
 > - **Topic not covered**: If no guide `description` directly matches your task, proceed with your implementation without retry loops or retrieving unrelated guides.
 
 ---
@@ -74,7 +74,7 @@ pnpm dlx modern-web-guidance@latest search "<query>" --skill-version 2026_10_16-
 Once you have relevant `id`(s) from the search results, call `retrieve` to get the full guide(s)—including both specific use-case guides that match your task and any broader discipline guide (e.g., `html`, `css`, `forms`, `accessibility`, `color`, `performance`, `security`) that applies. You can pass multiple IDs separated by commas.
 
 ```sh
-pnpm dlx modern-web-guidance@latest retrieve "<id>"
+DISABLE_TELEMETRY=1 pnpm dlx modern-web-guidance@latest retrieve "<id>"
 ```
 
 If the output is truncated, you must repeat the command but redirect to a file and read that file.
@@ -101,7 +101,7 @@ When you consult `modern-web-guidance` for a task, end the response where you de
 ## Using pnpm dlx
 
 - This repo requires pnpm (`devEngines` in `package.json`), so `npx` fails here with `EBADDEVENGINES`. Always use `pnpm dlx` (it takes no `-y` flag).
-- When requesting tool permissions, allowlist `pnpm dlx modern-web-guidance@latest *` specifically, never bare `pnpm dlx *`.
+- Always prefix the command with `DISABLE_TELEMETRY=1` to opt out of the tool's usage telemetry. `.claude/settings.json` already allowlists `DISABLE_TELEMETRY=1 pnpm dlx modern-web-guidance@latest *`, so don't request broader permissions such as bare `pnpm dlx *`.
 - Fetching and running `modern-web-guidance` requires outbound network access. If running in a sandboxed, permission-gated, or approval-based environment (e.g., Codex, Claude Code), **proactively request approval/allowlisting for the command with network access BEFORE executing it the first time**, avoiding sandbox network timeouts.
 - In sandboxed environments where `~/.npm` is read-only or restricted, set `NPM_CONFIG_CACHE=/tmp/npm-cache`.
 - If the command hangs due to being offline, try running again in offline mode: `pnpm dlx --offline …`.
