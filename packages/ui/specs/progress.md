@@ -3,12 +3,13 @@
 Shows how far a task has got (an upload, an import, a multi-step setup), or that it is running when the amount is unknown. Use it for tasks that take long enough to watch. For a short wait of unknown length inside a control use Spinner or Button's `loading`; for a value in a range that isn't progress (storage used, password strength) use Meter.
 
 ```tsx
+import { roRO } from "@platform/ui/locales/ro-RO";
 import { Progress } from "@platform/ui/progress";
 
 <Progress value={40} label="Uploading 3 files" />
 <Progress value={3} max={4} label="Setup" valueLabel="Step 3 of 4" />
 <Progress value={null} aria-label="Importing contacts" />
-<Progress value={40} label="Se încarcă 3 fișiere" locale="ro" />
+<Progress value={40} label="Se încarcă 3 fișiere" locale={roRO} />
 ```
 
 Status: draft for brand-owner review (phase 1). No source guide: drafted from the brand book and the reference libraries. Shares its shape and tokens pattern with Meter.
@@ -34,7 +35,7 @@ Label, value, track and indicator are internal elements, not Parts (see API).
 | `label`         | `ReactNode`                |                        | Visible label. Without it, `aria-label` or `aria-labelledby` is required (the props type is a union that demands one of the three).      |
 | `valueLabel`    | `ReactNode`                | the formatted value    | Visible value text, shown when there is a `label` and the value is known. A string `valueLabel` is also the `aria-valuetext`.            |
 | `formatOptions` | `Intl.NumberFormatOptions` | `{ style: "percent" }` | How the default value text is formatted. With `style: "percent"` the fraction `value / max` is formatted; otherwise `value` itself.      |
-| `locale`        | `Intl.LocalesArgument`     | from LocaleProvider    | The locale for `Intl.NumberFormat`. When omitted, the shared client formatting leaf resolves it (see Built-in labels).                   |
+| `locale`        | `Locale`                   | English (`"en"`)       | A shipped locale object (`@platform/ui/locales/*`); its `tag` is the locale for `Intl.NumberFormat`. Formatting runs on the server.      |
 | …native         | `ComponentProps<"div">`    |                        | `ref`, `className`, `id`, `aria-label`, `aria-labelledby`, `aria-describedby`, `aria-valuetext` and every native attribute pass through. |
 
 Names, checked against the reference libraries:
@@ -45,7 +46,7 @@ Names, checked against the reference libraries:
 - **`label`**: React Spectrum "`label` … "The content to display as the label."" (https://react-spectrum.adobe.com/react-spectrum/ProgressBar.html). Base UI and Chakra compose a `Label` Part instead.
 - **`valueLabel`**: React Aria "The content to display as the value's label (e.g. 1 of 4)."; React Spectrum the same. React Spectrum shows it by default with a label: "`showValueLabel` … True by default if there's a label, false by default if not." We keep that default and drop the boolean.
 - **`formatOptions`**: React Aria "The display format of the value label." Default "`{ style: 'percent' }`"; Chakra "`formatOptions` (default `{ style: "percent" }`)". Base UI calls it `format`. Two to one for `formatOptions`.
-- **`locale`**: Base UI "The locale used by `Intl.NumberFormat` when formatting the value. Defaults to the user's runtime locale. When server rendering, `en-US` is used until hydration."; Chakra "`locale` (default `'en-US'`): "The locale to use for formatting the value."" We keep the prop as an override; the default follows spec #1 (LocaleProvider, then the document `lang`, then English) through the shared client formatting leaf (see Built-in labels).
+- **`locale`**: Base UI "The locale used by `Intl.NumberFormat` when formatting the value. Defaults to the user's runtime locale. When server rendering, `en-US` is used until hydration."; Chakra "`locale` (default `'en-US'`): "The locale to use for formatting the value."" We keep the prop, typed as the same locale object the Provider takes, and default to English (Q15-2: no client leaf, see Built-in labels).
 - **No `getValueLabel`** (Radix) or `getAriaValueText` (Base UI: "Accepts a function which returns a string value that provides a human-readable text alternative for the current value"). A string `valueLabel`, or a plain `aria-valuetext`, covers both with one less prop.
 - **Single component, not Parts.** Radix, Base UI and Chakra are compound (Base UI: "`Progress.Root`, `Progress.Label`, `Progress.Track`, `Progress.Indicator`, `Progress.Value`"). Their Parts share the value through React context, which Server Components can't read (inference), and spec #1 requires Progress to work as a Server Component. A single component with `label` and `valueLabel`, as React Spectrum has, keeps the root a Server Component. If the phase review prefers Parts, the names would be Base UI's.
 - **No `size`, `variant` or colour.** Chakra has `size` `xs`–`xl` and `colorPalette`, Radix Themes `size` `1`–`3` and `variant`. Progress has one look: the brand book's "Rationed color" gives progress the Accent only, and status belongs to Meter and Alert.
@@ -65,10 +66,10 @@ The `data-state` values are Radix's: "`[data-state]` … "complete", "indetermin
 - **ARIA, not the native element.** `<progress>` has the right semantics, but its bar can only be styled through engine-specific pseudo-elements (`::-webkit-progress-bar`, `::-webkit-progress-value`, `::-moz-progress-bar`, listed on the MDN page). MDN on `::-webkit-progress-value`: "**Non-standard:** This feature is not standardized. We do not recommend using non-standard features in production" (https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/::-webkit-progress-value). ADR-0002 allows no engine-specific fallbacks, so Progress uses `role="progressbar"` with the ARIA value attributes, as Radix, Base UI, Mantine ("Progress section has the `role="progressbar"` attribute") and the rest do. This adds no script, so ADR-0001's "platform before script" still holds.
 - **Values.** Root sets `aria-valuemin="0"`, `aria-valuemax={max}` and `aria-valuenow={value}`; for `null` it leaves `aria-valuenow` out. WAI-ARIA 1.2: "The author SHOULD supply a value for aria-valuenow unless the value is indeterminate" (https://www.w3.org/TR/wai-aria-1.2/#progressbar).
 - **Value text.** WAI-ARIA 1.2 notes that assistive technologies usually present `aria-valuenow` as a percentage of the range "unless aria-valuetext is specified", so a percent needs no `aria-valuetext`. Progress sets `aria-valuetext` only when `valueLabel` is a string (or the consumer passes one).
-- **Formatting.** The default value text is `new Intl.NumberFormat(locale, formatOptions).format(…)` (spec #1: "`Intl.*` for all formatting"). With `locale` passed, this runs on the server and the value text needs no client code. Without it, the value text is the shared `'use client'` formatting leaf proposed in the Badge spec ("the leaf is also what Meter, Progress and any other server-rendered `Intl` output should share"), which reads the locale from LocaleProvider, else `document.documentElement.lang`. The root stays a Server Component either way.
+- **Formatting.** The default value text is `new Intl.NumberFormat(locale, formatOptions).format(…)` (spec #1: "`Intl.*` for all formatting"). It always runs on the server, in `locale.tag` or `"en"`, so the value text needs no client code and can't mismatch on hydration (decision Q15-2).
 - **Indicator size** is an inline `inline-size: {percent}%` on the indicator, so it starts at the inline start in either direction and needs no transform origin.
 - **Region loading.** When Progress describes a loading region, the consumer sets `aria-busy="true"` on the region and points `aria-describedby` at the Progress. MDN: "use `aria-describedby` to point to the status, and set `aria-busy="true"` on the section that is being updated, removing the `aria-busy` attribute when it has finished loading." MUI says the same on its LinearProgress page.
-- The label id comes from `useId`, which the React 19 server build exports (`exports.useId` in `react/cjs/react.react-server.development.js`, react 19.3.1). Server Component root: no state, no handlers, no `'use client'` (spec #1 user story 4); only the default value text may be the shared client leaf.
+- The label id comes from `useId`, which the React 19 server build exports (`exports.useId` in `react/cjs/react.react-server.development.js`, react 19.3.1). Server Component: no state, no handlers, no `'use client'` (spec #1 user story 4).
 
 ## Motion
 
@@ -122,7 +123,7 @@ Dictionary changes: the component word **`progress`**, and the element word **`v
 
 ## Built-in labels
 
-None. The name comes from `label`, `aria-label` or `aria-labelledby`, and the only generated text is the number, formatted with `Intl.NumberFormat`. Locale order: the `locale` prop (server-side formatting, no client code); else the shared client formatting leaf (Badge spec), which reads LocaleProvider, then `document.documentElement.lang`, then English (spec #1: "fall back to English and the document `lang` when there's no provider"). The root can't read LocaleProvider itself because a Server Component can't read client context (inference). Only the value text depends on the locale: `aria-valuenow` is a plain number, and assistive technology presents it as a percentage itself (WAI-ARIA 1.2, see Behaviour).
+None. The name comes from `label`, `aria-label` or `aria-labelledby`, and the only generated text is the number, formatted with `Intl.NumberFormat`. Locale: the `locale` prop's `tag`, else English (`"en"`). A Server Component can't read the Provider's client context or `document.documentElement.lang`, so the app passes the same locale object it gives the Provider (decision Q15-2). Only the value text depends on the locale: `aria-valuenow` is a plain number, and assistive technology presents it as a percentage itself (WAI-ARIA 1.2, see Behaviour).
 
 ## Feedback events
 

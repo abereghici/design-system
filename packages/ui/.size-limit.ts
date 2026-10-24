@@ -6,9 +6,15 @@ import type { SizeLimitConfig } from "size-limit";
 const budgets: Readonly<Record<string, string>> = {
   button: "800 B",
   events: "20 B",
+  heading: "340 B",
   icon: "520 B",
   logo: "470 B",
+  meter: "1.1 kB",
+  progress: "1.1 kB",
   provider: "5.4 kB",
+  skeleton: "630 B",
+  spinner: "760 B",
+  text: "520 B",
 };
 
 const checks = (pattern: string, subpath: (path: string) => string, limit?: string) =>
@@ -35,6 +41,6 @@ export default [
   ...checks(
     "src/provider/locales/*.ts",
     (path) => path.slice("src/provider/".length, -".ts".length),
-    "120 B",
+    "140 B",
   ),
 ] satisfies SizeLimitConfig;

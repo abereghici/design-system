@@ -1,0 +1,42 @@
+@import "@platform/tokens/components/skeleton.css";
+
+@layer ab.components {
+  /* Two selectors' weight, so the placeholder overrides the wrapped component's own fill and border. */
+  .root[data-loading] {
+    border-color: transparent;
+    box-shadow: none;
+    background-image: none;
+    background-color: var(--ab-skeleton-background-color);
+    color: transparent;
+    pointer-events: none;
+    user-select: none;
+    animation: pulse var(--ab-skeleton-duration) var(--ab-motion-easing-color) infinite alternate;
+  }
+
+  .root[data-loading] > * {
+    visibility: hidden;
+  }
+
+  .inline {
+    border-radius: var(--ab-skeleton-border-radius);
+    box-decoration-break: clone;
+  }
+
+  .inline:empty {
+    display: block;
+    block-size: 1lh;
+  }
+
+  @media (forced-colors: active) {
+    .root[data-loading] {
+      background-color: GrayText;
+      animation: none;
+    }
+  }
+
+  @keyframes pulse {
+    to {
+      background-color: var(--ab-skeleton-pulse-background-color);
+    }
+  }
+}
