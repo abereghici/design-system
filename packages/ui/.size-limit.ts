@@ -12,6 +12,9 @@ const budgets: Readonly<Record<string, string>> = {
   "empty-state": "740 B",
   "icon-button": "3.2 kB",
   events: "20 B",
+  field: "2.3 kB",
+  fieldset: "380 B",
+  form: "250 B",
   heading: "340 B",
   icon: "520 B",
   kbd: "2.95 kB",
@@ -20,7 +23,7 @@ const budgets: Readonly<Record<string, string>> = {
   meter: "1.1 kB",
   progress: "1.1 kB",
   provider: "5.4 kB",
-  select: "3.4 kB",
+  select: "4.1 kB",
   separator: "700 B",
   skeleton: "630 B",
   "skip-link": "680 B",
@@ -28,6 +31,7 @@ const budgets: Readonly<Record<string, string>> = {
   "status-dot": "490 B",
   tag: "600 B",
   text: "520 B",
+  "text-field": "2.7 kB",
   "visually-hidden": "1.75 kB",
 };
 

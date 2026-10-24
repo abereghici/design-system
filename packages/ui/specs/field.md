@@ -16,8 +16,9 @@ import { Checkbox } from "@platform/ui/checkbox";
   <Field.Label>Handle</Field.Label>
   <Field.Control required pattern="@[a-z0-9_]+" />
   <Field.Description>Letters, digits and underscores.</Field.Description>
-  <Field.Error match="patternMismatch">Use only letters, digits and underscores.</Field.Error>
-  <Field.Error />
+  <Field.Error>
+    {(validity) => (validity.patternMismatch ? "Use only letters, digits and underscores." : null)}
+  </Field.Error>
 </Field.Root>
 ```
 
@@ -29,7 +30,7 @@ Root → Label → control → Description → Error.
 
 - **Root.** A `<div>` that stacks its children with `input-gap` (4). It provides the ids and the field state to its children through context. It renders no role: the control carries the semantics.
 - **Label.** A native `<label for>` pointing at the control's id, in `input-label-font` (13/500). MDN: "we recommend using explicit association with the `for` attribute … In fact, you can simultaneously nest _and_ provide `id`/`for` for maximum compatibility." Required controls show a decorative `*` after the text (`aria-hidden`; the `required` attribute is what is announced).
-- **Control.** `Field.Control` renders a native `<input>`. Any phase-2 control placed inside Root reads the same context instead (Checkbox, Switch, RadioGroup, Slider, FileTrigger), so it gets the id, `name`, `disabled` and the describedby list from Root.
+- **Control.** `Field.Control` renders a native `<input>` drawn as the source's `.ab-input`. Any other control placed inside Root (Checkbox, Switch, RadioGroup, Slider, FileTrigger, and the built-in Fields of TextField, TextArea, PasswordField, NumberField and Select) uses the `useFieldControl` hook instead (see **Control contract**), so it gets the id, `name`, `disabled` and the describedby list from Root.
 - **Description.** A `<p>` in `input-helper-font`, `input-helper-text-color`. Hidden while the error shows (see Behaviour).
 - **Error.** A `<div>` in `input-helper-font`, `input-error-text-color`. Empty until the field is invalid after interaction. With no children it shows the browser's `validationMessage`.
 
@@ -51,16 +52,17 @@ Root → Label → control → Description → Error.
 
 | Prop       | Type                                                                                                                                                                       | Default | Notes                                                                                                    |
 | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------- |
-| `match`    | `"badInput" \| "customError" \| "patternMismatch" \| "rangeOverflow" \| "rangeUnderflow" \| "stepMismatch" \| "tooLong" \| "tooShort" \| "typeMismatch" \| "valueMissing"` |         | Shows this Error only when that `ValidityState` flag is true. Without `match`, it shows for any failure. |
-| `children` | `ReactNode`                                                                                                                                                                |         | The message. Omitted: the control's `validationMessage`, which the browser localises.                    |
+| `children` | `ReactNode \| ((validity: ValidityState) => ReactNode)` |         | The message, or a function that picks one per failure from the native `ValidityState`. Omitted: the control's `validationMessage`, which the browser localises. |
 | …native    | `ComponentProps<"div">`                                                                                                                                                    |         |                                                                                                          |
 
-When several Errors match, the first in source order shows and the rest stay empty, so a specific `match` placed before a catch-all Error wins.
+One Error per Field. A per-failure message is the function form (as TextField's `errorMessage`), so there is no `match` prop and no ordering rule between several Errors (judgement call: one mechanism for both forms, fewer Parts to keep in sync).
+
+**Control contract** (`useFieldControl`, exported from `@platform/ui/field`). A control calls `useFieldControl<Element, Props>(props)` and spreads the result on its native `<input>`, `<select>` or `<textarea>`. Inside a Root it gets `id` (so `Field.Label` points at it), `name` (Root's wins), `aria-describedby` (Description or Error, never both), `aria-invalid`, `aria-disabled` (from its own or Root's `disabled`; native `disabled` is never set), a `ref` that registers the element with Root (the consumer's `ref` is kept), and `onFocus`/`onChange` that call `onValueChange(value, { reason: "none", event, cancel })` and restore the previous value on `cancel()` or while disabled. Root does the rest: validity, `validate`, server errors, reset. How the control blocks input while disabled (`readOnly`, key handling) is the control's own. Outside a Root the hook only passes the props through.
 
 Names, checked against the reference libraries:
 
 - **`Field` with `Root`, `Label`, `Control`, `Description`, `Error`**: Base UI "Groups all parts of the field. Renders a `<div>` element.", "The form control to label and validate. Renders an `<input>`.", "A paragraph with additional information about the field. Renders a `<p>`.", "An error message displayed if the field control fails validation." (https://base-ui.com/react/components/field). Ark and Chakra use `Field.Root` / `Field.Label` / `Field.HelperText` / `Field.ErrorText` (https://ark-ui.com/react/docs/components/field, https://chakra-ui.com/docs/components/field); shadcn `Field`, `FieldLabel`, `FieldDescription`, `FieldError` (https://ui.shadcn.com/docs/components/field); Radix Form `Form.Field`, `Form.Label`, `Form.Control`, `Form.Message` (https://www.radix-ui.com/primitives/docs/components/form). `Description` is Base UI's and shadcn's word and Radix's Part word for the same job (Dialog's "Description"); `Error` is Base UI's.
-- **`match`**: Base UI Error "`match` … Determines whether to show the error message according to the field's ValidityState."; Radix Form.Message "It matches the native HTML validity state (`ValidityState`…)". Values are the `ValidityState` flag names. Base UI's `match={true}` and Radix's function matchers are left out: `invalid` and `validate` cover them.
+- **No `match`**: Base UI Error "`match` … Determines whether to show the error message according to the field's ValidityState." and Radix Form.Message match on `ValidityState` with one Part per failure. React Spectrum's `errorMessage: ((v: ValidationResult) => ReactNode) | ReactNode` picks the message in one function; we take that form for Error and every built-in Field.
 - **`validate`**: Base UI Root "Return a string or an array of strings with the error message(s) if the value is invalid. Returning nothing, `null`, an empty string, or an empty array means the value is valid." We take one string (one message per field) and drop async validation (Base UI: "Asynchronous functions are supported, but they do not prevent form submission").
 - **`invalid`, `disabled`, `name` on Root**: Base UI Root `name` "Takes precedence over the `name` prop on the `<Field.Control>` component.", `invalid` "Useful when the field state is controlled by an external library."; Ark Root `disabled`, `invalid`.
 - **Default message from the browser**: React Aria "By default, the `FieldError` component displays the error message provided by the browser, which is localized in the user's preferred language." (https://react-aria.adobe.com/forms).
@@ -72,7 +74,7 @@ Names, checked against the reference libraries:
 | -------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | rest     | Label, control, description                                                                     | —                                                              |
 | invalid  | Error text replaces the description; the control shows its invalid border (each control's spec) | `data-invalid` on Root, `aria-invalid="true"` on the control   |
-| disabled | Label and description in `color-text-disabled`; the control's disabled look                     | `data-disabled` on Root, `aria-disabled="true"` on the control |
+| disabled | The control's disabled look; label and description keep their colours (source `forms.css`)     | `data-disabled` on Root, `aria-disabled="true"` on the control |
 | required | `*` after the label text                                                                        | native `required` on the control                               |
 
 ## Behaviour
@@ -117,7 +119,7 @@ Logical properties only. Label, Description and Error align to the inline start 
 
 ## Component tokens
 
-All exist (the source's `input-*` set, shared by every field): `input-gap`, `input-label-font`, `input-label-text-color`, `input-helper-font`, `input-helper-text-color`, `input-error-text-color`. Disabled text uses `color-text-disabled` directly (semantic, as Button's disabled roles).
+All exist (the source's `input-*` set, shared by every field): `input-gap`, `input-label-font`, `input-label-text-color`, `input-helper-font`, `input-helper-text-color`, `input-error-text-color`.
 
 No new tokens. Field reuses the `input` component word instead of adding `field`, because the source designed label, helper and error once for all its form controls (judgement call).
 

@@ -117,6 +117,20 @@ describe("each component route ships only its own CSS, tokens and client code", 
       client: ["select/select-root.tsx"],
       html: 'label="Asia Pacific"',
     },
+    { name: "form", tokens: [], client: ["form/form.tsx"], html: "<form" },
+    { name: "fieldset", tokens: ["fieldset"], client: [], html: "<legend" },
+    {
+      name: "field",
+      tokens: ["input"],
+      client: ["field/field.tsx"],
+      html: "Letters and digits.",
+    },
+    {
+      name: "text-field",
+      tokens: ["input"],
+      client: ["text-field/text-field.tsx"],
+      html: 'dir="auto"',
+    },
   ])("$name", ({ name, tokens, client, html }) => {
     const r = route(name);
     expect(r.html).toContain(html);

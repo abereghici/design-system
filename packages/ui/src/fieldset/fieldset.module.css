@@ -1,0 +1,19 @@
+@import "@platform/tokens/components/fieldset.css";
+
+@layer ab.components {
+  .root {
+    display: grid;
+    gap: var(--ab-fieldset-gap);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .legend {
+    margin-block-end: var(--ab-fieldset-gap);
+    padding: 0;
+    color: var(--ab-fieldset-legend-text-color);
+    font: var(--ab-fieldset-legend-font);
+  }
+}
