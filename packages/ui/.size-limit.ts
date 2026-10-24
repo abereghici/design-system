@@ -12,6 +12,8 @@ const budgets: Readonly<Record<string, string>> = {
   card: "1.3 kB",
   checkbox: "2.55 kB",
   "drop-zone": "2.4 kB",
+  "context-menu": "6.3 kB",
+  "dropdown-menu": "5.9 kB",
   "empty-state": "880 B",
   "icon-button": "2.1 kB",
   events: "20 B",

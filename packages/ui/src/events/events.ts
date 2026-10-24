@@ -10,17 +10,29 @@ export interface FeedbackEventDetail<Component extends string = string> {
   readonly reason: FeedbackReason;
 }
 
-export type PressEvent = CustomEvent<FeedbackEventDetail<"Button" | "IconButton">>;
+export type PressEvent = CustomEvent<
+  FeedbackEventDetail<"Button" | "IconButton" | "DropdownMenu" | "ContextMenu">
+>;
 
 /** Not `ToggleEvent`, which would shadow the DOM's popover and `<details>` event type. */
 export type ToggleFeedbackEvent = CustomEvent<
   FeedbackEventDetail<
-    "IconButton" | "Checkbox" | "Switch" | "RadioGroup" | "Tabs" | "SegmentedControl" | "Accordion"
+    | "IconButton"
+    | "Checkbox"
+    | "Switch"
+    | "RadioGroup"
+    | "Tabs"
+    | "SegmentedControl"
+    | "Accordion"
+    | "DropdownMenu"
+    | "ContextMenu"
   >
 >;
 
 export type DismissEvent = CustomEvent<
-  FeedbackEventDetail<"Alert" | "Dialog" | "AlertDialog" | "Sheet" | "Popover">
+  FeedbackEventDetail<
+    "Alert" | "Dialog" | "AlertDialog" | "Sheet" | "Popover" | "DropdownMenu" | "ContextMenu"
+  >
 >;
 
 export type ConfirmEvent = CustomEvent<FeedbackEventDetail<"AlertDialog">>;

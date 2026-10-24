@@ -3,13 +3,6 @@ import type { ToggleEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
 
-declare module "react" {
-  interface ButtonHTMLAttributes<T> {
-    command?: "toggle-popover" | "show-popover" | "hide-popover" | undefined;
-    commandfor?: string | undefined;
-  }
-}
-
 export type ChangeReason =
   | "trigger-press"
   | "outside-press"
@@ -43,7 +36,7 @@ interface Options {
     | undefined;
 }
 
-type Component = "Popover";
+type Component = "Popover" | "DropdownMenu" | "ContextMenu";
 
 interface Layer {
   pending?: ChangeReason | undefined;
@@ -97,11 +90,23 @@ function settle(element: HTMLElement, component: Component) {
   if (closing === "escape-key" || closing === "outside-press") {
     dispatchFeedback(element, "ab-dismiss", { component, reason: "user" });
   }
+  if (focusInside === true && closing !== "outside-press") returnFocus(element);
+  layer.returnTo = undefined;
+}
+
+/** Records where focus was before a press that may open the layer moved it (WebKit blurs on press). */
+export function rememberFocus(contentId: string) {
+  const element = byId(contentId);
   const focus = document.activeElement;
-  const stranded = focus === document.body || element.contains(focus);
-  if (focusInside === true && stranded && closing !== "outside-press") {
-    layer.returnTo?.focus({ preventScroll: true });
-  }
+  if (element !== null)
+    layerOf(element).returnTo = focus instanceof HTMLElement ? focus : undefined;
+}
+
+/** Puts focus back where the layer was opened from, unless the user already moved it elsewhere. */
+export function returnFocus(element: HTMLElement) {
+  const focus = document.activeElement;
+  if (focus !== document.body && !element.contains(focus)) return;
+  layerOf(element).returnTo?.focus({ preventScroll: true });
 }
 
 function leaves(contentId: string, next: EventTarget | null) {
@@ -125,7 +130,7 @@ function recordInput(element: HTMLElement, focusOut: (event: FocusEvent) => void
   };
 }
 
-function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>) {
+function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, component: Component) {
   const element = event.currentTarget;
   const layer = layerOf(element);
   const opening = event.newState === "open";
@@ -140,20 +145,22 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>) {
       document.activeElement === document.body || element.contains(document.activeElement);
   } else if (accepted) {
     const { source } = event.nativeEvent;
-    layer.returnTo = source instanceof HTMLElement ? source : undefined;
-    element.toggleAttribute("data-pointer", layer.returnTo?.dataset["pointer"] !== undefined);
+    const from = component === "ContextMenu" ? (layer.returnTo ?? document.activeElement) : source;
+    layer.returnTo = from instanceof HTMLElement ? from : undefined;
+    const pointer = source instanceof HTMLElement && source.dataset["pointer"] !== undefined;
+    element.toggleAttribute("data-pointer", pointer);
   } else {
     event.preventDefault();
   }
 }
 
-function reconcile(contentId: string, open: boolean, source: Element | null) {
+function reconcile(contentId: string, open: boolean, findSource: (id: string) => Element | null) {
   const element = byId(contentId);
   if (element === null || layerOf(element).pending !== undefined || open === isOpen(element)) {
     return;
   }
   layerOf(element).pending = "none";
-  if (open) element.showPopover(sourceOf(source));
+  if (open) element.showPopover(sourceOf(findSource(contentId)));
   else element.hidePopover();
 }
 
@@ -167,7 +174,7 @@ function contentPropsOf(
     id,
     popover: "auto",
     onBeforeToggle: (event: ToggleEvent<HTMLElement>) => {
-      beforeToggle(options, event);
+      beforeToggle(options, event, component);
     },
     onToggle: (event: ToggleEvent<HTMLElement>) => {
       setOpen(event.newState === "open");
@@ -234,7 +241,7 @@ export function useFloating(
   }, [contentId, current]);
 
   useLayoutEffect(() => {
-    reconcile(contentId, current, findSource(contentId));
+    reconcile(contentId, current, findSource);
   });
 
   const contentProps = contentPropsOf(contentId, component, options, setUncontrolled);

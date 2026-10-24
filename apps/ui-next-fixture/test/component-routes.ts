@@ -144,4 +144,16 @@ export const componentRoutes = [
     client: ["popover/popover-root.tsx"],
     html: 'command="toggle-popover"',
   },
+  {
+    name: "dropdown-menu",
+    tokens: ["dropdown-menu", "icon"],
+    client: ["dropdown-menu/dropdown-menu-root.tsx", "menu/menu-items.tsx", "menu/menu.tsx"],
+    html: 'aria-haspopup="menu"',
+  },
+  {
+    name: "context-menu",
+    tokens: ["context-menu", "icon"],
+    client: ["context-menu/context-menu-root.tsx", "menu/menu.tsx"],
+    html: 'role="menu"',
+  },
 ];

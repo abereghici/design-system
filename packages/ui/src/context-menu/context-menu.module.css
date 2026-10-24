@@ -1,0 +1,51 @@
+@import "@platform/tokens/components/context-menu.css";
+
+@layer ab.components {
+  .content {
+    --min-width: var(--ab-context-menu-min-width);
+    --padding: var(--ab-context-menu-padding);
+    --border-radius: var(--ab-context-menu-border-radius);
+    --background-color: var(--ab-context-menu-background-color);
+    --blur: var(--ab-context-menu-blur);
+    --saturate: var(--ab-context-menu-saturate);
+    --shadow: var(--ab-context-menu-shadow);
+    --item-height: var(--ab-context-menu-item-height);
+    --item-padding-inline: var(--ab-context-menu-item-padding-inline);
+    --item-gap: var(--ab-context-menu-item-gap);
+    --item-border-radius: var(--ab-context-menu-item-border-radius);
+    --item-font: var(--ab-context-menu-item-font);
+    --item-text-color: var(--ab-context-menu-item-text-color);
+    --item-icon-color: var(--ab-context-menu-item-icon-color);
+    --item-background-color-hovered: var(--ab-context-menu-item-background-color-hovered);
+    --item-icon-color-selected: var(--ab-context-menu-item-icon-color-selected);
+    --item-danger-text-color: var(--ab-context-menu-item-danger-text-color);
+    --item-danger-icon-color: var(--ab-context-menu-item-danger-icon-color);
+    --item-shortcut-text-color: var(--ab-context-menu-item-shortcut-text-color);
+    --group-label-font: var(--ab-context-menu-group-label-font);
+    --group-label-text-color: var(--ab-context-menu-group-label-text-color);
+    --separator-border-color: var(--ab-context-menu-separator-border-color);
+    --enter-scale: var(--ab-context-menu-enter-scale);
+    --enter-duration: var(--ab-context-menu-enter-duration);
+    --exit-duration: var(--ab-context-menu-exit-duration);
+    --easing: var(--ab-context-menu-easing);
+    --item-text-color-disabled: var(--ab-context-menu-item-text-color-disabled);
+    --item-icon-color-disabled: var(--ab-context-menu-item-icon-color-disabled);
+
+    inset-block-start: anchor(self-end);
+    inset-inline-start: anchor(self-start);
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
+    margin-block-start: var(--ab-context-menu-offset);
+  }
+
+  .anchor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    inline-size: 0;
+    block-size: 0;
+    pointer-events: none;
+  }
+}

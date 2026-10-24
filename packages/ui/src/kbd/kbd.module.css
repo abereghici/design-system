@@ -4,6 +4,7 @@
   .root {
     display: inline-flex;
     gap: var(--ab-kbd-gap);
+    margin-inline-start: var(--ab-kbd-margin-inline-start, 0);
     vertical-align: middle;
     font: var(--ab-kbd-font);
     font-variant-numeric: var(--ab-kbd-font-variant-numeric);
