@@ -204,6 +204,7 @@ describe("per-component JS", () => {
   test.each([
     ["heading", "var(--ab-type-heading-lg)", 0],
     ["text", "var(--ab-type-body-md)", 0],
+    ["scroll-area", "animation-timeline:scroll(self)", 0],
     ["spinner", "var(--ab-spinner-color)", 5],
     ["skeleton", "var(--ab-skeleton-background-color)", 4],
     ["progress", "var(--ab-progress-indicator-background-color)", 11],

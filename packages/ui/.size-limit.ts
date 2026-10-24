@@ -24,6 +24,7 @@ const budgets: Readonly<Record<string, string>> = {
   "number-field": "7.4 kB",
   meter: "1.1 kB",
   progress: "1.1 kB",
+  "scroll-area": "775 B",
   "password-field": "6.5 kB",
   "radio-group": "2.9 kB",
   provider: "5.4 kB",
