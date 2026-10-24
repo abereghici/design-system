@@ -1,6 +1,6 @@
 # Table
 
-Data in rows and columns that the user reads and compares: invoices, usage per month, a list of members with their roles. It is static: cells are not focusable or selectable, and any Button or Link inside a cell is its own tab stop. For a short list of labelled values use a description list; for a spreadsheet-like grid the user moves through with arrow keys, use a grid (not part of this component).
+Data in rows and columns that the user reads and compares: invoices, usage per month, a list of members with their roles. It is static: cells are not focusable, and any Button, Link or Checkbox inside a cell is its own tab stop. A column can be sortable (a `SortLabel` button in its header, `aria-sort` on the sorted one) and rows selectable (a column of native Checkboxes). For a short list of labelled values use a description list; for a spreadsheet-like grid the user moves through with arrow keys, use a grid (not part of this component).
 
 ```tsx
 import { ScrollArea } from "@platform/ui/scroll-area";
@@ -49,7 +49,15 @@ A wide table goes inside a [ScrollArea](./scroll-area.md), which scrolls it hori
 
 `Table.Root`: `ComponentProps<"table">`. `Table.Caption`: `ComponentProps<"caption">`. `Table.Header`: `ComponentProps<"thead">`. `Table.Body`: `ComponentProps<"tbody">`. `Table.Row`: `ComponentProps<"tr">`. `Table.ColumnHeader` and `Table.RowHeader`: `ComponentProps<"th">` (`scope` preset to `"col"` / `"row"`, overridable, e.g. `"colgroup"`). `Table.Cell`: `ComponentProps<"td">`. `ref`, `className`, `colSpan`, `rowSpan`, `headers`, `aria-*` and every native attribute pass through.
 
-No props of their own.
+Own props (fix/review, issue #39 asks for "sortable headers announced correctly, row selection"):
+
+| Part           | Prop                       | Type                          | Notes                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------- | -------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ColumnHeader` | `sortDirection`            | `"ascending" \| "descending"` | Rendered as `aria-sort`. Set it on the sorted column only (APG Sortable Table example: "Set on the currently sorted column. When the sorted column is changed, the aria-sort attribute is removed and set on the newly sorted column.", https://www.w3.org/WAI/ARIA/apg/patterns/table/examples/sortable-table/). Names: MUI `TableCell` `sortDirection`, React Aria `SortDescriptor.direction` `"ascending" \| "descending"`. |
+| `SortLabel`    | `ComponentProps<"button">` |                               | A native `<button type="button">` inside the ColumnHeader; its text names the column and a CSS arrow shows the sort (hidden on unsorted columns until hover). Your `onClick` changes the order. Name: MUI `TableSortLabel`.                                                                                                                                                                                                    |
+| `Row`          | `selected`                 | `boolean`                     | Draws the row with `table-row-background-color-selected`. Name: MUI `TableRow` `selected`. The row's own Checkbox carries the state for assistive technology; a native table row has no selected state (`aria-selected` applies to rows of a grid or treegrid only).                                                                                                                                                           |
+
+Selection is composed: a first column of `Checkbox`es named "Select <row>", and a header Checkbox with `indeterminate` for select-all (MUI's "Sorting & selecting" demo; React Aria's `selectionMode` needs its interactive grid, left out).
 
 Names, checked against the reference libraries:
 
@@ -60,7 +68,7 @@ Names, checked against the reference libraries:
 - **No `align` / `justify` prop.** Radix Themes `Table.Cell` `justify` "`"start"`, `"center"`, or `"end"`"; shadcn aligns amounts with `className="text-right"`. Numeric columns set `text-align: end` through `className` on the ColumnHeader and Cells (shadcn's way); the figures are already tabular from the base stylesheet.
 - **No `size`, `variant` or `layout`.** Radix Themes `size` "`"1"`, `"2"`, or `"3"`", `variant` "`"surface"` or `"ghost"`", `layout` "`"auto"` or `"fixed"`"; MUI "Dense table"; Mantine `verticalSpacing`. The brand book has one density ("Compact. Linear-class density on a fine pointer."), so there is one cell padding.
 - **No scroll container Part.** MUI "`TableContainer` provides horizontal scrolling for `Table`"; Mantine `Table.ScrollContainer` with `minWidth`. ScrollArea is that container, composed around the Root.
-- Left out (YAGNI): sorting (`aria-sort`), row selection and the interactive grid (React Aria's Table "enables a user to navigate its contents via directional navigation keys"), sticky header (MUI and Mantine `stickyHeader`), column resizing (React Aria `ResizableTableContainer`), striped rows and row hover highlight (Mantine demo "Striped and rows hover"), a Footer Part, density sizes, cell alignment props.
+- Left out (YAGNI): the interactive grid (React Aria's Table "enables a user to navigate its contents via directional navigation keys"), sticky header (MUI and Mantine `stickyHeader`), column resizing (React Aria `ResizableTableContainer`), striped rows and row hover highlight (Mantine demo "Striped and rows hover"), a Footer Part, density sizes, cell alignment props.
 
 ## States
 
@@ -68,8 +76,10 @@ Names, checked against the reference libraries:
 | ------------- | --------------------------------------------------- | -------------------------- |
 | rest          | Header row in label type, hairlines between rows    | —                          |
 | focus-visible | On Links/Buttons inside cells only (their own ring) | Their own `:focus-visible` |
+| sorted        | Arrow after the SortLabel text, up for ascending    | `aria-sort` on the `th`    |
+| selected      | `table-row-background-color-selected` fill          | The row's Checkbox checked |
 
-No hovered, selected or disabled state: a static table has no row interaction, and a hover highlight would suggest the row can be clicked (judgement call).
+No hovered or disabled row state: a hover highlight would suggest the row can be clicked (judgement call).
 
 ## Behaviour
 
@@ -102,6 +112,7 @@ Screen readers provide their own table navigation (row and column commands) from
 ## Accessibility
 
 - **Roles** come from the native elements: `table`, `rowgroup`, `row`, `columnheader`, `rowheader`, `cell`. APG: "authors are strongly encouraged to use a native HTML table element whenever possible." and "Each cell … has one of the following roles: columnheader if the cell contains a title or header information for the column. rowheader if the cell contains title or header information for the row. cell if the cell does not contain column or row header information."
+- **Sorting.** APG Sortable Table example: "The aria-sort attribute is set on the column header of the currently sorted column, and the header text of sortable columns is wrapped in a button element." So the column name is the button's name and screen readers announce the sort on the header.
 - **Header scope.** HTML `scope`: "row — The header cell applies to some of the subsequent cells in the same row(s). col — The header cell applies to some of the subsequent cells in the same column(s)." ColumnHeader and RowHeader set it explicitly instead of relying on the auto state.
 - **Name.** Every Table needs one. With `Table.Caption`: HTML-AAM "if the table element has a child that is a caption element, then use the subtree of the first such element". Without a visible caption, pass `aria-labelledby` (a visible heading) or `aria-label` on the Root; APG: "If there is an element in the user interface that serves as a label for the table, aria-labelledby is set on the table element … Otherwise, a label is specified for the table element using aria-label." A visually hidden caption is `<Table.Caption><VisuallyHidden>…</VisuallyHidden></Table.Caption>`.
 - **Contrast.** Header text `color-text-subtle`, cell and caption text `color-text-default`, both in the contrast matrix on every surface. Row hairlines (`color-border-subtle`) are decorative (brand book exemption: "The subtle hairline border is decorative and is never the only boundary of a control"); rows are told apart by alignment and the text itself.
@@ -118,18 +129,20 @@ Logical properties only: `text-align: start`/`end`, `padding-inline`, `border-bl
 
 New component word `table` (Dictionary change) and a new modifier word `caption` (the Caption Part; the existing `title` was considered, but the HTML element and the Part are both called caption).
 
-| Token                      | References             | `$type`    | Why                                                   |
-| -------------------------- | ---------------------- | ---------- | ----------------------------------------------------- |
-| `table-padding-block`      | `space-inset-sm`       | dimension  | Cell padding, 8 (compact density)                     |
-| `table-padding-inline`     | `space-inset-md`       | dimension  | Cell padding, 12                                      |
-| `table-border-color`       | `color-border-subtle`  | color      | Row hairline                                          |
-| `table-border-width`       | `border-width-default` | dimension  | Row hairline, 1                                       |
-| `table-header-font`        | `type-label-sm`        | typography | ColumnHeader type                                     |
-| `table-header-text-color`  | `color-text-subtle`    | color      | ColumnHeader text, one step quieter than the data     |
-| `table-body-font`          | `type-body-xs`         | typography | Cell and RowHeader type (as Alert and Card body text) |
-| `table-body-text-color`    | `color-text-default`   | color      | Cell and RowHeader text                               |
-| `table-caption-font`       | `type-label-md`        | typography | Caption type                                          |
-| `table-caption-text-color` | `color-text-default`   | color      | Caption text                                          |
+| Token                                 | References                  | `$type`    | Why                                                   |
+| ------------------------------------- | --------------------------- | ---------- | ----------------------------------------------------- |
+| `table-padding-block`                 | `space-inset-sm`            | dimension  | Cell padding, 8 (compact density)                     |
+| `table-padding-inline`                | `space-inset-md`            | dimension  | Cell padding, 12                                      |
+| `table-border-color`                  | `color-border-subtle`       | color      | Row hairline                                          |
+| `table-border-width`                  | `border-width-default`      | dimension  | Row hairline, 1                                       |
+| `table-header-font`                   | `type-label-sm`             | typography | ColumnHeader type                                     |
+| `table-header-text-color`             | `color-text-subtle`         | color      | ColumnHeader text, one step quieter than the data     |
+| `table-body-font`                     | `type-body-xs`              | typography | Cell and RowHeader type (as Alert and Card body text) |
+| `table-body-text-color`               | `color-text-default`        | color      | Cell and RowHeader text                               |
+| `table-caption-font`                  | `type-label-md`             | typography | Caption type                                          |
+| `table-caption-text-color`            | `color-text-default`        | color      | Caption text                                          |
+| `table-row-background-color-selected` | `color-background-selected` | color      | Selected Row fill (new modifier word `row`)           |
+| `table-sort-icon-color`               | `color-icon-subtle`         | color      | SortLabel arrow (new modifier word `sort`)            |
 
 None exist yet. The gap below the Caption uses `space-stack-sm` directly; the more-contrast hairline uses `color-border-default` directly.
 
@@ -139,7 +152,7 @@ None. The Caption or `aria-label` is the consumer's.
 
 ## Feedback events
 
-None. A static table has no selection or expansion.
+None. Sorting and selection are the consumer's handlers on a native button and Checkbox (the Checkbox dispatches its own `ab-toggle`).
 
 ## Sources
 

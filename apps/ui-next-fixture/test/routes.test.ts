@@ -149,7 +149,7 @@ describe("per-component JS", () => {
     ["text", "var(--ab-type-body-md)", 0],
     ["scroll-area", "animation-timeline:scroll(self)", 0],
     ["spinner", "var(--ab-spinner-color)", 4],
-    ["table", "var(--ab-table-body-font)", 10],
+    ["table", "var(--ab-table-body-font)", 12],
     ["skeleton", "var(--ab-skeleton-background-color)", 4],
     ["progress", "var(--ab-progress-indicator-background-color)", 11],
     ["meter", "var(--ab-meter-indicator-background-color)", 13],
@@ -173,6 +173,9 @@ describe("per-component JS", () => {
     expect(route("progress").html).toContain("40\u00A0%");
     expect(route("meter").html).toContain("42%");
     expect(route("skip-link").html).toContain(">Skip to main content</a>");
+    expect(route("table").html).toMatch(
+      /<th scope="col" aria-sort="ascending" class="[^"]+"><button type="button"/v,
+    );
     expect(route("link").html).toMatch(/<a class="[^"]+" href="\/">Home<\/a>/v);
   });
 

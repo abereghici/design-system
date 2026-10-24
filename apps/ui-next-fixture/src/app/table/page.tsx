@@ -7,7 +7,9 @@ export default function Page() {
         <Table.Caption>Invoices</Table.Caption>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader>Invoice</Table.ColumnHeader>
+            <Table.ColumnHeader sortDirection="ascending">
+              <Table.SortLabel>Invoice</Table.SortLabel>
+            </Table.ColumnHeader>
             <Table.ColumnHeader>Amount</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>

@@ -209,6 +209,8 @@ const MODIFIERS = new Set([
   "segment",
   "cell",
   "today",
+  "row",
+  "sort",
 ]);
 
 const outsideDictionary = (words: readonly string[]) =>

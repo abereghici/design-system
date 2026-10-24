@@ -2488,6 +2488,14 @@
       "$type": "color",
       "$value": "{semantic.color-text-default}"
     },
+    "table-row-background-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-background-selected}"
+    },
+    "table-sort-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
     "tooltip-enter-scale": {
       "$type": "number",
       "$value": "{semantic.motion-scale-enter}"
