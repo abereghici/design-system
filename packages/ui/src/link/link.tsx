@@ -1,5 +1,6 @@
 import type { ComponentProps } from "react";
-import { Slot } from "@radix-ui/react-slot";
+
+import { Slot } from "../slot/slot.tsx";
 
 import styles from "./link.module.css";
 

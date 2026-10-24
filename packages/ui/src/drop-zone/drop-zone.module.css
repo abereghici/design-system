@@ -1,0 +1,46 @@
+@import "@platform/tokens/components/drop-zone.css";
+
+@layer ab.components {
+  .root {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--ab-drop-zone-gap);
+    padding: var(--ab-drop-zone-padding);
+    border: var(--ab-drop-zone-border-width) dashed var(--ab-drop-zone-border-color);
+    border-radius: var(--ab-drop-zone-border-radius);
+    background-color: var(--ab-drop-zone-background-color);
+    font: var(--ab-drop-zone-font);
+    color: var(--ab-drop-zone-text-color);
+    text-align: center;
+    transition-property: border-color, background-color;
+    transition-duration: var(--ab-motion-duration-hover-out);
+    transition-timing-function: var(--ab-motion-easing-color);
+  }
+
+  .root[data-drop-target] {
+    border-color: var(--ab-drop-zone-border-color-hovered);
+    background-color: var(--ab-drop-zone-background-color-hovered);
+    transition-duration: var(--ab-motion-duration-hover-in);
+  }
+
+  .root:is([data-drop-target="rejected"], [data-invalid]) {
+    border-color: var(--ab-drop-zone-border-color-invalid);
+  }
+
+  .root[data-drop-target="rejected"] {
+    background-color: var(--ab-drop-zone-background-color);
+  }
+
+  @media (forced-colors: active) {
+    .root {
+      border-color: CanvasText;
+    }
+
+    .root[data-drop-target] {
+      border-style: solid;
+      border-color: Highlight;
+    }
+  }
+}

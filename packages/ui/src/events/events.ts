@@ -13,7 +13,11 @@ export interface FeedbackEventDetail<Component extends string = string> {
 export type PressEvent = CustomEvent<FeedbackEventDetail<"Button" | "IconButton">>;
 
 /** Not `ToggleEvent`, which would shadow the DOM's popover and `<details>` event type. */
-export type ToggleFeedbackEvent = CustomEvent<FeedbackEventDetail<"IconButton">>;
+export type ToggleFeedbackEvent = CustomEvent<
+  FeedbackEventDetail<
+    "IconButton" | "Checkbox" | "Switch" | "RadioGroup" | "Tabs" | "SegmentedControl" | "Accordion"
+  >
+>;
 
 export type DismissEvent = CustomEvent<FeedbackEventDetail<"Alert">>;
 

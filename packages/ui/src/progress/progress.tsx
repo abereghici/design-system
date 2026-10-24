@@ -10,7 +10,7 @@ type Name =
   | { label?: undefined; "aria-label": string }
   | { label?: undefined; "aria-labelledby": string };
 
-export type ProgressProps = Omit<ComponentProps<"div">, "children"> &
+export type ProgressProps = Omit<ComponentProps<"progress">, "children" | "value" | "max"> &
   Name & {
     /** `null` is indeterminate. Clamped to `0…max`. */
     value?: number | null;
@@ -40,6 +40,7 @@ export function Progress({
   formatOptions = { style: "percent" },
   locale,
   className,
+  style,
   ...props
 }: ProgressProps) {
   const id = useId();
@@ -53,16 +54,9 @@ export function Progress({
         ));
   return (
     <div
-      aria-labelledby={label === undefined ? undefined : id}
-      aria-valuetext={typeof valueLabel === "string" ? valueLabel : undefined}
-      {...props}
-      // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- <progress> styles only through non-standard pseudo-elements
-      role="progressbar"
-      aria-valuemin={0}
-      aria-valuemax={max}
-      aria-valuenow={now}
       data-state={now === undefined ? "indeterminate" : now === max ? "complete" : "loading"}
       className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      style={style}
     >
       {label !== undefined && (
         <div className={styles["header"]}>
@@ -72,12 +66,14 @@ export function Progress({
           <span className={styles["value"]}>{text}</span>
         </div>
       )}
-      <div className={styles["track"]}>
-        <div
-          className={styles["indicator"]}
-          style={now === undefined ? undefined : { inlineSize: `${(now / max) * 100}%` }}
-        />
-      </div>
+      <progress
+        aria-labelledby={label === undefined ? undefined : id}
+        aria-valuetext={typeof valueLabel === "string" ? valueLabel : undefined}
+        {...props}
+        max={max}
+        value={now}
+        className={styles["track"]}
+      />
     </div>
   );
 }

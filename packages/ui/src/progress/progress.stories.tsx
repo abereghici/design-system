@@ -16,8 +16,8 @@ export const Default = meta.story({});
 
 Default.test("is a progressbar named by its label, with its value", async ({ canvas }) => {
   const bar = canvas.getByRole("progressbar", { name: "Uploading 3 files" });
-  await expect(bar).toHaveAttribute("aria-valuenow", "40");
-  await expect(bar).toHaveAttribute("aria-valuemax", "100");
+  await expect(bar).toHaveProperty("value", 40);
+  await expect(bar).toHaveProperty("max", 100);
   await expect(canvas.getByText("40%")).toBeVisible();
 });
 
@@ -35,18 +35,18 @@ Default.test(
   "has no value while indeterminate",
   { args: { value: null, label: undefined, "aria-label": "Importing contacts" } },
   async ({ canvas }) => {
-    await expect(
-      canvas.getByRole("progressbar", { name: "Importing contacts" }),
-    ).not.toHaveAttribute("aria-valuenow");
+    await expect(canvas.getByRole("progressbar", { name: "Importing contacts" })).toHaveProperty(
+      "position",
+      -1,
+    );
   },
 );
 
 Default.test(
   "sweeps only when motion is allowed",
   { args: { value: null } },
-  async ({ canvas }) => {
-    const sweeping = canvas
-      .getByRole("progressbar")
+  async ({ canvasElement }) => {
+    const sweeping = canvasElement
       .getAnimations({ subtree: true })
       .some(
         ({ effect }) =>
@@ -58,12 +58,12 @@ Default.test(
 );
 
 Default.test("is full when complete", { args: { value: 100 } }, async ({ canvas }) => {
-  await expect(canvas.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "100");
+  await expect(canvas.getByRole("progressbar")).toHaveProperty("value", 100);
   await expect(canvas.getByText("100%")).toBeVisible();
 });
 
 Default.test("clamps its value to the range", { args: { value: 140 } }, async ({ canvas }) => {
-  await expect(canvas.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "100");
+  await expect(canvas.getByRole("progressbar")).toHaveProperty("value", 100);
 });
 
 Default.test(

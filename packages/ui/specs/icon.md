@@ -18,7 +18,7 @@ Status: draft for brand-owner review (phase 1). Source guides: `components/Icon/
 
 Svg (one `<svg viewBox="0 0 24 24">`) → glyph paths.
 
-- **Svg.** Inline `<svg>` with `fill="none"`, `stroke="currentColor"`, `stroke-linecap="square"`, `stroke-linejoin="miter"`. Width, height and `stroke-width` come from the size's tokens (see API).
+- **Svg.** Inline `<svg>` with `fill="none"`, `stroke="currentColor"`, `stroke-linecap="square"`, `stroke-linejoin="miter"`. Width, height and `stroke-width` come from the size's tokens (see API), unless a host sets the inherited contract `--ab-icon-size`, `--ab-icon-stroke-width` or `--ab-icon-ink` (colour, default `currentColor`) on itself: Button, IconButton, Tag, Alert, Avatar.Fallback and EmptyState.Indicator do, so no host styles the `<svg>` with a tag selector. `display: inline-block; vertical-align: middle`, as the artifact's `.ab-icon`.
 - **Glyph paths.** The source SVG's paths, SVGO-optimised and reproduced exactly (spec #1 user story 65). The generator keeps `viewBox`, since the stroke tokens are in 24-grid units.
 - **One component per icon.** Each of the 42 source glyphs is its own component on its own subpath (`@platform/ui/icons/search` exports `SearchIcon`), built on `Icon` (ADR-0005: "Per-icon subpaths keep unused icons out of the bundle"). The source's `<Icon name="search" />` lookup and `Icon.names` are dropped: a name lookup imports every glyph.
 - **`Icon`** is the shared base, public for custom glyphs drawn on the same construction. Its children are the SVG content.

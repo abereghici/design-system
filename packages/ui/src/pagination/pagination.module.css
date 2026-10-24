@@ -1,0 +1,72 @@
+@import "@platform/tokens/components/pagination.css";
+
+@layer ab.components {
+  .list {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-pagination-gap);
+    /* The fallback scroller would clip the focus ring; the padding gives the ring room and the margin cancels it. */
+    margin: calc((var(--ab-focus-ring-width) + var(--ab-focus-ring-offset)) * -1);
+    padding: calc(var(--ab-focus-ring-width) + var(--ab-focus-ring-offset));
+    list-style: none;
+    overflow-x: auto;
+  }
+
+  .page,
+  .ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-inline-size: var(--ab-pagination-item-min-width);
+    block-size: var(--ab-pagination-item-height);
+    color: var(--ab-pagination-item-text-color);
+  }
+
+  .page {
+    padding-inline: var(--ab-pagination-item-padding-inline);
+    border-radius: var(--ab-pagination-item-border-radius);
+    font: var(--ab-pagination-item-font);
+    text-decoration-line: none;
+    -webkit-tap-highlight-color: transparent;
+    transition-property: background-color, color, scale;
+    transition-duration:
+      var(--ab-motion-duration-hover-out), var(--ab-motion-duration-hover-out),
+      var(--ab-motion-duration-press);
+    transition-timing-function:
+      var(--ab-motion-easing-color), var(--ab-motion-easing-color), var(--ab-motion-easing-enter);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .page:not([aria-current="page"]):hover {
+      background-color: var(--ab-pagination-item-background-color-hovered);
+      color: var(--ab-pagination-item-text-color-hovered);
+      transition-duration:
+        var(--ab-motion-duration-hover-in), var(--ab-motion-duration-hover-in),
+        var(--ab-motion-duration-press);
+    }
+  }
+
+  .page:active {
+    scale: var(--ab-motion-scale-pressed);
+  }
+
+  .page[aria-current="page"] {
+    background-color: var(--ab-pagination-item-background-color-selected);
+    color: var(--ab-pagination-item-text-color-selected);
+    box-shadow: inset 0 0 0 var(--ab-border-width-default)
+      var(--ab-pagination-item-border-color-selected);
+  }
+
+  /* Rotating the chevron composes with Icon's RTL mirror, so Previous points back in both directions. */
+  .previous {
+    rotate: 180deg;
+  }
+
+  @media (forced-colors: active) {
+    .page[aria-current="page"] {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+  }
+}

@@ -1,0 +1,106 @@
+@import "@platform/tokens/components/input.css";
+
+@layer ab.components {
+  .root {
+    display: grid;
+    gap: var(--ab-input-gap);
+    min-inline-size: 0;
+  }
+
+  .label {
+    color: var(--ab-input-label-text-color);
+    font: var(--ab-input-label-font);
+  }
+
+  .root:has(:required) .label::after {
+    content: " *" / "";
+    color: var(--ab-input-error-text-color);
+  }
+
+  .description,
+  .error {
+    margin: 0;
+    font: var(--ab-input-helper-font);
+  }
+
+  .description {
+    color: var(--ab-input-helper-text-color);
+    text-wrap: pretty;
+  }
+
+  .error {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-inline-xs);
+    color: var(--ab-input-error-text-color);
+  }
+
+  .error:empty {
+    display: none;
+  }
+
+  .control {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--ab-input-height);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--ab-input-padding-inline);
+    border: var(--ab-input-border-width) solid var(--ab-input-border-color);
+    border-radius: var(--ab-input-border-radius);
+    background-color: var(--ab-input-background-color);
+    box-shadow: var(--ab-input-shadow);
+    color: var(--ab-input-text-color);
+    font: var(--ab-input-font);
+    transition:
+      border-color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color),
+      outline-color var(--ab-motion-duration-hover-in) var(--ab-motion-easing-color);
+  }
+
+  [data-size="lg"] .control {
+    block-size: var(--ab-input-lg-height);
+  }
+
+  .control::placeholder,
+  .control ::placeholder {
+    color: var(--ab-input-placeholder-color);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .control:hover:not(
+        :disabled,
+        [aria-disabled="true"],
+        :focus-within,
+        :has(> [aria-disabled="true"]),
+        :disabled *
+      ) {
+      border-color: var(--ab-input-border-color-hovered);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+
+  .control:is(:focus-visible, :has(> :focus-visible)) {
+    border-color: var(--ab-input-border-color-focused);
+    outline: var(--ab-focus-ring-width) solid var(--ab-input-border-color-focused);
+    outline-offset: 0;
+  }
+
+  .control:is(
+    :user-invalid,
+    [aria-invalid="true"],
+    :has(> :is(:user-invalid, [aria-invalid="true"]))
+  ) {
+    border-color: var(--ab-input-border-color-invalid);
+    outline-color: var(--ab-input-border-color-invalid);
+  }
+
+  .control:is(:disabled, [aria-disabled="true"], :has(> [aria-disabled="true"])),
+  :disabled .control {
+    border-color: var(--ab-input-border-color-disabled);
+    background-color: var(--ab-input-background-color-disabled);
+    box-shadow: none;
+    color: var(--ab-input-text-color-disabled);
+    cursor: not-allowed;
+  }
+}

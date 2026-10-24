@@ -24,7 +24,7 @@ Container → leading icon (optional) → label → trailing icon (optional) →
 - **Container.** A native `<button>`. Radius 8 (lg: 10). Primary and danger are filled. Secondary is the floating surface with a subtle hairline and raised elevation. Tertiary has no fill at rest.
 - **Icons** are children, not props. An icon marks its side with `data-icon="inline-start"` or `data-icon="inline-end"`, so the gap and padding follow the side in either direction (shadcn's convention, see API). Icons are decorative (`aria-hidden`); the label names the button.
 - **Kbd hint** is an optional child Kbd, passed `aria-hidden`. The consumer sets `aria-keyshortcuts` on the button, because the Kbd text would otherwise join the accessible name (see Accessibility).
-- **Spinner** replaces the leading icon while `loading`, rendered `<Spinner aria-hidden />` (decorative; Spinner spec). The label stays, so the width never changes. Without a leading icon the Spinner is added before the label, so the button grows by one icon and gap (judgement call, #16).
+- **Spinner** is centred over the content while `loading`, rendered `<Spinner aria-hidden />` (decorative; Spinner spec), as the artifact's `.ab-button[aria-busy]`. The label and icons are hidden but stay in the accessible name and the layout, so the width never changes (brand book: "Busy buttons keep their width").
 
 ## API
 
@@ -56,7 +56,7 @@ Names, checked against the reference libraries:
 | pressed       | Scale 0.97 and the `-pressed` fill, 100 ms                             | `:active`                          |
 | focus-visible | 2 px focus ring, 3 px offset, `color-border-focused`                   | `:focus-visible`                   |
 | disabled      | Disabled fill, text and border; no hover or press                      | `aria-disabled="true"`             |
-| loading       | Spinner in the leading slot, label kept, width kept; no hover or press | `aria-busy="true"`, `data-loading` |
+| loading       | Spinner centred, content hidden, width kept; no hover or press         | `aria-busy="true"`, `data-loading` |
 
 ## Behaviour
 

@@ -76,11 +76,11 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State                  | How it shows                                                                                              | Exposed as                                    |
-| ---------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| rest                   | Hairline border, no elevation                                                                             | `data-layout`                                 |
-| hovered (linked)       | Border steps to `border-default`, `elevation-raised` shadow; fine pointers only (`@media (hover: hover)`) | `:has()` on the title link's `:hover`         |
-| focus-visible (linked) | 2 px focus ring around the whole card, 3 px offset, `color-border-focused`                                | `:has()` on the title link's `:focus-visible` |
+| State                  | How it shows                                                                                                                  | Exposed as                                    |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| rest                   | Hairline border, no elevation                                                                                                 | `data-layout`                                 |
+| hovered (linked)       | Border steps to `border-default`, `elevation-raised` shadow; fine pointers only (`@media (hover: hover) and (pointer: fine)`) | `:has()` on the title link's `:hover`         |
+| focus-visible (linked) | 2 px focus ring around the whole card, 3 px offset, `color-border-focused`                                                    | `:has()` on the title link's `:focus-visible` |
 
 A card without a link has only rest. There is no pressed state: the link navigates.
 
@@ -91,7 +91,7 @@ A card without a link has only rest. There is no pressed state: the link navigat
 - **Text selection.** Inclusive Components notes "it's now difficult to select the text within the card (the link acts as a mask over the top of it)". Card.Content is raised (above), so its text stays selectable; the Header text is part of the link target, as the source intends.
 - **Hover and focus on the card, not the link.** `.root:has(.title a:hover)` and `.root:has(.title a:focus-visible)` style the Root; the link's own outline is removed only inside a Card.Title, because the Root draws the ring. `:has()` is Baseline widely available, "since December 2023" (MDN, https://developer.mozilla.org/en-US/docs/Web/CSS/:has). Hovering a Footer button doesn't lift the card, because the link is not hovered then.
 - **Title link look.** Inside Card.Title the link takes the title colour and font; the hover border and shadow are the affordance, not an underline.
-- **Row layout.** Source: "`container-type: inline-size`: `layout="row"` reflows horizontally at ≥ 480px of its own width, wherever it is placed." `container-type` is Baseline widely available, "since February 2023" (MDN, https://developer.mozilla.org/en-US/docs/Web/CSS/container-type); so is `@container`. In row layout the internal wrapper is a flex row: Header and Content grow, Footer sits at the inline end, centred on the block axis, gap `card-padding`. The 480 px threshold is a literal in the CSS module, not a token: MDN, "The `var()` function cannot be used in property names, selectors or anything else besides property values." (https://developer.mozilla.org/en-US/docs/Web/CSS/var).
+- **Row layout.** Source: "`container-type: inline-size`: `layout="row"` reflows horizontally at ≥ 480px of its own width, wherever it is placed." `container-type` is Baseline widely available, "since February 2023" (MDN, https://developer.mozilla.org/en-US/docs/Web/CSS/container-type); so is `@container`. In row layout the internal wrapper is a flex row: Header and Content grow, Footer sits at the inline end, centred on the block axis, gap `space-inline-lg` (the artifact's `.ab-card[data-layout="row"]` column gap). In column layout Header, Content and Footer stack with `card-gap`, as the artifact's `.ab-card-layout`. The 480 px threshold is a literal in the CSS module, not a token: MDN, "The `var()` function cannot be used in property names, selectors or anything else besides property values." (https://developer.mozilla.org/en-US/docs/Web/CSS/var).
 - Server Component: no client code. The stretched link, hover, focus and row layout are all CSS.
 - Only one link may be stretched: the one in Card.Title. Other links go in Content or Footer.
 
@@ -139,7 +139,7 @@ Proposed new:
 | ----------------- | ------------------------ | ------------------------------------------------------------------------------------------------- |
 | `card-footer-gap` | `space-inline-sm` (8 px) | The gap between Footer actions; the source's `actions` had no token. Mirrors `dialog-footer-gap`. |
 
-The row-layout gap reuses `card-padding`. Focus ring: semantic `focus-ring-width`, `focus-ring-offset`, `color-border-focused` (R6).
+The row-layout gap is semantic `space-inline-lg`; the column gap reuses `card-gap`. Focus ring: semantic `focus-ring-width`, `focus-ring-offset`, `color-border-focused` (R6).
 
 ## Built-in labels
 

@@ -27,22 +27,22 @@ Status: draft for brand-owner review (phase 2). No source guide: drafted from th
 
 Trigger (the consumer's single child) → hidden file input.
 
-- **Trigger.** The one child element, usually a Button or IconButton, rendered as is (Slot): FileTrigger adds an `onClick` and `aria-describedby` from a surrounding Field, nothing else. It keeps its own look and name.
-- **Hidden input.** A native `<input type="file">`, `hidden`, after the trigger. It holds `name`, `accept`, `multiple`, `required` and the selected `FileList`.
+- **Trigger.** The one child element, usually a Button or IconButton, rendered as is (Slot): FileTrigger adds an `onClick`, `disabled`, and inside a Field an `id`, `aria-labelledby`, `aria-describedby` and `aria-invalid`. It keeps its own look; in a Field's grid it keeps its content width (`justify-self: start`, FileTrigger's only CSS).
+- **Hidden input.** A native `<input type="file">` after the trigger, visually hidden (VisuallyHidden), `tabIndex={-1}` and `aria-hidden`. It holds `name`, `accept`, `multiple`, `required` and the selected `FileList`, and it is the Field's control (`useFieldControl`). It is not `hidden`: a blocked submit focuses the first invalid control, and a `hidden` input cannot take focus (Chromium then refuses the submit with "An invalid form control … is not focusable"). When it receives focus it moves focus on to the trigger. Inside a DropZone, FileTrigger renders no input and uses the zone's.
 
 FileTrigger draws nothing. The list of chosen files is the app's to render (from `onSelect`), because products differ (thumbnails, progress, remove buttons).
 
 ## API
 
-| Prop                       | Type                                                               | Default | Notes                                                                                                   |
-| -------------------------- | ------------------------------------------------------------------ | ------- | ------------------------------------------------------------------------------------------------------- |
-| `children`                 | `ReactElement`                                                     |         | Exactly one element; it becomes the trigger.                                                            |
-| `accept`                   | `string`                                                           |         | Native: "a comma-separated list of unique file type specifiers".                                        |
-| `multiple`                 | `boolean`                                                          | `false` | Native.                                                                                                 |
-| `directory`                | `boolean`                                                          | `false` | Native `webkitdirectory`: pick a folder; all files inside are selected.                                 |
-| `onSelect`                 | `(files: File[], details: FileTrigger.SelectEventDetails) => void` |         | After the user picks files. `details`: `reason` (`"none"`), `event`, `cancel()` (clears the selection). |
-| `name`, `required`, `form` | native                                                             |         | On the hidden input, so the files submit with the form and `valueMissing` applies.                      |
-| `disabled`                 | `boolean`                                                          | `false` | Passed to the trigger (`aria-disabled`); the picker does not open.                                      |
+| Prop                       | Type                                                              | Default | Notes                                                                                                                         |
+| -------------------------- | ----------------------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `children`                 | `ReactElement`                                                    |         | Exactly one element; it becomes the trigger.                                                                                  |
+| `accept`                   | `string`                                                          |         | Native: "a comma-separated list of unique file type specifiers".                                                              |
+| `multiple`                 | `boolean`                                                         | `false` | Native.                                                                                                                       |
+| `directory`                | `boolean`                                                         | `false` | Native `webkitdirectory`: pick a folder; all files inside are selected.                                                       |
+| `onSelect`                 | `(files: File[], details: FileTriggerSelectEventDetails) => void` |         | After the user picks files. `details`: `reason` (`"none"`), `event` (the native `change`), `cancel()` (clears the selection). |
+| `name`, `required`, `form` | native                                                            |         | On the hidden input, so the files submit with the form and `valueMissing` applies.                                            |
+| `disabled`                 | `boolean`                                                         | `false` | Passed to the trigger (`aria-disabled`); the picker does not open.                                                            |
 
 Names, checked against the reference libraries:
 
@@ -58,10 +58,10 @@ FileTrigger has no states of its own; the trigger shows its own (Button's). With
 ## Behaviour
 
 - **Opening the picker.** The trigger's click calls `input.click()` on the hidden input, inside the user's gesture. `showPicker()` is not used: webstatus.dev `show-picker-input` is limited (no Safari iOS). MDN: "`showPicker()` … NotAllowedError: Thrown if not explicitly triggered by a user action".
-- **Selection.** On the input's `change`, FileTrigger calls `onSelect([...input.files], details)`. `cancel()` sets `input.value = ""`. Choosing the same files again, or closing the picker, fires the native `cancel` event instead, which a consumer can listen to on the trigger's form or document if needed (no prop). MDN: "fires on an input element when the user cancels the file picker dialog via the Esc key or the cancel button and when the user re-selects the same files that were previously selected of `type="file"`."
+- **Selection.** Each trigger click listens once for the input's `change` (or stops at its `cancel`), so inside a DropZone a drop never calls a FileTrigger's `onSelect`. On that `change`, FileTrigger calls `onSelect([...input.files], details)`. `cancel()` sets `input.value = ""`. Choosing the same files again, or closing the picker, fires the native `cancel` event instead, which a consumer can listen to on the trigger's form or document if needed (no prop). MDN: "fires on an input element when the user cancels the file picker dialog via the Esc key or the cancel button and when the user re-selects the same files that were previously selected of `type="file"`."
 - **Form submission is native.** Because the input keeps `name` and the `FileList`, `FormData` includes the files, and a React action or `multipart/form-data` post receives them with no extra code.
-- **Validation:** `required` gives `valueMissing`; `accept` is a picker hint, not a constraint, so a type check belongs in `onSelect` or Field's `validate`. The hidden input cannot be focused, so Form's focus-first-invalid moves focus to the trigger instead, and the trigger carries `aria-invalid` and the error's `aria-describedby`.
-- **Disabled:** the trigger is `aria-disabled` and its click returns before `input.click()`.
+- **Validation:** `required` gives `valueMissing`; `accept` is a picker hint, not a constraint, so a type check belongs in `onSelect` or Field's `validate`. Form's focus-first-invalid focuses the input, which hands focus to the trigger, and the trigger carries `aria-invalid` and the error's `aria-describedby`.
+- **Disabled:** the trigger gets `disabled` (Button renders `aria-disabled`) and the click returns before `input.click()`, also when the trigger's own handler called `preventDefault()`. A click on the Field label is cancelled on the input.
 - Client component (`'use client'`).
 
 ## Motion
@@ -77,7 +77,7 @@ No pattern of its own: the trigger is a Button (APG **Button**, https://www.w3.o
 
 ## Accessibility
 
-- The trigger's name says what will be chosen ("Choose image", "Add files"). Inside a Field, Field.Label points at the trigger (`for` its id; HTML counts `<button>` as a labelable element), so a click on the label opens the picker too. Whether the label or the button text then wins in the accessible name is the engine's accessible-name computation, not verified here; keep them consistent ("Attachments" / "Add files") and the screen-reader pass records the result.
+- The trigger's name says what will be chosen ("Choose image", "Add files"). Inside a Field, Field.Label's `for` points at the file input (the Field's control, so validation, server errors and reset work unchanged), and a click on the label opens the picker through the input's own activation. The trigger names itself with `aria-labelledby="<label id> <trigger id>"`, so it is announced as "Attachments Add files" (React Aria's pattern for a Select trigger: label plus own content). A child with its own `id` breaks that reference; don't set one.
 - The selection is announced by the app: render the chosen file names near the trigger. Announce changes with a polite live region in the app's file list if the list updates without focus moving (documented on the docs page).
 - **More contrast, forced colors, reduced transparency:** as the trigger.
 

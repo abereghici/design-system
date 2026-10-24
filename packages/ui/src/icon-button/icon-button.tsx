@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
-import { Slot } from "@radix-ui/react-slot";
 
 import { dispatchFeedback } from "../events/events.ts";
+import { Slot } from "../slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./icon-button.module.css";

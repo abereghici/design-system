@@ -8,8 +8,6 @@
     inline-size: var(--ab-avatar-md-size);
     block-size: var(--ab-avatar-md-size);
     overflow: clip;
-    /* Transparent until forced colors paint it, so the circle stays visible there. */
-    border: var(--ab-border-width-default) solid transparent;
     border-radius: var(--ab-avatar-border-radius);
     background-color: var(--ab-avatar-background-color);
   }
@@ -36,6 +34,9 @@
   }
 
   .fallback {
+    --ab-icon-size: var(--ab-avatar-icon-size);
+    --ab-icon-ink: var(--ab-avatar-icon-color);
+
     display: grid;
     place-items: center;
     color: var(--ab-avatar-text-color);
@@ -46,6 +47,8 @@
   }
 
   .root[data-size="sm"] > .fallback {
+    --ab-icon-size: var(--ab-avatar-sm-icon-size);
+
     font: var(--ab-avatar-sm-font);
   }
 
@@ -53,18 +56,12 @@
     visibility: hidden;
   }
 
-  .fallback > svg {
-    inline-size: var(--ab-avatar-icon-size);
-    block-size: var(--ab-avatar-icon-size);
-    color: var(--ab-avatar-icon-color);
-  }
-
-  .root[data-size="sm"] > .fallback > svg {
-    inline-size: var(--ab-avatar-sm-icon-size);
-    block-size: var(--ab-avatar-sm-icon-size);
-  }
-
   @media (forced-colors: active) {
+    .root {
+      outline: 1px solid CanvasText;
+      outline-offset: -1px;
+    }
+
     .fallback {
       color: CanvasText;
     }

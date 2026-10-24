@@ -2,44 +2,6 @@
 @import "@platform/tokens/components/select.css";
 
 @layer ab.components {
-  .root {
-    display: flex;
-    flex-direction: column;
-    gap: var(--ab-input-gap);
-  }
-
-  .label {
-    color: var(--ab-input-label-text-color);
-    font: var(--ab-input-label-font);
-  }
-
-  .root:has(.select:required) .label::after {
-    content: " *" / "";
-    color: var(--ab-input-error-text-color);
-  }
-
-  .description,
-  .error {
-    margin: 0;
-    font: var(--ab-input-helper-font);
-  }
-
-  .description {
-    color: var(--ab-input-helper-text-color);
-  }
-
-  .error {
-    color: var(--ab-input-error-text-color);
-  }
-
-  .error:empty {
-    display: none;
-  }
-
-  .root[data-disabled] :is(.label, .description) {
-    color: var(--ab-color-text-disabled);
-  }
-
   .control {
     position: relative;
     display: grid;
@@ -48,31 +10,12 @@
 
   .select {
     appearance: none;
-    box-sizing: border-box;
-    inline-size: 100%;
-    min-inline-size: 0;
-    block-size: var(--ab-input-height);
-    margin: 0;
-    padding-block: 0;
     padding-inline: var(--ab-input-padding-inline)
       calc(var(--ab-input-padding-inline) * 2 + var(--ab-icon-sm-size));
-    border: var(--ab-input-border-width) solid var(--ab-input-border-color);
-    border-radius: var(--ab-input-border-radius);
-    background-color: var(--ab-input-background-color);
-    box-shadow: var(--ab-input-shadow);
-    color: var(--ab-input-text-color);
-    font: var(--ab-input-font);
     cursor: pointer;
-    transition:
-      border-color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color),
-      outline-color var(--ab-motion-duration-hover-in) var(--ab-motion-easing-color);
   }
 
-  .root[data-size="lg"] .select {
-    block-size: var(--ab-input-lg-height);
-  }
-
-  .select:has(option[value=""]:checked) {
+  .select:has(.placeholder:checked) {
     color: var(--ab-input-placeholder-color);
   }
 
@@ -86,32 +29,6 @@
 
   .select:open + .icon {
     rotate: 180deg;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .select:hover:not(:disabled, [aria-disabled="true"], :focus-visible) {
-      border-color: var(--ab-input-border-color-hovered);
-      transition-duration: var(--ab-motion-duration-hover-in);
-    }
-  }
-
-  .select:focus-visible {
-    border-color: var(--ab-input-border-color-focused);
-    outline: var(--ab-focus-ring-width) solid var(--ab-input-border-color-focused);
-    outline-offset: 0;
-  }
-
-  .select:is(:user-invalid, [aria-invalid="true"]) {
-    border-color: var(--ab-input-border-color-invalid);
-    outline-color: var(--ab-input-border-color-invalid);
-  }
-
-  .select:is(:disabled, [aria-disabled="true"]) {
-    border-color: var(--ab-input-border-color-disabled);
-    background-color: var(--ab-input-background-color-disabled);
-    box-shadow: none;
-    color: var(--ab-input-text-color-disabled);
-    cursor: not-allowed;
   }
 
   @supports (appearance: base-select) {
@@ -169,7 +86,7 @@
       }
     }
 
-    .select option {
+    .item {
       display: flex;
       align-items: center;
       gap: var(--ab-select-option-gap);
@@ -183,11 +100,11 @@
       outline-offset: calc(var(--ab-focus-ring-width) * -1);
     }
 
-    .select option:is(:hover, :focus-visible) {
+    .item:is(:hover, :focus-visible) {
       background-color: var(--ab-select-option-background-color-hovered);
     }
 
-    .select option::checkmark {
+    .item::checkmark {
       content: "";
       order: 1;
       inline-size: var(--ab-icon-sm-size);
@@ -199,7 +116,7 @@
         center / 100% no-repeat;
     }
 
-    .select optgroup {
+    .group {
       color: var(--ab-color-text-subtlest);
       font: var(--ab-type-overline-sm);
       letter-spacing: var(--ab-type-overline-sm-letter-spacing);
@@ -212,7 +129,7 @@
         outline-offset: -1px;
       }
 
-      .select option::checkmark {
+      .item::checkmark {
         forced-color-adjust: none;
         background: CanvasText;
       }

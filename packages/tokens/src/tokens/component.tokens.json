@@ -1798,7 +1798,7 @@
     },
     "separator-dot-color": {
       "$type": "color",
-      "$value": "{semantic.color-icon-subtlest}"
+      "$value": "{semantic.color-border-default}"
     },
     "separator-gap": {
       "$type": "dimension",
@@ -2294,7 +2294,7 @@
     },
     "accordion-trigger-gap": {
       "$type": "dimension",
-      "$value": "{semantic.space-inline-sm}"
+      "$value": "{semantic.space-inline-md}"
     },
     "breadcrumbs-gap": {
       "$type": "dimension",

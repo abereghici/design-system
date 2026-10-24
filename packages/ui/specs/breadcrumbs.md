@@ -32,7 +32,7 @@ Root (nav → ordered list) → Items (separator → link).
 - **Root.** A native `<nav>` (the navigation landmark) named by `aria-label` from `labels.root`, wrapping a native `<ol>` with list styling reset. The list is a wrapping flex row (`flex-wrap: wrap`), gap `breadcrumbs-gap`, text in `breadcrumbs-font`.
 - **Item.** A native `<li>`, `display: inline-flex`, centred, `min-block-size: size-target-min` (24) so wrapped rows keep targets apart (Accessibility).
 - **Separator.** Drawn by the Item, not a Part: a `ChevronRightIcon` (`size="sm"`, 16, decorative: `aria-hidden` from the Icon component) before the link, in `breadcrumbs-separator-icon-color`. Hidden on the first Item (`li:first-child`), so it only ever sits between two items.
-- **Link.** A native `<a href>` (or the child element with `asChild`). Ancestors: text `breadcrumbs-item-text-color`, underlined like Link (`link-underline-*`). The current page (`aria-current="page"`): `link-text-color`, no underline.
+- **Link.** The Link component (a native `<a href>`, or the child element with `asChild`), so the underline, hover and focus are Link's own. Ancestors: text `breadcrumbs-item-text-color`, underlined like Link (`link-underline-*`). The current page (`aria-current="page"`): `link-text-color`, no underline.
 
 ## API
 
@@ -116,7 +116,7 @@ No arrow keys: it is a list of links, not a composite. No key handler is added.
 
 ## RTL
 
-Logical properties only; the list runs from the inline start, so the root is on the right in RTL. The separator is `chevron-right`, which the Icon component mirrors under `:dir(rtl)` (Icon spec RTL list: "`arrow-right`, `arrow-up-right`, `chevron-right`, `log-out`"), so it points from parent to child in both directions. Icon mirroring is not built yet (Icon spec status); Breadcrumbs depends on it.
+Logical properties only; the list runs from the inline start, so the root is on the right in RTL. The separator is `chevron-right`, which the Icon component mirrors under `:dir(rtl)` (Icon spec RTL list: "`arrow-right`, `arrow-up-right`, `chevron-right`, `log-out`"), so it points from parent to child in both directions.
 
 ## Component tokens
 

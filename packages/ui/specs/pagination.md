@@ -5,6 +5,7 @@ Moves between the pages of a long, ordered result set (invoices, search results,
 ```tsx
 import { Pagination } from "@platform/ui/pagination";
 import NextLink from "next/link";
+import { roRO } from "@platform/ui/locales/ro-RO";
 
 <Pagination
   page={page}
@@ -17,8 +18,8 @@ import NextLink from "next/link";
   page={2}
   count={40}
   getPageUrl={(page) => `?page=${page}`}
-  locale="fr"
-  labels={{ root: "Pagination", previous: "Page précédente", next: "Page suivante", page: (page) => `Page ${page}` }}
+  locale={roRO}
+  labels={{ page: (page) => `Pagina ${page}` }}
 />
 ```
 
@@ -29,7 +30,7 @@ Status: draft for brand-owner review (phase 3). No source guide: drafted from th
 Root (nav → list) → Previous → page items and ellipses → Next.
 
 - **Root.** A native `<nav>` named by `aria-label` from `labels.root`, wrapping a native `<ul>` with list styling reset: a single row (`display: flex`, no wrap), gap `pagination-gap`, items centred.
-- **Previous / Next.** Icon-only links in IconButton's md visuals (`icon-button-md-size` square, `icon-button-border-radius`, `icon-button-icon-color`, hover fill), each in its own `<li>`. Icon `ChevronRightIcon` (`size="sm"`), flipped for Previous (RTL). Named by `labels.previous` / `labels.next`.
+- **Previous / Next.** The IconButton component (md) with `asChild` around a link, each in its own `<li>`, so they look and press exactly like IconButton. Icon `ChevronRightIcon`, turned for Previous (RTL). Named by `labels.previous` / `labels.next`. With no target (first / last page) it is a plain disabled IconButton (Behaviour).
 - **Page item.** A link per page, `<li>` → `<a href>` (or `linkComponent`), at least `pagination-item-min-width` wide and `pagination-item-height` tall, `pagination-item-padding-inline` for long numbers, radius `pagination-item-border-radius`, text `pagination-item-font` (tabular figures) in `pagination-item-text-color`. The visible text is the number formatted with `Intl.NumberFormat`; the accessible name is `labels.page`.
 - **Current page item.** Fill `pagination-item-background-color-selected`, text `pagination-item-text-color-selected`, and a 1 px inset ring `pagination-item-border-color-selected`; carries `aria-current="page"`.
 - **Ellipsis.** An `<li aria-hidden="true">` with a `MoreIcon` (`size="sm"`), the same footprint as a page item, `currentColor` from `pagination-item-text-color`. Not focusable, not a link.
@@ -42,8 +43,8 @@ Root (nav → list) → Previous → page items and ellipses → Next.
 | `count`         | `number`                                                                               | required            | The total number of pages, an integer ≥ 1. Pages, not items.                                                                                                  |
 | `getPageUrl`    | `(page: number) => string`                                                             | required            | The `href` of each page item and of Previous / Next.                                                                                                          |
 | `linkComponent` | `ElementType`                                                                          | `"a"`               | Renders every enabled item (pages, Previous, Next) with this component, given `href`, `aria-label`, `aria-current`, `className` and children (a router link). |
-| `locale`        | `string`                                                                               | `"en"`              | Formats the page numbers with `Intl.NumberFormat(locale)` (Q15-2).                                                                                            |
-| `labels`        | `{ root?: string; previous?: string; next?: string; page?: (page: string) => string }` | see Built-in labels | Each key falls back to its English default. `page` receives the formatted number.                                                                             |
+| `locale`        | `Locale`                                                                               |                     | A shipped locale object: its `tag` formats the numbers (`"en"` without it) and its `labels.pagination` translate the names (Q15-2, Badge precedent).          |
+| `labels`        | `{ root?: string; previous?: string; next?: string; page?: (page: string) => string }` | see Built-in labels | Each key overrides the locale's, then the English default. `page` receives the formatted number and lives only here (locale labels are strings).              |
 | …native         | `ComponentProps<"nav">`                                                                |                     | `ref`, `className`, `aria-labelledby` and native attributes go on the `<nav>`.                                                                                |
 
 Names, checked against the reference libraries:
@@ -62,14 +63,14 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State         | How it shows                                                                                                                                                                 | Exposed as                         |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| rest          | Page items: no fill, `pagination-item-text-color`. Previous / Next: IconButton rest                                                                                          | —                                  |
-| hovered       | Fill `pagination-item-background-color-hovered`, text `pagination-item-text-color-hovered` (Previous / Next: IconButton hover); fine pointers only (`@media (hover: hover)`) | `:hover`                           |
-| pressed       | Scale `motion-scale-pressed` (0.97), 100 ms                                                                                                                                  | `:active`                          |
-| current       | Selected fill, text and 1 px inset ring; no hover change                                                                                                                     | `aria-current="page"`              |
-| focus-visible | 2 px focus ring, 3 px offset, `color-border-focused`                                                                                                                         | `:focus-visible`                   |
-| disabled      | Previous on page 1, Next on the last page: `opacity-disabled`, no hover or press                                                                                             | `aria-disabled="true"` (no `href`) |
+| State         | How it shows                                                                                                                                                                 | Exposed as                        |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| rest          | Page items: no fill, `pagination-item-text-color`. Previous / Next: IconButton rest                                                                                          | —                                 |
+| hovered       | Fill `pagination-item-background-color-hovered`, text `pagination-item-text-color-hovered` (Previous / Next: IconButton hover); fine pointers only (`@media (hover: hover)`) | `:hover`                          |
+| pressed       | Scale `motion-scale-pressed` (0.97), 100 ms                                                                                                                                  | `:active`                         |
+| current       | Selected fill, text and 1 px inset ring; no hover change                                                                                                                     | `aria-current="page"`             |
+| focus-visible | 2 px focus ring, 3 px offset, `color-border-focused`                                                                                                                         | `:focus-visible`                  |
+| disabled      | Previous on page 1, Next on the last page: `opacity-disabled`, no hover or press                                                                                             | `aria-disabled="true"` (a button) |
 
 ## Behaviour
 
@@ -77,7 +78,7 @@ Names, checked against the reference libraries:
   - `siblingsStart = max(min(page − 1, count − 4), 3)`; `siblingsEnd = min(max(page + 1, 5), count − 2)`.
   - Items: page 1; then an ellipsis if `siblingsStart > 3`, else page 2 if `2 < count − 1`; then pages `siblingsStart…siblingsEnd`; then an ellipsis if `siblingsEnd < count − 2`, else page `count − 1` if `count − 1 > 1`; then page `count` if `count > 1`.
   - Examples with `count = 10`: page 1 → `1 2 3 4 5 … 10`; page 5 → `1 … 4 5 6 … 10`; page 10 → `1 … 6 7 8 9 10`. With `count ≤ 7` every page shows; `count = 1` → `1`. An ellipsis therefore always stands for at least two pages (MUI fills a one-page gap with the page).
-- **Previous / Next** link to `getPageUrl(page − 1)` / `getPageUrl(page + 1)`. On the first (last) page, Previous (Next) has no target, so it renders a native `<a>` with no `href`, `role="link"`, `aria-disabled="true"` and `tabindex="0"`, never `linkComponent` (a router link requires `href`: Next.js lists `href` as "Required … Yes"). ARIA in HTML: "If a link needs to be programmatically communicated as "disabled", remove the href attribute." and "Example 2: Communicate a disabled link with ARIA `<a role=link aria-disabled=true>...</a>`". Zag does the same: `if (disabled || targetPage == null) return { role: "link", "aria-disabled": true }`. `tabindex="0"` keeps it focusable (spec #1: "disabled controls stay focusable"); with no `href`, Enter and click do nothing, so no handler is needed.
+- **Previous / Next** link to `getPageUrl(page − 1)` / `getPageUrl(page + 1)` through IconButton `asChild`. On the first (last) page, Previous (Next) has no target, so it renders a plain IconButton `<button>` with `aria-disabled="true"`: focusable (spec #1: "disabled controls stay focusable"), announced as dimmed, and its click is blocked by IconButton. A link without `href` (ARIA in HTML: "remove the href attribute", "`<a role=link aria-disabled=true>`") was the draft; lint rejects both `<a role="link">` (redundant role, missing `href`) and `<span role="link">` (prefer the tag), and MUI renders its disabled Previous / Next as disabled buttons too, so the button is the lint-clean equivalent (Q35-1).
 - **The current page is a link** to its own URL with `aria-current="page"`, as shadcn's `PaginationLink isActive` and the APG breadcrumb example. Following it reloads the same page (harmless; judgement call).
 - **Numbers:** `new Intl.NumberFormat(locale ?? "en").format(n)` for the visible text and `labels.page`. Server Component: it cannot read LocaleProvider or `document.documentElement.lang`, so `locale` is a prop with an `"en"` fallback (Q15-2). The digits are tabular (`pagination-item-font`), so the row's width changes only with the digit count.
 - **Server Component.** No state and no handlers, no `'use client'`. Passing `getPageUrl` (a function) and `linkComponent` (a client component reference) works when the caller is a Server Component, because props between Server Components are not serialised (inference; tested in `apps/ui-next-fixture`). Called from a client component, Pagination renders on the client like any component.
@@ -98,7 +99,7 @@ No APG pattern: the APG pattern list has Breadcrumb, Landmarks and Link but no p
 | Key             | Action                                                                                                                                         |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | Tab / Shift+Tab | Moves focus through Previous, the page links and Next (native tab order); ellipses are skipped. A disabled Previous / Next stays in the order. |
-| Enter           | "Executes the link and moves focus to the link target." (APG Link). Does nothing on a disabled Previous / Next (no `href`).                    |
+| Enter           | "Executes the link and moves focus to the link target." (APG Link). Does nothing on a disabled Previous / Next (a blocked button).             |
 | Shift + F10     | "(Optional): Opens a context menu for the link." Provided by the browser.                                                                      |
 
 No arrow keys: it is a list of links, not a composite widget with one tab stop (MUI: "The pagination items are in tab order, with a tabindex of "0"."). No key handler is added.
@@ -112,7 +113,7 @@ No arrow keys: it is a list of links, not a composite widget with one tab stop (
 - **Current page:** `aria-current="page"` on its link. MDN: "In a breadcrumb list, when a link within a set of pagination links is styled to indicate the user is currently on that page, aria-current="page" should be set on that link." and "Only mark one element in a set of elements as current with aria-current."
 - **Names:** each page link is named `labels.page(formatted)` ("Page 3"), which contains the visible "3" (WCAG 2.5.3 Label in Name; inference that the containment satisfies it). Previous / Next are named by `labels.previous` / `labels.next`; their icons are decorative (Icon's `aria-hidden`).
 - **Ellipsis is decorative** (`aria-hidden="true"`), as shadcn `PaginationEllipsis` (`<span aria-hidden …>`). The page numbers on either side already say which pages are skipped. MUI renders a visible "…" with no `aria-hidden` (judgement call: hidden, so screen readers hear only links).
-- **Disabled Previous / Next:** `role="link"` with `aria-disabled="true"`, focusable, as ARIA in HTML's example (Behaviour).
+- **Disabled Previous / Next:** a `button` with `aria-disabled="true"`, focusable (Behaviour, Q35-1).
 - **Targets:** items are `size-control-md` (32, 44 on coarse pointers), above the 24 px minimum.
 - **Contrast:** rest text `color-text-subtle` (matrix text role on every surface and on `background-neutral-subtle-hovered`); current text `color-text-selected` on `color-background-selected` (matrix); the current ring `color-border-selected` (3:1 on every surface). No new pairs.
 - **Not colour alone:** the current page has the inset ring (a shape) as well as the fill and text colour, because the selected fill (`color-background-selected`) and the hover fill (`color-background-neutral-subtle-hovered`) resolve to the same value in light (`palette-sage-50`).
@@ -122,7 +123,7 @@ No arrow keys: it is a list of links, not a composite widget with one tab stop (
 
 ## RTL
 
-The row runs from the inline start, so in RTL Previous is on the right and page 1 next to it. Next uses `ChevronRightIcon`, which the Icon component mirrors under `:dir(rtl)` (Icon spec list includes `chevron-right`), so it points left in RTL. Previous uses the same icon with `scale: -1 1` in LTR and `scale: none` under `:dir(rtl)`, so it points left in LTR and right in RTL; that rule must win over Icon's own mirror rule (Icon's rules are wrapped in `:where()`, so a component rule wins; the build checks it). The icon set has no `chevron-left`. Icon mirroring is not built yet (Icon spec status); Pagination depends on it.
+The row runs from the inline start, so in RTL Previous is on the right and page 1 next to it. Next uses `ChevronRightIcon`, which the Icon component mirrors under `:dir(rtl)` (Icon spec list includes `chevron-right`), so it points left in RTL. Previous uses the same icon with `rotate: 180deg`, which composes with Icon's own `scale: -1 1` mirror instead of fighting it, so it points left in LTR and right in RTL. The icon set has no `chevron-left`.
 
 ## Component tokens
 
@@ -156,11 +157,11 @@ The `selected` state word stands for `aria-current="page"`: the Dictionary has n
 | `next`     | "Next page"                   | Next link's `aria-label`                                     |
 | `page`     | ``(page) => `Page ${page}` `` | Each page link's `aria-label`; receives the formatted number |
 
-Passed through the `labels` prop: Pagination is a Server Component and cannot read LocaleProvider (Q15-2 precedent). Defaults follow Ark's (`"previous page"`, `"next page"`, `` `page ${page}` ``) in sentence case.
+`root`, `previous` and `next` are in the locale type and every shipped locale; Pagination is a Server Component and cannot read the Provider, so they arrive through `locale` (or `labels`). `page` is a function, so it is a `labels` key only. Defaults follow Ark's (`"previous page"`, `"next page"`, `` `page ${page}` ``) in sentence case.
 
 ## Feedback events
 
-None. Every item is a link, and navigation is not a feedback moment (Link spec). Previous / Next use IconButton's visuals only, not the IconButton component, so no `ab-press` fires (judgement call: IconButton is a client `<button>` that dispatches `ab-press`, which would contradict the Link rule).
+None of its own: page links dispatch nothing (Link spec). Previous / Next are IconButtons (`asChild` around the link), so an enabled one dispatches IconButton's `ab-press` (`component: "IconButton"`) when followed, and a disabled one dispatches nothing. Reusing IconButton keeps one source for its look and press (Q35-1).
 
 ## Sources
 

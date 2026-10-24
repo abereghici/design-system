@@ -1,0 +1,7 @@
+@import "@platform/tokens/components/input.css";
+
+@layer ab.components {
+  .input {
+    font-variant-numeric: tabular-nums;
+  }
+}

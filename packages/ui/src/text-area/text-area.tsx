@@ -1,0 +1,83 @@
+"use client";
+
+import type { ComponentProps, ReactNode } from "react";
+
+import * as Field from "../field/field.tsx";
+
+import fieldStyles from "../field/field.module.css";
+import styles from "./text-area.module.css";
+
+export type TextAreaChangeEventDetails = Field.ChangeEventDetails<HTMLTextAreaElement>;
+
+type Naming =
+  | { label: ReactNode }
+  | { label?: undefined; "aria-label": string }
+  | { label?: undefined; "aria-labelledby": string };
+
+type ControlProps = Omit<ComponentProps<"textarea">, "rows" | "cols"> & {
+  /** Height floor in lines. */
+  minRows?: number;
+  /** Height ceiling in lines; beyond it the text scrolls. Equal to `minRows` for a fixed height. */
+  maxRows?: number;
+  onValueChange?: (value: string, details: TextAreaChangeEventDetails) => void;
+  /** Renders `aria-disabled="true"` and `readOnly`: focusable and selectable, not editable. */
+  disabled?: boolean;
+};
+
+export type TextAreaProps = Naming &
+  ControlProps & {
+    /** Helper text below the field, replaced by the error while invalid. */
+    description?: ReactNode;
+    /** Shown only after interaction while invalid. Defaults to the browser's `validationMessage`. */
+    errorMessage?: ReactNode | ((validity: ValidityState) => ReactNode);
+    /** Forces the invalid state, e.g. from an external validation library. */
+    invalid?: boolean;
+    validate?: Field.RootProps["validate"];
+  };
+
+const lines = (rows: number) =>
+  `calc(${rows}lh + 2 * var(--ab-input-padding-block) + 2 * var(--ab-input-border-width))`;
+
+function Control({ minRows = 3, maxRows = 12, readOnly, ...props }: ControlProps) {
+  const bindings = Field.useFieldControl<HTMLTextAreaElement, typeof props>(props);
+  return (
+    <textarea
+      dir="auto"
+      {...bindings}
+      readOnly={bindings["aria-disabled"] ?? readOnly}
+      className={`${fieldStyles["control"]} ${styles["textarea"]}`}
+      style={{ minBlockSize: lines(minRows), maxBlockSize: lines(maxRows) }}
+    />
+  );
+}
+
+/**
+ * Multi-line text entry that grows with its content, from 3 to 12 lines by default, then scrolls.
+ * Use TextField for a single line.
+ */
+export function TextArea({
+  label,
+  description,
+  errorMessage,
+  invalid,
+  validate,
+  className,
+  style,
+  ...props
+}: TextAreaProps) {
+  return (
+    <Field.Root
+      className={className}
+      style={style}
+      name={props.name}
+      invalid={invalid}
+      validate={validate}
+      disabled={props.disabled}
+    >
+      {label !== undefined && <Field.Label>{label}</Field.Label>}
+      <Control {...props} />
+      {description !== undefined && <Field.Description>{description}</Field.Description>}
+      <Field.Error>{errorMessage}</Field.Error>
+    </Field.Root>
+  );
+}

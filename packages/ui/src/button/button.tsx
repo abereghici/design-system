@@ -1,9 +1,9 @@
 "use client";
 
 import type { ComponentProps, MouseEvent } from "react";
-import { Slot } from "@radix-ui/react-slot";
 
 import { dispatchFeedback } from "../events/events.ts";
+import { Slot } from "../slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./button.module.css";
@@ -67,8 +67,8 @@ export function Button({
     >
       {loading && !asChild ? (
         <>
-          <Spinner aria-hidden data-icon="inline-start" />
           {children}
+          <Spinner aria-hidden className={styles["spinner"]} />
         </>
       ) : (
         children

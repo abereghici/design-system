@@ -17,13 +17,14 @@
   .layout {
     display: flex;
     flex-direction: column;
-    gap: var(--ab-card-padding);
+    gap: var(--ab-card-gap);
   }
 
   @container (inline-size >= 480px) {
     .root[data-layout="row"] > .layout {
       flex-direction: row;
       align-items: center;
+      column-gap: var(--ab-space-inline-lg);
     }
 
     .root[data-layout="row"] > .layout > :not(.footer) {
@@ -43,16 +44,17 @@
     font: var(--ab-card-title-font);
   }
 
-  .title a {
+  .title :any-link {
     color: inherit;
     text-decoration: none;
     outline: none;
   }
 
-  .title a::after {
+  .title :any-link::after {
     content: "";
     position: absolute;
     inset: 0;
+    border-radius: inherit;
   }
 
   .description {
@@ -74,15 +76,15 @@
     gap: var(--ab-card-footer-gap);
   }
 
-  @media (hover: hover) {
-    .root:has(.title a:hover) {
+  @media (hover: hover) and (pointer: fine) {
+    .root:has(.title :any-link:hover) {
       border-color: var(--ab-card-border-color-hovered);
       box-shadow: var(--ab-card-shadow-hovered);
       transition-duration: var(--ab-motion-duration-hover-in);
     }
   }
 
-  .root:has(.title a:focus-visible) {
+  .root:has(.title :any-link:focus-visible) {
     outline: var(--ab-focus-ring-width) solid var(--ab-color-border-focused);
     outline-offset: var(--ab-focus-ring-offset);
   }
