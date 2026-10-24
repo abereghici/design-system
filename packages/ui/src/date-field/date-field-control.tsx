@@ -10,6 +10,7 @@ import type { Labels } from "../provider/locale.tsx";
 import { useSegmentEditing } from "./date-field-editing.ts";
 import { useValidity } from "./date-field-validity.ts";
 import type { Validity } from "./date-field-validity.ts";
+import { dateFieldLabels } from "./labels.ts";
 import { bounds, display, fromDate, toDate } from "./segments.ts";
 import type { Segments } from "./segments.ts";
 import fieldStyles from "../field/field.module.css";
@@ -151,7 +152,7 @@ function filledAround(formats: Formats, index: number, segments: Segments) {
 function useControl(options: ControlOptions, onValidity: (validity: Validity) => void) {
   const field = use(FieldContext);
   const locale = useLocale();
-  const names = { ...locale.labels.dateField, ...options.labels };
+  const names = { ...dateFieldLabels, ...locale.labels.dateField, ...options.labels };
   const formats = dateFormats(locale.tag);
   const group = useRef<HTMLFieldSetElement>(null);
   const date = useDate(options);

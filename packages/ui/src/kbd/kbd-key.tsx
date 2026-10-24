@@ -6,6 +6,8 @@ import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
+import { kbdLabels } from "./labels.ts";
+
 export interface KbdFace {
   readonly text: string;
   readonly label?: keyof Labels["kbd"];
@@ -27,7 +29,7 @@ export function KbdKey({
 }) {
   const face =
     useSyncExternalStore(subscribe, platform, serverPlatform) === "apple" ? apple : other;
-  const locale = useLocale().labels.kbd;
+  const locale = useLocale().labels.kbd ?? kbdLabels;
   if (face.label === undefined) return face.text;
   return (
     <>

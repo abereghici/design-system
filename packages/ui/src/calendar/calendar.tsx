@@ -19,6 +19,7 @@ import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 
 import { Grid, keyTarget } from "./calendar-grid.tsx";
+import { calendarLabels } from "./labels.ts";
 import styles from "./calendar.module.css";
 
 export interface CalendarChangeEventDetails {
@@ -238,7 +239,7 @@ export function Calendar({
       className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
     >
       <Header
-        names={{ ...locale.labels.calendar, ...labels }}
+        names={{ ...calendarLabels, ...locale.labels.calendar, ...labels }}
         heading={formats.heading(first)}
         headingId={headingId}
         before={!outside(first.subtract({ days: 1 }))}

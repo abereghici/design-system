@@ -6,6 +6,7 @@ import { dispatchFeedback } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { useLocale } from "../provider/locale.tsx";
 
+import { alertLabels } from "./labels.ts";
 import styles from "./alert.module.css";
 
 export interface CloseProps extends ComponentProps<"button"> {
@@ -39,7 +40,7 @@ export function Close({
 
   return (
     <button
-      aria-label={labels?.close ?? locale.labels.alert.close}
+      aria-label={labels?.close ?? locale.labels.alert?.close ?? alertLabels.close}
       {...props}
       type={type}
       aria-disabled={disabled ? true : undefined}

@@ -3,9 +3,9 @@ import type { ComponentProps } from "react";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { Link as BaseLink } from "../link/link.tsx";
 import type { LinkProps as BaseLinkProps } from "../link/link.tsx";
-import type { Labels } from "../provider/locale.tsx";
-import { enUS } from "../provider/locales/en-US.ts";
+import type { Labels, Locale } from "../provider/locale.tsx";
 
+import { breadcrumbsLabels } from "./labels.ts";
 import styles from "./breadcrumbs.module.css";
 
 const join = (own: string | undefined, className: string | undefined) =>
@@ -13,9 +13,11 @@ const join = (own: string | undefined, className: string | undefined) =>
 
 export interface RootProps extends ComponentProps<"nav"> {
   /**
-   * Built-in strings, English by default. A Server Component can't read the Provider's `locale`,
-   * so pass the shipped locale's `labels.breadcrumbs` to translate.
+   * A shipped locale (`@platform/ui/locales/*`) that translates it on the server. A Server Component
+   * can't read the Provider's `locale`, so without it the name is en-US.
    */
+  locale?: Locale;
+  /** Overrides the locale's labels. */
   labels?: Partial<Labels["breadcrumbs"]>;
 }
 
@@ -24,9 +26,12 @@ export interface RootProps extends ComponentProps<"nav"> {
  * page, which carries `aria-current="page"`. Place it before the page's main content on pages two
  * or more levels deep. For the site's main sections use a Navbar or a Sidebar.
  */
-export function Root({ labels, children, ...props }: RootProps) {
+export function Root({ locale, labels, children, ...props }: RootProps) {
   return (
-    <nav aria-label={labels?.root ?? enUS.labels.breadcrumbs.root} {...props}>
+    <nav
+      aria-label={labels?.root ?? locale?.labels.breadcrumbs.root ?? breadcrumbsLabels.root}
+      {...props}
+    >
       <ol className={styles["list"]}>{children}</ol>
     </nav>
   );

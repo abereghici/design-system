@@ -6,6 +6,7 @@ import type { ComponentProps, RefObject, SyntheticEvent } from "react";
 import { Content, ModalRoot } from "../dialog/modal.tsx";
 import { useLocale } from "../provider/locale.tsx";
 
+import { commandLabels } from "./labels.ts";
 import { DialogContext, report, Root } from "./root.tsx";
 import type { Callback, RootProps } from "./root.tsx";
 import styles from "./command.module.css";
@@ -64,7 +65,7 @@ export function Dialog(props: DialogProps) {
       }}
     >
       <Content
-        aria-label={labels?.dialog ?? locale.labels.command.dialog}
+        aria-label={labels?.dialog ?? locale.labels.command?.dialog ?? commandLabels.dialog}
         {...native}
         onClose={(event) => {
           handleClose(event, props);

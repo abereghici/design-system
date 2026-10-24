@@ -1,20 +1,20 @@
 "use client";
 
-import { createContext, use, useId, useRef, useState } from "react";
+import { createContext, use, useRef, useState } from "react";
 import type { ComponentProps, ReactNode, RefObject } from "react";
 
 import { DateFieldFrame } from "../date-field/date-field.tsx";
 import type { DateFieldChangeEventDetails, DateFieldProps } from "../date-field/date-field.tsx";
-import { DatePickerContext, dateFormats } from "../date/date.ts";
+import { DatePickerContext } from "../date/date.ts";
 import type { DatePickerContextValue, Temporal } from "../date/date.ts";
-import { byId, isOpen, rememberFocus, useFloating } from "../floating/floating.ts";
+import { byId, rememberFocus, useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as FloatingDetails, Floating } from "../floating/floating.ts";
-import { IconButton } from "../icon-button/icon-button.tsx";
-import { CalendarIcon } from "../icon/icons/calendar.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { pointerMarker } from "../toggle/toggle.ts";
 
+import { datePickerLabels } from "./labels.ts";
+import { Trigger } from "./trigger.tsx";
 import popoverStyles from "../popover/popover.module.css";
 import styles from "./date-picker.module.css";
 
@@ -110,50 +110,6 @@ function pickerOf(
   };
 }
 
-interface TriggerProps {
-  readonly panel: Omit<Panel, "picker">;
-  readonly value: Temporal.PlainDate | null;
-  readonly disabled: boolean;
-  readonly fieldBox: () => Element | null;
-}
-
-function Trigger({ panel, value, disabled, fieldBox }: TriggerProps) {
-  const { floating, name, trigger } = panel;
-  const locale = useLocale();
-  const wasOpen = useRef(false);
-  const descriptionId = useId();
-  return (
-    <>
-      <IconButton
-        ref={trigger}
-        size="sm"
-        aria-label={name}
-        aria-controls={floating.contentId}
-        aria-expanded={floating.open}
-        aria-haspopup="dialog"
-        aria-describedby={value === null ? undefined : descriptionId}
-        disabled={disabled}
-        className={styles["trigger"]}
-        onPointerDown={() => {
-          wasOpen.current = isOpen(byId(floating.contentId));
-        }}
-        onClick={(event) => {
-          // A pointer press on the trigger light-dismisses the open panel before `click`.
-          const shown = event.detail > 0 ? wasOpen.current : isOpen(byId(floating.contentId));
-          floating.toggle(!shown, "trigger-press", event.nativeEvent, fieldBox());
-        }}
-      >
-        <CalendarIcon size="sm" />
-      </IconButton>
-      {value !== null && (
-        <span id={descriptionId} hidden>
-          {dateFormats(locale.tag).full(value)}
-        </span>
-      )}
-    </>
-  );
-}
-
 /**
  * A DateField with a trigger that opens a Calendar in a popover: type the date, or pick it from the
  * month. Put a `<Calendar />` in `DatePicker.Content`; it reads the value and limits from the
@@ -164,7 +120,8 @@ export function Root(props: RootProps) {
   const { defaultValue, open, defaultOpen, onOpenChange, isDateUnavailable, ...rest } = props;
   const { labels, disabled, children, ...field } = rest;
   const locale = useLocale();
-  const name = labels?.chooseDate ?? locale.labels.datePicker.chooseDate;
+  const name =
+    labels?.chooseDate ?? locale.labels.datePicker?.chooseDate ?? datePickerLabels.chooseDate;
   const date = useValue(props);
   const trigger = useRef<HTMLButtonElement>(null);
   const fieldBox = () => trigger.current?.closest("fieldset") ?? null;

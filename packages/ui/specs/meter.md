@@ -124,7 +124,7 @@ Dictionary changes: the component word **`meter`**, and the element word **`valu
 
 ## Built-in labels
 
-None. The name is the consumer's, the judgement is the consumer's `valueLabel` (it depends on what is measured: "almost full" is right for storage, wrong for a battery), and the default value text is a number formatted with `Intl.NumberFormat` in `locale`. The locale resolves as in Progress: the `locale` prop's `tag`, else English.
+None. The name is the consumer's, the judgement is the consumer's `valueLabel` (it depends on what is measured: "almost full" is right for storage, wrong for a battery), and the default value text is a number formatted with `Intl.NumberFormat` in `locale`. The locale resolves as in Progress: the `locale` prop's `tag`, else `"en-US"`.
 
 ## Feedback events
 

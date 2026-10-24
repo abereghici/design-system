@@ -10,6 +10,7 @@ import { Kbd } from "../kbd/kbd.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import { composeRefs } from "../slot/slot.tsx";
 
+import { commandLabels } from "./labels.ts";
 import { DialogContext, enabled, useCommand } from "./root.tsx";
 import styles from "./command.module.css";
 
@@ -31,7 +32,7 @@ export function Input({
 }: InputProps) {
   const command = useCommand();
   const inDialog = use(DialogContext) !== null;
-  const text = { ...useLocale().labels.command, ...labels };
+  const text = { ...commandLabels, ...useLocale().labels.command, ...labels };
   return (
     <label className={styles["search"]}>
       <SearchIcon className={styles["searchIcon"]} />
@@ -166,7 +167,7 @@ export interface EmptyProps extends ComponentProps<"output"> {
 export function Empty({ labels, className, children, ...props }: EmptyProps) {
   const { empty } = useCommand();
   const locale = useLocale();
-  const text = labels?.empty ?? locale.labels.command.empty;
+  const text = labels?.empty ?? locale.labels.command?.empty ?? commandLabels.empty;
   return (
     <output {...props} className={join(styles["empty"], className)}>
       {empty &&
@@ -195,7 +196,7 @@ export interface FooterProps extends ComponentProps<"div"> {
 /** Teaches the keys to sighted users; assistive technology gets them from the roles. */
 export function Footer({ labels, className, children, ...props }: FooterProps) {
   const inDialog = use(DialogContext) !== null;
-  const text = { ...useLocale().labels.command, ...labels };
+  const text = { ...commandLabels, ...useLocale().labels.command, ...labels };
   return (
     <div aria-hidden="true" {...props} className={join(styles["footer"], className)}>
       {children ?? (

@@ -4,8 +4,10 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { XIcon } from "../icon/icons/x.tsx";
 import { useLocale } from "../provider/locale.tsx";
+import { sheetLabels } from "../sheet/labels.ts";
 import { Slot } from "../slot/slot.tsx";
 
+import { dialogLabels } from "./labels.ts";
 import { join, useModal } from "./modal.tsx";
 import iconButton from "../icon-button/icon-button.module.css";
 
@@ -36,7 +38,13 @@ export function Close({ asChild = false, labels, className, onClick, ...props }:
   return (
     <button
       type="button"
-      aria-label={labels?.close ?? locale.labels[component === "Sheet" ? "sheet" : "dialog"].close}
+      aria-label={
+        labels?.close ??
+        (component === "Sheet"
+          ? (locale.labels.sheet ?? sheetLabels)
+          : (locale.labels.dialog ?? dialogLabels)
+        ).close
+      }
       {...props}
       data-size="sm"
       className={join(`${iconButton["root"]} ${styles["close"]}`, className)}

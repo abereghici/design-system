@@ -27,6 +27,7 @@ Status (`<span role="status">`), painted with eight staves.
 | `size`        | `"sm" \| "lg"`               | `"sm"`           | Exposed as `data-size`. 16 / 24 px.                               |
 | `aria-label`  | `string`                     | `labels.loading` | The status's name. Overrides the built-in label for one instance. |
 | `aria-hidden` | `boolean`                    |                  | When true, the Spinner is decorative: no `role`, no name.         |
+| `locale`      | `Locale`                     | en-US            | A shipped locale; translates the name on the server.              |
 | `labels`      | `Partial<Labels["spinner"]>` | English          | See Built-in labels.                                              |
 | …native       | `ComponentProps<"span">`     |                  | `ref`, `className` and every native attribute pass through.       |
 
@@ -93,7 +94,7 @@ No new tokens. The reduced-motion pulse uses semantic `motion-easing-move` direc
 | --------- | --------- | ------------------------------------------------- |
 | `loading` | "Loading" | The status's name when no `aria-label` is passed. |
 
-Overridable per instance through `labels`. The label lives in every shipped locale (`enUS.labels.spinner`, `roRO.labels.spinner`), but a Server Component can't read the Provider's locale, so a localised app passes `labels={roRO.labels.spinner}` (decision Q19-1).
+The en-US default is `spinnerLabels` in `src/spinner/labels.ts`, which `enUS` composes. A Server Component can't read the Provider's locale, so a localised app passes the shipped object, `locale={roRO}`, as on Progress, Meter, Badge and Pagination; `labels` overrides single strings (decision Q19-1).
 
 ## Feedback events
 

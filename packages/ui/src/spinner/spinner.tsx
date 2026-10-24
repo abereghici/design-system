@@ -1,17 +1,19 @@
 import type { ComponentProps } from "react";
 
-import type { Labels } from "../provider/locale.tsx";
-import { enUS } from "../provider/locales/en-US.ts";
+import type { Labels, Locale } from "../provider/locale.tsx";
 
+import { spinnerLabels } from "./labels.ts";
 import styles from "./spinner.module.css";
 
 export interface SpinnerProps extends ComponentProps<"span"> {
   /** sm 16 · lg 24. */
   size?: "sm" | "lg";
   /**
-   * Built-in strings, English by default. A Server Component can't read the Provider's
-   * `locale`, so pass the shipped locale's `labels.spinner` to translate.
+   * A shipped locale (`@platform/ui/locales/*`) that translates it on the server. A Server Component
+   * can't read the Provider's `locale`, so without it the name is en-US.
    */
+  locale?: Locale;
+  /** Overrides the locale's labels. */
   labels?: Partial<Labels["spinner"]>;
 }
 
@@ -21,13 +23,17 @@ export interface SpinnerProps extends ComponentProps<"span"> {
  * region it stands in. For measurable progress use Progress; for content of known shape use
  * Skeleton; inside a busy Button use the Button's `loading`.
  */
-export function Spinner({ size = "sm", labels, className, ...props }: SpinnerProps) {
+export function Spinner({ size = "sm", locale, labels, className, ...props }: SpinnerProps) {
   const decorative = props["aria-hidden"] === true || props["aria-hidden"] === "true";
   return (
     <span
       {...(decorative
         ? {}
-        : { role: "status", "aria-label": labels?.loading ?? enUS.labels.spinner.loading })}
+        : {
+            role: "status",
+            "aria-label":
+              labels?.loading ?? locale?.labels.spinner.loading ?? spinnerLabels.loading,
+          })}
       {...props}
       data-size={size}
       className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}

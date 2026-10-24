@@ -3,54 +3,10 @@
 import { createContext, use } from "react";
 import type { ReactNode } from "react";
 
-import { enUS } from "./locales/en-US.ts";
+import type { enUS } from "./locales/en-US.ts";
 
-export interface Labels {
-  readonly alert: { readonly close: string };
-  readonly spinner: { readonly loading: string };
-  readonly kbd: {
-    readonly command: string;
-    readonly control: string;
-    readonly shift: string;
-    readonly option: string;
-    readonly enter: string;
-    readonly backspace: string;
-    readonly arrowUp: string;
-    readonly arrowDown: string;
-    readonly arrowLeft: string;
-    readonly arrowRight: string;
-  };
-  readonly skipLink: { readonly label: string };
-  readonly passwordField: { readonly show: string };
-  readonly numberField: { readonly increment: string; readonly decrement: string };
-  readonly breadcrumbs: { readonly root: string };
-  readonly pagination: { readonly root: string; readonly previous: string; readonly next: string };
-  readonly popover: { readonly close: string };
-  readonly dialog: { readonly close: string };
-  readonly sheet: { readonly close: string };
-  readonly combobox: { readonly noResults: string };
-  readonly toast: { readonly close: string };
-  readonly toaster: { readonly region: string };
-  readonly dateField: {
-    readonly dayPlaceholder: string;
-    readonly monthPlaceholder: string;
-    readonly yearPlaceholder: string;
-    readonly empty: string;
-    readonly incomplete: string;
-    readonly unavailable: string;
-  };
-  readonly calendar: { readonly previousMonth: string; readonly nextMonth: string };
-  readonly datePicker: { readonly chooseDate: string };
-  readonly command: {
-    readonly dialog: string;
-    readonly search: string;
-    readonly placeholder: string;
-    readonly empty: string;
-    readonly navigate: string;
-    readonly open: string;
-    readonly close: string;
-  };
-}
+/** Every component's built-in strings, in the shape en-US composes from each one's defaults. */
+export type Labels = (typeof enUS)["labels"];
 
 export interface Locale {
   readonly tag: string;
@@ -63,9 +19,7 @@ export function LocaleProvider({ value, children }: { value: Locale; children: R
   return <LocaleContext value={value}>{children}</LocaleContext>;
 }
 
-export function useLocale(): Locale {
-  const locale = use(LocaleContext);
-  if (locale !== undefined) return locale;
-  const lang = typeof document === "undefined" ? "" : document.documentElement.lang;
-  return lang === "" ? enUS : { ...enUS, tag: lang };
+/** The Provider's `locale`, or en-US with no labels so each component falls back to its own. */
+export function useLocale(): { readonly tag: string; readonly labels: Partial<Labels> } {
+  return use(LocaleContext) ?? { tag: "en-US", labels: {} };
 }

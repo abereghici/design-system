@@ -5,14 +5,13 @@ import type { ComponentProps, KeyboardEvent, ReactNode, SyntheticEvent } from "r
 
 import { FieldContext } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
-import { IconButton } from "../icon-button/icon-button.tsx";
-import { MinusIcon } from "../icon/icons/minus.tsx";
-import { PlusIcon } from "../icon/icons/plus.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { InputGroup } from "../text-field/text-field.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
 
+import { StepButtons } from "./step-buttons.tsx";
+import type { Direction } from "./step-buttons.tsx";
 import textFieldStyles from "../text-field/text-field.module.css";
 import styles from "./number-field.module.css";
 
@@ -138,40 +137,6 @@ function useNumber({
     if (!cancelled) setOwn(next);
   };
   return { committed, text, setText, commit };
-}
-
-type Direction = 1 | -1;
-
-function StepButtons({
-  labels,
-  controls,
-  disabled,
-  onStep,
-}: {
-  labels: ControlProps["labels"];
-  controls: string | undefined;
-  disabled: (direction: Direction) => boolean;
-  onStep: (direction: Direction, event: SyntheticEvent) => void;
-}) {
-  const names = { ...useLocale().labels.numberField, ...labels };
-  return ([-1, 1] as const).map((direction) => (
-    <IconButton
-      key={direction}
-      size="sm"
-      tabIndex={-1}
-      aria-label={direction === 1 ? names.increment : names.decrement}
-      aria-controls={controls}
-      disabled={disabled(direction)}
-      onPointerDown={(event) => {
-        event.preventDefault();
-      }}
-      onClick={(event) => {
-        onStep(direction, event);
-      }}
-    >
-      {direction === 1 ? <PlusIcon size="sm" /> : <MinusIcon size="sm" />}
-    </IconButton>
-  ));
 }
 
 function useNumberValue({

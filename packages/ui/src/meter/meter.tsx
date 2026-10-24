@@ -30,8 +30,8 @@ export type MeterProps = Omit<
     /** With `style: "percent"` the fraction of the range is formatted, otherwise `value`. */
     formatOptions?: Intl.NumberFormatOptions;
     /**
-     * A shipped locale (`@platform/ui/locales/*`) whose tag formats the value, on the server. A
-     * Server Component can't read the Provider's `locale`, so without it the value is English.
+     * A shipped locale (`@platform/ui/locales/*`) that formats it on the server. A Server Component
+     * can't read the Provider's `locale`, so without it the value is en-US.
      */
     locale?: Locale;
   };
@@ -40,7 +40,7 @@ export type MeterProps = Omit<
  * A measurement within a known range: storage used, a quota, a score. With `low`, `high` and
  * `optimum` the fill takes the success, warning or danger colour of the HTML meter's regions, and a
  * string `valueLabel` must say the same in words. The value text is formatted with
- * `Intl.NumberFormat` on the server, in English unless you pass a shipped `locale`. For progress
+ * `Intl.NumberFormat` on the server, in en-US unless you pass a shipped `locale`. For progress
  * use Progress; for a value the user sets, Slider.
  */
 export function Meter({
@@ -61,7 +61,7 @@ export function Meter({
   const now = Math.min(Math.max(value, min), max);
   const text =
     valueLabel ??
-    new Intl.NumberFormat(locale?.tag ?? "en", formatOptions).format(
+    new Intl.NumberFormat(locale?.tag ?? "en-US", formatOptions).format(
       formatOptions.style === "percent" ? (now - min) / (max - min) : now,
     );
   return (

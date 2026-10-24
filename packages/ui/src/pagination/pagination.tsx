@@ -4,8 +4,8 @@ import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { MoreIcon } from "../icon/icons/more.tsx";
 import type { Labels, Locale } from "../provider/locale.tsx";
-import { enUS } from "../provider/locales/en-US.ts";
 
+import { paginationLabels } from "./labels.ts";
 import styles from "./pagination.module.css";
 
 export interface PaginationLabels extends Partial<Labels["pagination"]> {
@@ -23,8 +23,8 @@ export interface PaginationProps extends ComponentProps<"nav"> {
   /** Renders every link with this component (a router link), given `href`, `aria-label`, `aria-current`, `className` and children. */
   linkComponent?: ElementType;
   /**
-   * A shipped locale (`@platform/ui/locales/*`): formats the numbers and translates the labels on
-   * the server. A Server Component can't read the Provider's `locale`, so without it they are English.
+   * A shipped locale (`@platform/ui/locales/*`) that formats and translates it on the server. A
+   * Server Component can't read the Provider's `locale`, so without it the text is en-US.
    */
   locale?: Locale;
   /** Overrides the locale's labels. */
@@ -84,12 +84,12 @@ export function Pagination({
   ...props
 }: PaginationProps) {
   const text = {
-    ...enUS.labels.pagination,
+    ...paginationLabels,
     page: pageLabel,
     ...locale?.labels.pagination,
     ...labels,
   };
-  const formatter = new Intl.NumberFormat(locale?.tag ?? "en");
+  const formatter = new Intl.NumberFormat(locale?.tag ?? "en-US");
   const url = (target: number) => (target < 1 || target > count ? undefined : getPageUrl(target));
   return (
     <nav aria-label={text.root} {...props}>

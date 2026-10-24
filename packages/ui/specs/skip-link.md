@@ -31,6 +31,7 @@ One part: a native `<a href="#…">` with a text label.
 | ---------- | --------------------- | ----------------------------------- | --------------------------------------------------------------------- |
 | `href`     | `` `#${string}` ``    | required                            | The fragment of the main content's `id`.                              |
 | `children` | `ReactNode`           | `labels.label`                      | The link text.                                                        |
+| `locale`   | `Locale`              | en-US                               | A shipped locale; translates the text on the server.                  |
 | `labels`   | `{ label?: string }`  | `{ label: "Skip to main content" }` | Built-in string (spec #1). Ignored when `children` is given.          |
 | …native    | `ComponentProps<"a">` |                                     | `ref`, `className` and every native attribute pass through unchanged. |
 
@@ -112,6 +113,8 @@ Consumed as semantic tokens directly: `z-index-tooltip` (a stacking decision, no
 | Key     | English default        | Used for                                  |
 | ------- | ---------------------- | ----------------------------------------- |
 | `label` | "Skip to main content" | The link text when no children are given. |
+
+The default is `skipLinkLabels` in `src/skip-link/labels.ts`, which `enUS` composes, so importing SkipLink ships only its own string.
 
 ## Feedback events
 

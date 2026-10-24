@@ -40,6 +40,7 @@ Root (nav → ordered list) → Items (separator → link).
 
 | Prop     | Type                    | Default                  | Notes                                                                                                     |
 | -------- | ----------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------- |
+| `locale` | `Locale`                | en-US                    | A shipped locale; translates `root` on the server.                                                        |
 | `labels` | `{ root?: string }`     | `{ root: "Breadcrumb" }` | Built-in labels: the landmark's `aria-label`.                                                             |
 | …native  | `ComponentProps<"nav">` |                          | `ref`, `className`, `aria-labelledby` and native attributes go on the `<nav>`. The `<ol>` takes no props. |
 
@@ -139,7 +140,7 @@ Consumed as semantic tokens directly: `size-target-min` (Item minimum height, a 
 | ------ | ------------ | ----------------------- |
 | `root` | "Breadcrumb" | `aria-label` on `<nav>` |
 
-Passed through the `labels` prop: Root is a Server Component and cannot read LocaleProvider (Q15-2 precedent).
+Root is a Server Component and cannot read the Provider, so it takes the shipped `locale` object (as Pagination does) and `labels` overrides; without either, `breadcrumbsLabels` (`src/breadcrumbs/labels.ts`) is the en-US default (Q19-1).
 
 ## Feedback events
 

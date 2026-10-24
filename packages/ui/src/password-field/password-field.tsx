@@ -11,6 +11,8 @@ import type { Labels } from "../provider/locale.tsx";
 import { InputGroup, TextInput } from "../text-field/text-field.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
 
+import { passwordFieldLabels } from "./labels.ts";
+
 export interface PasswordFieldVisibleChangeEventDetails {
   readonly reason: "toggle-press" | "form-submit";
   readonly event: Event;
@@ -93,7 +95,7 @@ function Control({
   const toggle = (
     <IconButton
       size="sm"
-      aria-label={labels?.show ?? locale.labels.passwordField.show}
+      aria-label={labels?.show ?? locale.labels.passwordField?.show ?? passwordFieldLabels.show}
       aria-controls={inputId}
       pressed={visible}
       disabled={field?.disabled === true}

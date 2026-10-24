@@ -179,6 +179,13 @@ describe("per-component JS", () => {
     expect(locale.html).toContain("<output>ro-RO</output>");
     expect(button.js).not.toContain('"ro-RO"');
   });
+
+  test("a client component ships its own default labels and no other component's", () => {
+    const alert = route("alert");
+    expect(alert.js).toContain('"Dismiss"');
+    expect(alert.js).not.toContain("Command palette");
+    expect(alert.js).not.toContain("Skip to main content");
+  });
 });
 
 const shipsCommand = (js: string) => js.includes('"input-clear"');
