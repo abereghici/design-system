@@ -4,7 +4,7 @@ Groups content about one subject so it can be scanned and compared: a report, a 
 
 ```tsx
 import { Button } from "@platform/ui/button";
-import * as Card from "@platform/ui/card";
+import { Card } from "@platform/ui/card";
 import { Link } from "@platform/ui/link";
 
 {

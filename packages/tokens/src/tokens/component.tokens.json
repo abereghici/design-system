@@ -2627,6 +2627,58 @@
     "sheet-close-offset": {
       "$type": "dimension",
       "$value": "{semantic.space-inset-sm}"
+    },
+    "date-field-segment-background-color-focused": {
+      "$type": "color",
+      "$value": "{semantic.color-background-selected}"
+    },
+    "date-field-segment-text-color-focused": {
+      "$type": "color",
+      "$value": "{semantic.color-text-selected}"
+    },
+    "date-field-segment-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-xs}"
+    },
+    "calendar-cell-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-md}"
+    },
+    "calendar-cell-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "calendar-cell-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-data-md}"
+    },
+    "calendar-cell-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "calendar-cell-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+    },
+    "calendar-cell-background-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold}"
+    },
+    "calendar-cell-text-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-text-on-accent}"
+    },
+    "calendar-cell-text-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-text-disabled}"
+    },
+    "calendar-today-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-accent}"
+    },
+    "calendar-header-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-md}"
     }
   }
 }

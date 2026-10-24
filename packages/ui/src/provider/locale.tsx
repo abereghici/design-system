@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { enUS } from "./locales/en-US.ts";
 
 export interface Labels {
+  readonly alert: { readonly close: string };
   readonly spinner: { readonly loading: string };
   readonly kbd: {
     readonly command: string;

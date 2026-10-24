@@ -1,0 +1,89 @@
+@import "@platform/tokens/components/card.css";
+
+@layer ab.components {
+  .root {
+    position: relative;
+    container-type: inline-size;
+    padding: var(--ab-card-padding);
+    border: var(--ab-card-border-width) solid var(--ab-card-border-color);
+    border-radius: var(--ab-card-border-radius);
+    background-color: var(--ab-card-background-color);
+    transition-property: border-color, box-shadow;
+    transition-duration: var(--ab-motion-duration-hover-out);
+    transition-timing-function: var(--ab-motion-easing-color);
+  }
+
+  /* A container query styles the container's descendants, never the container itself. */
+  .layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ab-card-padding);
+  }
+
+  @container (inline-size >= 480px) {
+    .root[data-layout="row"] > .layout {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .root[data-layout="row"] > .layout > :not(.footer) {
+      flex: 1;
+    }
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ab-card-gap);
+  }
+
+  .title {
+    margin: 0;
+    color: var(--ab-card-title-text-color);
+    font: var(--ab-card-title-font);
+  }
+
+  .title a {
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+  }
+
+  .title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .description {
+    margin: 0;
+    color: var(--ab-card-description-text-color);
+    font: var(--ab-card-description-font);
+  }
+
+  /* Positioned after the Header in source order, so they paint above the stretched link. */
+  .content,
+  .footer {
+    position: relative;
+  }
+
+  .footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ab-card-footer-gap);
+  }
+
+  @media (hover: hover) {
+    .root:has(.title a:hover) {
+      border-color: var(--ab-card-border-color-hovered);
+      box-shadow: var(--ab-card-shadow-hovered);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+
+  .root:has(.title a:focus-visible) {
+    outline: var(--ab-focus-ring-width) solid var(--ab-color-border-focused);
+    outline-offset: var(--ab-focus-ring-offset);
+  }
+}

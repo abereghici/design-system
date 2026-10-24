@@ -1,0 +1,72 @@
+@import "@platform/tokens/components/avatar.css";
+
+@layer ab.components {
+  .root {
+    display: inline-grid;
+    flex-shrink: 0;
+    vertical-align: middle;
+    inline-size: var(--ab-avatar-md-size);
+    block-size: var(--ab-avatar-md-size);
+    overflow: clip;
+    /* Transparent until forced colors paint it, so the circle stays visible there. */
+    border: var(--ab-border-width-default) solid transparent;
+    border-radius: var(--ab-avatar-border-radius);
+    background-color: var(--ab-avatar-background-color);
+  }
+
+  .root[data-size="sm"] {
+    inline-size: var(--ab-avatar-sm-size);
+    block-size: var(--ab-avatar-sm-size);
+  }
+
+  .root > * {
+    grid-area: 1 / 1;
+  }
+
+  .image {
+    z-index: 1;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: opacity var(--ab-motion-duration-swap) var(--ab-motion-easing-enter);
+  }
+
+  .image:is([data-loading], [data-error]) {
+    opacity: 0;
+  }
+
+  .fallback {
+    display: grid;
+    place-items: center;
+    color: var(--ab-avatar-text-color);
+    font: var(--ab-avatar-font);
+    text-transform: uppercase;
+    /* Hidden only once the image has faded in over it. */
+    transition: visibility 0s var(--ab-motion-duration-swap);
+  }
+
+  .root[data-size="sm"] > .fallback {
+    font: var(--ab-avatar-sm-font);
+  }
+
+  .root:has(> .image:not([data-loading], [data-error])) > .fallback {
+    visibility: hidden;
+  }
+
+  .fallback > svg {
+    inline-size: var(--ab-avatar-icon-size);
+    block-size: var(--ab-avatar-icon-size);
+    color: var(--ab-avatar-icon-color);
+  }
+
+  .root[data-size="sm"] > .fallback > svg {
+    inline-size: var(--ab-avatar-sm-icon-size);
+    block-size: var(--ab-avatar-sm-icon-size);
+  }
+
+  @media (forced-colors: active) {
+    .fallback {
+      color: CanvasText;
+    }
+  }
+}
