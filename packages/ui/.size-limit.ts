@@ -6,9 +6,11 @@ import type { SizeLimitConfig } from "size-limit";
 const budgets: Readonly<Record<string, string>> = {
   button: "800 B",
   events: "20 B",
+  heading: "340 B",
   icon: "520 B",
   logo: "470 B",
   provider: "5.4 kB",
+  text: "520 B",
 };
 
 const checks = (pattern: string, subpath: (path: string) => string, limit?: string) =>

@@ -90,6 +90,19 @@ describe("per-component JS", () => {
     expect(logo.js).not.toContain("ab-press");
   });
 
+  test.each([
+    ["heading", "var(--ab-type-heading-lg)", []],
+    ["text", "var(--ab-type-body-md)", []],
+  ])(
+    "the %s route renders on the server and ships its CSS and tokens only",
+    (name, rule, tokens) => {
+      const r = route(name);
+      expect(uiClientModules(r)).toEqual(["provider/locale.tsx"]);
+      expect(r.css).toContain(rule);
+      expect(shippedComponentTokens(r.css)).toEqual(tokens);
+    },
+  );
+
   test("a locale reaches client components, and ships only on the route that imports it", () => {
     expect(locale.html).toContain("<output>ro-RO</output>");
     expect(button.js).not.toContain('"ro-RO"');
