@@ -220,6 +220,13 @@ const componentRoutes = [
   },
   { name: "navbar", tokens: ["navbar"], client: [], html: '<nav aria-label="Main">' },
   { name: "sidebar", tokens: ["sidebar"], client: [], html: 'role="group" aria-labelledby=' },
+  { name: "toast", tokens: [], client: [], html: "Copy link" },
+  {
+    name: "toaster",
+    tokens: ["toast", "kbd", "icon"],
+    client: ["toaster/toaster.tsx"],
+    html: "Copy link",
+  },
 ];
 
 describe("each component route ships only its own CSS, tokens and client code", () => {
@@ -235,6 +242,11 @@ describe("each component route ships only its own CSS, tokens and client code", 
 });
 
 describe("per-component JS", () => {
+  test("a route that only calls toast() loads none of the Toaster's code", () => {
+    expect(route("toast").js).not.toContain("Alt+T");
+    expect(route("toaster").js).toContain("Alt+T");
+  });
+
   test("only the Button route loads Button's client code", () => {
     expect(uiClientModules(button)).toEqual(["button/button.tsx", "provider/locale.tsx"]);
     expect(button.js).toContain("ab-press");

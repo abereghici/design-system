@@ -15,7 +15,7 @@ function assign(
   if (ref) ref.current = node;
 }
 
-function composeRefs(...refs: (Ref<HTMLElement> | undefined)[]): RefCallback<HTMLElement> {
+export function composeRefs(...refs: (Ref<HTMLElement> | undefined)[]): RefCallback<HTMLElement> {
   return (node) => {
     const cleanups = refs.map((ref) => assign(ref, node));
     return () => {
