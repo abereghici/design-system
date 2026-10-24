@@ -209,3 +209,73 @@ The spike packages were deleted in #13. The spike app became `apps/ui-next-fixtu
   - Button importing `listen` from `src/testing/` as a value: the "nothing ships from outside" test failed.
   - A side-effect-only `import "../testing/listen.ts"` was dropped from the graph, as the `sideEffects` declaration says it may be, so that control did not trip the test.
   - Adding `"."` to `exports`: check-types failed with "Unused '@ts-expect-error' directive".
+
+## Per-component CSS and the root Provider (T1, spec #1)
+
+Researched and verified 2026-10-24 with `next` 16.4.3 (Turbopack), `react`/`react-dom` 19.3.1, Vite 8.3.5 (Storybook 10.6.3), `size-limit` 14.3.0 with `@size-limit/esbuild` 14.3.0. The checks are `apps/ui-next-fixture/test/routes.test.ts`, the Button and Provider stories, and `packages/tokens/src/css.test.ts`.
+
+### Question
+
+Importing one component must ship only that component's JS, its CSS and its component tokens. Apps must import no CSS by hand. Before this change, `@platform/tokens/tokens.css` (67 kB) held all of the component tokens (542 before phase 3), so an app that rendered only Button still shipped `--ab-dialog-*`, `--ab-toast-*` and the rest.
+
+### What was built
+
+- **One token sheet per component.** `@platform/tokens` writes `dist/components/<component>.css`, one per Dictionary component word (45 after phase 3), each `@layer ab.tokens { :root { … } }`, with that component's `@property` rules first. `tokens.css` keeps the 504 primitive and semantic tokens (32.5 kB). The export is `"./components/*.css": "./dist/components/*.css"`.
+- **Each CSS Module `@import`s its own sheet**, as its first line: `@import "@platform/tokens/components/button.css";`. The dependency sits where the tokens are used, and it works the same in Turbopack, Vite and esbuild (below). A side-effect import in the `.tsx` would also work ("Stylesheets published by external packages can be imported anywhere in the `app` directory, including colocated components", https://nextjs.org/docs/app/getting-started/css, lastUpdated 2026-08-25), but it splits one dependency across two files.
+- **`Provider` (`@platform/ui/provider`)**, a Server Component, imports `provider.css` (the layer order, `tokens.css`, `fonts.css`, `base.css`) and preloads Figtree latin. It takes an optional `locale` from `@platform/ui/locales/<tag>` (`enUS`, `roRO`). `@platform/ui/base.css` is no longer exported.
+
+### Evidence: the build output
+
+The fixture's root layout renders only `<Provider>{children}</Provider>` and imports no CSS. `/` renders Button, `/logo` renders Logo, and `/locale` renders `<Provider locale={roRO}>` around a client component that calls `useLocale()`. The test reads each route's prerendered HTML (`.next/server/app/<route>.html`), every `/_next/static/**.css` and `**.js` it references, and the route's `page_client-reference-manifest.js`.
+
+Observed with the final code:
+
+- `/` ships `--ab-button-*` and no other component's tokens. `/logo` ships `--ab-logo-*` and no `--ab-button-`. The component-token check covers every name in `component.tokens.json`.
+- Every route's first stylesheet starts with `@layer ab.reset,ab.tokens,ab.base,ab.components;`, then the shared tokens, the `@font-face` rules and `@layer ab.base`.
+- The HTML has exactly one font preload, `<link rel="preload" href="/_next/static/media/Figtree-latin.1meowcc0_9_5r.woff2" as="font" crossorigin="" type="font/woff2"/>`. The `@font-face` asks for the same file (`src:url(../media/Figtree-latin.1meowcc0_9_5r.woff2)`), so it is fetched once.
+- The client modules from `@platform/ui` are `button/button.tsx` and `provider/locale.tsx` on `/`, and only `provider/locale.tsx` on `/logo`. Only `/` loads code that contains `ab-press`. `ro-RO` is absent from `/`'s JS.
+
+Controls (each a temporary edit, then reverted):
+
+| Change                                                         | Result                                                                      |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `@import` removed from `button.module.css`                     | "a route that imports Button ships … only Button's component tokens" failed |
+| `provider.css` also imports `components/button.css`            | "a route that imports Logo ships … none of Button's" failed                 |
+| layer statement written inside `provider.css` before `@import` | first stylesheet started `@layer ab.tokens{` (see below)                    |
+| fixture without a `browserslist`                               | `--lightningcss-light` toggles in the CSS (see below)                       |
+| Button's token sheet unlayered (Storybook, Chromium)           | "takes its component tokens from unlayered app CSS" failed                  |
+
+### Turbopack emits an `@import`ed sheet before the importing sheet
+
+With `@layer ab.reset, ab.tokens, ab.base, ab.components;` followed by the `@import`s in one file, the built CSS began with `@layer ab.tokens{:root{…` and the statement came after `tokens.css`, `fonts.css` and `base.css` (observed). The order of first appearance becomes `ab.tokens, ab.reset, ab.base, ab.components`. MDN allows the authored form: "An `@import` rule _must_ be defined at the top of the stylesheet, before any other at-rule (except @charset and @layer) and style declarations, or it will be ignored" (https://developer.mozilla.org/en-US/docs/Web/CSS/@import). The statement therefore lives in its own `layers.css`, imported first, and is emitted first (observed). esbuild documents the browser's order: "@import is supposed to behave as if the import rule was replaced by the imported file" (https://esbuild.github.io/content-types/#css). (inference) Turbopack treats each `@import` as a separate CSS chunk item placed ahead of the importer.
+
+### Next lowers `light-dark()` unless the app targets the Baseline floor
+
+`docs/research/base-stylesheet.md` predicted this as an inference; it is now observed. With Next's default targets the built `tokens.css` contained `--lightningcss-light:initial;--lightningcss-dark: ;`, which breaks `data-theme` subtrees. Next: "Next.js supports Browserslist configuration in your `package.json` file. Next.js uses the following Browserslist configuration by default: `["chrome 111", "edge 111", "firefox 111", "safari 16.4"]`" (https://nextjs.org/docs/architecture/supported-browsers, lastUpdated 2026-07-28). Browserslist: "`baseline newly available`: browser versions that support all Baseline Newly available features" (https://github.com/browserslist/browserslist). With `"browserslist": ["baseline newly available"]` (ADR-0002's floor) in the fixture's `package.json`, the CSS keeps `light-dark(` and has no `--lightningcss` (observed, and asserted). Every app needs that entry.
+
+### A Server Component cannot keep its client leaf out of the bundle
+
+The aim was a Provider that ships no JS unless `locale` is passed. Turbopack collects client references from the server module graph, whatever is rendered:
+
+- A static `import { LocaleProvider } from "./locale.tsx"` rendered only when `locale` is set: `locale.tsx` is in every route's client manifest (`"async":false`) and its code is in the layout chunk on `/` and `/logo` (observed).
+- `await import("./locale.tsx")` inside an `async` Provider: same result (observed). It would also make Provider async, which a client render (Storybook) can't do.
+
+The leaf adds about 400 bytes of minified code to the layout chunk (`createContext`, `LocaleProvider`, `useLocale`, the en-US object; read from `.next/static/chunks/*.js`). The Provider keeps the static import and renders the context only when `locale` is passed. Logged as Q-T1-3.
+
+### `preload()` from a Server Component
+
+React: "In server-side rendering or when rendering Server Components, `preload` only has an effect if you call it while rendering a component or in an async context originating from rendering a component" and "Multiple equivalent calls to `preload` have the same effect as a single call" (https://react.dev/reference/react-dom/preload). The URL comes from `src/provider/figtree-latin.js`, `export { default as figtreeLatin } from "@platform/tokens/fonts/Figtree-latin.woff2"`, typed by its sibling `figtree-latin.d.ts`:
+
+- Turbopack 16.4.3 resolves the `.woff2` import to the hashed `/_next/static/media/…` URL without the `turbopackModuleType: "asset"` attribute that #10 used (observed). Vite returns the URL as well: "Importing a static asset will return the resolved public URL when it is served" (https://vite.dev/guide/features).
+- A `.js` file with a `.d.ts` beside it keeps the woff2 module type out of every consumer's program. Typing the import in a `.ts` file needs `declare module "*.woff2"` in each app, or `allowArbitraryExtensions`: "By default, this import will raise an error … you can suppress the error with the new `--allowArbitraryExtensions` compiler option" (https://www.typescriptlang.org/tsconfig/#allowArbitraryExtensions). The fixture type-checks with neither (observed).
+
+### Vite (Storybook) and esbuild (size budgets)
+
+- Vite: "Vite is pre-configured to support CSS `@import` inlining via `postcss-import`" and "all CSS `url()` references … are always automatically rebased" (https://vite.dev/guide/features). The Storybook preview wraps every story in `<Provider>`, `.storybook/preview.css` is gone, and all 85 Chromium story tests passed, including the colour checks that read component tokens.
+- esbuild: "You can @import other CSS files and reference image and font files with url() and esbuild will bundle everything together" and "you will have to configure a loader for image and font files, since esbuild doesn't have any pre-configured" (https://esbuild.github.io/content-types/#css). Each component's budget therefore includes its token sheet. Font files are not part of any budget: `ignore` becomes esbuild's `external` (`external: check.ignore`, `@size-limit/esbuild` 14.3.0 `get-config.js`), and "you can use *.png to remove all .png files" (https://esbuild.github.io/api/#external), so `"*.woff2"` is in `ignore`. Measured (Brotli): button 722 B (was about 380 B without its tokens), icon 469 B, logo 427 B, sun icon 612 B, provider 4.83 kB, each locale about 104 B.
+
+### Naming the Provider and the locale objects
+
+- React Spectrum: "Provider is the container for all React Spectrum applications", "A Provider must be the root component of your application" and "It defines the theme, locale, and other application level settings" (https://react-spectrum.adobe.com/react-spectrum/Provider.html). Hence `Provider` with a `locale` prop.
+- Mantine and Radix Themes make the app import the CSS: "import '@mantine/core/styles.css'" then "Wrap your application with MantineProvider" (https://mantine.dev/getting-started/), and "Import the global CSS file at the root of your application" then "Add `Theme` to your application" (https://www.radix-ui.com/themes/docs/overview/getting-started). The user ruled that out, so ours imports its CSS itself.
+- Locale objects follow Ant Design, `import frFR from 'antd/locale/fr_FR';` with `<ConfigProvider locale={frFR}>` "for configuring antd locale text globally" (https://ant.design/docs/react/i18n), and MUI, `import { zhCN } from '@mui/material/locale';` passed to `createTheme` (https://mui.com/material-ui/guides/localization/). They are named `enUS` and `roRO` and live at `@platform/ui/locales/<BCP 47 tag>`.

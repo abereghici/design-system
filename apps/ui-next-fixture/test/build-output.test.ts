@@ -38,10 +38,16 @@ describe("tree-shaking of @platform/ui", () => {
     expect(shipped).toContain("src/button/button.module.css");
   });
 
-  test("nothing ships from outside what the page imports (button) and its shared helpers", () => {
-    // The page imports only `@platform/ui/button`. Button may use the shared, non-component
-    // directories; any other component's directory, or a story, means a subpath leaked.
-    const allowed = ["src/button/", "src/events/", "src/internal/"];
+  test("nothing ships from outside what the app imports (provider, button, logo, ro-RO)", () => {
+    const allowed = [
+      "src/provider/",
+      "src/base/",
+      "src/locales/en-US.ts",
+      "src/locales/ro-RO.ts",
+      "src/button/",
+      "src/events/",
+      "src/logo/",
+    ];
     const outside = [...shipped].filter((path) => !allowed.some((dir) => path.startsWith(dir)));
     const stories = [...shipped].filter((path) => path.includes(".stories."));
 

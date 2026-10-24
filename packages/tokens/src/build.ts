@@ -3,7 +3,7 @@ import type { DesignTokens } from "style-dictionary/types";
 
 import { toArtifactTokens, type ArtifactTokens } from "./artifact-format.ts";
 import { checkTokens, TokenCheckError } from "./checks.ts";
-import { cssFormat } from "./css-format.ts";
+import { stylesheets } from "./css-format.ts";
 
 export { TokenCheckError };
 export type { ArtifactTokens };
@@ -22,8 +22,10 @@ export interface BuildInput {
 }
 
 export interface BuildOutput {
-  /** `tokens.css`: the `--ab-` custom properties, themed with `light-dark()`. */
+  /** `tokens.css`: the primitive and semantic `--ab-` custom properties, themed with `light-dark()`. */
   readonly css: string;
+  /** `components/<name>.css`: each component's tokens, keyed by component name. */
+  readonly components: Readonly<Record<string, string>>;
   /** `tokens.json`: the artifact-shaped tokens for `/design-sync`. */
   readonly artifact: ArtifactTokens;
 }
@@ -57,7 +59,6 @@ export async function buildTokens(input: BuildInput): Promise<BuildOutput> {
           },
         },
       },
-      formats: { "ab/css": cssFormat },
     },
     platforms: {
       web: {
@@ -69,7 +70,6 @@ export async function buildTokens(input: BuildInput): Promise<BuildOutput> {
           "cubicBezier/css",
           "fontFamily/css",
         ],
-        files: [{ destination: "tokens.css", format: "ab/css" }],
       },
     },
   });
@@ -78,6 +78,8 @@ export async function buildTokens(input: BuildInput): Promise<BuildOutput> {
   const problems = checkTokens(dictionary);
   if (problems.length > 0) throw new TokenCheckError(problems);
 
-  const [css] = await sd.formatPlatform("web");
-  return { css: String(css?.output), artifact: toArtifactTokens(dictionary) };
+  return {
+    ...stylesheets(dictionary),
+    artifact: toArtifactTokens(dictionary),
+  };
 }

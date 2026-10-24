@@ -22,18 +22,21 @@ import type { SizeLimitConfig } from "size-limit";
  * change that grows the component.
  */
 const budgets: Readonly<Record<string, `${number} B` | `${number} kB`>> = {
-  button: "420 B",
+  button: "800 B",
   events: "20 B",
-  icon: "400 B",
-  logo: "410 B",
+  icon: "520 B",
+  logo: "470 B",
+  provider: "5.4 kB",
 };
 
 /** Brotli budget of any one icon (`src/icons/<name>.tsx`), Icon itself included. Icons are
- * generated, so one value: the largest measured (`sun`, 503 B) plus about 10%. */
-const iconBudget = "560 B";
+ * generated, so one value: the largest measured (`sun`, 612 B) plus about 10%. */
+const iconBudget = "680 B";
+
+const localeBudget = "120 B";
 
 // React is a peer dependency: apps pay for it once, so it is not part of any subpath's cost.
-const ignore = ["react", "react-dom"];
+const ignore = ["react", "react-dom", "*.woff2"];
 
 const cwd = import.meta.dirname;
 
@@ -54,4 +57,12 @@ const icons = globSync("src/icons/*.tsx", { cwd }).map((path) => ({
   limit: iconBudget,
 }));
 
-export default [...components, ...icons] satisfies SizeLimitConfig;
+const locales = globSync("src/locales/*.ts", { cwd }).map((path) => ({
+  name: `@platform/ui/locales/${path.slice("src/locales/".length, -".ts".length)}`,
+  path,
+  import: "*",
+  ignore,
+  limit: localeBudget,
+}));
+
+export default [...components, ...icons, ...locales] satisfies SizeLimitConfig;

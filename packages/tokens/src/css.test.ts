@@ -10,11 +10,23 @@ test("primitive tokens are literal --ab- custom properties", async () => {
 });
 
 test("semantic and component tokens reference the tier below with var()", async () => {
-  const { css } = await buildTokens({ tokens: validTokens() });
+  const { css, components } = await buildTokens({ tokens: validTokens() });
   expect(css).toContain("--ab-radius-sm: var(--ab-dimension-8);");
   expect(css).toContain("--ab-color-brand-moss: var(--ab-palette-moss-900);");
-  expect(css).toContain("--ab-button-border-radius: var(--ab-radius-sm);");
-  expect(css).toContain("--ab-card-background-color: var(--ab-color-surface-default);");
+  expect(components["button"]).toContain("--ab-button-border-radius: var(--ab-radius-sm);");
+  expect(components["card"]).toContain(
+    "--ab-card-background-color: var(--ab-color-surface-default);",
+  );
+});
+
+test("each component's tokens get their own sheet, and the shared sheet has none", async () => {
+  const { css, components } = await buildTokens({ tokens: validTokens() });
+  expect(css).not.toMatch(/--ab-(?:button|card|icon-button|logo)-/v);
+  expect(components["button"]).toMatch(
+    /^\/\*[^\n]*\*\/\n@layer ab\.tokens \{\n {2}:root \{\n(?: {4}--ab-button-[^\n]+\n)+ {2}\}\n\}\n$/v,
+  );
+  expect(components["icon-button"]).not.toMatch(/--ab-button-/v);
+  expect(components["icon"]).not.toMatch(/--ab-icon-button-/v);
 });
 
 test("themed colors resolve per Theme with light-dark(), light first", async () => {
@@ -36,13 +48,9 @@ test("everything sits in the ab.tokens cascade layer", async () => {
   expect(css).toMatch(/^\/\*[^\n]*\*\/\n@layer ab\.tokens \{\n[\s\S]*\n\}\n$/v);
 });
 
-test("properties are listed primitive, then semantic, then component", async () => {
+test("properties are listed primitive, then semantic", async () => {
   const { css } = await buildTokens({ tokens: validTokens() });
-  const order = [
-    "--ab-palette-sage-0:",
-    "--ab-color-surface-default:",
-    "--ab-card-background-color:",
-  ];
+  const order = ["--ab-palette-sage-0:", "--ab-color-surface-default:"];
   const positions = order.map((name) => css.indexOf(name));
   expect(positions).toEqual(positions.toSorted((a, b) => a - b));
   expect(positions).not.toContain(-1);
@@ -77,11 +85,11 @@ test("durations, easings, font stacks and CSS-only values compile to CSS literal
 test("a type style is a font shorthand of var() references, like the source", async () => {
   const tokens = validTokens();
   tokens.component["button-font"] = { $type: "typography", $value: "{semantic.type-label-sm}" };
-  const { css } = await buildTokens({ tokens });
+  const { css, components } = await buildTokens({ tokens });
   expect(css).toContain(
     "--ab-type-label-sm: var(--ab-font-weight-500) var(--ab-type-label-sm-font-size)/var(--ab-line-height-120) var(--ab-font-family-figtree);",
   );
-  expect(css).toContain("--ab-button-font: var(--ab-type-label-sm);");
+  expect(components["button"]).toContain("--ab-button-font: var(--ab-type-label-sm);");
 });
 
 test("an Elevation is a box-shadow list of var() references, like the source", async () => {
@@ -126,7 +134,7 @@ test("media overrides are emitted as @media blocks on :root, inside the layer", 
   expect(css).toMatch(/\}\n\}\n$/v);
 });
 
-test("an animated token is registered with @property and inherits: false", async () => {
+test("an animated token is registered with @property and inherits: false, in its component's sheet", async () => {
   const tokens = validTokens();
   tokens.primitive["scale-97"] = { $type: "number", $value: 0.97 };
   tokens.semantic["motion-scale-pressed"] = { $type: "number", $value: "{primitive.scale-97}" };
@@ -140,8 +148,9 @@ test("an animated token is registered with @property and inherits: false", async
     $value: "{semantic.radius-sm}",
     $extensions: { "com.bereghici.animated": true },
   };
-  const { css } = await buildTokens({ tokens });
-  expect(css).toContain(
+  const { css, components } = await buildTokens({ tokens });
+  expect(css).not.toContain("@property");
+  expect(components["button"]).toContain(
     [
       "@property --ab-button-md-padding-inline {",
       '  syntax: "<length>";',
@@ -158,7 +167,7 @@ test("an animated token is registered with @property and inherits: false", async
       "@layer ab.tokens {",
     ].join("\n"),
   );
-  expect(css.match(/@property/gv)).toHaveLength(2);
+  expect(components["button"]?.match(/@property/gv)).toHaveLength(2);
 });
 
 test("a themed color with the same value in both Themes needs no light-dark()", async () => {
@@ -168,15 +177,18 @@ test("a themed color with the same value in both Themes needs no light-dark()", 
 });
 
 test("ports every source token (210 primitive, 294 semantic, 413 component) plus 79 phase-1, 50 phase-2, 61 phase-3 and 24 phase-4 component tokens", async () => {
-  const { css } = await buildTokens({ source: [SOURCE_GLOB] });
+  const { css, components } = await buildTokens({ source: [SOURCE_GLOB] });
   const root = css.slice(css.indexOf(":root {"), css.indexOf("}", css.indexOf(":root {")));
-  expect(root.match(/^ {4}--ab-/gmv)).toHaveLength(210 + 294 + 413 + 79 + 50 + 61 + 24);
+  expect(root.match(/^ {4}--ab-/gmv)).toHaveLength(210 + 294);
   expect(css.match(/^ {6}--ab-/gmv)).toHaveLength(22);
+  const sheets = Object.values(components).join("");
+  expect(sheets.match(/^ {4}--ab-/gmv)).toHaveLength(413 + 79 + 50 + 61 + 24);
+  expect(Object.keys(components)).toHaveLength(45);
 });
 
 test("the package's own token source passes every check and compiles", async () => {
-  const { css } = await buildTokens({ source: [SOURCE_GLOB] });
-  expect(css).toContain(
+  const { css, components } = await buildTokens({ source: [SOURCE_GLOB] });
+  expect(components["button"]).toContain(
     "--ab-button-primary-background-color: var(--ab-color-background-accent-bold);",
   );
   expect(css).toContain(

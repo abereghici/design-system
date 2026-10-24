@@ -13,6 +13,7 @@
     "test": "pnpm run build && pnpm run analyze && vitest run"
   },
   "dependencies": {
+    "@platform/tokens": "workspace:*",
     "@platform/ui": "workspace:*",
     "next": "catalog:",
     "react": "catalog:",
@@ -30,5 +31,8 @@
     "oxlint-tsgolint": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
-  }
+  },
+  "browserslist": [
+    "baseline newly available"
+  ]
 }

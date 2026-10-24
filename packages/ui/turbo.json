@@ -4,6 +4,9 @@
   "tasks": {
     "test": {
       "dependsOn": ["$TURBO_EXTENDS$", "^build"]
+    },
+    "size": {
+      "dependsOn": ["$TURBO_EXTENDS$", "^build"]
     }
   }
 }
