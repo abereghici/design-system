@@ -167,12 +167,12 @@ test("a themed color with the same value in both Themes needs no light-dark()", 
   expect(css).toContain("--ab-color-backdrop: var(--ab-palette-night-950-a64);");
 });
 
-test("ports every source token (210 primitive, 294 semantic, 413 component) plus 79 phase-1 component tokens", async () => {
+test("ports every source token (210 primitive, 294 semantic, 413 component) plus 79 phase-1 and 50 phase-2 component tokens", async () => {
   const { css } = await buildTokens({ source: [SOURCE_GLOB] });
   const root = css.slice(css.indexOf(":root {"), css.indexOf("}", css.indexOf(":root {")));
   // 386 source component tokens, with Menu's 27 carried by both DropdownMenu and ContextMenu,
-  // plus the phase-1 component tokens proposed in packages/ui/specs (ticket #15).
-  expect(root.match(/^ {4}--ab-/gmv)).toHaveLength(210 + 294 + 413 + 79);
+  // plus the phase-1 and phase-2 component tokens proposed in packages/ui/specs (#15, #22).
+  expect(root.match(/^ {4}--ab-/gmv)).toHaveLength(210 + 294 + 413 + 79 + 50);
   expect(css.match(/^ {6}--ab-/gmv)).toHaveLength(22);
 });
 

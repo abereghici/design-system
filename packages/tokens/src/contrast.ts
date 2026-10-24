@@ -73,11 +73,19 @@ const PAIRS = [
   ["text-subtle", "background-danger-subtle"],
 ] as const;
 
-/** Not in the source: Alert's status icon on its own subtle fill (ticket #15), 3:1. */
+/** Not in the source, 3:1. */
 const NON_TEXT_PAIRS = [
+  // Alert's status icon on its own subtle fill (ticket #15).
   ["icon-success", "background-success-subtle"],
   ["icon-warning", "background-warning-subtle"],
   ["icon-danger", "background-danger-subtle"],
+  // The checked fill of Checkbox, RadioGroup and Switch, and the Slider range, on every surface,
+  // and the Switch and Slider thumb on that fill (ticket #22): the fill and thumb carry the state.
+  ["background-accent-bold", "surface-default"],
+  ["background-accent-bold", "surface-raised"],
+  ["background-accent-bold", "surface-nested"],
+  ["background-accent-bold", "surface-floating"],
+  ["surface-floating", "background-accent-bold"],
 ] as const;
 
 interface Requirement {
