@@ -27,18 +27,21 @@ describe("@platform/ui exports", () => {
     }
   });
 
-  test("every src/icons/<name>.tsx is the subpath @platform/ui/icons/<name>", () => {
-    for (const entry of globSync("src/icons/*.tsx", { cwd: uiDir })) {
-      const name = entry.slice("src/icons/".length, -".tsx".length);
+  test("every src/icon/icons/<name>.tsx is the subpath @platform/ui/icons/<name>", () => {
+    for (const entry of globSync("src/icon/icons/*.tsx", { cwd: uiDir })) {
+      const name = entry.slice("src/icon/icons/".length, -".tsx".length);
       expect(resolve(`@platform/ui/icons/${name}`)).toBe(join(uiDir, entry));
     }
   });
 
-  test("every src/locales/<tag>.ts is the subpath @platform/ui/locales/<tag>", () => {
-    const entries = globSync("src/locales/*.ts", { cwd: uiDir });
-    expect(entries.toSorted()).toEqual(["src/locales/en-US.ts", "src/locales/ro-RO.ts"]);
+  test("every src/provider/locales/<tag>.ts is the subpath @platform/ui/locales/<tag>", () => {
+    const entries = globSync("src/provider/locales/*.ts", { cwd: uiDir });
+    expect(entries.toSorted()).toEqual([
+      "src/provider/locales/en-US.ts",
+      "src/provider/locales/ro-RO.ts",
+    ]);
     for (const entry of entries) {
-      const tag = entry.slice("src/locales/".length, -".ts".length);
+      const tag = entry.slice("src/provider/locales/".length, -".ts".length);
       expect(resolve(`@platform/ui/locales/${tag}`)).toBe(join(uiDir, entry));
     }
   });
@@ -54,10 +57,11 @@ describe("@platform/ui exports", () => {
     await expect(import(root)).rejects.toThrow(/"\." is not exported/v);
   });
 
-  test("module files and private directories have no subpath", () => {
+  test("module files, glyph folders and the Storybook harness have no subpath", () => {
     expect(resolve("@platform/ui/button/button.tsx")).toBeUndefined();
     expect(resolve("@platform/ui/button/button.module.css")).toBeUndefined();
     expect(resolve("@platform/ui/src/button/button.tsx")).toBeUndefined();
-    expect(resolve("@platform/ui/testing")).toBeUndefined();
+    expect(resolve("@platform/ui/icon/icons/x")).toBeUndefined();
+    expect(resolve("@platform/ui/.storybook/preview")).toBeUndefined();
   });
 });

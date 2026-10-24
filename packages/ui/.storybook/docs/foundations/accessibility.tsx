@@ -38,11 +38,15 @@ function Cell({ foreground, background, minimum, theme, text }: PairProps & { te
       data-background={background}
       className={styles["cell"]}
       style={{
-        "--cell-background": cssVar(`color-${background}`),
-        "--cell-sample": cssVar(`color-${foreground}`),
-        "--cell-text": cssVar(text ? `color-${foreground}` : labelOn(background)),
+        backgroundColor: cssVar(`color-${background}`),
+        color: cssVar(text ? `color-${foreground}` : labelOn(background)),
       }}
     >
+      <span
+        aria-hidden="true"
+        className={styles["sample"]}
+        style={{ backgroundColor: cssVar(`color-${foreground}`) }}
+      />
       <Ratio foreground={foreground} background={background} minimum={minimum} theme={theme} />
     </td>
   );
@@ -187,7 +191,10 @@ export function ContrastMatrix() {
 
 const targetPreview = (row: Token) =>
   row.name.startsWith("size-target") ? (
-    <span className={styles["target"]} style={{ "--target": cssVar(row.name) }} />
+    <span
+      className={styles["target"]}
+      style={{ inlineSize: cssVar(row.name), blockSize: cssVar(row.name) }}
+    />
   ) : null;
 
 export function FocusAndTarget() {

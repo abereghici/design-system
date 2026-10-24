@@ -40,7 +40,6 @@ export default definePreview({
             "Personality",
             "Logo",
             "Iconography",
-            "Icons",
             "Accessibility",
             "Base stylesheet",
           ],

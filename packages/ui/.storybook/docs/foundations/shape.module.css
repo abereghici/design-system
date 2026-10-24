@@ -1,7 +1,6 @@
 @layer ab.components {
   .bar {
     display: block;
-    inline-size: var(--bar);
     max-inline-size: var(--ab-size-container-2xs);
     block-size: var(--ab-space-stack-sm);
     background-color: var(--ab-color-background-accent-subtle);
@@ -13,7 +12,6 @@
     inline-size: var(--ab-size-control-lg);
     block-size: var(--ab-size-control-lg);
     border: var(--ab-border-width-thick) solid var(--ab-color-border-default);
-    border-start-start-radius: var(--corner);
   }
 
   .concentric {
@@ -53,7 +51,6 @@
     margin: var(--ab-space-inset-md);
     border-radius: var(--ab-radius-lg);
     background-color: var(--ab-color-surface-floating);
-    box-shadow: var(--elevation);
   }
 
   /* A striped ground, so the material's translucency and blur are visible. */
@@ -75,7 +72,5 @@
     inline-size: 100%;
     block-size: 100%;
     border-radius: var(--ab-radius-md);
-    background-color: var(--material);
-    backdrop-filter: blur(var(--material-blur)) saturate(var(--material-saturate));
   }
 }

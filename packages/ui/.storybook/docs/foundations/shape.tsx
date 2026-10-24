@@ -10,7 +10,7 @@ const px = (tier: "semantic" | "component", name: string): number => {
 };
 
 const bar = (row: Token) => (
-  <span aria-hidden="true" className={styles["bar"]} style={{ "--bar": cssVar(row.name) }} />
+  <span aria-hidden="true" className={styles["bar"]} style={{ inlineSize: cssVar(row.name) }} />
 );
 
 export function Space() {
@@ -36,7 +36,11 @@ export function Space() {
 }
 
 const corner = (row: Token) => (
-  <span aria-hidden="true" className={styles["corner"]} style={{ "--corner": cssVar(row.name) }} />
+  <span
+    aria-hidden="true"
+    className={styles["corner"]}
+    style={{ borderStartStartRadius: cssVar(row.name) }}
+  />
 );
 
 const CONCENTRIC = [
@@ -112,7 +116,7 @@ const elevated = (row: Token) => (
     <span
       aria-hidden="true"
       className={styles["elevated"]}
-      style={{ "--elevation": cssVar(row.name) }}
+      style={{ boxShadow: cssVar(row.name) }}
     />
   </InEachTheme>
 );
@@ -162,9 +166,8 @@ const material = (row: Token) => {
         <span
           className={styles["material"]}
           style={{
-            "--material": cssVar(row.name),
-            "--material-blur": cssVar(`material-blur-${thickness}`),
-            "--material-saturate": cssVar(`material-saturate-${thickness}`),
+            backgroundColor: cssVar(row.name),
+            backdropFilter: `blur(${cssVar(`material-blur-${thickness}`)}) saturate(${cssVar(`material-saturate-${thickness}`)})`,
           }}
         />
       </span>

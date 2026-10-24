@@ -27,6 +27,14 @@ const checks = (pattern: string, subpath: (path: string) => string, limit?: stri
 
 export default [
   ...checks("src/*/index.ts", (path) => path.split("/")[1] ?? path),
-  ...checks("src/icons/*.tsx", (path) => path.slice("src/".length, -".tsx".length), "680 B"),
-  ...checks("src/locales/*.ts", (path) => path.slice("src/".length, -".ts".length), "120 B"),
+  ...checks(
+    "src/icon/icons/*.tsx",
+    (path) => path.slice("src/icon/".length, -".tsx".length),
+    "680 B",
+  ),
+  ...checks(
+    "src/provider/locales/*.ts",
+    (path) => path.slice("src/provider/".length, -".ts".length),
+    "120 B",
+  ),
 ] satisfies SizeLimitConfig;

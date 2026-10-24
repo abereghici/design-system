@@ -36,15 +36,7 @@ describe("tree-shaking of @platform/ui", () => {
   });
 
   test("nothing ships from outside what the app imports (provider, button, logo, ro-RO)", () => {
-    const allowed = [
-      "src/provider/",
-      "src/base/",
-      "src/locales/en-US.ts",
-      "src/locales/ro-RO.ts",
-      "src/button/",
-      "src/events/",
-      "src/logo/",
-    ];
+    const allowed = ["src/provider/", "src/button/", "src/events/", "src/logo/"];
     const outside = [...shipped].filter((path) => !allowed.some((dir) => path.startsWith(dir)));
     const stories = [...shipped].filter((path) => path.includes(".stories."));
 

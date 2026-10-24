@@ -43,25 +43,19 @@
   }
 
   .cell {
-    background-color: var(--cell-background);
-    color: var(--cell-text);
     white-space: nowrap;
+  }
 
-    &::before {
-      content: "";
-      display: inline-block;
-      inline-size: var(--ab-size-indicator);
-      block-size: var(--ab-size-icon-sm);
-      margin-inline-end: var(--ab-space-inline-sm);
-      vertical-align: middle;
-      background-color: var(--cell-sample);
-    }
+  .sample {
+    display: inline-block;
+    inline-size: var(--ab-size-indicator);
+    block-size: var(--ab-size-icon-sm);
+    margin-inline-end: var(--ab-space-inline-sm);
+    vertical-align: middle;
   }
 
   .target {
     display: block;
-    inline-size: var(--target);
-    block-size: var(--target);
     border: var(--ab-border-width-default) dashed var(--ab-color-border-default);
   }
 }

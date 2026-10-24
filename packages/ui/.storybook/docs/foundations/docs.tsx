@@ -97,7 +97,11 @@ export function InEachTheme({ children }: { children: ReactNode }) {
 
 export function Chip({ name }: { name: string }) {
   return (
-    <span aria-hidden="true" className={styles["swatch"]} style={{ "--swatch": cssVar(name) }} />
+    <span
+      aria-hidden="true"
+      className={styles["swatch"]}
+      style={{ backgroundColor: cssVar(name) }}
+    />
   );
 }
 
