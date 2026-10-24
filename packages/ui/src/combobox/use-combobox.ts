@@ -1,12 +1,12 @@
 import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "react";
 
 import { byId, isOpen, sourceOf } from "../floating/floating.ts";
+import { arrange, enabled, textOf } from "../listbox/listbox.tsx";
 import { useLocale } from "../provider/locale.tsx";
 
-import { dismiss, inputOf, listOf, memoryOf, part } from "./combobox-state.ts";
+import { chosenOf, dismiss, highlight, inputOf, listOf, memoryOf, part } from "./combobox-state.ts";
 import type { Combobox, Options } from "./combobox-state.ts";
 import { comboboxLabels } from "./labels.ts";
-import { arrange, chosenOf, enabled, highlight, labelOf } from "./listbox.ts";
 
 export const ValueContext = createContext<string | null>(null);
 
@@ -15,7 +15,7 @@ function applyText(c: Combobox, list: Element, input: HTMLInputElement) {
   const memory = memoryOf(c);
   if (inputValue !== undefined && input.value !== inputValue) input.value = inputValue;
   if (memory.text === null && inputValue === undefined && defaultInputValue === undefined) {
-    input.value = labelOf(chosenOf(list, c.value));
+    input.value = textOf(chosenOf(list, c.value));
   }
   memory.text = input.value;
 }
@@ -88,7 +88,7 @@ function useListeners(c: Combobox) {
   const reset = useEffectEvent(() => {
     const { defaultValue = null, defaultInputValue } = c.options;
     const list = listOf(c);
-    const label = defaultInputValue ?? labelOf(list === null ? null : chosenOf(list, defaultValue));
+    const label = defaultInputValue ?? textOf(list === null ? null : chosenOf(list, defaultValue));
     // The reset event fires before the form resets its controls, so the label goes in afterwards.
     queueMicrotask(() => {
       const input = inputOf(c);

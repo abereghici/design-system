@@ -4,6 +4,7 @@ import { use, useId } from "react";
 import type { ComponentProps } from "react";
 
 import { CheckIcon } from "../icon/icons/check.tsx";
+import { Option } from "../listbox/listbox.tsx";
 
 import { ValueContext } from "./use-combobox.ts";
 import styles from "./combobox.module.css";
@@ -30,12 +31,10 @@ export function Item({
 }: ItemProps) {
   const id = useId();
   const chosen = use(ValueContext) === value;
-  // HTML allows <option> only inside select, datalist and optgroup, so the APG option is a role.
-  const option = { role: "option", "aria-selected": false } as const;
   return (
-    <div
+    <Option
       {...props}
-      {...option}
+      aria-selected={false}
       id={id}
       data-value={value}
       data-keywords={keywords?.join("\n")}
@@ -45,7 +44,7 @@ export function Item({
     >
       {children}
       <span className={styles["indicator"]}>{chosen && <CheckIcon size="sm" />}</span>
-    </div>
+    </Option>
   );
 }
 

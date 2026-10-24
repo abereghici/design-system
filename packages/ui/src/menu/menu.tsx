@@ -6,6 +6,7 @@ import type { ComponentProps, KeyboardEvent, MouseEvent, PointerEvent, ToggleEve
 import { dispatchFeedback } from "../events/events.ts";
 import { byId, returnFocus } from "../floating/floating.ts";
 import type { Floating } from "../floating/floating.ts";
+import { enabled, textOf } from "../listbox/listbox.tsx";
 
 import styles from "./menu.module.css";
 
@@ -40,14 +41,6 @@ const TYPEAHEAD_WINDOW = 500;
 export const itemsOf = (menu: Element) => [
   ...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]'),
 ];
-const enabled = (item: Element) => item.getAttribute("aria-disabled") !== "true";
-const labelOf = (item: HTMLElement) =>
-  [...item.childNodes]
-    .filter((node) => !(node instanceof HTMLElement && node.matches("kbd")))
-    .map((node) => node.textContent)
-    .join("")
-    .trim()
-    .toLowerCase();
 
 function typeahead(menu: HTMLElement, key: string, from: Element | null) {
   const last = typed.get(menu);
@@ -58,7 +51,7 @@ function typeahead(menu: HTMLElement, key: string, from: Element | null) {
   const start = from instanceof HTMLElement ? items.indexOf(from) : -1;
   const repeat = text === key.repeat(text.length) ? key : text;
   const order = [...items.slice(start + 1), ...items.slice(0, start + 1)];
-  order.find((item) => labelOf(item).startsWith(repeat.toLowerCase()))?.focus();
+  order.find((item) => textOf(item).toLowerCase().startsWith(repeat.toLowerCase()))?.focus();
 }
 
 function navigate(event: KeyboardEvent<HTMLElement>) {

@@ -4,8 +4,8 @@ import { createContext, use, useId, useLayoutEffect, useRef, useState } from "re
 import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction } from "react";
 
 import { join } from "../dialog/modal.tsx";
+import { arrange, enabled, shownOf } from "../listbox/listbox.tsx";
 import { useLocale } from "../provider/locale.tsx";
-import { rank } from "../ranking/ranking.ts";
 
 import styles from "./command.module.css";
 
@@ -63,47 +63,6 @@ export function useCommand(): CommandContext {
   return context;
 }
 
-export const enabled = (option: Element) => option.getAttribute("aria-disabled") !== "true";
-
-const byOrder = (parent: Element) =>
-  [...parent.querySelectorAll<HTMLElement>(":scope > [role=option], :scope > fieldset")].toSorted(
-    (a, b) => Number(a.style.order) - Number(b.style.order),
-  );
-
-/** The shown options in the order they are drawn: groups in document order, options by rank. */
-const ranked = (list: HTMLElement | null) =>
-  (list === null ? [] : byOrder(list))
-    .flatMap((element) => (element.localName === "fieldset" ? byOrder(element) : [element]))
-    .filter((option) => option.getAttribute("role") === "option" && !option.hasAttribute("hidden"));
-
-function textOf(option: HTMLElement) {
-  const clone = option.cloneNode(true);
-  if (!(clone instanceof HTMLElement)) return "";
-  for (const kbd of clone.querySelectorAll("kbd")) kbd.remove();
-  return clone.textContent.trim();
-}
-
-function filter(list: HTMLElement | null, query: string, locale: string | null) {
-  for (const option of list?.querySelectorAll<HTMLElement>("[role=option]") ?? []) {
-    const keywords = option.dataset["keywords"]?.split("\n") ?? [];
-    const tier =
-      locale === null
-        ? 0
-        : rank([option.dataset["value"] ?? textOf(option), ...keywords], query, locale);
-    if (option.hasAttribute("hidden") !== (tier === undefined)) option.toggleAttribute("hidden");
-    const order = String(tier ?? 0);
-    if (option.style.order !== order) option.style.order = order;
-  }
-  const shown = ranked(list);
-  for (const siblings of Map.groupBy(shown, (option) => option.parentElement).values()) {
-    for (const [index, option] of siblings.entries()) {
-      option.setAttribute("aria-posinset", String(index + 1));
-      option.setAttribute("aria-setsize", String(siblings.length));
-    }
-  }
-  return shown;
-}
-
 function reveal(option: HTMLElement, shown: readonly HTMLElement[]) {
   const group = option.parentElement;
   const previous = shown[shown.indexOf(option) - 1];
@@ -134,7 +93,7 @@ function navigate(
   { highlighted, query }: Pick<CommandContext, "highlighted" | "query">,
   highlight: (id: string) => void,
 ) {
-  const shown = ranked(list);
+  const shown = shownOf(list);
   const options = shown.filter((option) => enabled(option));
   const index = options.findIndex(({ id }) => id === highlighted);
   if (event.key === "Enter") {
@@ -163,7 +122,7 @@ function useRanking(
   useLayoutEffect(() => {
     const node = list.current;
     const run = (fresh: boolean) => {
-      const shown = filter(node, query, locale);
+      const shown = arrange(node, query, locale);
       setEmpty(shown.length === 0);
       const [first] = shown.filter((option) => enabled(option));
       setHighlighted((current) =>
@@ -183,7 +142,7 @@ function useRanking(
         subtree: true,
         childList: true,
         characterData: true,
-        attributeFilter: ["aria-disabled", "data-value", "data-keywords"],
+        attributeFilter: ["aria-disabled", "data-label", "data-keywords"],
       });
     return () => {
       observer.disconnect();

@@ -8,16 +8,32 @@ import type {
 } from "react";
 
 import { byId } from "../floating/floating.ts";
+import { enabled, optionAt, shownOf, textOf } from "../listbox/listbox.tsx";
 
-import {
-  chosenOf,
-  enabled,
-  highlight,
-  highlightedOf,
-  labelOf,
-  optionAt,
-  shownOf,
-} from "./listbox.ts";
+export const chosenOf = (list: Element, value: string | null) =>
+  value === null ? null : list.querySelector(`[role="option"][data-value="${CSS.escape(value)}"]`);
+function highlightedOf(input: Element) {
+  const id = input.getAttribute("aria-activedescendant");
+  return id === null ? null : byId(id);
+}
+
+export function highlight(
+  list: Element,
+  input: Element,
+  option: HTMLElement | null | undefined,
+  scroll: boolean,
+) {
+  for (const each of list.querySelectorAll('[role="option"]')) {
+    each.setAttribute("aria-selected", String(each === option));
+    each.toggleAttribute("data-highlighted", each === option);
+  }
+  if (option === null || option === undefined) {
+    input.removeAttribute("aria-activedescendant");
+    return;
+  }
+  input.setAttribute("aria-activedescendant", option.id);
+  if (scroll) option.scrollIntoView({ block: "nearest" });
+}
 
 export interface ChangeEventDetails<Reason extends string = string> {
   readonly reason: Reason;
@@ -153,14 +169,14 @@ export function press(c: Combobox, event: PointerEvent) {
 export function dismiss(c: Combobox, reason: InputReason, event: Event) {
   const list = listOf(c);
   if (list !== null && changeOpen(c, false, reason, event)) {
-    changeText(c, labelOf(chosenOf(list, c.value)), reason, event);
+    changeText(c, textOf(chosenOf(list, c.value)), reason, event);
   }
 }
 
 export function choose(c: Combobox, option: HTMLElement, event: Event) {
   if (!enabled(option)) return;
   if (!changeValue(c, option.dataset["value"] ?? null, "item-press", event)) return;
-  changeText(c, labelOf(option), "item-press", event);
+  changeText(c, textOf(option), "item-press", event);
   changeOpen(c, false, "item-press", event);
 }
 
@@ -228,8 +244,6 @@ export function blur(c: Combobox, event: FocusEvent<HTMLInputElement>) {
 export function listProps(c: Combobox) {
   return {
     id: part(c, "list"),
-    role: "listbox",
-    tabIndex: -1,
     popover: "manual",
     onMouseDown: (event: MouseEvent) => {
       event.preventDefault();
