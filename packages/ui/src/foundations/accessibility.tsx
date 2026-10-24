@@ -30,17 +30,18 @@ function Ratio({ foreground, background, minimum, theme }: PairProps) {
   return ratio < minimum ? `${ratio.toFixed(2)}:1 below ${minimum}:1` : `${ratio.toFixed(2)}:1`;
 }
 
+const labelOn = (background: string): string =>
+  background === "background-accent-bold" ? "color-text-on-accent" : "color-text-default";
+
 function Cell({ foreground, background, minimum, theme, text }: PairProps & { text: boolean }) {
   return (
     <td
       data-background={background}
       className={styles["cell"]}
-      // Text roles are drawn in their own color, so axe checks the same pair; icons and borders
-      // draw a sample bar next to text in the default text color.
       style={{
         "--cell-background": cssVar(`color-${background}`),
         "--cell-sample": cssVar(`color-${foreground}`),
-        "--cell-text": cssVar(text ? `color-${foreground}` : "color-text-default"),
+        "--cell-text": cssVar(text ? `color-${foreground}` : labelOn(background)),
       }}
     >
       <Ratio foreground={foreground} background={background} minimum={minimum} theme={theme} />
@@ -110,7 +111,7 @@ const FILL_PAIRS = [
 function Pairs({ theme }: { theme: ThemeId }) {
   return (
     <table className={styles["matrix"]}>
-      <caption>Content on fills · text 4.5:1, icons 3:1</caption>
+      <caption>Content on fills · text 4.5:1, icons and fills 3:1</caption>
       <thead>
         <tr>
           <th scope="col">Content</th>

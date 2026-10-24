@@ -16,6 +16,11 @@ export interface ButtonProps extends ComponentProps<"button"> {
   disabled?: boolean;
 }
 
+/**
+ * A native `<button type="button">` for an action. `disabled` keeps it focusable and announced
+ * (`aria-disabled`) while blocking activation, and every press dispatches a bubbling `ab-press`
+ * event after `onClick`.
+ */
 export function Button({
   variant = "primary",
   disabled = false,

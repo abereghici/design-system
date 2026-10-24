@@ -238,6 +238,22 @@ test("subtle text is checked at 4.5:1 against a status subtle fill", async () =>
   );
 });
 
+test("the checked accent fill is checked at 3:1 against each surface", async () => {
+  const tokens = validTokens();
+  tokens.semantic["color-background-accent-bold"] = themed("palette-moss-900", "palette-night-900");
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "[dark] --ab-color-background-accent-bold on --ab-color-surface-floating: 1.00:1, needs 3:1",
+  );
+});
+
+test("the Switch and Slider thumb is checked at 3:1 against the accent fill", async () => {
+  const tokens = validTokens();
+  tokens.semantic["color-surface-floating"] = themed("palette-sage-0", "palette-night-50");
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "[dark] --ab-color-surface-floating on --ab-color-background-accent-bold:",
+  );
+});
+
 test("an on-{role} pair is checked against its bold fill", async () => {
   const tokens = validTokens();
   tokens.semantic["color-background-accent-bold"] = themed("palette-moss-900", "palette-night-50");

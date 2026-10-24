@@ -121,6 +121,9 @@ const COMPONENTS = [
   "progress",
   "meter",
   "alert",
+  "fieldset",
+  "slider",
+  "drop-zone",
 ];
 
 const PROPERTIES = [
@@ -209,6 +212,8 @@ const MODIFIERS = new Set([
   // Ticket #15: the far end of the Skeleton pulse, and the value text of Progress and Meter.
   "pulse",
   "value",
+  "legend",
+  "range",
 ]);
 
 const outsideDictionary = (words: readonly string[]) =>

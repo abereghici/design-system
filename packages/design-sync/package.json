@@ -1,11 +1,12 @@
 {
-  "name": "@platform/design-sync-spike",
+  "name": "@platform/design-sync",
   "version": "0.0.0",
   "private": true,
-  "description": "Spike #3: proves a Design System artifact preview runs on React 19 shipped under components/lib/. Throwaway; the preview-bundle ticket replaces it.",
+  "description": "Builds the claude.ai Design System artifact's project/ tree from @platform/tokens and @platform/ui. Dev-only; nothing here is published to npm.",
   "type": "module",
   "scripts": {
-    "build": "node src/cli.ts",
+    "build": "node src/cli.ts build",
+    "plan": "node src/cli.ts plan",
     "check-types": "tsc --noEmit",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
@@ -13,18 +14,18 @@
   },
   "devDependencies": {
     "@platform/oxlint-config": "workspace:*",
+    "@platform/tokens": "workspace:*",
     "@platform/typescript-config": "workspace:*",
+    "@platform/ui": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
-    "esbuild": "catalog:",
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
     "playwright": "catalog:",
     "react": "catalog:",
-    "react-18": "catalog:",
     "react-dom": "catalog:",
-    "react-dom-18": "catalog:",
     "typescript": "catalog:",
+    "vite": "catalog:",
     "vitest": "catalog:"
   }
 }
