@@ -23,6 +23,8 @@ export interface Labels {
   readonly skipLink: { readonly label: string };
   readonly passwordField: { readonly show: string };
   readonly numberField: { readonly increment: string; readonly decrement: string };
+  readonly breadcrumbs: { readonly root: string };
+  readonly pagination: { readonly root: string; readonly previous: string; readonly next: string };
 }
 
 export interface Locale {

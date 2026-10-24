@@ -1,0 +1,84 @@
+@import "@platform/tokens/components/sidebar.css";
+
+@layer ab.components {
+  .root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ab-sidebar-gap);
+    padding: var(--ab-sidebar-padding);
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ab-sidebar-group-gap);
+  }
+
+  .label {
+    padding-inline: var(--ab-sidebar-group-label-padding-inline);
+    font: var(--ab-sidebar-group-label-font);
+    color: var(--ab-sidebar-group-label-text-color);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .link {
+    --ab-icon-size: var(--ab-size-icon-sm);
+    --ab-icon-stroke-width: var(--ab-stroke-width-lg);
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--ab-sidebar-item-gap);
+    box-sizing: border-box;
+    min-block-size: var(--ab-sidebar-item-min-height);
+    padding-inline: var(--ab-sidebar-item-padding-inline);
+    border-radius: var(--ab-sidebar-item-border-radius);
+    font: var(--ab-sidebar-item-font);
+    color: var(--ab-sidebar-item-text-color);
+    text-decoration-line: none;
+    -webkit-tap-highlight-color: transparent;
+    transition-property: color, background-color;
+    transition-duration: var(--ab-motion-duration-hover-out);
+    transition-timing-function: var(--ab-motion-easing-color);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .link:hover {
+      background-color: var(--ab-sidebar-item-background-color-hovered);
+      color: var(--ab-sidebar-item-text-color-hovered);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+
+  .link:active {
+    background-color: var(--ab-sidebar-item-background-color-pressed);
+  }
+
+  .link[aria-current="page"] {
+    background-color: var(--ab-sidebar-item-background-color-selected);
+    color: var(--ab-sidebar-item-text-color-selected);
+  }
+
+  /* Inset by the corner radius so the bar runs along the straight part of the rounded fill's edge. */
+  .link[aria-current="page"]::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block: var(--ab-sidebar-item-border-radius);
+    inline-size: var(--ab-sidebar-indicator-width);
+    background-color: var(--ab-sidebar-indicator-color);
+  }
+
+  @media (forced-colors: active) {
+    .link[aria-current="page"]::before {
+      background-color: Highlight;
+    }
+  }
+}
