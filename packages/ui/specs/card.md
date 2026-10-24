@@ -3,7 +3,7 @@
 Groups content about one subject so it can be scanned and compared: a report, a project, a settings area. Don't nest cards, and don't use a card as a page section; in-flow content separates with space, hairlines and surface steps (brand book, "Flat in flow, lifted when floating").
 
 ```tsx
-import * as Card from "@platform/ui/card";
+import { Card } from "@platform/ui/card";
 import { Link } from "@platform/ui/link";
 import { Button } from "@platform/ui/button";
 

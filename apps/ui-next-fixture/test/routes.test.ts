@@ -82,6 +82,29 @@ describe("per-component CSS", () => {
   });
 });
 
+describe("each component route ships only its own CSS, tokens and client code", () => {
+  test.each([
+    { name: "badge", tokens: ["badge"], client: [], html: "1.280" },
+    { name: "tag", tokens: ["tag"], client: [], html: "Live" },
+    { name: "status-dot", tokens: ["status-dot"], client: [], html: "Operational" },
+    {
+      name: "avatar",
+      tokens: ["avatar", "icon"],
+      client: ["avatar/avatar-image.tsx"],
+      html: 'alt="Ana Popescu"',
+    },
+  ])("$name", ({ name, tokens, client, html }) => {
+    const r = route(name);
+    expect(r.html).toContain(html);
+    const shipped = shippedComponentTokens(r.css);
+    const owner = (token: string) =>
+      tokens.findLast((word) => token.startsWith(`--ab-${word}-`));
+    expect(shipped.filter((token) => owner(token) === undefined)).toEqual([]);
+    expect(new Set(shipped.map((token) => owner(token)))).toEqual(new Set(tokens));
+    expect(uiClientModules(r)).toEqual([...client, "provider/locale.tsx"].toSorted());
+  });
+});
+
 describe("per-component JS", () => {
   test("only the Button route loads Button's client code", () => {
     expect(uiClientModules(button)).toEqual(["button/button.tsx", "provider/locale.tsx"]);
