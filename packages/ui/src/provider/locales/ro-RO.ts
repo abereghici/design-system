@@ -24,6 +24,7 @@ export const roRO: Locale = {
     pagination: { root: "Paginare", previous: "Pagina anterioară", next: "Pagina următoare" },
     popover: { close: "Închide" },
     dialog: { close: "Închide" },
+    combobox: { noResults: "Niciun rezultat" },
     sheet: { close: "Închide" },
     toast: { close: "Închide" },
     toaster: { region: "Notificări" },

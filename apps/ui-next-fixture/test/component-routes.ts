@@ -37,6 +37,12 @@ export const componentRoutes = [
     client: ["select/select-root.tsx"],
     html: 'label="Asia Pacific"',
   },
+  {
+    name: "combobox",
+    tokens: ["input", "combobox", "icon"],
+    client: ["combobox/combobox-item.tsx", "combobox/combobox-root.tsx"],
+    html: 'role="combobox"',
+  },
   { name: "form", tokens: [], client: ["form/form.tsx"], html: "<form" },
   { name: "fieldset", tokens: ["fieldset"], client: [], html: "<legend" },
   {
