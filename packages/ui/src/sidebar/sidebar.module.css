@@ -20,6 +20,36 @@
     color: var(--ab-sidebar-group-label-text-color);
   }
 
+  .summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  /* WebKit draws its disclosure triangle from this pseudo-element, not from list-style. */
+  .summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .summary::after {
+    content: "";
+    inline-size: var(--ab-size-icon-sm);
+    block-size: var(--ab-size-icon-sm);
+    background-color: currentColor;
+    mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>')
+      center / 100% no-repeat;
+  }
+
+  .collapsible[open] .summary {
+    margin-block-end: var(--ab-sidebar-group-gap);
+  }
+
+  .collapsible[open] .summary::after {
+    rotate: 180deg;
+  }
+
   .list {
     display: flex;
     flex-direction: column;
