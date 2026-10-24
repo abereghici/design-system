@@ -1,0 +1,1 @@
+The licences of the font files in `fonts/`. Figtree and Noto Serif are variable fonts under the SIL Open Font License 1.1, each split into a `latin` and a `latin-ext` subset: Figtree (wght 300–900) for body, labels, data and overlines; Noto Serif (wght 100–900, wdth 62.5–100) for headings and display statements. Code uses the system monospace stack, with no webfont.
