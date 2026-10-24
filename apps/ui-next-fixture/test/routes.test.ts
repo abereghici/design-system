@@ -85,7 +85,7 @@ describe("per-component CSS", () => {
 
 describe("each component route ships only its own CSS, tokens and client code", () => {
   test.each([
-    { name: "badge", tokens: ["badge"], client: [], html: "1.280" },
+    { name: "badge", tokens: ["badge"], client: [], html: "12.345" },
     { name: "tag", tokens: ["tag"], client: [], html: "Live" },
     { name: "status-dot", tokens: ["status-dot"], client: [], html: "Operational" },
     {

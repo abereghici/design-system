@@ -2,6 +2,8 @@ import { expect } from "storybook/test";
 
 import preview from "#.storybook/preview.tsx";
 
+import { enUS } from "../provider/locales/en-US.ts";
+
 import { Badge } from "./badge.tsx";
 
 const meta = preview.meta({
@@ -32,7 +34,7 @@ Default.test("caps a count above max", { args: { children: 1280 } }, async ({ ca
 
 Default.test(
   "formats the count and the cap in its locale",
-  { args: { children: 1280, max: 1000, locale: "de" } },
+  { args: { children: 1280, max: 1000, locale: { ...enUS, tag: "de" } } },
   async ({ canvas }) => {
     await expect(canvas.getByText("1.000+")).toBeVisible();
   },
