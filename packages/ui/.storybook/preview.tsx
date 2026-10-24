@@ -4,6 +4,7 @@ import { definePreview } from "@storybook/react-vite";
 import { useEffect } from "storybook/preview-api";
 
 import { Provider } from "../src/provider/provider.tsx";
+import { rememberStoryCanvas } from "./screenshots/canvas.ts";
 
 // Toolbar globals for the Theme contract (packages/tokens/README.md) and text direction.
 // "system" leaves `data-theme` off, which means the System theme.
@@ -33,7 +34,8 @@ export default definePreview({
   addons: [addonDocs(), addonA11y()],
   // "If a CSF file contains at least one story tagged with `autodocs`, then a documentation page
   // will be generated" (https://storybook.js.org/docs/writing-docs/autodocs).
-  tags: ["autodocs"],
+  tags: ["autodocs", "screenshot"],
+  beforeEach: rememberStoryCanvas,
   parameters: {
     // The addon's own default is 'todo' (code/addons/a11y/src/preview.tsx @ v10.6.3); 'error':
     // "violations return a failing test in the Storybook UI and CLI/CI"

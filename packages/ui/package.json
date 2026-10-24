@@ -7,6 +7,7 @@
     "*.css"
   ],
   "imports": {
+    "#storybook/*": "./.storybook/*.ts",
     "#*": [
       "./*",
       "./*.ts",
@@ -25,9 +26,11 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "size": "size-limit",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "icons": "node scripts/icons.ts"
+    "test": "vitest run --project \"!screenshot:*\"",
+    "test:watch": "vitest --project \"!screenshot:*\"",
+    "icons": "node scripts/icons.ts",
+    "test:screenshots": "vitest run --project \"screenshot:*\" --reporter=default --reporter=html",
+    "test:screenshots:docker": "sh scripts/screenshots-docker.sh"
   },
   "dependencies": {
     "@platform/tokens": "workspace:*"
@@ -46,6 +49,7 @@
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "@vitest/browser-playwright": "catalog:",
+    "@vitest/ui": "catalog:",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",

@@ -124,6 +124,12 @@ const COMPONENTS = [
   "fieldset",
   "slider",
   "drop-zone",
+  "breadcrumbs",
+  "pagination",
+  "toolbar",
+  "navbar",
+  "sidebar",
+  "table",
 ];
 
 const PROPERTIES = [
@@ -214,6 +220,7 @@ const MODIFIERS = new Set([
   "value",
   "legend",
   "range",
+  "caption",
 ]);
 
 const outsideDictionary = (words: readonly string[]) =>

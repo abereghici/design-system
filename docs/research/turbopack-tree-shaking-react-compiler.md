@@ -216,11 +216,11 @@ Researched and verified 2026-10-24 with `next` 16.4.3 (Turbopack), `react`/`reac
 
 ### Question
 
-Importing one component must ship only that component's JS, its CSS and its component tokens. Apps must import no CSS by hand. Before this change, `@platform/tokens/tokens.css` (67 kB) held all 542 component tokens, so an app that rendered only Button still shipped `--ab-dialog-*`, `--ab-toast-*` and the rest.
+Importing one component must ship only that component's JS, its CSS and its component tokens. Apps must import no CSS by hand. Before this change, `@platform/tokens/tokens.css` (67 kB) held all of the component tokens (542 before phase 3), so an app that rendered only Button still shipped `--ab-dialog-*`, `--ab-toast-*` and the rest.
 
 ### What was built
 
-- **One token sheet per component.** `@platform/tokens` writes `dist/components/<component>.css`, one per Dictionary component word (39), each `@layer ab.tokens { :root { … } }`, with that component's `@property` rules first. `tokens.css` keeps the 504 primitive and semantic tokens (32.5 kB). The export is `"./components/*.css": "./dist/components/*.css"`.
+- **One token sheet per component.** `@platform/tokens` writes `dist/components/<component>.css`, one per Dictionary component word (45 after phase 3), each `@layer ab.tokens { :root { … } }`, with that component's `@property` rules first. `tokens.css` keeps the 504 primitive and semantic tokens (32.5 kB). The export is `"./components/*.css": "./dist/components/*.css"`.
 - **Each CSS Module `@import`s its own sheet**, as its first line: `@import "@platform/tokens/components/button.css";`. The dependency sits where the tokens are used, and it works the same in Turbopack, Vite and esbuild (below). A side-effect import in the `.tsx` would also work ("Stylesheets published by external packages can be imported anywhere in the `app` directory, including colocated components", https://nextjs.org/docs/app/getting-started/css, lastUpdated 2026-08-25), but it splits one dependency across two files.
 - **`Provider` (`@platform/ui/provider`)**, a Server Component, imports `provider.css` (the layer order, `tokens.css`, `fonts.css`, `base.css`) and preloads Figtree latin. It takes an optional `locale` from `@platform/ui/locales/<tag>` (`enUS`, `roRO`). `@platform/ui/base.css` is no longer exported.
 
@@ -230,7 +230,7 @@ The fixture's root layout renders only `<Provider>{children}</Provider>` and imp
 
 Observed with the final code:
 
-- `/` ships `--ab-button-*` and no other component's tokens. `/logo` ships `--ab-logo-*` and no `--ab-button-`. The component-token check covers all 542 names from `component.tokens.json`.
+- `/` ships `--ab-button-*` and no other component's tokens. `/logo` ships `--ab-logo-*` and no `--ab-button-`. The component-token check covers every name in `component.tokens.json`.
 - Every route's first stylesheet starts with `@layer ab.reset,ab.tokens,ab.base,ab.components;`, then the shared tokens, the `@font-face` rules and `@layer ab.base`.
 - The HTML has exactly one font preload, `<link rel="preload" href="/_next/static/media/Figtree-latin.1meowcc0_9_5r.woff2" as="font" crossorigin="" type="font/woff2"/>`. The `@font-face` asks for the same file (`src:url(../media/Figtree-latin.1meowcc0_9_5r.woff2)`), so it is fetched once.
 - The client modules from `@platform/ui` are `button/button.tsx` and `provider/locale.tsx` on `/`, and only `provider/locale.tsx` on `/logo`. Only `/` loads code that contains `ab-press`. `ro-RO` is absent from `/`'s JS.
