@@ -69,12 +69,12 @@ describe("the Provider owns the global CSS", () => {
 });
 
 describe("per-component CSS", () => {
-  test("a route that imports Button ships Button's CSS and only Button's component tokens", () => {
+  test("a route that imports Button ships only Button's and its Spinner's component tokens", () => {
     expect(button.css).toContain("var(--ab-button-primary-background-color)");
     expect(shippedComponentTokens(button.css)).toContain("--ab-button-primary-background-color:");
-    expect(shippedComponentTokens(button.css).filter((t) => !t.startsWith("--ab-button-"))).toEqual(
-      [],
-    );
+    expect(
+      shippedComponentTokens(button.css).filter((t) => !/^--ab-(button|spinner)-/v.test(t)),
+    ).toEqual([]);
   });
 
   test("a route that imports Logo ships Logo's tokens and none of Button's", () => {
@@ -87,7 +87,7 @@ describe("per-component CSS", () => {
     const shipped = shippedComponentTokens(iconButton.css);
     expect(shipped).toContain("--ab-icon-button-background-color-selected:");
     expect(shipped).toContain("--ab-icon-md-size:");
-    expect(shipped.filter((t) => !t.startsWith("--ab-icon-"))).toEqual([]);
+    expect(shipped.filter((t) => !/^--ab-(icon|spinner)-/v.test(t))).toEqual([]);
   });
 });
 

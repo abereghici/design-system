@@ -24,10 +24,14 @@
   }
 
   /* (0,1,1) beats Icon's own size rules whatever order the two stylesheets load in. */
-  .root svg {
+  .root > svg {
     inline-size: var(--ab-button-icon-size);
     block-size: var(--ab-button-icon-size);
     stroke-width: var(--ab-icon-sm-stroke-width);
+  }
+
+  .root:where([data-loading]) > svg:where([data-icon="inline-start"]) {
+    display: none;
   }
 
   .root :where([data-icon="inline-start"]) {
@@ -56,7 +60,7 @@
     color: var(--ab-button-primary-text-color);
   }
 
-  .root:where([data-variant="primary"]) svg {
+  .root:where([data-variant="primary"]) > :is(svg, [data-icon]) {
     color: var(--ab-button-primary-icon-color);
   }
 
@@ -67,7 +71,7 @@
     box-shadow: var(--ab-button-shadow);
   }
 
-  .root:where([data-variant="secondary"]) svg {
+  .root:where([data-variant="secondary"]) > :is(svg, [data-icon]) {
     color: var(--ab-button-secondary-icon-color);
   }
 
@@ -77,7 +81,7 @@
     color: var(--ab-button-tertiary-text-color);
   }
 
-  .root:where([data-variant="tertiary"]) svg {
+  .root:where([data-variant="tertiary"]) > :is(svg, [data-icon]) {
     color: var(--ab-button-tertiary-icon-color);
   }
 
@@ -87,7 +91,7 @@
     color: var(--ab-button-danger-text-color);
   }
 
-  .root:where([data-variant="danger"]) svg {
+  .root:where([data-variant="danger"]) > :is(svg, [data-icon]) {
     color: var(--ab-button-danger-icon-color);
   }
 
@@ -161,7 +165,7 @@
     box-shadow: none;
   }
 
-  .root:where([aria-disabled="true"]) svg {
+  .root:where([aria-disabled="true"]) > :is(svg, [data-icon]) {
     color: inherit;
   }
 

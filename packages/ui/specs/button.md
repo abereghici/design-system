@@ -24,7 +24,7 @@ Container → leading icon (optional) → label → trailing icon (optional) →
 - **Container.** A native `<button>`. Radius 8 (lg: 10). Primary and danger are filled. Secondary is the floating surface with a subtle hairline and raised elevation. Tertiary has no fill at rest.
 - **Icons** are children, not props. An icon marks its side with `data-icon="inline-start"` or `data-icon="inline-end"`, so the gap and padding follow the side in either direction (shadcn's convention, see API). Icons are decorative (`aria-hidden`); the label names the button.
 - **Kbd hint** is an optional child Kbd, passed `aria-hidden`. The consumer sets `aria-keyshortcuts` on the button, because the Kbd text would otherwise join the accessible name (see Accessibility).
-- **Spinner** replaces the leading icon while `loading`, rendered `<Spinner aria-hidden />` (decorative; Spinner spec). The label stays, so the width never changes. Built in #16 without the Spinner (it ships in #19): until it is wired in, a loading Button keeps its icon and label and shows the busy state through `aria-busy` and `data-loading`.
+- **Spinner** replaces the leading icon while `loading`, rendered `<Spinner aria-hidden />` (decorative; Spinner spec). The label stays, so the width never changes. Without a leading icon the Spinner is added before the label, so the button grows by one icon and gap (judgement call, #16).
 
 ## API
 

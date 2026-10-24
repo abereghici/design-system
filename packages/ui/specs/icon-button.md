@@ -22,7 +22,7 @@ Container → icon (or Spinner while `loading`).
 
 - **Container.** A native `<button>`, square: width and height both `icon-button-{size}-size`. Radius `icon-button-border-radius` (8). Transparent at rest, no border, no elevation.
 - **Icon** is the only child. It is decorative (`aria-hidden`, from the Icon component); the accessible name comes from `aria-label` or `aria-labelledby` on the button. Icon size is `icon-button-icon-size` (16), and `icon-button-lg-icon-size` (20) at `lg`, with the matching Icon stroke (`icon-sm-stroke-width` / `icon-md-stroke-width`, per the Icon spec).
-- **Spinner** replaces the icon while `loading`, decorative, at the same size, so the square never changes. Built in #16 without the Spinner (it ships in #19): until it is wired in, a loading IconButton keeps its icon and shows the busy state through `aria-busy` and `data-loading`.
+- **Spinner** replaces the icon while `loading`, decorative, at the same size, so the square never changes.
 
 ## API
 

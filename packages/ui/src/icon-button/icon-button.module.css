@@ -21,10 +21,14 @@
   }
 
   /* (0,1,1) beats Icon's own size rules whatever order the two stylesheets load in. */
-  .root svg {
+  .root > svg {
     inline-size: var(--ab-icon-button-icon-size);
     block-size: var(--ab-icon-button-icon-size);
     stroke-width: var(--ab-icon-sm-stroke-width);
+  }
+
+  .root > span {
+    color: inherit;
   }
 
   .root:where([data-size="sm"]) {
@@ -37,7 +41,7 @@
     block-size: var(--ab-icon-button-lg-size);
   }
 
-  .root:where([data-size="lg"]) svg {
+  .root:where([data-size="lg"]) > svg {
     inline-size: var(--ab-icon-button-lg-icon-size);
     block-size: var(--ab-icon-button-lg-icon-size);
     stroke-width: var(--ab-icon-md-stroke-width);

@@ -5,6 +5,7 @@ import type { ComponentProps, MouseEvent } from "react";
 import { Slot } from "@radix-ui/react-slot";
 
 import { dispatchFeedback } from "../events/events.ts";
+import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./icon-button.module.css";
 
@@ -68,16 +69,18 @@ export function IconButton({
       return;
     }
     onClick?.(event);
-    const target = event.currentTarget;
     if (current === undefined) {
-      dispatchFeedback(target, "ab-press", { component: "IconButton", reason: "user" });
+      dispatchFeedback(event.currentTarget, "ab-press", {
+        component: "IconButton",
+        reason: "user",
+      });
       return;
     }
     const [details, cancelled] = changeEventDetails(event);
     onPressedChange?.(!current, details);
     if (cancelled()) return;
     setUncontrolled(!current);
-    dispatchFeedback(target, "ab-toggle", { component: "IconButton", reason: "user" });
+    dispatchFeedback(event.currentTarget, "ab-toggle", { component: "IconButton", reason: "user" });
   }
 
   const Root = asChild ? Slot : "button";
@@ -92,6 +95,8 @@ export function IconButton({
       data-size={size}
       className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
       onClick={handleClick}
-    />
+    >
+      {loading && !asChild ? <Spinner aria-hidden /> : props.children}
+    </Root>
   );
 }

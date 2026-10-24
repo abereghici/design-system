@@ -4,6 +4,7 @@ import type { ComponentProps, MouseEvent } from "react";
 import { Slot } from "@radix-ui/react-slot";
 
 import { dispatchFeedback } from "../events/events.ts";
+import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./button.module.css";
 
@@ -33,6 +34,7 @@ export function Button({
   className,
   type = "button",
   onClick,
+  children,
   ...props
 }: ButtonProps) {
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
@@ -57,6 +59,15 @@ export function Button({
       data-size={size}
       className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
       onClick={handleClick}
-    />
+    >
+      {loading && !asChild ? (
+        <>
+          <Spinner aria-hidden data-icon="inline-start" />
+          {children}
+        </>
+      ) : (
+        children
+      )}
+    </Root>
   );
 }
