@@ -20,6 +20,7 @@ const budgets: Readonly<Record<string, string>> = {
   kbd: "2.95 kB",
   link: "1.95 kB",
   logo: "470 B",
+  "number-field": "7.4 kB",
   meter: "1.1 kB",
   progress: "1.1 kB",
   "password-field": "6.5 kB",

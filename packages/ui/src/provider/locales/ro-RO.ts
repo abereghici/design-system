@@ -19,5 +19,6 @@ export const roRO: Locale = {
     },
     skipLink: { label: "Salt la conținutul principal" },
     passwordField: { show: "Afișează parola" },
+    numberField: { increment: "Mărește", decrement: "Micșorează" },
   },
 };

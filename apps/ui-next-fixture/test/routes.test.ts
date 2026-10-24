@@ -143,6 +143,12 @@ describe("each component route ships only its own CSS, tokens and client code", 
       client: ["password-field/password-field.tsx"],
       html: 'aria-label="Show password"',
     },
+    {
+      name: "number-field",
+      tokens: ["input", "icon", "icon-button", "spinner"],
+      client: ["number-field/number-field.tsx"],
+      html: 'aria-label="Increase"',
+    },
   ])("$name", ({ name, tokens, client, html }) => {
     const r = route(name);
     expect(r.html).toContain(html);

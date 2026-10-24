@@ -22,6 +22,7 @@ export interface Labels {
   };
   readonly skipLink: { readonly label: string };
   readonly passwordField: { readonly show: string };
+  readonly numberField: { readonly increment: string; readonly decrement: string };
 }
 
 export interface Locale {
