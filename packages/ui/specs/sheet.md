@@ -45,13 +45,13 @@ Shared behaviour is specified once in `dialog.md` (native modal `<dialog>`, stat
 Root (no element) → Trigger → Content (`<dialog>` + `::backdrop`) → Title + Description → Body → Footer · Close.
 
 - **Root, Trigger.** As Dialog.
-- **Content.** A native `<dialog>`, opened with `showModal()`, placed at one inline edge instead of centred: `margin: 0`, `inset-block: sheet-offset`, `inset-inline-end: sheet-offset` (`side="end"`) or `inset-inline-start: sheet-offset` (`side="start"`), the other inline inset `auto`. `block-size: auto` and `max-block-size: none` replace the UA's `fit-content` / `max-height`, so it runs the full height minus the two offsets. `inline-size: sheet-width` (420), `max-inline-size: calc(100% - 2 * sheet-offset)`. Surface `sheet-background-color` (`color-surface-floating`, solid), radius `sheet-border-radius` (16) on every corner (it floats, source "Floats 8px inset from the right edge with 16px corners"), `sheet-shadow` (modal elevation), padding `sheet-padding` (24). A flex column: Title and Description at the top, the Body taking the remaining height, the Footer at the bottom, `sheet-gap` (16) between them. The UA `border` is removed.
-- **Backdrop.** The dialog's `::backdrop` in `sheet-backdrop-color` (`color-backdrop`), no blur: the source gives Sheet no blur, and the page it keeps "visible" stays legible behind the dim (inference from "keep page context visible").
+- **Content.** A native `<dialog>`, opened with `showModal()`, placed at one inline edge instead of centred: `margin: 0`, `inset-block: sheet-offset`, `inset-inline-end: sheet-offset` (`side="end"`) or `inset-inline-start: sheet-offset` (`side="start"`), the other inline inset `auto`. `block-size: auto` and `max-block-size: none` replace the UA's `fit-content` / `max-height`, so it runs the full height minus the two offsets. `inline-size: sheet-width` (420), capped at `100vw - 2 × sheet-offset` (`min()`, as the artifact's `.ab-sheet`). Surface `sheet-background-color` (`color-surface-floating`, solid), radius `sheet-border-radius` (16) on every corner (it floats, source "Floats 8px inset from the right edge with 16px corners"), `sheet-shadow` (modal elevation), padding `sheet-padding` (24). A flex column: Title and Description at the top, the Body taking the remaining height, the Footer at the bottom, `sheet-gap` (16) between them. The UA `border` is removed.
+- **Backdrop.** The dialog's `::backdrop` in `sheet-backdrop-color` (`color-backdrop`) with `backdrop-filter: blur(sheet-backdrop-blur)`: the artifact's `overlays.css` draws Dialog, Sheet and CommandPalette backdrops with one rule that includes the blur (exact-fidelity rule).
 - **Title.** An `<h2>` in `sheet-title-font` (`type-heading-sm`) and `sheet-title-text-color`, with room reserved at its inline end for the icon-only Close, as Dialog.
-- **Description.** A `<p>` in `sheet-description-font` / `sheet-description-text-color`, `sheet-title-gap` below the Title.
+- **Description.** A `<p>` in `sheet-description-font` / `sheet-description-text-color`, `sheet-title-gap` (4) below the Title. Title and Description reserve `space-inline-xl` at their inline end for the Close, as Dialog.
 - **Body.** A `<div>` that scrolls (`overflow-y: auto`, `flex: 1`, `min-block-size: 0`) with `tabIndex={0}` by default, so keyboard users can scroll it in every engine (the ScrollArea precedent). It pulls itself out to the panel edges (`margin-inline: calc(-1 * sheet-padding)`, `padding-inline: sheet-padding`), so its scrollbar sits at the panel edge and the focus ring is not clipped.
 - **Footer.** A `<div>`, a wrapping flex row aligned to the inline end with `sheet-footer-gap`; it stays at the bottom while the Body scrolls.
-- **Close.** As Dialog's: icon-only `x` with IconButton's `sm` visuals at the top inline-end corner, `sheet-close-offset` (8) from both edges; or the consumer's Button through `asChild`.
+- **Close.** As Dialog's: icon-only `x` with IconButton's `sm` visuals at the top inline-end corner, `sheet-close-offset` (12) from both edges; or the consumer's Button through `asChild`.
 
 ## API
 
@@ -95,7 +95,7 @@ Names, checked against the reference libraries:
 - **Body is not a ScrollArea component** but follows its rules (keyboard reachable with `tabIndex={0}`, no role, native scrollbars): WebKit bug 277290 "AX: Scrolling containers inoperable with keyboard" (ScrollArea spec) is why the default tab stop exists.
 - **Body edge fades left out.** The source has "Body scrolls with edge fades", which the brand book builds with scroll-driven animation ("`animation-timeline: scroll(self)`"); `scroll-driven-animations` is limited (webstatus.dev: no Firefox), and the ScrollArea spec left them out for the same reason. The Footer's position at the bottom and the native scrollbar show that there is more (judgement call, ScrollArea precedent).
 - **Side.** `side` sets `data-side`, which picks the inset and the slide direction in CSS; nothing else changes.
-- Client components (`'use client'`): as Dialog (Root, Trigger, Content, Close, Title, Description). Body and Footer are Server Components (plain `<div>`s, no context).
+- Client components (`'use client'`): the shared Dialog Parts (`src/dialog/modal.tsx`, `close.tsx`). `sheet.tsx` itself is a Server module: Root and Content bind Sheet's styles and `side` onto them, and Body and Footer are plain `<div>`s.
 
 ## Motion
 
@@ -130,7 +130,7 @@ APG pattern: **Dialog (Modal)** (https://www.w3.org/WAI/ARIA/apg/patterns/dialog
 - **Targets:** as Dialog.
 - **More contrast:** the Description takes `sheet-title-text-color`, and the Content draws a 1 px `color-border-default` border (`@media (prefers-contrast: more)`).
 - **Forced colors:** the shadow disappears, so the Content draws a 1 px `CanvasText` border; the Close icon is `currentColor`.
-- **Reduced transparency:** not affected: the surface is solid and the backdrop has no blur (the dim stays, as in Dialog).
+- **Reduced transparency:** the surface is solid; the backdrop drops its blur and keeps the dim, as in Dialog.
 
 ## RTL
 
@@ -142,14 +142,15 @@ Existing (ported from the source): `sheet-width`, `sheet-offset`, `sheet-padding
 
 Proposed new (mirroring Dialog's set):
 
-| Token                          | References           | `$type`    | Why                                                                      |
-| ------------------------------ | -------------------- | ---------- | ------------------------------------------------------------------------ |
-| `sheet-title-text-color`       | `color-text-default` | color      | Title colour, as `dialog-title-text-color`                               |
-| `sheet-description-font`       | `type-body-sm`       | typography | Description type, as `dialog-description-font`                           |
-| `sheet-description-text-color` | `color-text-subtle`  | color      | Description colour, as `dialog-description-text-color`                   |
-| `sheet-title-gap`              | `space-stack-sm`     | dimension  | Title to Description (8), as `dialog-title-gap`                          |
-| `sheet-footer-gap`             | `space-inline-sm`    | dimension  | Between Footer buttons (8), as `dialog-footer-gap`                       |
-| `sheet-close-offset`           | `space-inset-sm`     | dimension  | Close inset (8); concentric radius: 16 − 8 = 8, IconButton's `radius-sm` |
+| Token                          | References           | `$type`    | Why                                                                |
+| ------------------------------ | -------------------- | ---------- | ------------------------------------------------------------------ |
+| `sheet-title-text-color`       | `color-text-default` | color      | Title colour, as `dialog-title-text-color`                         |
+| `sheet-description-font`       | `type-body-sm`       | typography | Description type, as `dialog-description-font`                     |
+| `sheet-description-text-color` | `color-text-subtle`  | color      | Description colour, as `dialog-description-text-color`             |
+| `sheet-title-gap`              | `space-stack-xs`     | dimension  | Title to Description (4), as `dialog-title-gap`                    |
+| `sheet-footer-gap`             | `space-inline-sm`    | dimension  | Between Footer buttons (8), as `dialog-footer-gap`                 |
+| `sheet-close-offset`           | `space-inset-md`     | dimension  | Close inset (12), as `dialog-close-offset`                         |
+| `sheet-backdrop-blur`          | `material-blur-thin` | dimension  | Backdrop blur, as `dialog-backdrop-blur` (artifact `overlays.css`) |
 
 The Close uses the `icon-button-*` tokens; the more-contrast and forced-colors borders use `border-width-default` and `color-border-default` directly. Body padding reuses `sheet-padding`.
 
