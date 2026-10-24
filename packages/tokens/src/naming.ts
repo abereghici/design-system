@@ -20,7 +20,7 @@ const SEMANTIC = [
   /^size-target-(min|recommended)$/v,
   /^size-container-(2xs|xs|sm|md|lg)$/v,
   /^size-(toggle|indicator)$/v,
-  /^size-mark-min$/v,
+  /^size-logo-min$/v,
   /^radius-(xs|sm|md|lg|xl|full)$/v,
   /^border-width-(default|thick)$/v,
   /^stroke-width-(sm|md|lg|xl|2xl)$/v,
