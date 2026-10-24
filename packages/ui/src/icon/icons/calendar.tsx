@@ -1,4 +1,5 @@
-import { Icon, type IconProps } from "../icon.tsx";
+import { Icon } from "../icon.tsx";
+import type { IconProps } from "../icon.tsx";
 
 export function CalendarIcon(props: IconProps) {
   return (

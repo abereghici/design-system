@@ -1,7 +1,9 @@
 import { Logo } from "@platform/ui/logo";
+
 import { cssVar, Rules, Section, Swatch, TokenTable } from "./docs.tsx";
+import { tokens } from "./tokens.ts";
+import type { Token } from "./tokens.ts";
 import styles from "./docs.module.css";
-import { tokens, type Token } from "./tokens.ts";
 
 export function Principles() {
   return (

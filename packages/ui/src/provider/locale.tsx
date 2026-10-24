@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, use, type ReactNode } from "react";
+import { createContext, use } from "react";
+import type { ReactNode } from "react";
 
 import { enUS } from "./locales/en-US.ts";
 

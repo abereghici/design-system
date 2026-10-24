@@ -172,13 +172,13 @@ test("a themed color with the same value in both Themes needs no light-dark()", 
   expect(css).toContain("--ab-color-backdrop: var(--ab-palette-night-950-a64);");
 });
 
-test("ports every source token (210 primitive, 294 semantic, 413 component) plus 79 phase-1, 50 phase-2, 61 phase-3 and 24 phase-4 component tokens", async () => {
+test("ports every source token (210 primitive, 294 semantic, 413 component) plus 79 phase-1, 50 phase-2, 61 phase-3, 24 phase-4 and 30 phase-5 component tokens", async () => {
   const { css, components } = await buildTokens({ source: [SOURCE_GLOB] });
   const root = css.slice(css.indexOf(":root {"), css.indexOf("}", css.indexOf(":root {")));
   expect(root.match(/^ {4}--ab-/gmv)).toHaveLength(210 + 294);
   expect(css.match(/^ {6}--ab-/gmv)).toHaveLength(22);
   const sheets = Object.values(components).join("");
-  expect(sheets.match(/^ {4}--ab-/gmv)).toHaveLength(413 + 79 + 50 + 61 + 24);
+  expect(sheets.match(/^ {4}--ab-/gmv)).toHaveLength(413 + 79 + 50 + 61 + 24 + 30);
   expect(Object.keys(components)).toHaveLength(45);
 });
 

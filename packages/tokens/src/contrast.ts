@@ -1,11 +1,9 @@
 import type { Dictionary } from "style-dictionary/types";
 
-import {
-  CONTRAST_REQUIREMENTS,
-  contrastRatio,
-  type ContrastRequirement,
-} from "./contrast-matrix.ts";
-import { THEMES, valueIn, type ThemeId } from "./theme.ts";
+import { CONTRAST_REQUIREMENTS, contrastRatio } from "./contrast-matrix.ts";
+import type { ContrastRequirement } from "./contrast-matrix.ts";
+import { THEMES, valueIn } from "./theme.ts";
+import type { ThemeId } from "./theme.ts";
 
 const OPAQUE_HEX = /^#[0-9a-f]{6}$/iv;
 

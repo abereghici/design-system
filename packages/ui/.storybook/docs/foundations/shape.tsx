@@ -1,6 +1,7 @@
 import { cssVar, InEachTheme, Rules, Section, TokenTable } from "./docs.tsx";
+import { field, resolve, token, tokens } from "./tokens.ts";
+import type { Token } from "./tokens.ts";
 import styles from "./shape.module.css";
-import { field, resolve, token, tokens, type Token } from "./tokens.ts";
 
 const px = (tier: "semantic" | "component", name: string): number => {
   const resolved = resolve(token(tier, name).value, "light");

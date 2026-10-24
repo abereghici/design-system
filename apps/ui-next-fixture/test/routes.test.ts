@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import component from "@platform/tokens/source/component.tokens.json";
 import { describe, expect, test } from "vitest";
+
+import component from "@platform/tokens/source/component.tokens.json";
 
 const next = join(import.meta.dirname, "..", ".next");
 const componentTokens = Object.keys(component.component).map((name) => `--ab-${name}:`);

@@ -1,7 +1,9 @@
-import preview from "#.storybook/preview.tsx";
-import type { IconProps } from "@platform/ui/icon";
 import type { ComponentType } from "react";
 import { expect } from "storybook/test";
+
+import type { IconProps } from "@platform/ui/icon";
+
+import preview from "#.storybook/preview.tsx";
 
 import { IconographyGuidelines } from "./brand.tsx";
 import { cellText, tokenRow } from "./table.ts";

@@ -1,7 +1,9 @@
 import { readFile } from "node:fs/promises";
 
-import { create, type Font } from "fontkit";
+import { create } from "fontkit";
 import { expect, test } from "vitest";
+
+import type { Font } from "fontkit";
 
 import { codePointsIn, FONT_SUBSETS } from "./fonts.ts";
 

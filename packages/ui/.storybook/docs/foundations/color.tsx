@@ -1,5 +1,6 @@
 import { Chip, Rules, Section, Swatch, TokenTable } from "./docs.tsx";
-import { tokens, type Token } from "./tokens.ts";
+import { tokens } from "./tokens.ts";
+import type { Token } from "./tokens.ts";
 
 const swatch = (row: Token) => <Swatch name={row.name} />;
 
