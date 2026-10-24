@@ -37,6 +37,7 @@ export const roRO: Locale = {
       unavailable: "Această dată nu este disponibilă",
     },
     calendar: { previousMonth: "Luna anterioară", nextMonth: "Luna următoare" },
+    datePicker: { chooseDate: "Alegeți data" },
     command: {
       dialog: "Paletă de comenzi",
       search: "Caută comenzi",

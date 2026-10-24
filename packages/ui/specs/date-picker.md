@@ -52,9 +52,9 @@ Root (DateField with a trigger in its field box) + Content (Floating layer holdi
 | `defaultOpen`                                                                                                       | `boolean`                                                                                  | `false` | Uncontrolled.                                                                                                           |
 | `onOpenChange`                                                                                                      | `(open: boolean, details: DatePicker.Root.OpenChangeEventDetails) => void`                 |         | `reason`: Popover's (`"trigger-press"`, `"outside-press"`, `"escape-key"`, `"focus-out"`, `"none"`) plus `"day-press"`. |
 | `labels`                                                                                                            | `Partial<Locale["labels"]["datePicker"] & Locale["labels"]["dateField"]>`                  |         | Per-instance override (Built-in labels).                                                                                |
-| …native                                                                                                             | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                                |         | On the Field root: `className`, `style`, `onPointerEnter`, `onFocus` (the warm-up recipe).                              |
+| …native                                                                                                             | as DateField                                                                               |         | `className`, `style` on the Field root, the rest on the field box (`onPointerEnter`, `onFocus`: the warm-up recipe).    |
 
-`DatePicker.Content`: `ComponentProps<"div">` (`ref`, `className`, `children`). `id`, `role`, `popover`, `aria-label` are owned.
+`DatePicker.Content`: `ComponentProps<"dialog">` (`ref`, `className`, `children`), a `<dialog>` as `Popover.Content`. `id`, `open`, `popover`, `aria-label` are owned.
 
 Names, checked against the reference libraries:
 
@@ -78,8 +78,8 @@ The field box's states are DateField's. Added:
 
 - **Field.** Exactly DateField's (Field contract with the hidden date input). Adds one rule: with `isDateUnavailable`, a complete typed date it rejects sets `setCustomValidity(labels.unavailable)` (after DateField's incomplete check, before `validate`). Choosing in the Calendar commits like typing: the hidden input's value changes, the Field re-reads validity, and the choice counts as an edit for the error timing.
 - **One value.** The Root owns the value. Typing a complete date moves the Calendar's month to it when the panel next opens. The Calendar inside `DatePicker.Content` reads `value`, `min`, `max`, `isDateUnavailable` and its choose handler from the DatePicker context (the context lives in the private module the three date components share, so the DatePicker does not import the Calendar's code); props set on that Calendar for those four are ignored.
-- **Panel.** Composes Popover (Popover spec): light dismiss, Escape, focus return to the trigger including the WebKit handler, `"focus-out"` closing on Tab out, anchoring, flipping and reasons. The anchor is the field box: Popover's anchor recipe with the field box as the implicit anchor (`showPopover({ source: fieldBox })`, as Combobox; HTML show popover "Set element's implicit anchor element to source."). The field box also becomes the popover's trigger for focus navigation, so Tab from the last segment or the trigger enters the panel; focus return goes to the previously focused element, the trigger (Popover spec, plus its WebKit handler) (inference: the build ticket checks anchoring, Tab order and focus return in three engines). A press on the trigger while the panel is open must close it, not close and reopen it: the trigger is inside the popover's invoker (the field box), which light dismiss treats as part of the popover (inference from HTML's light-dismiss algorithm using the popover invoker; the build ticket checks it, and otherwise the trigger's `pointerdown` records the open state before light dismiss runs).
-- **Focus on open.** Moves to the Calendar's tab-stop day: the value, else today, clamped into `min` / `max`. APG: "Move focus to selected date, i.e., the date displayed in the date input text field. If no date has been selected, places focus on the current date." This departs from Popover's default (focus stays on the Trigger): the panel is operated with the keyboard map, and APG asks for it (judgement call). Mechanism: the Calendar sets `autofocus` on its tab-stop cell while inside an opening DatePicker, so the native popover focusing steps focus it (Popover spec, `initialFocus`); a Calendar that mounts after the panel opened (lazy) focuses that cell itself once, if focus is still on the trigger or in the panel (inference: the build ticket checks keyboard and pointer opens with a lazy Calendar).
+- **Panel.** Composes Popover (Popover spec): light dismiss, Escape, focus return to the trigger including the WebKit handler, `"focus-out"` closing on Tab out, anchoring, flipping and reasons. The anchor is the field box: Popover's anchor recipe with the field box as the implicit anchor (`showPopover({ source: fieldBox })`, as Combobox; HTML show popover "Set element's implicit anchor element to source."). The field box also becomes the popover's trigger for focus navigation, so Tab from the last segment or the trigger enters the panel; focus return goes to the trigger, which the panel records as its return target on every open (Popover's focus return; checked in three engines). A press on the trigger while the panel is open closes it, not close and reopen it: light dismiss already closes the panel in two of the three engines before `click` (the trigger inside the source does not count as an invoker), so the trigger's `pointerdown` records the open state and its `click` acts on that.
+- **Focus on open.** Moves to the Calendar's tab-stop day: the value, else today, clamped into `min` / `max`. APG: "Move focus to selected date, i.e., the date displayed in the date input text field. If no date has been selected, places focus on the current date." This departs from Popover's default (focus stays on the Trigger): the panel is operated with the keyboard map, and APG asks for it (judgement call). Mechanism: one path for eager and lazy Calendars: after each open (or on mounting into an open panel), the Calendar moves its tab stop to that day and focuses it, if focus is still on the trigger, in the panel or nowhere (WebKit does not focus a pressed button). Checked for keyboard and pointer opens with an eager and a lazy Calendar in three engines.
 - **Choosing** (`"day-press"`): `onValueChange(day, details)`; then the panel closes (`onOpenChange(false, { reason: "day-press" })`) and focus returns to the trigger, whose description now reads the new date (APG: "So, when the dialog closes and focus returns to the button, screen reader users hear confirmation of the selected date."). The trigger's name stays `labels.chooseDate` and the date is in its description (judgement call: APG renames the button to "Change Date, DATE_STRING"; built-in labels are plain strings, so the date is not interpolated into the name). `cancel()` on the value keeps the panel open.
 - **Splitting** (spec #1 story 27; `docs/research/performance.md`: "the input field renders eagerly. The calendar grid … load[s] the same way when the popover opens."). `@platform/ui/date-picker` and `@platform/ui/calendar` are separate subpaths with no module-level side effects, and Content mounts its children only after the first open, so an app can load the Calendar on demand and warm it on hover or focus of the field. The design system itself never calls `import()` (Command precedent):
 
@@ -92,14 +92,17 @@ The field box's states are DateField's. Added:
 
   const loadCalendar = () => import("@platform/ui/calendar");
   const Calendar = lazy(() => loadCalendar().then((m) => ({ default: m.Calendar })));
+  const warmCalendar = () => {
+    void loadCalendar();
+  };
 
   export function DueDate() {
     return (
       <DatePicker.Root
         label="Due date"
         name="due"
-        onPointerEnter={loadCalendar}
-        onFocus={loadCalendar}
+        onPointerEnter={warmCalendar}
+        onFocus={warmCalendar}
       >
         <DatePicker.Content>
           <Suspense fallback={<Spinner />}>

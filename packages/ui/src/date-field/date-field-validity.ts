@@ -15,11 +15,13 @@ interface Options {
   readonly validate?:
     | ((value: string, formData: FormData) => string | null | undefined)
     | undefined;
+  readonly isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
 }
 
 interface Wiring {
   readonly id: string | undefined;
   readonly incomplete: string;
+  readonly unavailable: string;
   readonly onValidity: (validity: Validity) => void;
   readonly reset: () => void;
 }
@@ -31,8 +33,8 @@ const hiddenInput = (id: string | undefined) => {
 
 /** Writes the value and custom validity to the hidden date input and reports its validity. */
 export function useValidity(
-  { validate, name }: Options,
-  { id, incomplete, onValidity, reset }: Wiring,
+  { validate, name, isDateUnavailable }: Options,
+  { id, incomplete, unavailable, onValidity, reset }: Wiring,
 ) {
   const server = use(FormErrorsContext)?.[name ?? ""];
   const touched = useRef(false);
@@ -42,7 +44,8 @@ export function useValidity(
     node.value = date?.toString() ?? "";
     const partial = date === null && Object.values(segments).some((part) => part !== undefined);
     const rule = validate?.(node.value, new FormData(node.form ?? undefined));
-    node.setCustomValidity(partial ? incomplete : (rule ?? server ?? ""));
+    const rejected = date !== null && isDateUnavailable?.(date) === true;
+    node.setCustomValidity(partial ? incomplete : rejected ? unavailable : (rule ?? server ?? ""));
   };
   const report = (commit = false) => {
     const node = hiddenInput(id);

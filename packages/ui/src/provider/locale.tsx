@@ -40,6 +40,7 @@ export interface Labels {
     readonly unavailable: string;
   };
   readonly calendar: { readonly previousMonth: string; readonly nextMonth: string };
+  readonly datePicker: { readonly chooseDate: string };
   readonly command: {
     readonly dialog: string;
     readonly search: string;

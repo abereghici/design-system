@@ -125,6 +125,13 @@ describe("toast() and the Toaster", () => {
   });
 });
 
+describe("DatePicker and Calendar", () => {
+  test("a route with a lazy Calendar in its DatePicker loads none of the Calendar's code up front", () => {
+    expect(route("date-picker").js).not.toContain("data-date");
+    expect(route("calendar").js).toContain("data-date");
+  });
+});
+
 describe("per-component JS", () => {
   test("only the Button route loads Button's client code", () => {
     expect(uiClientModules(button)).toEqual(["button/button.tsx", "provider/locale.tsx"]);

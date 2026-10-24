@@ -9,6 +9,7 @@ export type ChangeReason =
   | "escape-key"
   | "close-press"
   | "item-press"
+  | "day-press"
   | "focus-out"
   | "none";
 
@@ -95,9 +96,8 @@ function settle(element: HTMLElement, component: Component) {
 }
 
 /** Records where focus was before a press that may open the layer moved it (WebKit blurs on press). */
-export function rememberFocus(contentId: string) {
+export function rememberFocus(contentId: string, focus = document.activeElement) {
   const element = byId(contentId);
-  const focus = document.activeElement;
   if (element !== null)
     layerOf(element).returnTo = focus instanceof HTMLElement ? focus : undefined;
 }
@@ -156,10 +156,12 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
 
 function reconcile(contentId: string, open: boolean, findSource: (id: string) => Element | null) {
   const element = byId(contentId);
-  if (element === null || layerOf(element).pending !== undefined || open === isOpen(element)) {
+  if (element === null) return;
+  const layer = layerOf(element);
+  // `closing` lasts until the async `toggle` event, so a render in between (a value set on the closing press) does not reopen the layer.
+  if (layer.pending !== undefined || layer.closing !== undefined || open === isOpen(element))
     return;
-  }
-  layerOf(element).pending = "none";
+  layer.pending = "none";
   if (open) element.showPopover(sourceOf(findSource(contentId)));
   else element.hidePopover();
 }
