@@ -110,6 +110,12 @@ describe("each component route ships only its own CSS, tokens and client code", 
       html: "Email me updates",
     },
     { name: "switch", tokens: ["switch"], client: ["switch/switch.tsx"], html: 'role="switch"' },
+    {
+      name: "radio-group",
+      tokens: ["fieldset", "radio"],
+      client: ["radio-group/radio-group.tsx"],
+      html: 'role="radiogroup"',
+    },
   ])("$name", ({ name, tokens, client, html }) => {
     const r = route(name);
     expect(r.html).toContain(html);

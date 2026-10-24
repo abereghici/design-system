@@ -17,6 +17,7 @@ const budgets: Readonly<Record<string, string>> = {
   logo: "470 B",
   meter: "1.1 kB",
   progress: "1.1 kB",
+  "radio-group": "1.95 kB",
   provider: "5.4 kB",
   separator: "700 B",
   skeleton: "630 B",

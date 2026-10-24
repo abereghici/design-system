@@ -14,7 +14,7 @@ export type PressEvent = CustomEvent<FeedbackEventDetail<"Button">>;
 
 export type DismissEvent = CustomEvent<FeedbackEventDetail<"Alert">>;
 
-export type ToggleEvent = CustomEvent<FeedbackEventDetail<"Checkbox" | "Switch">>;
+export type ToggleEvent = CustomEvent<FeedbackEventDetail<"Checkbox" | "Switch" | "RadioGroup">>;
 
 declare global {
   // lib.dom's Document, Window and HTMLElement event maps extend this one, so every target is typed.
