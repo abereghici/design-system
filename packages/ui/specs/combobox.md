@@ -43,17 +43,17 @@ Status: draft for brand-owner review (phase 5). Source guide: `components/Combob
 
 ## Anatomy
 
-Label → field box (input, chevron) → list (Floating layer: Groups, Items, empty row) → description or error. A hidden input carries the form value; a visually hidden status region announces "No results".
+Label → field box (search icon, input) → list (Floating layer: Groups, Items, empty row) → description or error. A hidden input carries the form value; a visually hidden status region announces "No results".
 
 - **Label, description, error.** The Field Parts, built in (Field spec), as Select.
-- **Field box.** TextField's container chrome (`input-*`: height 32 / 40, radius 8, hairline, raised elevation) holding the input and a decorative `chevron-down` Icon at the inline end (`combobox-icon-color`, `aria-hidden`). A pointer press anywhere on the box focuses the input and opens the list.
+- **Field box.** TextField's container chrome (`input-*`: height 32 / 40, radius 8, hairline, raised elevation) holding a decorative `search` Icon at the inline start (TextField's start Icon, `input-icon-color`, `aria-hidden`) and the input, as the source's `<Combobox>` (`ab-input-group` + `search`; Q46-1). A pointer press anywhere on the box focuses the input and opens the list.
 - **Input.** A native `<input type="text" role="combobox">` with no border or background of its own, `dir="auto"`, `autocomplete="off"` by default, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` → list id, and `aria-activedescendant` → the highlighted option while there is one. It has no `name`: its text is the query, not the value.
 - **Hidden input.** `<input type="hidden" name form value>` holding the chosen Item's `value` (empty string when none).
 - **List.** One `<div popover="manual" role="listbox" aria-labelledby={labelId}>`, rendered right after the field box (no portal) and shown in the top layer. Material `combobox-list-background-color` (`color-material-thick`) with `backdrop-filter: blur(combobox-list-blur) saturate(combobox-list-saturate)`, `combobox-list-shadow` (overlay elevation), radius `combobox-list-border-radius` (12), padding `combobox-list-padding` (4), `combobox-list-offset` (4) from the field box, at least as wide as it, at most `combobox-list-max-height` (320) tall, then scrolling (`overflow-y: auto`).
-- **Item.** A `<div role="option" id>`, a flex row `combobox-option-height` (28), `combobox-option-padding-inline` (8), `combobox-option-gap` (8), radius `combobox-option-border-radius` (8: concentric, 12 − 4), `combobox-option-font`, `combobox-option-text-color`. Children, in order: a 16 px check box at the inline start (the `check` Icon in `combobox-option-icon-color-selected` on the chosen Item, empty otherwise, so labels line up: Select's "moss checkmark"), an optional Icon with `data-icon="inline-start"` (`combobox-option-icon-color`), the label. The whole row is the hit target.
-- **Group.** A `<div role="group" aria-labelledby>` whose first child is its label, a `<div role="presentation" id>` in the overline type (`type-overline-sm`, `color-text-subtlest`, as Select's group label), padded like an Item's text.
+- **Item.** A `<div role="option" id>`, a flex row `combobox-option-height` (28), `combobox-option-padding-inline` (8), `combobox-option-gap` (8), radius `combobox-option-border-radius` (8: concentric, 12 − 4), `combobox-option-font`, `combobox-option-text-color`. Children, in order: an optional Icon with `data-icon="inline-start"` (`combobox-option-icon-color`), the label, and a 16 px check box at the inline end (the `check` Icon in `combobox-option-icon-color-selected` on the chosen Item, empty otherwise), as the source's `.ab-option` > `.ab-indicator` (Q46-1). The whole row is the hit target.
+- **Group.** A `<fieldset aria-labelledby>` (implicit role `group`, DropdownMenu precedent) whose first child is its label, a `<div role="presentation" id>` in the overline type (`type-overline-sm`, `color-text-subtlest`, as Select's group label), padded like an Item's text.
 - **Empty row.** When no Item is shown, the list shows the built-in "No results" (`labels.noResults`) in `type-body-xs` / `color-text-subtle`, padded like an Item, `aria-hidden` (the status region announces it).
-- **Status region.** A visually hidden `<div role="status">` inside the field root, always rendered, empty unless the list is open and empty.
+- **Status region.** A visually hidden `<output>` (implicit role `status`) inside the field root, always rendered, empty unless the list is open and empty.
 
 ## API
 
@@ -110,7 +110,7 @@ Names, checked against the reference libraries:
 | disabled            | TextField's disabled colours; no hover                                                            | `aria-disabled="true"` or `:disabled`                               |
 | option highlighted  | Fill `combobox-option-background-color-hovered`, no transition                                    | `aria-selected="true"`, `data-highlighted`, `aria-activedescendant` |
 | option chosen       | Check in `combobox-option-icon-color-selected`, text in `combobox-option-text-color-selected`     | `data-selected` (Base UI: "Present when the item is selected.")     |
-| option disabled     | Text and icon in `combobox-option-{text,icon}-color-disabled`; never highlighted                  | `aria-disabled="true"`, `aria-selected="false"`                     |
+| option disabled     | `opacity-disabled` on the row, as the source's `.ab-option[aria-disabled]`; never highlighted     | `aria-disabled="true"`, `aria-selected="false"`                     |
 | empty               | The "No results" row                                                                              | `data-empty` on the list; status region text                        |
 
 `aria-selected` marks the highlighted option (APG, Accessibility), so the chosen Item uses Base UI's `data-selected` rather than ARIA (judgement call: the two words differ only by prefix; the docs page says so).
@@ -197,7 +197,7 @@ APG: "IMPORTANT: Ensure JavaScript does not interfere with browser-provided text
 
 ## RTL
 
-Logical properties only: the chevron at the inline end, the check box and icon at the inline start of each option. Positioning (spike #4 recipe, Q4-2): `margin: 0; position-anchor: auto; inset: auto; inset-block-start: anchor(self-end); margin-block-start: var(--ab-combobox-list-offset); inset-inline-start: anchor(self-start); min-inline-size: anchor-size(self-inline); position-try-fallbacks: flip-block`; never `position-visibility`. The list inherits `dir` in the top layer (spike #4: "a popover inside a `dir="rtl"` element matches `:dir(rtl)` … while it is in the top layer"). The input's own text direction is `dir="auto"` (TextField). `transform-origin` is mirrored with `:dir(rtl)`. `check` and `chevron-down` are not mirrored (Icon spec).
+Logical properties only: the search Icon at the inline start of the field box; each option's icon at the inline start and its check at the inline end. Positioning (spike #4 recipe, Q4-2): `margin: 0; position-anchor: auto; inset: auto; inset-block-start: anchor(self-end); margin-block-start: var(--ab-combobox-list-offset); inset-inline-start: anchor(self-start); min-inline-size: anchor-size(self-inline); position-try-fallbacks: flip-block`; never `position-visibility`. The list inherits `dir` in the top layer (spike #4: "a popover inside a `dir="rtl"` element matches `:dir(rtl)` … while it is in the top layer"). The input's own text direction is `dir="auto"` (TextField). `transform-origin` is mirrored with `:dir(rtl)`. `check` and `search` are not mirrored (Icon spec).
 
 ## Component tokens
 

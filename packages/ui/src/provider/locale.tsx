@@ -28,6 +28,7 @@ export interface Labels {
   readonly popover: { readonly close: string };
   readonly dialog: { readonly close: string };
   readonly sheet: { readonly close: string };
+  readonly combobox: { readonly noResults: string };
   readonly toast: { readonly close: string };
   readonly toaster: { readonly region: string };
   readonly dateField: {

@@ -24,6 +24,7 @@ export const enUS: Locale = {
     pagination: { root: "Pagination", previous: "Previous page", next: "Next page" },
     popover: { close: "Close" },
     dialog: { close: "Close" },
+    combobox: { noResults: "No results" },
     sheet: { close: "Close" },
     toast: { close: "Dismiss" },
     toaster: { region: "Notifications" },

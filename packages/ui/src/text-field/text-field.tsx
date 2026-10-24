@@ -77,15 +77,15 @@ export function InputGroup({
   start,
   end,
   children,
-}: {
-  start: ReactNode;
-  end: ReactNode;
-  children: ReactNode;
-}) {
+  onPointerDown,
+  ...props
+}: ComponentProps<"div"> & { start: ReactNode; end: ReactNode }) {
   return (
     <div
+      {...props}
       className={`${fieldStyles["control"]} ${styles["group"]}`}
       onPointerDown={(event) => {
+        onPointerDown?.(event);
         const input = event.currentTarget.querySelector("input");
         if (!(event.target instanceof Element) || input === null || event.target === input) return;
         if (event.target.closest("button, a, [tabindex]") !== null) return;
