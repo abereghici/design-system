@@ -182,6 +182,12 @@ const componentRoutes = [
     client: ["segmented-control/segmented-control.tsx"],
     html: 'aria-label="View"',
   },
+  {
+    name: "accordion",
+    tokens: ["accordion", "icon"],
+    client: ["accordion/accordion.tsx"],
+    html: "<summary",
+  },
 ];
 
 describe("each component route ships only its own CSS, tokens and client code", () => {

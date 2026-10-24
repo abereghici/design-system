@@ -37,6 +37,7 @@ const budgets: Readonly<Record<string, string>> = {
   "status-dot": "490 B",
   tabs: "1.8 kB",
   "segmented-control": "2 kB",
+  accordion: "2.05 kB",
   tag: "600 B",
   text: "520 B",
   "text-area": "2.7 kB",
