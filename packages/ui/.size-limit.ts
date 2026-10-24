@@ -4,14 +4,14 @@ import { globSync } from "node:fs";
 import type { SizeLimitConfig } from "size-limit";
 
 const budgets: Readonly<Record<string, string>> = {
-  alert: "2.2 kB",
+  alert: "2.25 kB",
   avatar: "1.6 kB",
   badge: "690 B",
-  button: "3.6 kB",
-  card: "1.2 kB",
+  button: "2.5 kB",
+  card: "1.3 kB",
   checkbox: "2.55 kB",
-  "empty-state": "740 B",
-  "icon-button": "3.2 kB",
+  "empty-state": "880 B",
+  "icon-button": "2.1 kB",
   events: "20 B",
   field: "2.3 kB",
   fieldset: "380 B",
@@ -19,7 +19,7 @@ const budgets: Readonly<Record<string, string>> = {
   heading: "340 B",
   icon: "560 B",
   kbd: "2.95 kB",
-  link: "1.95 kB",
+  link: "760 B",
   logo: "470 B",
   "number-field": "7.4 kB",
   meter: "1.1 kB",
@@ -39,7 +39,7 @@ const budgets: Readonly<Record<string, string>> = {
   text: "520 B",
   "text-area": "2.7 kB",
   "text-field": "2.7 kB",
-  "visually-hidden": "1.75 kB",
+  "visually-hidden": "580 B",
 };
 
 const checks = (pattern: string, subpath: (path: string) => string, limit?: string) =>

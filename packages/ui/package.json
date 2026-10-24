@@ -28,8 +28,7 @@
     "test:screenshots:docker": "sh scripts/screenshots-docker.sh"
   },
   "dependencies": {
-    "@platform/tokens": "workspace:*",
-    "@radix-ui/react-slot": "catalog:"
+    "@platform/tokens": "workspace:*"
   },
   "devDependencies": {
     "@platform/oxlint-config": "workspace:*",

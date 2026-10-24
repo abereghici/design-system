@@ -164,6 +164,39 @@ Default.test(
   },
 );
 
+const childClick = fn((event: MouseEvent) => {
+  event.preventDefault();
+});
+const childRef = fn<(node: HTMLElement | null) => void>();
+const buttonRef = fn<(node: HTMLElement | null) => void>();
+
+Default.test(
+  "keeps its child's own click handler and ref with asChild",
+  {
+    args: {
+      asChild: true,
+      ref: buttonRef,
+      children: (
+        <a href="#settings" ref={childRef} onClick={childClick}>
+          Settings
+        </a>
+      ),
+      onClick: fn<(event: MouseEvent) => void>(),
+    },
+  },
+  async ({ canvas, userEvent, args }) => {
+    const link = canvas.getByRole("link", { name: "Settings" });
+    const presses = listen("ab-press");
+    await userEvent.click(link);
+    await expect(childClick).toHaveBeenCalledOnce();
+    await expect(args.onClick).toHaveBeenCalledOnce();
+    presses.stop();
+    await expect(presses.events).toHaveLength(1);
+    await expect(childRef).toHaveBeenCalledWith(link);
+    await expect(buttonRef).toHaveBeenCalledWith(link);
+  },
+);
+
 async function backgroundUnder(css: string, button: HTMLElement) {
   const appStyles = document.createElement("style");
   appStyles.textContent = css;
