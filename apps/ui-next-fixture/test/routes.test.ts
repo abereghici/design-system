@@ -187,6 +187,12 @@ const componentRoutes = [
     client: ["icon-button/icon-button.tsx"],
     html: 'href="/pagination?page=3">3</a>',
   },
+  {
+    name: "toolbar",
+    tokens: ["toolbar", "icon", "icon-button", "spinner"],
+    client: ["icon-button/icon-button.tsx", "toolbar/toolbar.tsx"],
+    html: 'role="toolbar"',
+  },
 ];
 
 describe("each component route ships only its own CSS, tokens and client code", () => {

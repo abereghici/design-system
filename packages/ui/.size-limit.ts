@@ -39,6 +39,7 @@ const budgets: Readonly<Record<string, string>> = {
   "status-dot": "490 B",
   tag: "600 B",
   text: "520 B",
+  toolbar: "830 B",
   "text-area": "2.7 kB",
   "text-field": "2.7 kB",
   "visually-hidden": "580 B",
