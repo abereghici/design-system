@@ -2,6 +2,7 @@ import type { ComponentProps } from "react";
 
 import type { Labels } from "../provider/locale.tsx";
 import { enUS } from "../provider/locales/en-US.ts";
+
 import styles from "./spinner.module.css";
 
 const staves = Array.from({ length: 8 }, (_, index) => index);

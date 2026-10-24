@@ -1,4 +1,5 @@
-import { cloneElement, isValidElement, type ComponentProps } from "react";
+import { cloneElement, isValidElement } from "react";
+import type { ComponentProps } from "react";
 
 import styles from "./skeleton.module.css";
 

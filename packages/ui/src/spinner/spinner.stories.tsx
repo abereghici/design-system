@@ -1,8 +1,10 @@
-import preview from "#.storybook/preview.tsx";
 import { expect } from "storybook/test";
+
+import preview from "#.storybook/preview.tsx";
 
 import type { Locale } from "../provider/locale.tsx";
 import { roRO } from "../provider/locales/ro-RO.ts";
+
 import { Spinner } from "./spinner.tsx";
 
 // @ts-expect-error -- a locale must translate every built-in label

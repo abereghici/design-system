@@ -1,6 +1,8 @@
-import { useId, type ComponentProps, type ReactNode } from "react";
+import { useId } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 import type { Locale } from "../provider/locale.tsx";
+
 import styles from "./meter.module.css";
 
 type Name =

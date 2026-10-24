@@ -1,7 +1,9 @@
-import preview from "#.storybook/preview.tsx";
 import { expect } from "storybook/test";
 
+import preview from "#.storybook/preview.tsx";
+
 import { roRO } from "../provider/locales/ro-RO.ts";
+
 import { Progress } from "./progress.tsx";
 
 const meta = preview.meta({

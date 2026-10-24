@@ -1,8 +1,11 @@
-import preview from "#.storybook/preview.tsx";
 import { expect } from "storybook/test";
 
+import preview from "#.storybook/preview.tsx";
+
 import { roRO } from "../provider/locales/ro-RO.ts";
-import { Meter, type MeterProps } from "./meter.tsx";
+
+import { Meter } from "./meter.tsx";
+import type { MeterProps } from "./meter.tsx";
 
 // @ts-expect-error -- thresholds need a valueLabel that states the judgement in words
 ({ value: 92, label: "Storage", high: 90 }) satisfies MeterProps;

@@ -112,7 +112,7 @@ describe("per-component JS", () => {
 
   test("Server Components label and format on the server", () => {
     expect(route("spinner").html).toContain('aria-label="Loading"');
-    expect(route("progress").html).toContain("40\u00a0%");
+    expect(route("progress").html).toContain("40\u00A0%");
     expect(route("meter").html).toContain("42%");
   });
 
