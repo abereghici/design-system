@@ -2294,7 +2294,7 @@
     },
     "accordion-trigger-gap": {
       "$type": "dimension",
-      "$value": "{semantic.space-inline-sm}"
+      "$value": "{semantic.space-inline-md}"
     },
     "breadcrumbs-gap": {
       "$type": "dimension",

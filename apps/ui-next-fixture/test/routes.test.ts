@@ -187,6 +187,19 @@ const componentRoutes = [
     client: ["number-field/number-field.tsx"],
     html: 'aria-label="Increase"',
   },
+  { name: "tabs", tokens: ["tabs"], client: ["tabs/tabs.tsx"], html: 'role="tablist"' },
+  {
+    name: "segmented-control",
+    tokens: ["segmented-control"],
+    client: ["segmented-control/segmented-control.tsx"],
+    html: 'aria-label="View"',
+  },
+  {
+    name: "accordion",
+    tokens: ["accordion", "icon"],
+    client: ["accordion/accordion.tsx"],
+    html: "<summary",
+  },
   {
     name: "breadcrumbs",
     tokens: ["breadcrumbs", "icon", "link"],

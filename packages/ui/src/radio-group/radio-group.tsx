@@ -1,11 +1,11 @@
 "use client";
 
 import { createContext, use, useId, useState } from "react";
-import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
+import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
 import { useFieldControl } from "../field/field-control.ts";
-import { changeDetails, pointerMarker } from "../toggle/toggle.ts";
+import { changeDetails, followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
 import styles from "./radio-group.module.css";
@@ -21,19 +21,6 @@ interface Group {
 }
 
 const GroupContext = createContext<Group | null>(null);
-
-// WebKit doesn't swap Left and Right for native radios in RTL (Chromium and Firefox do).
-function followVisualDirection(event: KeyboardEvent<HTMLFieldSetElement>) {
-  const step = event.key === "ArrowLeft" ? 1 : event.key === "ArrowRight" ? -1 : 0;
-  const group = event.currentTarget;
-  if (step === 0 || event.defaultPrevented || !group.matches(":dir(rtl)")) return;
-  if (!(event.target instanceof HTMLInputElement)) return;
-  event.preventDefault();
-  const radios = [...group.querySelectorAll<HTMLInputElement>('input[type="radio"]')];
-  const next = radios.at((radios.indexOf(event.target) + step) % radios.length);
-  next?.focus();
-  next?.click();
-}
 
 export interface RootProps extends Omit<ComponentProps<"fieldset">, "defaultValue" | "disabled"> {
   /** The chosen option; `null` when nothing is chosen. */
