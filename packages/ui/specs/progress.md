@@ -18,25 +18,25 @@ Status: draft for brand-owner review (phase 1). No source guide: drafted from th
 
 Root → header (optional: label, value) → track → indicator.
 
-- **Root.** A `<div role="progressbar">` holding everything. Not the native `<progress>`: see Behaviour.
+- **Root.** A `<div>` holding the header and the native `<progress>` (see Behaviour).
 - **Label** (optional). The visible name, a `<span>` at the inline start of the header, referenced by the root's `aria-labelledby`.
 - **Value** (optional). The visible value text, a `<span>` at the inline end of the header, in tabular figures.
-- **Track.** The full range: a 6 px rounded bar in `progress-track-background-color`.
-- **Indicator.** The filled part, from the inline start, `inline-size` set to the percentage. Indeterminate: a segment that sweeps the track.
+- **Track.** The native `<progress>` (`appearance: none`): a 6 px rounded bar in `progress-track-background-color`.
+- **Indicator.** The progress value pseudo-element (`::-webkit-progress-value`, `::-moz-progress-bar`). Indeterminate: the Root's `::after`, a segment that sweeps the track, because no engine draws a value pseudo-element for an indeterminate `<progress>` and Firefox renders no `::after` on it.
 
 Label, value, track and indicator are internal elements, not Parts (see API).
 
 ## API
 
-| Prop            | Type                       | Default                | Notes                                                                                                                                    |
-| --------------- | -------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `value`         | `number \| null`           | `null`                 | `null` is indeterminate. Clamped to `0…max`.                                                                                             |
-| `max`           | `number`                   | `100`                  | Must be greater than 0.                                                                                                                  |
-| `label`         | `ReactNode`                |                        | Visible label. Without it, `aria-label` or `aria-labelledby` is required (the props type is a union that demands one of the three).      |
-| `valueLabel`    | `ReactNode`                | the formatted value    | Visible value text, shown when there is a `label` and the value is known. A string `valueLabel` is also the `aria-valuetext`.            |
-| `formatOptions` | `Intl.NumberFormatOptions` | `{ style: "percent" }` | How the default value text is formatted. With `style: "percent"` the fraction `value / max` is formatted; otherwise `value` itself.      |
-| `locale`        | `Locale`                   | English (`"en"`)       | A shipped locale object (`@platform/ui/locales/*`); its `tag` is the locale for `Intl.NumberFormat`. Formatting runs on the server.      |
-| …native         | `ComponentProps<"div">`    |                        | `ref`, `className`, `id`, `aria-label`, `aria-labelledby`, `aria-describedby`, `aria-valuetext` and every native attribute pass through. |
+| Prop            | Type                         | Default                | Notes                                                                                                                                                                        |
+| --------------- | ---------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`         | `number \| null`             | `null`                 | `null` is indeterminate. Clamped to `0…max`.                                                                                                                                 |
+| `max`           | `number`                     | `100`                  | Must be greater than 0.                                                                                                                                                      |
+| `label`         | `ReactNode`                  |                        | Visible label. Without it, `aria-label` or `aria-labelledby` is required (the props type is a union that demands one of the three).                                          |
+| `valueLabel`    | `ReactNode`                  | the formatted value    | Visible value text, shown when there is a `label` and the value is known. A string `valueLabel` is also the `aria-valuetext`.                                                |
+| `formatOptions` | `Intl.NumberFormatOptions`   | `{ style: "percent" }` | How the default value text is formatted. With `style: "percent"` the fraction `value / max` is formatted; otherwise `value` itself.                                          |
+| `locale`        | `Locale`                     | English (`"en"`)       | A shipped locale object (`@platform/ui/locales/*`); its `tag` is the locale for `Intl.NumberFormat`. Formatting runs on the server.                                          |
+| …native         | `ComponentProps<"progress">` |                        | `className` and `style` go on the root; `ref`, `id`, `aria-label`, `aria-labelledby`, `aria-describedby`, `aria-valuetext` and every other attribute go on the `<progress>`. |
 
 Names, checked against the reference libraries:
 
@@ -53,18 +53,18 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State                 | How it shows                               | Exposed as                                       |
-| --------------------- | ------------------------------------------ | ------------------------------------------------ |
-| loading (determinate) | Indicator fills `value / max` of the track | `data-state="loading"`, `aria-valuenow`          |
-| complete              | Indicator fills the track                  | `data-state="complete"`, `aria-valuenow` = `max` |
-| indeterminate         | Segment sweeps the track; no value text    | `data-state="indeterminate"`, no `aria-valuenow` |
+| State                 | How it shows                               | Exposed as                               |
+| --------------------- | ------------------------------------------ | ---------------------------------------- |
+| loading (determinate) | Indicator fills `value / max` of the track | `data-state="loading"`, `value`          |
+| complete              | Indicator fills the track                  | `data-state="complete"`, `value` = `max` |
+| indeterminate         | Segment sweeps the track; no value text    | `data-state="indeterminate"`, no `value` |
 
 The `data-state` values are Radix's: "`[data-state]` … "complete", "indeterminate", or "loading"".
 
 ## Behaviour
 
-- **ARIA, not the native element.** `<progress>` has the right semantics, but its bar can only be styled through engine-specific pseudo-elements (`::-webkit-progress-bar`, `::-webkit-progress-value`, `::-moz-progress-bar`, listed on the MDN page). MDN on `::-webkit-progress-value`: "**Non-standard:** This feature is not standardized. We do not recommend using non-standard features in production" (https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/::-webkit-progress-value). ADR-0002 allows no engine-specific fallbacks, so Progress uses `role="progressbar"` with the ARIA value attributes, as Radix, Base UI, Mantine ("Progress section has the `role="progressbar"` attribute") and the rest do. This adds no script, so ADR-0001's "platform before script" still holds.
-- **Values.** Root sets `aria-valuemin="0"`, `aria-valuemax={max}` and `aria-valuenow={value}`; for `null` it leaves `aria-valuenow` out. WAI-ARIA 1.2: "The author SHOULD supply a value for aria-valuenow unless the value is indeterminate" (https://www.w3.org/TR/wai-aria-1.2/#progressbar).
+- **The native element.** Progress renders `<progress max value>`, which exposes the `progressbar` role and value itself (ladder: platform first). The bar is styled with `::-webkit-progress-inner-element`, `::-webkit-progress-bar`, `::-webkit-progress-value` and `::-moz-progress-bar`, each in its own rule. Screenshotted in Chromium, Firefox and WebKit (QVF log).
+- **Values.** The `<progress>` gets `max` and the clamped `value`; for `null` it has no `value` attribute, which makes it indeterminate (`position` is −1, HTML spec).
 - **Value text.** WAI-ARIA 1.2 notes that assistive technologies usually present `aria-valuenow` as a percentage of the range "unless aria-valuetext is specified", so a percent needs no `aria-valuetext`. Progress sets `aria-valuetext` only when `valueLabel` is a string (or the consumer passes one).
 - **Formatting.** The default value text is `new Intl.NumberFormat(locale, formatOptions).format(…)` (spec #1: "`Intl.*` for all formatting"). It always runs on the server, in `locale.tag` or `"en"`, so the value text needs no client code and can't mismatch on hydration (decision Q15-2).
 - **Indicator size** is an inline `inline-size: {percent}%` on the indicator, so it starts at the inline start in either direction and needs no transform origin.
@@ -88,7 +88,7 @@ Not focusable; no keyboard interaction. WAI-ARIA 1.2 says the progressbar is rea
 ## Accessibility
 
 - Name: `progressbar` is "name required" in WAI-ARIA 1.2 (Roles Supporting Name from Author). React Spectrum: "a `label`, `aria-label`, or `aria-labelledby` prop is required." The props type enforces one of the three.
-- The label is the root's `aria-labelledby`; the visible value text is inside the root and is not read separately (its content reaches assistive technology through `aria-valuenow` / `aria-valuetext`).
+- The label is the root's `aria-labelledby`; the visible value text is not read separately (its content reaches assistive technology through the element's value / `aria-valuetext`).
 - Don't announce every update: Progress is not a live region. The value is read when the user reaches it.
 - Indicator against track and surface: `color-icon-accent`, which the tokens build checks at 3:1 on every surface (non-text contrast). The track is decorative; the indicator's length is read against the visible value text, so the range doesn't rely on the track alone.
 - **More contrast:** `progress-track-background-color` is `color-border-subtle`, which steps up to `color-border-default` under `(prefers-contrast: more)` (token media override), so the full range becomes visible.

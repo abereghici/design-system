@@ -3,6 +3,7 @@
 @layer ab.components {
   .root {
     display: inline-block;
+    flex-shrink: 0;
     vertical-align: middle;
     inline-size: var(--ab-status-dot-size);
     block-size: var(--ab-status-dot-size);
@@ -26,14 +27,10 @@
     background-color: var(--ab-status-dot-danger-background-color);
   }
 
-  /* System colours are the only ones forced colors leave alone, so the dot doesn't vanish. */
+  /* Forced colors would erase the fill, the only thing that tells the statuses apart. */
   @media (forced-colors: active) {
     .root {
-      border-color: CanvasText;
-    }
-
-    .root:not([data-variant="neutral"]) {
-      background-color: CanvasText;
+      forced-color-adjust: none;
     }
   }
 }

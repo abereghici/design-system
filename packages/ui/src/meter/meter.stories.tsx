@@ -28,9 +28,9 @@ export const Default = meta.story({});
 
 Default.test("is a meter named by its label, with its value", async ({ canvas }) => {
   const meter = canvas.getByRole("meter", { name: "Storage" });
-  await expect(meter).toHaveAttribute("aria-valuenow", "42");
-  await expect(meter).toHaveAttribute("aria-valuemin", "0");
-  await expect(meter).toHaveAttribute("aria-valuemax", "100");
+  await expect(meter).toHaveProperty("value", 42);
+  await expect(meter).toHaveProperty("min", 0);
+  await expect(meter).toHaveProperty("max", 100);
   await expect(canvas.getByText("42%")).toBeVisible();
 });
 
@@ -42,7 +42,7 @@ Default.test(
   async ({ canvas }) => {
     const meter = canvas.getByRole("meter", { name: "Rating" });
     await expect(meter).toHaveAttribute("aria-valuetext", "3 out of 5");
-    await expect(meter).toHaveAttribute("aria-valuemax", "5");
+    await expect(meter).toHaveProperty("max", 5);
   },
 );
 
@@ -78,7 +78,7 @@ Default.test(
   "clamps its value to the range",
   { args: { value: -5, min: 0, max: 10 } },
   async ({ canvas }) => {
-    await expect(canvas.getByRole("meter")).toHaveAttribute("aria-valuenow", "0");
+    await expect(canvas.getByRole("meter")).toHaveProperty("value", 0);
     await expect(canvas.getByText("0%")).toBeVisible();
   },
 );

@@ -49,14 +49,8 @@ const toPath = (curve: readonly Point[]) =>
     .join(" ");
 
 const curve = (row: Token) => (
-  // An <img> can't read the token colors, so the inline SVG takes role="img".
-  <svg
-    // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
-    role="img"
-    aria-label={`${row.name} curve`}
-    viewBox="-4 -4 108 148"
-    className={styles["curve"]}
-  >
+  <svg viewBox="-4 -4 108 148" className={styles["curve"]}>
+    <title>{`${row.name} curve`}</title>
     <path d="M0,20 H100 M0,120 H100" className={styles["guide"]} />
     <path d={toPath(points(resolve(row.value, "light")))} className={styles["line"]} />
   </svg>

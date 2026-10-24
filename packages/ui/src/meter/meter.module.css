@@ -26,37 +26,67 @@
   }
 
   .track {
-    overflow: hidden;
+    appearance: none;
+    display: block;
+    inline-size: 100%;
     block-size: var(--ab-meter-track-height);
+    border: 0;
     border-radius: var(--ab-meter-track-border-radius);
-    background-color: var(--ab-meter-track-background-color);
+    background: var(--ab-meter-track-background-color);
   }
 
-  .indicator {
-    block-size: 100%;
+  /* Chromium and WebKit size the bar from a block inner element; flex stretches it to the track. */
+  .track::-webkit-meter-inner-element {
+    display: flex;
     border-radius: inherit;
-    background-color: var(--ab-meter-indicator-background-color);
   }
 
-  .root:where([data-region="optimum"]) .indicator {
-    background-color: var(--ab-meter-success-indicator-background-color);
+  .track::-webkit-meter-bar {
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
   }
 
-  .root:where([data-region="suboptimum"]) .indicator {
-    background-color: var(--ab-meter-warning-indicator-background-color);
+  .track::-webkit-meter-optimum-value {
+    border-radius: inherit;
+    background: var(--ab-meter-indicator-background-color);
   }
 
-  .root:where([data-region="even-less-good"]) .indicator {
-    background-color: var(--ab-meter-danger-indicator-background-color);
+  .track::-moz-meter-bar {
+    border-radius: inherit;
+    background: var(--ab-meter-indicator-background-color);
+  }
+
+  .root[data-thresholds] > .track::-webkit-meter-optimum-value {
+    background: var(--ab-meter-success-indicator-background-color);
+  }
+
+  .root[data-thresholds] > .track:-moz-meter-optimum::-moz-meter-bar {
+    background: var(--ab-meter-success-indicator-background-color);
+  }
+
+  .track::-webkit-meter-suboptimum-value {
+    border-radius: inherit;
+    background: var(--ab-meter-warning-indicator-background-color);
+  }
+
+  .track:-moz-meter-sub-optimum::-moz-meter-bar {
+    background: var(--ab-meter-warning-indicator-background-color);
+  }
+
+  .track::-webkit-meter-even-less-good-value {
+    border-radius: inherit;
+    background: var(--ab-meter-danger-indicator-background-color);
+  }
+
+  .track:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+    background: var(--ab-meter-danger-indicator-background-color);
   }
 
   @media (forced-colors: active) {
     .track {
+      forced-color-adjust: none;
       outline: 1px solid CanvasText;
-    }
-
-    .indicator {
-      background-color: CanvasText;
     }
   }
 }

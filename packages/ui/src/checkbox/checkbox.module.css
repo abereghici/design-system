@@ -12,6 +12,10 @@
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
+  .root:has(.input:is([aria-disabled="true"], :disabled)) {
+    color: var(--ab-color-text-disabled);
+    cursor: not-allowed;
+  }
 
   .input {
     appearance: none;

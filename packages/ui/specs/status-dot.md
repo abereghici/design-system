@@ -67,7 +67,7 @@ Not focusable; no keyboard interaction.
 - The neutral ring differs by shape, not only colour, so idle/unknown reads apart from the filled states even in greyscale.
 - Contrast: `icon-subtlest`, `icon-success`, `icon-warning`, `icon-danger` are icon roles in the AA matrix (3:1).
 - **More contrast:** `color-icon-subtlest` steps up to `color-icon-subtle` under `(prefers-contrast: more)` (token media override), so the neutral ring darkens. Filled dots already pass.
-- **Forced colors:** `background-color` and `border-color` are forced (MDN, https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors), so a filled dot would vanish into `Canvas`. In `@media (forced-colors: active)` the filled dots set `background-color: CanvasText` and the ring `border-color: CanvasText`; system colours are not forced (CSS Color Adjust 1: "if its computed value is a color other than a system color, its used value is instead forced", https://www.w3.org/TR/css-color-adjust-1/). All filled dots then look alike, which is fine: the label carries the state, and neutral stays hollow.
+- **Forced colors:** `background-color` and `border-color` are forced (MDN, https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors), so a filled dot would vanish into `Canvas` and the statuses would look alike. The dot sets `forced-color-adjust: none` and keeps its status colours, as the artifact's adaptive.css does (`.ab-status-dot{forced-color-adjust:none}`); the label still carries the state.
 - **Reduced transparency:** not affected.
 
 ## RTL

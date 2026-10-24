@@ -16,11 +16,11 @@ Status: draft for brand-owner review (phase 1). No source guide: drafted from th
 
 Root → header (optional: label, value) → track → indicator. The same four elements as Progress:
 
-- **Root.** A `<div role="meter">`. Not the native `<meter>`: see Behaviour.
+- **Root.** A `<div>` holding the header and the native `<meter>` (see Behaviour).
 - **Label** (optional). The visible name, at the inline start of the header, referenced by `aria-labelledby`.
 - **Value** (optional). The visible value text, at the inline end, in tabular figures.
-- **Track.** The full range, a 6 px rounded bar.
-- **Indicator.** Fills from the inline start to the value. Its colour is the Accent, or a status colour when `low` / `high` are set.
+- **Track.** The native `<meter>` (`appearance: none`): the full range, a 6 px rounded bar.
+- **Indicator.** The meter's value pseudo-element (`::-webkit-meter-*-value`, `::-moz-meter-bar`). Its colour is the Accent, or the native region's status colour when `low` / `high` are set.
 
 ## API
 
@@ -36,7 +36,7 @@ Root → header (optional: label, value) → track → indicator. The same four 
 | `valueLabel`    | `ReactNode`, or `string` when `low` / `high` are set | the formatted value    | Visible value text when there is a `label`. A string is also the `aria-valuetext`. **Required, as a string, when `low` or `high` is set**, so the judgement the colour shows is also in words. |
 | `formatOptions` | `Intl.NumberFormatOptions`                           | `{ style: "percent" }` | With `style: "percent"` the fraction `(value − min) / (max − min)` is formatted; otherwise `value`.                                                                                            |
 | `locale`        | `Locale`                                             | English (`"en"`)       | A shipped locale object (`@platform/ui/locales/*`); its `tag` is the locale for `Intl.NumberFormat`. Formatting runs on the server.                                                            |
-| …native         | `ComponentProps<"div">`                              |                        | `ref`, `className`, `id`, `aria-*` and every native attribute pass through.                                                                                                                    |
+| …native         | `ComponentProps<"meter">`                            |                        | `className` and `style` go on the root; `ref`, `id`, `aria-*` and every other attribute go on the `<meter>`.                                                                                   |
 
 Names, checked against the reference libraries:
 
@@ -48,12 +48,12 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State                 | How it shows            | Exposed as                        |
-| --------------------- | ----------------------- | --------------------------------- |
-| no thresholds         | Indicator in the Accent | `aria-valuenow`, no `data-region` |
-| optimum region        | Indicator in success    | `data-region="optimum"`           |
-| suboptimal region     | Indicator in warning    | `data-region="suboptimum"`        |
-| even less good region | Indicator in danger     | `data-region="even-less-good"`    |
+| State                 | How it shows            | Exposed as                       |
+| --------------------- | ----------------------- | -------------------------------- |
+| no thresholds         | Indicator in the Accent | native `optimum` region          |
+| optimum region        | Indicator in success    | `data-thresholds`, native region |
+| suboptimal region     | Indicator in warning    | native region                    |
+| even less good region | Indicator in danger     | native region                    |
 
 **Regions** follow the HTML spec's gauge algorithm (https://html.spec.whatwg.org/multipage/form-elements.html#the-meter-element). The optimum point is `optimum`, defaulting to "the midpoint between the minimum value and the maximum value." Then:
 
@@ -64,8 +64,8 @@ The region names are the HTML spec's and match the engines' own pseudo-elements 
 
 ## Behaviour
 
-- **ARIA, not the native element.** `<meter>` has the right semantics, but its bar can only be styled through non-standard pseudo-elements (MDN lists "`::-webkit-meter-bar`, … `::-webkit-meter-optimum-value`, `::-webkit-meter-suboptimum-value`: non-standard pseudo-elements"). ADR-0002 allows no engine-specific fallbacks, so Meter uses `role="meter"` with the ARIA value attributes, as Base UI does ("Renders a `<div>` element."). No script is added.
-- **Values.** Root sets `aria-valuemin`, `aria-valuemax` and `aria-valuenow`, clamped like the native element ("the actual value is the minimum value" / "the actual value is the maximum value", HTML spec). WAI-ARIA 1.2: "The value of aria-valuenow MUST NOT fall below or exceed the computed values of aria-valuemin and aria-valuemax".
+- **The native element.** Meter renders `<meter min max low high optimum value>`, so the browser computes the gauge region (HTML spec) and exposes the `meter` role and value. The bar is styled with the engines' pseudo-elements (`::-webkit-meter-inner-element`, `::-webkit-meter-bar`, `::-webkit-meter-{optimum,suboptimum,even-less-good}-value`, `::-moz-meter-bar` with `:-moz-meter-{optimum,sub-optimum,sub-sub-optimum}`), each in its own rule because a selector list fails whole in an engine that doesn't know one of its pseudo-elements. Screenshotted in Chromium, Firefox and WebKit (QVF log).
+- **Values.** The value is clamped to `min…max` before it is formatted and set, as the native element clamps its actual value ("the actual value is the minimum value" / "the actual value is the maximum value", HTML spec).
 - **Thresholds aren't exposed by ARIA.** WAI-ARIA 1.2 notes there are currently no properties for the HTML `low`, `optimum` and `high` attributes, to be "considered for ARIA version 1.3" (https://www.w3.org/TR/wai-aria-1.2/#meter). This is why a string `valueLabel` is required with thresholds: it becomes `aria-valuetext` and carries the judgement ("92%, almost full"). The APG: "the aria-valuetext property is set to a string that makes the meter value understandable." (https://www.w3.org/WAI/ARIA/apg/patterns/meter/).
 - **Formatting** with `Intl.NumberFormat(locale, formatOptions)`, as Progress: always on the server, in `locale.tag` or `"en"` (decision Q15-2). The HTML spec also asks for the value in text: "Authors are encouraged to include a textual representation of the gauge's state in the element's contents".
 - **Indicator size** is an inline `inline-size: {percent}%`, as Progress.

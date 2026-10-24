@@ -44,6 +44,13 @@
   body {
     font: var(--ab-type-body-md);
     letter-spacing: var(--ab-type-body-md-letter-spacing);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+    font-optical-sizing: auto;
+    font-synthesis-weight: none;
+    font-synthesis-small-caps: none;
   }
 
   :where(table, time, output, data) {

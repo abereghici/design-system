@@ -14,11 +14,11 @@ Status: draft for brand-owner review (phase 1). Source guide: `components/Spinne
 
 ## Anatomy
 
-Status (`<span role="status">`) → Svg (`aria-hidden`) → eight staves.
+Status (`<span role="status">`), painted with eight staves.
 
 - **Status.** An inline-block `<span>` sized `spinner-size` (sm, 16) or `spinner-lg-size` (lg, 24), carrying the role and the name.
-- **Svg.** One `<svg viewBox="0 0 24 24">`, `stroke="currentColor"` in `spinner-color`, `stroke-width` from `spinner-stroke-width`, square caps (carved construction).
-- **Staves.** Eight short radial strokes at 45° steps: the brand's stave motif ("The spinner's eight turning staves", archived brand book). Opacity falls off behind the leading stave so the turn reads. The stave is the surface's one motif (brand rule), so a Spinner never sits next to another motif such as the Separator ornament.
+- **Paint.** The span's own background, as the artifact's `.ab-spinner`: a `conic-gradient` ramp from transparent to `currentColor` (`spinner-color`), masked by a `repeating-conic-gradient` (18° staves every 45°) intersected with a `radial-gradient` ring. No child elements.
+- **Staves.** Eight short radial wedges at 45° steps: the brand's stave motif ("The spinner's eight turning staves", archived brand book). Opacity falls off behind the leading stave so the turn reads. The stave is the surface's one motif (brand rule), so a Spinner never sits next to another motif such as the Separator ornament.
 
 ## API
 
@@ -35,7 +35,7 @@ Names, checked against the reference libraries:
 - **`Spinner`**: Chakra "Used to provide a visual cue that an action is processing" (https://chakra-ui.com/docs/components/spinner); shadcn "An indicator that can be used to show a loading state." (https://ui.shadcn.com/docs/components/spinner); Radix Themes "Displays an animated loading indicator." (https://www.radix-ui.com/themes/docs/components/spinner). Others differ: Mantine `Loader` ("Indicate loading state", https://mantine.dev/core/loader/), MUI `CircularProgress` with `variant` "Use indeterminate when there is no progress value." (https://mui.com/material-ui/api/circular-progress/), React Spectrum `ProgressCircle` with `isIndeterminate` (https://react-spectrum.adobe.com/react-spectrum/ProgressCircle.html), Ark "Progress - Circular", which has no Spinner. Spinner is the most common name (Chakra, shadcn, Radix) and the source's; spec #1 keeps it.
 - **`size`**: Chakra "`'inherit' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'`"; Radix Themes `"1" | "2" | "3"`; Spectrum "`'S' | 'M' | 'L'`". All call it `size`. The values are the source's two (default and `lg`), named with the Dictionary's size words to match the tokens `spinner-size` / `spinner-lg-size`.
 - **`aria-label`**: React Spectrum "An `aria-label` must be provided for accessibility."; shadcn's source sets `role="status"` and `aria-label="Loading"`. The source guide's `label="Loading results"` becomes the native attribute both libraries use.
-- **No `color`, `thickness` or `animationDuration` props.** Chakra documents `borderWidth`, `animationDuration` and `colorPalette`; MUI `thickness`. Here they are the component tokens (`spinner-color`, `spinner-stroke-width`, `spinner-duration`), the supported override surface (spec #1 user story 15).
+- **No `color`, `thickness` or `animationDuration` props.** Chakra documents `borderWidth`, `animationDuration` and `colorPalette`; MUI `thickness`. Here they are the component tokens (`spinner-color`, `spinner-duration`), the supported override surface (spec #1 user story 15).
 - **No `loading` prop.** Radix Themes' Spinner has `loading` "to control whether the spinner or its children are displayed"; Button owns that here (`loading`), so Spinner stays a leaf.
 
 ## States
@@ -57,7 +57,7 @@ Names, checked against the reference libraries:
 
 - Spin: `rotate` from 0 to 360° over `spinner-duration` (`motion-duration-loop`, 700 ms), `animation-timing-function: steps(8)`, infinite. Eight discrete steps, so each stave lands where the last one was (source: "Steps through 8 positions per `--ab-spinner-duration` (700ms)"). A step function is not an ease, so the brand's never-ease-in rule is met (inference).
 - The rotation is clockwise in both directions (see RTL).
-- **Reduced motion:** under `(prefers-reduced-motion: reduce)` the rotation is removed and the whole Spinner pulses `opacity` between 1 and 0.4 over `motion-duration-loop`, `motion-easing-color`, alternating (source: "Under reduced motion it pulses opacity instead of rotating"). Opacity fades are what reduced motion keeps (spec #1 user story 47). The reduced-motion project asserts that no `rotate` runs.
+- **Reduced motion:** under `(prefers-reduced-motion: reduce)` the rotation is removed and the whole Spinner pulses `opacity` between 1 and 0.4 over twice `spinner-duration`, `motion-easing-move`, alternating (artifact `ab-pulse`) (source: "Under reduced motion it pulses opacity instead of rotating"). Opacity fades are what reduced motion keeps (spec #1 user story 47). The reduced-motion project asserts that no `rotate` runs.
 - Looping past 5 s is allowed here: WCAG 2.2.2 Note 4, "An animation that occurs as part of a preload phase or similar situation can be considered essential if interaction cannot occur during that phase for all users and if not indicating progress could confuse users or cause them to think that content was frozen or broken." (https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html). Where the wait runs in parallel with other content the user can use, the caller should keep it short or use Progress (inference from the SC's "presented in parallel with other content").
 - **Instant exit:** Spinner has no exit animation; it is unmounted when the wait ends. That reads as correct because the loaded content takes its place in the same spot (and in a Button the label never moved).
 
@@ -74,7 +74,7 @@ Not focusable; no keyboard interaction. Tab skips it, and focus is never moved t
 - Decorative (`aria-hidden`) wherever something else already says "busy": a loading Button, a region with `aria-busy` and its own message.
 - Contrast: the leading stave is drawn in `spinner-color` (`color-icon-subtle`), an icon role held to 3:1. The fading staves are decoration; the state is also conveyed by the role and name, so it never relies on the faded strokes.
 - **More contrast:** no change; the leading stave already meets 3:1.
-- **Forced colors:** the strokes are `currentColor`; `color` and `stroke` are on the "Properties Affected by Forced Colors Mode" list (https://www.w3.org/TR/css-color-adjust-1/), so the staves draw in the system text colour, and the opacity fall-off still shows the turn.
+- **Forced colors:** the staves are background paint, which forced colors would drop, so the Spinner sets `forced-color-adjust: none` and `color: CanvasText` (artifact adaptive.css).
 - **Reduced transparency:** not affected (no Material). The stave opacity is part of the glyph, not a translucent fill.
 
 ## RTL
@@ -85,7 +85,7 @@ Not mirrored: the Spinner keeps turning clockwise. Adobe Spectrum: "Icons that r
 
 All exist (ported from the source): `spinner-size` (→ `size-icon-sm`), `spinner-lg-size` (→ `size-icon-lg`), `spinner-color` (→ `color-icon-subtle`), `spinner-stroke-width` (→ `stroke-width-lg`), `spinner-duration` (→ `motion-duration-loop`).
 
-No new tokens. The reduced-motion pulse uses semantic `motion-easing-color` directly.
+No new tokens. The reduced-motion pulse uses semantic `motion-easing-move` directly. `spinner-stroke-width` is unused since the staves became a mask.
 
 ## Built-in labels
 

@@ -38,8 +38,11 @@ const iconButton = route("icon-button");
 const uiClientModules = (r: Route) =>
   [...new Set(r.clientModules.match(/(?<=packages\/ui\/src\/)[\w.\/\-]+(?=")/gv))].toSorted();
 
-const shippedComponentTokens = (css: string) =>
-  componentTokens.filter((token) => css.includes(token));
+// Only token sheets count: a component may redefine another's token on itself (Button restyles Kbd hints).
+const shippedComponentTokens = (css: string) => {
+  const sheets = css.match(/@layer ab\.tokens\{:root\{[^\}]*\}\}/gv)?.join("") ?? "";
+  return componentTokens.filter((token) => sheets.includes(token));
+};
 
 describe("the Provider owns the global CSS", () => {
   test.each([

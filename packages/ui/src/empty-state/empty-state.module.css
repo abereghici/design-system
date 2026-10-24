@@ -14,10 +14,9 @@
     max-inline-size: var(--ab-empty-state-max-width);
   }
 
-  .indicator > svg {
-    inline-size: var(--ab-empty-state-icon-size);
-    block-size: var(--ab-empty-state-icon-size);
-    color: var(--ab-empty-state-icon-color);
+  .indicator {
+    --ab-icon-size: var(--ab-empty-state-icon-size);
+    --ab-icon-ink: var(--ab-empty-state-icon-color);
   }
 
   .title {

@@ -19,6 +19,10 @@
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
+  .root:has(.track:is([aria-disabled="true"], :disabled)) {
+    color: var(--ab-color-text-disabled);
+    cursor: not-allowed;
+  }
 
   .root:dir(rtl) {
     --sign: -1;

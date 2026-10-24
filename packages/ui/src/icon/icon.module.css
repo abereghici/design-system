@@ -1,30 +1,33 @@
 @import "@platform/tokens/components/icon.css";
 
 @layer ab.components {
-  /* Size rules stay at (0,1,0) so a host's `.root svg` rule (0,1,1) can size the icons a consumer passes in. */
+  /* Hosts size and tint the icons they hold by setting --ab-icon-size, --ab-icon-stroke-width and --ab-icon-ink on themselves; the values inherit, so no host reaches into the svg. */
   .root {
+    display: inline-block;
     flex-shrink: 0;
-    inline-size: var(--ab-icon-md-size);
-    block-size: var(--ab-icon-md-size);
-    stroke-width: var(--ab-icon-md-stroke-width);
+    vertical-align: middle;
+    inline-size: var(--ab-icon-size, var(--ab-icon-md-size));
+    block-size: var(--ab-icon-size, var(--ab-icon-md-size));
+    stroke-width: var(--ab-icon-stroke-width, var(--ab-icon-md-stroke-width));
+    color: var(--ab-icon-ink, currentColor);
   }
 
   .root:where([data-size="sm"]) {
-    inline-size: var(--ab-icon-sm-size);
-    block-size: var(--ab-icon-sm-size);
-    stroke-width: var(--ab-icon-sm-stroke-width);
+    inline-size: var(--ab-icon-size, var(--ab-icon-sm-size));
+    block-size: var(--ab-icon-size, var(--ab-icon-sm-size));
+    stroke-width: var(--ab-icon-stroke-width, var(--ab-icon-sm-stroke-width));
   }
 
   .root:where([data-size="lg"]) {
-    inline-size: var(--ab-icon-lg-size);
-    block-size: var(--ab-icon-lg-size);
-    stroke-width: var(--ab-icon-lg-stroke-width);
+    inline-size: var(--ab-icon-size, var(--ab-icon-lg-size));
+    block-size: var(--ab-icon-size, var(--ab-icon-lg-size));
+    stroke-width: var(--ab-icon-stroke-width, var(--ab-icon-lg-stroke-width));
   }
 
   .root:where([data-size="xl"]) {
-    inline-size: var(--ab-icon-xl-size);
-    block-size: var(--ab-icon-xl-size);
-    stroke-width: var(--ab-icon-xl-stroke-width);
+    inline-size: var(--ab-icon-size, var(--ab-icon-xl-size));
+    block-size: var(--ab-icon-size, var(--ab-icon-xl-size));
+    stroke-width: var(--ab-icon-stroke-width, var(--ab-icon-xl-stroke-width));
   }
 
   .root:where([data-mirror]):dir(rtl) {

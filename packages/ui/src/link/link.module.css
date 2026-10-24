@@ -11,11 +11,6 @@
       var(--ab-motion-easing-color);
   }
 
-  .root > svg {
-    display: inline-block;
-    vertical-align: middle;
-  }
-
   .root > :where([data-icon="inline-start"]) {
     margin-inline-end: var(--ab-space-inline-xs);
   }
