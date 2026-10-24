@@ -1,0 +1,67 @@
+# Regenerates the story screenshot baselines on a feature branch and commits them (Git LFS).
+# Run it from the Actions tab ("Run workflow", pick the branch) after an intended visual change,
+# review the committed PNGs, then re-run the Visual check: "events triggered by the `GITHUB_TOKEN`
+# will not create a new workflow run" (docs.github.com/en/actions/concepts/security/github_token),
+# so the bot's push doesn't start one.
+# Adapted from the workflow in https://vitest.dev/guide/browser/visual-regression-testing
+# (docs/guide/browser/visual-regression-testing.md @ v5.0.5): "Only runs on feature branches
+# (never on main)", "Credits the person who triggered it as co-author", "Prevents concurrent runs
+# on the same branch".
+name: Update screenshots
+
+on:
+  workflow_dispatch: # manual trigger only
+
+env:
+  AUTHOR_NAME: "github-actions[bot]"
+  AUTHOR_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
+  COMMIT_MESSAGE: |
+    test(ui): update story screenshot baselines
+
+    Co-authored-by: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
+
+jobs:
+  update-screenshots:
+    runs-on: ubuntu-24.04
+    # safety first: don't run on main
+    if: github.ref_name != github.event.repository.default_branch
+    # one at a time per branch
+    concurrency:
+      group: story-screenshots@${{ github.ref_name }}
+      cancel-in-progress: true
+    permissions:
+      contents: write # needs to push changes
+    # Same image as visual.yml, so the baselines match what CI compares against.
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+    steps:
+      - run: apt-get update && apt-get install --yes --no-install-recommends git-lfs
+      # With `lfs`, checkout runs `git lfs install --local` (src/git-command-manager.ts @ v7.0.1),
+      # so the `git add` below stores the PNGs through LFS (.gitattributes) and the push uploads them.
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref_name }}
+          lfs: true
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ env.AUTHOR_NAME }}"
+          git config --global user.email "${{ env.AUTHOR_EMAIL }}"
+      - uses: pnpm/setup@v3
+        with:
+          require-lockfile: true
+      - run: pnpm --filter @platform/tokens build
+      # Baselines for deleted or renamed stories "aren't removed automatically" (VRT guide), so
+      # start from none: every baseline left afterwards belongs to a story that exists.
+      - run: find packages/ui/src -type d -name __screenshots__ -prune -exec rm -rf {} +
+      # `--update` writes every baseline even though `CI` is set (observed with Vitest 5.0.5).
+      - run: pnpm --filter @platform/ui test:screenshots --update
+      - name: Commit and push
+        run: |
+          git add --all packages/ui/src
+          if git diff --cached --quiet; then
+            echo "No baseline changed." >> "$GITHUB_STEP_SUMMARY"
+          else
+            git diff --cached --name-status >> "$GITHUB_STEP_SUMMARY"
+            git commit -m "$COMMIT_MESSAGE"
+            git push origin "HEAD:${{ github.ref_name }}"
+          fi

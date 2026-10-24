@@ -24,8 +24,10 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "size": "size-limit",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run --project \"storybook*\"",
+    "test:watch": "vitest --project \"storybook*\"",
+    "test:screenshots": "vitest run --project \"screenshot:*\" --reporter=default --reporter=html",
+    "test:screenshots:docker": "sh scripts/screenshots-docker.sh"
   },
   "dependencies": {
     "@platform/tokens": "workspace:*"
@@ -44,6 +46,7 @@
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "@vitest/browser-playwright": "catalog:",
+    "@vitest/ui": "catalog:",
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
     "playwright": "catalog:",

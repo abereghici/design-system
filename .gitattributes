@@ -1,0 +1,2 @@
+# Story screenshot baselines live in Git LFS (written by .github/workflows/update-screenshots.yml).
+packages/ui/src/**/__screenshots__/**/*.png filter=lfs diff=lfs merge=lfs -text

@@ -7,6 +7,8 @@
 @layer ab.reset, ab.tokens, ab.base, ab.components;
 
 @import "@platform/tokens/tokens.css";
+/* The @font-face sheet, as an app imports it next to tokens.css (packages/tokens/README.md, Fonts). */
+@import "@platform/tokens/fonts.css";
 
 /* App-level page colours, unlayered like any app CSS. The base stylesheet (#12) replaces this. */
 body {
