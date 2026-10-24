@@ -19,7 +19,11 @@ export type ToggleFeedbackEvent = CustomEvent<
   >
 >;
 
-export type DismissEvent = CustomEvent<FeedbackEventDetail<"Alert">>;
+export type DismissEvent = CustomEvent<
+  FeedbackEventDetail<"Alert" | "Dialog" | "AlertDialog" | "Sheet">
+>;
+
+export type ConfirmEvent = CustomEvent<FeedbackEventDetail<"AlertDialog">>;
 
 declare global {
   // lib.dom's Document, Window and HTMLElement event maps extend this one, so every target is typed.
@@ -27,6 +31,7 @@ declare global {
     "ab-press": PressEvent;
     "ab-toggle": ToggleFeedbackEvent;
     "ab-dismiss": DismissEvent;
+    "ab-confirm": ConfirmEvent;
   }
 }
 
