@@ -129,7 +129,7 @@ function Control({
         }}
       >
         {placeholder !== undefined && (
-          <option value="" disabled hidden>
+          <option value="" disabled hidden className={styles["placeholder"]}>
             {placeholder}
           </option>
         )}

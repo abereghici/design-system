@@ -68,14 +68,14 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State         | How it shows                                                  | Exposed as                                           |
-| ------------- | ------------------------------------------------------------- | ---------------------------------------------------- |
-| unchecked     | Hairline circle                                               | —                                                    |
-| hovered       | Border `radio-border-color-hovered`; fine pointers only       | `:hover` on the item                                 |
-| checked       | Accent fill `radio-background-color-checked` with the diamond | `:checked`                                           |
-| focus-visible | 2 px ring, 3 px offset around the circle                      | `:focus-visible`                                     |
-| invalid       | Border `radio-border-color-invalid` on every radio            | `aria-invalid="true"` on the radios (Field contract) |
-| disabled      | `opacity-disabled`; no hover                                  | `aria-disabled="true"` or `:disabled`                |
+| State         | How it shows                                                    | Exposed as                                           |
+| ------------- | --------------------------------------------------------------- | ---------------------------------------------------- |
+| unchecked     | Hairline circle                                                 | —                                                    |
+| hovered       | Border `radio-border-color-hovered`; fine pointers only         | `:hover` on the item                                 |
+| checked       | Accent fill `radio-background-color-checked` with the diamond   | `:checked`                                           |
+| focus-visible | 2 px ring, 3 px offset around the circle                        | `:focus-visible`                                     |
+| invalid       | Border `radio-border-color-invalid` on every radio              | `aria-invalid="true"` on the radios (Field contract) |
+| disabled      | radio `opacity-disabled`, label `color-text-disabled`; no hover | `aria-disabled="true"` or `:disabled`                |
 
 ## Behaviour
 

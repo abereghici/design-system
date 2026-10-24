@@ -53,16 +53,16 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State         | How it shows                                                                              | Exposed as                                   |
-| ------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------- |
-| unchecked     | Hairline box                                                                              | `:checked` not matching                      |
-| hovered       | Border `checkbox-border-color-hovered`; fine pointers only                                | `:hover` on the root                         |
-| pressed       | Box scales to `checkbox-scale-pressed` (0.97)                                             | `:active`                                    |
-| checked       | Fill `checkbox-background-color-checked` (accent), check in `checkbox-icon-color-checked` | `:checked`, `aria-checked` from the platform |
-| indeterminate | Accent fill with a `minus` glyph                                                          | `:indeterminate`                             |
-| focus-visible | 2 px focus ring, 3 px offset around the box                                               | `:focus-visible` on the input                |
-| invalid       | Border `checkbox-border-color-invalid`                                                    | `aria-invalid="true"` (Field contract)       |
-| disabled      | `opacity-disabled`; no hover or press                                                     | `aria-disabled="true"` or `:disabled`        |
+| State         | How it shows                                                                                 | Exposed as                                   |
+| ------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| unchecked     | Hairline box                                                                                 | `:checked` not matching                      |
+| hovered       | Border `checkbox-border-color-hovered`; fine pointers only                                   | `:hover` on the root                         |
+| pressed       | Box scales to `checkbox-scale-pressed` (0.97)                                                | `:active`                                    |
+| checked       | Fill `checkbox-background-color-checked` (accent), check in `checkbox-icon-color-checked`    | `:checked`, `aria-checked` from the platform |
+| indeterminate | Accent fill with a `minus` glyph                                                             | `:indeterminate`                             |
+| focus-visible | 2 px focus ring, 3 px offset around the box                                                  | `:focus-visible` on the input                |
+| invalid       | Border `checkbox-border-color-invalid`                                                       | `aria-invalid="true"` (Field contract)       |
+| disabled      | box `opacity-disabled`, label `color-text-disabled`, `not-allowed` cursor; no hover or press | `aria-disabled="true"` or `:disabled`        |
 
 ## Behaviour
 
