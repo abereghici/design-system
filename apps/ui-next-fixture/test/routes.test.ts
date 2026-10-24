@@ -228,6 +228,12 @@ const componentRoutes = [
     html: 'role="spinbutton"',
   },
   {
+    name: "calendar",
+    tokens: ["calendar", "icon", "icon-button", "spinner"],
+    client: ["calendar/calendar.tsx"],
+    html: 'role="grid"',
+  },
+  {
     name: "toaster",
     tokens: ["toast", "kbd", "icon"],
     client: ["toaster/toaster.tsx"],

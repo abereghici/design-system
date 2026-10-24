@@ -35,6 +35,7 @@ export interface Labels {
     readonly incomplete: string;
     readonly unavailable: string;
   };
+  readonly calendar: { readonly previousMonth: string; readonly nextMonth: string };
 }
 
 export interface Locale {

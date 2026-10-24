@@ -32,5 +32,6 @@ export const enUS: Locale = {
       incomplete: "Enter a complete date",
       unavailable: "This date is not available",
     },
+    calendar: { previousMonth: "Previous month", nextMonth: "Next month" },
   },
 };

@@ -32,5 +32,6 @@ export const roRO: Locale = {
       incomplete: "Introduceți o dată completă",
       unavailable: "Această dată nu este disponibilă",
     },
+    calendar: { previousMonth: "Luna anterioară", nextMonth: "Luna următoare" },
   },
 };

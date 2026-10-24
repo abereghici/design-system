@@ -9,6 +9,7 @@ const budgets: Readonly<Record<string, string>> = {
   badge: "690 B",
   breadcrumbs: "1.95 kB",
   button: "2.5 kB",
+  calendar: "24.6 kB",
   card: "1.3 kB",
   checkbox: "2.55 kB",
   "date-field": "25.6 kB",
