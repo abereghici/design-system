@@ -116,6 +116,7 @@ describe("each component route ships only its own CSS, tokens and client code", 
       client: ["radio-group/radio-group.tsx"],
       html: 'role="radiogroup"',
     },
+    { name: "slider", tokens: ["slider"], client: ["slider/slider.tsx"], html: 'type="range"' },
   ])("$name", ({ name, tokens, client, html }) => {
     const r = route(name);
     expect(r.html).toContain(html);
