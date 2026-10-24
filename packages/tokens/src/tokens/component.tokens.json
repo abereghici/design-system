@@ -648,6 +648,90 @@
       "$type": "dimension",
       "$value": "{semantic.size-container-xs}"
     },
+    "combobox-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "combobox-list-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xs}"
+    },
+    "combobox-list-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-lg}"
+    },
+    "combobox-list-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-material-thick}"
+    },
+    "combobox-list-blur": {
+      "$type": "dimension",
+      "$value": "{semantic.material-blur-regular}"
+    },
+    "combobox-list-saturate": {
+      "$type": "number",
+      "$value": "{semantic.material-saturate-regular}"
+    },
+    "combobox-list-shadow": {
+      "$type": "shadow",
+      "$value": "{semantic.elevation-overlay}"
+    },
+    "combobox-list-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-xs}"
+    },
+    "combobox-list-enter-scale": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-enter}"
+    },
+    "combobox-list-enter-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-popover}"
+    },
+    "combobox-list-exit-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-exit}"
+    },
+    "combobox-list-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-enter}"
+    },
+    "combobox-option-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "combobox-option-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "combobox-option-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "combobox-option-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "combobox-option-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "combobox-option-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "combobox-option-icon-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-accent}"
+    },
+    "combobox-option-text-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-text-disabled}"
+    },
+    "combobox-option-icon-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-disabled}"
+    },
     "segmented-control-height": {
       "$type": "dimension",
       "$value": "{semantic.size-control-md}"
@@ -931,6 +1015,26 @@
     "toast-exit-easing": {
       "$type": "cubicBezier",
       "$value": "{semantic.motion-easing-exit}"
+    },
+    "toast-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "toast-body-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-xs}"
+    },
+    "toast-stack-scale": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-enter-modal}"
+    },
+    "toast-stack-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-expand}"
+    },
+    "toast-stack-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-enter}"
     },
     "tag-padding-block": {
       "$type": "dimension",
@@ -1651,6 +1755,22 @@
     "command-easing": {
       "$type": "cubicBezier",
       "$value": "{semantic.motion-easing-enter}"
+    },
+    "command-input-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "command-item-text-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-text-disabled}"
+    },
+    "command-item-icon-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-disabled}"
+    },
+    "command-footer-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-subtle}"
     },
     "icon-button-scale-pressed": {
       "$type": "number",
