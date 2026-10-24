@@ -1,0 +1,95 @@
+@import "@platform/tokens/components/tooltip.css";
+
+@layer ab.components {
+  .content {
+    --ab-kbd-background-color: transparent;
+    --ab-kbd-text-color: color-mix(in oklch, currentColor 72%, transparent);
+    --ab-kbd-border-color: color-mix(in oklch, currentColor 72%, transparent);
+
+    position-anchor: auto;
+    inset: auto;
+    inset-block-end: anchor(self-start);
+    left: anchor(center);
+    translate: -50% 0;
+    position-try-fallbacks: flip-block;
+    box-sizing: border-box;
+    max-inline-size: var(--ab-tooltip-max-width);
+    margin: 0;
+    margin-block-end: var(--ab-tooltip-offset);
+    padding: var(--ab-tooltip-padding-block) var(--ab-tooltip-padding-inline);
+    border: 0;
+    border-radius: var(--ab-tooltip-border-radius);
+    overflow: visible;
+    background-color: var(--ab-tooltip-background-color);
+    color: var(--ab-tooltip-text-color);
+    font: var(--ab-tooltip-font);
+    text-wrap: pretty;
+    opacity: 0;
+    visibility: hidden;
+    scale: var(--ab-tooltip-enter-scale);
+    transform-origin: bottom center;
+    transition:
+      opacity var(--ab-tooltip-exit-duration) var(--ab-tooltip-easing),
+      visibility var(--ab-tooltip-exit-duration) allow-discrete,
+      overlay var(--ab-tooltip-exit-duration) allow-discrete,
+      display var(--ab-tooltip-exit-duration) allow-discrete;
+  }
+
+  .content::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--ab-tooltip-offset) * -1) 0;
+  }
+
+  .content:popover-open {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-tooltip-gap);
+    opacity: 1;
+    visibility: visible;
+    scale: 1;
+    transition: none;
+  }
+
+  .content:popover-open:where([data-pointer]) {
+    transition:
+      opacity var(--ab-tooltip-duration) var(--ab-tooltip-easing) var(--ab-tooltip-delay),
+      scale var(--ab-tooltip-duration) var(--ab-tooltip-easing) var(--ab-tooltip-delay),
+      visibility 0s var(--ab-tooltip-delay);
+  }
+
+  @starting-style {
+    .content:popover-open:where([data-pointer]) {
+      opacity: 0;
+      visibility: hidden;
+      scale: var(--ab-tooltip-enter-scale);
+    }
+  }
+
+  .content:where([data-instant]),
+  .content:popover-open:where([data-instant]) {
+    transition: none;
+  }
+
+  .content:where([data-side="bottom"]) {
+    inset-block: anchor(self-end) auto;
+    margin-block: var(--ab-tooltip-offset) 0;
+    transform-origin: top center;
+  }
+
+  .content:where([data-align="start"]) {
+    inset-inline: anchor(self-start) auto;
+    translate: none;
+  }
+
+  .content:where([data-align="end"]) {
+    inset-inline: auto anchor(self-end);
+    translate: none;
+  }
+
+  @media (forced-colors: active) {
+    .content {
+      border: var(--ab-border-width-default) solid CanvasText;
+    }
+  }
+}

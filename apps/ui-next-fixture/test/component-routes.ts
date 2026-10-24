@@ -132,4 +132,28 @@ export const componentRoutes = [
   },
   { name: "navbar", tokens: ["navbar"], client: [], html: '<nav aria-label="Main">' },
   { name: "sidebar", tokens: ["sidebar"], client: [], html: 'role="group" aria-labelledby=' },
+  {
+    name: "tooltip",
+    tokens: ["tooltip", "icon", "icon-button", "spinner"],
+    client: ["icon-button/icon-button.tsx", "tooltip/tooltip.tsx"],
+    html: 'role="tooltip"',
+  },
+  {
+    name: "popover",
+    tokens: ["popover", "icon", "icon-button"],
+    client: ["popover/popover-root.tsx"],
+    html: 'command="toggle-popover"',
+  },
+  {
+    name: "dropdown-menu",
+    tokens: ["dropdown-menu", "icon"],
+    client: ["dropdown-menu/dropdown-menu-root.tsx", "menu/menu-items.tsx", "menu/menu.tsx"],
+    html: 'aria-haspopup="menu"',
+  },
+  {
+    name: "context-menu",
+    tokens: ["context-menu", "icon"],
+    client: ["context-menu/context-menu-root.tsx", "menu/menu.tsx"],
+    html: 'role="menu"',
+  },
 ];

@@ -22,6 +22,7 @@ export const enUS: Locale = {
     numberField: { increment: "Increase", decrement: "Decrease" },
     breadcrumbs: { root: "Breadcrumb" },
     pagination: { root: "Pagination", previous: "Previous page", next: "Next page" },
+    popover: { close: "Close" },
     dialog: { close: "Close" },
     sheet: { close: "Close" },
   },
