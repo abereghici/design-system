@@ -7,12 +7,7 @@
     "*.css"
   ],
   "imports": {
-    "#storybook/*": "./.storybook/*.ts",
-    "#*": [
-      "./*",
-      "./*.ts",
-      "./*.tsx"
-    ]
+    "#.storybook/*": "./.storybook/*"
   },
   "exports": {
     "./*": "./src/*/index.ts",

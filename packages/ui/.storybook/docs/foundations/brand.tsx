@@ -1,7 +1,7 @@
 // The brand book's prose pages: principles, personality, Logo and iconography. The text is the
 // brand owner's copy from the source design system (project/README.md), with the spec's renames
 // (Logo for "mark", Separator for "divider").
-import { Logo } from "../logo/logo.tsx";
+import { Logo } from "@platform/ui/logo";
 import { cssVar, Rules, Section, Swatch, TokenTable } from "./docs.tsx";
 import styles from "./docs.module.css";
 import { tokens, type Token } from "./tokens.ts";

@@ -2,7 +2,7 @@ import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig, mergeConfig } from "vitest/config";
 
-import { screenshotProjects } from "#storybook/screenshots/projects";
+import { screenshotProjects } from "#.storybook/screenshots/projects.ts";
 
 import viteConfig from "./vite.config.ts";
 
@@ -51,7 +51,7 @@ export default mergeConfig(
           test: {
             name: "storybook-reduced-motion",
             // Fails the project if the emulation did not reach the page.
-            setupFiles: ["./.storybook/reduced-motion.setup.ts"],
+            setupFiles: ["./.storybook/test/reduced-motion.setup.ts"],
             browser: {
               enabled: true,
               headless: true,

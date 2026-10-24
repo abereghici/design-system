@@ -1,7 +1,7 @@
-import preview from "#.storybook/preview";
+import preview from "#.storybook/preview.tsx";
 import { expect, fn } from "storybook/test";
 
-import { listen } from "../testing/listen.ts";
+import { listen } from "#.storybook/test/listen.ts";
 import { Button } from "./button.tsx";
 
 const meta = preview.meta({

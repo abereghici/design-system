@@ -1,4 +1,4 @@
-import preview from "#.storybook/preview";
+import preview from "#.storybook/preview.tsx";
 import { expect } from "storybook/test";
 
 import { Direction as DirectionSection, InteractionPrinciples, Principles } from "./brand.tsx";

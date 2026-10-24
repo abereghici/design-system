@@ -1,4 +1,4 @@
-import preview from "#.storybook/preview";
+import preview from "#.storybook/preview.tsx";
 import { expect, within } from "storybook/test";
 
 import { Families, FontSizes, SPECIMEN_TEXT, TypeRoles } from "./type.tsx";

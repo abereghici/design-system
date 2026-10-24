@@ -1,9 +1,9 @@
-import preview from "#.storybook/preview";
+import preview from "#.storybook/preview.tsx";
 import { expect } from "storybook/test";
 
 import lichenSource from "../../assets/logo/stalpul-cerului-lichen.svg?raw";
 import mossSource from "../../assets/logo/stalpul-cerului-moss.svg?raw";
-import { expectSameDrawing } from "../testing/geometry.ts";
+import { expectSameDrawing } from "#.storybook/test/geometry.ts";
 import { Logo } from "./logo.tsx";
 
 const meta = preview.meta({ title: "Components/Logo", component: Logo });

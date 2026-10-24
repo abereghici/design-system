@@ -1,15 +1,15 @@
-import preview from "#.storybook/preview";
+import preview from "#.storybook/preview.tsx";
 import type { ComponentType } from "react";
 import { expect } from "storybook/test";
 
-import type { IconProps } from "../icon/icon.tsx";
-import { expectSameDrawing } from "../testing/geometry.ts";
+import type { IconProps } from "@platform/ui/icon";
+import { expectSameDrawing } from "#.storybook/test/geometry.ts";
 
 // Every generated icon module and every source SVG, keyed by icon name.
-const modules = import.meta.glob<Record<string, ComponentType<IconProps>>>("../icons/*.tsx", {
+const modules = import.meta.glob<Record<string, ComponentType<IconProps>>>("../../../src/icons/*.tsx", {
   eager: true,
 });
-const sources = import.meta.glob<string>("../../assets/icons/*.svg", {
+const sources = import.meta.glob<string>("../../../assets/icons/*.svg", {
   query: "?raw",
   import: "default",
   eager: true,

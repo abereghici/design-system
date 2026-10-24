@@ -1,4 +1,4 @@
-import preview from "#.storybook/preview";
+import preview from "#.storybook/preview.tsx";
 import { expect } from "storybook/test";
 
 function Sample() {

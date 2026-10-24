@@ -1,8 +1,8 @@
-import preview from "#.storybook/preview";
+import preview from "#.storybook/preview.tsx";
 import { expect, within } from "storybook/test";
 
 import { ColorRoles, Palettes } from "./color.tsx";
-import { cellText, tokenRow } from "../testing/table.ts";
+import { cellText, tokenRow } from "./table.ts";
 
 const meta = preview.meta({
   title: "Foundations/Color",
