@@ -189,12 +189,13 @@ Default.test(
   },
 );
 
-async function backgroundUnder(css: string, button: HTMLElement) {
+function backgroundUnder(css: string, button: HTMLElement) {
   const appStyles = document.createElement("style");
   appStyles.textContent = css;
   document.head.prepend(appStyles);
   try {
-    await Promise.all(button.getAnimations().map(({ finished }) => finished));
+    // Finishing jumps to the settled colour; awaiting `finished` rejects when a busy engine cancels the transition.
+    for (const animation of button.getAnimations()) animation.finish();
     return getComputedStyle(button).backgroundColor;
   } finally {
     appStyles.remove();
@@ -203,7 +204,7 @@ async function backgroundUnder(css: string, button: HTMLElement) {
 
 Default.test("yields to unlayered app CSS", async ({ canvas }) => {
   const button = canvas.getByRole("button", { name: "Save changes" });
-  await expect(await backgroundUnder("button { background-color: rgb(1, 2, 3); }", button)).toBe(
+  await expect(backgroundUnder("button { background-color: rgb(1, 2, 3); }", button)).toBe(
     "rgb(1, 2, 3)",
   );
 });
@@ -214,10 +215,7 @@ Default.test(
   async ({ canvas }) => {
     const button = canvas.getByRole("button", { name: "Save changes" });
     await expect(
-      await backgroundUnder(
-        ":root { --ab-button-primary-background-color: rgb(1, 2, 3); }",
-        button,
-      ),
+      backgroundUnder(":root { --ab-button-primary-background-color: rgb(1, 2, 3); }", button),
     ).toBe("rgb(1, 2, 3)");
   },
 );
