@@ -1,0 +1,33 @@
+@import "@platform/tokens/components/link.css";
+
+@layer ab.components {
+  .root {
+    color: var(--ab-link-text-color);
+    text-decoration-line: underline;
+    text-decoration-color: var(--ab-link-underline-color);
+    text-decoration-thickness: var(--ab-link-underline-thickness);
+    text-underline-offset: var(--ab-link-underline-offset);
+    transition: text-decoration-color var(--ab-motion-duration-hover-out)
+      var(--ab-motion-easing-color);
+  }
+
+  .root > svg {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .root > :where([data-icon="inline-start"]) {
+    margin-inline-end: var(--ab-space-inline-xs);
+  }
+
+  .root > :where([data-icon="inline-end"]) {
+    margin-inline-start: var(--ab-space-inline-xs);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .root:hover {
+      text-decoration-color: var(--ab-link-underline-color-hovered);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+}

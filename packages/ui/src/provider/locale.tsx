@@ -7,6 +7,19 @@ import { enUS } from "./locales/en-US.ts";
 
 export interface Labels {
   readonly spinner: { readonly loading: string };
+  readonly kbd: {
+    readonly command: string;
+    readonly control: string;
+    readonly shift: string;
+    readonly option: string;
+    readonly enter: string;
+    readonly backspace: string;
+    readonly arrowUp: string;
+    readonly arrowDown: string;
+    readonly arrowLeft: string;
+    readonly arrowRight: string;
+  };
+  readonly skipLink: { readonly label: string };
 }
 
 export interface Locale {
