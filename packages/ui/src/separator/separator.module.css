@@ -19,12 +19,15 @@
   /* <hr> is void, so the diamond is a pseudo-element and the two lines are background layers. */
   .root[data-variant="ornament"] {
     --line: linear-gradient(var(--ab-separator-border-color) 0 0) no-repeat;
-    --half: calc(50% - var(--ab-separator-gap) - var(--ab-separator-dot-size) * sqrt(2) / 2);
+    --diagonal: calc(
+      (var(--ab-separator-dot-size) + 2 * var(--ab-separator-border-width)) * sqrt(2)
+    );
+    --half: calc(50% - var(--ab-separator-gap) - var(--diagonal) / 2);
 
     display: flex;
     justify-content: center;
     align-items: center;
-    block-size: calc(var(--ab-separator-dot-size) * sqrt(2));
+    block-size: var(--diagonal);
     border: 0;
     background:
       var(--line) left center / var(--half) var(--ab-separator-border-width),
@@ -33,10 +36,11 @@
 
   .root[data-variant="ornament"]::before {
     content: "";
+    box-sizing: content-box;
     inline-size: var(--ab-separator-dot-size);
     block-size: var(--ab-separator-dot-size);
+    border: var(--ab-separator-border-width) solid var(--ab-separator-dot-color);
     rotate: 45deg;
-    background-color: var(--ab-separator-dot-color);
   }
 
   @media (forced-colors: active) {

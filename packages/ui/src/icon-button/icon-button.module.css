@@ -2,6 +2,10 @@
 
 @layer ab.components {
   .root {
+    --ab-icon-size: var(--ab-icon-button-icon-size);
+    --ab-icon-stroke-width: var(--ab-icon-sm-stroke-width);
+    --ab-spinner-color: currentColor;
+
     display: inline-grid;
     place-items: center;
     flex-shrink: 0;
@@ -12,6 +16,8 @@
     border-radius: var(--ab-icon-button-border-radius);
     background-color: transparent;
     color: var(--ab-icon-button-icon-color);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
     transition-property: background-color, color, scale;
     transition-duration:
       var(--ab-motion-duration-hover-out), var(--ab-motion-duration-hover-out),
@@ -20,34 +26,19 @@
       var(--ab-motion-easing-color), var(--ab-motion-easing-color), var(--ab-motion-easing-enter);
   }
 
-  /* (0,1,1) beats Icon's own size rules whatever order the two stylesheets load in. */
-  .root > svg {
-    inline-size: var(--ab-icon-button-icon-size);
-    block-size: var(--ab-icon-button-icon-size);
-    stroke-width: var(--ab-icon-sm-stroke-width);
-  }
-
-  .root > span {
-    color: inherit;
-  }
-
   .root:where([data-size="sm"]) {
     inline-size: var(--ab-icon-button-sm-size);
     block-size: var(--ab-icon-button-sm-size);
   }
 
   .root:where([data-size="lg"]) {
+    --ab-icon-size: var(--ab-icon-button-lg-icon-size);
+
     inline-size: var(--ab-icon-button-lg-size);
     block-size: var(--ab-icon-button-lg-size);
   }
 
-  .root:where([data-size="lg"]) > svg {
-    inline-size: var(--ab-icon-button-lg-icon-size);
-    block-size: var(--ab-icon-button-lg-icon-size);
-    stroke-width: var(--ab-icon-md-stroke-width);
-  }
-
-  @media (hover: hover) {
+  @media (hover: hover) and (pointer: fine) {
     .root:where(:not([aria-disabled="true"], [aria-busy="true"])):hover {
       background-color: var(--ab-icon-button-background-color-hovered);
       color: var(--ab-icon-button-icon-color-hovered);
@@ -65,11 +56,15 @@
   .root:where(:not([aria-disabled="true"], [aria-busy="true"])):active {
     background-color: var(--ab-icon-button-background-color-pressed);
     scale: var(--ab-icon-button-scale-pressed);
-    transition-duration: 0s, 0s, var(--ab-motion-duration-press);
   }
 
   .root:where([aria-disabled="true"]) {
     opacity: var(--ab-opacity-disabled);
+    cursor: not-allowed;
+  }
+
+  .root:where([aria-busy="true"]) {
+    cursor: progress;
   }
 
   @media (prefers-contrast: more) {
@@ -87,6 +82,7 @@
 
     .root:where([aria-disabled="true"]) {
       color: GrayText;
+      opacity: 1;
     }
   }
 }

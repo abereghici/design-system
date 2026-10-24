@@ -62,8 +62,8 @@ export function Button({
     >
       {loading && !asChild ? (
         <>
-          <Spinner aria-hidden data-icon="inline-start" />
           {children}
+          <Spinner aria-hidden className={styles["spinner"]} />
         </>
       ) : (
         children

@@ -1798,7 +1798,7 @@
     },
     "separator-dot-color": {
       "$type": "color",
-      "$value": "{semantic.color-icon-subtlest}"
+      "$value": "{semantic.color-border-default}"
     },
     "separator-gap": {
       "$type": "dimension",
