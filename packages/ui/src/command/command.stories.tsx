@@ -86,12 +86,13 @@ Default.test(
 );
 
 Default.test(
-  "matches case- and accent-insensitively",
+  "matches case- and accent-insensitively, named by an external <label for> over its built-in name",
   {
     args: {
       children: (
         <>
-          <Command.Input />
+          <label htmlFor="command-search">Find a page</label>
+          <Command.Input id="command-search" />
           <Command.List>
             <Command.Item>Șablon nou</Command.Item>
             <Command.Item>Größe ändern</Command.Item>
@@ -101,7 +102,7 @@ Default.test(
     },
   },
   async ({ canvas, userEvent }) => {
-    const input = canvas.getByRole("combobox");
+    const input = canvas.getByRole("combobox", { name: "Find a page" });
     for (const [query, match] of [
       ["sab", "Șablon nou"],
       ["AND", "Größe ändern"],
