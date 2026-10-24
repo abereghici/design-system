@@ -34,6 +34,7 @@ catalog:
   "@types/subset-font": 2.3.0
   "@vitejs/plugin-react": 6.1.2
   "@vitest/browser-playwright": 5.0.5
+  "@vitest/ui": 5.0.5
   babel-plugin-react-compiler: 1.0.0
   fflate: 0.8.3
   fontkit: 2.0.4
