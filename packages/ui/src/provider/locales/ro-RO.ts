@@ -36,5 +36,14 @@ export const roRO: Locale = {
       unavailable: "Această dată nu este disponibilă",
     },
     calendar: { previousMonth: "Luna anterioară", nextMonth: "Luna următoare" },
+    command: {
+      dialog: "Paletă de comenzi",
+      search: "Caută comenzi",
+      placeholder: "Tastează o comandă sau caută…",
+      empty: "Niciun rezultat",
+      navigate: "Navighează",
+      open: "Deschide",
+      close: "Închide",
+    },
   },
 };

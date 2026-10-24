@@ -174,6 +174,22 @@ describe("per-component JS", () => {
   });
 });
 
+const shipsCommand = (js: string) => js.includes('"input-clear"');
+
+describe("a lazily loaded component", () => {
+  test("Command stays out of its route's initial JavaScript and loads through the dynamic import", () => {
+    const command = route("command");
+    const chunks = join(next, "static", "chunks");
+    expect(command.html).toContain(">Search</button>");
+    expect(shipsCommand(command.js)).toBe(false);
+    expect(
+      readdirSync(chunks, { recursive: true, encoding: "utf8" })
+        .filter((file) => file.endsWith(".js"))
+        .some((file) => shipsCommand(readFileSync(join(chunks, file), "utf8"))),
+    ).toBe(true);
+  });
+});
+
 describe("a client leaf inside a Server Component", () => {
   test("Kbd renders its platform keys as Ctrl on the server and resolves them on the client", () => {
     const kbd = route("kbd");

@@ -39,6 +39,15 @@ export interface Labels {
     readonly unavailable: string;
   };
   readonly calendar: { readonly previousMonth: string; readonly nextMonth: string };
+  readonly command: {
+    readonly dialog: string;
+    readonly search: string;
+    readonly placeholder: string;
+    readonly empty: string;
+    readonly navigate: string;
+    readonly open: string;
+    readonly close: string;
+  };
 }
 
 export interface Locale {
