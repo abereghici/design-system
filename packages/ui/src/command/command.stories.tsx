@@ -175,7 +175,7 @@ Default.test(
   async ({ canvas, userEvent }) => {
     await userEvent.type(canvas.getByRole("combobox", { name: "Caută comenzi" }), "zzz");
     await waitFor(() => expect(canvas.getByRole("status")).toHaveTextContent("Niciun rezultat"));
-    // @ts-expect-error A locale must carry the Command labels.
+    // @ts-expect-error -- a locale must carry the Command labels
     void ({ tag: "fr-FR", labels: { ...roRO.labels, command: {} } } satisfies typeof roRO);
   },
 );

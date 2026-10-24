@@ -111,7 +111,7 @@ Default.test(
   },
   async ({ canvas }) => {
     await waitFor(() => expect(canvas.getByRole("button", { name: "Închide" })).toBeVisible());
-    // @ts-expect-error A locale must carry the Sheet labels.
+    // @ts-expect-error -- a locale must carry the Sheet labels
     void ({ tag: "fr-FR", labels: { ...roRO.labels, sheet: {} } } satisfies Locale);
   },
 );

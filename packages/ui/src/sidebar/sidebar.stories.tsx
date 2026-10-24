@@ -8,7 +8,7 @@ import preview from "#.storybook/preview.tsx";
 
 import * as Sidebar from "./sidebar.tsx";
 
-// @ts-expect-error A Sidebar without aria-label or aria-labelledby leaves its landmark unnamed.
+// @ts-expect-error -- a Sidebar without aria-label or aria-labelledby leaves its landmark unnamed
 <Sidebar.Root>{null}</Sidebar.Root>;
 
 const groups = (

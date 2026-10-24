@@ -28,7 +28,7 @@ export function List({
       className={join(styles["list"], className)}
       onMouseDown={(event) => {
         onMouseDown?.(event);
-        // Keeps DOM focus, and the caret, in the Input.
+        // A press would otherwise move focus to the list, and the Input would lose its caret and keys.
         event.preventDefault();
       }}
       onPointerMove={(event) => {

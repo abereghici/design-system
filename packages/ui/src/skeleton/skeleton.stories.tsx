@@ -41,14 +41,11 @@ Default.test(
   },
 );
 
-Default.test(
-  "holds a line of space when empty",
-  { args: { children: undefined, style: { inlineSize: "12rem" } } },
-  async ({ canvasElement }) => {
-    await expect(canvasElement.querySelector("[aria-hidden]")).toBeVisible();
-  },
-);
-
 Default.test("keeps its colour pulse under reduced motion", async ({ canvas }) => {
   await expect(canvas.getByText("Placeholder name").getAnimations()).toHaveLength(1);
+});
+
+/** With no children it holds one line of space; the screenshot carries it. */
+export const Empty = meta.story({
+  args: { children: undefined, style: { inlineSize: "12rem" } },
 });
