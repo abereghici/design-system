@@ -8,7 +8,7 @@ import { DropZone } from "@platform/ui/drop-zone";
 import { FileTrigger } from "@platform/ui/file-trigger";
 
 <DropZone name="files" accept=".csv,text/csv" multiple onDrop={(files) => queue(files)}>
-  <p>Drop CSV files here, or</p>
+  <span>Drop CSV files here, or</span>
   <FileTrigger onSelect={(files) => queue(files)}>
     <Button>Choose files</Button>
   </FileTrigger>
@@ -22,8 +22,8 @@ Status: draft for brand-owner review (phase 2). No source guide: drafted from th
 Root → content (text, FileTrigger) → hidden file input.
 
 - **Root.** A `<div>` with `drop-zone-padding` (24), `drop-zone-gap` (8) between its children (centred column), radius `drop-zone-border-radius` (12), a dashed `drop-zone-border-width` border in `drop-zone-border-color`, fill `drop-zone-background-color` (`surface-raised`), text in `drop-zone-font` / `drop-zone-text-color`. In flow: no elevation (brand principle 5).
-- **Content.** The consumer's: a sentence and a FileTrigger. The FileTrigger inside uses the DropZone's hidden input instead of its own, so drops and picks land in one `FileList`.
-- **Hidden input.** A native `<input type="file" hidden>` carrying `name`, `accept`, `multiple`, `required`.
+- **Content.** The consumer's: a sentence (a `<span>` or text, which inherits the zone's font and colour; a `<p>` brings its UA margins) and a FileTrigger. The FileTrigger inside uses the DropZone's hidden input instead of its own, so drops and picks land in one `FileList`.
+- **Hidden input.** FileTrigger's visually hidden native `<input type="file">` (see FileTrigger, Anatomy) carrying `name`, `accept`, `multiple`, `required`; it is the Field's control, and on focus it hands focus to the FileTrigger inside.
 
 ## API
 
@@ -53,17 +53,17 @@ Names, checked against the reference libraries:
 | drop target | Border `drop-zone-border-color-hovered` (accent), fill `drop-zone-background-color-hovered` (accent subtle) while files are dragged over | `data-drop-target`                                    |
 | rejected    | Border `drop-zone-border-color-invalid` while the dragged items can't be accepted (type known during the drag and not matching `accept`) | `data-drop-target="rejected"`                         |
 | invalid     | Border `drop-zone-border-color-invalid`; the error below (Field contract)                                                                | `aria-invalid` on the trigger, Field's `data-invalid` |
-| disabled    | `opacity-disabled`; no drop target state                                                                                                 | `data-disabled`                                       |
+| disabled    | No drop target state; the text keeps its colours (as Field's disabled rule) and the FileTrigger shows Button's disabled look             | `data-disabled`                                       |
 
 The drop target state is shown by the border colour and the fill together, and the text does not change, so the zone does not resize under the cursor.
 
 ## Behaviour
 
 - **Drag events.** The Root handles `dragenter`, `dragover`, `dragleave` and `drop`. MDN: "In order for the `drop` event to fire, the element must also cancel the dragover event." and "dragstart and dragend events are not fired when dragging a file into the browser from the OS. To detect when OS files are dragged into the browser, use dragenter and dragleave." A counter of enter/leave pairs keeps `data-drop-target` stable while the pointer crosses child elements (inference: `dragleave` fires on every child boundary).
-- **Accepting.** During `dragover`, `event.dataTransfer.items` gives each item's MIME type; if none can match `accept`, the zone shows rejected and sets `dropEffect = "none"`. On `drop`, files are read from `dataTransfer.files` (MDN: "this property can only be used to read files in the handlers for the dragstart and drop events"), filtered by `accept`, and trimmed to one without `multiple`.
+- **Accepting.** During `dragenter`, `event.dataTransfer.items` gives each item's MIME type but not its name; if none can match `accept`, the zone shows rejected and `dragover` sets `dropEffect = "none"`. An extension token (`.csv`) can't be judged before the drop, so it never rejects during the drag; only MIME tokens (`text/csv`, `image/*`) do. On `drop`, files are read from `dataTransfer.files` (MDN: "this property can only be used to read files in the handlers for the dragstart and drop events"), filtered by `accept`, and trimmed to one without `multiple`.
 - **Native form value.** Accepted files are written to the hidden input with a `DataTransfer`: `const dt = new DataTransfer(); files.forEach((f) => dt.items.add(f)); input.files = dt.files;`. HTML, `files`: "Can be set to a FileList object to change the selected files of the form control. For instance, as the result of a drag-and-drop operation." Then `input` and `change` fire on the input, so Field validation and `FormData` see the files.
 - **Drops outside the zone.** MDN: "For file dropping, the browser may process them by default (such as opening or downloading the file) even when the file is not dropped into a valid drop target. To prevent this behavior, we also need to listen for the `drop` event on `window` and cancel it." While a DropZone is mounted it cancels `dragover` and `drop` on `window` for file drags only (Ark's default: "`preventDocumentDrop = true`"), so a missed drop never navigates away.
-- **Keyboard and touch alternative** is the FileTrigger inside. WCAG 2.2 SC 2.5.7 Dragging Movements requires a single-pointer alternative to dragging; MDN's guide: "For users who can't or don't want to use drag and drop, we also provide the alternative functionality of file selection via an `<input>` element." A DropZone without a FileTrigger child logs a development warning.
+- **Keyboard and touch alternative** is the FileTrigger inside. WCAG 2.2 SC 2.5.7 Dragging Movements requires a single-pointer alternative to dragging; MDN's guide: "For users who can't or don't want to use drag and drop, we also provide the alternative functionality of file selection via an `<input>` element." The FileTrigger is required by this documentation, not checked at run time: a development-only warning needs a build flag that Vite and Next expose differently (`import.meta.env.DEV` / `process.env.NODE_ENV`), so it is left out (Q30-2).
 - **Disabled:** drag handlers set `dropEffect = "none"` and return; the inner FileTrigger is disabled through context.
 - Client component (`'use client'`).
 

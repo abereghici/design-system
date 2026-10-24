@@ -6,6 +6,7 @@ export type FormControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaEle
 
 export interface FieldState {
   readonly controlId: string;
+  readonly labelId: string;
   readonly descriptionId: string;
   readonly errorId: string;
   readonly name: string | undefined;

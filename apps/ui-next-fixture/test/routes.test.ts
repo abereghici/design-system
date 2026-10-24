@@ -170,6 +170,18 @@ const componentRoutes = [
     html: 'aria-label="Show password"',
   },
   {
+    name: "file-trigger",
+    tokens: ["button", "spinner"],
+    client: ["button/button.tsx", "file-trigger/file-trigger.tsx"],
+    html: 'type="file"',
+  },
+  {
+    name: "drop-zone",
+    tokens: ["drop-zone", "button", "spinner"],
+    client: ["button/button.tsx", "drop-zone/drop-zone.tsx", "file-trigger/file-trigger.tsx"],
+    html: "Drop CSV files here",
+  },
+  {
     name: "number-field",
     tokens: ["input", "icon", "icon-button", "spinner"],
     client: ["number-field/number-field.tsx"],
