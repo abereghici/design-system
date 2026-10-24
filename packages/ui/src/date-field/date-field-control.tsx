@@ -151,16 +151,13 @@ function useControl(options: ControlOptions, onValidity: (validity: Validity) =>
   const group = useRef<HTMLFieldSetElement>(null);
   const date = useDate(options);
   const name = field?.name ?? options.name;
-  const validity = useValidity(
-    { ...options, name },
-    {
-      id: field?.controlId,
-      incomplete: names.incomplete,
-      unavailable: names.unavailable,
-      onValidity,
-      reset: date.reset,
-    },
-  );
+  const validity = useValidity(options, {
+    id: field?.controlId,
+    incomplete: names.incomplete,
+    unavailable: names.unavailable,
+    onValidity,
+    reset: date.reset,
+  });
   const blocked = options.disabled === true || field?.disabled === true;
   useLayoutEffect(() => {
     validity.apply(date.segments, date.committed);

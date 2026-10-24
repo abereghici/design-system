@@ -79,6 +79,10 @@ function useServerError(name: string | undefined, controlId: string) {
 function useValidity({ name, validate }: Pick<RootProps, "name" | "validate">, controlId: string) {
   const [failure, setFailure] = useState<Failure>(null);
   const { server, clear } = useServerError(name, controlId);
+  const clearServerError = () => {
+    setFailure(null);
+    clear();
+  };
 
   useEffect(() => {
     const target = controlOf(controlId);
@@ -91,16 +95,12 @@ function useValidity({ name, validate }: Pick<RootProps, "name" | "validate">, c
     const commit = () => {
       setFailure(target === null ? null : failureOf(target));
     };
-    const reset = () => {
-      setFailure(null);
-      clear();
-    };
     // React's onChange on a text input is the input event; user validity turns on at the native change.
     target?.addEventListener("change", commit);
-    form?.addEventListener("reset", reset);
+    form?.addEventListener("reset", clearServerError);
     return () => {
       target?.removeEventListener("change", commit);
-      form?.removeEventListener("reset", reset);
+      form?.removeEventListener("reset", clearServerError);
     };
   });
 
@@ -110,7 +110,8 @@ function useValidity({ name, validate }: Pick<RootProps, "name" | "validate">, c
   };
   return {
     failure,
-    server,
+    serverError: server,
+    clearServerError,
     sync: (event: SyntheticEvent) => {
       const target = own(event);
       if (target !== null) setFailure(failureOf(target));
@@ -145,16 +146,16 @@ export function Root({
   const ids = useId();
   const [controlId, setControlId] = useState(`${ids}control`);
   const [described, describe] = useState(false);
-  const { failure, server, sync, edit } = useValidity({ name, validate }, controlId);
-  const shown = invalid ?? (server !== undefined || failure !== null);
+  const { failure, sync, edit, ...server } = useValidity({ name, validate }, controlId);
+  const shown = invalid ?? (server.serverError !== undefined || failure !== null);
   const parts = partIds(ids);
   const describedBy = shown ? parts.errorId : described ? parts.descriptionId : undefined;
-  const message = server ?? failure?.message;
+  const message = server.serverError ?? failure?.message;
   const state = { controlId, ...parts, name, disabled, invalid: shown, describedBy };
 
   return (
     <FieldContext
-      value={{ ...state, message, validity: failure?.validity, setControlId, describe }}
+      value={{ ...state, ...server, message, validity: failure?.validity, setControlId, describe }}
     >
       <div
         {...props}
