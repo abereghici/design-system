@@ -37,6 +37,7 @@ export const enUS: Locale = {
       unavailable: "This date is not available",
     },
     calendar: { previousMonth: "Previous month", nextMonth: "Next month" },
+    datePicker: { chooseDate: "Choose date" },
     command: {
       dialog: "Command palette",
       search: "Search commands",

@@ -181,4 +181,10 @@ export const componentRoutes = [
     client: ["calendar/calendar.tsx"],
     html: 'role="grid"',
   },
+  {
+    name: "date-picker",
+    tokens: ["input", "date-field", "popover", "icon", "icon-button", "spinner"],
+    client: [],
+    html: 'aria-haspopup="dialog"',
+  },
 ];

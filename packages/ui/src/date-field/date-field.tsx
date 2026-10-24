@@ -12,7 +12,7 @@ import type { Validity } from "./date-field-validity.ts";
 export type { DateFieldChangeEventDetails } from "./date-field-control.tsx";
 
 export type DateFieldProps = DateFieldOptions &
-  Omit<ControlProps, "options" | "onValidity"> & {
+  Omit<ControlProps, "options" | "onValidity" | "end"> & {
     label?: ReactNode;
     /** Helper text below the field, replaced by the error while invalid. */
     description?: ReactNode;
@@ -24,12 +24,21 @@ export type DateFieldProps = DateFieldOptions &
     size?: "md" | "lg";
   };
 
+type FrameProps = DateFieldProps &
+  Pick<ControlProps, "end"> &
+  Pick<ControlProps["options"], "isDateUnavailable" | "onFormReset"> & { children?: ReactNode };
+
 /**
  * Entry of one calendar date by keyboard: day, month and year segments in the Locale's order, with
  * a hidden native date input for the form value and validation. To pick from a month, use Calendar
  * or DatePicker.
  */
-export function DateField({
+export function DateField(props: DateFieldProps) {
+  return <DateFieldFrame {...props} />;
+}
+
+/** DateField with a slot in its field box and one after it, for the DatePicker. */
+export function DateFieldFrame({
   label,
   description,
   errorMessage,
@@ -48,8 +57,12 @@ export function DateField({
   disabled,
   validate,
   labels,
+  isDateUnavailable,
+  onFormReset,
+  end,
+  children,
   ...props
-}: DateFieldProps) {
+}: FrameProps) {
   const [validity, setValidity] = useState<Validity>({ invalid: false, message: "" });
   const options = { value, defaultValue, onValueChange, min, max, name, form, required };
   return (
@@ -64,11 +77,13 @@ export function DateField({
       {label !== undefined && <Field.Label>{label}</Field.Label>}
       <Control
         {...props}
-        options={{ ...options, disabled, validate, labels }}
+        options={{ ...options, disabled, validate, labels, isDateUnavailable, onFormReset }}
         onValidity={setValidity}
+        end={end}
       />
       {description !== undefined && <Field.Description>{description}</Field.Description>}
       <Field.Error>{errorMessage ?? (validity.invalid ? validity.message : undefined)}</Field.Error>
+      {children}
     </Field.Root>
   );
 }

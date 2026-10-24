@@ -1,3 +1,4 @@
+import { createContext } from "react";
 import { Temporal } from "temporal-polyfill";
 
 export { Temporal };
@@ -52,3 +53,17 @@ export function dateFormats(tag: string) {
   cache.set(tag, cached);
   return cached;
 }
+
+/** What a Calendar inside a DatePicker reads instead of its own props. */
+export interface DatePickerContextValue {
+  readonly open: boolean;
+  readonly value: Temporal.PlainDate | null;
+  readonly min: Temporal.PlainDate | undefined;
+  readonly max: Temporal.PlainDate | undefined;
+  readonly isDateUnavailable: ((date: Temporal.PlainDate) => boolean) | undefined;
+  readonly choose: (date: Temporal.PlainDate, event: Event) => void;
+  /** Whether focus is still where the open left it (the trigger, the panel or nowhere). */
+  readonly canFocus: () => boolean;
+}
+
+export const DatePickerContext = createContext<DatePickerContextValue | null>(null);

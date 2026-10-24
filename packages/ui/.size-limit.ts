@@ -13,6 +13,7 @@ const budgets: Readonly<Record<string, string>> = {
   card: "1.3 kB",
   checkbox: "2.55 kB",
   "date-field": "25.6 kB",
+  "date-picker": "30.6 kB",
   "drop-zone": "2.4 kB",
   combobox: "8.7 kB",
   "context-menu": "6.3 kB",
@@ -91,6 +92,6 @@ export default [
   ...checks(
     "src/provider/locales/*.ts",
     (path) => path.slice("src/provider/".length, -".ts".length),
-    "640 B",
+    "730 B",
   ),
 ] satisfies SizeLimitConfig;

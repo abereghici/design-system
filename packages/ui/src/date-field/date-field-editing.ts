@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useRef } from "react";
+import { useEffect, useEffectEvent, useLayoutEffect, useRef } from "react";
 import type { ChangeEvent, KeyboardEvent, RefObject } from "react";
 
 import type { DatePart, dateFormats, Temporal } from "../date/date.ts";
@@ -13,6 +13,7 @@ type Formats = ReturnType<typeof dateFormats>;
 interface Editing {
   readonly group: RefObject<HTMLElement | null>;
   readonly date: {
+    readonly committed: Temporal.PlainDate | null;
     readonly segments: Segments;
     readonly buffer: Buffer;
     readonly setBuffer: (buffer: Buffer) => void;
@@ -63,6 +64,7 @@ function useGroupEvents(
 ) {
   const onPointerDown = useEffectEvent((event: PointerEvent) => {
     if (focus.isSegment(event.target)) return;
+    if (event.target instanceof Element && event.target.closest("button") !== null) return;
     event.preventDefault();
     focus.firstEmpty(-1);
   });
@@ -147,6 +149,14 @@ function pressKey(
 export function useSegmentEditing({ group, date, validity, blocked, formats, submit }: Editing) {
   const focus = useFocus(formats, date.segments);
   const edited = useRef(false);
+  const committed = date.committed?.toString();
+  const last = useRef(committed);
+  useLayoutEffect(() => {
+    if (last.current === committed) return;
+    last.current = committed;
+    edited.current = true;
+    validity.report();
+  });
   useGroupEvents(group, focus, () => {
     if (edited.current) validity.report(true);
   });

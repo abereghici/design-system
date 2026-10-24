@@ -1,5 +1,5 @@
 import { use, useLayoutEffect, useRef, useState } from "react";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 import { dateFormats } from "../date/date.ts";
 import type { DatePart, Temporal } from "../date/date.ts";
@@ -45,13 +45,18 @@ export interface DateFieldOptions {
   labels?: Partial<Labels["dateField"]> | undefined;
 }
 
+interface ControlOptions extends DateFieldOptions {
+  readonly isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
+  readonly onFormReset?: (() => void) | undefined;
+}
+
 type Buffer = { readonly part: DatePart; readonly text: string } | null;
 type Formats = ReturnType<typeof dateFormats>;
 
 const same = (a: Temporal.PlainDate | null, b: Temporal.PlainDate | null) =>
   a === null || b === null ? a === b : a.equals(b);
 
-function useDate({ value, defaultValue = null, onValueChange }: DateFieldOptions) {
+function useDate({ value, defaultValue = null, onValueChange, onFormReset }: ControlOptions) {
   const [own, setOwn] = useState(defaultValue);
   const committed = value === undefined ? own : value;
   const [segments, setSegments] = useState(() => fromDate(committed));
@@ -87,6 +92,7 @@ function useDate({ value, defaultValue = null, onValueChange }: DateFieldOptions
     setOwn(defaultValue);
     setSegments(fromDate(defaultValue));
     setBuffer(null);
+    onFormReset?.();
   };
   return { committed, segments, buffer, setBuffer, edit, reset };
 }
@@ -142,7 +148,7 @@ function filledAround(formats: Formats, index: number, segments: Segments) {
   );
 }
 
-function useControl(options: DateFieldOptions, onValidity: (validity: Validity) => void) {
+function useControl(options: ControlOptions, onValidity: (validity: Validity) => void) {
   const field = use(FieldContext);
   const locale = useLocale();
   const names = { ...locale.labels.dateField, ...options.labels };
@@ -152,7 +158,13 @@ function useControl(options: DateFieldOptions, onValidity: (validity: Validity) 
   const name = field?.name ?? options.name;
   const validity = useValidity(
     { ...options, name },
-    { id: field?.controlId, incomplete: names.incomplete, onValidity, reset: date.reset },
+    {
+      id: field?.controlId,
+      incomplete: names.incomplete,
+      unavailable: names.unavailable,
+      onValidity,
+      reset: date.reset,
+    },
   );
   const blocked = options.disabled === true || field?.disabled === true;
   useLayoutEffect(() => {
@@ -214,11 +226,13 @@ export interface ControlProps extends Omit<
   ComponentProps<"fieldset">,
   "defaultValue" | "onChange" | "children"
 > {
-  readonly options: DateFieldOptions;
+  readonly options: ControlOptions;
   readonly onValidity: (validity: Validity) => void;
+  /** Rendered at the inline end of the field box (the DatePicker trigger). */
+  readonly end?: ReactNode;
 }
 
-export function Control({ options, onValidity, ...props }: ControlProps) {
+export function Control({ options, onValidity, end, ...props }: ControlProps) {
   const control = useControl(options, onValidity);
   const { field, formats, group, date, blocked } = control;
   return (
@@ -245,6 +259,7 @@ export function Control({ options, onValidity, ...props }: ControlProps) {
         ),
       )}
       <HiddenInput control={control} options={options} />
+      {end}
     </fieldset>
   );
 }
