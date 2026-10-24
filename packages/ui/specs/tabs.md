@@ -28,11 +28,11 @@ Status: draft for brand-owner review (phase 3). Source guide: `components/Tabs/R
 
 Root → List (Triggers → indicator) → Contents.
 
-- **Root.** A `<div>` that stacks the List and the visible Content with `space-stack-md`.
-- **List.** A `<div role="tablist">` laid out as a row of Triggers with `tabs-gap`, a `tabs-list-border-width` hairline in `tabs-list-border-color` along its block-end edge. It scrolls horizontally when the Triggers overflow (`overflow-x: auto`, `scrollbar-width: thin`; source: "Overflowing tablists scroll horizontally"). Its padding is `focus-ring-width + focus-ring-offset` on every side, with the same negative `margin-inline`, so a Trigger's focus ring is not clipped by the scroll container and the first label still lines up with the content edge.
+- **Root.** A `<div>` holding the List and the Contents.
+- **List.** A `<div role="tablist">` laid out as a row of Triggers with `tabs-gap`, `tabs-height` tall (content box) plus a `tabs-list-border-width` hairline in `tabs-list-border-color` along its block-end edge. It scrolls horizontally when the Triggers overflow (`overflow-x: auto`, `scrollbar-width: none`, as the source CSS; source: "Overflowing tablists scroll horizontally"). A Trigger's focus ring is drawn inside it (`outline-offset: -focus-ring-width`, as the source CSS), so the scroll container never clips it.
 - **Trigger.** A native `<button type="button" role="tab">`, `tabs-height` tall (40, 48 on coarse pointers), label in `tabs-item-font`, `tabs-item-text-color`. Children are the label and, optionally, a Badge (the source's `badge: 3`).
 - **Indicator.** The List's `::after`: a bar of `tabs-indicator-height` (2 px) in `tabs-indicator-color` on the List's block-end edge, as wide as the selected Trigger. It is positioned with CSS anchor positioning, not measured in script (see Behaviour). Decorative. There is no Indicator Part (below).
-- **Content.** A `<div role="tabpanel">` per Trigger. Every Content is rendered; the inactive ones carry `hidden`.
+- **Content.** A `<div role="tabpanel">` per Trigger, `space-stack-md` padding on its block sides. Every Content is rendered; the inactive ones carry `hidden`.
 
 ## API
 
@@ -75,23 +75,23 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State         | How it shows                                                                     | Exposed as                             |
-| ------------- | -------------------------------------------------------------------------------- | -------------------------------------- |
-| rest          | Label in `tabs-item-text-color` (subtle)                                         | `aria-selected="false"`                |
-| hovered       | Label in `tabs-item-text-color-hovered`; fine pointers only                      | `:hover` under `@media (hover: hover)` |
-| selected      | Label in `tabs-item-text-color-selected`; the indicator under it                 | `aria-selected="true"`                 |
-| focus-visible | 2 px ring, 3 px offset, `color-border-focused`, on the Trigger or on the Content | `:focus-visible`                       |
-| hidden panel  | Not rendered to the screen or the accessibility tree                             | `hidden` on the Content                |
+| State         | How it shows                                                                          | Exposed as                             |
+| ------------- | ------------------------------------------------------------------------------------- | -------------------------------------- |
+| rest          | Label in `tabs-item-text-color` (subtle)                                              | `aria-selected="false"`                |
+| hovered       | Label in `tabs-item-text-color-hovered`; fine pointers only                           | `:hover` under `@media (hover: hover)` |
+| selected      | Label in `tabs-item-text-color-selected`; the indicator under it                      | `aria-selected="true"`                 |
+| focus-visible | 2 px ring in `color-border-focused`: inset on the Trigger, 3 px offset on the Content | `:focus-visible`                       |
+| hidden panel  | Not rendered to the screen or the accessibility tree                                  | `hidden` on the Content                |
 
 ## Behaviour
 
 - **Ids and relations.** The Root takes a `useId()`; each Trigger's `id` is `{id}-trigger-{value}` with `aria-controls` = `{id}-content-{value}`, and each Content's `aria-labelledby` points back at its Trigger (APG: "Each element with role tab has the property aria-controls referring to its associated tabpanel element." and "Each element with role tabpanel has the property aria-labelledby referring to its associated tab element.").
-- **Change.** A click on a Trigger, or an arrow/Home/End key in the List, calls `onValueChange(value, details)`. `details.cancel()` keeps the current tab and focus stays where it was. Otherwise the uncontrolled value changes (controlled: the parent decides), the new Trigger takes focus (keyboard), and `ab-toggle` fires. Choosing the selected tab again does nothing.
+- **Change.** A click on a Trigger, or an arrow/Home/End key on a Trigger, calls `onValueChange(value, details)`. `details.cancel()` keeps the current tab and focus stays where it was. Otherwise the uncontrolled value changes (controlled: the parent decides), the new Trigger takes focus (also after a click, since Safari does not focus a clicked button), and `ab-toggle` fires. Choosing the selected tab again does nothing.
 - **Roving tabindex.** The selected Trigger has `tabindex="0"`, the others `tabindex="-1"` (APG "Managing Focus Within Components Using a Roving tabindex": "the element that is to be included in the tab sequence has tabindex="0" and all other focusable elements contained in the composite have tabindex="-1"."). Selection follows focus, so the tab stop is always the selected tab, which is APG's "When focus moves into the tab list, places focus on the active tab element."
 - **Indicator, without measuring.** The selected Trigger (`[aria-selected="true"]`) gets `anchor-name: --ab-tabs-selected`; the List sets `anchor-scope: --ab-tabs-selected` and `position: relative`; its `::after` is `position: absolute` with `position-anchor: --ab-tabs-selected`, `inset-inline-start: anchor(self-start)`, `inset-inline-end: anchor(self-end)` and `inset-block-end: 0`. `anchor-scope` is required: without it, a lookup that is not an ancestor returns "the last element el in tree order", so a second Tabs on the page would steal the indicator (spec: "When a design pattern is re-used, anchor-scope can prevent naming clashes across identical components."). `position-anchor` is always written explicitly (floating-platform research). The indicator and its anchor sit in the same scroll container, so they scroll together (inference; the build tests a scrolled List in three engines). A pseudo-element as the anchor-positioned box is an inference too (the spec lets a pseudo-element be an anchor; the build verifies the `::after` positions in three engines).
 - **Overflow.** After a change commits, the List calls `scrollIntoView({ block: "nearest", inline: "nearest" })` on the selected Trigger, so a partly hidden tab scrolls fully into view (MDN `nearest`: "Scrolls as little as possible to bring the element into view. … If the element is already visible, no scrolling is done."). `focus()` alone also scrolls (MDN: "By default the browser will scroll the element into view after focusing it"), but React Aria's toolbar source notes "Focusing an item that is only partially visible doesn't scroll it fully into view", and Safari does not focus a clicked button (MDN `<button>`: "Most browsers do give focus to a button being clicked, but Safari does not, by design", quoted in the floating-platform research).
 - **Panels.** The inactive Contents carry `hidden`; MDN: "The browser will not render elements that are in the _hidden_ state." The Content's CSS never sets `display` on a hidden panel (MDN: "changing the value of the CSS `display` property on a hidden element will override the _hidden_ state"). Each Content has `tabindex="0"` by default, the panel's tab stop (APG: "When the tabpanel does not contain any focusable elements or the first element with content is not focusable, the tabpanel should set tabindex="0" to include it in the tab sequence of the page."; Radix's rendered tabpanel carries `tabindex="0"`). A panel that starts with a focusable control can pass `tabIndex={-1}`.
-- **Pointer vs keyboard.** The Root sets `data-pointer` on `pointerdown` and removes it on `keydown` (the Checkbox rule), so the motion below runs only for pointer changes.
+- **Pointer vs keyboard.** A Trigger's `pointerdown` sets `data-pointer` on the List and its `keydown` removes it (the Checkbox rule), so the motion below runs only for pointer changes. The keys are handled on the Triggers, not the List: a tablist with key handlers would have to be focusable itself (`jsx-a11y/interactive-supports-focus`), and the roving tab stop belongs to the selected Trigger.
 - Client components (`'use client'`) for every Part: Root holds state, List handles keys, Trigger and Content read the selected value from context. Content children can be Server Components.
 
 ## Motion
@@ -105,7 +105,7 @@ Names, checked against the reference libraries:
 
 ## Keyboard
 
-APG pattern: **Tabs**, automatic activation (https://www.w3.org/WAI/ARIA/apg/patterns/tabs/). The List handles the keys; Space and Enter are the native button's.
+APG pattern: **Tabs**, automatic activation (https://www.w3.org/WAI/ARIA/apg/patterns/tabs/). The Triggers handle the keys; Space and Enter are the native button's.
 
 | Key           | Action                                                                                                                                                                                                                                                                                                             |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -118,7 +118,7 @@ APG pattern: **Tabs**, automatic activation (https://www.w3.org/WAI/ARIA/apg/pat
 
 Up and Down are not handled: APG "If the tab list is horizontal, it does not listen for Down Arrow or Up Arrow so those keys can provide their normal browser scrolling functions even when focus is inside the tab list." Shift+F10 and Delete (APG, for tabs with menus or closable tabs) do not apply.
 
-**RTL:** the List reads `:dir(rtl)` on itself at keydown and swaps Left and Right, so Left moves to the next tab in visual order (spec #1 user story 54). Home and End are logical (first and last tab) in both directions.
+**RTL:** the Trigger reads `:dir(rtl)` on its List at keydown and swaps Left and Right, so Left moves to the next tab in visual order (spec #1 user story 54). Home and End are logical (first and last tab) in both directions.
 
 ## Accessibility
 

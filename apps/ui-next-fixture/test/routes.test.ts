@@ -175,6 +175,7 @@ const componentRoutes = [
     client: ["number-field/number-field.tsx"],
     html: 'aria-label="Increase"',
   },
+  { name: "tabs", tokens: ["tabs"], client: ["tabs/tabs.tsx"], html: 'role="tablist"' },
 ];
 
 describe("each component route ships only its own CSS, tokens and client code", () => {

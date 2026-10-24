@@ -1,0 +1,84 @@
+@import "@platform/tokens/components/tabs.css";
+
+@layer ab.components {
+  .list {
+    position: relative;
+    display: flex;
+    gap: var(--ab-tabs-gap);
+    box-sizing: content-box;
+    block-size: var(--ab-tabs-height);
+    border-block-end: var(--ab-tabs-list-border-width) solid var(--ab-tabs-list-border-color);
+    overflow-x: auto;
+    scrollbar-width: none;
+    anchor-scope: --ab-tabs-selected;
+  }
+
+  .list::after {
+    content: "";
+    position: absolute;
+    position-anchor: --ab-tabs-selected;
+    inset-inline: anchor(self-start) anchor(self-end);
+    inset-block-end: 0;
+    block-size: var(--ab-tabs-indicator-height);
+    background-color: var(--ab-tabs-indicator-color);
+  }
+
+  .trigger {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-space-inline-xs);
+    padding: 0;
+    border: 0;
+    background: none;
+    font: var(--ab-tabs-item-font);
+    color: var(--ab-tabs-item-text-color);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color);
+  }
+
+  .trigger:focus-visible {
+    outline-offset: calc(var(--ab-focus-ring-width) * -1);
+  }
+
+  .trigger[aria-selected="true"] {
+    color: var(--ab-tabs-item-text-color-selected);
+    anchor-name: --ab-tabs-selected;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .trigger:hover {
+      color: var(--ab-tabs-item-text-color-hovered);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+
+  .content {
+    padding-block: var(--ab-space-stack-md);
+  }
+
+  .root:has(> .list[data-pointer]) > .content {
+    transition-property: opacity, translate, filter;
+    transition-duration: var(--ab-motion-duration-swap);
+    transition-timing-function: var(--ab-motion-easing-enter);
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 var(--ab-motion-distance-swap);
+      filter: blur(var(--ab-motion-blur-swap));
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .list[data-pointer]::after {
+      transition: inset-inline var(--ab-tabs-duration) var(--ab-tabs-easing);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .list::after {
+      background-color: Highlight;
+    }
+  }
+}
