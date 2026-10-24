@@ -6,11 +6,15 @@ import type { StubStory } from "./storybook.ts";
 
 /** One preview card: a story file, rendered as every story it exports. */
 export interface Card {
-  /** The story title's last segment, the card's folder under `components/`. */
+  /**
+   * The card's folder under `components/`: a component's own name (the title's last segment),
+   * or, for a page, the whole title in PascalCase (`Foundations/Logo` → `FoundationsLogo`), so a
+   * page never takes a component's folder.
+   */
   readonly name: string;
   /** The story title's first segment ("<its story title's first segment>", from-code.md step 7). */
   readonly group: string;
-  /** True when the namespace has no export of that name: a showcase page, not a component. */
+  /** True when the file's own `index.ts` doesn't export that name: a showcase page. */
   readonly page: boolean;
   /** Story names, in file order. */
   readonly stories: readonly string[];
@@ -22,7 +26,16 @@ export interface Card {
 export interface StoryFile {
   readonly module: Readonly<Record<string, unknown>>;
   readonly order: readonly string[];
+  /** The public entry (`index.ts`) of the story file's directory; `{}` when it has none. */
+  readonly entry: Readonly<Record<string, unknown>>;
 }
+
+/** A title segment as an identifier part: `Base stylesheet` → `BaseStylesheet`. */
+const pascal = (segment: string) =>
+  segment
+    .split(/[^A-Za-z0-9]+/v)
+    .map((word) => `${word.slice(0, 1).toUpperCase()}${word.slice(1)}`)
+    .join("");
 
 /** Storybook's story name from an export name: `DarkRightToLeft` → "Dark Right To Left". */
 export const storyName = (exportName: string) =>
@@ -71,39 +84,39 @@ export function CardPreview({ card }: Readonly<{ card: Card }>) {
   );
 }
 
-function cardOf(file: StoryFile, components: Readonly<Record<string, unknown>>): Card | undefined {
-  const { module, order } = file;
+function cardOf(file: StoryFile): Card | undefined {
+  const { module, order, entry } = file;
   const rank = (name: string) => (order.includes(name) ? order.indexOf(name) : order.length);
   const entries: (readonly [string, StubStory])[] = [];
-  for (const [name, value] of Object.entries(module))
+  for (const [name, value] of Object.entries(module)) {
     if (isStory(value)) entries.push([name, value]);
+  }
   entries.sort((a, b) => rank(a[0]) - rank(b[0]));
   const first = entries[0]?.[1];
   if (first === undefined) return undefined;
   const title = first.meta.input.title ?? "";
   const segments = title.split("/");
-  const name = segments.at(-1)?.replaceAll(/[^A-Za-z0-9_$]/gv, "") ?? "";
-  if (name === "") throw new Error(`Story title "${title}" gives no card name`);
+  const last = pascal(segments.at(-1) ?? "");
+  if (last === "") throw new Error(`Story title "${title}" gives no card name`);
+  const page = !Object.hasOwn(entry, last);
   return {
-    name,
+    name: page ? segments.map((segment) => pascal(segment)).join("") : last,
     group: segments.length > 1 ? (segments[0] ?? "") : "",
-    page: !Object.hasOwn(components, name),
+    page,
     stories: entries.map(([exportName]) => storyName(exportName)),
     entries,
   };
 }
 
-/** Every story file's card, keyed by name. `components` is the bundle namespace. */
-export function collectCards(
-  files: readonly StoryFile[],
-  components: Readonly<Record<string, unknown>>,
-): Record<string, Card> {
+/** Every story file's card, keyed by name. */
+export function collectCards(files: readonly StoryFile[]): Record<string, Card> {
   const cards: Record<string, Card> = {};
   for (const file of files) {
-    const card = cardOf(file, components);
+    const card = cardOf(file);
     if (card === undefined) continue;
-    if (Object.hasOwn(cards, card.name))
+    if (Object.hasOwn(cards, card.name)) {
       throw new Error(`Two story files make the card ${card.name}`);
+    }
     cards[card.name] = card;
   }
   return cards;

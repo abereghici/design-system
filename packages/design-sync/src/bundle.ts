@@ -69,9 +69,11 @@ export async function entrySource(
   const orders = await Promise.all(
     sources.map(async ({ stories }) => exportOrder(await readFile(stories, "utf8"))),
   );
-  const files = sources.map(
-    (_, index) => `{ module: stories${String(index)}, order: ${spec(orders[index])} }`,
-  );
+  // Each story file with the public entry of its own directory (`{}` when it has none).
+  const files = sources.map(({ entry }, index) => {
+    const own = entry === undefined ? "{}" : `entry${String(entries.indexOf(entry))}`;
+    return `{ module: stories${String(index)}, order: ${spec(orders[index])}, entry: ${own} }`;
+  });
   return [
     // The stylesheet Storybook stories run under: the layer order and @platform/tokens.
     `import ${spec(path.join(uiDir, ".storybook", "preview.css"))};`,
@@ -80,7 +82,7 @@ export async function entrySource(
     ...sources.map(({ stories }, index) => `import * as stories${index} from ${spec(stories)};`),
     `const components = Object.fromEntries([${entries.map((_, index) => `entry${index}`).join(", ")}]`,
     `  .flatMap((module) => Object.entries(module)).filter(([name]) => /^[A-Z]/v.test(name)));`,
-    `const cards = collectCards([${files.join(", ")}], components);`,
+    `const cards = collectCards([${files.join(", ")}]);`,
     `window[${spec(namespace)}] = { ...components, cards, renderCard: CardPreview };`,
   ].join("\n");
 }
@@ -98,12 +100,33 @@ function storybookStub(): Plugin {
   };
 }
 
+/**
+ * Leaves `@platform/tokens/fonts.css` out of bundle.css. The page's tokens.css already declares
+ * the faces with `fonts/` URLs, and library mode inlined every woff2 as a data URI (700 kB of
+ * bundle.css, observed). An alias, because a CSS `@import` is not resolved through plugin
+ * `resolveId` hooks (a hook was tried and did not apply).
+ */
+function withoutFonts(): Plugin {
+  const empty = path.join(runtimeDir, "no-fonts.css");
+  return {
+    name: "design-sync:without-fonts",
+    config: () => ({
+      resolve: { alias: [{ find: /^@platform\/tokens\/fonts\.css$/v, replacement: empty }] },
+    }),
+  };
+}
+
 /** Runs the bundle in a Node context with React, and reads the cards it registered. */
 export function readCatalog(js: string, namespace: string): CardInfo[] {
   const context: Record<string, unknown> = { React: require("react"), console };
   context["window"] = context;
   context["globalThis"] = context;
-  vm.runInNewContext(js, context);
+  try {
+    vm.runInNewContext(js, context);
+  } catch (error) {
+    // Rethrown without the bundle source, which Node would print as the failing line.
+    throw new Error(`Running the preview bundle failed: ${String(error)}`, { cause: error });
+  }
   const exported: unknown = context[namespace];
   const cards: unknown =
     typeof exported === "object" && exported !== null ? Reflect.get(exported, "cards") : undefined;
@@ -144,7 +167,7 @@ export async function buildPreviewBundle({
   const { js, css } = await buildIife({
     root: uiDir,
     source: await entrySource(uiDir, sources, namespace),
-    plugins: [storybookStub(), reactGlobals()],
+    plugins: [storybookStub(), withoutFonts(), reactGlobals()],
     shimMissingExports: true,
   });
   const cards = readCatalog(js, namespace);

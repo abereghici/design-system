@@ -57,7 +57,9 @@ test("every story file in @platform/ui becomes a card, with no list kept by hand
   // The Cover is the one hand-written preview.
   expect(cardNames().filter((name) => name !== "Cover")).toHaveLength(stories.length);
   expect(built.components).toEqual(["Button", "Icon", "Logo"]);
-  expect(cardNames()).toContain("Icons");
+  expect(cardNames()).toEqual(
+    expect.arrayContaining(["FoundationsIcons", "FoundationsLogo", "Logo"]),
+  );
 });
 
 test("every card renders on the bundled React 19 with no page error", async () => {
@@ -120,7 +122,7 @@ test("previews and READMEs follow the format: marker on line 1, summary first", 
   expect((await read("components/Button/preview.html")).split("\n")[0]).toBe(
     '<!-- @dsCard group="Components" height=312 -->',
   );
-  expect((await read("components/Icons/preview.html")).split("\n")[0]).toMatch(
+  expect((await read("components/FoundationsIcons/preview.html")).split("\n")[0]).toMatch(
     /^<!-- @dsCard group="Foundations" height=\d+ page -->$/v,
   );
   const readme = await read("components/Logo/README.md");
