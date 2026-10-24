@@ -1,0 +1,23 @@
+@layer ab.components {
+  .root {
+    margin: 0;
+    color: var(--ab-color-text-default);
+    font: var(--ab-type-heading-md);
+    letter-spacing: var(--ab-type-heading-md-letter-spacing);
+  }
+
+  .root:where([data-size="lg"]) {
+    font: var(--ab-type-heading-lg);
+    letter-spacing: var(--ab-type-heading-lg-letter-spacing);
+  }
+
+  .root:where([data-size="sm"]) {
+    font: var(--ab-type-heading-sm);
+    letter-spacing: var(--ab-type-heading-sm-letter-spacing);
+  }
+
+  .root:where([data-size="xs"]) {
+    font: var(--ab-type-heading-xs);
+    letter-spacing: var(--ab-type-heading-xs-letter-spacing);
+  }
+}

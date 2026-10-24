@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import type { ComponentProps, MouseEvent } from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { useState, type ComponentProps, type MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
+
 import styles from "./icon-button.module.css";
 
 export interface IconButtonChangeEventDetails {

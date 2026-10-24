@@ -1,9 +1,10 @@
 "use client";
 
-import { Slot } from "@radix-ui/react-slot";
 import type { ComponentProps, MouseEvent } from "react";
+import { Slot } from "@radix-ui/react-slot";
 
 import { dispatchFeedback } from "../events/events.ts";
+
 import styles from "./button.module.css";
 
 export interface ButtonProps extends ComponentProps<"button"> {

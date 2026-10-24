@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
 
-import { buildTokens, SOURCE_GLOB } from "./build.ts";
 import type { Themed } from "./artifact-format.ts";
+import { buildTokens, SOURCE_GLOB } from "./build.ts";
 import { validTokens } from "./test-fixtures.ts";
 
 const artifactOf = async () => (await buildTokens({ tokens: validTokens() })).artifact;

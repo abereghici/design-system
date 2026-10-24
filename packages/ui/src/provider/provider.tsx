@@ -1,10 +1,11 @@
 import "./provider.css";
 
-import type { ReactNode } from "react";
 import { preload } from "react-dom";
+import type { ReactNode } from "react";
 
 import { figtreeLatin } from "./figtree-latin.js";
-import { LocaleProvider, type Locale } from "./locale.tsx";
+import { LocaleProvider } from "./locale.tsx";
+import type { Locale } from "./locale.tsx";
 
 export interface ProviderProps {
   /**

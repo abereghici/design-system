@@ -1,5 +1,6 @@
-import preview from "#.storybook/preview.tsx";
 import { expect } from "storybook/test";
+
+import preview from "#.storybook/preview.tsx";
 
 import { Logo } from "./logo.tsx";
 

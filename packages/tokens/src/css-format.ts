@@ -2,9 +2,9 @@ import type { Dictionary, TransformedToken } from "style-dictionary/types";
 
 import { compositeCss } from "./composite.ts";
 import { mediaOverrides, perTheme } from "./media.ts";
+import { componentOf } from "./naming.ts";
 import { propertyRules } from "./property.ts";
 import { authoredDark, isThemed, isWholeReference, resolvedDark } from "./theme.ts";
-import { componentOf } from "./naming.ts";
 import { inTierOrder, tierOf } from "./tiers.ts";
 
 const cssValue = (

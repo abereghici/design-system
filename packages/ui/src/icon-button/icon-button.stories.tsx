@@ -1,14 +1,14 @@
-import { listen } from "#.storybook/test/listen.ts";
-import preview from "#.storybook/preview.tsx";
-import { PinIcon } from "@platform/ui/icons/pin";
-import { useState, type MouseEvent } from "react";
+import { useState } from "react";
+import type { MouseEvent } from "react";
 import { expect, fn } from "storybook/test";
 
-import {
-  IconButton,
-  type IconButtonChangeEventDetails,
-  type IconButtonProps,
-} from "./icon-button.tsx";
+import { PinIcon } from "@platform/ui/icons/pin";
+
+import preview from "#.storybook/preview.tsx";
+import { listen } from "#.storybook/test/listen.ts";
+
+import { IconButton } from "./icon-button.tsx";
+import type { IconButtonChangeEventDetails, IconButtonProps } from "./icon-button.tsx";
 
 type Context = Parameters<Parameters<typeof Default.test>[2]>[0];
 

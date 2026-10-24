@@ -1,8 +1,10 @@
-import { listen } from "#.storybook/test/listen.ts";
-import preview from "#.storybook/preview.tsx";
-import { PlusIcon } from "@platform/ui/icons/plus";
 import type { MouseEvent } from "react";
 import { expect, fn } from "storybook/test";
+
+import { PlusIcon } from "@platform/ui/icons/plus";
+
+import preview from "#.storybook/preview.tsx";
+import { listen } from "#.storybook/test/listen.ts";
 
 import { Button } from "./button.tsx";
 

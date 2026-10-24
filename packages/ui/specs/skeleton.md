@@ -3,8 +3,8 @@
 Holds the place of content that is still loading, in the same shape, so the layout doesn't jump when the content arrives. Use it for a first load where the shape of the content is known (a list, a card, an avatar and name). For a wait inside a control use the Button's `loading`; for a wait of unknown shape use Spinner; for a measurable task use Progress. Like Spinner, show nothing for waits under about 400 ms (brand book, Doherty threshold).
 
 ```tsx
-import { Skeleton } from "@platform/ui/skeleton";
 import { Avatar } from "@platform/ui/avatar";
+import { Skeleton } from "@platform/ui/skeleton";
 import { Text } from "@platform/ui/text";
 
 <section aria-busy={isLoading} aria-labelledby="team-heading">

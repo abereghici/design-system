@@ -1,5 +1,7 @@
-export let storyCanvas: HTMLElement;
+let canvas: HTMLElement;
+
+export const storyCanvas = () => canvas;
 
 export function rememberStoryCanvas({ canvasElement }: { canvasElement: HTMLElement }) {
-  storyCanvas = canvasElement;
+  canvas = canvasElement;
 }
