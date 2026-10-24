@@ -8,8 +8,6 @@
     block-size: var(--ab-badge-height);
     min-inline-size: var(--ab-badge-min-width);
     padding-inline: var(--ab-badge-padding-inline);
-    /* Transparent until forced colors paint it, so the pill keeps its outline there. */
-    border: var(--ab-border-width-default) solid transparent;
     border-radius: var(--ab-badge-border-radius);
     background-color: var(--ab-badge-neutral-background-color);
     color: var(--ab-badge-neutral-text-color);
@@ -26,5 +24,13 @@
   .root[data-variant="danger"] {
     background-color: var(--ab-badge-danger-background-color);
     color: var(--ab-badge-danger-text-color);
+  }
+
+  @media (forced-colors: active) {
+    .root {
+      forced-color-adjust: none;
+      outline: 1px solid CanvasText;
+      outline-offset: -1px;
+    }
   }
 }

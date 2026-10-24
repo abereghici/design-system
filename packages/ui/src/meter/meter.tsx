@@ -15,7 +15,10 @@ type Thresholds =
   | { low: number; high?: number; valueLabel: string }
   | { low?: number; high: number; valueLabel: string };
 
-export type MeterProps = Omit<ComponentProps<"div">, "children"> &
+export type MeterProps = Omit<
+  ComponentProps<"meter">,
+  "children" | "value" | "min" | "max" | "low" | "high" | "optimum"
+> &
   Name &
   Thresholds & {
     /** Clamped to `min…max`. */
@@ -33,71 +36,52 @@ export type MeterProps = Omit<ComponentProps<"div">, "children"> &
     locale?: Locale;
   };
 
-const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
-
-function region(
-  value: number,
-  min: number,
-  max: number,
-  low?: number,
-  high?: number,
-  optimum?: number,
-) {
-  const lo = clamp(low ?? min, min, max);
-  const hi = clamp(high ?? max, lo, max);
-  const best = clamp(optimum ?? (min + max) / 2, min, max);
-  if (best < lo) return value <= lo ? "optimum" : value <= hi ? "suboptimum" : "even-less-good";
-  if (best > hi) return value >= hi ? "optimum" : value >= lo ? "suboptimum" : "even-less-good";
-  return value >= lo && value <= hi ? "optimum" : "suboptimum";
-}
-
 export function Meter({
   value,
   min = 0,
   max = 100,
   low,
   high,
-  optimum,
   label,
   valueLabel,
   formatOptions = { style: "percent" },
   locale,
   className,
+  style,
   ...props
 }: MeterProps) {
   const id = useId();
-  const now = clamp(value, min, max);
-  const fraction = (now - min) / (max - min);
-  const thresholds = low !== undefined || high !== undefined;
+  const now = Math.min(Math.max(value, min), max);
+  const text =
+    valueLabel ??
+    new Intl.NumberFormat(locale?.tag ?? "en", formatOptions).format(
+      formatOptions.style === "percent" ? (now - min) / (max - min) : now,
+    );
   return (
     <div
-      aria-labelledby={label === undefined ? undefined : id}
-      aria-valuetext={typeof valueLabel === "string" ? valueLabel : undefined}
-      {...props}
-      // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- <meter> styles only through non-standard pseudo-elements
-      role="meter"
-      aria-valuemin={min}
-      aria-valuemax={max}
-      aria-valuenow={now}
-      data-region={thresholds ? region(now, min, max, low, high, optimum) : undefined}
+      data-thresholds={low === undefined && high === undefined ? undefined : ""}
       className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      style={style}
     >
       {label !== undefined && (
         <div className={styles["header"]}>
           <span id={id} className={styles["label"]}>
             {label}
           </span>
-          <span className={styles["value"]}>
-            {valueLabel ??
-              new Intl.NumberFormat(locale?.tag ?? "en", formatOptions).format(
-                formatOptions.style === "percent" ? fraction : now,
-              )}
-          </span>
+          <span className={styles["value"]}>{text}</span>
         </div>
       )}
-      <div className={styles["track"]}>
-        <div className={styles["indicator"]} style={{ inlineSize: `${fraction * 100}%` }} />
-      </div>
+      <meter
+        aria-labelledby={label === undefined ? undefined : id}
+        aria-valuetext={typeof valueLabel === "string" ? valueLabel : undefined}
+        {...props}
+        min={min}
+        max={max}
+        low={low}
+        high={high}
+        value={now}
+        className={styles["track"]}
+      />
     </div>
   );
 }

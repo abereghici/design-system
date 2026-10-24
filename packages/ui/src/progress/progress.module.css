@@ -2,6 +2,7 @@
 
 @layer ab.components {
   .root {
+    position: relative;
     display: grid;
     gap: var(--ab-progress-gap);
   }
@@ -26,41 +27,70 @@
   }
 
   .track {
-    overflow: hidden;
+    appearance: none;
+    display: block;
+    inline-size: 100%;
     block-size: var(--ab-progress-track-height);
+    border: 0;
     border-radius: var(--ab-progress-track-border-radius);
     background-color: var(--ab-progress-track-background-color);
   }
 
-  .indicator {
-    block-size: 100%;
+  .track::-webkit-progress-inner-element {
+    border-radius: inherit;
+  }
+
+  .track::-webkit-progress-bar {
+    border-radius: inherit;
+    background-color: transparent;
+  }
+
+  .track::-webkit-progress-value {
     border-radius: inherit;
     background-color: var(--ab-progress-indicator-background-color);
   }
 
-  .root:where([data-state="indeterminate"]) .indicator {
+  .track::-moz-progress-bar {
+    border-radius: inherit;
+    background-color: var(--ab-progress-indicator-background-color);
+  }
+
+  .track:indeterminate::-moz-progress-bar {
+    background-color: transparent;
+  }
+
+  /* <progress> renders no pseudo-element of its own while indeterminate in every engine, so the root draws the segment. */
+  .root:has(> .track:indeterminate)::after {
+    content: "";
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
     inline-size: 40%;
+    block-size: var(--ab-progress-track-height);
+    border-radius: var(--ab-progress-track-border-radius);
+    background-color: var(--ab-progress-indicator-background-color);
     animation: sweep var(--ab-progress-duration) var(--ab-motion-easing-constant) infinite alternate;
   }
 
-  .root:where([data-state="indeterminate"]:dir(rtl)) .indicator {
+  .root:has(> .track:indeterminate):dir(rtl)::after {
     animation-name: sweep-rtl;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .root:where([data-state="indeterminate"]) .indicator {
+    .root:has(> .track:indeterminate)::after {
       inline-size: 100%;
       animation-name: fade;
     }
   }
 
   @media (forced-colors: active) {
-    .track {
-      outline: 1px solid CanvasText;
+    .track,
+    .root::after {
+      forced-color-adjust: none;
     }
 
-    .indicator {
-      background-color: CanvasText;
+    .track {
+      outline: 1px solid CanvasText;
     }
   }
 
@@ -79,7 +109,7 @@
 
   @keyframes fade {
     from {
-      background-color: var(--ab-progress-track-background-color);
+      opacity: 0;
     }
   }
 }

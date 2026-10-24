@@ -35,11 +35,11 @@
   }
 
   .icon {
+    --ab-icon-size: var(--ab-alert-icon-size);
+    --ab-icon-ink: var(--icon-color);
+
     grid-row: 1;
     grid-column: 1;
-    inline-size: var(--ab-alert-icon-size);
-    block-size: var(--ab-alert-icon-size);
-    color: var(--icon-color);
   }
 
   .title,
@@ -70,9 +70,14 @@
     border-radius: var(--ab-icon-button-border-radius);
     background-color: transparent;
     color: var(--ab-icon-button-icon-color);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
     transition-property: background-color, color, scale;
-    transition-duration: var(--ab-motion-duration-hover-out);
-    transition-timing-function: var(--ab-motion-easing-color);
+    transition-duration:
+      var(--ab-motion-duration-hover-out), var(--ab-motion-duration-hover-out),
+      var(--ab-motion-duration-press);
+    transition-timing-function:
+      var(--ab-motion-easing-color), var(--ab-motion-easing-color), var(--ab-motion-easing-enter);
   }
 
   .close:not([aria-disabled="true"]):active {
@@ -82,13 +87,16 @@
 
   .close[aria-disabled="true"] {
     color: var(--ab-color-icon-disabled);
+    cursor: not-allowed;
   }
 
-  @media (hover: hover) {
+  @media (hover: hover) and (pointer: fine) {
     .close:not([aria-disabled="true"]):hover {
       background-color: var(--ab-icon-button-background-color-hovered);
       color: var(--ab-icon-button-icon-color-hovered);
-      transition-duration: var(--ab-motion-duration-hover-in);
+      transition-duration:
+        var(--ab-motion-duration-hover-in), var(--ab-motion-duration-hover-in),
+        var(--ab-motion-duration-press);
     }
   }
 
@@ -108,7 +116,7 @@
     }
 
     .icon {
-      color: CanvasText;
+      --ab-icon-ink: CanvasText;
     }
   }
 }

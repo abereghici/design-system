@@ -68,7 +68,7 @@ Not focusable; no keyboard interaction. Tab skips it.
 - The icon is decorative and the label carries the meaning; colour is never the only signal (WCAG 1.4.1).
 - Contrast: the source requires "text meets 4.5:1 on each". `text-{role}` on `background-{role}-subtle` (and `text-subtle` on `surface-nested`) are in the AA matrix.
 - **More contrast:** text tokens already pass 4.5:1; no change. The fill is decorative.
-- **Forced colors:** fills are removed (MDN forced-colors list: "`background-color`", https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors). Tag draws a 1 px transparent border at all times, which forced colors turns into a system colour (CSS Color Adjust 1, "its used value is instead forced to a system color", https://www.w3.org/TR/css-color-adjust-1/), so the pill outline stays.
+- **Forced colors:** fills are removed (MDN forced-colors list: "`background-color`", https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors), so under `@media (forced-colors: active)` Tag draws a 1 px inset `CanvasText` outline, as the artifact's adaptive.css does (`outline:1px solid CanvasText;outline-offset:-1px`). No border at other times, so the pill keeps the artifact's size.
 - **Reduced transparency:** not affected (no Material).
 
 ## RTL
@@ -85,7 +85,7 @@ Proposed new:
 | --------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `tag-icon-size` | `size-icon-xs` (14 px) | The source shows an icon in a Tag but has no size token for it; 14 px fits the 13 px label without raising the height. |
 
-The forced-colors border uses semantic `border-width-default` directly.
+The forced-colors outline is a 1 px system-colour literal, as in the artifact.
 
 ## Built-in labels
 

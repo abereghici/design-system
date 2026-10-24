@@ -78,7 +78,7 @@ Not focusable; no keyboard interaction. Tab skips it; focus lands on the owning 
 - Not colour alone: the count or glyph carries the meaning; the fill only adds emphasis (WCAG 1.4.1: "Color is not used as the only visual means of conveying information").
 - Contrast: `on-accent` / `on-danger` on their bold fills and `text-subtle` on `surface-nested` are in the AA matrix (`packages/tokens/src/contrast.ts`).
 - **More contrast:** text tokens already pass 4.5:1; no change. The pill shape is decorative.
-- **Forced colors:** fills are removed ("`background-color`" is in the forced list, MDN https://developer.mozilla.org/en-US/docs/Web/CSS/@media/forced-colors). Badge draws a 1 px transparent border at all times (inside its height), which forced colors turns into a visible system colour (CSS Color Adjust: "if its computed value is a color other than a system color, its used value is instead forced to a system color", https://www.w3.org/TR/css-color-adjust-1/), so the pill outline stays.
+- **Forced colors:** as the artifact's adaptive.css, Badge sets `forced-color-adjust: none` (it keeps its own fill and ink, an AA pair) and draws a 1 px inset `CanvasText` outline so the pill edge shows on any `Canvas`.
 - **Reduced transparency:** not affected (no Material).
 
 ## RTL
@@ -89,7 +89,7 @@ Logical properties only (`padding-inline`, `min-inline-size`). The "+" placement
 
 All exist (`packages/tokens/src/tokens/component.tokens.json`): `badge-height`, `badge-min-width`, `badge-padding-inline`, `badge-border-radius`, `badge-font`, `badge-font-variant-numeric`, `badge-{neutral,accent,danger}-background-color`, `badge-{neutral,accent,danger}-text-color`.
 
-No new tokens. The transparent forced-colors border uses semantic `border-width-default` directly.
+No new tokens. The forced-colors outline is a 1 px system-colour literal, as in the artifact.
 
 ## Built-in labels
 
