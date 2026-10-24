@@ -20,6 +20,7 @@ export default mergeConfig(
           plugins: [storybookTest()],
           test: {
             name: "storybook",
+            setupFiles: ["./.storybook/test/focus.setup.ts"],
             browser: {
               enabled: true,
               headless: true,
@@ -32,7 +33,10 @@ export default mergeConfig(
           plugins: [storybookTest()],
           test: {
             name: "storybook-reduced-motion",
-            setupFiles: ["./.storybook/test/reduced-motion.setup.ts"],
+            setupFiles: [
+              "./.storybook/test/focus.setup.ts",
+              "./.storybook/test/reduced-motion.setup.ts",
+            ],
             browser: {
               enabled: true,
               headless: true,
