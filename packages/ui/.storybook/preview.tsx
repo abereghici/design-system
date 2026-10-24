@@ -5,7 +5,7 @@ import addonDocs from "@storybook/addon-docs";
 import { definePreview } from "@storybook/react-vite";
 import { useEffect } from "storybook/preview-api";
 
-import { rememberStoryCanvas } from "./story-canvas.ts";
+import { rememberStoryCanvas } from "./screenshots/canvas.ts";
 
 // Toolbar globals for the Theme contract (packages/tokens/README.md) and text direction.
 // "system" leaves `data-theme` off, which means the System theme.
@@ -35,14 +35,8 @@ export default definePreview({
   addons: [addonDocs(), addonA11y()],
   // "If a CSF file contains at least one story tagged with `autodocs`, then a documentation page
   // will be generated" (https://storybook.js.org/docs/writing-docs/autodocs).
-  // `screenshot` (custom): every story is captured by the `screenshot:*` Vitest projects. "To
-  // remove a tag from a story, prefix it with `!`" (https://storybook.js.org/docs/writing-stories/tags),
-  // so a story or meta opts out with `tags: ["!screenshot"]`.
   tags: ["autodocs", "screenshot"],
-  // Runs before every story with its context; the screenshot setup file captures this element.
-  beforeEach: ({ canvasElement }) => {
-    rememberStoryCanvas(canvasElement);
-  },
+  beforeEach: rememberStoryCanvas,
   parameters: {
     // The addon's own default is 'todo' (code/addons/a11y/src/preview.tsx @ v10.6.3); 'error':
     // "violations return a failing test in the Storybook UI and CLI/CI"

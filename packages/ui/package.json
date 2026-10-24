@@ -7,6 +7,7 @@
     "*.css"
   ],
   "imports": {
+    "#storybook/*": "./.storybook/*.ts",
     "#*": [
       "./*",
       "./*.ts",
@@ -25,8 +26,8 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "size": "size-limit",
-    "test": "vitest run --project \"storybook*\"",
-    "test:watch": "vitest --project \"storybook*\"",
+    "test": "vitest run --project \"!screenshot:*\"",
+    "test:watch": "vitest --project \"!screenshot:*\"",
     "icons": "node scripts/icons.ts",
     "test:screenshots": "vitest run --project \"screenshot:*\" --reporter=default --reporter=html",
     "test:screenshots:docker": "sh scripts/screenshots-docker.sh"
