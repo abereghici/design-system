@@ -36,6 +36,7 @@ const budgets: Readonly<Record<string, string>> = {
   spinner: "880 B",
   switch: "2.3 kB",
   "status-dot": "490 B",
+  table: "700 B",
   tag: "600 B",
   text: "520 B",
   "text-area": "2.7 kB",

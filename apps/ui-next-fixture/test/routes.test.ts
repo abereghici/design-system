@@ -206,6 +206,7 @@ describe("per-component JS", () => {
     ["text", "var(--ab-type-body-md)", 0],
     ["scroll-area", "animation-timeline:scroll(self)", 0],
     ["spinner", "var(--ab-spinner-color)", 5],
+    ["table", "var(--ab-table-body-font)", 10],
     ["skeleton", "var(--ab-skeleton-background-color)", 4],
     ["progress", "var(--ab-progress-indicator-background-color)", 11],
     ["meter", "var(--ab-meter-indicator-background-color)", 13],
