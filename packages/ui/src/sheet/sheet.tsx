@@ -2,6 +2,7 @@ import type { ComponentProps } from "react";
 
 import { Content as ModalContent, ModalRoot } from "../dialog/modal.tsx";
 import type { ContentProps as ModalContentProps, RootProps } from "../dialog/modal.tsx";
+import { join } from "../slot/slot.tsx";
 
 import styles from "./sheet.module.css";
 
@@ -9,9 +10,6 @@ export { Close } from "../dialog/close.tsx";
 export type { CloseProps } from "../dialog/close.tsx";
 export { Description, Title, Trigger } from "../dialog/modal.tsx";
 export type { ChangeEventDetails, RootProps, TitleProps, TriggerProps } from "../dialog/modal.tsx";
-
-const join = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
 
 /**
  * A modal side panel for a secondary task that keeps the page in view: record details, editing one

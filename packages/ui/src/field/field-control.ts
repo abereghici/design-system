@@ -1,6 +1,8 @@
 import { createContext, use, useEffect, useRef } from "react";
 import type { ChangeEvent, ChangeEventHandler, FocusEvent, FocusEventHandler } from "react";
 
+import type { ChangeEventDetails as Details } from "../events/events.ts";
+
 /** The native elements a Field validates. */
 export type FormControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
@@ -21,12 +23,10 @@ export interface FieldState {
 
 export const FieldContext = createContext<FieldState | undefined>(undefined);
 
-export interface ChangeEventDetails<Element extends FormControl = HTMLInputElement> {
-  readonly reason: "none";
-  readonly event: ChangeEvent<Element>;
-  /** Restores the previous value. */
-  readonly cancel: () => void;
-}
+export type ChangeEventDetails<Element extends FormControl = HTMLInputElement> = Details<
+  "none",
+  ChangeEvent<Element>
+>;
 
 export interface ControlBindings<Element extends FormControl> {
   id?: string | undefined;

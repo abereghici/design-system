@@ -3,7 +3,7 @@
 import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
-import { Slot } from "../slot/slot.tsx";
+import { Slot, join } from "../slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./button.module.css";
@@ -62,7 +62,7 @@ export function Button({
       data-loading={loading ? "" : undefined}
       data-variant={variant}
       data-size={size}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
       onClick={handleClick}
     >
       {loading && !asChild ? (

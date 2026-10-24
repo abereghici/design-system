@@ -1,12 +1,9 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { Slot } from "../slot/slot.tsx";
+import { Slot, join } from "../slot/slot.tsx";
 
 import styles from "./sidebar.module.css";
-
-const join = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
 
 type AccessibleName =
   | { "aria-label": string; "aria-labelledby"?: string }

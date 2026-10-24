@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 
 import type { Labels, Locale } from "../provider/locale.tsx";
+import { join } from "../slot/slot.tsx";
 
 import { skipLinkLabels } from "./labels.ts";
 import styles from "./skip-link.module.css";
@@ -23,10 +24,7 @@ export interface SkipLinkProps extends Omit<ComponentProps<"a">, "href"> {
  */
 export function SkipLink({ locale, labels, children, className, ...props }: SkipLinkProps) {
   return (
-    <a
-      {...props}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
-    >
+    <a {...props} className={join(styles["root"], className)}>
       {children ?? labels?.label ?? locale?.labels.skipLink.label ?? skipLinkLabels.label}
     </a>
   );

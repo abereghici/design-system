@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import { join } from "../slot/slot.tsx";
+
 import styles from "./status-dot.module.css";
 
 export interface StatusDotProps extends ComponentProps<"span"> {
@@ -19,7 +21,7 @@ export function StatusDot({ variant = "neutral", className, ...props }: StatusDo
       aria-hidden
       {...props}
       data-variant={variant}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
     />
   );
 }

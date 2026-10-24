@@ -4,6 +4,7 @@ import { CheckCircleIcon } from "../icon/icons/check-circle.tsx";
 import { DangerIcon } from "../icon/icons/danger.tsx";
 import { InfoIcon } from "../icon/icons/info.tsx";
 import { WarningIcon } from "../icon/icons/warning.tsx";
+import { join } from "../slot/slot.tsx";
 
 import styles from "./alert.module.css";
 
@@ -16,9 +17,6 @@ const icons = {
   warning: WarningIcon,
   danger: DangerIcon,
 };
-
-const join = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
 
 export interface RootProps extends ComponentProps<"div"> {
   /** Sets the fill and the status icon. The Title still names the situation in words. */

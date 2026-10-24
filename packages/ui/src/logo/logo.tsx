@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import { join } from "../slot/slot.tsx";
+
 import styles from "./logo.module.css";
 
 export interface LogoProps extends Omit<ComponentProps<"svg">, "children"> {
@@ -25,7 +27,7 @@ export function Logo({ label, className, ...props }: LogoProps) {
       strokeLinecap="square"
       {...props}
       {...(label === undefined ? { "aria-hidden": true } : { role: "img", "aria-label": label })}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
     >
       <path d="m11 9-6 7 6 7M21 9l6 7-6 7M16 6l2.5 5-5 5 5 5-2.5 5" />
     </svg>

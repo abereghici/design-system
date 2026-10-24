@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import { join } from "../slot/slot.tsx";
+
 import styles from "./heading.module.css";
 
 const sizeOfLevel = { h1: "lg", h2: "md", h3: "sm", h4: "xs", h5: "xs", h6: "xs" } as const;
@@ -23,11 +25,5 @@ export function Heading({
   className,
   ...props
 }: HeadingProps) {
-  return (
-    <Element
-      {...props}
-      data-size={size}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
-    />
-  );
+  return <Element {...props} data-size={size} className={join(styles["root"], className)} />;
 }

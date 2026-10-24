@@ -10,9 +10,9 @@ import type {
 
 import { byId, rememberFocus, useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as Details, FloatingOptions } from "../floating/floating.ts";
-import { join, MenuContext, menuContentProps } from "../menu/menu.tsx";
+import { MenuContext, menuContentProps } from "../menu/menu.tsx";
 import type { Menu } from "../menu/menu.tsx";
-import { Slot } from "../slot/slot.tsx";
+import { Slot, join } from "../slot/slot.tsx";
 
 import menuStyles from "../menu/menu.module.css";
 import styles from "./context-menu.module.css";

@@ -4,12 +4,10 @@ import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { Link as BaseLink } from "../link/link.tsx";
 import type { LinkProps as BaseLinkProps } from "../link/link.tsx";
 import type { Labels, Locale } from "../provider/locale.tsx";
+import { join } from "../slot/slot.tsx";
 
 import { breadcrumbsLabels } from "./labels.ts";
 import styles from "./breadcrumbs.module.css";
-
-const join = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
 
 export interface RootProps extends ComponentProps<"nav"> {
   /**

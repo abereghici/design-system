@@ -8,6 +8,7 @@ import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 
 import { useSegmentEditing } from "./date-field-editing.ts";
+import type { DateFieldChangeEventDetails } from "./date-field-editing.ts";
 import { useValidity } from "./date-field-validity.ts";
 import type { Validity } from "./date-field-validity.ts";
 import { dateFieldLabels } from "./labels.ts";
@@ -15,13 +16,6 @@ import { bounds, display, fromDate, toDate } from "./segments.ts";
 import type { Segments } from "./segments.ts";
 import fieldStyles from "../field/field.module.css";
 import styles from "./date-field.module.css";
-
-export interface DateFieldChangeEventDetails {
-  readonly reason: "input-change" | "keyboard";
-  readonly event: Event;
-  /** Keeps the previous segments. */
-  readonly cancel: () => void;
-}
 
 export interface DateFieldOptions {
   /** Controlled. `null` is no date. */

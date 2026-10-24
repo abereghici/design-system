@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 
 import type { Locale } from "../provider/locale.tsx";
+import { join } from "../slot/slot.tsx";
 
 import styles from "./badge.module.css";
 
@@ -48,7 +49,7 @@ export function Badge({
       {...props}
       data-variant={variant}
       data-overflow={overflow || undefined}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
     >
       {typeof children === "string"
         ? children

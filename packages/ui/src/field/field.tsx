@@ -3,9 +3,10 @@
 import { use, useEffect } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
+import { join } from "../slot/slot.tsx";
+
 import { FieldContext, useFieldControl } from "./field-control.ts";
 import type { ChangeEventDetails } from "./field-control.ts";
-import { withClass } from "./field-root.tsx";
 import styles from "./field.module.css";
 
 export { Root } from "./field-root.tsx";
@@ -20,7 +21,7 @@ export function Label({ className, ...props }: ComponentProps<"label">) {
       id={field?.labelId}
       htmlFor={field?.controlId}
       {...props}
-      className={withClass(styles["label"], className)}
+      className={join(styles["label"], className)}
     />
   );
 }
@@ -39,7 +40,7 @@ export function Description({ className, ...props }: ComponentProps<"p">) {
       id={field?.descriptionId}
       hidden={field?.invalid}
       {...props}
-      className={withClass(styles["description"], className)}
+      className={join(styles["description"], className)}
     />
   );
 }
@@ -61,7 +62,7 @@ export function Error({ children, className, ...props }: ErrorProps) {
       id={field?.errorId}
       aria-live="assertive"
       {...props}
-      className={withClass(styles["error"], className)}
+      className={join(styles["error"], className)}
     >
       {field?.invalid === true ? content : null}
     </div>
@@ -81,7 +82,7 @@ export function Control({ className, readOnly, ...props }: ControlProps) {
     <input
       {...bindings}
       readOnly={bindings["aria-disabled"] ?? readOnly}
-      className={withClass(styles["control"], className)}
+      className={join(styles["control"], className)}
     />
   );
 }

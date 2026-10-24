@@ -5,9 +5,9 @@ import type { ComponentProps, KeyboardEvent, MouseEvent, ReactNode } from "react
 
 import { byId, isOpen, useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as Details, FloatingOptions } from "../floating/floating.ts";
-import { focusLast, itemsOf, join, MenuContext, menuContentProps } from "../menu/menu.tsx";
+import { focusLast, itemsOf, MenuContext, menuContentProps } from "../menu/menu.tsx";
 import type { Menu } from "../menu/menu.tsx";
-import { Slot } from "../slot/slot.tsx";
+import { join, Slot } from "../slot/slot.tsx";
 import { pointerMarker } from "../toggle/toggle.ts";
 
 import menuStyles from "../menu/menu.module.css";

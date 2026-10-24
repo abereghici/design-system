@@ -4,13 +4,11 @@ import { use, useEffect, useId, useState } from "react";
 import type { ComponentProps, SyntheticEvent } from "react";
 
 import { FormErrorsContext } from "../form/form.tsx";
+import { join } from "../slot/slot.tsx";
 
 import { FieldContext } from "./field-control.ts";
 import type { FormControl } from "./field-control.ts";
 import styles from "./field.module.css";
-
-export const withClass = (base: string | undefined, className: string | undefined) =>
-  className === undefined ? base : `${base} ${className}`;
 
 export interface RootProps extends ComponentProps<"div"> {
   /** Passed to the control's `name`; also the key Form's `errors` uses for this field. */
@@ -160,7 +158,7 @@ export function Root({
     >
       <div
         {...props}
-        className={withClass(styles["root"], className)}
+        className={join(styles["root"], className)}
         data-invalid={shown || undefined}
         data-disabled={disabled || undefined}
         onChange={(event) => {

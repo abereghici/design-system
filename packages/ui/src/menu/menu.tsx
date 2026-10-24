@@ -4,18 +4,16 @@ import { createContext, use } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent, PointerEvent, ToggleEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId, returnFocus } from "../floating/floating.ts";
 import type { Floating } from "../floating/floating.ts";
 import { enabled, textOf } from "../listbox/listbox.tsx";
+import { join } from "../slot/slot.tsx";
 
 import styles from "./menu.module.css";
 
-export interface ItemChangeEventDetails {
-  readonly reason: "item-press";
-  readonly event: Event;
-  /** Keeps the previous value; a menu `closeOnClick` would close stays open too. */
-  readonly cancel: () => void;
-}
+/** `cancel()`: keeps the previous value; a menu `closeOnClick` would close stays open too. */
+export type ItemChangeEventDetails = Details<"item-press">;
 
 export interface Menu {
   readonly floating: Floating;
@@ -29,9 +27,6 @@ function useMenu(): Menu {
   if (menu === null) throw new Error("Menu parts must be inside their menu's Root");
   return menu;
 }
-
-export const join = (base: string | undefined, className: string | undefined) =>
-  className === undefined ? base : `${base} ${className}`;
 
 export const focusLast = new WeakSet<Element>();
 const enterPressed = new WeakSet<Element>();

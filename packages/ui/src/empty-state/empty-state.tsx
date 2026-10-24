@@ -1,11 +1,8 @@
 import type { ComponentProps } from "react";
 
-import { Slot } from "../slot/slot.tsx";
+import { Slot, join } from "../slot/slot.tsx";
 
 import styles from "./empty-state.module.css";
-
-const join = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
 
 /**
  * Stands in for content that isn't there yet (an empty list, a search with no results), in place of

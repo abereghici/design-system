@@ -3,6 +3,8 @@
 import { useState } from "react";
 import type { ComponentProps, SyntheticEvent } from "react";
 
+import { join } from "../slot/slot.tsx";
+
 import styles from "./avatar.module.css";
 
 export type LoadingStatus = "loading" | "loaded" | "error";
@@ -51,7 +53,7 @@ export function Image({
       alt={alt}
       data-loading={status === "loading" || undefined}
       data-error={status === "error" || undefined}
-      className={className === undefined ? styles["image"] : `${styles["image"]} ${className}`}
+      className={join(styles["image"], className)}
       onLoad={(event: SyntheticEvent<HTMLImageElement>) => {
         settle("loaded");
         onLoad?.(event);

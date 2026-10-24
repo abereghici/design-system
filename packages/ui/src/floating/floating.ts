@@ -2,6 +2,7 @@ import { useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "rea
 import type { ToggleEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 
 export type ChangeReason =
   | "trigger-press"
@@ -13,15 +14,11 @@ export type ChangeReason =
   | "focus-out"
   | "none";
 
-export interface ChangeEventDetails<Reason extends ChangeReason = ChangeReason> {
-  readonly reason: Reason;
-  readonly event: Event | undefined;
-  /**
-   * Keeps the current state. It has no effect on Escape and outside presses: the browser closes
-   * the popover itself and its closing `beforetoggle` cannot be cancelled.
-   */
-  readonly cancel: () => void;
-}
+/** `cancel()`: keeps the current state. It has no effect on Escape and outside presses: the browser closes the popover itself and its closing `beforetoggle` cannot be cancelled. */
+export type ChangeEventDetails<Reason extends ChangeReason = ChangeReason> = Details<
+  Reason,
+  Event | undefined
+>;
 
 export interface FloatingOptions<Reason extends ChangeReason> {
   open?: boolean | undefined;
@@ -61,7 +58,7 @@ export const sourceOf = (source: Element | null): ShowPopoverOptions =>
   source instanceof HTMLElement ? { source } : {};
 
 /** The element that opened the layer: commands and `showPopover({ source })` both record it. */
-export const invokerOf = (contentId: string) =>
+const invokerOf = (contentId: string) =>
   document.querySelector(`[commandfor="${CSS.escape(contentId)}"]`);
 
 export const byId = (id: string) => document.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
@@ -103,10 +100,13 @@ export function rememberFocus(contentId: string, focus = document.activeElement)
 }
 
 /** Puts focus back where the layer was opened from, unless the user already moved it elsewhere. */
-export function returnFocus(element: HTMLElement) {
+export function returnFocus(
+  element: HTMLElement,
+  to: Element | null | undefined = layerOf(element).returnTo,
+) {
   const focus = document.activeElement;
   if (focus !== document.body && !element.contains(focus)) return;
-  layerOf(element).returnTo?.focus({ preventScroll: true });
+  if (to instanceof HTMLElement) to.focus({ preventScroll: true });
 }
 
 function leaves(contentId: string, next: EventTarget | null) {

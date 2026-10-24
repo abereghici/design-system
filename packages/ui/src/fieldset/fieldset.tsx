@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import { join } from "../slot/slot.tsx";
+
 import styles from "./fieldset.module.css";
 
 export interface RootProps extends ComponentProps<"fieldset"> {
@@ -15,19 +17,9 @@ export interface RootProps extends ComponentProps<"fieldset"> {
  * the native `<fieldset>` with its `<legend>`. For a single choice among options use RadioGroup.
  */
 export function Root({ className, ...props }: RootProps) {
-  return (
-    <fieldset
-      {...props}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
-    />
-  );
+  return <fieldset {...props} className={join(styles["root"], className)} />;
 }
 
 export function Legend({ className, ...props }: ComponentProps<"legend">) {
-  return (
-    <legend
-      {...props}
-      className={className === undefined ? styles["legend"] : `${styles["legend"]} ${className}`}
-    />
-  );
+  return <legend {...props} className={join(styles["legend"], className)} />;
 }

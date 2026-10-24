@@ -5,12 +5,10 @@ import type { ComponentProps } from "react";
 
 import { CheckIcon } from "../icon/icons/check.tsx";
 import { Option } from "../listbox/listbox.tsx";
+import { join } from "../slot/slot.tsx";
 
 import { ValueContext } from "./use-combobox.ts";
 import styles from "./combobox.module.css";
-
-const join = (base: string | undefined, className: string | undefined) =>
-  className === undefined ? base : `${base} ${className}`;
 
 export interface ItemProps extends ComponentProps<"div"> {
   value: string;

@@ -3,6 +3,7 @@
 import { use, useState } from "react";
 import type { ComponentProps, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { FieldContext } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
 import { useLocale } from "../provider/locale.tsx";
@@ -15,12 +16,10 @@ import type { Direction } from "./step-buttons.tsx";
 import textFieldStyles from "../text-field/text-field.module.css";
 import styles from "./number-field.module.css";
 
-export interface NumberFieldChangeEventDetails {
-  readonly reason: "input-commit" | "increment-press" | "decrement-press" | "keyboard";
-  readonly event: SyntheticEvent;
-  /** Keeps the previous value. */
-  readonly cancel: () => void;
-}
+export type NumberFieldChangeEventDetails = Details<
+  "input-commit" | "increment-press" | "decrement-press" | "keyboard",
+  SyntheticEvent
+>;
 
 type Naming =
   | { label: ReactNode }

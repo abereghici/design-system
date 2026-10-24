@@ -4,18 +4,15 @@ import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, MouseEvent, SyntheticEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
+import { join } from "../slot/slot.tsx";
 import { pointerMarker } from "../toggle/toggle.ts";
 
 import styles from "./accordion.module.css";
 
-export interface ChangeEventDetails {
-  /** `"trigger-press"`: a Trigger click, Enter or Space. `"none"`: the browser opened an Item (find-in-page, fragment navigation). */
-  readonly reason: "trigger-press" | "none";
-  readonly event: Event;
-  /** Keeps the open Items as they were. Only a `"trigger-press"` can be cancelled: the browser has already revealed its match. */
-  readonly cancel: () => void;
-}
+/** `"trigger-press"`: a Trigger click, Enter or Space. `"none"`: the browser opened an Item (find-in-page, fragment navigation). `cancel()`: keeps the open Items as they were. Only a `"trigger-press"` can be cancelled: the browser has already revealed its match. */
+export type ChangeEventDetails = Details<"trigger-press" | "none">;
 
 interface AccordionState {
   readonly name: string | undefined;
@@ -25,9 +22,6 @@ interface AccordionState {
 
 const AccordionContext = createContext<AccordionState | null>(null);
 const ItemContext = createContext<string | null>(null);
-
-const classes = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
 
 export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
   /** `false`: opening an Item closes the open one. */
@@ -83,7 +77,7 @@ export function Root({
 
   return (
     <AccordionContext value={{ name: multiple ? undefined : name, value: current, change }}>
-      <div {...props} className={classes(styles["root"], className)} />
+      <div {...props} className={join(styles["root"], className)} />
     </AccordionContext>
   );
 }
@@ -107,7 +101,7 @@ export function Item({ value, className, onToggle, ...props }: ItemProps) {
         {...props}
         open={open}
         name={accordion.name}
-        className={classes(styles["item"], className)}
+        className={join(styles["item"], className)}
         onToggle={(event) => {
           onToggle?.(event);
           if (event.currentTarget.open !== open) accordion.change(value, !open, event);
@@ -133,7 +127,7 @@ export function Trigger({
   return (
     <summary
       {...props}
-      className={classes(styles["trigger"], className)}
+      className={join(styles["trigger"], className)}
       onPointerDown={(event) => {
         pointerMarker.onPointerDown(event);
         onPointerDown?.(event);
@@ -158,5 +152,5 @@ export function Trigger({
 export type ContentProps = ComponentProps<"div">;
 
 export function Content({ className, ...props }: ContentProps) {
-  return <div {...props} className={classes(styles["content"], className)} />;
+  return <div {...props} className={join(styles["content"], className)} />;
 }

@@ -5,6 +5,7 @@ import type { ComponentProps, MouseEvent } from "react";
 import { dispatchFeedback } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { useLocale } from "../provider/locale.tsx";
+import { join } from "../slot/slot.tsx";
 
 import { alertLabels } from "./labels.ts";
 import iconButton from "../icon-button/icon-button.module.css";
@@ -46,7 +47,7 @@ export function Close({
       type={type}
       aria-disabled={disabled ? true : undefined}
       data-size="sm"
-      className={`${iconButton["root"]} ${styles["close"]}${className === undefined ? "" : ` ${className}`}`}
+      className={join(`${iconButton["root"]} ${styles["close"]}`, className)}
       onClick={handleClick}
     >
       <XIcon size="sm" />

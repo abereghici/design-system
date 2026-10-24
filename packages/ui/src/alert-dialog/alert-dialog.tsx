@@ -2,10 +2,10 @@
 
 import type { ComponentProps, MouseEvent } from "react";
 
-import { Content as ModalContent, join, ModalRoot, useModal } from "../dialog/modal.tsx";
+import { Content as ModalContent, ModalRoot, useModal } from "../dialog/modal.tsx";
 import type { Reason, RootProps as ModalRootProps } from "../dialog/modal.tsx";
 import { dispatchFeedback } from "../events/events.ts";
-import { composeRefs } from "../slot/slot.tsx";
+import { composeRefs, join } from "../slot/slot.tsx";
 
 import button from "../button/button.module.css";
 import styles from "../dialog/dialog.module.css";

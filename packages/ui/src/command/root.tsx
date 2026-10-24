@@ -3,18 +3,14 @@
 import { createContext, use, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction } from "react";
 
-import { join } from "../dialog/modal.tsx";
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { arrange, enabled, shownOf } from "../listbox/listbox.tsx";
 import { useLocale } from "../provider/locale.tsx";
+import { join } from "../slot/slot.tsx";
 
 import styles from "./command.module.css";
 
-export interface ChangeEventDetails<Reason extends string> {
-  readonly reason: Reason;
-  readonly event: Event;
-  /** Keeps the current state. */
-  readonly cancel: () => void;
-}
+export type ChangeEventDetails<Reason extends string> = Details<Reason>;
 
 export type Callback<Value, Reason extends string> = (
   value: Value,

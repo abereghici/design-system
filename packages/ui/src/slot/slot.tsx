@@ -9,6 +9,10 @@ declare module "react" {
   }
 }
 
+/** A component's own class, then the consumer's `className`. */
+export const join = (own: string | undefined, className: string | undefined) =>
+  className === undefined ? own : `${own} ${className}`;
+
 type Props = HTMLAttributes<HTMLElement> &
   Pick<ButtonHTMLAttributes<HTMLElement>, "command" | "commandfor"> & {
     readonly ref?: Ref<HTMLElement> | undefined;

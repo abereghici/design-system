@@ -3,19 +3,16 @@
 import { Children, createContext, isValidElement, use, useId, useState } from "react";
 import type { ComponentProps, KeyboardEvent, PointerEvent } from "react";
 
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useFieldControl } from "../field/field-control.ts";
 import { useLocale } from "../provider/locale.tsx";
+import { join } from "../slot/slot.tsx";
 
 import styles from "./slider.module.css";
 
 type Reason = "track-press" | "drag" | "keyboard";
 
-export interface ChangeEventDetails {
-  readonly reason: Reason;
-  readonly event: Event;
-  /** Keeps the previous value. */
-  readonly cancel: () => void;
-}
+export type ChangeEventDetails = Details<Reason>;
 
 export type CommitEventDetails = Omit<ChangeEventDetails, "cancel">;
 
@@ -137,7 +134,7 @@ export function Root({
         {...props}
         data-dragging={slider.dragging === null ? undefined : ""}
         data-disabled={disabled ? "" : undefined}
-        className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+        className={join(styles["root"], className)}
       />
     </SliderContext>
   );
@@ -182,7 +179,7 @@ export function Track({ className, children, ...props }: TrackProps) {
   return (
     <div
       {...props}
-      className={className === undefined ? styles["track"] : `${styles["track"]} ${className}`}
+      className={join(styles["track"], className)}
       onPointerDown={(event) => {
         if (slider.disabled || event.button !== 0) return;
         event.preventDefault();
@@ -209,7 +206,7 @@ export function Range({ className, style, ...props }: RangeProps) {
   return (
     <div
       {...props}
-      className={className === undefined ? styles["range"] : `${styles["range"]} ${className}`}
+      className={join(styles["range"], className)}
       style={{ insetInlineStart: `${first}%`, inlineSize: `${last - first}%`, ...style }}
     />
   );
@@ -258,7 +255,7 @@ export function Thumb({ className, style, id, onKeyDown, onChange, ...props }: T
   }
   return (
     <div
-      className={className === undefined ? styles["thumb"] : `${styles["thumb"]} ${className}`}
+      className={join(styles["thumb"], className)}
       data-dragging={slider.dragging === index ? "" : undefined}
       style={{ insetInlineStart: `${slider.percent(value)}%`, ...style }}
     >
@@ -292,7 +289,7 @@ export function Value({ className, children, ...props }: ValueProps) {
       htmlFor={values.map((_, index) => `${id}-${index}`).join(" ")}
       aria-live="off"
       {...props}
-      className={className === undefined ? styles["value"] : `${styles["value"]} ${className}`}
+      className={join(styles["value"], className)}
     >
       {children ?? values.map((entry) => format(entry)).join("–")}
     </output>

@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 
 import type { Labels, Locale } from "../provider/locale.tsx";
+import { join } from "../slot/slot.tsx";
 
 import { spinnerLabels } from "./labels.ts";
 import styles from "./spinner.module.css";
@@ -36,7 +37,7 @@ export function Spinner({ size = "sm", locale, labels, className, ...props }: Sp
           })}
       {...props}
       data-size={size}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
     />
   );
 }

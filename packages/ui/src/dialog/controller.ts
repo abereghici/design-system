@@ -1,6 +1,8 @@
 import type { RefObject } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
+import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { returnFocus } from "../floating/floating.ts";
 
 declare global {
   // Baseline newly available (2026-05-11) but not yet in TypeScript's DOM lib.
@@ -11,12 +13,8 @@ declare global {
 
 export type Reason = "trigger-press" | "outside-press" | "escape-key" | "close-press" | "none";
 
-export interface ChangeEventDetails<R extends Reason = Reason> {
-  readonly reason: R;
-  readonly event: Event;
-  /** Keeps the current state. The browser may not let a repeated Escape be cancelled. */
-  readonly cancel: () => void;
-}
+/** `cancel()`: keeps the current state. The browser may not let a repeated Escape be cancelled. */
+export type ChangeEventDetails<R extends Reason = Reason> = Details<R>;
 
 export interface Pending {
   readonly reason: Reason;
@@ -152,14 +150,8 @@ export class Controller {
     this.#pending = null;
     if (this.#skipClose) this.#skipClose = false;
     else change(options, false, "none", event);
-    const focused = document.activeElement;
     // WebKit doesn't focus a clicked button, so its close steps leave focus on <body> or in the closed dialog.
-    if (
-      (focused === document.body || dialog.contains(focused)) &&
-      this.#opener instanceof HTMLElement
-    ) {
-      this.#opener.focus();
-    }
+    returnFocus(dialog, this.#opener);
     this.#opener = null;
   }
 }

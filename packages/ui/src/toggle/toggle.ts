@@ -1,13 +1,10 @@
 import type { KeyboardEvent, MouseEvent, MouseEventHandler, PointerEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 
-export interface ChangeEventDetails {
-  readonly reason: "none";
-  readonly event: Event;
-  /** Keeps the previous state: the browser restores it once the click is cancelled. */
-  readonly cancel: () => void;
-}
+/** `cancel()`: keeps the previous state: the browser restores it once the click is cancelled. */
+export type ChangeEventDetails = Details<"none">;
 
 export function changeDetails(event: MouseEvent): ChangeEventDetails {
   return {

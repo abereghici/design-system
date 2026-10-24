@@ -12,7 +12,7 @@ import type {
 } from "../floating/floating.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { useLocale } from "../provider/locale.tsx";
-import { Slot } from "../slot/slot.tsx";
+import { Slot, join } from "../slot/slot.tsx";
 import { pointerMarker } from "../toggle/toggle.ts";
 
 import { popoverLabels } from "./labels.ts";
@@ -36,9 +36,6 @@ function usePopover(): Floating {
   if (popover === null) throw new Error("Popover parts must be inside Popover.Root");
   return popover;
 }
-
-const join = (base: string | undefined, className: string | undefined) =>
-  className === undefined ? base : `${base} ${className}`;
 
 export interface RootProps extends FloatingOptions<ChangeReason> {
   children?: ReactNode;

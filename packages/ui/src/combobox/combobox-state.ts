@@ -7,6 +7,7 @@ import type {
   PointerEvent as ReactPointerEvent,
 } from "react";
 
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId } from "../floating/floating.ts";
 import { enabled, optionAt, shownOf, textOf } from "../listbox/listbox.tsx";
 
@@ -35,12 +36,7 @@ export function highlight(
   if (scroll) option.scrollIntoView({ block: "nearest" });
 }
 
-export interface ChangeEventDetails<Reason extends string = string> {
-  readonly reason: Reason;
-  readonly event: Event | undefined;
-  /** Keeps the previous state. */
-  readonly cancel: () => void;
-}
+export type ChangeEventDetails<Reason extends string = string> = Details<Reason, Event | undefined>;
 
 export type ValueReason = "item-press" | "input-clear" | "escape-key";
 export type InputReason =

@@ -5,10 +5,10 @@ import type { ComponentProps, MouseEvent } from "react";
 import { XIcon } from "../icon/icons/x.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import { sheetLabels } from "../sheet/labels.ts";
-import { Slot } from "../slot/slot.tsx";
+import { Slot, join } from "../slot/slot.tsx";
 
 import { dialogLabels } from "./labels.ts";
-import { join, useModal } from "./modal.tsx";
+import { useModal } from "./modal.tsx";
 import iconButton from "../icon-button/icon-button.module.css";
 
 export interface CloseProps extends Omit<ComponentProps<"button">, "command" | "commandfor"> {

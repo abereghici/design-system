@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import type { ComponentProps, RefObject } from "react";
 
 import { useLocale } from "../provider/locale.tsx";
-import { composeRefs } from "../slot/slot.tsx";
+import { composeRefs, join } from "../slot/slot.tsx";
 import { close, mark, snapshot, subscribe } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
@@ -172,7 +172,7 @@ function Layer({ labels, className, ref, ...props }: ToasterProps) {
         tabIndex={-1}
         aria-label={labels?.region ?? locale.toaster?.region ?? toasterLabels.region}
         aria-keyshortcuts="Alt+T"
-        className={className === undefined ? styles["region"] : `${styles["region"]} ${className}`}
+        className={join(styles["region"], className)}
       >
         <ol className={styles["list"]}>
           {toasts.map((record, at) => (

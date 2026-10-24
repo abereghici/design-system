@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 
 import { UserIcon } from "../icon/icons/user.tsx";
+import { join } from "../slot/slot.tsx";
 
 import styles from "./avatar.module.css";
 
@@ -19,13 +20,7 @@ export interface RootProps extends ComponentProps<"span"> {
  * brand sign, use the Logo.
  */
 export function Root({ size = "md", className, ...props }: RootProps) {
-  return (
-    <span
-      {...props}
-      data-size={size}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
-    />
-  );
+  return <span {...props} data-size={size} className={join(styles["root"], className)} />;
 }
 
 export interface FallbackProps extends ComponentProps<"span"> {
@@ -47,14 +42,7 @@ function initials(name: string) {
 export function Fallback({ name, className, children, ...props }: FallbackProps) {
   const text = name === undefined ? "" : initials(name);
   return (
-    <span
-      dir="auto"
-      {...props}
-      aria-hidden
-      className={
-        className === undefined ? styles["fallback"] : `${styles["fallback"]} ${className}`
-      }
-    >
+    <span dir="auto" {...props} aria-hidden className={join(styles["fallback"], className)}>
       {children ?? (text === "" ? <UserIcon /> : text)}
     </span>
   );

@@ -13,21 +13,18 @@ import type { ComponentProps, FocusEvent, KeyboardEvent, MouseEvent } from "reac
 
 import { DatePickerContext, dateFormats, Temporal } from "../date/date.ts";
 import type { DatePickerContextValue } from "../date/date.ts";
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
+import { join } from "../slot/slot.tsx";
 
 import { Grid, keyTarget } from "./calendar-grid.tsx";
 import { calendarLabels } from "./labels.ts";
 import styles from "./calendar.module.css";
 
-export interface CalendarChangeEventDetails {
-  readonly reason: "day-press";
-  readonly event: Event;
-  /** Keeps the previous value. */
-  readonly cancel: () => void;
-}
+export type CalendarChangeEventDetails = Details<"day-press">;
 
 export interface CalendarProps extends Omit<
   ComponentProps<"fieldset">,
@@ -234,10 +231,7 @@ export function Calendar({
   const handlers = useGrid(calendar, formats.firstDay, picker);
   const first = focused.with({ day: 1 });
   return (
-    <fieldset
-      {...rest}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
-    >
+    <fieldset {...rest} className={join(styles["root"], className)}>
       <Header
         names={{ ...calendarLabels, ...locale.labels.calendar, ...labels }}
         heading={formats.heading(first)}

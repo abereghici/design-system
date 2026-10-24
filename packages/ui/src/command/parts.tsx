@@ -3,10 +3,10 @@
 import { use } from "react";
 import type { ComponentProps } from "react";
 
-import { join } from "../dialog/modal.tsx";
 import { SearchIcon } from "../icon/icons/search.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
 import { useLocale } from "../provider/locale.tsx";
+import { join } from "../slot/slot.tsx";
 
 import { commandLabels } from "./labels.ts";
 import { DialogContext, useCommand } from "./root.tsx";

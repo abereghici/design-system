@@ -2,6 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { FieldContext } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
 import { IconButton } from "../icon-button/icon-button.tsx";
@@ -13,12 +14,8 @@ import type { TextFieldProps } from "../text-field/text-field.tsx";
 
 import { passwordFieldLabels } from "./labels.ts";
 
-export interface PasswordFieldVisibleChangeEventDetails {
-  readonly reason: "toggle-press" | "form-submit";
-  readonly event: Event;
-  /** Keeps the current visibility. */
-  readonly cancel: () => void;
-}
+/** `cancel()`: keeps the current visibility. */
+export type PasswordFieldVisibleChangeEventDetails = Details<"toggle-press" | "form-submit">;
 
 type ControlProps = Omit<
   Field.ControlProps,

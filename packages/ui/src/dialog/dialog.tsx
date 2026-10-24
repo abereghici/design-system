@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import { join } from "../slot/slot.tsx";
+
 import { ModalRoot } from "./modal.tsx";
 import type { RootProps } from "./modal.tsx";
 import styles from "./dialog.module.css";
@@ -14,9 +16,6 @@ export type {
   TitleProps,
   TriggerProps,
 } from "./modal.tsx";
-
-const join = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
 
 /**
  * A modal layer for a short task that interrupts the page: the page is inert until it closes, and Escape, the Close button and a press on the backdrop all close it. For an irreversible confirmation use AlertDialog; when the page must stay in view, a Sheet; for content anchored to a control, a Popover.

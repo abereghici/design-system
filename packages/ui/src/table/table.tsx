@@ -1,9 +1,8 @@
 import type { ComponentProps } from "react";
 
-import styles from "./table.module.css";
+import { join } from "../slot/slot.tsx";
 
-const join = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
+import styles from "./table.module.css";
 
 /**
  * A static data table on the native `<table>`, for rows and columns the user reads and compares.

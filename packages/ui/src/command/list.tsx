@@ -3,10 +3,9 @@
 import { use, useId } from "react";
 import type { ComponentProps } from "react";
 
-import { join } from "../dialog/modal.tsx";
 import { dispatchFeedback } from "../events/events.ts";
 import { Listbox, Option, enabled, optionAt } from "../listbox/listbox.tsx";
-import { composeRefs } from "../slot/slot.tsx";
+import { composeRefs, join } from "../slot/slot.tsx";
 
 import { DialogContext, useCommand } from "./root.tsx";
 import styles from "./command.module.css";
