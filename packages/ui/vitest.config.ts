@@ -2,6 +2,8 @@ import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig, mergeConfig } from "vitest/config";
 
+import { screenshotProjects } from "#storybook/screenshots/projects";
+
 import viteConfig from "./vite.config.ts";
 
 // Every story runs as a test (render smoke test, then `play` and `Story.test()`), with axe from
@@ -61,6 +63,7 @@ export default mergeConfig(
             },
           },
         },
+        ...screenshotProjects(),
       ],
     },
   }),

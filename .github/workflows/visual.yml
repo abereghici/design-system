@@ -1,0 +1,31 @@
+name: Visual
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+    steps:
+      - run: apt-get update && apt-get install --yes --no-install-recommends git-lfs
+      - uses: actions/checkout@v7
+        with:
+          lfs: true
+      - uses: pnpm/setup@v3
+        with:
+          require-lockfile: true
+      - run: pnpm --filter @platform/tokens build
+      - run: pnpm --filter @platform/ui test:screenshots
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: story-screenshots-report
+          path: packages/ui/.vitest/
+          include-hidden-files: true

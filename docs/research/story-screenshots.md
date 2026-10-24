@@ -32,7 +32,7 @@ How should `packages/ui` screenshot every Storybook story with Vitest's `toMatch
 
 ## Short answer
 
-- **Capture in a Vitest `afterEach`** in a setup file used only by the screenshot projects. The story test awaits `composedStory.run()`, which awaits `play` and the story's own `afterEach` hooks, so a Vitest `afterEach` runs after `play` and while the story is still mounted. Name the baseline with `ctx.story.id` (the story id, which `@storybook/addon-vitest` puts on the test context). Skip children of `Story.test()` (tag `test-fn`) and failed tests. Every Storybook-side option is worse: a `beforeEach` cleanup runs at the *start of the next story*, and a preview `afterEach` would pull `vitest/browser` into the Storybook bundle.
+- **Capture in a Vitest `afterEach`** in a setup file used only by the screenshot projects. The story test awaits `composedStory.run()`, which awaits `play` and the story's own `afterEach` hooks, so a Vitest `afterEach` runs after `play` and while the story is still mounted. Name the baseline with `ctx.story.id` (the story id, which `@storybook/addon-vitest` puts on the test context). Skip children of `Story.test()` (tag `test-fn`) and failed tests. Every Storybook-side option is worse: a `beforeEach` cleanup runs at the _start of the next story_, and a preview `afterEach` would pull `vitest/browser` into the Storybook bundle.
 - **`storybook-addon-vis` is maintained but does not support Vitest 5.** Its latest release, 4.3.2 (2026-10-11), peers on `"vitest": "^4"`, and the maintainers merged a Renovate rule to "hold vitest 5".
 - **Opt out with a tag.** Put a custom `screenshot` tag in `preview.ts` and remove it per story or meta with `!screenshot`. Then filter the screenshot projects with `storybookTest({ tags: { include: ['screenshot'], skip: ['test-fn'] } })`.
 - **Scope.** By default, capture the story's `canvasElement`, which is the documented Vitest advice ("prefer capturing specific components"). For stories that open a `<dialog>` or a popover, capture `document.documentElement`. Top-layer content spans the viewport, and Playwright's element screenshot is "clipped to the size and position of a particular element", so anything outside the story root's box is lost.
@@ -48,6 +48,7 @@ How should `packages/ui` screenshot every Storybook story with Vitest's `toMatch
   - `initialGlobals` for RTL and for the 320 px viewport (`mobile1`).
 
   Default paths contain no project, and `attachmentsDir` "cannot be configured per project". So both `resolveScreenshotPath` **and** `resolveDiffPath` must add the variant.
+
 - **Workflow.** Run in the container with `CI=true`, which makes the update mode `none`: nothing is written, and missing baselines fail. Regenerate baselines with `--update` in a manually triggered workflow on a feature branch. Commit the PNGs, which is what Vitest says ("Commit them to your repository"). Git LFS is suggested only "if you plan to have a large test suite". Upload `.vitest/` (HTML report and attachments) as the CI artifact. Keep `storybook` (fast, no screenshots) and `screenshot:*` as separate projects.
 - **In practice.** Four public repos run exactly this pattern on Storybook 10.6 and Vitest 5: a Vitest `afterEach` that calls `toMatchScreenshot`. They are OBOS Grunnmuren, IBM `carbon-components-ember`, Kartverket and Plinky. Neither the Storybook docs nor the Vitest docs describe it.
 
@@ -61,7 +62,7 @@ How should `packages/ui` screenshot every Storybook story with Vitest's `toMatch
   - [`test-utils.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/addons/vitest/src/vitest-plugin/test-utils.ts): the generated test does `context.story = composedStory;` … `await setViewport(composedStory.parameters, composedStory.globals);` `await composedStory.run(undefined);`.
   - [`portable-stories.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/core/src/preview-api/modules/store/csf/portable-stories.ts) `runStory`: `await playFunction(context);` then `await story.applyAfterEach(context);`.
   - [`run.ts`](https://github.com/vitest-dev/vitest/blob/v5.0.5/packages/vitest/src/runtime/runner/run.ts): the test callback (`fn()`) is awaited, then `test.result!.state = 'pass'` or `failTask(...)`, and only then `callSuiteHook(suite, test, 'afterEach', …)`. So `ctx.task.result.state` is already known inside `afterEach`.
-- **The story is still mounted at that point.** `runStory` runs the *previous* story's cleanups first: `for (const callback of [...cleanups].reverse()) { await callback(); }`. It then mounts into `document.createElement('div')` appended to `document.body`. Removal is a cleanup, so it happens when the next story starts.
+- **The story is still mounted at that point.** `runStory` runs the _previous_ story's cleanups first: `for (const callback of [...cleanups].reverse()) { await callback(); }`. It then mounts into `document.createElement('div')` appended to `document.body`. Removal is a cleanup, so it happens when the next story starts.
 - **The story id is on the context.** `context.story = composedStory` (above), and `_task.meta.storyId = storyId` with the comment "The id will always be present". Neither is typed publicly. The addon's `vitest-provided-context.d.ts` augments only `ProvidedContext`, so a `declare module 'vitest' { interface TestContext { story?: … } }` is needed. IBM's repo does exactly that.
 - **Why the id and not the default name.** By default the name is `` `${this.currentTestName} ${counter.current}` `` ([`toMatchScreenshot.ts`](https://github.com/vitest-dev/vitest/blob/v5.0.5/packages/browser/src/client/tester/expect/toMatchScreenshot.ts)). The test name is the story's display name: "use the story's name as the test title for vitest, and fallback to exportName" ([`transformer.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/core/src/csf-tools/vitest-plugin/transformer.ts)). A story that has `.test()` children becomes a `describe` with a test called `'base story'`. Passing `story.id` as the name gives one flat, stable name per story. The `arg` is "Path **without** extension, sanitized and relative to the test file" ([`browser.expect`](https://vitest.dev/config/browser/expect)). In source, `sanitize` keeps `/` between segments and drops anything matching `[^\w-]+` inside them. Story ids like `components-button--primary` pass through unchanged.
 - **`Story.test()` children re-run the story, so skip them.** [`csf-factories.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/core/src/csf/csf-factories.ts) gives each child `tags: [Tag.TEST_FN, …]`, and [`tags.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/core/src/shared/constants/tags.ts) defines `TEST_FN: 'test-fn'`. IBM: "Story tests (`.test()`) rerender their story; screenshot it once. `if (!story || story.tags.includes('test-fn')) return;`".
@@ -70,7 +71,7 @@ How should `packages/ui` screenshot every Storybook story with Vitest's `toMatch
 
 **Option B: a Storybook-side hook**
 
-- **`beforeEach` cleanup runs at the wrong time.** [interaction-testing](https://storybook.js.org/docs/writing-tests/interaction-testing): the cleanup "will run **after** each story, when the story is remounted or navigated away from". In portable stories that is the start of the *next* `runStory` (the cleanup loop above). So a screenshot taken there would be reported against the wrong test, which is our inference.
+- **`beforeEach` cleanup runs at the wrong time.** [interaction-testing](https://storybook.js.org/docs/writing-tests/interaction-testing): the cleanup "will run **after** each story, when the story is remounted or navigated away from". In portable stories that is the start of the _next_ `runStory` (the cleanup loop above). So a screenshot taken there would be reported against the wrong test, which is our inference.
 - **Preview `afterEach` runs at the right time, but in the wrong bundle.** It "runs after the story is rendered and the play function has completed" (same page), and also in the Storybook UI. Calling `toMatchScreenshot` there means importing `vitest/browser` into `preview.ts`. This is not documented. The `storybook-addon-vis` maintainers had to add "a cdp proxy that is safe to import from stories" ([PR #887](https://github.com/repobuddy/visual-testing/pull/887)), which suggests a direct import is not safe (inference).
 - **Animations would be paused there.** In a test environment, `runStory` calls `cleanUp = pauseAnimations();` before `applyAfterEach`, and `await cleanUp?.()` after it. So the pause stylesheet is gone by the time the Vitest `afterEach` runs. Vitest's own `animations: 'disabled'` default covers that gap (§3).
 - **Tags work as a filter in either option.** [tags](https://storybook.js.org/docs/writing-stories/tags): "To remove a tag from a story, prefix it with `!`". [`csf-utils.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/core/src/csf/csf-utils.ts) `combineTags`: `if (tag.startsWith('!')) { acc.delete(tag.slice(1)); }`. So `composedStory.tags` is the resolved list.
@@ -163,6 +164,7 @@ How should `packages/ui` screenshot every Storybook story with Vitest's `toMatch
   - `await page.viewport(viewportWidth, viewportHeight);`.
 
   Grunnmuren hit this: "Storybook's Vitest plugin lays every story out in 1200x900, whatever the instance below says."
+
 - **Tall stories.** Grunnmuren: "whatever is outside it comes out blank in the screenshot. So a tall story gets an iframe tall enough to hold it first". It calls `page.viewport(width, document.documentElement.scrollHeight)` for the shot, then restores the viewport.
 - **Chromium font-rendering flags.** element-web passes `--font-render-hinting=none`, `--disable-font-subpixel-positioning` and `--disable-lcd-text` ("Force consistent font rendering"). This is not needed when every run uses the same image (inference). Not adopted.
 
@@ -182,6 +184,7 @@ How should `packages/ui` screenshot every Storybook story with Vitest's `toMatch
   - `contrast`.
 
   These are already established in `storybook-vitest-testing.md` §5.
+
 - **Light and dark (inference).** Our tokens switch through `light-dark()` on `color-scheme` (see `theme-switching.md`). So `colorScheme: 'dark'` exercises the "system" path with no `data-theme`. An explicit `data-theme` override would need an `initialGlobals` theme and a decorator instead.
 - **`prefers-reduced-transparency` through CDP.**
   - [commands](https://vitest.dev/api/browser/commands): `import { cdp } from 'vitest/browser'`. It "works only with `playwright` provider and only when using `chromium` browser".
@@ -205,8 +208,8 @@ How should `packages/ui` screenshot every Storybook story with Vitest's `toMatch
 **Unique baseline names per project**
 
 - **The default paths contain no project.** [browser.expect](https://vitest.dev/config/browser/expect):
-  - `resolveScreenshotPath` defaults to `` path.resolve(root, testFileDirectory, screenshotDirectory, testFileName, `${arg}-${browserName}-${platform}${ext}`) ``;
-  - `resolveDiffPath` defaults to `` path.resolve(root, attachmentsDir, testFileDirectory, testFileName, `${arg}-${browserName}-${platform}${ext}`) ``.
+  - `resolveScreenshotPath` defaults to ``path.resolve(root, testFileDirectory, screenshotDirectory, testFileName, `${arg}-${browserName}-${platform}${ext}`)``;
+  - `resolveDiffPath` defaults to ``path.resolve(root, attachmentsDir, testFileDirectory, testFileName, `${arg}-${browserName}-${platform}${ext}`)``.
 - **The attachments directory is shared.** [attachmentsDir](https://vitest.dev/config/attachmentsdir): "When using [`projects`], all projects share the same `attachmentsDir`; it cannot be configured per project."
 - **Grunnmuren customises both paths:** "Vitest's default screenshot and diff paths have no project in them, so every variant would compare against the same file and write its diffs over the other's." Its `resolveDiffPath` comment: "Covers the actual screenshot too, as `<arg>-actual`". This matches the source, which calls `resolveDiffPath` with `` `${arg}-reference` ``, `-actual` and `-diff`.
 - **The `project` field.** `PathResolveData` also has "`project: TestProject` <Version 4.1.6> <Experimental />". Because it is experimental, a closure over the variant name (Grunnmuren's approach) is the safer key.
@@ -217,7 +220,7 @@ How should `packages/ui` screenshot every Storybook story with Vitest's `toMatch
 **Updating baselines**
 
 - [assertions](https://vitest.dev/api/browser/assertions#tomatchscreenshot): update by "pressing the `u` key in watch mode, or by running tests with the `-u` or `--update` flags".
-- **CI never writes baselines.** [update](https://vitest.dev/config/update): "CI runs (`process.env.CI` is truthy): works same as `none`". `none` "does not write snapshots and fails on snapshot mismatches, missing snapshots, and obsolete snapshots". In source, a missing reference with `updateSnapshot === 'none'` is written to the *diff* location and reported as "No existing reference screenshot found."
+- **CI never writes baselines.** [update](https://vitest.dev/config/update): "CI runs (`process.env.CI` is truthy): works same as `none`". `none` "does not write snapshots and fails on snapshot mismatches, missing snapshots, and obsolete snapshots". In source, a missing reference with `updateSnapshot === 'none'` is written to the _diff_ location and reported as "No existing reference screenshot found."
 - **Locally, missing baselines are created.** The mode is "works same as `new`", and the message is "No existing reference screenshot found; a new one was created. Review it before running tests again."
 - **Update in CI, not locally.** [VRT guide](https://vitest.dev/guide/browser/visual-regression-testing): "Running `vitest --update` locally would generate screenshots on your machine, defeating the whole point". It recommends "a manually-triggered workflow" that "Only runs on feature branches (never on main)", with `on: workflow_dispatch`, a `concurrency` group per branch, and a bot commit with `Co-authored-by`.
 - **Grunnmuren's version.** [update-screenshot-baselines.yml](https://github.com/code-obos/grunnmuren/blob/2835d4707a0131b1e5ae302e41c5463333eec6c7/.github/workflows/update-screenshot-baselines.yml): "they are only ever produced by this workflow, on a feature branch, never on main". It refuses to run on the default branch ("A job-level `if` would skip and report green … Fail instead"), then runs `git add ':(glob)**/__screenshots__/**'`.
@@ -250,13 +253,13 @@ How should `packages/ui` screenshot every Storybook story with Vitest's `toMatch
 - **Vitest docs.** The VRT guide covers `*.vrt.test.*` files, a Docker or CI environment, Azure App Testing and Chromatic (`@chromatic-com/vitest`). Storybook: not found (the word appears only in `docs/blog/vitest-3.md`). `examples/` at v5.0.5 has no `toMatchScreenshot` example: not found.
 - **Real repos.**
 
-  | Repo | Versions | Hook and target | Name and paths | Notes |
-  |---|---|---|---|---|
-  | [code-obos/grunnmuren](https://github.com/code-obos/grunnmuren/blob/2835d4707a0131b1e5ae302e41c5463333eec6c7/.storybook/vitest.setup.ts) | SB 10.6.1, Vitest 5.0.3, PW 1.63.0 | `afterEach` → `page.elementLocator(document.body)`; "Every story is a screenshot" | default `arg`; variant suffix in both resolvers | font `load()` in `beforeAll`, media freeze, tall-story viewport, manual baseline workflow |
-  | [IBM/carbon-components-ember](https://github.com/IBM/carbon-components-ember/blob/0de6e0d0b0ec28cf1028508044ed203aa7c86da2/carbon-components-ember/.storybook/vitest.setup.ts) | SB ^10.6.3, Vitest ^5.0.5, PW ^1.64.1 | `afterEach(({ story, task }) …)` → `document.documentElement` | `story.id.replace('--', '/')`; one flat `__screenshots__` dir | skips `test-fn` and failed tests; `parameters.screenshot.disable`; baselines from main's CI artifact |
-  | [kartverket/kv-designsystem-test](https://github.com/kartverket/kv-designsystem-test/blob/5cd40be22b25d7b7c5931384e74940d57077118d/@kv-designsystem/react/.storybook/vitest.setup.ts) | `catalog:` | `afterEach` → `canvasElement` stored by a decorator | `context.task.name` | smallest working version |
-  | [metio/plinky](https://github.com/metio/plinky/blob/1d2c90d90c55f93c47f4e3d00fbeb3d84e308801/.storybook/vitest.setup.ts) | (not checked) | `afterEach` → story root, falling back to body | default, plus `` `${name}-dark` `` | flips `.dark` in the same test; skip-lists emoji and OKLCH raster-unstable stories |
-  | [Ahoo-Wang/Wow](https://github.com/Ahoo-Wang/Wow/blob/896081659165b99a34ec09408818acd0aff06d96/typescript/storybook/vitest.config.ts) | `catalog:` | a story calls a global `storybookScreenshot()`, only in the `visual` project | `root/baselines/<file>/<arg>-<browser>` | remote Linux browser over `connectOptions`; `reducedMotion` and `deviceScaleFactor: 1` |
+  | Repo                                                                                                                                                                                  | Versions                              | Hook and target                                                                   | Name and paths                                                | Notes                                                                                                |
+  | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+  | [code-obos/grunnmuren](https://github.com/code-obos/grunnmuren/blob/2835d4707a0131b1e5ae302e41c5463333eec6c7/.storybook/vitest.setup.ts)                                              | SB 10.6.1, Vitest 5.0.3, PW 1.63.0    | `afterEach` → `page.elementLocator(document.body)`; "Every story is a screenshot" | default `arg`; variant suffix in both resolvers               | font `load()` in `beforeAll`, media freeze, tall-story viewport, manual baseline workflow            |
+  | [IBM/carbon-components-ember](https://github.com/IBM/carbon-components-ember/blob/0de6e0d0b0ec28cf1028508044ed203aa7c86da2/carbon-components-ember/.storybook/vitest.setup.ts)        | SB ^10.6.3, Vitest ^5.0.5, PW ^1.64.1 | `afterEach(({ story, task }) …)` → `document.documentElement`                     | `story.id.replace('--', '/')`; one flat `__screenshots__` dir | skips `test-fn` and failed tests; `parameters.screenshot.disable`; baselines from main's CI artifact |
+  | [kartverket/kv-designsystem-test](https://github.com/kartverket/kv-designsystem-test/blob/5cd40be22b25d7b7c5931384e74940d57077118d/@kv-designsystem/react/.storybook/vitest.setup.ts) | `catalog:`                            | `afterEach` → `canvasElement` stored by a decorator                               | `context.task.name`                                           | smallest working version                                                                             |
+  | [metio/plinky](https://github.com/metio/plinky/blob/1d2c90d90c55f93c47f4e3d00fbeb3d84e308801/.storybook/vitest.setup.ts)                                                              | (not checked)                         | `afterEach` → story root, falling back to body                                    | default, plus `` `${name}-dark` ``                            | flips `.dark` in the same test; skip-lists emoji and OKLCH raster-unstable stories                   |
+  | [Ahoo-Wang/Wow](https://github.com/Ahoo-Wang/Wow/blob/896081659165b99a34ec09408818acd0aff06d96/typescript/storybook/vitest.config.ts)                                                 | `catalog:`                            | a story calls a global `storybookScreenshot()`, only in the `visual` project      | `root/baselines/<file>/<arg>-<browser>`                       | remote Linux browser over `connectOptions`; `reducedMotion` and `deviceScaleFactor: 1`               |
 
 ## Recommended config sketch
 
@@ -287,77 +290,118 @@ Source keys:
 
 ```ts
 // packages/ui/.storybook/preview.ts (excerpt)
-import { definePreview } from '@storybook/react-vite';
+import { definePreview } from "@storybook/react-vite";
 export default definePreview({
-  tags: ['autodocs', 'screenshot'],                                   // [SB-tags] custom tag; stories opt out with '!screenshot'
-  beforeEach: ({ canvasElement, globals }) => {                       // [SB-tu] beforeEach gets the story context [inf]
-    globalThis.__storyCanvas = canvasElement;                         // [R-kv] the root div has no stable selector
-    document.documentElement.dir = globals.direction ?? 'ltr';        // [inf] RTL variant via initialGlobals
+  tags: ["autodocs", "screenshot"], // [SB-tags] custom tag; stories opt out with '!screenshot'
+  beforeEach: ({ canvasElement, globals }) => {
+    // [SB-tu] beforeEach gets the story context [inf]
+    globalThis.__storyCanvas = canvasElement; // [R-kv] the root div has no stable selector
+    document.documentElement.dir = globals.direction ?? "ltr"; // [inf] RTL variant via initialGlobals
   },
 });
 ```
 
 ```ts
 // packages/ui/.storybook/screenshot-variants.ts
-import type { BrowserContextOptions } from 'playwright';
+import type { BrowserContextOptions } from "playwright";
 export interface ScreenshotVariant {
   name: string;
-  contextOptions?: Pick<BrowserContextOptions, 'colorScheme' | 'forcedColors' | 'contrast' | 'reducedMotion'>; // [PW-p]
-  initialGlobals?: Record<string, unknown>;                           // [SB-va]
+  contextOptions?: Pick<
+    BrowserContextOptions,
+    "colorScheme" | "forcedColors" | "contrast" | "reducedMotion"
+  >; // [PW-p]
+  initialGlobals?: Record<string, unknown>; // [SB-va]
   cdp?: { media?: { name: string; value: string }[]; fontSize?: number }; // [CDP]
 }
 export const variants: ScreenshotVariant[] = [
-  { name: 'light', contextOptions: { colorScheme: 'light' } },        // [PW-p]
-  { name: 'dark', contextOptions: { colorScheme: 'dark' } },          // [PW-p] [inf] exercises light-dark() via color-scheme
-  { name: 'forced-colors', contextOptions: { forcedColors: 'active' } }, // [PW-p]
-  { name: 'contrast-more', contextOptions: { contrast: 'more' } },    // [PW-p]
-  { name: 'reduced-motion', contextOptions: { reducedMotion: 'reduce' } }, // [PW-p]
-  { name: 'reduced-transparency', cdp: { media: [{ name: 'prefers-reduced-transparency', value: 'reduce' }] } }, // [CDP] Emulation.setEmulatedMedia
-  { name: 'rtl', initialGlobals: { direction: 'rtl' } },              // [SB-va] [inf]
-  { name: 'text-200', cdp: { fontSize: 32 } },                        // [CDP] Page.setFontSizes (experimental) [inf]
-  { name: 'w320', initialGlobals: { viewport: { value: 'mobile1' } } }, // [SB-vp] mobile1 = 320×568; instance viewport is overridden [SB-tu]
+  { name: "light", contextOptions: { colorScheme: "light" } }, // [PW-p]
+  { name: "dark", contextOptions: { colorScheme: "dark" } }, // [PW-p] [inf] exercises light-dark() via color-scheme
+  { name: "forced-colors", contextOptions: { forcedColors: "active" } }, // [PW-p]
+  { name: "contrast-more", contextOptions: { contrast: "more" } }, // [PW-p]
+  { name: "reduced-motion", contextOptions: { reducedMotion: "reduce" } }, // [PW-p]
+  {
+    name: "reduced-transparency",
+    cdp: { media: [{ name: "prefers-reduced-transparency", value: "reduce" }] },
+  }, // [CDP] Emulation.setEmulatedMedia
+  { name: "rtl", initialGlobals: { direction: "rtl" } }, // [SB-va] [inf]
+  { name: "text-200", cdp: { fontSize: 32 } }, // [CDP] Page.setFontSizes (experimental) [inf]
+  { name: "w320", initialGlobals: { viewport: { value: "mobile1" } } }, // [SB-vp] mobile1 = 320×568; instance viewport is overridden [SB-tu]
 ];
 ```
 
 ```ts
 // packages/ui/vitest.config.ts (screenshot projects only; the `storybook` and `unit` projects as in storybook-vitest-testing.md)
-import path from 'node:path';
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';  // [SB-va]
-import { playwright } from '@vitest/browser-playwright';               // [V-pw]
-import { configDefaults, defineConfig } from 'vitest/config';          // [V-html]
-import { variants, type ScreenshotVariant } from './.storybook/screenshot-variants.ts';
+import path from "node:path";
+import { storybookTest } from "@storybook/addon-vitest/vitest-plugin"; // [SB-va]
+import { playwright } from "@vitest/browser-playwright"; // [V-pw]
+import { configDefaults, defineConfig } from "vitest/config"; // [V-html]
+import { variants, type ScreenshotVariant } from "./.storybook/screenshot-variants.ts";
 
-const configDir = path.join(import.meta.dirname, '.storybook');        // [SB-va] configDir required outside default cwd
-const name = (v: ScreenshotVariant) => `screenshot:${v.name}`;         // [V-proj] filter with --project 'screenshot:*'
+const configDir = path.join(import.meta.dirname, ".storybook"); // [SB-va] configDir required outside default cwd
+const name = (v: ScreenshotVariant) => `screenshot:${v.name}`; // [V-proj] filter with --project 'screenshot:*'
 
 const screenshotProject = (v: ScreenshotVariant) => ({
-  extends: true,                                                      // [SB-va]
-  plugins: [storybookTest({
-    configDir,
-    tags: { include: ['screenshot'], skip: ['test-fn'] },             // [SB-va] [SB-tags] skip Story.test() children [inf]
-    initialGlobals: v.initialGlobals ?? {},                           // [SB-va]
-  })],
+  extends: true, // [SB-va]
+  plugins: [
+    storybookTest({
+      configDir,
+      tags: { include: ["screenshot"], skip: ["test-fn"] }, // [SB-va] [SB-tags] skip Story.test() children [inf]
+      initialGlobals: v.initialGlobals ?? {}, // [SB-va]
+    }),
+  ],
   test: {
     name: name(v),
-    setupFiles: ['./.storybook/vitest.screenshot.ts'],                // [V-vrt] setupFiles; [R-obos] [R-ibm]
-    provide: { screenshotVariant: v },                                // [V-prov] serializable
+    setupFiles: ["./.storybook/vitest.screenshot.ts"], // [V-vrt] setupFiles; [R-obos] [R-ibm]
+    provide: { screenshotVariant: v }, // [V-prov] serializable
     browser: {
       enabled: true,
-      headless: true,                                                 // [V-head] default is process.env.CI
-      ui: false,                                                      // [V-ui] default !isCI; UI scales the iframe [V-src]
+      headless: true, // [V-head] default is process.env.CI
+      ui: false, // [V-ui] default !isCI; UI scales the iframe [V-src]
       provider: playwright({
         contextOptions: { deviceScaleFactor: 1, ...v.contextOptions }, // [PW-p] default 1; Vitest scale is 'device' [V-src]
       }),
-      instances: [{ browser: 'chromium' }],                           // [SB-va]
+      instances: [{ browser: "chromium" }], // [SB-va]
       expect: {
         toMatchScreenshot: {
-          comparatorName: 'pixelmatch',                               // [V-asrt] set it for option types
+          comparatorName: "pixelmatch", // [V-asrt] set it for option types
           comparatorOptions: { threshold: 0.1, allowedMismatchedPixelRatio: 0.001 }, // [V-asrt] [V-vrt] [inf] start strict, tune
-          timeout: 15_000,                                            // [V-asrt] [R-ibm] stability loop headroom
-          resolveScreenshotPath: ({ arg, ext, root, screenshotDirectory, testFileDirectory, testFileName, browserName, platform }) =>
-            path.resolve(root, testFileDirectory, screenshotDirectory, testFileName, v.name, `${arg}-${browserName}-${platform}${ext}`), // [V-exp] [R-obos]
-          resolveDiffPath: ({ arg, ext, root, attachmentsDir, testFileDirectory, testFileName, browserName, platform }) =>
-            path.resolve(root, attachmentsDir, testFileDirectory, testFileName, v.name, `${arg}-${browserName}-${platform}${ext}`), // [V-exp] [V-att] shared dir
+          timeout: 15_000, // [V-asrt] [R-ibm] stability loop headroom
+          resolveScreenshotPath: ({
+            arg,
+            ext,
+            root,
+            screenshotDirectory,
+            testFileDirectory,
+            testFileName,
+            browserName,
+            platform,
+          }) =>
+            path.resolve(
+              root,
+              testFileDirectory,
+              screenshotDirectory,
+              testFileName,
+              v.name,
+              `${arg}-${browserName}-${platform}${ext}`,
+            ), // [V-exp] [R-obos]
+          resolveDiffPath: ({
+            arg,
+            ext,
+            root,
+            attachmentsDir,
+            testFileDirectory,
+            testFileName,
+            browserName,
+            platform,
+          }) =>
+            path.resolve(
+              root,
+              attachmentsDir,
+              testFileDirectory,
+              testFileName,
+              v.name,
+              `${arg}-${browserName}-${platform}${ext}`,
+            ), // [V-exp] [V-att] shared dir
         },
       },
     },
@@ -366,7 +410,7 @@ const screenshotProject = (v: ScreenshotVariant) => ({
 
 export default defineConfig({
   test: {
-    reporters: ['html', ...configDefaults.reporters],                 // [V-html]
+    reporters: ["html", ...configDefaults.reporters], // [V-html]
     projects: [/* storybook, unit … */ ...variants.map(screenshotProject)], // [SB-va] one project per global value
   },
 });
@@ -374,39 +418,52 @@ export default defineConfig({
 
 ```ts
 // packages/ui/.storybook/vitest.screenshot.ts
-import { afterEach, beforeAll, expect, inject } from 'vitest';
-import { cdp, page } from 'vitest/browser';                           // [V-cmd] [V-vrt]
-import type { ScreenshotVariant } from './screenshot-variants.ts';
+import { afterEach, beforeAll, expect, inject } from "vitest";
+import { cdp, page } from "vitest/browser"; // [V-cmd] [V-vrt]
+import type { ScreenshotVariant } from "./screenshot-variants.ts";
 
-declare module 'vitest' {
-  interface ProvidedContext { screenshotVariant: ScreenshotVariant }  // [V-prov]
-  interface TestContext {                                             // [R-ibm] not typed by the addon
-    story?: { id: string; tags: string[]; parameters: { screenshot?: { target?: 'canvas' | 'document' } } }; // [SB-tu] context.story = composedStory
+declare module "vitest" {
+  interface ProvidedContext {
+    screenshotVariant: ScreenshotVariant;
+  } // [V-prov]
+  interface TestContext {
+    // [R-ibm] not typed by the addon
+    story?: {
+      id: string;
+      tags: string[];
+      parameters: { screenshot?: { target?: "canvas" | "document" } };
+    }; // [SB-tu] context.story = composedStory
   }
 }
 
-const variant = inject('screenshotVariant');                          // [V-prov]
-const FACES = ['400 1rem "Ab Sans"', '600 1rem "Ab Sans"'];           // [inf] our self-hosted faces
+const variant = inject("screenshotVariant"); // [V-prov]
+const FACES = ['400 1rem "Ab Sans"', '600 1rem "Ab Sans"']; // [inf] our self-hosted faces
 
 beforeAll(async () => {
-  if (variant.cdp?.media) await cdp().send('Emulation.setEmulatedMedia', { features: variant.cdp.media }); // [CDP] [V-cmd]
-  if (variant.cdp?.fontSize) await cdp().send('Page.setFontSizes', { fontSizes: { standard: variant.cdp.fontSize } }); // [CDP] experimental
-  if (variant.name === 'reduced-transparency') expect(matchMedia('(prefers-reduced-transparency: reduce)').matches).toBe(true); // [inf] fail if not emulated
-  if (variant.name === 'text-200') expect(getComputedStyle(document.documentElement).fontSize).toBe('32px'); // [inf]
+  if (variant.cdp?.media)
+    await cdp().send("Emulation.setEmulatedMedia", { features: variant.cdp.media }); // [CDP] [V-cmd]
+  if (variant.cdp?.fontSize)
+    await cdp().send("Page.setFontSizes", { fontSizes: { standard: variant.cdp.fontSize } }); // [CDP] experimental
+  if (variant.name === "reduced-transparency")
+    expect(matchMedia("(prefers-reduced-transparency: reduce)").matches).toBe(true); // [inf] fail if not emulated
+  if (variant.name === "text-200")
+    expect(getComputedStyle(document.documentElement).fontSize).toBe("32px"); // [inf]
   const loaded = await Promise.all(FACES.map((f) => document.fonts.load(f))); // [R-obos] fonts.ready alone isn't enough
-  expect(loaded.every((faces) => faces.length > 0)).toBe(true);       // [R-obos] throw on missing face
-  const style = document.createElement('style');                      // [V-vrt] "Disable animations" snippet
-  style.textContent = '*,*::before,*::after{animation-duration:0s!important;animation-delay:0s!important;transition-duration:0s!important;transition-delay:0s!important}';
+  expect(loaded.every((faces) => faces.length > 0)).toBe(true); // [R-obos] throw on missing face
+  const style = document.createElement("style"); // [V-vrt] "Disable animations" snippet
+  style.textContent =
+    "*,*::before,*::after{animation-duration:0s!important;animation-delay:0s!important;transition-duration:0s!important;transition-delay:0s!important}";
   document.head.append(style);
 });
 
 afterEach(async ({ story, task }) => {
-  if (!story || story.tags.includes('test-fn')) return;              // [R-ibm] [SB-tags] TEST_FN = 'test-fn'
-  if (task.result?.state === 'fail') return;                          // [V-src] state set before afterEach; [R-ibm]
-  const target = story.parameters.screenshot?.target === 'document'
-    ? document.documentElement                                        // [R-ibm] top layer and portals
-    : (globalThis as { __storyCanvas?: HTMLElement }).__storyCanvas;  // [V-vrt] prefer specific elements; [R-kv]
-  if (!target) throw new Error(`no canvas for ${story.id}`);          // [inf]
+  if (!story || story.tags.includes("test-fn")) return; // [R-ibm] [SB-tags] TEST_FN = 'test-fn'
+  if (task.result?.state === "fail") return; // [V-src] state set before afterEach; [R-ibm]
+  const target =
+    story.parameters.screenshot?.target === "document"
+      ? document.documentElement // [R-ibm] top layer and portals
+      : (globalThis as { __storyCanvas?: HTMLElement }).__storyCanvas; // [V-vrt] prefer specific elements; [R-kv]
+  if (!target) throw new Error(`no canvas for ${story.id}`); // [inf]
   await expect(page.elementLocator(target)).toMatchScreenshot(story.id); // [V-vrt] [V-asrt]; id as name [SB-tu]
 });
 ```
@@ -416,11 +473,11 @@ afterEach(async ({ story, task }) => {
 on: workflow_dispatch
 jobs:
   update:
-    if: github.ref_name != github.event.repository.default_branch       # [V-vrt] (R-obos fails instead of skipping)
-    concurrency: { group: screenshots@${{ github.ref_name }}, cancel-in-progress: true } # [V-vrt]
+    if: github.ref_name != github.event.repository.default_branch # [V-vrt] (R-obos fails instead of skipping)
+    concurrency: { group: screenshots@$, { { github.ref_name } }, cancel-in-progress: true } # [V-vrt]
     runs-on: ubuntu-latest
-    container: { image: mcr.microsoft.com/playwright:v1.64.1-noble }    # [PW-ci]
-    permissions: { contents: write }                                    # [V-vrt]
+    container: { image: mcr.microsoft.com/playwright:v1.64.1-noble } # [PW-ci]
+    permissions: { contents: write } # [V-vrt]
     steps:
       # checkout, pnpm install --frozen-lockfile                        [V-vrt]
       - run: pnpm --filter @platform/ui exec vitest run --project 'screenshot:*' --update # [V-asrt] [V-proj]
@@ -450,3 +507,59 @@ These are proposals, not decisions.
 4. **`--update` and obsolete screenshots.** Does `'all'` delete orphaned `__screenshots__` PNGs, or only text snapshots? The VRT guide says they "aren't removed automatically". Not resolved.
 5. **Prerequisites for the variants.** Is `prefers-reduced-transparency` present in the Chromium that ships with Playwright 1.64.1? It was checked only on Chromium `main`. Is `Page.setFontSizes` still accepted there, given it is experimental?
 6. **`storybook-addon-vis` on Vitest 5.** No timeline was found beyond "lift when the libraries and Storybook support v5". Storybook's side already allows `^5.0.0`.
+
+## Answers (ticket #8, 2026-10-24)
+
+What was built: `packages/ui/.storybook/screenshots/` (`projects.ts` makes one Vitest project per variant, `setup.ts` is the setup file those projects use, and `canvas.ts` records the story canvas from the preview's `beforeEach`), `packages/ui/scripts/screenshots-docker.sh`, and `.github/workflows/{ci,visual,update-screenshots}.yml`. It was run with `pnpm test:screenshots:docker` in `mcr.microsoft.com/playwright:v1.64.1-noble`, as `linux/amd64` (CI's architecture, emulated on an Apple-silicon host) and as `linux/arm64`, over every story on the integration branch (153 story files) plus temporary probe stories that were deleted afterwards: a 1500px tall story, a `showModal()` dialog, a `showPopover()` popover, a failing `play` and a `!screenshot` story. "Observed" marks what those runs showed.
+
+1. **CDP emulation reaches the tester iframe.** Observed: the setup file's `beforeAll`, which runs in the iframe, saw `matchMedia('(prefers-reduced-transparency: reduce)').matches === true` and a root font size of `32px` after `cdp().send('Emulation.setEmulatedMedia', { features })` and `cdp().send('Page.setFontSizes', { fontSizes: { standard: 32 } })`. With the two `send` calls removed, the checks failed with "(prefers-reduced-transparency: reduce): expected false to be true" and "expected '16px' to be '32px'". So Playwright 1.64.1's Chromium has the feature, and it still accepts the experimental `Page.setFontSizes` (open question 5). Whether a CDP override composes with a `contextOptions` one was not tested: no variant combines them, and Chromium's `setEmulatedMedia` begins with `emulated_media_features_.Clear()` (`storybook-vitest-testing.md` §5).
+2. **`skip: ['test-fn']` skips `Story.test()` children and keeps the base story.** Observed: "315 passed | 450 skipped (765)" over the 9 projects, and no baseline was written for a child. A skipped test has no `context.story`, because the addon calls `context.skip()` before `context.story = composedStory` (`test-utils.js` @ 10.6.3). That is the setup file's `!story` check.
+3. **Tall stories are cut at the viewport.** Observed: a 1500px story in the 900px default viewport produced a 1500px-tall PNG whose lower 600px were blank. The setup file now grows the viewport to `document.documentElement.scrollHeight` (`page.viewport(innerWidth, height)`) before capturing, and the story came out whole. The addon resizes the viewport again before the next story (`setViewport` in `test-utils.js`). Top-layer captures keep their viewport, because a modal is laid out against it.
+4. **`--update` does not delete orphaned baselines.** Observed: after renaming a story's export and running `--update`, both the old and the new PNG were on disk. So the update workflow deletes `packages/ui/__screenshots__` before `--update`.
+5. **Top layer.** Observed: capturing the canvas with a modal open failed with "Could not capture a stable screenshot within 5000ms"; capturing `document.documentElement` gave a viewport-sized shot of the backdrop and dialog, and the same for a popover. The setup file therefore captures the document whenever `document.querySelector(':modal, :popover-open')` matches after `play`. Both pseudo-classes are Baseline widely available (MDN). `:modal` matches "The `dialog` element opened with the `showModal()` API"; `:popover-open` "represents a popover element … that is in the showing state".
+6. **Baseline names and location.** `sanitize` in `@vitest/browser` 5.0.5 ends with `.replace(/-{2,}/g, "-")`, so `components-button--primary` is stored as `components-button-primary-chromium-linux.png`; this corrects §1's "pass through unchanged". Baselines sit at `packages/ui/__screenshots__/<variant>/<test file dir>/<file>/<name>-chromium-linux.png`, outside `src/`, because `scripts/icons.test.ts` (#11) reads every entry of `src/logo/` as a file and failed with `EISDIR` on a `src/logo/__screenshots__` folder (observed). Diffs go to `.vitest/attachments/<variant>/…`. 315 baselines take 48 MB, so they're stored in Git LFS, following the VRT guide's "if you plan to have a large test suite". The pattern `packages/ui/__screenshots__/**/*.png filter=lfs diff=lfs merge=lfs -text` was checked in the image with `git lfs ls-files` (git-lfs 3.4.1 from apt): it tracks the baselines and nothing else.
+7. **CI behaviour.** Observed with `CI=true`: missing baselines fail with "No existing reference screenshot found." and nothing is written; `--update` still writes every baseline; a `border-radius: 0` mutation of Button failed 24 of 27 Button shots with "32 pixels (ratio 0.01) differ", and wrote reference, actual and diff images per variant. The 3 `forced-colors` shots passed, which is right: forced colours drop the background that shows the radius. Vitest's default comparator options caught the change.
+8. **Architecture.** Observed: all 315 baselines written by the amd64 container matched pixel for pixel when compared from an arm64 container. So the local script runs Docker's native platform; `DOCKER_DEFAULT_PLATFORM=linux/amd64` forces CI's.
+9. **Memory, time, stability.** Observed: natively (arm64) the full run took about 33 s. Emulated amd64 was killed with exit 137 in an 8 GB Docker VM unless run with `--maxWorkers=1` (208 s). Large Foundations tables at `text-200` needed more than the 5 s default stability timeout, so it is 15 s, the value IBM and Plinky use. The capture runs in an `afterEach`, whose `hookTimeout` is "`30_000` if `browser.enabled` is `true`" (vitest.dev/config/hooktimeout).
+10. **Axe is off in the screenshot projects.** With axe on, the Foundations stories timed out (15 s test timeout) and other tickets' stories failed color-contrast under forced colors. The VRT guide says "Separating your visual suite from other tests gives you cleaner failure signals". No documented storybookTest option does this per project: `composeInitialGlobals` overwrites `a11y.manual` from the run config. So the projects provide the run config that the testing widget's Accessibility toggle sends (`STORYBOOK_TEST_PROVIDE_KEY = "storybook/test-provided"` in addon-vitest 10.6.3 `dist/node/vitest.js`, read as `runConfig.a11y` in `vitest-plugin/test-utils.js`).
+
+### Config provenance
+
+The harness and workflows carry no comments (repo rule), so each line's source is recorded here.
+
+- `projects.ts`
+  - One project per variant: "It can be further configured with multiple Vitest projects, each pinning a different global value" ([vitest-addon](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon)).
+  - `contextOptions` go to `browser.newContext()` ([vitest playwright](https://vitest.dev/config/browser/playwright)). `colorScheme`, `forcedColors`, `contrast` and `reducedMotion` emulate those media features (Playwright 1.64.1 `params.md`).
+  - Playwright has no option for `prefers-reduced-transparency` ("reducedTransparency" isn't in its 1.64.1 docs), hence CDP.
+  - `rtl` uses the preview's `dir` global. `w320` uses `viewport: { value: 'mobile1' }` (320×568, `MINIMAL_VIEWPORTS`), because the addon sizes the page before each story (`viewports.ts`).
+  - `tags.include: ['screenshot']` plus the preview's `screenshot` tag: "To remove a tag from a story, prefix it with `!`" ([tags](https://storybook.js.org/docs/writing-stories/tags)). `tags.skip`: "Stories with these tags will not be tested, and will be counted in the test results" (vitest-addon). `Story.test()` children carry `test-fn` (`csf-factories.ts`).
+  - `provide`: "Define values that can be accessed inside your tests using `inject` method" ([provide](https://vitest.dev/config/provide)).
+  - `headless: true` and `ui: false`: both default to "not CI" ([ui](https://vitest.dev/config/browser/ui), [headless](https://vitest.dev/config/browser/headless)). The UI CSS-scales the iframe, and a headed UI run takes the host's DPR (§3).
+  - `deviceScaleFactor: 1`: Vitest captures at `scale: 'device'` (§3).
+  - `resolveScreenshotPath` and `resolveDiffPath` are the documented defaults with the variant added: "all projects share the same `attachmentsDir`; it cannot be configured per project" ([attachmentsDir](https://vitest.dev/config/attachmentsdir)).
+  - Projects exist only when `process.platform === 'linux'`: "Screenshots differ between browsers and platforms due to different rendering, fonts and more" (Playwright `test-snapshots-js.md`), and baselines are Linux-only.
+- `setup.ts`
+  - `/// <reference types="@vitest/browser-playwright" />` loads the provider's augmentation of `vitest/browser`, which types `cdp().send` with the DevTools Protocol.
+  - `cdp()` "works only with `playwright` provider and only when using `chromium` browser" ([commands](https://vitest.dev/api/browser/commands)).
+  - Every `document.fonts` face is loaded up front, because `fonts.ready` waits only for faces already requested (§3), and `unicode-range` splits each family across files.
+  - Failed tests are skipped because Vitest sets `result.state` before `afterEach` (§1, `run.ts`).
+- `package.json`
+  - `"#storybook/*": "./.storybook/*.ts"` in `imports` (Node subpath imports).
+  - `test` / `test:watch` use `--project "!screenshot:*"`. Vitest's `matchesProjectFilter` keeps every project not excluded by a `!` pattern when no positive pattern is given (`vitest` 5.0.5 `dist/chunks/index.*.js`).
+  - `test:screenshots` adds `--reporter=default --reporter=html`; the HTML reporter writes `.vitest/index.html` (`@vitest/ui` 5.0.5 `reporter.js`: `outputDir || ".vitest"`).
+- `screenshots-docker.sh`
+  - Image `mcr.microsoft.com/playwright:v<catalog playwright>-noble`, `--init` and `--ipc=host` ([Playwright Docker](https://playwright.dev/docs/docker)).
+  - "The Playwright package/dependency is not included in the image", so pnpm installs it. The image's Node is 24 and has no corepack (observed), so pnpm comes from npm at the `devEngines` version, and pnpm downloads the `devEngines.runtime` Node.
+  - The repo goes in as a tar of `git ls-files --cached --others --exclude-standard`, because the host's `node_modules` hold host binaries. macOS tar adds AppleDouble `._*` files, which Vite then scanned as stories (observed), so extraction drops `._*`.
+  - `CI=true` makes the update mode `none` ([update](https://vitest.dev/config/update)).
+  - The store sits in a named volume through `pnpm_config_store_dir`.
+- Workflows
+  - `pnpm/setup@v3` "picks up every runtime and version from" `devEngines` and, with `require-lockfile`, runs `pnpm install --frozen-lockfile` ([pnpm/setup v3.1.1 README](https://github.com/pnpm/setup/blob/v3.1.1/README.md)).
+  - `playwright install --with-deps` (Playwright `ci.md`).
+  - The container job: "GitHub Actions support running jobs in a container … to have a consistent environment for e.g. screenshots/visual regression testing" (Playwright `ci.md`).
+  - The image has git but no git-lfs (observed), hence `apt-get install git-lfs`. `actions/checkout` `lfs: true` runs `git lfs install --local` (`src/git-command-manager.ts` @ v7.0.1), so `git add` stores PNGs through LFS.
+  - `include-hidden-files` because `.vitest` is hidden (actions/upload-artifact v7.0.2 README).
+  - The update workflow follows the VRT guide's: `workflow_dispatch`, "Only runs on feature branches (never on main)" through `if: github.ref_name != github.event.repository.default_branch`, `contents: write`, and a bot commit with a `Co-authored-by` trailer for the actor.
+  - After it pushes, re-run Visual by hand: "events triggered by the `GITHUB_TOKEN` will not create a new workflow run" ([GITHUB_TOKEN](https://docs.github.com/en/actions/concepts/security/github_token)).
+  - Action versions are the latest releases on 2026-10-24: checkout v7.0.1, upload-artifact v7.0.2, pnpm/setup v3.1.1.
+  - `actionlint` 1.7.7 and `shellcheck` 0.10.0 pass on the workflows and the script.
