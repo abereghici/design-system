@@ -1,0 +1,97 @@
+@import "@platform/tokens/components/segmented-control.css";
+
+@layer ab.components {
+  .root {
+    position: relative;
+    display: inline-flex;
+    align-items: stretch;
+    box-sizing: border-box;
+    block-size: var(--ab-segmented-control-height);
+    min-inline-size: 0;
+    margin: 0;
+    border: 0;
+    padding: var(--ab-segmented-control-padding);
+    background-color: var(--ab-segmented-control-background-color);
+    border-radius: var(--ab-segmented-control-border-radius);
+    anchor-scope: --ab-segmented-control-checked;
+    isolation: isolate;
+  }
+
+  .root::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    position-anchor: --ab-segmented-control-checked;
+    inset-block: anchor(self-start) anchor(self-end);
+    inset-inline: anchor(self-start) anchor(self-end);
+    background-color: var(--ab-segmented-control-indicator-background-color);
+    border-radius: var(--ab-segmented-control-item-border-radius);
+    box-shadow: var(--ab-segmented-control-indicator-shadow);
+  }
+
+  .item {
+    --ab-icon-size: var(--ab-size-icon-sm);
+    --ab-icon-stroke-width: var(--ab-stroke-width-lg);
+
+    position: relative;
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ab-space-inline-xs);
+    padding-inline: var(--ab-segmented-control-item-padding-inline);
+    font: var(--ab-segmented-control-item-font);
+    color: var(--ab-segmented-control-item-text-color);
+    border-radius: var(--ab-segmented-control-item-border-radius);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color);
+  }
+
+  .item:has(.radio:checked) {
+    color: var(--ab-segmented-control-item-text-color-selected);
+    anchor-name: --ab-segmented-control-checked;
+  }
+
+  .item:has(.radio:focus-visible) {
+    outline: var(--ab-focus-ring-width) solid var(--ab-color-border-focused);
+    outline-offset: calc(var(--ab-segmented-control-padding) * -1);
+  }
+
+  .radio {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .item:hover:not(:has(.radio:checked)) {
+      color: var(--ab-segmented-control-item-text-color-hovered);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .root[data-pointer]::before {
+      transition: inset var(--ab-segmented-control-duration) var(--ab-segmented-control-easing);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .root {
+      border: 1px solid CanvasText;
+    }
+
+    .root::before {
+      background-color: Highlight;
+    }
+
+    .item:has(.radio:checked) {
+      color: HighlightText;
+    }
+  }
+}

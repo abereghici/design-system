@@ -176,6 +176,12 @@ const componentRoutes = [
     html: 'aria-label="Increase"',
   },
   { name: "tabs", tokens: ["tabs"], client: ["tabs/tabs.tsx"], html: 'role="tablist"' },
+  {
+    name: "segmented-control",
+    tokens: ["segmented-control"],
+    client: ["segmented-control/segmented-control.tsx"],
+    html: 'aria-label="View"',
+  },
 ];
 
 describe("each component route ships only its own CSS, tokens and client code", () => {
