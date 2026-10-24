@@ -4,6 +4,8 @@ import type { Decorator } from "@storybook/react-vite";
 
 import preview from "#.storybook/preview.tsx";
 
+import { Checkbox } from "../checkbox/checkbox.tsx";
+
 import * as Field from "./field.tsx";
 
 const inAForm: Decorator = (Story) => (
@@ -152,5 +154,31 @@ Default.test(
     const input = canvas.getByRole("textbox", { name: "Handle" });
     await expect(input).toHaveAttribute("aria-invalid", "true");
     await expect(input).toHaveAccessibleDescription("That handle is taken.");
+  },
+);
+
+Default.test(
+  "adds a description and an error to a Checkbox",
+  {
+    decorators: [inAForm],
+    args: {
+      name: "terms",
+      children: (
+        <>
+          <Checkbox required>I accept the terms</Checkbox>
+          <Field.Description>You can read them in Settings.</Field.Description>
+          <Field.Error>Accept the terms to continue.</Field.Error>
+        </>
+      ),
+    },
+  },
+  async ({ canvas, userEvent }) => {
+    const box = canvas.getByRole("checkbox", { name: "I accept the terms" });
+    await expect(box).toHaveAccessibleDescription("You can read them in Settings.");
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
+    await expect(box).toHaveAttribute("aria-invalid", "true");
+    await expect(box).toHaveAccessibleDescription("Accept the terms to continue.");
+    await userEvent.click(box);
+    await expect(box).not.toHaveAttribute("aria-invalid");
   },
 );

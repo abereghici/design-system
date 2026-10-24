@@ -43,7 +43,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          "Entry of a real quantity, formatted for the user's locale with `Intl`, with step buttons and arrow-key stepping. For digits that are not a number (postal codes, card numbers) use TextField with `inputMode=\"numeric\"`; to pick a value by feel, use Slider.",
+          'Entry of a real quantity, formatted for the user\'s locale with `Intl`, with step buttons and arrow-key stepping. For digits that are not a number (postal codes, card numbers) use TextField with `inputMode="numeric"`; to pick a value by feel, use Slider.',
       },
     },
   },
@@ -57,24 +57,27 @@ Default.test("is a textbox named by its label, with named step buttons", async (
   await expect(canvas.getByRole("button", { name: "Decrease" })).toBeVisible();
 });
 
-Default.test("steps with the arrow, page, home and end keys", async ({ args, canvas, userEvent }) => {
-  const input = canvas.getByRole("textbox", { name: "Seats" });
-  await userEvent.click(input);
-  await userEvent.keyboard("{ArrowUp}");
-  await expect(input).toHaveValue("6");
-  await userEvent.keyboard("{PageUp}");
-  await expect(input).toHaveValue("16");
-  await userEvent.keyboard("{ArrowDown}");
-  await expect(input).toHaveValue("15");
-  await userEvent.keyboard("{End}");
-  await expect(input).toHaveValue("50");
-  await userEvent.keyboard("{Home}");
-  await expect(input).toHaveValue("1");
-  await expect(args.onValueChange).toHaveBeenLastCalledWith(
-    1,
-    expect.objectContaining({ reason: "keyboard" }),
-  );
-});
+Default.test(
+  "steps with the arrow, page, home and end keys",
+  async ({ args, canvas, userEvent }) => {
+    const input = canvas.getByRole("textbox", { name: "Seats" });
+    await userEvent.click(input);
+    await userEvent.keyboard("{ArrowUp}");
+    await expect(input).toHaveValue("6");
+    await userEvent.keyboard("{PageUp}");
+    await expect(input).toHaveValue("16");
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(input).toHaveValue("15");
+    await userEvent.keyboard("{End}");
+    await expect(input).toHaveValue("50");
+    await userEvent.keyboard("{Home}");
+    await expect(input).toHaveValue("1");
+    await expect(args.onValueChange).toHaveBeenLastCalledWith(
+      1,
+      expect.objectContaining({ reason: "keyboard" }),
+    );
+  },
+);
 
 Default.test(
   "steps with the buttons, keeps focus in the input and stops at the bound",
@@ -114,13 +117,16 @@ Default.test("clamps a typed value when it commits", async ({ args, canvas, user
   );
 });
 
-Default.test("keeps the last number when the typed text is not one", async ({ canvas, userEvent }) => {
-  const input = canvas.getByRole("textbox", { name: "Seats" });
-  await userEvent.tripleClick(input);
-  await userEvent.keyboard("abc");
-  await userEvent.tab();
-  await expect(input).toHaveValue("5");
-});
+Default.test(
+  "keeps the last number when the typed text is not one",
+  async ({ canvas, userEvent }) => {
+    const input = canvas.getByRole("textbox", { name: "Seats" });
+    await userEvent.tripleClick(input);
+    await userEvent.keyboard("abc");
+    await userEvent.tab();
+    await expect(input).toHaveValue("5");
+  },
+);
 
 Default.test(
   "keeps the previous value when the change is cancelled",
@@ -182,7 +188,10 @@ Default.test(
 
 Default.test(
   "fails valueMissing only when required and empty",
-  { args: { required: true, defaultValue: null, errorMessage: "Enter a number of seats." }, decorators: [inAForm] },
+  {
+    args: { required: true, defaultValue: null, errorMessage: "Enter a number of seats." },
+    decorators: [inAForm],
+  },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
     await userEvent.click(canvas.getByRole("button", { name: "Order" }));

@@ -87,10 +87,10 @@
   }
 
   .control:is(
-      :user-invalid,
-      [aria-invalid="true"],
-      :has(> :is(:user-invalid, [aria-invalid="true"]))
-    ) {
+    :user-invalid,
+    [aria-invalid="true"],
+    :has(> :is(:user-invalid, [aria-invalid="true"]))
+  ) {
     border-color: var(--ab-input-border-color-invalid);
     outline-color: var(--ab-input-border-color-invalid);
   }

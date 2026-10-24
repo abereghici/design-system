@@ -91,79 +91,81 @@ describe("per-component CSS", () => {
   });
 });
 
+const componentRoutes = [
+  { name: "badge", tokens: ["badge"], client: [], html: "12.345" },
+  { name: "tag", tokens: ["tag"], client: [], html: "Live" },
+  { name: "status-dot", tokens: ["status-dot"], client: [], html: "Operational" },
+  {
+    name: "avatar",
+    tokens: ["avatar", "icon"],
+    client: ["avatar/avatar-image.tsx"],
+    html: 'alt="Ana Popescu"',
+  },
+  { name: "card", tokens: ["card"], client: [], html: "<h1" },
+  { name: "separator", tokens: ["separator"], client: [], html: "<hr" },
+  {
+    name: "alert",
+    tokens: ["alert", "icon", "icon-button"],
+    client: ["alert/alert-close.tsx"],
+    html: 'aria-label="Dismiss"',
+  },
+  { name: "empty-state", tokens: ["empty-state", "icon"], client: [], html: "No files yet" },
+  {
+    name: "checkbox",
+    tokens: ["checkbox"],
+    client: ["checkbox/checkbox.tsx"],
+    html: "Email me updates",
+  },
+  { name: "switch", tokens: ["switch"], client: ["switch/switch.tsx"], html: 'role="switch"' },
+  {
+    name: "radio-group",
+    tokens: ["fieldset", "radio"],
+    client: ["radio-group/radio-group.tsx"],
+    html: 'role="radiogroup"',
+  },
+  { name: "slider", tokens: ["slider"], client: ["slider/slider.tsx"], html: 'type="range"' },
+  {
+    name: "select",
+    tokens: ["input", "select", "icon"],
+    client: ["select/select-root.tsx"],
+    html: 'label="Asia Pacific"',
+  },
+  { name: "form", tokens: [], client: ["form/form.tsx"], html: "<form" },
+  { name: "fieldset", tokens: ["fieldset"], client: [], html: "<legend" },
+  {
+    name: "field",
+    tokens: ["input"],
+    client: ["field/field.tsx"],
+    html: "Letters and digits.",
+  },
+  {
+    name: "text-field",
+    tokens: ["input"],
+    client: ["text-field/text-field.tsx"],
+    html: 'dir="auto"',
+  },
+  {
+    name: "text-area",
+    tokens: ["input"],
+    client: ["text-area/text-area.tsx"],
+    html: "<textarea",
+  },
+  {
+    name: "password-field",
+    tokens: ["input", "icon", "icon-button", "spinner"],
+    client: ["password-field/password-field.tsx"],
+    html: 'aria-label="Show password"',
+  },
+  {
+    name: "number-field",
+    tokens: ["input", "icon", "icon-button", "spinner"],
+    client: ["number-field/number-field.tsx"],
+    html: 'aria-label="Increase"',
+  },
+];
+
 describe("each component route ships only its own CSS, tokens and client code", () => {
-  test.each([
-    { name: "badge", tokens: ["badge"], client: [], html: "12.345" },
-    { name: "tag", tokens: ["tag"], client: [], html: "Live" },
-    { name: "status-dot", tokens: ["status-dot"], client: [], html: "Operational" },
-    {
-      name: "avatar",
-      tokens: ["avatar", "icon"],
-      client: ["avatar/avatar-image.tsx"],
-      html: 'alt="Ana Popescu"',
-    },
-    { name: "card", tokens: ["card"], client: [], html: "<h1" },
-    { name: "separator", tokens: ["separator"], client: [], html: "<hr" },
-    {
-      name: "alert",
-      tokens: ["alert", "icon", "icon-button"],
-      client: ["alert/alert-close.tsx"],
-      html: 'aria-label="Dismiss"',
-    },
-    { name: "empty-state", tokens: ["empty-state", "icon"], client: [], html: "No files yet" },
-    {
-      name: "checkbox",
-      tokens: ["checkbox"],
-      client: ["checkbox/checkbox.tsx"],
-      html: "Email me updates",
-    },
-    { name: "switch", tokens: ["switch"], client: ["switch/switch.tsx"], html: 'role="switch"' },
-    {
-      name: "radio-group",
-      tokens: ["fieldset", "radio"],
-      client: ["radio-group/radio-group.tsx"],
-      html: 'role="radiogroup"',
-    },
-    { name: "slider", tokens: ["slider"], client: ["slider/slider.tsx"], html: 'type="range"' },
-    {
-      name: "select",
-      tokens: ["input", "select", "icon"],
-      client: ["select/select-root.tsx"],
-      html: 'label="Asia Pacific"',
-    },
-    { name: "form", tokens: [], client: ["form/form.tsx"], html: "<form" },
-    { name: "fieldset", tokens: ["fieldset"], client: [], html: "<legend" },
-    {
-      name: "field",
-      tokens: ["input"],
-      client: ["field/field.tsx"],
-      html: "Letters and digits.",
-    },
-    {
-      name: "text-field",
-      tokens: ["input"],
-      client: ["text-field/text-field.tsx"],
-      html: 'dir="auto"',
-    },
-    {
-      name: "text-area",
-      tokens: ["input"],
-      client: ["text-area/text-area.tsx"],
-      html: "<textarea",
-    },
-    {
-      name: "password-field",
-      tokens: ["input", "icon", "icon-button", "spinner"],
-      client: ["password-field/password-field.tsx"],
-      html: 'aria-label="Show password"',
-    },
-    {
-      name: "number-field",
-      tokens: ["input", "icon", "icon-button", "spinner"],
-      client: ["number-field/number-field.tsx"],
-      html: 'aria-label="Increase"',
-    },
-  ])("$name", ({ name, tokens, client, html }) => {
+  test.each(componentRoutes)("$name", ({ name, tokens, client, html }) => {
     const r = route(name);
     expect(r.html).toContain(html);
     const shipped = shippedComponentTokens(r.css);

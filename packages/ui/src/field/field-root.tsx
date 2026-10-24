@@ -1,30 +1,13 @@
 "use client";
 
-import { createContext, use, useEffect, useId, useState } from "react";
+import { use, useEffect, useId, useState } from "react";
 import type { ComponentProps, SyntheticEvent } from "react";
 
 import { FormErrorsContext } from "../form/form.tsx";
 
+import { FieldContext } from "./field-control.ts";
+import type { FormControl } from "./field-control.ts";
 import styles from "./field.module.css";
-
-/** The native elements a Field validates. */
-export type FormControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-
-export interface FieldState {
-  readonly controlId: string;
-  readonly descriptionId: string;
-  readonly errorId: string;
-  readonly name: string | undefined;
-  readonly disabled: boolean;
-  readonly invalid: boolean;
-  readonly describedBy: string | undefined;
-  readonly message: string | undefined;
-  readonly validity: ValidityState | undefined;
-  readonly setControlId: (id: string) => void;
-  readonly describe: (described: boolean) => void;
-}
-
-export const FieldContext = createContext<FieldState | undefined>(undefined);
 
 export const withClass = (base: string | undefined, className: string | undefined) =>
   className === undefined ? base : `${base} ${className}`;
@@ -59,7 +42,11 @@ const controlOf = (id: string) => {
     : null;
 };
 
-const applyRule = (target: FormControl, message: string | undefined, rule: RootProps["validate"]) => {
+const applyRule = (
+  target: FormControl,
+  message: string | undefined,
+  rule: RootProps["validate"],
+) => {
   target.setCustomValidity(
     message ?? rule?.(target.value, new FormData(target.form ?? undefined)) ?? "",
   );
@@ -161,7 +148,9 @@ export function Root({
   const state = { controlId, descriptionId, errorId, name, disabled, invalid: shown, describedBy };
 
   return (
-    <FieldContext value={{ ...state, message, validity: failure?.validity, setControlId, describe }}>
+    <FieldContext
+      value={{ ...state, message, validity: failure?.validity, setControlId, describe }}
+    >
       <div
         {...props}
         className={withClass(styles["root"], className)}

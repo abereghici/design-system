@@ -50,18 +50,15 @@ Default.test("is a textbox named by its label", async ({ canvas }) => {
   await expect(canvas.getByRole("textbox", { name: "Email" })).toBeVisible();
 });
 
-Default.test(
-  "calls onValueChange with each new value",
-  async ({ args, canvas, userEvent }) => {
-    const input = canvas.getByRole("textbox", { name: "Email" });
-    await userEvent.type(input, "ab");
-    await expect(input).toHaveValue("ab");
-    await expect(args.onValueChange).toHaveBeenLastCalledWith(
-      "ab",
-      expect.objectContaining({ reason: "none" }),
-    );
-  },
-);
+Default.test("calls onValueChange with each new value", async ({ args, canvas, userEvent }) => {
+  const input = canvas.getByRole("textbox", { name: "Email" });
+  await userEvent.type(input, "ab");
+  await expect(input).toHaveValue("ab");
+  await expect(args.onValueChange).toHaveBeenLastCalledWith(
+    "ab",
+    expect.objectContaining({ reason: "none" }),
+  );
+});
 
 Default.test(
   "keeps the previous value when the change is cancelled",
@@ -80,13 +77,10 @@ Default.test(
   },
 );
 
-Default.test(
-  "focuses the input when its label is clicked",
-  async ({ canvas, userEvent }) => {
-    await userEvent.click(canvas.getByText("Email"));
-    await expect(canvas.getByRole("textbox", { name: "Email" })).toHaveFocus();
-  },
-);
+Default.test("focuses the input when its label is clicked", async ({ canvas, userEvent }) => {
+  await userEvent.click(canvas.getByText("Email"));
+  await expect(canvas.getByRole("textbox", { name: "Email" })).toHaveFocus();
+});
 
 Default.test(
   "describes itself with its description",
@@ -287,4 +281,3 @@ Controlled.test("follows the value the app holds", async ({ canvas, userEvent })
   await userEvent.type(canvas.getByRole("textbox", { name: "Name" }), "-Maria");
   await expect(canvas.getByRole("status")).toHaveTextContent("Hello, Ana-Maria");
 });
-

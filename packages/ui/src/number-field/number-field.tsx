@@ -3,16 +3,17 @@
 import { use, useState } from "react";
 import type { ComponentProps, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 
-import { FieldContext } from "../field/field-root.tsx";
+import { FieldContext } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
+import { IconButton } from "../icon-button/icon-button.tsx";
 import { MinusIcon } from "../icon/icons/minus.tsx";
 import { PlusIcon } from "../icon/icons/plus.tsx";
-import { IconButton } from "../icon-button/icon-button.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { InputGroup } from "../text-field/text-field.tsx";
-import textFieldStyles from "../text-field/text-field.module.css";
+import type { TextFieldProps } from "../text-field/text-field.tsx";
 
+import textFieldStyles from "../text-field/text-field.module.css";
 import styles from "./number-field.module.css";
 
 export interface NumberFieldChangeEventDetails {
@@ -31,13 +32,23 @@ type Bounds = { min?: number | undefined; max?: number | undefined; step: number
 
 type ControlProps = Omit<
   ComponentProps<"input">,
-  "type" | "value" | "defaultValue" | "size" | "min" | "max" | "step" | "aria-label" | "aria-labelledby"
+  | "type"
+  | "value"
+  | "defaultValue"
+  | "size"
+  | "min"
+  | "max"
+  | "step"
+  | "aria-label"
+  | "aria-labelledby"
 > & {
   /** Controlled raw value; `null` is empty. */
   value?: number | null | undefined;
   defaultValue?: number | null | undefined;
   /** Called when a value commits: blur or Enter after typing, a step button, an arrow key. */
-  onValueChange?: ((value: number | null, details: NumberFieldChangeEventDetails) => void) | undefined;
+  onValueChange?:
+    | ((value: number | null, details: NumberFieldChangeEventDetails) => void)
+    | undefined;
   /** A committed value is clamped to `min` and `max`. */
   min?: number | undefined;
   max?: number | undefined;
@@ -57,22 +68,14 @@ type ControlProps = Omit<
 };
 
 export type NumberFieldProps = Naming &
-  ControlProps & {
-    /** Helper text below the field, replaced by the error while invalid. */
-    description?: ReactNode;
-    /** Shown only after interaction while invalid. Defaults to the browser's `validationMessage`. */
-    errorMessage?: ReactNode | ((validity: ValidityState) => ReactNode);
-    /** Forces the invalid state, e.g. from an external validation library. */
-    invalid?: boolean;
-    validate?: Field.RootProps["validate"];
-    /** Heights 32 / 40, growing on coarse pointers. */
-    size?: "md" | "lg";
-  };
+  ControlProps &
+  Pick<TextFieldProps, "description" | "errorMessage" | "invalid" | "validate" | "size">;
 
 function numberFormat(locale: string, options: Intl.NumberFormatOptions | undefined) {
   const format = new Intl.NumberFormat(locale, options);
   const parts = format.formatToParts(-1234567.89);
-  const symbol = (type: Intl.NumberFormatPartTypes) => parts.find((part) => part.type === type)?.value;
+  const symbol = (type: Intl.NumberFormatPartTypes) =>
+    parts.find((part) => part.type === type)?.value;
   const digits = Array.from({ length: 10 }, (_, digit) =>
     new Intl.NumberFormat(locale, { useGrouping: false }).format(digit),
   );
@@ -102,7 +105,12 @@ function fit(value: number, { min, max, step }: Bounds) {
 
 function stepKey(event: KeyboardEvent, step: number, largeStep: number, { min, max }: Bounds) {
   const large = event.shiftKey ? largeStep : step;
-  const deltas: Record<string, number> = { ArrowUp: large, ArrowDown: -large, PageUp: largeStep, PageDown: -largeStep };
+  const deltas: Record<string, number> = {
+    ArrowUp: large,
+    ArrowDown: -large,
+    PageUp: largeStep,
+    PageDown: -largeStep,
+  };
   if (event.key in deltas) return (value: number) => value + (deltas[event.key] ?? 0);
   if (event.key === "Home" && min !== undefined) return () => min;
   if (event.key === "End" && max !== undefined) return () => max;
@@ -191,7 +199,8 @@ function useNumberValue({
   };
   return {
     rest,
-    inputMode: Number.isInteger(step) && (min ?? -1) >= 0 ? ("numeric" as const) : ("decimal" as const),
+    inputMode:
+      Number.isInteger(step) && (min ?? -1) >= 0 ? ("numeric" as const) : ("decimal" as const),
     committed,
     display: text ?? (committed === null ? "" : format(committed)),
     setText,

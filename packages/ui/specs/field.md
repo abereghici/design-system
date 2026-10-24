@@ -50,10 +50,10 @@ Root → Label → control → Description → Error.
 
 `Field.Error`
 
-| Prop       | Type                                                                                                                                                                       | Default | Notes                                                                                                    |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| Prop       | Type                                                    | Default | Notes                                                                                                                                                           |
+| ---------- | ------------------------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `children` | `ReactNode \| ((validity: ValidityState) => ReactNode)` |         | The message, or a function that picks one per failure from the native `ValidityState`. Omitted: the control's `validationMessage`, which the browser localises. |
-| …native    | `ComponentProps<"div">`                                                                                                                                                    |         |                                                                                                          |
+| …native    | `ComponentProps<"div">`                                 |         |                                                                                                                                                                 |
 
 One Error per Field. A per-failure message is the function form (as TextField's `errorMessage`), so there is no `match` prop and no ordering rule between several Errors (judgement call: one mechanism for both forms, fewer Parts to keep in sync).
 
@@ -74,7 +74,7 @@ Names, checked against the reference libraries:
 | -------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | rest     | Label, control, description                                                                     | —                                                              |
 | invalid  | Error text replaces the description; the control shows its invalid border (each control's spec) | `data-invalid` on Root, `aria-invalid="true"` on the control   |
-| disabled | The control's disabled look; label and description keep their colours (source `forms.css`)     | `data-disabled` on Root, `aria-disabled="true"` on the control |
+| disabled | The control's disabled look; label and description keep their colours (source `forms.css`)      | `data-disabled` on Root, `aria-disabled="true"` on the control |
 | required | `*` after the label text                                                                        | native `required` on the control                               |
 
 ## Behaviour

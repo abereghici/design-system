@@ -3,8 +3,8 @@
 import type { ComponentProps, ReactNode } from "react";
 
 import * as Field from "../field/field.tsx";
-import fieldStyles from "../field/field.module.css";
 
+import fieldStyles from "../field/field.module.css";
 import styles from "./text-area.module.css";
 
 export type TextAreaChangeEventDetails = Field.ChangeEventDetails<HTMLTextAreaElement>;

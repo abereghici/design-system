@@ -50,9 +50,9 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State    | How it shows                                                          | Exposed as                                 |
-| -------- | --------------------------------------------------------------------- | ------------------------------------------ |
-| rest     | Legend and controls                                                   | —                                          |
+| State    | How it shows                                                               | Exposed as                                 |
+| -------- | -------------------------------------------------------------------------- | ------------------------------------------ |
+| rest     | Legend and controls                                                        | —                                          |
 | disabled | Each control shows its disabled look; the Legend keeps its colour (source) | native `disabled`, `:disabled` on controls |
 
 ## Behaviour
@@ -92,7 +92,6 @@ New component word `fieldset` and element word `legend` (Dictionary change).
 | `fieldset-gap`               | `space-stack-sm`     | Gap between the Legend and each control   |
 | `fieldset-legend-font`       | `type-label-sm`      | The field label type (`input-label-font`) |
 | `fieldset-legend-text-color` | `color-text-default` |                                           |
-
 
 ## Built-in labels
 

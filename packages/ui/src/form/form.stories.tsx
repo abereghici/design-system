@@ -49,9 +49,7 @@ Default.test(
     const email = canvas.getByRole("textbox", { name: "Email" });
     await expect(email).toHaveFocus();
     await expect(email).toHaveAttribute("aria-invalid", "true");
-    await expect(canvas.getByRole("textbox", { name: "Name" })).not.toHaveAttribute(
-      "aria-invalid",
-    );
+    await expect(canvas.getByRole("textbox", { name: "Name" })).not.toHaveAttribute("aria-invalid");
     await expect(args.onSubmit).not.toHaveBeenCalled();
   },
 );

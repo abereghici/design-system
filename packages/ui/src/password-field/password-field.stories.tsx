@@ -77,13 +77,16 @@ Default.test(
   },
 );
 
-Default.test("keeps focus on the toggle when pressed from the keyboard", async ({ canvas, userEvent }) => {
-  await userEvent.tab();
-  await userEvent.tab();
-  await userEvent.keyboard(" ");
-  await expect(canvas.getByRole("button", { name: "Show password" })).toHaveFocus();
-  await expect(canvas.getByRole("textbox", { name: "Password" })).toBeVisible();
-});
+Default.test(
+  "keeps focus on the toggle when pressed from the keyboard",
+  async ({ canvas, userEvent }) => {
+    await userEvent.tab();
+    await userEvent.tab();
+    await userEvent.keyboard(" ");
+    await expect(canvas.getByRole("button", { name: "Show password" })).toHaveFocus();
+    await expect(canvas.getByRole("textbox", { name: "Password" })).toBeVisible();
+  },
+);
 
 Default.test(
   "stays hidden when the change is cancelled",

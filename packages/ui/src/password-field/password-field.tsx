@@ -2,10 +2,10 @@
 
 import { use, useEffect, useState } from "react";
 
-import { FieldContext } from "../field/field-root.tsx";
+import { FieldContext } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
-import { InspectIcon } from "../icon/icons/inspect.tsx";
 import { IconButton } from "../icon-button/icon-button.tsx";
+import { InspectIcon } from "../icon/icons/inspect.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { InputGroup, TextInput } from "../text-field/text-field.tsx";

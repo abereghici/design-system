@@ -1,33 +1,26 @@
 "use client";
 
-import { use, useEffect, useRef } from "react";
-import type {
-  ChangeEvent,
-  ChangeEventHandler,
-  ComponentProps,
-  FocusEvent,
-  FocusEventHandler,
-  ReactNode,
-} from "react";
+import { use, useEffect } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
-import { FieldContext, withClass } from "./field-root.tsx";
-import type { FormControl } from "./field-root.tsx";
+import { FieldContext, useFieldControl } from "./field-control.ts";
+import type { ChangeEventDetails } from "./field-control.ts";
+import { withClass } from "./field-root.tsx";
 import styles from "./field.module.css";
 
 export { Root } from "./field-root.tsx";
-export type { FormControl, RootProps } from "./field-root.tsx";
-
-export interface ChangeEventDetails<Element extends FormControl = HTMLInputElement> {
-  readonly reason: "none";
-  readonly event: ChangeEvent<Element>;
-  /** Restores the previous value. */
-  readonly cancel: () => void;
-}
+export type { RootProps } from "./field-root.tsx";
+export { useFieldControl } from "./field-control.ts";
+export type { ChangeEventDetails, ControlBindings, FormControl } from "./field-control.ts";
 
 export function Label({ className, ...props }: ComponentProps<"label">) {
   const field = use(FieldContext);
   return (
-    <label htmlFor={field?.controlId} {...props} className={withClass(styles["label"], className)} />
+    <label
+      htmlFor={field?.controlId}
+      {...props}
+      className={withClass(styles["label"], className)}
+    />
   );
 }
 
@@ -72,74 +65,6 @@ export function Error({ children, className, ...props }: ErrorProps) {
       {field?.invalid === true ? content : null}
     </div>
   );
-}
-
-export interface ControlBindings<Element extends FormControl> {
-  id?: string | undefined;
-  name?: string | undefined;
-  disabled?: boolean | undefined;
-  "aria-describedby"?: string | undefined;
-  onFocus?: FocusEventHandler<Element> | undefined;
-  onChange?: ChangeEventHandler<Element> | undefined;
-  onValueChange?: ((value: string, details: ChangeEventDetails<Element>) => void) | undefined;
-}
-
-function changeEventDetails<Element extends FormControl>(
-  event: ChangeEvent<Element>,
-): [ChangeEventDetails<Element>, () => boolean] {
-  let cancelled = false;
-  const cancel = () => {
-    cancelled = true;
-  };
-  return [{ reason: "none", event, cancel }, () => cancelled];
-}
-
-/**
- * The Field contract for a control: spread the result on the native element. It takes the id,
- * `name`, `disabled` and describedby list from the enclosing Root, sets `aria-invalid` and
- * `aria-disabled`, and calls `onValueChange` with `cancel()`. A disabled control keeps its value;
- * how it blocks input (`readOnly`, key handling) is the control's.
- */
-export function useFieldControl<Element extends FormControl, Props extends ControlBindings<Element>>({
-  id,
-  name,
-  disabled,
-  onFocus,
-  onChange,
-  onValueChange,
-  ...props
-}: Props) {
-  const field = use(FieldContext);
-  const previous = useRef("");
-  const blocked = disabled === true || field?.disabled === true;
-  const setControlId = field?.setControlId;
-  useEffect(() => {
-    if (id !== undefined) setControlId?.(id);
-  }, [id, setControlId]);
-  return {
-    ...props,
-    id: id ?? field?.controlId,
-    name: field?.name ?? name,
-    "aria-disabled": blocked || undefined,
-    "aria-invalid": field?.invalid === true || undefined,
-    "aria-describedby": field?.describedBy ?? props["aria-describedby"],
-    onFocus(event: FocusEvent<Element>) {
-      previous.current = event.currentTarget.value;
-      onFocus?.(event);
-    },
-    onChange(event: ChangeEvent<Element>) {
-      const target = event.currentTarget;
-      if (blocked) {
-        target.value = previous.current;
-        return;
-      }
-      onChange?.(event);
-      const [details, cancelled] = changeEventDetails(event);
-      onValueChange?.(target.value, details);
-      if (cancelled()) target.value = previous.current;
-      previous.current = target.value;
-    },
-  };
 }
 
 export interface ControlProps extends ComponentProps<"input"> {

@@ -21,7 +21,12 @@ const meta = preview.meta({
     children: (
       <>
         <Fieldset.Legend>Billing address</Fieldset.Legend>
-        <TextField label="Street" name="street" autoComplete="street-address" defaultValue="Main 1" />
+        <TextField
+          label="Street"
+          name="street"
+          autoComplete="street-address"
+          defaultValue="Main 1"
+        />
         <TextField label="City" name="city" autoComplete="address-level2" />
       </>
     ),

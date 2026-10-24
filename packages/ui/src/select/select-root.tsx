@@ -3,9 +3,9 @@
 import type { ComponentProps, KeyboardEvent, ReactNode } from "react";
 
 import * as Field from "../field/field.tsx";
-import fieldStyles from "../field/field.module.css";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
 
+import fieldStyles from "../field/field.module.css";
 import styles from "./select.module.css";
 
 export type ChangeEventDetails = Field.ChangeEventDetails<HTMLSelectElement>;
