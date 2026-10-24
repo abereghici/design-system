@@ -5,12 +5,12 @@ import { createPortal } from "react-dom";
 import type { ComponentProps, RefObject } from "react";
 
 import { useLocale } from "../provider/locale.tsx";
+import { toaster as toasterLabels } from "../provider/locales/en-US/toaster.ts";
 import { composeRefs, join } from "../slot/slot.tsx";
 import { close, mark, snapshot, subscribe } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
-import { toasterLabels } from "./labels.ts";
 import { Toast } from "./toast-item.tsx";
 import { useFocusReturn } from "./toaster-keys.ts";
 import styles from "./toaster.module.css";

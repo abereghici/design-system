@@ -4,8 +4,8 @@ import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { MoreIcon } from "../icon/icons/more.tsx";
 import type { Labels, Locale } from "../provider/locale.tsx";
+import { pagination as paginationLabels } from "../provider/locales/en-US/pagination.ts";
 
-import { paginationLabels } from "./labels.ts";
 import styles from "./pagination.module.css";
 
 export interface PaginationLabels extends Partial<Labels["pagination"]> {

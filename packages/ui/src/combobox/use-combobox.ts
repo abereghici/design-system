@@ -3,10 +3,10 @@ import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useSt
 import { byId, isOpen, sourceOf } from "../floating/floating.ts";
 import { arrange, enabled, textOf } from "../listbox/listbox.tsx";
 import { useLocale } from "../provider/locale.tsx";
+import { combobox as comboboxLabels } from "../provider/locales/en-US/combobox.ts";
 
 import { chosenOf, dismiss, highlight, inputOf, listOf, memoryOf, part } from "./combobox-state.ts";
 import type { Combobox, Options } from "./combobox-state.ts";
-import { comboboxLabels } from "./labels.ts";
 
 export const ValueContext = createContext<string | null>(null);
 

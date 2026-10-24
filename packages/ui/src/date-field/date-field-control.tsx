@@ -6,12 +6,12 @@ import type { DatePart, Temporal } from "../date/date.ts";
 import { FieldContext } from "../field/field-control.ts";
 import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
+import { dateField as dateFieldLabels } from "../provider/locales/en-US/date-field.ts";
 
 import { useSegmentEditing } from "./date-field-editing.ts";
 import type { DateFieldChangeEventDetails } from "./date-field-editing.ts";
 import { useValidity } from "./date-field-validity.ts";
 import type { Validity } from "./date-field-validity.ts";
-import { dateFieldLabels } from "./labels.ts";
 import { bounds, display, fromDate, toDate } from "./segments.ts";
 import type { Segments } from "./segments.ts";
 import fieldStyles from "../field/field.module.css";

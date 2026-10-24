@@ -1,4 +1,4 @@
-export const commandLabels = {
+export const command = {
   dialog: "Command palette",
   search: "Search commands",
   placeholder: "Type a command or search…",

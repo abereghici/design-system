@@ -5,8 +5,8 @@ import type { ComponentProps, RefObject, SyntheticEvent } from "react";
 
 import { Content, ModalRoot } from "../dialog/modal.tsx";
 import { useLocale } from "../provider/locale.tsx";
+import { command as commandLabels } from "../provider/locales/en-US/command.ts";
 
-import { commandLabels } from "./labels.ts";
 import { DialogContext, report, Root } from "./root.tsx";
 import type { Callback, RootProps } from "./root.tsx";
 import styles from "./command.module.css";

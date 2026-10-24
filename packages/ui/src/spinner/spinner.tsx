@@ -1,9 +1,9 @@
 import type { ComponentProps } from "react";
 
 import type { Labels, Locale } from "../provider/locale.tsx";
+import { spinner as spinnerLabels } from "../provider/locales/en-US/spinner.ts";
 import { join } from "../slot/slot.tsx";
 
-import { spinnerLabels } from "./labels.ts";
 import styles from "./spinner.module.css";
 
 export interface SpinnerProps extends ComponentProps<"span"> {

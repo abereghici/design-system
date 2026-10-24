@@ -12,10 +12,10 @@ import type {
 } from "../floating/floating.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { useLocale } from "../provider/locale.tsx";
+import { popover as popoverLabels } from "../provider/locales/en-US/popover.ts";
 import { Slot, join } from "../slot/slot.tsx";
 import { pointerMarker } from "../toggle/toggle.ts";
 
-import { popoverLabels } from "./labels.ts";
 import iconButtonStyles from "../icon-button/icon-button.module.css";
 import styles from "./popover.module.css";
 

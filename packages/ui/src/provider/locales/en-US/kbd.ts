@@ -1,4 +1,4 @@
-export const kbdLabels = {
+export const kbd = {
   command: "Command",
   control: "Control",
   shift: "Shift",

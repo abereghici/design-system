@@ -18,10 +18,10 @@ import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
+import { calendar as calendarLabels } from "../provider/locales/en-US/calendar.ts";
 import { join } from "../slot/slot.tsx";
 
 import { Grid, keyTarget } from "./calendar-grid.tsx";
-import { calendarLabels } from "./labels.ts";
 import styles from "./calendar.module.css";
 
 export type CalendarChangeEventDetails = Details<"day-press">;
