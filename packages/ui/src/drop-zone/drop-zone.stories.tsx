@@ -1,0 +1,178 @@
+import { expect, fn } from "storybook/test";
+
+import type { Decorator } from "@storybook/react-vite";
+
+import { Button } from "@platform/ui/button";
+import { Field } from "@platform/ui/field";
+import { FileTrigger } from "@platform/ui/file-trigger";
+import { Form } from "@platform/ui/form";
+
+import preview from "#.storybook/preview.tsx";
+
+import { DropZone } from "./drop-zone.tsx";
+import type { DropZoneDropEventDetails } from "./drop-zone.tsx";
+
+const january = new File(["a,b"], "january.csv", { type: "text/csv" });
+const february = new File(["a,b"], "february.csv", { type: "text/csv" });
+const photo = new File(["png"], "photo.png", { type: "image/png" });
+
+/** Drags files from the desktop over `target` and drops them, as the browser reports it. */
+const drop = (target: Element, ...files: File[]) => {
+  const dataTransfer = new DataTransfer();
+  for (const file of files) dataTransfer.items.add(file);
+  for (const type of ["dragenter", "dragover", "drop"]) {
+    target.dispatchEvent(new DragEvent(type, { bubbles: true, cancelable: true, dataTransfer }));
+  }
+};
+
+const inAForm: Decorator = (Story) => (
+  <form aria-label="Import">
+    <Story />
+  </form>
+);
+
+const submitted = (form: HTMLFormElement) =>
+  new FormData(form).getAll("files").map((file) => (file instanceof File ? file.name : file));
+
+const meta = preview.meta({
+  title: "Components/DropZone",
+  component: DropZone,
+  args: {
+    name: "files",
+    accept: ".csv,text/csv",
+    multiple: true,
+    onDrop: fn<(files: File[], details: DropZoneDropEventDetails) => void>(),
+    children: (
+      <>
+        <span>Drop CSV files here, or</span>
+        <FileTrigger>
+          <Button>Choose files</Button>
+        </FileTrigger>
+      </>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "An area that accepts files dragged from the desktop, with a FileTrigger inside as the keyboard and touch alternative; drops and picks land in one native file input that submits with the form. Use it where uploading is the main task of a view; for a small Attach action use FileTrigger alone.",
+      },
+    },
+  },
+});
+
+export const Default = meta.story({});
+
+Default.test(
+  "calls onDrop with the accepted files and the rejected ones in details",
+  async ({ canvas, args }) => {
+    drop(canvas.getByText("Drop CSV files here, or"), january, photo);
+    await expect(args.onDrop).toHaveBeenCalledOnce();
+    await expect(args.onDrop).toHaveBeenCalledWith(
+      [january],
+      expect.objectContaining({ reason: "none", rejected: [photo] }),
+    );
+  },
+);
+
+Default.test(
+  "submits the dropped files with the form",
+  { decorators: [inAForm] },
+  async ({ canvas }) => {
+    drop(canvas.getByText("Drop CSV files here, or"), january, february);
+    await expect(submitted(canvas.getByRole("form", { name: "Import" }))).toEqual([
+      "january.csv",
+      "february.csv",
+    ]);
+  },
+);
+
+Default.test(
+  "keeps only the first file without multiple",
+  { args: { multiple: false }, decorators: [inAForm] },
+  async ({ canvas, args }) => {
+    drop(canvas.getByText("Drop CSV files here, or"), january, february);
+    await expect(args.onDrop).toHaveBeenCalledWith([january], expect.anything());
+    await expect(submitted(canvas.getByRole("form", { name: "Import" }))).toEqual(["january.csv"]);
+  },
+);
+
+Default.test(
+  "keeps the previous files when the drop is cancelled",
+  {
+    args: {
+      onDrop: (files, details) => {
+        if (files[0]?.name === "february.csv") details.cancel();
+      },
+    },
+    decorators: [inAForm],
+  },
+  async ({ canvas }) => {
+    const zone = canvas.getByText("Drop CSV files here, or");
+    drop(zone, january);
+    drop(zone, february);
+    await expect(submitted(canvas.getByRole("form", { name: "Import" }))).toEqual(["january.csv"]);
+  },
+);
+
+Default.test(
+  "submits files picked through its FileTrigger",
+  { decorators: [inAForm] },
+  async ({ canvas, canvasElement, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: "Choose files" }));
+    const input = canvasElement.querySelector<HTMLInputElement>("input[type=file]");
+    const transfer = new DataTransfer();
+    transfer.items.add(january);
+    if (input !== null) {
+      input.files = transfer.files;
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    await expect(submitted(canvas.getByRole("form", { name: "Import" }))).toEqual(["january.csv"]);
+  },
+);
+
+Default.test(
+  "refuses drops and disables its FileTrigger when disabled",
+  { args: { disabled: true } },
+  async ({ canvas, args }) => {
+    await expect(canvas.getByRole("button", { name: "Choose files" })).toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
+    drop(canvas.getByText("Drop CSV files here, or"), january);
+    await expect(args.onDrop).not.toHaveBeenCalled();
+  },
+);
+
+Default.test("stops a file dropped beside it from opening in the page", async () => {
+  const dataTransfer = new DataTransfer();
+  dataTransfer.items.add(january);
+  const missed = new DragEvent("drop", { bubbles: true, cancelable: true, dataTransfer });
+  document.body.dispatchEvent(missed);
+  await expect(missed.defaultPrevented).toBe(true);
+});
+
+Default.test(
+  "focuses its trigger and marks it invalid after a blocked submit when required",
+  {
+    args: { required: true },
+    decorators: [
+      (Story) => (
+        <Form aria-label="Import">
+          <Field.Root>
+            <Field.Label>Statements</Field.Label>
+            <Story />
+            <Field.Error />
+          </Field.Root>
+          <button type="submit">Import</button>
+        </Form>
+      ),
+    ],
+  },
+  async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: "Import" }));
+    const trigger = canvas.getByRole("button", { name: "Statements Choose files" });
+    await expect(trigger).toHaveFocus();
+    await expect(trigger).toHaveAttribute("aria-invalid", "true");
+  },
+);

@@ -1,0 +1,5 @@
+@layer ab.components {
+  .trigger {
+    justify-self: start;
+  }
+}

@@ -26,6 +26,12 @@ export interface RootProps extends ComponentProps<"div"> {
   validate?: ((value: string, formData: FormData) => string | null | undefined) | undefined;
 }
 
+const partIds = (base: string) => ({
+  labelId: `${base}label`,
+  descriptionId: `${base}description`,
+  errorId: `${base}error`,
+});
+
 type Failure = { readonly message: string; readonly validity: ValidityState } | null;
 
 const failureOf = (target: FormControl): Failure =>
@@ -141,11 +147,10 @@ export function Root({
   const [described, describe] = useState(false);
   const { failure, server, sync, edit } = useValidity({ name, validate }, controlId);
   const shown = invalid ?? (server !== undefined || failure !== null);
-  const errorId = `${ids}error`;
-  const descriptionId = `${ids}description`;
-  const describedBy = shown ? errorId : described ? descriptionId : undefined;
+  const parts = partIds(ids);
+  const describedBy = shown ? parts.errorId : described ? parts.descriptionId : undefined;
   const message = server ?? failure?.message;
-  const state = { controlId, descriptionId, errorId, name, disabled, invalid: shown, describedBy };
+  const state = { controlId, ...parts, name, disabled, invalid: shown, describedBy };
 
   return (
     <FieldContext

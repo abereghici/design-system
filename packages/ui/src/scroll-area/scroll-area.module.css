@@ -1,0 +1,48 @@
+@layer ab.components {
+  .root {
+    overflow: auto;
+  }
+
+  /* Without scroll timelines the animation would run once on the document timeline and park on its last frame, fading the top edge for good. */
+  @supports (animation-timeline: scroll()) {
+    .root {
+      mask-image:
+        linear-gradient(to bottom, transparent, #000 var(--ab-space-stack-lg)),
+        linear-gradient(to top, transparent, #000 var(--ab-space-stack-lg));
+      mask-size: 100% calc(100% + var(--ab-space-stack-lg));
+      mask-repeat: no-repeat;
+      mask-composite: intersect;
+      mask-position:
+        0 100%,
+        0 0;
+      animation: scroll-fade linear both;
+      animation-timeline: scroll(self block);
+    }
+
+    /* A mask clips the element's own outline, so the fade gives way to the focus ring. */
+    .root:focus-visible {
+      mask-image: none;
+    }
+  }
+
+  @keyframes scroll-fade {
+    0% {
+      mask-position:
+        0 100%,
+        0 100%;
+    }
+
+    8%,
+    92% {
+      mask-position:
+        0 0,
+        0 100%;
+    }
+
+    100% {
+      mask-position:
+        0 0,
+        0 0;
+    }
+  }
+}

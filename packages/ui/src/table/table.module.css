@@ -1,0 +1,51 @@
+@import "@platform/tokens/components/table.css";
+
+@layer ab.components {
+  .root {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  .caption {
+    padding-block-end: var(--ab-space-stack-sm);
+    font: var(--ab-table-caption-font);
+    color: var(--ab-table-caption-text-color);
+    text-align: start;
+  }
+
+  .row {
+    border-block-end: var(--ab-table-border-width) solid var(--ab-table-border-color);
+  }
+
+  .body > .row:last-child {
+    border-block-end: none;
+  }
+
+  .column-header,
+  .cell {
+    padding-block: var(--ab-table-padding-block);
+    padding-inline: var(--ab-table-padding-inline);
+    text-align: start;
+    vertical-align: baseline;
+  }
+
+  .column-header {
+    font: var(--ab-table-header-font);
+    color: var(--ab-table-header-text-color);
+  }
+
+  .cell {
+    font: var(--ab-table-body-font);
+    color: var(--ab-table-body-text-color);
+  }
+
+  @media (prefers-contrast: more) {
+    .row {
+      border-block-end-color: var(--ab-color-border-default);
+    }
+
+    .column-header {
+      color: var(--ab-table-body-text-color);
+    }
+  }
+}

@@ -17,6 +17,7 @@ export function Label({ className, ...props }: ComponentProps<"label">) {
   const field = use(FieldContext);
   return (
     <label
+      id={field?.labelId}
       htmlFor={field?.controlId}
       {...props}
       className={withClass(styles["label"], className)}
