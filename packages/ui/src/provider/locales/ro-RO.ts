@@ -24,5 +24,13 @@ export const roRO: Locale = {
     pagination: { root: "Paginare", previous: "Pagina anterioară", next: "Pagina următoare" },
     toast: { close: "Închide" },
     toaster: { region: "Notificări" },
+    dateField: {
+      dayPlaceholder: "zz",
+      monthPlaceholder: "ll",
+      yearPlaceholder: "aaaa",
+      empty: "Necompletat",
+      incomplete: "Introduceți o dată completă",
+      unavailable: "Această dată nu este disponibilă",
+    },
   },
 };

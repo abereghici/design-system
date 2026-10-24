@@ -222,6 +222,12 @@ const componentRoutes = [
   { name: "sidebar", tokens: ["sidebar"], client: [], html: 'role="group" aria-labelledby=' },
   { name: "toast", tokens: [], client: [], html: "Copy link" },
   {
+    name: "date-field",
+    tokens: ["input", "date-field"],
+    client: ["date-field/date-field.tsx"],
+    html: 'role="spinbutton"',
+  },
+  {
     name: "toaster",
     tokens: ["toast", "kbd", "icon"],
     client: ["toaster/toaster.tsx"],

@@ -27,6 +27,14 @@ export interface Labels {
   readonly pagination: { readonly root: string; readonly previous: string; readonly next: string };
   readonly toast: { readonly close: string };
   readonly toaster: { readonly region: string };
+  readonly dateField: {
+    readonly dayPlaceholder: string;
+    readonly monthPlaceholder: string;
+    readonly yearPlaceholder: string;
+    readonly empty: string;
+    readonly incomplete: string;
+    readonly unavailable: string;
+  };
 }
 
 export interface Locale {
