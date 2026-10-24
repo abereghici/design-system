@@ -91,17 +91,29 @@ describe("per-component JS", () => {
   });
 
   test.each([
-    ["heading", "var(--ab-type-heading-lg)", []],
-    ["text", "var(--ab-type-body-md)", []],
+    ["heading", "var(--ab-type-heading-lg)", 0],
+    ["text", "var(--ab-type-body-md)", 0],
+    ["spinner", "var(--ab-spinner-color)", 5],
+    ["skeleton", "var(--ab-skeleton-background-color)", 4],
+    ["progress", "var(--ab-progress-indicator-background-color)", 11],
+    ["meter", "var(--ab-meter-indicator-background-color)", 13],
   ])(
     "the %s route renders on the server and ships its CSS and tokens only",
-    (name, rule, tokens) => {
+    (name, rule, count) => {
       const r = route(name);
       expect(uiClientModules(r)).toEqual(["provider/locale.tsx"]);
       expect(r.css).toContain(rule);
-      expect(shippedComponentTokens(r.css)).toEqual(tokens);
+      const tokens = shippedComponentTokens(r.css);
+      expect(tokens).toHaveLength(count);
+      expect(tokens.filter((t) => !t.startsWith(`--ab-${name}-`))).toEqual([]);
     },
   );
+
+  test("Server Components label and format on the server", () => {
+    expect(route("spinner").html).toContain('aria-label="Loading"');
+    expect(route("progress").html).toContain("40\u00a0%");
+    expect(route("meter").html).toContain("42%");
+  });
 
   test("a locale reaches client components, and ships only on the route that imports it", () => {
     expect(locale.html).toContain("<output>ro-RO</output>");

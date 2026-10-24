@@ -35,7 +35,7 @@ Root → header (optional: label, value) → track → indicator. The same four 
 | `label`         | `ReactNode`                                          |                        | Visible label. Without it, `aria-label` or `aria-labelledby` is required (a props union).                                                                                                      |
 | `valueLabel`    | `ReactNode`, or `string` when `low` / `high` are set | the formatted value    | Visible value text when there is a `label`. A string is also the `aria-valuetext`. **Required, as a string, when `low` or `high` is set**, so the judgement the colour shows is also in words. |
 | `formatOptions` | `Intl.NumberFormatOptions`                           | `{ style: "percent" }` | With `style: "percent"` the fraction `(value − min) / (max − min)` is formatted; otherwise `value`.                                                                                            |
-| `locale`        | `Intl.LocalesArgument`                               | from LocaleProvider    | The locale for `Intl.NumberFormat`. When omitted, the shared client formatting leaf resolves it (see Built-in labels).                                                                         |
+| `locale`        | `Locale`                                             | English (`"en"`)       | A shipped locale object (`@platform/ui/locales/*`); its `tag` is the locale for `Intl.NumberFormat`. Formatting runs on the server.                                                            |
 | …native         | `ComponentProps<"div">`                              |                        | `ref`, `className`, `id`, `aria-*` and every native attribute pass through.                                                                                                                    |
 
 Names, checked against the reference libraries:
@@ -67,9 +67,9 @@ The region names are the HTML spec's and match the engines' own pseudo-elements 
 - **ARIA, not the native element.** `<meter>` has the right semantics, but its bar can only be styled through non-standard pseudo-elements (MDN lists "`::-webkit-meter-bar`, … `::-webkit-meter-optimum-value`, `::-webkit-meter-suboptimum-value`: non-standard pseudo-elements"). ADR-0002 allows no engine-specific fallbacks, so Meter uses `role="meter"` with the ARIA value attributes, as Base UI does ("Renders a `<div>` element."). No script is added.
 - **Values.** Root sets `aria-valuemin`, `aria-valuemax` and `aria-valuenow`, clamped like the native element ("the actual value is the minimum value" / "the actual value is the maximum value", HTML spec). WAI-ARIA 1.2: "The value of aria-valuenow MUST NOT fall below or exceed the computed values of aria-valuemin and aria-valuemax".
 - **Thresholds aren't exposed by ARIA.** WAI-ARIA 1.2 notes there are currently no properties for the HTML `low`, `optimum` and `high` attributes, to be "considered for ARIA version 1.3" (https://www.w3.org/TR/wai-aria-1.2/#meter). This is why a string `valueLabel` is required with thresholds: it becomes `aria-valuetext` and carries the judgement ("92%, almost full"). The APG: "the aria-valuetext property is set to a string that makes the meter value understandable." (https://www.w3.org/WAI/ARIA/apg/patterns/meter/).
-- **Formatting** with `Intl.NumberFormat(locale, formatOptions)`, as Progress: on the server when `locale` is passed, otherwise through the shared client formatting leaf. The HTML spec also asks for the value in text: "Authors are encouraged to include a textual representation of the gauge's state in the element's contents".
+- **Formatting** with `Intl.NumberFormat(locale, formatOptions)`, as Progress: always on the server, in `locale.tag` or `"en"` (decision Q15-2). The HTML spec also asks for the value in text: "Authors are encouraged to include a textual representation of the gauge's state in the element's contents".
 - **Indicator size** is an inline `inline-size: {percent}%`, as Progress.
-- Server Component root: no state, no handlers, no `'use client'` (spec #1 user story 4); only the default value text may be the shared client leaf. The label id comes from `useId`, which the React 19 server build exports.
+- Server Component: no state, no handlers, no `'use client'` (spec #1 user story 4). The label id comes from `useId`, which the React 19 server build exports.
 
 ## Motion
 
@@ -124,7 +124,7 @@ Dictionary changes: the component word **`meter`**, and the element word **`valu
 
 ## Built-in labels
 
-None. The name is the consumer's, the judgement is the consumer's `valueLabel` (it depends on what is measured: "almost full" is right for storage, wrong for a battery), and the default value text is a number formatted with `Intl.NumberFormat` in `locale`. The locale resolves as in Progress: the `locale` prop, else LocaleProvider, the document `lang`, then English, through the shared client formatting leaf.
+None. The name is the consumer's, the judgement is the consumer's `valueLabel` (it depends on what is measured: "almost full" is right for storage, wrong for a battery), and the default value text is a number formatted with `Intl.NumberFormat` in `locale`. The locale resolves as in Progress: the `locale` prop's `tag`, else English.
 
 ## Feedback events
 
