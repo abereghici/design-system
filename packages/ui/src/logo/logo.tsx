@@ -1,6 +1,5 @@
 import type { ComponentProps } from "react";
 
-import { logoPath } from "./logo-path.ts";
 import styles from "./logo.module.css";
 
 export interface LogoProps extends Omit<ComponentProps<"svg">, "children"> {
@@ -11,12 +10,11 @@ export interface LogoProps extends Omit<ComponentProps<"svg">, "children"> {
   label?: string;
 }
 
+/** Stâlpul cerului, the brand sign. One em square by default, never below its minimum size. */
 export function Logo({ label, className, ...props }: LogoProps) {
   return (
     <svg
       viewBox="0 0 32 32"
-      width={32}
-      height={32}
       fill="none"
       stroke="currentColor"
       strokeWidth={3}
@@ -25,7 +23,7 @@ export function Logo({ label, className, ...props }: LogoProps) {
       {...(label === undefined ? { "aria-hidden": true } : { role: "img", "aria-label": label })}
       className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
     >
-      <path d={logoPath} />
+      <path d="m11 9-6 7 6 7M21 9l6 7-6 7M16 6l2.5 5-5 5 5 5-2.5 5" />
     </svg>
   );
 }

@@ -1,0 +1,88 @@
+@import "@platform/tokens/components/icon-button.css";
+
+@layer ab.components {
+  .root {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    inline-size: var(--ab-icon-button-md-size);
+    block-size: var(--ab-icon-button-md-size);
+    padding: 0;
+    border: 0;
+    border-radius: var(--ab-icon-button-border-radius);
+    background-color: transparent;
+    color: var(--ab-icon-button-icon-color);
+    transition-property: background-color, color, scale;
+    transition-duration:
+      var(--ab-motion-duration-hover-out), var(--ab-motion-duration-hover-out),
+      var(--ab-motion-duration-press);
+    transition-timing-function:
+      var(--ab-motion-easing-color), var(--ab-motion-easing-color), var(--ab-motion-easing-enter);
+  }
+
+  /* (0,1,1) beats Icon's own size rules whatever order the two stylesheets load in. */
+  .root svg {
+    inline-size: var(--ab-icon-button-icon-size);
+    block-size: var(--ab-icon-button-icon-size);
+    stroke-width: var(--ab-icon-sm-stroke-width);
+  }
+
+  .root:where([data-size="sm"]) {
+    inline-size: var(--ab-icon-button-sm-size);
+    block-size: var(--ab-icon-button-sm-size);
+  }
+
+  .root:where([data-size="lg"]) {
+    inline-size: var(--ab-icon-button-lg-size);
+    block-size: var(--ab-icon-button-lg-size);
+  }
+
+  .root:where([data-size="lg"]) svg {
+    inline-size: var(--ab-icon-button-lg-icon-size);
+    block-size: var(--ab-icon-button-lg-icon-size);
+    stroke-width: var(--ab-icon-md-stroke-width);
+  }
+
+  @media (hover: hover) {
+    .root:where(:not([aria-disabled="true"], [aria-busy="true"])):hover {
+      background-color: var(--ab-icon-button-background-color-hovered);
+      color: var(--ab-icon-button-icon-color-hovered);
+      transition-duration:
+        var(--ab-motion-duration-hover-in), var(--ab-motion-duration-hover-in),
+        var(--ab-motion-duration-press);
+    }
+  }
+
+  .root:where([aria-pressed="true"], [aria-expanded="true"]) {
+    background-color: var(--ab-icon-button-background-color-selected);
+    color: var(--ab-icon-button-icon-color-selected);
+  }
+
+  .root:where(:not([aria-disabled="true"], [aria-busy="true"])):active {
+    background-color: var(--ab-icon-button-background-color-pressed);
+    scale: var(--ab-icon-button-scale-pressed);
+    transition-duration: 0s, 0s, var(--ab-motion-duration-press);
+  }
+
+  .root:where([aria-disabled="true"]) {
+    opacity: var(--ab-opacity-disabled);
+  }
+
+  @media (prefers-contrast: more) {
+    .root:where([aria-pressed="true"], [aria-expanded="true"]) {
+      box-shadow: inset 0 0 0 var(--ab-border-width-default)
+        var(--ab-icon-button-border-color-selected);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .root:where([aria-pressed="true"], [aria-expanded="true"]) {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .root:where([aria-disabled="true"]) {
+      color: GrayText;
+    }
+  }
+}

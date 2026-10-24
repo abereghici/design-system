@@ -32,6 +32,7 @@ function route(name: string): Route {
 const button = route("index");
 const logo = route("logo");
 const locale = route("locale");
+const iconButton = route("icon-button");
 
 const uiClientModules = (r: Route) =>
   [...new Set(r.clientModules.match(/(?<=packages\/ui\/src\/)[\w.\/\-]+(?=")/gv))].toSorted();
@@ -80,6 +81,13 @@ describe("per-component CSS", () => {
     expect(shippedComponentTokens(logo.css).filter((t) => !t.startsWith("--ab-logo-"))).toEqual([]);
     expect(logo.css).not.toContain("--ab-button-");
   });
+
+  test("a route that imports IconButton and an icon ships only their component tokens", () => {
+    const shipped = shippedComponentTokens(iconButton.css);
+    expect(shipped).toContain("--ab-icon-button-background-color-selected:");
+    expect(shipped).toContain("--ab-icon-md-size:");
+    expect(shipped.filter((t) => !t.startsWith("--ab-icon-"))).toEqual([]);
+  });
 });
 
 describe("per-component JS", () => {
@@ -88,6 +96,10 @@ describe("per-component JS", () => {
     expect(button.js).toContain("ab-press");
     expect(uiClientModules(logo)).toEqual(["provider/locale.tsx"]);
     expect(logo.js).not.toContain("ab-press");
+    expect(uiClientModules(iconButton)).toEqual([
+      "icon-button/icon-button.tsx",
+      "provider/locale.tsx",
+    ]);
   });
 
   test("a locale reaches client components, and ships only on the route that imports it", () => {

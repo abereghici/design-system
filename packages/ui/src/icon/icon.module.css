@@ -26,4 +26,8 @@
     block-size: var(--ab-icon-xl-size);
     stroke-width: var(--ab-icon-xl-stroke-width);
   }
+
+  .root:where([data-mirror]):dir(rtl) {
+    scale: -1 1;
+  }
 }

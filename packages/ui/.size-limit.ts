@@ -4,7 +4,8 @@ import { globSync } from "node:fs";
 import type { SizeLimitConfig } from "size-limit";
 
 const budgets: Readonly<Record<string, string>> = {
-  button: "800 B",
+  button: "3 kB",
+  "icon-button": "2.65 kB",
   events: "20 B",
   icon: "520 B",
   logo: "470 B",

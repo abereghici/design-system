@@ -10,12 +10,16 @@ export interface FeedbackEventDetail<Component extends string = string> {
   readonly reason: FeedbackReason;
 }
 
-export type PressEvent = CustomEvent<FeedbackEventDetail<"Button">>;
+export type PressEvent = CustomEvent<FeedbackEventDetail<"Button" | "IconButton">>;
+
+/** Not `ToggleEvent`, which would shadow the DOM's popover and `<details>` event type. */
+export type ToggleFeedbackEvent = CustomEvent<FeedbackEventDetail<"IconButton">>;
 
 declare global {
   // lib.dom's Document, Window and HTMLElement event maps extend this one, so every target is typed.
   interface GlobalEventHandlersEventMap {
     "ab-press": PressEvent;
+    "ab-toggle": ToggleFeedbackEvent;
   }
 }
 

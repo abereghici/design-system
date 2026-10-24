@@ -10,7 +10,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          "Stâlpul cerului, the Bereghici Logo, in `--ab-logo-color`. 32px by default; resize it with `width` and `height`, never below 16px. For an interface glyph, use an icon.",
+          "Stâlpul cerului, the Bereghici Logo, in `--ab-logo-color`. One em square by default, so it scales with the text it sits in; size it with CSS `inline-size` and `block-size`. It never renders below `--ab-logo-min-size` (16px). For an interface glyph, use an icon.",
       },
     },
   },

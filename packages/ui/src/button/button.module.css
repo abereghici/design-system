@@ -2,10 +2,177 @@
 
 @layer ab.components {
   .root {
-    border: 0;
-    border-radius: var(--ab-button-border-radius);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ab-button-gap);
+    block-size: var(--ab-button-md-height);
     padding-inline: var(--ab-button-md-padding-inline);
+    border: var(--ab-button-border-width) solid transparent;
+    border-radius: var(--ab-button-border-radius);
+    font: var(--ab-button-font);
+    text-decoration: none;
+    white-space: nowrap;
+    user-select: none;
+    transition-property: background-color, border-color, color, scale;
+    transition-duration:
+      var(--ab-motion-duration-hover-out), var(--ab-motion-duration-hover-out),
+      var(--ab-motion-duration-hover-out), var(--ab-motion-duration-press);
+    transition-timing-function:
+      var(--ab-motion-easing-color), var(--ab-motion-easing-color), var(--ab-motion-easing-color),
+      var(--ab-motion-easing-enter);
+  }
+
+  /* (0,1,1) beats Icon's own size rules whatever order the two stylesheets load in. */
+  .root svg {
+    inline-size: var(--ab-button-icon-size);
+    block-size: var(--ab-button-icon-size);
+    stroke-width: var(--ab-icon-sm-stroke-width);
+  }
+
+  .root :where([data-icon="inline-start"]) {
+    margin-inline-start: calc(var(--ab-button-gap) * -0.5);
+  }
+
+  .root :where([data-icon="inline-end"]) {
+    margin-inline-end: calc(var(--ab-button-gap) * -0.5);
+  }
+
+  .root:where([data-size="sm"]) {
+    block-size: var(--ab-button-sm-height);
+    padding-inline: var(--ab-button-sm-padding-inline);
+  }
+
+  .root:where([data-size="lg"]) {
+    block-size: var(--ab-button-lg-height);
+    padding-inline: var(--ab-button-lg-padding-inline);
+    border-radius: var(--ab-button-lg-border-radius);
+    font: var(--ab-button-lg-font);
+  }
+
+  .root:where([data-variant="primary"]) {
+    border-color: transparent;
     background-color: var(--ab-button-primary-background-color);
     color: var(--ab-button-primary-text-color);
+  }
+
+  .root:where([data-variant="primary"]) svg {
+    color: var(--ab-button-primary-icon-color);
+  }
+
+  .root:where([data-variant="secondary"]) {
+    border-color: var(--ab-button-secondary-border-color);
+    background-color: var(--ab-button-secondary-background-color);
+    color: var(--ab-button-secondary-text-color);
+    box-shadow: var(--ab-button-shadow);
+  }
+
+  .root:where([data-variant="secondary"]) svg {
+    color: var(--ab-button-secondary-icon-color);
+  }
+
+  .root:where([data-variant="tertiary"]) {
+    border-color: transparent;
+    background-color: var(--ab-button-tertiary-background-color);
+    color: var(--ab-button-tertiary-text-color);
+  }
+
+  .root:where([data-variant="tertiary"]) svg {
+    color: var(--ab-button-tertiary-icon-color);
+  }
+
+  .root:where([data-variant="danger"]) {
+    border-color: transparent;
+    background-color: var(--ab-button-danger-background-color);
+    color: var(--ab-button-danger-text-color);
+  }
+
+  .root:where([data-variant="danger"]) svg {
+    color: var(--ab-button-danger-icon-color);
+  }
+
+  @media (hover: hover) {
+    .root:where(:not([aria-disabled="true"], [aria-busy="true"])):hover {
+      transition-duration:
+        var(--ab-motion-duration-hover-in), var(--ab-motion-duration-hover-in),
+        var(--ab-motion-duration-hover-in), var(--ab-motion-duration-press);
+    }
+
+    .root:where([data-variant="primary"]):where(
+        :not([aria-disabled="true"], [aria-busy="true"])
+      ):hover {
+      background-color: var(--ab-button-primary-background-color-hovered);
+    }
+
+    .root:where([data-variant="secondary"]):where(
+        :not([aria-disabled="true"], [aria-busy="true"])
+      ):hover {
+      background-color: var(--ab-button-secondary-background-color-hovered);
+      border-color: var(--ab-button-secondary-border-color-hovered);
+    }
+
+    .root:where([data-variant="tertiary"]):where(
+        :not([aria-disabled="true"], [aria-busy="true"])
+      ):hover {
+      background-color: var(--ab-button-tertiary-background-color-hovered);
+      color: var(--ab-button-tertiary-text-color-hovered);
+    }
+
+    .root:where([data-variant="danger"]):where(
+        :not([aria-disabled="true"], [aria-busy="true"])
+      ):hover {
+      background-color: var(--ab-button-danger-background-color-hovered);
+    }
+  }
+
+  .root:where(:not([aria-disabled="true"], [aria-busy="true"])):active {
+    scale: var(--ab-button-scale-pressed);
+    transition-duration: 0s, 0s, 0s, var(--ab-motion-duration-press);
+  }
+
+  .root:where([data-variant="primary"]):where(
+      :not([aria-disabled="true"], [aria-busy="true"])
+    ):active {
+    background-color: var(--ab-button-primary-background-color-pressed);
+  }
+
+  .root:where([data-variant="secondary"]):where(
+      :not([aria-disabled="true"], [aria-busy="true"])
+    ):active {
+    background-color: var(--ab-button-secondary-background-color-pressed);
+  }
+
+  .root:where([data-variant="tertiary"]):where(
+      :not([aria-disabled="true"], [aria-busy="true"])
+    ):active {
+    background-color: var(--ab-button-tertiary-background-color-pressed);
+  }
+
+  .root:where([data-variant="danger"]):where(
+      :not([aria-disabled="true"], [aria-busy="true"])
+    ):active {
+    background-color: var(--ab-button-danger-background-color-pressed);
+  }
+
+  .root:where([aria-disabled="true"]) {
+    border-color: var(--ab-button-border-color-disabled);
+    background-color: var(--ab-button-background-color-disabled);
+    color: var(--ab-button-text-color-disabled);
+    box-shadow: none;
+  }
+
+  .root:where([aria-disabled="true"]) svg {
+    color: inherit;
+  }
+
+  @media (forced-colors: active) {
+    .root {
+      border-color: ButtonText;
+    }
+
+    .root:where([aria-disabled="true"]) {
+      border-color: GrayText;
+      color: GrayText;
+    }
   }
 }
