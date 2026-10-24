@@ -53,6 +53,7 @@ catalog:
   storybook: 10.6.3
   style-dictionary: 5.7.0
   subset-font: 2.9.0
+  svgo: 4.1.0
   turbo: 2.11.10
   typescript: 7.0.2
   vite: 8.3.5

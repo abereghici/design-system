@@ -118,6 +118,8 @@ export default mergeConfig(
   defineConfig({
     test: {
       projects: [
+        // Build scripts (the icon generator) run in Node, not in a browser.
+        { test: { name: "node", include: ["scripts/**/*.test.ts"], environment: "node" } },
         {
           plugins: [storybookTest({ configDir })],
           test: {

@@ -1,0 +1,15 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+
+import * as PrinciplesStories from "./principles.stories";
+
+<Meta of={PrinciplesStories} />
+
+# Principles
+
+The intent behind the system: its principles, direction and the interaction rules every component follows.
+
+<Canvas of={PrinciplesStories.System} sourceState="none" />
+
+<Canvas of={PrinciplesStories.Direction} sourceState="none" />
+
+<Canvas of={PrinciplesStories.Interaction} sourceState="none" />

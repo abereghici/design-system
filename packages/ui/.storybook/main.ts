@@ -4,7 +4,9 @@ import { defineMain } from "@storybook/react-vite/node";
 // "import { defineMain } from '@storybook/your-framework/node'".
 export default defineMain({
   framework: "@storybook/react-vite",
-  stories: ["../src/**/*.stories.tsx"],
+  // MDX docs pages attach to a CSF file with `<Meta of={…} />`
+  // (https://storybook.js.org/docs/writing-docs/mdx).
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.tsx"],
   // Docs (autodocs), a11y (axe) and Vitest (stories as tests).
   // https://storybook.js.org/docs/writing-tests/integrations/vitest-addon
   addons: ["@storybook/addon-docs", "@storybook/addon-a11y", "@storybook/addon-vitest"],

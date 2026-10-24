@@ -48,6 +48,31 @@ export default definePreview({
     // "violations return a failing test in the Storybook UI and CLI/CI"
     // (https://storybook.js.org/docs/writing-tests/accessibility-testing).
     a11y: { test: "error" },
+    // The brand book's order (https://storybook.js.org/docs/writing-stories/naming-components-and-hierarchy#sorting-stories).
+    options: {
+      storySort: {
+        order: [
+          "Foundations",
+          [
+            "Principles",
+            "Color",
+            "Type",
+            "Space",
+            "Radius",
+            "Elevation",
+            "Material",
+            "Motion",
+            "Personality",
+            "Logo",
+            "Iconography",
+            "Icons",
+            "Accessibility",
+            "Base stylesheet",
+          ],
+          "Components",
+        ],
+      },
+    },
   },
   // https://storybook.js.org/docs/essentials/toolbars-and-globals
   globalTypes: {

@@ -14,18 +14,20 @@
     ]
   },
   "exports": {
+    "./base.css": "./src/base/base.css",
     "./*": "./src/*/index.ts",
     "./icons/*": "./src/icons/*.tsx"
   },
   "scripts": {
     "storybook": "storybook dev --port 6006",
     "build-storybook": "storybook build",
-    "check-types": "tsc --noEmit",
+    "check-types": "tsc --noEmit && tsc --noEmit -p scripts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "size": "size-limit",
     "test": "vitest run --project \"storybook*\"",
     "test:watch": "vitest --project \"storybook*\"",
+    "icons": "node scripts/icons.ts",
     "test:screenshots": "vitest run --project \"screenshot:*\" --reporter=default --reporter=html",
     "test:screenshots:docker": "sh scripts/screenshots-docker.sh"
   },
@@ -47,6 +49,7 @@
     "@vitejs/plugin-react": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "@vitest/ui": "catalog:",
+    "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
     "playwright": "catalog:",
@@ -54,6 +57,7 @@
     "react-dom": "catalog:",
     "size-limit": "catalog:",
     "storybook": "catalog:",
+    "svgo": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:"

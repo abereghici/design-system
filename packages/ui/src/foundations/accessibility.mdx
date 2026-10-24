@@ -1,0 +1,13 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+
+import * as AccessibilityStories from "./accessibility.stories";
+
+<Meta of={AccessibilityStories} />
+
+# Accessibility
+
+Target: WCAG 2.2 Level AA. The contrast matrix is computed from the token source and the same pair list the tokens build checks (`@platform/tokens/contrast-matrix`).
+
+<Canvas of={AccessibilityStories.Contrast} sourceState="none" />
+
+<Canvas of={AccessibilityStories.Focus} sourceState="none" />

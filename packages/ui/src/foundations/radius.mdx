@@ -1,0 +1,11 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+
+import * as RadiusStories from "./radius.stories";
+
+<Meta of={RadiusStories} />
+
+# Radius
+
+Generated from the token source (`@platform/tokens/source/*.tokens.json`), so it follows every token change. The concentric table checks the rule on the component tokens that nest corners.
+
+<Canvas of={RadiusStories.Scale} sourceState="none" />

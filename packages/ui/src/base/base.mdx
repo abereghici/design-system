@@ -1,0 +1,21 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+
+import * as BaseStories from "./base.stories";
+
+<Meta of={BaseStories} />
+
+# Base stylesheet
+
+An opt-in stylesheet that makes plain HTML look right on day one: a small reset, body text in the `type-body-md` role, the focus ring, the selection highlight, size-keyword transitions (`interpolate-size`), a stable scrollbar gutter and balanced or pretty text wrapping. Everything sits in the `ab.reset` and `ab.base` cascade layers, so components and any unlayered app CSS win over it.
+
+Import it once, after the layer order and the tokens:
+
+```css
+@layer ab.reset, ab.tokens, ab.base, ab.components;
+
+@import "@platform/tokens/tokens.css";
+@import "@platform/tokens/fonts.css";
+@import "@platform/ui/base.css";
+```
+
+<Canvas of={BaseStories.Elements} sourceState="none" />
