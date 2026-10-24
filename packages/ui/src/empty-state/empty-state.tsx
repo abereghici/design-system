@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 
 import { Slot } from "../slot/slot.tsx";
+
 import styles from "./empty-state.module.css";
 
 const join = (own: string | undefined, className: string | undefined) =>

@@ -1,5 +1,6 @@
-import preview from "#.storybook/preview.tsx";
 import { expect, fn, waitFor } from "storybook/test";
+
+import preview from "#.storybook/preview.tsx";
 
 import * as Avatar from "./avatar.tsx";
 
@@ -11,7 +12,11 @@ const onLoadingStatusChange = fn<(status: Avatar.LoadingStatus) => void>();
 
 const person = (src: string) => (
   <>
-    <Avatar.Image src={src} alt="Alexandru Bereghici" onLoadingStatusChange={onLoadingStatusChange} />
+    <Avatar.Image
+      src={src}
+      alt="Alexandru Bereghici"
+      onLoadingStatusChange={onLoadingStatusChange}
+    />
     <Avatar.Fallback name="Alexandru Bereghici" />
   </>
 );
@@ -61,7 +66,7 @@ export const Initials = meta.story({
     docs: {
       description: {
         story:
-          "Without an Image, the Fallback shows the first letters of the first and last words. It is decorative: name it with `role=\"img\"` and `aria-label` on Root if it stands alone.",
+          'Without an Image, the Fallback shows the first letters of the first and last words. It is decorative: name it with `role="img"` and `aria-label` on Root if it stands alone.',
       },
     },
   },

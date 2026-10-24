@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import component from "@platform/tokens/source/component.tokens.json";
 import { describe, expect, test } from "vitest";
+
+import component from "@platform/tokens/source/component.tokens.json";
 
 const next = join(import.meta.dirname, "..", ".next");
 const componentTokens = Object.keys(component.component).map((name) => `--ab-${name}:`);
@@ -106,8 +107,7 @@ describe("each component route ships only its own CSS, tokens and client code", 
     const r = route(name);
     expect(r.html).toContain(html);
     const shipped = shippedComponentTokens(r.css);
-    const owner = (token: string) =>
-      tokens.findLast((word) => token.startsWith(`--ab-${word}-`));
+    const owner = (token: string) => tokens.findLast((word) => token.startsWith(`--ab-${word}-`));
     expect(shipped.filter((token) => owner(token) === undefined)).toEqual([]);
     expect(new Set(shipped.map((token) => owner(token)))).toEqual(new Set(tokens));
     expect(uiClientModules(r)).toEqual([...client, "provider/locale.tsx"].toSorted());
@@ -120,6 +120,31 @@ describe("per-component JS", () => {
     expect(button.js).toContain("ab-press");
     expect(uiClientModules(logo)).toEqual(["provider/locale.tsx"]);
     expect(logo.js).not.toContain("ab-press");
+  });
+
+  test.each([
+    ["heading", "var(--ab-type-heading-lg)", 0],
+    ["text", "var(--ab-type-body-md)", 0],
+    ["spinner", "var(--ab-spinner-color)", 5],
+    ["skeleton", "var(--ab-skeleton-background-color)", 4],
+    ["progress", "var(--ab-progress-indicator-background-color)", 11],
+    ["meter", "var(--ab-meter-indicator-background-color)", 13],
+  ])(
+    "the %s route renders on the server and ships its CSS and tokens only",
+    (name, rule, count) => {
+      const r = route(name);
+      expect(uiClientModules(r)).toEqual(["provider/locale.tsx"]);
+      expect(r.css).toContain(rule);
+      const tokens = shippedComponentTokens(r.css);
+      expect(tokens).toHaveLength(count);
+      expect(tokens.filter((t) => !t.startsWith(`--ab-${name}-`))).toEqual([]);
+    },
+  );
+
+  test("Server Components label and format on the server", () => {
+    expect(route("spinner").html).toContain('aria-label="Loading"');
+    expect(route("progress").html).toContain("40\u00A0%");
+    expect(route("meter").html).toContain("42%");
   });
 
   test("a locale reaches client components, and ships only on the route that imports it", () => {

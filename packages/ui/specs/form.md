@@ -3,9 +3,9 @@
 A native `<form>` that keeps the browser's constraint validation but shows errors inline, through each Field, instead of the browser's bubbles. It moves focus to the first invalid control on a failed submit and routes server errors to their fields. Submission is the platform's: `action`, `method`, `FormData`, React 19 actions and Server Functions all work unchanged.
 
 ```tsx
+import { Button } from "@platform/ui/button";
 import { Form } from "@platform/ui/form";
 import { TextField } from "@platform/ui/text-field";
-import { Button } from "@platform/ui/button";
 
 <Form action={signUp} errors={state.errors}>
   <TextField label="Email" name="email" type="email" required autoComplete="email" />

@@ -1,7 +1,8 @@
+import { defineConfig } from "oxlint";
+
 import base from "@platform/oxlint-config/base";
 import next from "@platform/oxlint-config/next";
 import react from "@platform/oxlint-config/react";
-import { defineConfig } from "oxlint";
 
 export default defineConfig({
   extends: [base, react, next],

@@ -1,7 +1,10 @@
-import preview from "#.storybook/preview.tsx";
-import { Button } from "@platform/ui/button";
-import type { Decorator } from "@storybook/react-vite";
 import { expect } from "storybook/test";
+
+import type { Decorator } from "@storybook/react-vite";
+
+import { Button } from "@platform/ui/button";
+
+import preview from "#.storybook/preview.tsx";
 
 import * as Card from "./card.tsx";
 
@@ -137,18 +140,24 @@ export const Linked = meta.story({
   },
 });
 
-Linked.test("is one tab stop named by its title, then its actions", async ({ canvas, userEvent }) => {
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Quarterly report" })).toHaveFocus();
-  await userEvent.tab();
-  await expect(canvas.getByRole("button", { name: "Share" })).toHaveFocus();
-});
+Linked.test(
+  "is one tab stop named by its title, then its actions",
+  async ({ canvas, userEvent }) => {
+    await userEvent.tab();
+    await expect(canvas.getByRole("link", { name: "Quarterly report" })).toHaveFocus();
+    await userEvent.tab();
+    await expect(canvas.getByRole("button", { name: "Share" })).toHaveFocus();
+  },
+);
 
-Linked.test("takes a click anywhere on the card as a click on its title link", async ({ canvas }) => {
-  await expect(center(canvas.getByText("Updated 2 hours ago"))).toBe(
-    canvas.getByRole("link", { name: "Quarterly report" }),
-  );
-});
+Linked.test(
+  "takes a click anywhere on the card as a click on its title link",
+  async ({ canvas }) => {
+    await expect(center(canvas.getByText("Updated 2 hours ago"))).toBe(
+      canvas.getByRole("link", { name: "Quarterly report" }),
+    );
+  },
+);
 
 Linked.test("keeps its footer actions clickable", async ({ canvas }) => {
   const share = canvas.getByRole("button", { name: "Share" });

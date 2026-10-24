@@ -1,5 +1,6 @@
-import preview from "#.storybook/preview.tsx";
 import { expect } from "storybook/test";
+
+import preview from "#.storybook/preview.tsx";
 
 import { Separator } from "./separator.tsx";
 
@@ -63,7 +64,8 @@ export const BetweenGroups = meta.story({
   parameters: {
     docs: {
       description: {
-        story: "Vertical, it stretches to the height of the row it divides, as between toolbar groups.",
+        story:
+          "Vertical, it stretches to the height of the row it divides, as between toolbar groups.",
       },
     },
   },

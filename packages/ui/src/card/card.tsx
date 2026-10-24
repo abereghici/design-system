@@ -1,6 +1,8 @@
-import { cloneElement, isValidElement, type ComponentProps, type ReactNode } from "react";
+import { cloneElement, isValidElement } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 import { Slot } from "../slot/slot.tsx";
+
 import styles from "./card.module.css";
 
 const join = (own: string | undefined, className: string | undefined) =>
@@ -15,7 +17,13 @@ export interface RootProps extends ComponentProps<"div"> {
   asChild?: boolean;
 }
 
-export function Root({ layout = "column", asChild = false, className, children, ...props }: RootProps) {
+export function Root({
+  layout = "column",
+  asChild = false,
+  className,
+  children,
+  ...props
+}: RootProps) {
   const root = { ...props, "data-layout": layout, className: join(styles["root"], className) };
   if (!asChild) return <div {...root}>{body(children)}</div>;
   return (

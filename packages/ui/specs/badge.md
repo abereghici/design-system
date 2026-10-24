@@ -28,9 +28,9 @@ Container → content.
 | ---------- | ---------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
 | `variant`  | `"neutral" \| "accent" \| "danger"`      | `"neutral"`                          | Exposed as `data-variant`. The three the source tokens define.                                                         |
 | `max`      | `number`                                 | `99`                                 | Applies only when `children` is a number. A count above `max` renders `max` formatted plus the overflow label ("99+"). |
-| `locale`   | `string`                                 | `"en"`                               | The BCP 47 tag that formats a numeric count. Pass the app's tag: Badge doesn't read the Provider's locale.            |
+| `locale`   | `string`                                 | `"en"`                               | The BCP 47 tag that formats a numeric count. Pass the app's tag: Badge doesn't read the Provider's locale.             |
 | `labels`   | `{ overflow?: (max: string) => string }` | `{ overflow: (max) => \`${max}+\` }` | The only built-in string. `max` arrives already formatted. A prop only: it isn't in the Provider's locale objects.     |
-| `children` | `number \| string`                       |                                      | A number is formatted with `Intl.NumberFormat` in `locale`.                                                  |
+| `children` | `number \| string`                       |                                      | A number is formatted with `Intl.NumberFormat` in `locale`.                                                            |
 | …native    | `ComponentProps<"span">`                 |                                      | `ref`, `className` and every native attribute pass through.                                                            |
 
 Names, checked against the reference libraries:

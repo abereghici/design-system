@@ -1,6 +1,8 @@
-import preview from "#.storybook/preview.tsx";
-import { CheckIcon } from "@platform/ui/icons/check";
 import { expect } from "storybook/test";
+
+import { CheckIcon } from "@platform/ui/icons/check";
+
+import preview from "#.storybook/preview.tsx";
 
 import { Tag } from "./tag.tsx";
 

@@ -3,9 +3,10 @@
 The app's primary navigation as a row of links, placed in the app's top bar beside the Logo and any actions. Use it for the handful of top-level destinations that every page shares. For many destinations in groups, use a Sidebar; for the path to the current page, Breadcrumbs; for switching views within one page, Tabs; for actions, Buttons.
 
 ```tsx
-import { Navbar } from "@platform/ui/navbar";
-import { Logo } from "@platform/ui/logo";
 import NextLink from "next/link";
+
+import { Logo } from "@platform/ui/logo";
+import { Navbar } from "@platform/ui/navbar";
 
 <header className={styles.bar}>
   <a href="/">

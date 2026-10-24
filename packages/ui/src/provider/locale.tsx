@@ -1,11 +1,13 @@
 "use client";
 
-import { createContext, use, type ReactNode } from "react";
+import { createContext, use } from "react";
+import type { ReactNode } from "react";
 
 import { enUS } from "./locales/en-US.ts";
 
 export interface Labels {
   readonly alert: { readonly close: string };
+  readonly spinner: { readonly loading: string };
 }
 
 export interface Locale {

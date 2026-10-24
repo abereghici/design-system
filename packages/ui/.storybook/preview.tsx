@@ -1,8 +1,9 @@
-import { Provider } from "@platform/ui/provider";
 import addonA11y from "@storybook/addon-a11y";
 import addonDocs from "@storybook/addon-docs";
 import { definePreview } from "@storybook/react-vite";
 import { useEffect } from "storybook/preview-api";
+
+import { Provider } from "@platform/ui/provider";
 
 import { DocsPage } from "./docs-page.tsx";
 import { rememberStoryCanvas } from "./screenshots/canvas.ts";

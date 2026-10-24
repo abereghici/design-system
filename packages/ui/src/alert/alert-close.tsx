@@ -5,6 +5,7 @@ import type { ComponentProps, MouseEvent } from "react";
 import { dispatchFeedback } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { useLocale } from "../provider/locale.tsx";
+
 import styles from "./alert.module.css";
 
 export interface CloseProps extends ComponentProps<"button"> {

@@ -1,4 +1,5 @@
-import { cloneElement, isValidElement, type HTMLAttributes } from "react";
+import { cloneElement, isValidElement } from "react";
+import type { HTMLAttributes } from "react";
 
 export function Slot({ className, children, ...props }: HTMLAttributes<HTMLElement>) {
   if (!isValidElement<HTMLAttributes<HTMLElement>>(children)) {

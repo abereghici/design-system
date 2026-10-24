@@ -38,6 +38,6 @@ afterEach(async ({ story, task }) => {
   const height = document.documentElement.scrollHeight;
   if (!topLayer && height > innerHeight) await page.viewport(innerWidth, height);
   await expect(
-    page.elementLocator(topLayer ? document.documentElement : storyCanvas),
+    page.elementLocator(topLayer ? document.documentElement : storyCanvas()),
   ).toMatchScreenshot(story.id);
 });

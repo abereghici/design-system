@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type ComponentProps, type SyntheticEvent } from "react";
+import { useState } from "react";
+import type { ComponentProps, SyntheticEvent } from "react";
 
 import styles from "./avatar.module.css";
 

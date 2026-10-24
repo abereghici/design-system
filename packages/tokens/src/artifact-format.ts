@@ -1,7 +1,8 @@
 import type { Dictionary, TransformedToken } from "style-dictionary/types";
 
 import { FONT_FAMILIES, FONT_SUBSETS, fontFileName } from "./fonts.ts";
-import { THEMES, isWholeReference, valueIn, type ThemeId } from "./theme.ts";
+import { THEMES, isWholeReference, valueIn } from "./theme.ts";
+import type { ThemeId } from "./theme.ts";
 import { inTierOrder, tierOf } from "./tiers.ts";
 
 interface ArtifactEntry<Value> {

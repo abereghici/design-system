@@ -3,9 +3,9 @@
 An area that accepts files dragged from the desktop, with a FileTrigger inside as the keyboard and touch alternative. Use it where uploading is the main task of a view (an import screen, an attachment panel); for a small "Attach" action use FileTrigger alone.
 
 ```tsx
+import { Button } from "@platform/ui/button";
 import { DropZone } from "@platform/ui/drop-zone";
 import { FileTrigger } from "@platform/ui/file-trigger";
-import { Button } from "@platform/ui/button";
 
 <DropZone name="files" accept=".csv,text/csv" multiple onDrop={(files) => queue(files)}>
   <p>Drop CSV files here, or</p>

@@ -11,12 +11,18 @@ const budgets: Readonly<Record<string, string>> = {
   card: "1.2 kB",
   "empty-state": "740 B",
   events: "20 B",
+  heading: "340 B",
   icon: "520 B",
   logo: "470 B",
+  meter: "1.1 kB",
+  progress: "1.1 kB",
   provider: "5.4 kB",
   separator: "700 B",
+  skeleton: "630 B",
+  spinner: "760 B",
   "status-dot": "490 B",
   tag: "600 B",
+  text: "520 B",
 };
 
 const checks = (pattern: string, subpath: (path: string) => string, limit?: string) =>
@@ -43,6 +49,6 @@ export default [
   ...checks(
     "src/provider/locales/*.ts",
     (path) => path.slice("src/provider/".length, -".ts".length),
-    "145 B",
+    "160 B",
   ),
 ] satisfies SizeLimitConfig;

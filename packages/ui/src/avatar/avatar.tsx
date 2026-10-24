@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 
 import { UserIcon } from "../icon/icons/user.tsx";
+
 import styles from "./avatar.module.css";
 
 export { Image } from "./avatar-image.tsx";
@@ -44,7 +45,9 @@ export function Fallback({ name, className, children, ...props }: FallbackProps)
       dir="auto"
       {...props}
       aria-hidden
-      className={className === undefined ? styles["fallback"] : `${styles["fallback"]} ${className}`}
+      className={
+        className === undefined ? styles["fallback"] : `${styles["fallback"]} ${className}`
+      }
     >
       {children ?? (text === "" ? <UserIcon /> : text)}
     </span>

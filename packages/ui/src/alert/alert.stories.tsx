@@ -1,11 +1,14 @@
-import { listen } from "#.storybook/test/listen.ts";
-import preview from "#.storybook/preview.tsx";
-import { Provider } from "@platform/ui/provider";
-import { roRO } from "@platform/ui/locales/ro-RO";
 import type { MouseEvent } from "react";
 import { expect, fn } from "storybook/test";
 
+import { roRO } from "@platform/ui/locales/ro-RO";
+import { Provider } from "@platform/ui/provider";
+
+import preview from "#.storybook/preview.tsx";
+import { listen } from "#.storybook/test/listen.ts";
+
 import type { Locale } from "../provider/locale.tsx";
+
 import * as Alert from "./alert.tsx";
 
 const onClose = fn<(event: MouseEvent<HTMLButtonElement>) => void>();

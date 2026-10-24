@@ -1,7 +1,9 @@
-import preview from "#.storybook/preview.tsx";
+import { expect } from "storybook/test";
+
 import { Button } from "@platform/ui/button";
 import { FilesIcon } from "@platform/ui/icons/files";
-import { expect } from "storybook/test";
+
+import preview from "#.storybook/preview.tsx";
 
 import * as EmptyState from "./empty-state.tsx";
 
@@ -49,7 +51,9 @@ Default.test(
     },
   },
   async ({ canvas }) => {
-    await expect(canvas.getByRole("heading", { level: 2, name: "No results for “moss”" })).toBeVisible();
+    await expect(
+      canvas.getByRole("heading", { level: 2, name: "No results for “moss”" }),
+    ).toBeVisible();
     await expect(canvas.queryByRole("heading", { level: 3 })).toBeNull();
   },
 );

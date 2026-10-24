@@ -2,6 +2,7 @@ import { resolve } from "node:path";
 
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { playwright } from "@vitest/browser-playwright";
+
 import type { BrowserContextOptions } from "playwright";
 import type { TestProjectInlineConfiguration } from "vitest/config";
 import type { ToMatchScreenshotOptions } from "vitest/node";
