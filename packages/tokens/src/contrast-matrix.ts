@@ -78,6 +78,11 @@ export const CONTRAST_NON_TEXT_PAIRS = [
   ["icon-success", "background-success-subtle"],
   ["icon-warning", "background-warning-subtle"],
   ["icon-danger", "background-danger-subtle"],
+  ["background-accent-bold", "surface-default"],
+  ["background-accent-bold", "surface-raised"],
+  ["background-accent-bold", "surface-nested"],
+  ["background-accent-bold", "surface-floating"],
+  ["surface-floating", "background-accent-bold"],
 ] as const;
 
 export interface ContrastRequirement {
