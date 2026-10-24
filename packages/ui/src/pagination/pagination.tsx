@@ -68,7 +68,12 @@ function Step({ href, label, Anchor, children }: StepProps) {
   );
 }
 
-/** Links to the pages of a long, ordered result set whose pages each have a URL. */
+/**
+ * A named navigation landmark of links to the pages of a long, ordered result set: Previous, up to
+ * seven page slots with ellipses, Next. Each page is a URL, so it works without client JavaScript
+ * and opens in a new tab; pass `linkComponent` for a router link. For a short list show everything;
+ * for a feed, load more on demand.
+ */
 export function Pagination({
   page,
   count,

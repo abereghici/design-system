@@ -17,19 +17,11 @@ const terms = [
 ];
 
 const meta = preview.meta({
-  title: "Components/ScrollArea",
+  title: "Components/Containers/ScrollArea",
   component: ScrollArea,
   args: {
     style: { maxBlockSize: "10rem", maxInlineSize: "24rem" },
     children: terms.map((term) => <p key={term}>{term}</p>),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A bounded box whose content scrolls inside it with the browser's own scrolling and scrollbars, and fades its top and bottom edges while there is more to scroll. It is a tab stop, so keyboard users can scroll it. Use it only for content that must stay inside a region (a wide Table, a long side-panel list, a terms text); if the page can scroll instead, let it.",
-      },
-    },
   },
 });
 

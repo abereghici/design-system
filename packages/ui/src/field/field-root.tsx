@@ -128,8 +128,10 @@ function useValidity({ name, validate }: Pick<RootProps, "name" | "validate">, c
 }
 
 /**
- * Wires one control to its label, description and error. The error shows only after interaction
- * (`:user-invalid`) and replaces the description.
+ * Wires one form control to a visible label, a description and an error, and shows the error only
+ * after interaction (`:user-invalid`), in place of the description. Use it to compose your own
+ * control or to add a description and error to Checkbox, Switch, RadioGroup or Slider. TextField,
+ * TextArea, PasswordField, NumberField and Select already contain a Field.
  */
 export function Root({
   name,

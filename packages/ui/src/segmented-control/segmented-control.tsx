@@ -26,6 +26,12 @@ export type RootProps = Omit<ComponentProps<"fieldset">, "defaultValue"> & {
 } & ({ value: string; defaultValue?: never } | { defaultValue: string; value?: never }) &
   ({ "aria-label": string } | { "aria-labelledby": string });
 
+/**
+ * A native radio group that switches between 2–5 views or modes of the same content in place; one
+ * floating indicator glides to the checked item. Arrow keys move and choose (following the visual
+ * direction in RTL), and every committed change dispatches a bubbling `ab-toggle`. For peer
+ * sections with their own content use Tabs; for a choice in a form, RadioGroup.
+ */
 export function Root({
   value,
   defaultValue,

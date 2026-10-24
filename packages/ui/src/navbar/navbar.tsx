@@ -15,7 +15,12 @@ type AccessibleName =
 export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelledby"> &
   AccessibleName;
 
-/** The app's primary navigation: a row of links for its top-level destinations. */
+/**
+ * The app's primary navigation: a named landmark holding a row of links, placed in the app's own
+ * `<header>` beside the Logo link and actions. The link to the page on screen carries
+ * `aria-current="page"` and the indicator bar. For many destinations in groups use a Sidebar; for
+ * the path to this page, Breadcrumbs; for views within one page, Tabs.
+ */
 export function Root({ children, ...props }: RootProps) {
   return (
     <nav {...props}>

@@ -16,8 +16,10 @@ export interface FormProps extends ComponentProps<"form"> {
 }
 
 /**
- * A native form that shows constraint-validation errors inline in each Field instead of the
- * browser's bubbles, and focuses the first invalid control after a blocked submit.
+ * A native `<form>` that keeps the browser's constraint validation but shows each error inline in
+ * its Field instead of the browser's bubbles, focuses the first invalid control after a blocked
+ * submit and routes server errors to their fields. Submission is the platform's: `action`,
+ * `method`, `FormData` and React actions work unchanged.
  */
 export function Form({ errors, onInvalidCapture, ...props }: FormProps) {
   return (

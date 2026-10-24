@@ -19,7 +19,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/TextArea",
+  title: "Components/Forms/TextArea",
   component: TextArea,
   args: {
     label: "Message",
@@ -27,14 +27,6 @@ const meta = preview.meta({
     placeholder: "Write something…",
     description: "Grows with your text.",
     onValueChange: fn(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Multi-line text entry that grows with its content, from 3 to 12 lines by default, then scrolls. Use TextField for a single line.",
-      },
-    },
   },
 });
 

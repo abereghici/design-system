@@ -1,18 +1,17 @@
 import addonA11y from "@storybook/addon-a11y";
 import addonDocs from "@storybook/addon-docs";
 import { definePreview } from "@storybook/react-vite";
+import addonPseudoStates from "storybook-addon-pseudo-states";
 import { useEffect } from "storybook/preview-api";
 
 import { Provider } from "@platform/ui/provider";
 
 import { DocsPage } from "./docs-page.tsx";
+import { applyGlobals, directions, DocsContainer, themes } from "./globals.tsx";
 import { rememberStoryCanvas } from "./screenshots/canvas.ts";
 
-const themes = ["system", "light", "dark"] as const;
-const directions = ["ltr", "rtl"] as const;
-
 export default definePreview({
-  addons: [addonDocs(), addonA11y()],
+  addons: [addonDocs(), addonA11y(), addonPseudoStates()],
   tags: ["autodocs", "screenshot"],
   beforeEach: rememberStoryCanvas,
   parameters: {
@@ -24,28 +23,41 @@ export default definePreview({
         rules: [{ id: "color-contrast", enabled: !matchMedia("(forced-colors: active)").matches }],
       },
     },
-    docs: { page: DocsPage, source: { type: "dynamic" } },
+    docs: {
+      page: DocsPage,
+      container: DocsContainer,
+      source: { type: "dynamic" },
+      toc: true,
+    },
     options: {
       storySort: {
         order: [
+          "Introduction",
+          "Guides",
+          [
+            "Getting started",
+            "Theming",
+            "Styling and overrides",
+            "Internationalization",
+            "Right-to-left",
+            "Contributing",
+          ],
           "Foundations",
           [
             "Principles",
+            "Tokens",
             "Color",
-            "Type",
-            "Space",
-            "Radius",
+            "Typography",
+            "Space and shape",
             "Elevation",
-            "Material",
             "Motion",
-            "Personality",
-            "Logo",
             "Iconography",
             "Accessibility",
-            "Base stylesheet",
+            "Brand",
           ],
           "Components",
         ],
+        method: "alphabetical",
       },
     },
   },
@@ -62,14 +74,9 @@ export default definePreview({
   initialGlobals: { theme: "system", dir: "ltr" },
   decorators: [
     (Story, { globals }) => {
-      const theme = themes.find((value) => value === globals["theme"]) ?? "system";
-      const dir = directions.find((value) => value === globals["dir"]) ?? "ltr";
       useEffect(() => {
-        const root = document.documentElement;
-        if (theme === "system") delete root.dataset["theme"];
-        else root.dataset["theme"] = theme;
-        root.dir = dir;
-      }, [theme, dir]);
+        applyGlobals(globals);
+      }, [globals]);
       return (
         <Provider>
           <Story />

@@ -51,7 +51,10 @@ function Control({ minRows = 3, maxRows = 12, readOnly, ...props }: ControlProps
   );
 }
 
-/** Multi-line text entry that grows with its content between `minRows` and `maxRows`. */
+/**
+ * Multi-line text entry that grows with its content, from 3 to 12 lines by default, then scrolls.
+ * Use TextField for a single line.
+ */
 export function TextArea({
   label,
   description,

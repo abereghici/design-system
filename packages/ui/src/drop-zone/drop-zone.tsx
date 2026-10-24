@@ -131,8 +131,10 @@ function useDropTarget({ accept, multiple, onDrop, blocked, input }: DropTargetO
 }
 
 /**
- * An area that accepts files dragged from the desktop. Put a FileTrigger inside as the keyboard
- * and touch alternative: it shares the zone's file input.
+ * An area that accepts files dragged from the desktop, with a FileTrigger inside as the keyboard
+ * and touch alternative; drops and picks land in one native file input that submits with the form.
+ * Use it where uploading is the main task of a view; for a small Attach action use FileTrigger
+ * alone.
  */
 export function DropZone({
   accept,

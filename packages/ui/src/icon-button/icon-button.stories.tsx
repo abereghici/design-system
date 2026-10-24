@@ -44,21 +44,13 @@ function ControlledIconButton(props: IconButtonProps) {
 }
 
 const meta = preview.meta({
-  title: "Components/IconButton",
+  title: "Components/Actions/IconButton",
   component: IconButton,
   args: {
     "aria-label": "Pin",
     children: <PinIcon />,
     onClick: fn(),
     onPressedChange: fn(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A square native `<button>` whose only content is an icon, named by `aria-label` or `aria-labelledby` (the type requires one). With `pressed` or `defaultPressed` it is a toggle button. A press dispatches `ab-press`; a toggle dispatches `ab-toggle` instead. Use a Button with a visible label whenever space allows.",
-      },
-    },
   },
 });
 

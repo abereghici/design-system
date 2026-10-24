@@ -17,21 +17,13 @@ const options = (lifetimeDisabled = false) => (
 );
 
 const meta = preview.meta({
-  title: "Components/RadioGroup",
+  title: "Components/Forms/RadioGroup",
   component: RadioGroup.Root,
   args: {
     name: "plan",
     defaultValue: "monthly",
     children: options(),
     onValueChange: fn<(value: string, details: RadioGroup.ChangeEventDetails) => void>(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A native fieldset of same-name radios for one choice among 2–6 options that should all stay visible; its Label is the legend. Arrow keys move and choose (following the visual direction in RTL), and every committed change dispatches a bubbling `ab-toggle`. With more options use Select; for a binary choice, Switch or Checkbox.",
-      },
-    },
   },
 });
 

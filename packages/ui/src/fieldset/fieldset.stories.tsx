@@ -15,7 +15,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Fieldset",
+  title: "Components/Forms/Fieldset",
   component: Fieldset.Root,
   args: {
     children: (
@@ -30,14 +30,6 @@ const meta = preview.meta({
         <TextField label="City" name="city" autoComplete="address-level2" />
       </>
     ),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Groups related controls under one caption, its Legend, and can disable them all at once. It is the native `<fieldset>` with its `<legend>`. For a single choice among options use RadioGroup.",
-      },
-    },
   },
 });
 

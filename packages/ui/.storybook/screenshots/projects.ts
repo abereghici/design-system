@@ -74,5 +74,9 @@ const screenshotProject = (variant: ScreenshotVariant): TestProjectInlineConfigu
   };
 };
 
+// addon-vitest names every storybookTest project `storybook:<configDir>` when it runs Vitest for
+// the Storybook UI (VITEST_STORYBOOK), so a second one would clash with the interaction project.
 export const screenshotProjects = () =>
-  process.platform === "linux" ? variants.map((variant) => screenshotProject(variant)) : [];
+  process.platform === "linux" && process.env["VITEST_STORYBOOK"] !== "true"
+    ? variants.map((variant) => screenshotProject(variant))
+    : [];

@@ -38,20 +38,12 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/FileTrigger",
+  title: "Components/Forms/FileTrigger",
   component: FileTrigger,
   args: {
     accept: "image/png,image/jpeg",
     children: <Button>Choose image</Button>,
     onSelect: fn<(files: File[], details: FileTriggerSelectEventDetails) => void>(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Opens the system file picker from its one child (usually a Button) and keeps the chosen files in a native file input, so they submit with the form. It draws nothing itself; render the chosen files from `onSelect`. To also accept files dragged onto an area, put it inside a DropZone.",
-      },
-    },
   },
 });
 

@@ -12,6 +12,11 @@ export interface IconProps extends ComponentProps<"svg"> {
   label?: string;
 }
 
+/**
+ * A glyph on the 24-unit icon grid, stroked in `currentColor`. The generated icons
+ * (`@platform/ui/icons/<name>`) render through it; pass your own `<path>` children for a custom
+ * glyph. For the brand mark, use Logo.
+ */
 export function Icon({ size = "md", label, className, ...props }: IconProps) {
   return (
     <svg

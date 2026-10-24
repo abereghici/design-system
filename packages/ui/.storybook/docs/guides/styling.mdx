@@ -1,0 +1,41 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Guides/Styling and overrides" />
+
+# Styling and overrides
+
+## Your CSS always wins
+
+The design system puts all of its CSS in cascade layers, in this order:
+
+```css
+@layer ab.reset, ab.tokens, ab.base, ab.components;
+```
+
+CSS outside any layer beats every layer, whatever its specificity or order. So an app's own unlayered CSS always wins over the design system, with no `!important` and no specificity games.
+
+## Restyle with tokens first
+
+- **One component everywhere:** set its component tokens, on `:root` or on a region. They are the supported surface for restyling.
+
+  ```css
+  :root {
+    --ab-button-primary-background-color: var(--ab-color-background-success-bold);
+  }
+  ```
+
+- **One instance:** pass a `className`. Every component merges it with its own.
+- **Your own elements:** use semantic tokens (`--ab-color-text-subtle`, `--ab-space-inset-md`, `font: var(--ab-type-body-md)`), never primitives.
+
+Some component tokens are animated and registered with `@property` without inheritance. Set those on the component's own element, not on an ancestor.
+
+## The base stylesheet
+
+`Provider` brings a small stylesheet that makes plain HTML look right from the start: a reset, body text in the `type-body-md` role, the focus ring, the selection color, transitions to and from `auto` sizes, a stable scrollbar gutter, and balanced headings and pretty paragraphs. It sits in `ab.reset` and `ab.base`, so components and your CSS override it.
+
+```css
+/* Unlayered, so it wins over ab.base. */
+:focus-visible {
+  outline-color: var(--ab-color-border-accent);
+}
+```

@@ -23,20 +23,12 @@ const sections = (
 );
 
 const meta = preview.meta({
-  title: "Components/Tabs",
+  title: "Components/Navigation/Tabs",
   component: Tabs.Root,
   args: {
     defaultValue: "overview",
     children: sections,
     onValueChange: fn<(value: string, details: Tabs.ChangeEventDetails) => void>(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Peer sections that share one context, one panel at a time. Arrow keys move and activate (following the visual direction in RTL), and every committed change dispatches a bubbling `ab-toggle`. For modes of the same content use SegmentedControl; to move between pages, Navbar or Sidebar; for sections that open independently, Accordion.",
-      },
-    },
   },
 });
 

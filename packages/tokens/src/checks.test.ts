@@ -2,6 +2,9 @@ import { expect, test } from "vitest";
 
 import { buildTokens, TokenCheckError } from "./build.ts";
 import { setMember, srgb, themed, validTokens } from "./test-fixtures.ts";
+import componentTokens from "./tokens/component.tokens.json" with { type: "json" };
+import primitiveTokens from "./tokens/primitive.tokens.json" with { type: "json" };
+import semanticTokens from "./tokens/semantic.tokens.json" with { type: "json" };
 
 test("a component token that skips the semantic tier fails the build", async () => {
   const tokens = validTokens();
@@ -250,5 +253,32 @@ test("an on-{role} pair is checked against its bold fill", async () => {
   tokens.semantic["color-text-on-accent"] = themed("palette-sage-0", "palette-night-50");
   await expect(buildTokens({ tokens })).rejects.toThrow(
     "[dark] --ab-color-text-on-accent on --ab-color-background-accent-bold: 1.00:1, needs 4.5:1",
+  );
+});
+
+const tiers: Record<string, Record<string, { $value: unknown }>> = {
+  primitive: primitiveTokens.primitive,
+  semantic: semanticTokens.semantic,
+  component: componentTokens.component,
+};
+
+function px(reference: string): number {
+  const [tier = "", name = ""] = reference.slice(1, -1).split(".");
+  const value = tiers[tier]?.[name]?.$value;
+  return typeof value === "string" ? px(value) : Number(Reflect.get(new Object(value), "value"));
+}
+
+test.each([
+  ["dropdown-menu-border-radius", "dropdown-menu-padding", "dropdown-menu-item-border-radius"],
+  ["context-menu-border-radius", "context-menu-padding", "context-menu-item-border-radius"],
+  [
+    "segmented-control-border-radius",
+    "segmented-control-padding",
+    "segmented-control-item-border-radius",
+  ],
+  ["command-border-radius", "command-list-padding", "command-item-border-radius"],
+])("concentric corners: %s minus %s is %s", (outer, padding, inner) => {
+  expect(px(`{component.${outer}}`) - px(`{component.${padding}}`)).toBe(
+    px(`{component.${inner}}`),
   );
 });

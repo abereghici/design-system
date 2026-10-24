@@ -27,17 +27,9 @@ const trail = (
 );
 
 const meta = preview.meta({
-  title: "Components/Breadcrumbs",
+  title: "Components/Navigation/Breadcrumbs",
   component: Breadcrumbs.Root,
   args: { children: trail },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A named navigation landmark holding an ordered trail of links from the site's root to the current page, which carries `aria-current=\"page\"`. Place it before the page's main content on pages two or more levels deep. For the site's main sections use a Navbar or a Sidebar.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

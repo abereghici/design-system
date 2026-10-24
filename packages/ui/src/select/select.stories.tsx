@@ -31,7 +31,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Select",
+  title: "Components/Forms/Select",
   component: Select.Root,
   args: {
     label: "Region",
@@ -39,14 +39,6 @@ const meta = preview.meta({
     placeholder: "Choose a region",
     children: regions,
     onValueChange: fn(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Chooses one value from a short, known list (up to about 15 options). It is a native `<select>`: keyboard, typeahead, screen readers, autofill, mobile pickers and form submission are the platform's. Engines with customizable select draw the brand picker; the others show the operating system's. For a long or searchable list use Combobox; for 2–6 options that should stay visible, RadioGroup.",
-      },
-    },
   },
 });
 

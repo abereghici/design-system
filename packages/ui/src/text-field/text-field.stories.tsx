@@ -24,7 +24,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/TextField",
+  title: "Components/Forms/TextField",
   component: TextField,
   args: {
     label: "Email",
@@ -33,14 +33,6 @@ const meta = preview.meta({
     placeholder: "name@domain.com",
     autoComplete: "email",
     onValueChange: fn(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Single-line text entry with a visible label, an optional description and an inline error that appears only after interaction. Use TextArea for more than one line, PasswordField for secrets, NumberField for numbers and Select to choose from a short known list.",
-      },
-    },
   },
 });
 

@@ -7,6 +7,12 @@ export interface TagProps extends ComponentProps<"span"> {
   variant?: "neutral" | "accent" | "success" | "warning" | "danger";
 }
 
+/**
+ * A static label for status, type or topic ("Draft", "Live", "Failed"), read in line with its
+ * neighbours. It is never a button: to filter, use SegmentedControl or Checkbox. For a count, use a
+ * Badge (shadcn and Radix call this component Badge); for a state marker in a dense list, a
+ * StatusDot.
+ */
 export function Tag({ variant = "neutral", className, ...props }: TagProps) {
   return (
     <span

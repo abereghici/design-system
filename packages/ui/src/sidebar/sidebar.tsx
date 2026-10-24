@@ -16,7 +16,12 @@ type AccessibleName =
 export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelledby"> &
   AccessibleName;
 
-/** The app's vertical navigation: links to its sections, optionally in labelled groups. */
+/**
+ * The app's vertical navigation: a named landmark of links to its sections, optionally in labelled
+ * groups, placed in a column the app's layout owns (width, scrolling, stacking under 760 px). The
+ * link to the page on screen carries `aria-current="page"`, a fill and the indicator bar. For a few
+ * top-level destinations use a Navbar; for the path to this page, Breadcrumbs.
+ */
 export function Root({ className, ...props }: RootProps) {
   return <nav {...props} className={join(styles["root"], className)} />;
 }

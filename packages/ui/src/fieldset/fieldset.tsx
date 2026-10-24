@@ -10,7 +10,10 @@ export interface RootProps extends ComponentProps<"fieldset"> {
   disabled?: boolean;
 }
 
-/** Groups related controls under one caption, its Legend. */
+/**
+ * Groups related controls under one caption, its Legend, and can disable them all at once. It is
+ * the native `<fieldset>` with its `<legend>`. For a single choice among options use RadioGroup.
+ */
 export function Root({ className, ...props }: RootProps) {
   return (
     <fieldset

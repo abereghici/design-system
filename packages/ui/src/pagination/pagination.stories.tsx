@@ -21,17 +21,9 @@ const controls = (canvasElement: HTMLElement) =>
     });
 
 const meta = preview.meta({
-  title: "Components/Pagination",
+  title: "Components/Navigation/Pagination",
   component: Pagination,
   args: { page: 5, count: 10, getPageUrl: (page: number) => `#page-${page}` },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A named navigation landmark of links to the pages of a long, ordered result set: Previous, up to seven page slots with ellipses, Next. Each page is a URL, so it works without client JavaScript and opens in a new tab; pass `linkComponent` for a router link. For a short list show everything; for a feed, load more on demand.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

@@ -38,6 +38,12 @@ export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
   onValueChange?: (value: string[], details: ChangeEventDetails) => void;
 }
 
+/**
+ * A stack of native `<details>` sections for secondary content; by default opening one closes the
+ * other (`<details name>`), and `multiple` lets any combination stay open. Enter and Space toggle,
+ * find-in-page opens a section with a match, and every press dispatches a bubbling `ab-toggle`.
+ * Never hide a primary task inside one; for peer views of the same place use Tabs.
+ */
 export function Root({
   multiple = false,
   value,

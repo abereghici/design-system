@@ -8,7 +8,7 @@ import { TextField } from "../text-field/text-field.tsx";
 import { Form } from "./form.tsx";
 
 const meta = preview.meta({
-  title: "Components/Form",
+  title: "Components/Forms/Form",
   component: Form,
   args: {
     "aria-label": "Sign up",
@@ -24,14 +24,6 @@ const meta = preview.meta({
         </Button>
       </>
     ),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A native `<form>` that keeps the browser's constraint validation but shows each error inline in its Field instead of the browser's bubbles, focuses the first invalid control after a blocked submit and routes server errors to their fields. Submission is the platform's: `action`, `method`, `FormData` and React actions work unchanged.",
-      },
-    },
   },
 });
 

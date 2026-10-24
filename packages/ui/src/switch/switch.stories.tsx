@@ -7,19 +7,11 @@ import { Switch } from "./switch.tsx";
 import type { SwitchChangeEventDetails } from "./switch.tsx";
 
 const meta = preview.meta({
-  title: "Components/Switch",
+  title: "Components/Forms/Switch",
   component: Switch,
   args: {
     children: "Sound",
     onCheckedChange: fn<(checked: boolean, details: SwitchChangeEventDetails) => void>(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'A native checkbox with `role="switch"` inside its label, for an on/off setting that takes effect immediately. Every committed change dispatches a bubbling `ab-toggle`. Its label names the setting, never the state. Inside a form that needs Save, use Checkbox.',
-      },
-    },
   },
 });
 

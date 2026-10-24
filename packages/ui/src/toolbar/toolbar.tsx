@@ -60,7 +60,12 @@ function destination(event: KeyboardEvent<HTMLDivElement>) {
   return list.at((index + (mirrored ? -offset : offset)) % list.length) ?? null;
 }
 
-/** Groups three or more controls into one tab stop; the arrow keys move between them. */
+/**
+ * Groups three or more related controls (IconButtons, Buttons, a SegmentedControl) into one tab
+ * stop; the arrow keys move between them, wrapping at the ends and following the visual direction
+ * in RTL. Disabled controls stay reachable. For one or two controls, place them directly; never put
+ * text fields, Selects or Sliders inside.
+ */
 export function Toolbar({ ref, className, onKeyDown, onFocus, ...props }: ToolbarProps) {
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     onKeyDown?.(event);

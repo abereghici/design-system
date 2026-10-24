@@ -26,6 +26,12 @@ export type ProgressProps = Omit<ComponentProps<"progress">, "children" | "value
     locale?: Locale;
   };
 
+/**
+ * How far a task has got, or that it is running when `value` is `null`. The value text is formatted
+ * with `Intl.NumberFormat` on the server, in English unless you pass a shipped `locale`. For a
+ * short wait inside a control use Spinner or Button's `loading`; for a measurement that isn't
+ * progress use Meter.
+ */
 export function Progress({
   value = null,
   max = 100,

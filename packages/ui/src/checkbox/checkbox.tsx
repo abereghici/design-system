@@ -29,6 +29,12 @@ export type CheckboxProps = Omit<ComponentProps<"input">, "type" | "children"> &
     disabled?: boolean;
   };
 
+/**
+ * A native checkbox inside its label, for an on/off choice in a form that is submitted, or one item
+ * of a set where any number may be chosen. Every committed change dispatches a bubbling
+ * `ab-toggle`. For a setting that applies immediately, use Switch; for one choice among several,
+ * RadioGroup.
+ */
 export function Checkbox({
   children,
   onCheckedChange,

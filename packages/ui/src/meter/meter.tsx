@@ -36,6 +36,13 @@ export type MeterProps = Omit<
     locale?: Locale;
   };
 
+/**
+ * A measurement within a known range: storage used, a quota, a score. With `low`, `high` and
+ * `optimum` the fill takes the success, warning or danger colour of the HTML meter's regions, and a
+ * string `valueLabel` must say the same in words. The value text is formatted with
+ * `Intl.NumberFormat` on the server, in English unless you pass a shipped `locale`. For progress
+ * use Progress; for a value the user sets, Slider.
+ */
 export function Meter({
   value,
   min = 0,

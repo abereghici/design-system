@@ -5,17 +5,9 @@ import preview from "#.storybook/preview.tsx";
 import { VisuallyHidden } from "./visually-hidden.tsx";
 
 const meta = preview.meta({
-  title: "Components/VisuallyHidden",
+  title: "Components/Utilities/VisuallyHidden",
   component: VisuallyHidden,
   args: { children: " (opens in a new tab)" },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Hides its content from the screen and keeps it in the accessibility tree, for text only assistive technology needs. To name an icon-only control, use IconButton's `aria-label`; to show content on focus, use SkipLink; to hide content from everyone, use the `hidden` attribute.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

@@ -1,0 +1,46 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import tokens from "@platform/tokens/tokens.json";
+
+import { TokenTable } from "../blocks/token-table.tsx";
+
+<Meta title="Foundations/Space and shape" />
+
+export const semantic = (family, prefix = "") =>
+  tokens[family].tokens.filter(
+    ({ name }) => name.startsWith(`ab-${prefix}`) && !/-\d+$/v.test(name),
+  );
+
+# Space and shape
+
+The system is compact: 28–32px controls with 13–14px labels on fine pointers. On coarse pointers the same size tokens grow (a 32px control becomes 44px), so no component needs a touch variant.
+
+## Space
+
+`inline` is a horizontal gap, `inset` is padding, `stack` is a vertical gap, and `section` separates page sections (88px, 64px below 760px).
+
+<TokenTable
+  tokens={semantic("spacing", "space-")}
+  preview={(value) => ({ inlineSize: value, blockSize: "0.5rem" })}
+/>
+
+## Size
+
+Icons, controls, containers and targets. `size-target-min` is the WCAG 2.5.8 minimum (24px) and `size-target-recommended` the comfortable touch target (44px).
+
+<TokenTable tokens={semantic("size", "size-")} />
+
+## Radius
+
+Nested corners share a centre: the inner radius is the outer radius minus the padding between them. A menu (12px) with 4px padding gives its items 8px; a dialog (16px) with 8px padding gives its cards 8px. Pick the token pair that satisfies the equation, never one that looks close.
+
+<TokenTable tokens={semantic("radius", "radius-")} preview={(value) => ({ borderRadius: value })} />
+
+## Lines and strokes
+
+<TokenTable tokens={[...semantic("line"), ...semantic("strokeWidth")]} />
+
+## Layout
+
+CSS can't read a custom property in a media query, so write `@media (width < 760px)` for `--ab-breakpoint-md`.
+
+<TokenTable tokens={semantic("layout")} />

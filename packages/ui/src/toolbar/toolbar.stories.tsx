@@ -55,17 +55,9 @@ function Growing() {
 }
 
 const meta = preview.meta({
-  title: "Components/Toolbar",
+  title: "Components/Actions/Toolbar",
   component: Toolbar,
   args: { "aria-label": "Report", children: controls },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Groups three or more related controls (IconButtons, Buttons, a SegmentedControl) into one tab stop; the arrow keys move between them, wrapping at the ends and following the visual direction in RTL. Disabled controls stay reachable. For one or two controls, place them directly; never put text fields, Selects or Sliders inside.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

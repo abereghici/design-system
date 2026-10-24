@@ -22,17 +22,9 @@ const person = (src: string) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Avatar",
+  title: "Components/Images and icons/Avatar",
   component: Avatar.Root,
   args: { children: person(photo) },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A person's picture, with their initials (or a generic glyph) while it loads or when it fails. The Image's `alt` is the avatar's one accessible name, whichever Part shows; the Fallback is never announced. When the name is written beside it, use `alt=\"\"` and `aria-hidden` on Root. For the brand sign, use the Logo.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

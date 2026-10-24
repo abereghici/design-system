@@ -10,7 +10,11 @@ export interface LogoProps extends Omit<ComponentProps<"svg">, "children"> {
   label?: string;
 }
 
-/** Stâlpul cerului, the brand sign. One em square by default, never below its minimum size. */
+/**
+ * Stâlpul cerului, the Bereghici Logo, in `--ab-logo-color`. One em square by default, so it scales
+ * with the text it sits in; size it with CSS `inline-size` and `block-size`. It never renders below
+ * `--ab-logo-min-size` (16px). For an interface glyph, use an icon.
+ */
 export function Logo({ label, className, ...props }: LogoProps) {
   return (
     <svg

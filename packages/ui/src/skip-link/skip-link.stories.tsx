@@ -7,7 +7,7 @@ import { roRO } from "../provider/locales/ro-RO.ts";
 import { SkipLink } from "./skip-link.tsx";
 
 const meta = preview.meta({
-  title: "Components/SkipLink",
+  title: "Components/Navigation/SkipLink",
   component: SkipLink,
   args: { href: "#main" as const },
   decorators: [
@@ -23,14 +23,6 @@ const meta = preview.meta({
       </>
     ),
   ],
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "The first element of a page layout: a link to the main content, hidden until it has focus. Give the target `<main>` the matching `id` and `tabIndex={-1}`. For any other navigation, use a Link.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

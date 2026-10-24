@@ -92,8 +92,9 @@ function selectOnce(input: HTMLInputElement, onSelect: FileTriggerProps["onSelec
 }
 
 /**
- * Opens the system file picker from its child and keeps the chosen files in a native file input,
- * so they submit with the form. Inside a DropZone it shares the zone's input.
+ * Opens the system file picker from its one child (usually a Button) and keeps the chosen files in
+ * a native file input, so they submit with the form. It draws nothing itself; render the chosen
+ * files from `onSelect`. To also accept files dragged onto an area, put it inside a DropZone.
  */
 export function FileTrigger({
   children,

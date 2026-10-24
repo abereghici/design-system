@@ -35,7 +35,7 @@ const submitted = (form: HTMLFormElement) =>
   new FormData(form).getAll("files").map((file) => (file instanceof File ? file.name : file));
 
 const meta = preview.meta({
-  title: "Components/DropZone",
+  title: "Components/Forms/DropZone",
   component: DropZone,
   args: {
     name: "files",
@@ -50,14 +50,6 @@ const meta = preview.meta({
         </FileTrigger>
       </>
     ),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "An area that accepts files dragged from the desktop, with a FileTrigger inside as the keyboard and touch alternative; drops and picks land in one native file input that submits with the form. Use it where uploading is the main task of a view; for a small Attach action use FileTrigger alone.",
-      },
-    },
   },
 });
 

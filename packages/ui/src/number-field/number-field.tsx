@@ -268,7 +268,7 @@ function Control({ labels, startElement, readOnly, ...options }: ControlProps) {
   );
 }
 
-/** Entry of a number, formatted and parsed for the locale, with step buttons and arrow keys. */
+/** A real quantity in the locale format. For digit codes use TextField; to pick by feel, Slider. */
 export function NumberField({
   label,
   description,

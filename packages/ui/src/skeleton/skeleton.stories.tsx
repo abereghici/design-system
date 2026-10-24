@@ -11,17 +11,9 @@ const save = (
 );
 
 const meta = preview.meta({
-  title: "Components/Skeleton",
+  title: "Components/Feedback/Skeleton",
   component: Skeleton,
   args: { children: "Placeholder name" },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Holds the place of content that is still loading, in its shape: wrap an element to keep its size and radius, wrap placeholder text to cover its lines, or leave it empty and size it with `className`. Set `aria-busy` on the loading region; Skeleton hides itself from assistive technology. For a wait of unknown shape use Spinner, for a measurable task Progress.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

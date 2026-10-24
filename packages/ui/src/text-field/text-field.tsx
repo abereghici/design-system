@@ -34,7 +34,11 @@ export type TextFieldProps = Naming &
     disabled?: boolean;
   };
 
-/** Single-line text entry with a visible label, an optional description and an inline error. */
+/**
+ * Single-line text entry with a visible label, an optional description and an inline error that
+ * appears only after interaction. Use TextArea for more than one line, PasswordField for secrets,
+ * NumberField for numbers and Select to choose from a short known list.
+ */
 export function TextField({
   label,
   description,

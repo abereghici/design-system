@@ -6,9 +6,7 @@ import { screenshotProjects } from "#.storybook/screenshots/projects.ts";
 
 import viteConfig from "./vite.config.ts";
 
-// Vitest stores each project's name on its instance objects, so projects can't share one array.
-const instances = () =>
-  (["chromium", "firefox", "webkit"] as const).map((browser) => ({ browser }));
+const browsers = ["chromium", "firefox", "webkit"] as const;
 
 export default mergeConfig(
   viteConfig,
@@ -20,28 +18,24 @@ export default mergeConfig(
           plugins: [storybookTest()],
           test: {
             name: "storybook",
-            setupFiles: ["./.storybook/test/focus.setup.ts"],
-            browser: {
-              enabled: true,
-              headless: true,
-              provider: playwright(),
-              instances: instances(),
-            },
-          },
-        },
-        {
-          plugins: [storybookTest()],
-          test: {
-            name: "storybook-reduced-motion",
             setupFiles: [
               "./.storybook/test/focus.setup.ts",
               "./.storybook/test/reduced-motion.setup.ts",
             ],
+            provide: { reducedMotion: false },
             browser: {
               enabled: true,
               headless: true,
-              provider: playwright({ contextOptions: { reducedMotion: "reduce" } }),
-              instances: instances(),
+              provider: playwright(),
+              instances: [
+                ...browsers.map((browser) => ({ browser })),
+                ...browsers.map((browser) => ({
+                  browser,
+                  name: `${browser}-reduced-motion`,
+                  provide: { reducedMotion: true },
+                  provider: playwright({ contextOptions: { reducedMotion: "reduce" } }),
+                })),
+              ],
             },
           },
         },

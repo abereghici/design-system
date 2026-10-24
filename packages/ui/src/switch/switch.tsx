@@ -27,6 +27,11 @@ export type SwitchProps = Omit<ComponentProps<"input">, "type" | "role" | "child
     disabled?: boolean;
   };
 
+/**
+ * A native checkbox with `role="switch"` inside its label, for an on/off setting that takes effect
+ * immediately. Every committed change dispatches a bubbling `ab-toggle`. Its label names the
+ * setting, never the state. Inside a form that needs Save, use Checkbox.
+ */
 export function Switch({
   children,
   onCheckedChange,

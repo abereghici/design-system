@@ -1,13 +1,79 @@
-import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+import { ColorItem, ColorPalette, Meta } from "@storybook/addon-docs/blocks";
+import tokens from "@platform/tokens/tokens.json";
 
-import * as ColorStories from "./color.stories";
+<Meta title="Foundations/Color" />
 
-<Meta of={ColorStories} />
+export const roles = (prefix) =>
+  tokens.color.tokens
+    .filter(({ name }) => name.startsWith(`ab-color-${prefix}`))
+    .map(({ name, value, usage }) => (
+      <ColorItem
+        key={name}
+        title={`--${name}`}
+        subtitle={usage}
+        colors={
+          typeof value === "string" ? { Fixed: value } : { Light: value.light, Dark: value.dark }
+        }
+      />
+    ));
+
+export const palettes = Object.entries(
+  Object.groupBy(
+    tokens.color.tokens.filter(({ name }) => /^ab-palette-\w+-\d+$/v.test(name)),
+    ({ name }) => name.split("-")[2],
+  ),
+).map(([hue, steps]) => (
+  <ColorItem
+    key={hue}
+    title={hue}
+    subtitle={`--ab-palette-${hue}-*`}
+    colors={Object.fromEntries(steps.map(({ name, value }) => [name.split("-").at(-1), value]))}
+  />
+));
 
 # Color
 
-Generated from the token source (`@platform/tokens/source/*.tokens.json`), so it follows every token change. Each swatch is drawn in the light and the dark Theme.
+The palette is Moss and Lichen. Surfaces stay neutral, and color marks an action, a state or the one highlight on a page. The light and dark Themes are designed separately; neither is an inversion of the other. Every swatch below shows both Themes, whatever Theme this page uses.
 
-<Canvas of={ColorStories.Roles} sourceState="none" />
+Use the semantic tokens. Each one names the CSS property it is for (`surface`, `background`, `text`, `icon`, `border`), so a text color is never used as a fill.
 
-<Canvas of={ColorStories.Palette} sourceState="none" />
+## Surface
+
+<ColorPalette>
+  {roles("surface")}
+  {roles("backdrop")}
+</ColorPalette>
+
+## Background
+
+<ColorPalette>{roles("background")}</ColorPalette>
+
+## Text
+
+<ColorPalette>{roles("text")}</ColorPalette>
+
+## Icon
+
+<ColorPalette>{roles("icon")}</ColorPalette>
+
+## Border
+
+<ColorPalette>{roles("border")}</ColorPalette>
+
+## Material
+
+Translucent fills for floating chrome, always paired with `--ab-material-blur-*` (see [Elevation](?path=/docs/foundations-elevation--docs)).
+
+<ColorPalette>{roles("material")}</ColorPalette>
+
+## Brand
+
+Identity hues, fixed in both Themes. They are for the Logo, imagery and print, never for an interface role.
+
+<ColorPalette>{roles("brand")}</ColorPalette>
+
+## Palettes
+
+The primitives behind the roles. Sage and Night are the light and dark neutrals, Moss and Lichen the accents, Fern success, Ember highlight and warning, Clay danger. The identity anchors are fixed brand values and the other steps are interpolated in OKLCH. Product code never uses a palette step directly.
+
+<ColorPalette>{palettes}</ColorPalette>

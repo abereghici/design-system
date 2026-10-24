@@ -29,7 +29,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/NumberField",
+  title: "Components/Forms/NumberField",
   component: NumberField,
   args: {
     label: "Seats",
@@ -38,14 +38,6 @@ const meta = preview.meta({
     min: 1,
     max: 50,
     onValueChange: fn(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'Entry of a real quantity, formatted for the user\'s locale with `Intl`, with step buttons and arrow-key stepping. For digits that are not a number (postal codes, card numbers) use TextField with `inputMode="numeric"`; to pick a value by feel, use Slider.',
-      },
-    },
   },
 });
 

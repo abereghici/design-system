@@ -10,8 +10,9 @@ export interface VisuallyHiddenProps extends ComponentProps<"span"> {
 }
 
 /**
- * Hides content from the screen and keeps it for assistive technology. It is absolutely
- * positioned, so give it a positioned ancestor. Never put focusable content in it.
+ * Hides its content from the screen and keeps it in the accessibility tree, for text only assistive
+ * technology needs. To name an icon-only control, use IconButton's `aria-label`; to show content on
+ * focus, use SkipLink; to hide content from everyone, use the `hidden` attribute.
  */
 export function VisuallyHidden({ asChild = false, className, ...props }: VisuallyHiddenProps) {
   const Root = asChild ? Slot : "span";

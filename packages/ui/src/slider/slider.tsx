@@ -110,6 +110,7 @@ function useSlider() {
   return slider;
 }
 
+/** A value or range picked by feel (volume, price). For an exact number, use NumberField. */
 export function Root({
   value,
   defaultValue,

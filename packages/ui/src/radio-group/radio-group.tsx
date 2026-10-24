@@ -36,6 +36,12 @@ export interface RootProps extends Omit<ComponentProps<"fieldset">, "defaultValu
   orientation?: "vertical" | "horizontal";
 }
 
+/**
+ * A native fieldset of same-name radios for one choice among 2–6 options that should all stay
+ * visible; its Label is the legend. Arrow keys move and choose (following the visual direction in
+ * RTL), and every committed change dispatches a bubbling `ab-toggle`. With more options use Select;
+ * for a binary choice, Switch or Checkbox.
+ */
 export function Root({
   value,
   defaultValue = null,

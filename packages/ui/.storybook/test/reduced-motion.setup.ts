@@ -1,6 +1,12 @@
-import { beforeAll, expect } from "vitest";
+import { beforeAll, expect, inject } from "vitest";
 
-// Fails the project if the reduced-motion emulation didn't reach the page.
+declare module "vitest" {
+  export interface ProvidedContext {
+    reducedMotion: boolean;
+  }
+}
+
+// Fails the instance if its reduced-motion emulation didn't reach the page, or leaked into another.
 beforeAll(() => {
-  expect(matchMedia("(prefers-reduced-motion: reduce)").matches).toBe(true);
+  expect(matchMedia("(prefers-reduced-motion: reduce)").matches).toBe(inject("reducedMotion"));
 });

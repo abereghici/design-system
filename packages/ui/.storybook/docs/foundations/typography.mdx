@@ -1,0 +1,52 @@
+import { Meta, Typeset } from "@storybook/addon-docs/blocks";
+import tokens from "@platform/tokens/tokens.json";
+
+import { TokenTable } from "../blocks/token-table.tsx";
+
+<Meta title="Foundations/Typography" />
+
+export const family = (key) => {
+  const styles = tokens.type.groups
+    .filter((group) => group.family === key)
+    .flatMap((group) => group.styles);
+  return {
+    fontFamily: tokens.type.families[key],
+    fontSizes: [...new Set(styles.map((style) => style.fontSize))],
+    fontWeight: styles[0].fontWeight,
+    sampleText: "Stâlpul cerului holds the sky",
+  };
+};
+
+# Typography
+
+Noto Serif sets headings and display statements, Figtree sets everything people read and operate, and code uses the system monospace stack with no webfont. Both webfonts are variable, self-hosted and split into Latin and Latin Extended files, so a page downloads only the scripts it shows.
+
+Set text with a type role: `font: var(--ab-type-body-md)` plus `letter-spacing: var(--ab-type-body-md-letter-spacing)`, because the `font` shorthand can't carry letter spacing. The roles keep size, weight and line height in step.
+
+- Sizes are in `rem`, so text follows the reader's default size.
+- Line heights are unitless.
+- The larger steps are fluid between 360px and 1280px viewports, with a `rem` term in every value (never viewport units alone) and at most 1.14× growth, well inside WCAG 1.4.4.
+
+## Noto Serif
+
+<Typeset {...family("noto-serif")} />
+
+## Figtree
+
+<Typeset {...family("figtree")} />
+
+## System monospace
+
+<Typeset {...family("system-mono")} />
+
+## Roles
+
+<TokenTable
+  tokens={tokens.type.groups.flatMap((group) =>
+    group.styles.map(({ name, fontSize, lineHeight, fontWeight, letterSpacing, usage }) => ({
+      name,
+      value: `${fontSize} / ${lineHeight} · ${fontWeight} · ${letterSpacing ?? "0"}`,
+      usage,
+    })),
+  )}
+/>

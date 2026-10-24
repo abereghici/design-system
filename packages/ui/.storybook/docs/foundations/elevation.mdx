@@ -1,11 +1,42 @@
-import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+import { Meta } from "@storybook/addon-docs/blocks";
+import tokens from "@platform/tokens/tokens.json";
 
-import * as ElevationStories from "./elevation.stories";
+import { TokenTable } from "../blocks/token-table.tsx";
 
-<Meta of={ElevationStories} />
+<Meta title="Foundations/Elevation" />
+
+export const semantic = (family, prefix = "") =>
+  tokens[family].tokens.filter(
+    ({ name }) => name.startsWith(`ab-${prefix}`) && !/-\d+$/v.test(name),
+  );
 
 # Elevation
 
-Generated from the token source (`@platform/tokens/source/*.tokens.json`), so it follows every token change.
+Content in the flow of the page stays flat and separates with space, hairlines and surface steps. Only floating layers are lifted.
 
-<Canvas of={ElevationStories.Levels} sourceState="none" />
+## Elevations
+
+Each Elevation is one recipe: a 1px hairline ring that separates the layer from any background, a 1px top highlight in dark only, and two soft shadows, tinted with Moss in light so they read warm rather than grey.
+
+<TokenTable
+  tokens={semantic("shadow")}
+  preview={(value) => ({ boxShadow: value, borderRadius: "var(--ab-radius-md)" })}
+/>
+
+## Materials
+
+Translucent fills with a backdrop blur, for floating chrome above content such as menus and the command palette. Never use them for content in the flow, or under long text. Under `prefers-reduced-transparency: reduce` every material becomes the solid floating surface.
+
+<TokenTable
+  tokens={[
+    ...semantic("blur", "material-"),
+    ...semantic("saturate", "material-"),
+    ...semantic("opacity", "opacity-disabled"),
+  ]}
+/>
+
+## Layering
+
+The stacking order, lowest to highest. Floating layers that use the top layer (`popover`, `<dialog>`) need none of these.
+
+<TokenTable tokens={semantic("zIndex")} />

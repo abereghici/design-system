@@ -10,10 +10,10 @@ export interface ScrollAreaProps extends ComponentProps<"div"> {
 }
 
 /**
- * A bounded box whose content scrolls inside it with the native scrollbars, fading the block edges
- * while more content remains. It is a tab stop so keyboard users can scroll it; pass
- * `tabIndex={-1}` when its content is itself focusable. For a named region, render a `<section>`
- * with `aria-labelledby` through `asChild`, and only when it is a meaningful section.
+ * A bounded box whose content scrolls inside it with the browser's own scrolling and scrollbars,
+ * and fades its top and bottom edges while there is more to scroll. It is a tab stop, so keyboard
+ * users can scroll it. Use it only for content that must stay inside a region (a wide Table, a long
+ * side-panel list, a terms text); if the page can scroll instead, let it.
  */
 export function ScrollArea({
   asChild = false,

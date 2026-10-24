@@ -1,13 +1,32 @@
-import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+import { IconGallery, IconItem, Meta } from "@storybook/addon-docs/blocks";
 
-import * as IconographyStories from "./iconography.stories";
+<Meta title="Foundations/Iconography" />
 
-<Meta of={IconographyStories} />
+export const icons = Object.entries(
+  import.meta.glob("../../../src/icon/icons/*.tsx", { eager: true }),
+).map(([path, module]) => {
+  const name = path.split("/").at(-1).replace(".tsx", "");
+  const Glyph = Object.values(module)[0];
+  return (
+    <IconItem key={name} name={name}>
+      <Glyph size="lg" />
+    </IconItem>
+  );
+});
 
 # Iconography
 
-Construction rules, the tokens icons are drawn with, and the icon set (`@platform/ui/icons/<name>`).
+A custom set on a 24-unit grid: straight strokes, 45° chamfers and square ends, carved rather than drawn, stroked in `currentColor` so an icon takes the color of the text it sits in.
 
-<Canvas of={IconographyStories.Guidelines} sourceState="none" />
+```tsx
+import { BellIcon } from "@platform/ui/icons/bell";
 
-<Canvas of={IconographyStories.Icons} sourceState="none" />
+<BellIcon size="md" />;
+```
+
+- **Size and stroke go together.** `sm` is 16px at a 2 stroke, `md` 20px and `lg` 24px at 1.75, `xl` 32px at 1.5, so lines look equally heavy at every size.
+- **An icon is decorative by default** and hidden from assistive technology. Name it only when it stands alone and carries meaning (`label`), and prefer a visible text label.
+- **Icon-only controls** keep at least a 24px target (`--ab-size-target-min`); use IconButton, which handles both.
+- **A new icon** is an SVG in `packages/ui/assets/icons/`, turned into its component by `pnpm --filter @platform/ui icons`.
+
+<IconGallery>{icons}</IconGallery>

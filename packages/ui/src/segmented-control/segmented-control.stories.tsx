@@ -10,7 +10,7 @@ import { listen } from "#.storybook/test/listen.ts";
 import { SegmentedControl } from "./index.ts";
 
 const meta = preview.meta({
-  title: "Components/SegmentedControl",
+  title: "Components/Actions/SegmentedControl",
   component: SegmentedControl.Root,
   args: {
     "aria-label": "View",
@@ -23,14 +23,6 @@ const meta = preview.meta({
       </>
     ),
     onValueChange: fn<(value: string, details: SegmentedControl.ChangeEventDetails) => void>(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A native radio group that switches between 2–5 views or modes of the same content in place; one floating indicator glides to the checked item. Arrow keys move and choose (following the visual direction in RTL), and every committed change dispatches a bubbling `ab-toggle`. For peer sections with their own content use Tabs; for a choice in a form, RadioGroup.",
-      },
-    },
   },
 });
 

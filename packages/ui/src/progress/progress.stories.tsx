@@ -7,17 +7,9 @@ import { roRO } from "../provider/locales/ro-RO.ts";
 import { Progress } from "./progress.tsx";
 
 const meta = preview.meta({
-  title: "Components/Progress",
+  title: "Components/Feedback/Progress",
   component: Progress,
   args: { value: 40, label: "Uploading 3 files" },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "How far a task has got, or that it is running when `value` is `null`. The value text is formatted with `Intl.NumberFormat` on the server, in English unless you pass a shipped `locale`. For a short wait inside a control use Spinner or Button's `loading`; for a measurement that isn't progress use Meter.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

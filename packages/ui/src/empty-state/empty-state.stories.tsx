@@ -8,7 +8,7 @@ import preview from "#.storybook/preview.tsx";
 import * as EmptyState from "./empty-state.tsx";
 
 const meta = preview.meta({
-  title: "Components/EmptyState",
+  title: "Components/Feedback/EmptyState",
   component: EmptyState.Root,
   args: {
     children: (
@@ -21,14 +21,6 @@ const meta = preview.meta({
         <Button>New file</Button>
       </>
     ),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Stands in for content that isn't there yet (an empty list, a search with no results), in place of the empty region. The Title says what is missing, the Description why or what to do, and the actions that follow offer the next step. It is not a live region: announce a filter's empty result from your own always-rendered `role=\"status\"`. For a load still running, use Skeleton or Spinner; for an error, an Alert.",
-      },
-    },
   },
 });
 

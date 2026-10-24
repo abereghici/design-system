@@ -6,9 +6,11 @@ const join = (own: string | undefined, className: string | undefined) =>
   className === undefined ? own : `${own} ${className}`;
 
 /**
- * A static data table on the native `<table>`. Name it with `Caption`, `aria-labelledby` or
- * `aria-label`. Never change the `display` of its parts: some browsers then drop the table
- * semantics. Put a wide table inside a ScrollArea.
+ * A static data table on the native `<table>`, for rows and columns the user reads and compares.
+ * Compose `Caption`, `Header`, `Body`, `Row`, `ColumnHeader`, `RowHeader` and `Cell`; cells are not
+ * focusable, and a Link or Button inside one is its own tab stop. Put a wide table inside a
+ * ScrollArea. For a short list of labelled values use a description list; for a grid moved through
+ * with arrow keys, a grid widget.
  */
 export function Root({ className, ...props }: ComponentProps<"table">) {
   return <table {...props} className={join(styles["root"], className)} />;

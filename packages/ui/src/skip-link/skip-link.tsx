@@ -15,7 +15,10 @@ export interface SkipLinkProps extends Omit<ComponentProps<"a">, "href"> {
   labels?: Partial<Labels["skipLink"]>;
 }
 
-/** A link to the main content, hidden until it has focus. Render it first in the page layout. */
+/**
+ * The first element of a page layout: a link to the main content, hidden until it has focus. Give
+ * the target `<main>` the matching `id` and `tabIndex={-1}`. For any other navigation, use a Link.
+ */
 export function SkipLink({ labels, children, className, ...props }: SkipLinkProps) {
   return (
     <a

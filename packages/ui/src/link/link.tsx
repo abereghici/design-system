@@ -13,7 +13,11 @@ export type LinkProps = ComponentProps<"a"> &
       }
   );
 
-/** Navigates to another page or a place on this page. To trigger an action, use a Button. */
+/**
+ * A native `<a href>` for navigation, always underlined, inheriting the surrounding type. Wrap a
+ * router link with `asChild`. To trigger an action, use a Button; to jump past repeated navigation,
+ * use a SkipLink.
+ */
 export function Link({ asChild = false, className, ...props }: LinkProps) {
   const Root = asChild ? Slot : "a";
   return (

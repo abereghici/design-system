@@ -36,7 +36,7 @@ const groups = (
 );
 
 const meta = preview.meta({
-  title: "Components/Sidebar",
+  title: "Components/Navigation/Sidebar",
   component: Sidebar.Root,
   args: { "aria-label": "Workspace", children: groups },
   decorators: [
@@ -46,14 +46,6 @@ const meta = preview.meta({
       </div>
     ),
   ],
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "The app's vertical navigation: a named landmark of links to its sections, optionally in labelled groups, placed in a column the app's layout owns (width, scrolling, stacking under 760 px). The link to the page on screen carries `aria-current=\"page\"`, a fill and the indicator bar. For a few top-level destinations use a Navbar; for the path to this page, Breadcrumbs.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

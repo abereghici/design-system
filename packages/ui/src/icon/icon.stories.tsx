@@ -5,17 +5,9 @@ import preview from "#.storybook/preview.tsx";
 import { Icon } from "./icon.tsx";
 
 const meta = preview.meta({
-  title: "Components/Icon",
+  title: "Components/Images and icons/Icon",
   component: Icon,
   args: { children: <path d="M5 12h14" /> },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A glyph on the 24-unit icon grid, stroked in `currentColor`. The generated icons (`@platform/ui/icons/<name>`) render through it; pass your own `<path>` children for a custom glyph. For the brand mark, use Logo.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

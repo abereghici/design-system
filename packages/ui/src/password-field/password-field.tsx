@@ -120,7 +120,10 @@ function Control({
   );
 }
 
-/** A TextField for secrets, with a toggle that shows the password so users can check it. */
+/**
+ * A TextField for secrets, with a toggle that shows the password as plain text so users can check
+ * what they typed. Use it for sign-in, sign-up and password-change forms.
+ */
 export function PasswordField({
   label,
   description,

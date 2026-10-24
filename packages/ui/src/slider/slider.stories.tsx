@@ -26,7 +26,7 @@ const price = (
 );
 
 const meta = preview.meta({
-  title: "Components/Slider",
+  title: "Components/Forms/Slider",
   component: Slider.Root,
   args: {
     defaultValue: 40,
@@ -35,14 +35,6 @@ const meta = preview.meta({
     onValueCommitted: fn<(value: number | number[], details: Slider.CommitEventDetails) => void>(),
   },
   decorators: [(Story) => <div style={{ inlineSize: 320 }}>{Story()}</div>],
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Picks a value, or a range with two thumbs, where the feel matters more than the exact number: volume, zoom, a price range. Each thumb holds a native range input, so focus, the slider role, the value text and form submission are the platform's; Left and Right follow the visual direction. For an exact number use NumberField; to show a value nobody sets, Meter or Progress.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

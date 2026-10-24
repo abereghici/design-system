@@ -33,6 +33,12 @@ export type RootProps = Omit<ComponentProps<"div">, "defaultValue"> & {
   onValueChange?: (value: string, details: ChangeEventDetails) => void;
 } & ({ value: string; defaultValue?: never } | { defaultValue: string; value?: never });
 
+/**
+ * Peer sections that share one context, one panel at a time. Arrow keys move and activate
+ * (following the visual direction in RTL), and every committed change dispatches a bubbling
+ * `ab-toggle`. For modes of the same content use SegmentedControl; to move between pages, Navbar or
+ * Sidebar; for sections that open independently, Accordion.
+ */
 export function Root({ value, defaultValue, onValueChange, className, ...props }: RootProps) {
   const id = useId();
   const [uncontrolled, setUncontrolled] = useState(defaultValue ?? "");

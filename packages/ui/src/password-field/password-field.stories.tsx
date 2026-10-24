@@ -28,21 +28,13 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/PasswordField",
+  title: "Components/Forms/PasswordField",
   component: PasswordField,
   args: {
     label: "Password",
     name: "password",
     onVisibleChange: fn(),
     onValueChange: fn(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A TextField for secrets, with a toggle that shows the password as plain text so users can check what they typed. Use it for sign-in, sign-up and password-change forms.",
-      },
-    },
   },
 });
 

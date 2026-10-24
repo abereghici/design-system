@@ -9,7 +9,7 @@ const tokens = "Semantic Versioning. Renames are major; additions are minor.";
 const browsers = "The latest Chromium and Safari.";
 
 const meta = preview.meta({
-  title: "Components/Accordion",
+  title: "Components/Containers/Accordion",
   component: Accordion.Root,
   args: {
     defaultValue: ["tokens"],
@@ -26,14 +26,6 @@ const meta = preview.meta({
       </>
     ),
     onValueChange: fn<(value: string[], details: Accordion.ChangeEventDetails) => void>(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A stack of native `<details>` sections for secondary content; by default opening one closes the other (`<details name>`), and `multiple` lets any combination stay open. Enter and Space toggle, find-in-page opens a section with a match, and every press dispatches a bubbling `ab-toggle`. Never hide a primary task inside one; for peer views of the same place use Tabs.",
-      },
-    },
   },
 });
 

@@ -41,7 +41,7 @@ const rows = (
 );
 
 const meta = preview.meta({
-  title: "Components/Table",
+  title: "Components/Containers/Table",
   component: Table.Root,
   args: {
     children: (
@@ -50,14 +50,6 @@ const meta = preview.meta({
         {rows}
       </>
     ),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A static data table on the native `<table>`, for rows and columns the user reads and compares. Compose `Caption`, `Header`, `Body`, `Row`, `ColumnHeader`, `RowHeader` and `Cell`; cells are not focusable, and a Link or Button inside one is its own tab stop. Put a wide table inside a ScrollArea. For a short list of labelled values use a description list; for a grid moved through with arrow keys, a grid widget.",
-      },
-    },
   },
 });
 

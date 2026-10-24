@@ -7,19 +7,11 @@ import { Checkbox } from "./checkbox.tsx";
 import type { CheckboxChangeEventDetails } from "./checkbox.tsx";
 
 const meta = preview.meta({
-  title: "Components/Checkbox",
+  title: "Components/Forms/Checkbox",
   component: Checkbox,
   args: {
     children: "Email me updates",
     onCheckedChange: fn<(checked: boolean, details: CheckboxChangeEventDetails) => void>(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A native checkbox inside its label, for an on/off choice in a form that is submitted, or one item of a set where any number may be chosen. Every committed change dispatches a bubbling `ab-toggle`. For a setting that applies immediately, use Switch; for one choice among several, RadioGroup.",
-      },
-    },
   },
 });
 

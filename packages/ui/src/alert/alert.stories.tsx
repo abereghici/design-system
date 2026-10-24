@@ -22,17 +22,9 @@ const message = (close: Alert.CloseProps = {}) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Alert",
+  title: "Components/Feedback/Alert",
   component: Alert.Root,
   args: { variant: "danger", children: message() },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'An inline message about the page or a task that stays relevant until the situation changes. It has no role by default; pass `role="alert"` only for an urgent message inserted after load. `Alert.Close` calls your `onClick`, where the app removes the Alert and moves focus to what the message was about. For brief confirmation use a Toast; for a decision that must interrupt, an AlertDialog.',
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});
