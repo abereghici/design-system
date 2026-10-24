@@ -1,0 +1,11 @@
+@import "@platform/tokens/components/input.css";
+
+@layer ab.components {
+  .textarea {
+    block-size: auto;
+    padding-block: var(--ab-input-padding-block);
+    line-height: var(--ab-type-body-xs-line-height);
+    field-sizing: content;
+    resize: vertical;
+  }
+}

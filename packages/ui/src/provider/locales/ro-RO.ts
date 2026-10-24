@@ -18,5 +18,6 @@ export const roRO: Locale = {
       arrowRight: "Săgeată dreapta",
     },
     skipLink: { label: "Salt la conținutul principal" },
+    passwordField: { show: "Afișează parola" },
   },
 };

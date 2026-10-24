@@ -22,6 +22,7 @@ const budgets: Readonly<Record<string, string>> = {
   logo: "470 B",
   meter: "1.1 kB",
   progress: "1.1 kB",
+  "password-field": "6.5 kB",
   provider: "5.4 kB",
   select: "4.1 kB",
   separator: "700 B",
@@ -31,6 +32,7 @@ const budgets: Readonly<Record<string, string>> = {
   "status-dot": "490 B",
   tag: "600 B",
   text: "520 B",
+  "text-area": "2.7 kB",
   "text-field": "2.7 kB",
   "visually-hidden": "1.75 kB",
 };

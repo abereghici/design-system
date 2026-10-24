@@ -21,6 +21,7 @@ export interface Labels {
     readonly arrowRight: string;
   };
   readonly skipLink: { readonly label: string };
+  readonly passwordField: { readonly show: string };
 }
 
 export interface Locale {
