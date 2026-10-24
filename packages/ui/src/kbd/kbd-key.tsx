@@ -12,7 +12,7 @@ export interface KbdFace {
 }
 
 const subscribe = () => () => {};
-const platform = () =>
+export const platform = () =>
   /^(?:Mac|iPhone|iPad)/v.test(navigator.platform) ? ("apple" as const) : ("other" as const);
 const serverPlatform = () => "other" as const;
 

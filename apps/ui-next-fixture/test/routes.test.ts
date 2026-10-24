@@ -118,6 +118,13 @@ describe("each component route ships only its own CSS, tokens and client code", 
   });
 });
 
+describe("toast() and the Toaster", () => {
+  test("a route that only calls toast() loads none of the Toaster's code", () => {
+    expect(route("toast").js).not.toContain("Alt+T");
+    expect(route("toaster").js).toContain("Alt+T");
+  });
+});
+
 describe("per-component JS", () => {
   test("only the Button route loads Button's client code", () => {
     expect(uiClientModules(button)).toEqual(["button/button.tsx", "provider/locale.tsx"]);

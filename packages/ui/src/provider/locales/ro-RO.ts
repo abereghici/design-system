@@ -25,5 +25,16 @@ export const roRO: Locale = {
     popover: { close: "Închide" },
     dialog: { close: "Închide" },
     sheet: { close: "Închide" },
+    toast: { close: "Închide" },
+    toaster: { region: "Notificări" },
+    dateField: {
+      dayPlaceholder: "zz",
+      monthPlaceholder: "ll",
+      yearPlaceholder: "aaaa",
+      empty: "Necompletat",
+      incomplete: "Introduceți o dată completă",
+      unavailable: "Această dată nu este disponibilă",
+    },
+    calendar: { previousMonth: "Luna anterioară", nextMonth: "Luna următoare" },
   },
 };

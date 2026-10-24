@@ -263,6 +263,9 @@ catalogs:
     svgo:
       specifier: 4.1.0
       version: 4.1.0
+    temporal-polyfill:
+      specifier: 1.0.6
+      version: 1.0.6
     turbo:
       specifier: 2.11.10
       version: 2.11.10
@@ -421,6 +424,9 @@ importers:
       '@platform/tokens':
         specifier: workspace:*
         version: link:../tokens
+      temporal-polyfill:
+        specifier: 'catalog:'
+        version: 1.0.6
     devDependencies:
       '@platform/oxlint-config':
         specifier: workspace:*
@@ -3469,6 +3475,15 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
+  temporal-polyfill@1.0.6:
+    resolution: {integrity: sha512-tYyEry1HLGUDbm2356W3iYD0OZdo7rlP7h98Zr/EnjqLZQwTAfcBDUvJnJbfA15v/vQad57hJZScG5O0W2oKEA==}
+
+  temporal-spec@1.0.1:
+    resolution: {integrity: sha512-wxVoanmDeavXie1vu2JaQ3WIc3JZnWAOYFBsJyATaVsXsycKYUflGsyBmrRSnoCpZJpwPyr38VpgSUlQ8CbFxg==}
+
+  temporal-utils@1.0.3:
+    resolution: {integrity: sha512-9jbTSX3HvkOWvDpNpFzwX/d1mkCrgQgwLmVTOEiuocZGKHsrQJtttGZFmybJ2zYP5zCSZuU5ZyeS8+eOEPABiQ==}
+
   thingies@2.6.1:
     resolution: {integrity: sha512-cV/CMGTK3M4MlnJ/0At6ismOw/A0EEniDNScajjz/Br3c1sqE72YD01rGpPTKwd27wAxI5Pr+6+0w8yofzFRYw==}
     engines: {node: '>=10.18'}
@@ -6421,6 +6436,15 @@ snapshots:
       csso: 5.0.5
       picocolors: 1.1.1
       sax: 1.6.1
+
+  temporal-polyfill@1.0.6:
+    dependencies:
+      temporal-spec: 1.0.1
+      temporal-utils: 1.0.3
+
+  temporal-spec@1.0.1: {}
+
+  temporal-utils@1.0.3: {}
 
   thingies@2.6.1(tslib@2.8.1):
     dependencies:

@@ -156,4 +156,23 @@ export const componentRoutes = [
     client: ["context-menu/context-menu-root.tsx", "menu/menu.tsx"],
     html: 'role="menu"',
   },
+  { name: "toast", tokens: [], client: [], html: "Copy link" },
+  {
+    name: "toaster",
+    tokens: ["toast", "kbd", "icon"],
+    client: ["toaster/toaster.tsx"],
+    html: "Copy link",
+  },
+  {
+    name: "date-field",
+    tokens: ["input", "date-field"],
+    client: ["date-field/date-field.tsx"],
+    html: 'role="spinbutton"',
+  },
+  {
+    name: "calendar",
+    tokens: ["calendar", "icon", "icon-button", "spinner"],
+    client: ["calendar/calendar.tsx"],
+    html: 'role="grid"',
+  },
 ];

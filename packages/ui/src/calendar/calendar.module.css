@@ -1,0 +1,100 @@
+@import "@platform/tokens/components/calendar.css";
+
+@layer ab.components {
+  .root {
+    display: grid;
+    gap: var(--ab-space-stack-sm);
+    inline-size: max-content;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Rotating the chevron composes with Icon's RTL mirror, so Previous points back in both directions. */
+  .previous {
+    rotate: 180deg;
+  }
+
+  .heading {
+    margin: 0;
+    color: var(--ab-color-text-default);
+    font: var(--ab-calendar-header-font);
+  }
+
+  .grid {
+    border-collapse: collapse;
+  }
+
+  .weekday {
+    block-size: var(--ab-calendar-cell-size);
+    padding: 0;
+    color: var(--ab-color-text-subtle);
+    font: var(--ab-type-label-sm);
+  }
+
+  .day,
+  .outside {
+    box-sizing: border-box;
+    inline-size: var(--ab-calendar-cell-size);
+    block-size: var(--ab-calendar-cell-size);
+    padding: 0;
+  }
+
+  .day {
+    border-radius: var(--ab-calendar-cell-border-radius);
+    color: var(--ab-calendar-cell-text-color);
+    font: var(--ab-calendar-cell-font);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .day:focus-visible {
+    outline-offset: 0;
+  }
+
+  .day[aria-current="date"] {
+    box-shadow: inset 0 0 0 var(--ab-border-width-default) var(--ab-calendar-today-border-color);
+  }
+
+  .day[aria-selected="true"] {
+    background-color: var(--ab-calendar-cell-background-color-selected);
+    box-shadow: none;
+    color: var(--ab-calendar-cell-text-color-selected);
+  }
+
+  .day[aria-disabled="true"] {
+    color: var(--ab-calendar-cell-text-color-disabled);
+    cursor: not-allowed;
+  }
+
+  @media (hover: hover) {
+    .day:not([aria-disabled="true"], [aria-selected="true"]):hover {
+      background-color: var(--ab-calendar-cell-background-color-hovered);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .day[aria-current="date"] {
+      box-shadow: none;
+      outline: var(--ab-border-width-default) solid CanvasText;
+      outline-offset: calc(var(--ab-border-width-default) * -1);
+    }
+
+    .day[aria-selected="true"] {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .day[aria-disabled="true"] {
+      color: GrayText;
+    }
+  }
+}

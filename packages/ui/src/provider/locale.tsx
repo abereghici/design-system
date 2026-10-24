@@ -28,6 +28,17 @@ export interface Labels {
   readonly popover: { readonly close: string };
   readonly dialog: { readonly close: string };
   readonly sheet: { readonly close: string };
+  readonly toast: { readonly close: string };
+  readonly toaster: { readonly region: string };
+  readonly dateField: {
+    readonly dayPlaceholder: string;
+    readonly monthPlaceholder: string;
+    readonly yearPlaceholder: string;
+    readonly empty: string;
+    readonly incomplete: string;
+    readonly unavailable: string;
+  };
+  readonly calendar: { readonly previousMonth: string; readonly nextMonth: string };
 }
 
 export interface Locale {

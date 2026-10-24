@@ -25,5 +25,16 @@ export const enUS: Locale = {
     popover: { close: "Close" },
     dialog: { close: "Close" },
     sheet: { close: "Close" },
+    toast: { close: "Dismiss" },
+    toaster: { region: "Notifications" },
+    dateField: {
+      dayPlaceholder: "dd",
+      monthPlaceholder: "mm",
+      yearPlaceholder: "yyyy",
+      empty: "Empty",
+      incomplete: "Enter a complete date",
+      unavailable: "This date is not available",
+    },
+    calendar: { previousMonth: "Previous month", nextMonth: "Next month" },
   },
 };
