@@ -11,9 +11,7 @@ const meta = preview.meta({ title: "Foundations/Motion", tags: ["!autodocs"] });
 export const Tokens = meta.story({ render: () => <Motion /> });
 
 Tokens.test("plots every easing", async ({ canvas }) => {
-  await expect(
-    canvas.getAllByRole("img", { name: /curve$/v }).map((plot) => plot.getAttribute("aria-label")),
-  ).toEqual(
+  await expect(canvas.getAllByTitle(/curve$/v).map((plot) => plot.textContent)).toEqual(
     [
       "enter",
       "exit",
