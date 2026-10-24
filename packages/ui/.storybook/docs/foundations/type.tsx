@@ -2,7 +2,7 @@ import { cssVar, Rules, Section, TokenTable } from "./docs.tsx";
 import { describe, tokens, type Token } from "./tokens.ts";
 import styles from "./type.module.css";
 
-export const SPECIMEN_TEXT = "Stâlpul cerului ține cerul: 1 234,50 lei";
+const SPECIMEN_TEXT = "Stâlpul cerului ține cerul: 1 234,50 lei";
 
 const roles = () => tokens("semantic", /^type-[a-z]+-[a-z0-9]+$/v);
 

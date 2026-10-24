@@ -2,6 +2,7 @@ import preview from "#.storybook/preview.tsx";
 import { expect, within } from "storybook/test";
 
 import { ContrastMatrix, FocusAndTarget } from "./accessibility.tsx";
+import { cellText } from "./table.ts";
 
 const meta = preview.meta({
   title: "Foundations/Accessibility",
@@ -19,9 +20,11 @@ Contrast.test("lists every pair of the AA matrix in both Themes", async ({ canva
 
 Contrast.test("shows the computed ratio of each pair", async ({ canvas }) => {
   const cell = (theme: string, row: string, column: string) =>
-    within(canvas.getByRole("region", { name: `${theme} Theme` }))
-      .getByRole("row", { name: new RegExp(`^${row} `, "v") })
-      .querySelector(`[data-background="${column}"]`)?.textContent;
+    cellText(
+      canvas.getByRole("region", { name: `${theme} Theme` }),
+      new RegExp(`^${row} `, "v"),
+      column,
+    );
   await expect([
     cell("Light", "text-subtlest", "background-neutral-subtle-pressed"),
     cell("Light", "border-warning", "background-neutral-subtle-pressed"),
@@ -32,15 +35,6 @@ Contrast.test("shows the computed ratio of each pair", async ({ canvas }) => {
 
 Contrast.test("finds no pair below its minimum", async ({ canvas }) => {
   await expect(canvas.queryAllByRole("cell", { name: /below/v })).toEqual([]);
-});
-
-Contrast.test("paints each table in its own Theme", async ({ canvas }) => {
-  const background = (theme: string) =>
-    getComputedStyle(canvas.getByRole("region", { name: `${theme} Theme` })).backgroundColor;
-  await expect([background("Light"), background("Dark")]).toEqual([
-    "rgb(255, 255, 255)",
-    "rgb(18, 21, 15)",
-  ]);
 });
 
 export const Focus = meta.story({ render: () => <FocusAndTarget /> });

@@ -33,17 +33,3 @@ Tokens.test("shows the reduced-motion value of each movement", async ({ canvas }
     "scale-97(prefers-reduced-motion: reduce): scale-100",
   );
 });
-
-Tokens.test("ends each curve at its final value", async ({ canvas }) => {
-  const end = (name: string) =>
-    canvas
-      .getByRole("img", { name: `${name} curve` })
-      .querySelector("path:last-of-type")
-      ?.getAttribute("d")
-      ?.split(" ")
-      .at(-1);
-  await expect([end("motion-easing-enter"), end("motion-easing-spring")]).toEqual([
-    "L100.00,20.00",
-    "L100.00,20.15",
-  ]);
-});

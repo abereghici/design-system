@@ -15,14 +15,6 @@ Sizes.test("draws the Logo at the brand book's sizes", async ({ canvas }) => {
   await expect(sizes).toEqual([16, 24, 32, 48]);
 });
 
-Sizes.test("draws the brand-color Logos on imagery grounds", async ({ canvas }) => {
-  const color = (name: string) => getComputedStyle(canvas.getByRole("img", { name })).color;
-  await expect([
-    color("Bereghici Logo, brand moss"),
-    color("Bereghici Logo, brand lichen"),
-  ]).toEqual(["rgb(38, 51, 22)", "rgb(240, 239, 208)"]);
-});
-
 export const Guidelines = meta.story({ render: () => <LogoGuidelines /> });
 
 Guidelines.test("lists the Logo's size, stroke and colors", async ({ canvasElement }) => {

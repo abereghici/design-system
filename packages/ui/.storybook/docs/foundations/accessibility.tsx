@@ -35,7 +35,6 @@ const labelOn = (background: string): string =>
 function Cell({ foreground, background, minimum, theme, text }: PairProps & { text: boolean }) {
   return (
     <td
-      data-background={background}
       className={styles["cell"]}
       style={{
         backgroundColor: cssVar(`color-${background}`),

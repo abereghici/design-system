@@ -39,7 +39,7 @@ A story file has three readers: the docs page, the Vitest run (every story is a 
 ## Proofs
 
 - A proof is `Story.test("present-tense fact", fn)`, never an exported story. A state Controls can reach (disabled, a label, a Theme, a locale) is a test with annotations: `Default.test("…", { args: { disabled: true } }, fn)`. `globals`, `render` and `beforeEach` work the same way. Axe still runs on it.
-- Assert what users or AT perceive: role and name, focus, ARIA state, callbacks through `args.onX`, `ab-*` events through `listen()` from `#.storybook/test/listen.ts`, and computed colours against literals resolved from the token source.
+- Assert only what users or AT perceive (role and name, focus, keyboard, ARIA state, visible text) and the public API (callbacks through `args.onX`, `details`, `ab-*` events through `listen()` from `#.storybook/test/listen.ts`). Query by role and name; act with `userEvent`. Visuals belong to the screenshots: never assert computed styles against token literals, class names, DOM shape beyond the accessibility tree, or internal state. One exception is the override contract: unlayered app CSS with its own literal beats the component.
 - Prove each proof can fail: break the code once and watch it go red.
 
 ## Tags

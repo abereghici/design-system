@@ -53,14 +53,6 @@ Default.test(
   },
 );
 
-Default.test("paints the primary Variant from its component tokens", async ({ canvas }) => {
-  const style = getComputedStyle(canvas.getByRole("button", { name: "Save changes" }));
-  await expect([style.backgroundColor, style.color]).toEqual([
-    "rgb(38, 51, 22)",
-    "rgb(255, 255, 255)",
-  ]);
-});
-
 Default.test("yields to unlayered app CSS", async ({ canvas }) => {
   const appStyles = document.createElement("style");
   appStyles.textContent = "button { background-color: rgb(1, 2, 3); }";
@@ -84,18 +76,3 @@ Default.test("takes its component tokens from unlayered app CSS", async ({ canva
     appStyles.remove();
   }
 });
-
-Default.test(
-  "follows the Theme and direction set by toolbar globals",
-  { globals: { theme: "dark", dir: "rtl" } },
-  async ({ canvas }) => {
-    const button = canvas.getByRole("button", { name: "Save changes" });
-    const style = getComputedStyle(button);
-    await expect(document.documentElement).toHaveAttribute("data-theme", "dark");
-    await expect(button.matches(":dir(rtl)")).toBe(true);
-    await expect([style.backgroundColor, style.color]).toEqual([
-      "rgb(236, 234, 201)",
-      "rgb(38, 51, 22)",
-    ]);
-  },
-);
