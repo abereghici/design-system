@@ -111,6 +111,12 @@ describe("each component route ships only its own CSS, tokens and client code", 
       html: 'aria-label="Dismiss"',
     },
     { name: "empty-state", tokens: ["empty-state", "icon"], client: [], html: "No files yet" },
+    {
+      name: "select",
+      tokens: ["input", "select", "icon"],
+      client: ["select/select-root.tsx"],
+      html: 'label="Asia Pacific"',
+    },
   ])("$name", ({ name, tokens, client, html }) => {
     const r = route(name);
     expect(r.html).toContain(html);
