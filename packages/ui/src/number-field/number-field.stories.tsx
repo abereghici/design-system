@@ -25,6 +25,7 @@ const inAForm: Decorator = (Story) => (
   >
     <Story />
     <button type="submit">Order</button>
+    <button type="reset">Reset</button>
   </form>
 );
 
@@ -206,5 +207,20 @@ Default.test(
       "true",
     );
     await expect(args.onValueChange).not.toHaveBeenCalled();
+  },
+);
+
+Default.test(
+  "restores the default value on form reset",
+  { decorators: [inAForm] },
+  async ({ canvas, userEvent }) => {
+    const input = canvas.getByRole("textbox", { name: "Seats" });
+    await userEvent.clear(input);
+    await userEvent.type(input, "12{Enter}");
+    await expect(input).toHaveValue("12");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(input).toHaveValue("5");
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Order" });
+    await expect(new FormData(form).getAll("seats")).toEqual(["5"]);
   },
 );

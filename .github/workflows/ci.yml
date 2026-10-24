@@ -18,5 +18,6 @@ jobs:
           require-lockfile: true
       - run: pnpm --filter @platform/ui exec playwright install --with-deps --only-shell
       - run: pnpm lint
+      - run: pnpm format
       - run: pnpm check-types
       - run: pnpm test

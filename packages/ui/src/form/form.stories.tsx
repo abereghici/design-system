@@ -3,6 +3,7 @@ import { expect, fn } from "storybook/test";
 import preview from "#.storybook/preview.tsx";
 
 import { Button } from "../button/button.tsx";
+import { DateField } from "../date-field/date-field.tsx";
 import { TextField } from "../text-field/text-field.tsx";
 
 import { Form } from "./form.tsx";
@@ -72,5 +73,24 @@ Default.test(
     await userEvent.type(name, "Ana");
     await expect(name).not.toHaveAttribute("aria-invalid");
     await expect(canvas.queryByText("Names can't contain digits.")).toBeNull();
+  },
+);
+
+Default.test(
+  "clears a DateField server error once a segment is edited",
+  {
+    args: {
+      errors: { birthDate: "You must be 18 or older." },
+      children: <DateField label="Date of birth" name="birthDate" />,
+    },
+  },
+  async ({ canvas, userEvent }) => {
+    const month = canvas.getByRole("spinbutton", { name: "month" });
+    await expect(month).toBeInvalid();
+    await expect(canvas.getByText("You must be 18 or older.")).toBeVisible();
+    await userEvent.click(month);
+    await userEvent.keyboard("1");
+    await expect(month).not.toBeInvalid();
+    await expect(canvas.queryByText("You must be 18 or older.")).toBeNull();
   },
 );

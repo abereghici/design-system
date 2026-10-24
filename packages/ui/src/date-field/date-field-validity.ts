@@ -1,7 +1,7 @@
 import { use, useEffect, useEffectEvent, useRef } from "react";
 
 import type { Temporal } from "../date/date.ts";
-import { FormErrorsContext } from "../form/form.tsx";
+import { FieldContext } from "../field/field-control.ts";
 
 import type { Segments } from "./segments.ts";
 
@@ -11,7 +11,6 @@ export interface Validity {
 }
 
 interface Options {
-  readonly name: string | undefined;
   readonly validate?:
     | ((value: string, formData: FormData) => string | null | undefined)
     | undefined;
@@ -33,10 +32,11 @@ const hiddenInput = (id: string | undefined) => {
 
 /** Writes the value and custom validity to the hidden date input and reports its validity. */
 export function useValidity(
-  { validate, name, isDateUnavailable }: Options,
+  { validate, isDateUnavailable }: Options,
   { id, incomplete, unavailable, onValidity, reset }: Wiring,
 ) {
-  const server = use(FormErrorsContext)?.[name ?? ""];
+  const field = use(FieldContext);
+  const server = field?.serverError;
   const touched = useRef(false);
   const apply = (segments: Segments, date: Temporal.PlainDate | null) => {
     const node = hiddenInput(id);
@@ -68,5 +68,5 @@ export function useValidity(
   const submit = () => {
     hiddenInput(id)?.form?.requestSubmit();
   };
-  return { apply, report, submit };
+  return { apply, report, submit, clearServerError: field?.clearServerError };
 }

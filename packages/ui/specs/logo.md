@@ -50,7 +50,7 @@ No interactive states. Inside a link the link owns hover and focus.
 ## Behaviour
 
 - Server Component, no `'use client'` (spec #1 user story 4).
-- **Minimum size:** `logo-min-size` (16 px, `size-mark-min`). The CSS clamps to it, so a smaller width set by the app has no effect.
+- **Minimum size:** `logo-min-size` (16 px, `size-logo-min`). The CSS clamps to it, so a smaller width set by the app has no effect.
 - **Clear space:** half the Logo's width on every side (brand book: "Clear space: half the mark's width"). The Logo adds no margin itself, because a margin would fight the app's layout; keeping the space free is a usage rule, shown in the docs page with an overlay (design decision).
 - **Colour:** one colour (brand book). On light grounds the brand-moss file passes on `brand-lichen` (11.46:1) and `brand-sage` (12.19:1); the brand-lichen file passes on `brand-moss` (11.46:1) and the dark page (15.76:1) (source `assets/marks/README.md`).
 - The stroke width is fixed in grid units, so it scales with the Logo; it never thins (unlike Icon), because the mark is drawn once at one weight (source: "stroke 3").
@@ -83,7 +83,7 @@ Never mirrored. Mozilla's list of what not to mirror includes "product logos" (h
 
 ## Component tokens
 
-All exist (ported from the source `mark-*`, renamed): `logo-color` (→ `color-icon-accent`), `logo-min-size` (→ `size-mark-min`), `logo-stroke-width` (→ `stroke-width-2xl`, 3).
+All exist (ported from the source `mark-*`, renamed): `logo-color` (→ `color-icon-accent`), `logo-min-size` (→ `size-logo-min`), `logo-stroke-width` (→ `stroke-width-2xl`, 3).
 
 No new tokens.
 

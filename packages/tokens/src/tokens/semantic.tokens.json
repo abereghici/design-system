@@ -256,7 +256,7 @@
     },
     "color-backdrop": {
       "$type": "color",
-      "$description": "The dimming layer behind a modal (Dialog, Sheet, CommandPalette).",
+      "$description": "The dimming layer behind a modal (Dialog, Sheet, Command).",
       "$value": "{primitive.palette-night-950-a64}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -1534,7 +1534,7 @@
       "$type": "dimension",
       "$value": "{primitive.dimension-6}"
     },
-    "size-mark-min": {
+    "size-logo-min": {
       "$type": "dimension",
       "$value": "{primitive.dimension-16}"
     },

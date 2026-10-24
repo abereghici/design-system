@@ -113,7 +113,7 @@ The keyboard is the engine's. MDN: "The keyboard mechanisms described below are 
 | Home / End      | "Moves visual focus to the first [last] option."                                                                      |
 | Tab             | APG: "Note: the native <select> element closes the listbox but does not move focus on tab." Native behaviour is kept. |
 
-The component adds no key handling except to block a disabled Select. Story tests assert only what is consistent across engines (focus, name, value after a pointer choice). Verified 2026-10-24 (Chromium 156, Firefox 157, WebKit 27.2, macOS): typing on a closed select does not change its value, and story `userEvent` dispatches untrusted events with no user activation, so no picker opens in a story test (`showPicker()` throws `NotAllowedError`); the open picker is covered by the manual screen-reader pass, not by story tests. The docs page records each engine's map.
+The component adds no key handling except to block a disabled Select. Story tests assert only what is consistent across engines (focus, name, value after a pointer choice). Verified 2026-10-24 (Chromium 156, Firefox 157, WebKit 27.2, macOS): typing on a closed select does not change its value, and story `userEvent` dispatches untrusted events with no user activation, so no picker opens from it (`showPicker()` throws `NotAllowedError`). Proofs that open the picker use Playwright's trusted input (`trusted()`) and run only where `appearance: base-select` draws an in-page picker; the OS picker of other engines stays in the manual pass. The docs page records each engine's map.
 
 ## Accessibility
 

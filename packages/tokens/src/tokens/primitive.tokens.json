@@ -1003,7 +1003,7 @@
     },
     "dimension-16": {
       "$type": "dimension",
-      "$description": "Feeds `ab-space-inset-lg`, `ab-space-stack-md`, `ab-size-icon-sm`, `ab-size-mark-min`, `ab-radius-xl`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$description": "Feeds `ab-space-inset-lg`, `ab-space-stack-md`, `ab-size-icon-sm`, `ab-size-logo-min`, `ab-radius-xl`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "value": 16,
         "unit": "px"

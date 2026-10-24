@@ -6,7 +6,7 @@ import { useEffect } from "storybook/preview-api";
 
 import { Provider } from "@platform/ui/provider";
 
-import { DocsPage } from "./docs-page.tsx";
+import { DocsPage, mdx } from "./docs-page.tsx";
 import { applyGlobals, directions, DocsContainer, themes } from "./globals.tsx";
 import { rememberStoryCanvas } from "./screenshots/canvas.ts";
 
@@ -28,6 +28,7 @@ export default definePreview({
       container: DocsContainer,
       source: { type: "dynamic" },
       toc: true,
+      ...mdx,
     },
     options: {
       storySort: {

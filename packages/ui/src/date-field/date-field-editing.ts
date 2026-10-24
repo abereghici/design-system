@@ -31,6 +31,7 @@ interface Editing {
   readonly validity: {
     readonly apply: (segments: Segments, date: Temporal.PlainDate | null) => void;
     readonly report: (commit?: boolean) => void;
+    readonly clearServerError: (() => void) | undefined;
   };
   readonly blocked: boolean;
   readonly formats: Formats;
@@ -168,6 +169,7 @@ export function useSegmentEditing({ group, date, validity, blocked, formats, sub
     const result = date.edit(next, text, reason, event);
     if (result === null) return false;
     edited.current = true;
+    validity.clearServerError?.();
     validity.apply(result.segments, result.date);
     validity.report();
     return true;

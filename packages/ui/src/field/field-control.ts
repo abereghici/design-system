@@ -17,6 +17,8 @@ export interface FieldState {
   readonly describedBy: string | undefined;
   readonly message: string | undefined;
   readonly validity: ValidityState | undefined;
+  readonly serverError: string | undefined;
+  readonly clearServerError: () => void;
   readonly setControlId: (id: string) => void;
   readonly describe: (described: boolean) => void;
 }
