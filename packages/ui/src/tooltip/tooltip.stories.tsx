@@ -7,7 +7,7 @@ import { PinIcon } from "@platform/ui/icons/pin";
 import { Kbd } from "@platform/ui/kbd";
 
 import preview from "#.storybook/preview.tsx";
-import { trusted } from "#.storybook/test/trusted.ts";
+import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Tooltip from "./tooltip.tsx";
 
@@ -33,9 +33,7 @@ const meta = preview.meta({
       </>
     ),
   },
-  beforeEach: async () => {
-    await (await trusted()).hover(document.body, { position: { x: 0, y: 0 } });
-  },
+  beforeEach: parkPointer,
   decorators: [
     (Story) => (
       <div style={{ paddingBlock: "3rem", display: "flex", gap: "0.5rem" }}>

@@ -28,8 +28,6 @@
     --enter-duration: var(--ab-context-menu-enter-duration);
     --exit-duration: var(--ab-context-menu-exit-duration);
     --easing: var(--ab-context-menu-easing);
-    --item-text-color-disabled: var(--ab-context-menu-item-text-color-disabled);
-    --item-icon-color-disabled: var(--ab-context-menu-item-icon-color-disabled);
 
     inset-block-start: anchor(self-end);
     inset-inline-start: anchor(self-start);
@@ -37,7 +35,7 @@
       flip-block,
       flip-inline,
       flip-block flip-inline;
-    margin-block-start: var(--ab-context-menu-offset);
+    margin: var(--ab-context-menu-offset);
   }
 
   .anchor {

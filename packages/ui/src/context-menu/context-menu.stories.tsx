@@ -7,7 +7,7 @@ import { Kbd } from "@platform/ui/kbd";
 
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
-import { trusted } from "#.storybook/test/trusted.ts";
+import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as ContextMenu from "./context-menu.tsx";
 
@@ -42,9 +42,7 @@ const meta = preview.meta({
       </>
     ),
   },
-  beforeEach: async () => {
-    await (await trusted()).hover(document.body, { position: { x: 0, y: 0 } });
-  },
+  beforeEach: parkPointer,
   decorators: [
     (Story) => (
       <div style={{ paddingBlockEnd: "14rem" }}>

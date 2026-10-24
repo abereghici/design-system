@@ -16,8 +16,7 @@
     flex-direction: column;
     gap: var(--ab-popover-gap);
     max-inline-size: var(--ab-popover-max-width);
-    margin: 0;
-    margin-block-start: var(--ab-popover-offset);
+    margin: var(--ab-popover-offset);
     padding: var(--ab-popover-padding);
     border: 0;
     border-radius: var(--ab-popover-border-radius);
@@ -60,15 +59,13 @@
     --origin-block: bottom;
 
     inset-block: auto anchor(self-start);
-    margin-block: 0 var(--ab-popover-offset);
   }
 
   .content:where([data-align="center"]) {
     --origin-inline: center;
 
     inset-inline-start: auto;
-    left: anchor(center);
-    translate: -50% 0;
+    justify-self: anchor-center;
   }
 
   .content:where([data-align="end"]) {

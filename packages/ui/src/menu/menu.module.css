@@ -9,7 +9,6 @@
     inset: auto;
     box-sizing: border-box;
     min-inline-size: var(--min-width);
-    margin: 0;
     padding: var(--padding);
     border: 0;
     border-radius: var(--border-radius);
@@ -79,13 +78,16 @@
     outline: none;
   }
 
-  .item:focus {
-    background-color: var(--item-background-color-hovered);
-  }
-
   .item:focus-visible {
+    background-color: var(--item-background-color-hovered);
     outline: var(--ab-focus-ring-width) solid var(--ab-color-border-focused);
     outline-offset: calc(var(--ab-focus-ring-width) * -1);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .item:not([aria-disabled="true"]):hover {
+      background-color: var(--item-background-color-hovered);
+    }
   }
 
   .item:where([data-variant="danger"]) {
@@ -95,9 +97,7 @@
   }
 
   .item:where([aria-disabled="true"]) {
-    --ab-icon-ink: var(--item-icon-color-disabled);
-
-    color: var(--item-text-color-disabled);
+    opacity: var(--ab-opacity-disabled);
   }
 
   .indicator {
@@ -109,10 +109,6 @@
     color: var(--item-icon-color-selected);
 
     --ab-icon-ink: currentColor;
-  }
-
-  .item:where([aria-disabled="true"]) .indicator {
-    color: var(--item-icon-color-disabled);
   }
 
   .diamond {
@@ -162,7 +158,7 @@
       border: var(--ab-border-width-default) solid CanvasText;
     }
 
-    .item:focus {
+    .item:is(:focus-visible, :hover) {
       background-color: Highlight;
       color: HighlightText;
     }
