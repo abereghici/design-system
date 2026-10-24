@@ -3,15 +3,9 @@ import type { Dictionary, TransformedToken } from "style-dictionary/types";
 import { THEMES, valueIn } from "./theme.ts";
 import { tierOf } from "./tiers.ts";
 
-/**
- * The `$extensions` key that marks a component token as animated: `"com.bereghici.animated": true`.
- * An unregistered custom property can't interpolate, so an animated token is registered with
- * `@property`, and with `inherits: false` so that changing it never restyles a whole subtree
- * (docs/research/performance.md, "The cost of a large `:root`").
- */
-export const ANIMATED_EXTENSION = "com.bereghici.animated";
+// An unregistered custom property can't interpolate, so animated tokens get @property, with inherits: false so a change never restyles a whole subtree.
+const ANIMATED_EXTENSION = "com.bereghici.animated";
 
-/** The `syntax` descriptor for each `$type` that can be registered. */
 const SYNTAX: Readonly<Record<string, string>> = {
   color: "<color>",
   dimension: "<length>",
@@ -19,7 +13,7 @@ const SYNTAX: Readonly<Record<string, string>> = {
   number: "<number>",
 };
 
-export const isAnimated = (token: TransformedToken): boolean => {
+const isAnimated = (token: TransformedToken): boolean => {
   const extensions: unknown = token.original["$extensions"];
   return (
     typeof extensions === "object" &&
@@ -28,10 +22,8 @@ export const isAnimated = (token: TransformedToken): boolean => {
   );
 };
 
-/** `initial-value` must be computationally independent: no `em`/`rem`, `var()` or functions. */
 const INDEPENDENT = /^(?:-?[\d.]+(?:px|ms|s)?|#[0-9a-f]{6}|rgba\([\d., ]+\))$/iv;
 
-/** Why an animated token can't be registered with `@property` (empty when it can). */
 export const checkAnimated = (token: TransformedToken, dictionary: Dictionary): string[] => {
   if (!isAnimated(token)) return [];
   const label = `--${token.name}`;
@@ -56,7 +48,6 @@ export const checkAnimated = (token: TransformedToken, dictionary: Dictionary): 
       ];
 };
 
-/** The `@property` rules for the animated tokens, ahead of the layer. */
 export const propertyRules = (
   tokens: readonly TransformedToken[],
   dictionary: Dictionary,

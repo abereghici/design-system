@@ -2,4 +2,4 @@
 
 The Bereghici design system began life as a claude.ai Design System artifact, but from now on `packages/tokens` and `packages/ui` own every token, component and guideline, and the artifact is republished from them with `/design-sync` (code → artifact only; a synced artifact is read-only). Keeping two editable copies would drift, and only the repo can enforce the tier rules, contrast checks and tests. Brand-book or component changes made in the artifact are therefore lost on the next sync: make them in the repo.
 
-**Mechanism (2026-10-24, ticket #14).** The decision stands; the republish no longer runs Claude Code's `/design-sync` command, which uploads only to the standalone claude.ai/design site (closing 2026-12-14) and cannot target an artifact (spike #3). `packages/design-sync` builds the artifact's `project/` tree from the repo and a maintainer publishes it with the Artifact tool, keeping `"editing": "code"` so the page stays read-only. The step keeps the name "design-sync"; its README has the procedure.
+**Mirror parked (2026-10-24).** The artifact mirror is parked until `/design-sync` can target artifacts.

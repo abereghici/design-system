@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
     "check-types": "turbo run check-types",
     "size": "turbo run size",
     "test": "turbo run test size",

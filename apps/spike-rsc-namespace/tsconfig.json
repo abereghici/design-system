@@ -1,8 +1,0 @@
-{
-  "extends": "@platform/typescript-config/react.json",
-  "compilerOptions": {
-    "types": ["node"],
-    "plugins": [{ "name": "next" }]
-  },
-  "include": ["next-env.d.ts", "src", "e2e", "*.ts", ".next/types/**/*.ts"]
-}

@@ -1,6 +1,6 @@
 # Floating layers on the platform: popover, invoker commands and anchor positioning in three engines
 
-Researched 2026-10-24 (spike #4). Proof: `apps/spike-floating/` (a throwaway spike, not part of the design system), run with `pnpm --filter @platform/spike-floating test`.
+Researched 2026-10-24 (spike #4). Proof: `apps/spike-floating/`, a throwaway spike deleted in R1 (2026-10-24); it remains in the repository history at commit `b7cb122`. Its last run that day (`vitest run`, Vitest 5.0.5 browser mode, Playwright 1.64.1) passed 51 of 51 tests in 3 files across Chromium, Firefox and WebKit: invoker commands, `popover=auto` Escape and focus return, light dismiss, anchor positioning with `position-try-fallbacks: flip-block`, implicit anchoring from a `commandfor` invoker, `dir` in the top layer, the `anchor()` recipe, and `@starting-style` entry and exit motion.
 
 Sources:
 

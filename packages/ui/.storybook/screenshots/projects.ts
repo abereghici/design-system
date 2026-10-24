@@ -45,15 +45,14 @@ const screenshotProject = (variant: ScreenshotVariant): TestProjectInlineConfigu
   return {
     plugins: [
       storybookTest({
-        configDir: new URL("..", import.meta.url).pathname,
         tags: { include: ["screenshot"], skip: ["test-fn"] },
         initialGlobals: variant.initialGlobals ?? {},
       }),
     ],
     test: {
       name: `screenshot:${variant.name}`,
-      setupFiles: [new URL("setup.ts", import.meta.url).pathname],
-      provide: { screenshotVariant: variant, "storybook/test-provided": { a11y: false } },
+      setupFiles: ["./.storybook/screenshots/setup.ts"],
+      provide: { screenshotVariant: variant },
       browser: {
         enabled: true,
         headless: true,

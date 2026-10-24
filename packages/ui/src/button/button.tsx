@@ -6,7 +6,6 @@ import { dispatchFeedback } from "../events/events.ts";
 import styles from "./button.module.css";
 
 export interface ButtonProps extends ComponentProps<"button"> {
-  /** The visual treatment. */
   variant?: "primary";
   /**
    * Renders `aria-disabled="true"`: the button stays focusable and announced, and activation is
@@ -16,11 +15,6 @@ export interface ButtonProps extends ComponentProps<"button"> {
   disabled?: boolean;
 }
 
-/**
- * A native `<button type="button">` for an action. `disabled` keeps it focusable and announced
- * (`aria-disabled`) while blocking activation, and every press dispatches a bubbling `ab-press`
- * event after `onClick`.
- */
 export function Button({
   variant = "primary",
   disabled = false,
@@ -31,7 +25,7 @@ export function Button({
 }: ButtonProps) {
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     if (disabled) {
-      // Stops the default action too (form submission or reset).
+      // preventDefault also stops a submit or reset button from acting on its form.
       event.preventDefault();
       return;
     }

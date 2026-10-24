@@ -2,6 +2,10 @@ name: Update screenshots
 
 on: workflow_dispatch
 
+concurrency:
+  group: update-screenshots@${{ github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   update-screenshots:
     if: github.ref_name != github.event.repository.default_branch
