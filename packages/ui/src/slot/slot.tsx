@@ -1,21 +1,29 @@
 import { cloneElement, isValidElement } from "react";
-import type { HTMLAttributes, Ref, RefCallback } from "react";
+import type { ButtonHTMLAttributes, HTMLAttributes, Ref, RefCallback } from "react";
 
-type Props = HTMLAttributes<HTMLElement> & { readonly ref?: Ref<HTMLElement> | undefined };
+// Invoker commands are Baseline but not yet in @types/react.
+declare module "react" {
+  interface ButtonHTMLAttributes<T> {
+    command?: string | undefined;
+    commandfor?: string | undefined;
+  }
+}
+
+type Props = HTMLAttributes<HTMLElement> &
+  Pick<ButtonHTMLAttributes<HTMLElement>, "command" | "commandfor"> & {
+    readonly ref?: Ref<HTMLElement> | undefined;
+  };
 
 type Handler = (...args: unknown[]) => unknown;
 
 const isHandler = (value: unknown): value is Handler => typeof value === "function";
 
-function assign(
-  ref: Ref<HTMLElement> | undefined,
-  node: HTMLElement | null,
-): ReturnType<RefCallback<HTMLElement>> {
+function assign<T>(ref: Ref<T> | undefined, node: T | null): ReturnType<RefCallback<T>> {
   if (typeof ref === "function") return ref(node);
   if (ref) ref.current = node;
 }
 
-export function composeRefs(...refs: (Ref<HTMLElement> | undefined)[]): RefCallback<HTMLElement> {
+export function composeRefs<T>(...refs: (Ref<T> | undefined)[]): RefCallback<T> {
   return (node) => {
     const cleanups = refs.map((ref) => assign(ref, node));
     return () => {

@@ -25,6 +25,9 @@ export interface Labels {
   readonly numberField: { readonly increment: string; readonly decrement: string };
   readonly breadcrumbs: { readonly root: string };
   readonly pagination: { readonly root: string; readonly previous: string; readonly next: string };
+  readonly popover: { readonly close: string };
+  readonly dialog: { readonly close: string };
+  readonly sheet: { readonly close: string };
   readonly toast: { readonly close: string };
   readonly toaster: { readonly region: string };
   readonly dateField: {

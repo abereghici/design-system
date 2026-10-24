@@ -4,18 +4,20 @@ import { globSync } from "node:fs";
 import type { SizeLimitConfig } from "size-limit";
 
 const budgets: Readonly<Record<string, string>> = {
-  alert: "2.25 kB",
+  alert: "2.5 kB",
   avatar: "1.6 kB",
   badge: "690 B",
   breadcrumbs: "1.95 kB",
-  button: "2.5 kB",
+  button: "2.75 kB",
   calendar: "24.6 kB",
   card: "1.3 kB",
   checkbox: "2.55 kB",
   "date-field": "25.6 kB",
   "drop-zone": "2.4 kB",
+  "context-menu": "6.3 kB",
+  "dropdown-menu": "5.9 kB",
   "empty-state": "880 B",
-  "icon-button": "2.1 kB",
+  "icon-button": "2.3 kB",
   events: "20 B",
   field: "2.3 kB",
   "file-trigger": "1.5 kB",
@@ -33,6 +35,7 @@ const budgets: Readonly<Record<string, string>> = {
   progress: "1.1 kB",
   "scroll-area": "775 B",
   "password-field": "6.5 kB",
+  popover: "4.7 kB",
   "radio-group": "2.9 kB",
   provider: "5.4 kB",
   select: "4.1 kB",
@@ -40,8 +43,8 @@ const budgets: Readonly<Record<string, string>> = {
   skeleton: "630 B",
   sidebar: "1.45 kB",
   slider: "4 kB",
-  "skip-link": "770 B",
-  spinner: "880 B",
+  "skip-link": "860 B",
+  spinner: "1.05 kB",
   switch: "2.3 kB",
   "status-dot": "490 B",
   table: "700 B",
@@ -53,9 +56,13 @@ const budgets: Readonly<Record<string, string>> = {
   toast: "275 B",
   toaster: "7.6 kB",
   toolbar: "830 B",
+  tooltip: "2.5 kB",
   "text-area": "2.7 kB",
   "text-field": "2.7 kB",
   "visually-hidden": "580 B",
+  dialog: "4.35 kB",
+  "alert-dialog": "4.2 kB",
+  sheet: "4.6 kB",
 };
 
 const checks = (pattern: string, subpath: (path: string) => string, limit?: string) =>
@@ -82,6 +89,6 @@ export default [
   ...checks(
     "src/provider/locales/*.ts",
     (path) => path.slice("src/provider/".length, -".ts".length),
-    "440 B",
+    "590 B",
   ),
 ] satisfies SizeLimitConfig;

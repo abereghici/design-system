@@ -6,6 +6,8 @@ import { describe, expect, test } from "vitest";
 
 import component from "@platform/tokens/source/component.tokens.json";
 
+import { componentRoutes } from "./component-routes.ts";
+
 const next = join(import.meta.dirname, "..", ".next");
 const componentTokens = Object.keys(component.component).map((name) => `--ab-${name}:`);
 // Longest name first, so `--ab-icon-button-*` belongs to icon-button, not icon.
@@ -104,143 +106,6 @@ describe("per-component CSS", () => {
   });
 });
 
-const componentRoutes = [
-  { name: "badge", tokens: ["badge"], client: [], html: "12.345" },
-  { name: "tag", tokens: ["tag"], client: [], html: "Live" },
-  { name: "status-dot", tokens: ["status-dot"], client: [], html: "Operational" },
-  {
-    name: "avatar",
-    tokens: ["avatar", "icon"],
-    client: ["avatar/avatar-image.tsx"],
-    html: 'alt="Ana Popescu"',
-  },
-  { name: "card", tokens: ["card"], client: [], html: "<h1" },
-  { name: "separator", tokens: ["separator"], client: [], html: "<hr" },
-  {
-    name: "alert",
-    tokens: ["alert", "icon", "icon-button"],
-    client: ["alert/alert-close.tsx"],
-    html: 'aria-label="Dismiss"',
-  },
-  { name: "empty-state", tokens: ["empty-state", "icon"], client: [], html: "No files yet" },
-  {
-    name: "checkbox",
-    tokens: ["checkbox"],
-    client: ["checkbox/checkbox.tsx"],
-    html: "Email me updates",
-  },
-  { name: "switch", tokens: ["switch"], client: ["switch/switch.tsx"], html: 'role="switch"' },
-  {
-    name: "radio-group",
-    tokens: ["fieldset", "radio"],
-    client: ["radio-group/radio-group.tsx"],
-    html: 'role="radiogroup"',
-  },
-  { name: "slider", tokens: ["slider"], client: ["slider/slider.tsx"], html: 'type="range"' },
-  {
-    name: "select",
-    tokens: ["input", "select", "icon"],
-    client: ["select/select-root.tsx"],
-    html: 'label="Asia Pacific"',
-  },
-  { name: "form", tokens: [], client: ["form/form.tsx"], html: "<form" },
-  { name: "fieldset", tokens: ["fieldset"], client: [], html: "<legend" },
-  {
-    name: "field",
-    tokens: ["input"],
-    client: ["field/field.tsx"],
-    html: "Letters and digits.",
-  },
-  {
-    name: "text-field",
-    tokens: ["input"],
-    client: ["text-field/text-field.tsx"],
-    html: 'dir="auto"',
-  },
-  {
-    name: "text-area",
-    tokens: ["input"],
-    client: ["text-area/text-area.tsx"],
-    html: "<textarea",
-  },
-  {
-    name: "password-field",
-    tokens: ["input", "icon", "icon-button", "spinner"],
-    client: ["password-field/password-field.tsx"],
-    html: 'aria-label="Show password"',
-  },
-  {
-    name: "file-trigger",
-    tokens: ["button", "spinner"],
-    client: ["button/button.tsx", "file-trigger/file-trigger.tsx"],
-    html: 'type="file"',
-  },
-  {
-    name: "drop-zone",
-    tokens: ["drop-zone", "button", "spinner"],
-    client: ["button/button.tsx", "drop-zone/drop-zone.tsx", "file-trigger/file-trigger.tsx"],
-    html: "Drop CSV files here",
-  },
-  {
-    name: "number-field",
-    tokens: ["input", "icon", "icon-button", "spinner"],
-    client: ["number-field/number-field.tsx"],
-    html: 'aria-label="Increase"',
-  },
-  { name: "tabs", tokens: ["tabs"], client: ["tabs/tabs.tsx"], html: 'role="tablist"' },
-  {
-    name: "segmented-control",
-    tokens: ["segmented-control"],
-    client: ["segmented-control/segmented-control.tsx"],
-    html: 'aria-label="View"',
-  },
-  {
-    name: "accordion",
-    tokens: ["accordion", "icon"],
-    client: ["accordion/accordion.tsx"],
-    html: "<summary",
-  },
-  {
-    name: "breadcrumbs",
-    tokens: ["breadcrumbs", "icon", "link"],
-    client: [],
-    html: '<nav aria-label="Breadcrumb">',
-  },
-  {
-    name: "pagination",
-    tokens: ["pagination", "icon", "icon-button", "spinner"],
-    client: ["icon-button/icon-button.tsx"],
-    html: 'href="/pagination?page=3">3</a>',
-  },
-  {
-    name: "toolbar",
-    tokens: ["toolbar", "icon", "icon-button", "spinner"],
-    client: ["icon-button/icon-button.tsx", "toolbar/toolbar.tsx"],
-    html: 'role="toolbar"',
-  },
-  { name: "navbar", tokens: ["navbar"], client: [], html: '<nav aria-label="Main">' },
-  { name: "sidebar", tokens: ["sidebar"], client: [], html: 'role="group" aria-labelledby=' },
-  { name: "toast", tokens: [], client: [], html: "Copy link" },
-  {
-    name: "date-field",
-    tokens: ["input", "date-field"],
-    client: ["date-field/date-field.tsx"],
-    html: 'role="spinbutton"',
-  },
-  {
-    name: "calendar",
-    tokens: ["calendar", "icon", "icon-button", "spinner"],
-    client: ["calendar/calendar.tsx"],
-    html: 'role="grid"',
-  },
-  {
-    name: "toaster",
-    tokens: ["toast", "kbd", "icon"],
-    client: ["toaster/toaster.tsx"],
-    html: "Copy link",
-  },
-];
-
 describe("each component route ships only its own CSS, tokens and client code", () => {
   test.each(componentRoutes)("$name", ({ name, tokens, client, html }) => {
     const r = route(name);
@@ -253,12 +118,14 @@ describe("each component route ships only its own CSS, tokens and client code", 
   });
 });
 
-describe("per-component JS", () => {
+describe("toast() and the Toaster", () => {
   test("a route that only calls toast() loads none of the Toaster's code", () => {
     expect(route("toast").js).not.toContain("Alt+T");
     expect(route("toaster").js).toContain("Alt+T");
   });
+});
 
+describe("per-component JS", () => {
   test("only the Button route loads Button's client code", () => {
     expect(uiClientModules(button)).toEqual(["button/button.tsx", "provider/locale.tsx"]);
     expect(button.js).toContain("ab-press");
