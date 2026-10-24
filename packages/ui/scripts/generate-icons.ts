@@ -1,7 +1,9 @@
 import { readdir, readFile } from "node:fs/promises";
 
 import { format } from "oxfmt";
-import { optimize, type XastElement, type XastRoot } from "svgo";
+import { optimize } from "svgo";
+
+import type { XastElement, XastRoot } from "svgo";
 
 import formatConfig from "../../../oxfmt.config.ts";
 
@@ -84,7 +86,8 @@ async function iconModule(name: string) {
     return `<path ${jsx.join(" ")} />`;
   });
   const component = componentName(name);
-  return `import { Icon, type IconProps } from "../icon.tsx";
+  return `import { Icon } from "../icon.tsx";
+import type { IconProps } from "../icon.tsx";
 
 export function ${component}(props: IconProps) {
   return <Icon {...props}>${children.join("")}</Icon>;

@@ -267,10 +267,10 @@ Source keys:
 - **PW-docker**: playwright.dev/docs/docker
 
 ```ts
+import babel from "@rolldown/plugin-babel"; // [PR]
+import react, { reactCompilerPreset } from "@vitejs/plugin-react"; // [PR]
 // packages/ui/vite.config.ts — shared by Storybook (merged automatically) and Vitest (mergeConfig)
 import { defineConfig } from "vite"; // [PR]
-import react, { reactCompilerPreset } from "@vitejs/plugin-react"; // [PR]
-import babel from "@rolldown/plugin-babel"; // [PR]
 export default defineConfig({
   plugins: [react(), babel({ presets: [reactCompilerPreset()] })], // [PR] Babel React Compiler; Storybook merges this [SB-vite]
 });
@@ -288,10 +288,10 @@ export default defineMain({
 ```
 
 ```ts
-// packages/ui/.storybook/preview.ts
-import { definePreview } from "@storybook/react-vite"; // [SB-csfnext]
 import addonA11y from "@storybook/addon-a11y"; // [SB-a11y]
 import addonDocs from "@storybook/addon-docs"; // [SB-autodocs]
+// packages/ui/.storybook/preview.ts
+import { definePreview } from "@storybook/react-vite"; // [SB-csfnext]
 export default definePreview({
   addons: [addonDocs(), addonA11y()], // [SB-csfnext] [SB-a11y] [SB-autodocs]
   tags: ["autodocs"], // [SB-autodocs]
@@ -303,9 +303,11 @@ export default definePreview({
 // packages/ui/vitest.config.ts
 import path from "node:path"; // [SB-vitest]
 import { fileURLToPath } from "node:url"; // [SB-vitest]
-import { defineConfig, mergeConfig } from "vitest/config"; // [SB-vitest]
-import { playwright } from "@vitest/browser-playwright"; // [SB-vitest] [V-pw]
+
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin"; // [SB-vitest]
+import { playwright } from "@vitest/browser-playwright"; // [SB-vitest] [V-pw]
+import { defineConfig, mergeConfig } from "vitest/config"; // [SB-vitest]
+
 import viteConfig from "./vite.config.ts"; // [SB-vitest]
 
 const dirname = path.dirname(fileURLToPath(import.meta.url)); // [SB-vitest]

@@ -1,5 +1,6 @@
 import { cssVar, Rules, Section, TokenTable } from "./docs.tsx";
-import { describe, tokens, type Token } from "./tokens.ts";
+import { describe, tokens } from "./tokens.ts";
+import type { Token } from "./tokens.ts";
 import styles from "./type.module.css";
 
 const SPECIMEN_TEXT = "Stâlpul cerului ține cerul: 1 234,50 lei";

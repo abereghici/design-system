@@ -7,9 +7,10 @@ import {
   contrastRatio,
 } from "@platform/tokens/contrast-matrix";
 
-import styles from "./accessibility.module.css";
 import { cssVar, Rules, Section, THEME_IDS, TokenTable } from "./docs.tsx";
-import { hexIn, token, tokens, type ThemeId, type Token } from "./tokens.ts";
+import { hexIn, token, tokens } from "./tokens.ts";
+import type { ThemeId, Token } from "./tokens.ts";
+import styles from "./accessibility.module.css";
 
 const color = (name: string) => token("semantic", `color-${name}`);
 

@@ -1,5 +1,6 @@
-import preview from "#.storybook/preview.tsx";
 import { expect, within } from "storybook/test";
+
+import preview from "#.storybook/preview.tsx";
 
 import { ColorRoles, Palettes } from "./color.tsx";
 import { cellText, tokenRow } from "./table.ts";

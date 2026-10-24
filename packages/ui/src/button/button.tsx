@@ -3,6 +3,7 @@
 import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
+
 import styles from "./button.module.css";
 
 export interface ButtonProps extends ComponentProps<"button"> {

@@ -1,7 +1,9 @@
 import StyleDictionary from "style-dictionary";
+
 import type { DesignTokens } from "style-dictionary/types";
 
-import { toArtifactTokens, type ArtifactTokens } from "./artifact-format.ts";
+import { toArtifactTokens } from "./artifact-format.ts";
+import type { ArtifactTokens } from "./artifact-format.ts";
 import { checkTokens, TokenCheckError } from "./checks.ts";
 import { stylesheets } from "./css-format.ts";
 

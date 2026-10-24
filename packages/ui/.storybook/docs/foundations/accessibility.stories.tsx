@@ -1,5 +1,6 @@
-import preview from "#.storybook/preview.tsx";
 import { expect, within } from "storybook/test";
+
+import preview from "#.storybook/preview.tsx";
 
 import { ContrastMatrix, FocusAndTarget } from "./accessibility.tsx";
 import { cellText } from "./table.ts";

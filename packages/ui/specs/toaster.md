@@ -3,9 +3,9 @@
 The region that shows toasts: a "Notifications" landmark at the bottom centre of the viewport that stacks, times, announces and positions every toast the app adds with `toast()`. Mount it once, near the root, inside the Provider. It stays above Floating layers, including an open modal Dialog, Sheet, AlertDialog or Command dialog, and stays usable there. What one toast looks like and does is in `toast.md`.
 
 ```tsx
+import { roRO } from "@platform/ui/locales/ro-RO";
 import { Provider } from "@platform/ui/provider";
 import { Toaster } from "@platform/ui/toaster";
-import { roRO } from "@platform/ui/locales/ro-RO";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

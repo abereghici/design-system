@@ -1,6 +1,7 @@
 import { Rules, Section, TokenTable } from "./docs.tsx";
+import { resolve, tokens } from "./tokens.ts";
+import type { Token } from "./tokens.ts";
 import styles from "./motion.module.css";
-import { resolve, type Token, tokens } from "./tokens.ts";
 
 type Point = readonly [x: number, y: number];
 

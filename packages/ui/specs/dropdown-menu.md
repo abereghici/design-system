@@ -5,10 +5,10 @@ A list of actions or options revealed from a button: "Duplicate", "Rename…", "
 ```tsx
 import { DropdownMenu } from "@platform/ui/dropdown-menu";
 import { IconButton } from "@platform/ui/icon-button";
-import { Kbd } from "@platform/ui/kbd";
 import { CopyIcon } from "@platform/ui/icons/copy";
 import { MoreIcon } from "@platform/ui/icons/more";
 import { TrashIcon } from "@platform/ui/icons/trash";
+import { Kbd } from "@platform/ui/kbd";
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger asChild>
