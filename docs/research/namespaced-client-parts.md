@@ -38,7 +38,7 @@ Measured from the installed packages and the build output:
 
 ## What was built
 
-The app is `apps/spike-rsc-namespace`, a throwaway marked SPIKE in its `package.json` and in every source file. It has one stateful compound component, a disclosure with `Root`, `Trigger` and `Content` that share React context. It is consumed four ways, each by a Server Component page:
+The app was `apps/spike-rsc-namespace` (deleted in R1, see Throwaway code), a throwaway marked SPIKE in its `package.json` and in every source file. It has one stateful compound component, a disclosure with `Root`, `Trigger` and `Content` that share React context. It is consumed four ways, each by a Server Component page:
 
 | Route                     | Shape                                                                                                                                                                                                         | Result                         |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
@@ -120,4 +120,4 @@ The tests confirm both readings empirically.
 
 ## Throwaway code
 
-`apps/spike-rsc-namespace` exists only to back this note and can be deleted once a real app consumes `@platform/ui`. Its `package.json` description and every source file are marked SPIKE. Its `test` script (`next build && playwright test`) runs under `pnpm test`, so the result stays proven until it is removed.
+`apps/spike-rsc-namespace` was deleted in R1 (2026-10-24), once `apps/ui-next-fixture` consumed `@platform/ui`. It remains in the repository history at commit `b7cb122`. Its last run that day (Next 16.4.3, Playwright 1.64.1 Chromium, `next build && playwright test` against both `next dev` and `next start`) passed 10 of 10: `namespace-import` and `namespace-reexport` rendered dotted client Parts that hydrated and shared state, `namespace-reexport` mixed a `server-only` Part with client Parts, and `object-in-client` and `static-props-in-client` answered 500 with "Element type is invalid: expected a string … but got: undefined".
