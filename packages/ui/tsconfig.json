@@ -6,7 +6,7 @@
   },
   "include": [
     "src",
-    ".storybook",
+    ".storybook/**/*",
     ".size-limit.ts",
     "vite.config.ts",
     "vitest.config.ts",

@@ -3,8 +3,6 @@ import { expect, test } from "vitest";
 import { buildTokens, TokenCheckError } from "./build.ts";
 import { setMember, srgb, themed, validTokens } from "./test-fixtures.ts";
 
-// Tier rules (R1–R3)
-
 test("a component token that skips the semantic tier fails the build", async () => {
   const tokens = validTokens();
   tokens.component["card-background-color"] = {
@@ -77,8 +75,6 @@ test("an Elevation may compose the ring and shadow colors, but no other semantic
   );
 });
 
-// Naming grammar and Dictionary (R7)
-
 test("a semantic color name with a word outside the Dictionary fails the build", async () => {
   const tokens = validTokens();
   tokens.semantic["color-text-shiny"] = themed("palette-sage-950", "palette-night-50");
@@ -141,8 +137,6 @@ test("stroke-width-2xl, used by the Logo, is a valid semantic name", async () =>
   await expect(buildTokens({ tokens })).resolves.toBeDefined();
 });
 
-// Theme completeness
-
 test("a themed color without a dark Theme value fails the build", async () => {
   const tokens = validTokens();
   tokens.semantic["color-text-subtle"] = {
@@ -169,8 +163,6 @@ test("a component token cannot carry its own Theme values", async () => {
     "--ab-card-background-color: only semantic colors are themed; component tokens follow the semantic tokens they reference",
   );
 });
-
-// AA contrast (WCAG 2.2 SC 1.4.3 and 1.4.11)
 
 test("a contrast pair whose token is missing fails the build", async () => {
   const tokens = validTokens();
@@ -202,7 +194,6 @@ test("a text pair below 4.5:1 in one Theme fails the build", async () => {
 
 test("contrast follows the WCAG 2.2 formula and a near miss still fails", async () => {
   const tokens = validTokens();
-  // #777777 on white is 4.48:1, the classic just-below-AA grey.
   tokens.primitive["palette-sage-400"] = { $type: "color", $value: srgb("#777777") };
   tokens.semantic["color-text-subtle"] = themed("palette-sage-400", "palette-night-50");
   await expect(buildTokens({ tokens })).rejects.toThrow(
@@ -218,7 +209,6 @@ test("a non-text pair below 3:1 fails the build", async () => {
   );
 });
 
-// Alert (ticket #15) puts its description and status icon on the status subtle fills.
 test("a status icon is checked at 3:1 against its subtle fill", async () => {
   const tokens = validTokens();
   tokens.semantic["color-background-danger-subtle"] = themed("palette-clay-50", "palette-clay-300");

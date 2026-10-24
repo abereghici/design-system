@@ -4,9 +4,6 @@ import { buildTokens, SOURCE_GLOB } from "./build.ts";
 import type { Themed } from "./artifact-format.ts";
 import { validTokens } from "./test-fixtures.ts";
 
-// Expected values are the source artifact's own tokens.json (project/tokens.json, version
-// 1792790791-a4da) unless a comment says otherwise.
-
 const artifactOf = async () => (await buildTokens({ tokens: validTokens() })).artifact;
 
 const namesIn = (family: { readonly tokens: readonly { readonly name: string }[] }) =>
@@ -22,7 +19,6 @@ test("lists the light Theme first", async () => {
 
 test("themed colors carry a literal per Theme, light first, with $description as usage", async () => {
   const artifact = await artifactOf();
-  // Source: color.css, :root sage-0 #ffffff and [data-theme="dark"] night-950 #12150f.
   expect(JSON.stringify(artifact)).toContain(
     '{"name":"ab-color-surface-default","value":{"light":"#ffffff","dark":"#12150f"},"usage":"The page.',
   );
@@ -33,7 +29,6 @@ test("fixed and translucent colors are a single literal", async () => {
   expect(artifact.color.tokens).toContainEqual(
     expect.objectContaining({ name: "ab-color-brand-moss", value: "#263316" }),
   );
-  // Source: palette.css, --ab-palette-night-950-a64: rgb(18 21 15 / .64).
   expect(artifact.color.tokens).toContainEqual(
     expect.objectContaining({ name: "ab-color-backdrop", value: "rgba(18, 21, 15, 0.64)" }),
   );
@@ -108,7 +103,6 @@ test("type families and fonts come from the font tokens and the shipped files", 
   expect(Object.keys(artifact.type.families)).toEqual(["noto-serif", "figtree", "system-mono"]);
   expect(artifact.type.families["noto-serif"]).toBe("'Noto Serif', Georgia, serif");
   expect(artifact.type.families["system-mono"]).toMatch(/monospace$/v);
-  // packages/tokens/src/fonts.ts: Noto Serif is rebuilt with its full wght axis (#10).
   expect(artifact.type.fonts).toContainEqual({
     family: "Noto Serif",
     file: "fonts/NotoSerif-latin.woff2",
@@ -118,15 +112,12 @@ test("type families and fonts come from the font tokens and the shipped files", 
   expect(artifact.type.fonts).toHaveLength(4);
 });
 
-/** A themed value's literals, light first. */
 const literals = (value: Themed | undefined): string[] =>
   value === undefined ? [] : typeof value === "string" ? [value] : [value.light, value.dark];
 
 test("Elevations are box-shadow literals per Theme", async () => {
   const artifact = await artifactOf();
   const raised = artifact.shadow.tokens.find(({ name }) => name === "ab-elevation-raised");
-  // Source: elevation.css, the ring, the highlight and one ambient layer; the highlight is
-  // transparent in light and the ring tinted with moss.
   const [light, dark] = literals(raised?.value);
   expect(light).toMatch(/^0px 0px 0px 1px rgba\(17, 25, 6, 0\.1\), inset 0px 1px/v);
   expect(dark).toContain("inset 0px 1px 0px 0px");
@@ -135,8 +126,6 @@ test("Elevations are box-shadow literals per Theme", async () => {
 
 test("every family keeps within the artifact's caps", async () => {
   const { artifact } = await buildTokens({ source: [SOURCE_GLOB] });
-  // format.md: "≤600 colors … ≤12 type groups / ≤80 styles, ≤60 tokens per other family";
-  // other keys ≤12; shadow ≤400 characters.
   const { name: _name, version: _version, color, type, ...others } = artifact;
   expect(color.tokens.length).toBeLessThanOrEqual(600);
   expect(type.groups.length).toBeLessThanOrEqual(12);

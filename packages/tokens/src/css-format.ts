@@ -7,10 +7,6 @@ import { authoredDark, isThemed, isWholeReference, resolvedDark } from "./theme.
 import { componentOf } from "./naming.ts";
 import { inTierOrder, tierOf } from "./tiers.ts";
 
-/**
- * `var(--ab-…)` for a value that is exactly one reference, so the cascade (and any override of
- * the referenced token) flows through. Anything else is emitted as the transformed literal.
- */
 const cssValue = (
   token: TransformedToken,
   authored: unknown,
@@ -47,7 +43,6 @@ const overrideCss = (entry: MediaEntry, dictionary: Dictionary): string => {
   return `      --${entry.token.name}: ${css};`;
 };
 
-/** One `@media` block per query, in source order, each overriding its tokens on `:root`. */
 const mediaBlocks = (tokens: readonly TransformedToken[], dictionary: Dictionary): string[] => {
   const entries: MediaEntry[] = tokens.flatMap((token) =>
     mediaOverrides(token).map(({ query, value }) => ({ token, query, value })),
@@ -69,11 +64,6 @@ const HEADER =
 const declarations = (tokens: readonly TransformedToken[], dictionary: Dictionary): string[] =>
   tokens.map((token) => declaration(token, dictionary));
 
-/**
- * The shared stylesheet of primitive and semantic tokens. Themed colors use `light-dark()`, which
- * follows the used `color-scheme`: `:root` allows both (System theme) and `[data-theme]` pins one
- * on a subtree. Media overrides follow as `@media` blocks.
- */
 const sharedCss = (tokens: readonly TransformedToken[], dictionary: Dictionary): string =>
   [
     HEADER,
@@ -95,7 +85,6 @@ const sharedCss = (tokens: readonly TransformedToken[], dictionary: Dictionary):
     "",
   ].join("\n");
 
-/** One component's stylesheet: its animated tokens' `@property` rules, then its tokens. */
 const componentCss = (tokens: readonly TransformedToken[], dictionary: Dictionary): string =>
   [
     HEADER,
@@ -108,7 +97,6 @@ const componentCss = (tokens: readonly TransformedToken[], dictionary: Dictionar
     "",
   ].join("\n");
 
-/** `tokens.css` (primitive and semantic tokens) and one stylesheet per component. */
 export const stylesheets = (dictionary: Dictionary) => {
   const { "": shared = [], ...components } = Object.groupBy(
     inTierOrder(dictionary.allTokens),

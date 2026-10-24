@@ -11,10 +11,6 @@ export interface LogoProps extends Omit<ComponentProps<"svg">, "children"> {
   label?: string;
 }
 
-/**
- * Stâlpul cerului, the Bereghici Logo, drawn from the source files in `--ab-logo-color`.
- * 32px by default; resize it with `width` and `height`. It never renders below 16px.
- */
 export function Logo({ label, className, ...props }: LogoProps) {
   return (
     <svg

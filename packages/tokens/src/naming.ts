@@ -1,18 +1,10 @@
 import type { Tier } from "./tiers.ts";
 
-/*
- * The naming grammar and Dictionary, carried over from the source design system's validator
- * (`project/scripts/lib/tokens.cjs` in the claude.ai artifact). Two deliberate changes: the
- * component words follow spec #1's renames, and `stroke-width-2xl` (which the source's own
- * tokens use) is allowed. Names here are without the `ab-` prefix. A new word is a Dictionary
- * change: add it here.
- */
+// Departs from the source validator on purpose: spec #1's component renames, and stroke-width-2xl is allowed.
 
-/** Tier 1: names state the value (`palette-{hue}-{step}`, `dimension-{px}`, …). */
 const PRIMITIVE =
   /^(palette-[a-z]+-(0|50|[1-9]00|950)(-a\d{2})?|palette-transparent|blur-\d+|saturate-\d+|opacity-\d+|dimension-\d+|stroke-width-\d+|scale-\d+|z-index-\d+|font-family-[a-z]+(-[a-z]+)*|font-size-\d+(-\d+)?|font-weight-[1-9]00|line-height-\d+|letter-spacing-(minus-)?\d+|font-variant-numeric-[a-z\-]+|text-transform-[a-z]+|duration-\d+|easing-[a-z]+(-[a-z]+)*)$/v;
 
-/** Tier 2: names state the purpose. */
 const SEMANTIC = [
   /^color-(surface|background|text|icon|border|brand|material|shadow)(-[a-z]+)+$/v,
   /^color-backdrop$/v,
@@ -40,7 +32,6 @@ const SEMANTIC = [
   /^breakpoint-(sm|md|lg)$/v,
 ];
 
-/** The words a semantic `color-*` name may use after its property. */
 const COLOR_WORDS = new Set([
   "default",
   "raised",
@@ -78,11 +69,6 @@ const COLOR_WORDS = new Set([
   "ember",
 ]);
 
-/**
- * Tier 3: `{component}-{variant}-{element}-{property}-{state}`. Longer names first. The source's
- * words are renamed to spec #1's component names: divider → separator, menu → dropdown-menu and
- * context-menu, command-palette → command, mark → logo.
- */
 const COMPONENTS = [
   "status-dot",
   "icon-button",
@@ -113,7 +99,6 @@ const COMPONENTS = [
   "card",
   "command",
   "spinner",
-  // Phase 1 components with no source guide (ticket #15 specs, packages/ui/specs/).
   "skip-link",
   "empty-state",
   "avatar",
@@ -170,7 +155,6 @@ const PROPERTIES = [
 
 const STATES = ["hovered", "pressed", "focused", "selected", "checked", "invalid", "disabled"];
 
-/** Variant, size and element words. */
 const MODIFIERS = new Set([
   "primary",
   "secondary",
@@ -215,7 +199,6 @@ const MODIFIERS = new Set([
   "picker",
   "backdrop",
   "stack",
-  // Ticket #15: the far end of the Skeleton pulse, and the value text of Progress and Meter.
   "pulse",
   "value",
   "legend",
@@ -265,5 +248,4 @@ const CHECKS: Record<Tier, (name: string) => string | undefined> = {
   component: checkComponentName,
 };
 
-/** Why a token name breaks its tier's grammar or the Dictionary, or `undefined` if it doesn't. */
 export const checkName = (name: string, tier: Tier): string | undefined => CHECKS[tier](name);

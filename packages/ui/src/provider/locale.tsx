@@ -2,7 +2,7 @@
 
 import { createContext, use, type ReactNode } from "react";
 
-import { enUS } from "../locales/en-US.ts";
+import { enUS } from "./locales/en-US.ts";
 
 export type Labels = Readonly<Record<string, never>>;
 

@@ -1,10 +1,4 @@
-/**
- * The design system's two webfonts and the subsets they ship in.
- *
- * The unicode ranges are Google Fonts' `latin-ext` and `latin` ranges, copied from
- * https://fonts.googleapis.com/css2?family=Figtree:wght@300..900 (2026-10-24). They overlap on
- * U+0304, U+0308 and U+0329, so `latin` is declared last and wins there, as in Google's sheet.
- */
+// The latin and latin-ext ranges overlap on U+0304, U+0308 and U+0329, so latin is declared last and wins, as in Google's sheet.
 export const FONT_SUBSETS = [
   {
     name: "latin-ext",
@@ -18,16 +12,12 @@ export const FONT_SUBSETS = [
   },
 ] as const;
 
-export type FontSubset = (typeof FONT_SUBSETS)[number];
+type FontSubset = (typeof FONT_SUBSETS)[number];
 
-export interface FontFamily {
-  /** The CSS family name. */
+interface FontFamily {
   readonly family: string;
-  /** File name stem: `<stem>-<subset>.woff2` and `<stem>-OFL.txt`. */
   readonly stem: string;
-  /** The `wght` axis range, as the `font-weight` descriptor. */
   readonly weight: string;
-  /** The `wdth` axis range, as the `font-stretch` descriptor, when the font has one. */
   readonly stretch?: string;
 }
 
@@ -40,7 +30,6 @@ export function fontFileName(family: FontFamily, subset: FontSubset): string {
   return `${family.stem}-${subset.name}.woff2`;
 }
 
-/** Every code point in a `unicode-range` value, in order. */
 export function codePointsIn(unicodeRange: string): number[] {
   return unicodeRange.split(", ").flatMap((part) => {
     const [first = "", last = first] = part.replace("U+", "").split("-");
@@ -65,7 +54,6 @@ function fontFace(family: FontFamily, subset: FontSubset, fontsUrl: string): str
   return `/* ${family.family} ${subset.name} */\n@font-face {\n${descriptors.map((line) => `  ${line}`).join("\n")}\n}\n`;
 }
 
-/** The `@font-face` sheet. `fontsUrl` is where the woff2 files sit, relative to the sheet. */
 export function fontFaceCss(fontsUrl = "../fonts/"): string {
   const faces = FONT_FAMILIES.flatMap((family) =>
     FONT_SUBSETS.map((subset) => fontFace(family, subset, fontsUrl)),

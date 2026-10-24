@@ -1,11 +1,7 @@
 @import "@platform/tokens/components/icon.css";
 
 @layer ab.components {
-  /*
-   * Size rules stay at (0,1,0), `:where()` adding nothing, so a host component's descendant rule
-   * (`.root svg`, 0,1,1) can size icons a consumer passes in. CSS beats the `stroke-width`
-   * presentation attribute, which counts as an author rule with specificity 0 (SVG 2, §6.6).
-   */
+  /* Size rules stay at (0,1,0) so a host's `.root svg` rule (0,1,1) can size the icons a consumer passes in. */
   .root {
     flex-shrink: 0;
     inline-size: var(--ab-icon-md-size);

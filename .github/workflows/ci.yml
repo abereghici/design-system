@@ -16,7 +16,7 @@ jobs:
       - uses: pnpm/setup@v3
         with:
           require-lockfile: true
-      - run: pnpm --filter @platform/ui exec playwright install --with-deps
+      - run: pnpm --filter @platform/ui exec playwright install --with-deps --only-shell
       - run: pnpm lint
       - run: pnpm check-types
       - run: pnpm test

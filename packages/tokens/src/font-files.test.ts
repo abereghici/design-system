@@ -44,8 +44,6 @@ test.each(files)("%s maps only characters inside its unicode-range", async (file
   expect(new Set(font.characterSet).difference(allowed)).toEqual(new Set());
 });
 
-// Samples, as unicode ranges. latin: A–Z, a–z, 0–9, &, €, en dash, curly quotes, ellipsis.
-// latin-ext: Romanian Ăă Șș Țț, Polish Łł, Czech Řř, Turkish Şş Ğğ, Welsh Ŵŵ Ŷŷ.
 const SAMPLES = {
   latin: "U+0041-005A, U+0061-007A, U+0030-0039, U+0026, U+20AC, U+2013, U+201C-201D, U+2026",
   "latin-ext":
