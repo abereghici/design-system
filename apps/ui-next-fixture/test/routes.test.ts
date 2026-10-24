@@ -168,15 +168,23 @@ describe("per-component JS", () => {
   );
 
   test("Server Components label and format on the server", () => {
-    expect(button.html).toContain('<html lang="en" dir="ltr"');
     expect(route("spinner").html).toContain('aria-label="Loading"');
     expect(route("progress").html).toContain("40\u00A0%");
     expect(route("meter").html).toContain("42%");
     expect(route("skip-link").html).toContain(">Skip to main content</a>");
+    expect(route("link").html).toMatch(/<a class="[^"]+" href="\/">Home<\/a>/v);
+  });
+});
+
+describe("locale, labels and direction", () => {
+  test("the root layout sets dir from getDirection on the server", () => {
+    expect(button.html).toContain('<html lang="en" dir="ltr"');
+  });
+
+  test("a sorted Table header renders aria-sort and its button on the server", () => {
     expect(route("table").html).toMatch(
       /<th scope="col" aria-sort="ascending" class="[^"]+"><button type="button"/v,
     );
-    expect(route("link").html).toMatch(/<a class="[^"]+" href="\/">Home<\/a>/v);
   });
 
   test("a locale reaches client components, and ships only on the route that imports it", () => {
