@@ -2598,11 +2598,11 @@
     },
     "dialog-close-offset": {
       "$type": "dimension",
-      "$value": "{semantic.space-inset-sm}"
+      "$value": "{semantic.space-inset-md}"
     },
     "dialog-title-gap": {
       "$type": "dimension",
-      "$value": "{semantic.space-stack-sm}"
+      "$value": "{semantic.space-stack-xs}"
     },
     "sheet-title-text-color": {
       "$type": "color",
