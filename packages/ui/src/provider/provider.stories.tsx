@@ -1,9 +1,10 @@
-import preview from "#.storybook/preview.tsx";
 import { expect } from "storybook/test";
 
+import preview from "#.storybook/preview.tsx";
+
+import { useLocale } from "./locale.tsx";
 import { enUS } from "./locales/en-US.ts";
 import { roRO } from "./locales/ro-RO.ts";
-import { useLocale } from "./locale.tsx";
 import { Provider } from "./provider.tsx";
 
 function Tag() {

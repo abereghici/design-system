@@ -3,9 +3,10 @@
 The app's vertical navigation: links to its sections, optionally in labelled groups, in a column beside the main content. Use it when an app has more destinations than a Navbar row holds, or destinations that fall into groups. For a few top-level destinations, use a Navbar; for the path to the current page, Breadcrumbs; for a table of contents within one page, a list of Links; for actions, Buttons.
 
 ```tsx
-import { Sidebar } from "@platform/ui/sidebar";
-import { FolderIcon } from "@platform/ui/icons/folder";
 import NextLink from "next/link";
+
+import { FolderIcon } from "@platform/ui/icons/folder";
+import { Sidebar } from "@platform/ui/sidebar";
 
 <Sidebar.Root aria-label="Workspace">
   <Sidebar.Group>

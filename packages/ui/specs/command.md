@@ -179,8 +179,9 @@ export function CommandMenu({ open, onOpenChange, finalFocus }: CommandMenuProps
 ```tsx
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+
 import { Button } from "@platform/ui/button";
 import { Kbd } from "@platform/ui/kbd";
 

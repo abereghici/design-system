@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 
+import { describe } from "./tokens.ts";
+import type { ThemeId, Token } from "./tokens.ts";
 import styles from "./docs.module.css";
-import { describe, type ThemeId, type Token } from "./tokens.ts";
 
 export const THEME_IDS = ["light", "dark"] as const satisfies readonly ThemeId[];
 

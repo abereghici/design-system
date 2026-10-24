@@ -1,0 +1,62 @@
+@import "@platform/tokens/components/meter.css";
+
+@layer ab.components {
+  .root {
+    display: grid;
+    gap: var(--ab-meter-gap);
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--ab-meter-gap);
+  }
+
+  .label {
+    font: var(--ab-meter-label-font);
+    letter-spacing: var(--ab-type-label-sm-letter-spacing);
+    color: var(--ab-meter-label-text-color);
+  }
+
+  .value {
+    font: var(--ab-meter-value-font);
+    letter-spacing: var(--ab-type-data-sm-letter-spacing);
+    font-variant-numeric: var(--ab-meter-value-font-variant-numeric);
+    color: var(--ab-meter-value-text-color);
+  }
+
+  .track {
+    overflow: hidden;
+    block-size: var(--ab-meter-track-height);
+    border-radius: var(--ab-meter-track-border-radius);
+    background-color: var(--ab-meter-track-background-color);
+  }
+
+  .indicator {
+    block-size: 100%;
+    border-radius: inherit;
+    background-color: var(--ab-meter-indicator-background-color);
+  }
+
+  .root:where([data-region="optimum"]) .indicator {
+    background-color: var(--ab-meter-success-indicator-background-color);
+  }
+
+  .root:where([data-region="suboptimum"]) .indicator {
+    background-color: var(--ab-meter-warning-indicator-background-color);
+  }
+
+  .root:where([data-region="even-less-good"]) .indicator {
+    background-color: var(--ab-meter-danger-indicator-background-color);
+  }
+
+  @media (forced-colors: active) {
+    .track {
+      outline: 1px solid CanvasText;
+    }
+
+    .indicator {
+      background-color: CanvasText;
+    }
+  }
+}

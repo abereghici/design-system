@@ -3,14 +3,14 @@
 Groups three or more related controls (IconButtons, Buttons, a SegmentedControl) into one tab stop, with the arrow keys moving between them: an editor's formatting row, a list's bulk actions, a panel header's tools. For one or two controls, place them directly (APG: "Use toolbar as a grouping element only if the group contains 3 or more controls."). Do not put text fields, Selects or Sliders in a Toolbar: they need the same arrow keys.
 
 ```tsx
-import { Toolbar } from "@platform/ui/toolbar";
-import { IconButton } from "@platform/ui/icon-button";
 import { Button } from "@platform/ui/button";
-import { Separator } from "@platform/ui/separator";
-import { SegmentedControl } from "@platform/ui/segmented-control";
-import { PinIcon } from "@platform/ui/icons/pin";
+import { IconButton } from "@platform/ui/icon-button";
 import { CopyIcon } from "@platform/ui/icons/copy";
 import { DownloadIcon } from "@platform/ui/icons/download";
+import { PinIcon } from "@platform/ui/icons/pin";
+import { SegmentedControl } from "@platform/ui/segmented-control";
+import { Separator } from "@platform/ui/separator";
+import { Toolbar } from "@platform/ui/toolbar";
 
 <Toolbar aria-label="Report">
   <IconButton aria-label="Pin" defaultPressed={false}>

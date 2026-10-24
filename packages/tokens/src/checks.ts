@@ -6,7 +6,8 @@ import { mediaOverrides, perTheme } from "./media.ts";
 import { checkName } from "./naming.ts";
 import { checkAnimated } from "./property.ts";
 import { authoredDark, isThemed, isWholeReference, THEME_EXTENSION } from "./theme.ts";
-import { TIERS, tierOf, type Tier } from "./tiers.ts";
+import { TIERS, tierOf } from "./tiers.ts";
+import type { Tier } from "./tiers.ts";
 
 export class TokenCheckError extends Error {
   readonly problems: readonly string[];

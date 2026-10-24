@@ -31,7 +31,7 @@ Root → status icon → Title (optional) + Description (optional) → Close (op
 - **Status icon.** Rendered by Root from `variant`, decorative (`aria-hidden`): `info` for neutral, `check-circle` for success, `warning` for warning, `danger` for danger (glyphs from the icon set; the info and warning glyphs carry the bob diamond, the one motif on this surface). Not a Part and not replaceable in phase 1.
 - **Title.** A `<div>` in label type. Not a heading: an Alert is a message, not a section of the outline (design decision; shadcn and Chakra also render a `div`, see API).
 - **Description.** A `<div>` in body type. May hold Links, inline code or a short list.
-- **Close.** An IconButton (sm, `x` icon) at the inline end of the first row. The only interactive Part.
+- **Close.** A native `<button>` with the `x` icon, drawn with IconButton's sm tokens (`icon-button-*`), at the inline end of the first row. It is not an IconButton instance, so one press dispatches only `ab-dismiss`. The only interactive Part.
 
 At least one of Title or Description is required. There is no Action Part: an action is a Link or Button inside Description (shadcn's `AlertAction` is the only reference Part for it; deferred until a product needs it).
 
@@ -79,7 +79,7 @@ Names, checked against the reference libraries:
 - Never auto-dismissed. APG: "It is also important to avoid designing alerts that disappear automatically."
 - Focus on dismiss: when the focused Close button unmounts, focus falls to `<body>`. The app moves focus to the next logical element (the heading or field the Alert was about) in the same handler. Inference from WCAG 2.4.3 Focus Order; documented on the docs page with an example.
 - Copy states the status in words. The Title names the situation ("Couldn't save changes", not "Error"), so the message reads without the colour or icon.
-- Server Components: `Alert.Root`, `Alert.Title` and `Alert.Description` have no handlers or state and are Server Components. `Alert.Close` is a `'use client'` leaf. The namespace is a directive-free `index.ts` (`export * as Alert from "./index.parts"`), per the UI scaffold.
+- Server Components: `Alert.Root`, `Alert.Title` and `Alert.Description` have no handlers or state and are Server Components. `Alert.Close` is a `'use client'` leaf. The namespace is a directive-free `index.ts` (`export * as Alert from "./alert.tsx"`), per the UI scaffold.
 - Width: fills its container; text wraps. Long words break (`overflow-wrap: anywhere` on the text column).
 
 ## Motion

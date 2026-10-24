@@ -1,5 +1,6 @@
-import preview from "#.storybook/preview.tsx";
 import { expect } from "storybook/test";
+
+import preview from "#.storybook/preview.tsx";
 
 import { Motion } from "./motion.tsx";
 import { cellText, tokenRow } from "./table.ts";

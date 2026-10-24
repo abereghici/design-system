@@ -1,0 +1,43 @@
+@import "@platform/tokens/components/tag.css";
+
+@layer ab.components {
+  .root {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-tag-gap);
+    padding-block: var(--ab-tag-padding-block);
+    padding-inline: var(--ab-tag-padding-inline);
+    /* Transparent until forced colors paint it, so the pill keeps its outline there. */
+    border: var(--ab-border-width-default) solid transparent;
+    border-radius: var(--ab-tag-border-radius);
+    background-color: var(--ab-tag-neutral-background-color);
+    color: var(--ab-tag-neutral-text-color);
+    font: var(--ab-tag-font);
+    overflow-wrap: anywhere;
+  }
+
+  .root > [data-icon] {
+    inline-size: var(--ab-tag-icon-size);
+    block-size: var(--ab-tag-icon-size);
+  }
+
+  .root[data-variant="accent"] {
+    background-color: var(--ab-tag-accent-background-color);
+    color: var(--ab-tag-accent-text-color);
+  }
+
+  .root[data-variant="success"] {
+    background-color: var(--ab-tag-success-background-color);
+    color: var(--ab-tag-success-text-color);
+  }
+
+  .root[data-variant="warning"] {
+    background-color: var(--ab-tag-warning-background-color);
+    color: var(--ab-tag-warning-text-color);
+  }
+
+  .root[data-variant="danger"] {
+    background-color: var(--ab-tag-danger-background-color);
+    color: var(--ab-tag-danger-text-color);
+  }
+}

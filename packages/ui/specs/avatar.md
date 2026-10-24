@@ -3,7 +3,7 @@
 A person's picture, with their initials or a generic glyph while the picture loads or when there is none. Use it next to a name in lists, comments and account menus. For the brand sign, use the Logo; for a status marker, use a StatusDot beside a text label.
 
 ```tsx
-import * as Avatar from "@platform/ui/avatar";
+import { Avatar } from "@platform/ui/avatar";
 
 {/* Named by the image's alt; initials "AB" show until it loads, or if it fails */}
 <Avatar.Root>
