@@ -6,10 +6,11 @@ import { Button } from "@platform/ui/button";
 import { roRO } from "@platform/ui/locales/ro-RO";
 import { Provider } from "@platform/ui/provider";
 import { toast } from "@platform/ui/toast";
+import type { Locale } from "@platform/ui/provider";
 
 import preview from "#.storybook/preview.tsx";
+import { trusted } from "#.storybook/test/trusted.ts";
 
-import type { Locale } from "../provider/locale.tsx";
 import { remove, snapshot } from "../toast/toast.ts";
 
 import { Toaster } from "./toaster.tsx";
@@ -201,8 +202,12 @@ Default.test(
     const renamed = within(dialog).getAllByRole("button", { name: "Undo" })[0];
     await expect(renamed).toHaveFocus();
     await expect(renamed !== undefined && topmost(renamed)).toBe(true);
-    await userEvent.keyboard("{Escape}");
+    const user = await trusted();
+    await user.keyboard("{Escape}");
     await waitFor(() => expect(page.queryByText("Renamed", { selector: "div" })).toBeNull());
     await expect(dialog).toBeVisible();
+    within(dialog).getByRole("button", { name: "Rename" }).focus();
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(dialog).not.toBeVisible());
   },
 );

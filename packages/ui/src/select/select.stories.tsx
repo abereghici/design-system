@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { expect, fn } from "storybook/test";
+import { expect, fn, waitFor } from "storybook/test";
 
 import type { Decorator } from "@storybook/react-vite";
 
 import preview from "#.storybook/preview.tsx";
+import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Select from "./select.tsx";
 
@@ -40,7 +41,11 @@ const meta = preview.meta({
     children: regions,
     onValueChange: fn(),
   },
+  beforeEach: parkPointer,
 });
+
+// Engines without base-select draw the OS picker, which the page can't see or drive.
+const basePicker = () => CSS.supports("appearance: base-select");
 
 export const Default = meta.story({});
 
@@ -223,6 +228,30 @@ function ControlledSelect(args: Select.RootProps) {
     />
   );
 }
+
+Default.test("opens its picker on click and chooses an option", async ({ args, canvas }) => {
+  if (!basePicker()) return;
+  const user = await trusted();
+  const select = canvas.getByRole("combobox", { name: "Region" });
+  const japan = canvas.getByRole("option", { name: "Japan" });
+  await expect(japan.checkVisibility()).toBe(false);
+  await user.click(select);
+  await waitFor(() => expect(japan.checkVisibility()).toBe(true));
+  await user.click(canvas.getByRole("option", { name: "Japan" }));
+  await expect(select).toHaveDisplayValue("Japan");
+  await expect(args.onValueChange).toHaveBeenCalledWith("jp", expect.anything());
+});
+
+Default.test(
+  "stays closed on click when disabled",
+  { args: { disabled: true } },
+  async ({ canvas }) => {
+    if (!basePicker()) return;
+    const user = await trusted();
+    await user.click(canvas.getByRole("combobox", { name: "Region" }), { force: true });
+    await expect(canvas.getByRole("option", { name: "Japan" }).checkVisibility()).toBe(false);
+  },
+);
 
 export const Controlled = meta.story({
   args: {

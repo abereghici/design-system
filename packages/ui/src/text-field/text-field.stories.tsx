@@ -4,6 +4,7 @@ import { expect, fn } from "storybook/test";
 import type { Decorator } from "@storybook/react-vite";
 
 import preview from "#.storybook/preview.tsx";
+import { trusted } from "#.storybook/test/trusted.ts";
 
 import { SearchIcon } from "../icon/icons/search.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
@@ -81,6 +82,21 @@ Default.test(
     await expect(canvas.getByRole("textbox", { name: "Email" })).toHaveAccessibleDescription(
       "Used for sign-in only.",
     );
+  },
+);
+
+Default.test(
+  "shows the error once an invalid value loses focus, not while typing",
+  { args: { errorMessage: "Enter an email address." } },
+  async ({ canvas }) => {
+    const user = await trusted();
+    const input = canvas.getByRole("textbox", { name: "Email" });
+    await user.click(input);
+    await user.keyboard("ana");
+    await expect(input).not.toHaveAttribute("aria-invalid");
+    await user.click(document.body, { position: { x: 0, y: 0 } });
+    await expect(input).toHaveAttribute("aria-invalid", "true");
+    await expect(input).toHaveAccessibleDescription("Enter an email address.");
   },
 );
 
@@ -223,7 +239,7 @@ export const WithIconAndShortcut = meta.story({
     placeholder: "Search",
     autoComplete: "off",
     "aria-keyshortcuts": "/",
-    startElement: <SearchIcon size="sm" />,
+    startElement: <SearchIcon />,
     endElement: <Kbd keys="/" aria-hidden />,
   },
   parameters: {

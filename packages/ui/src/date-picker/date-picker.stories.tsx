@@ -8,7 +8,7 @@ import { roRO } from "@platform/ui/locales/ro-RO";
 
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
-import { trusted } from "#.storybook/test/trusted.ts";
+import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as DatePicker from "./date-picker.tsx";
 
@@ -39,8 +39,9 @@ const meta = preview.meta({
       </DatePicker.Content>
     ),
   },
-  beforeEach: () => {
+  beforeEach: async () => {
     onOpenChange.mockClear();
+    await parkPointer();
   },
   decorators: [
     (Story) => (
