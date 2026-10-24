@@ -1,0 +1,14 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+
+import * as IconGalleryStories from "../icon-gallery/icon-gallery.stories";
+import * as IconographyStories from "./iconography.stories";
+
+<Meta of={IconographyStories} />
+
+# Iconography
+
+Construction rules, the tokens icons are drawn with, and the icon set (`@platform/ui/icons/<name>`).
+
+<Canvas of={IconographyStories.Guidelines} sourceState="none" />
+
+<Canvas of={IconGalleryStories.AllIcons} sourceState="none" />

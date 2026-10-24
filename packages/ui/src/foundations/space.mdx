@@ -1,0 +1,11 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+
+import * as SpaceStories from "./space.stories";
+
+<Meta of={SpaceStories} />
+
+# Space
+
+Generated from the token source (`@platform/tokens/source/*.tokens.json`), so it follows every token change.
+
+<Canvas of={SpaceStories.Scale} sourceState="none" />
