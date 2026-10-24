@@ -38,6 +38,7 @@
     margin: var(--ab-context-menu-offset);
   }
 
+  /* Physical top/left on purpose: the anchor is placed with clientX/clientY, which are physical viewport coordinates in every direction. */
   .anchor {
     position: fixed;
     top: 0;

@@ -120,3 +120,37 @@ Default.test(
     await expect(canvas.queryByRole("menu")).toBeNull();
   },
 );
+
+Default.test(
+  "opens from the keyboard at the focused element and returns focus there",
+  async ({ canvas }) => {
+    const user = await trusted();
+    const file = canvas.getByRole("button", { name: "Report.pdf" });
+    await user.keyboard("{Tab}");
+    await expect(file).toHaveFocus();
+    // Shift+F10 and the context-menu key reach the page through the OS, which Playwright's keys bypass, so the proof dispatches the contextmenu event they produce: no pointer button.
+    file.dispatchEvent(
+      new MouseEvent("contextmenu", { bubbles: true, cancelable: true, button: 0 }),
+    );
+    await waitFor(() => expect(canvas.getByRole("menuitem", { name: "Duplicate" })).toHaveFocus());
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(file).toHaveFocus());
+  },
+);
+
+Default.test(
+  "opens on a long touch press once released, not on a tap",
+  async ({ canvas, userEvent }) => {
+    const file = canvas.getByRole("button", { name: "Report.pdf" });
+    await userEvent.pointer({ keys: "[TouchA]", target: file });
+    await expect(canvas.queryByRole("menu")).toBeNull();
+    await userEvent.pointer({ keys: "[TouchA>]", target: file });
+    await new Promise((resolve) => {
+      setTimeout(resolve, 800);
+    });
+    await expect(canvas.queryByRole("menu")).toBeNull();
+    await userEvent.pointer({ keys: "[/TouchA]", target: file });
+    await waitFor(() => expect(canvas.getByRole("menu", { name: "File actions" })).toBeVisible());
+    await expect(reasons().at(-1)).toEqual([true, "trigger-press"]);
+  },
+);
