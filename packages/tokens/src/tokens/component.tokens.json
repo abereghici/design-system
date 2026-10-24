@@ -1616,6 +1616,10 @@
       "$type": "color",
       "$value": "{semantic.color-backdrop}"
     },
+    "sheet-backdrop-blur": {
+      "$type": "dimension",
+      "$value": "{semantic.material-blur-thin}"
+    },
     "sheet-enter-duration": {
       "$type": "duration",
       "$value": "{semantic.motion-duration-drawer}"
@@ -2618,7 +2622,7 @@
     },
     "sheet-title-gap": {
       "$type": "dimension",
-      "$value": "{semantic.space-stack-sm}"
+      "$value": "{semantic.space-stack-xs}"
     },
     "sheet-footer-gap": {
       "$type": "dimension",
@@ -2626,7 +2630,7 @@
     },
     "sheet-close-offset": {
       "$type": "dimension",
-      "$value": "{semantic.space-inset-sm}"
+      "$value": "{semantic.space-inset-md}"
     },
     "date-field-segment-background-color-focused": {
       "$type": "color",

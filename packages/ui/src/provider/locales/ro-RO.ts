@@ -23,5 +23,6 @@ export const roRO: Locale = {
     breadcrumbs: { root: "Cale de navigare" },
     pagination: { root: "Paginare", previous: "Pagina anterioară", next: "Pagina următoare" },
     dialog: { close: "Închide" },
+    sheet: { close: "Închide" },
   },
 };

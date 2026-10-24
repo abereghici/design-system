@@ -17,7 +17,7 @@ export interface CloseProps extends Omit<ComponentProps<"button">, "command" | "
 }
 
 export function Close({ asChild = false, labels, className, onClick, ...props }: CloseProps) {
-  const { id, controller, styles } = useModal();
+  const { id, controller, styles, component } = useModal();
   const locale = useLocale();
 
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
@@ -36,7 +36,7 @@ export function Close({ asChild = false, labels, className, onClick, ...props }:
   return (
     <button
       type="button"
-      aria-label={labels?.close ?? locale.labels.dialog.close}
+      aria-label={labels?.close ?? locale.labels[component === "Sheet" ? "sheet" : "dialog"].close}
       {...props}
       data-size="sm"
       className={join(`${iconButton["root"]} ${styles["close"]}`, className)}

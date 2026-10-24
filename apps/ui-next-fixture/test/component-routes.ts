@@ -124,6 +124,12 @@ export const componentRoutes = [
     client: ["alert-dialog/alert-dialog.tsx"],
     html: 'role="alertdialog"',
   },
+  {
+    name: "sheet",
+    tokens: ["sheet", "icon", "icon-button"],
+    client: ["dialog/close.tsx", "dialog/modal.tsx"],
+    html: 'data-side="end"',
+  },
   { name: "navbar", tokens: ["navbar"], client: [], html: '<nav aria-label="Main">' },
   { name: "sidebar", tokens: ["sidebar"], client: [], html: 'role="group" aria-labelledby=' },
 ];

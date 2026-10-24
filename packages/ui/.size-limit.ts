@@ -54,6 +54,7 @@ const budgets: Readonly<Record<string, string>> = {
   "visually-hidden": "580 B",
   dialog: "4.35 kB",
   "alert-dialog": "4.2 kB",
+  sheet: "4.6 kB",
 };
 
 const checks = (pattern: string, subpath: (path: string) => string, limit?: string) =>

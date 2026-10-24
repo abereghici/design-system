@@ -26,6 +26,7 @@ export interface Labels {
   readonly breadcrumbs: { readonly root: string };
   readonly pagination: { readonly root: string; readonly previous: string; readonly next: string };
   readonly dialog: { readonly close: string };
+  readonly sheet: { readonly close: string };
 }
 
 export interface Locale {
