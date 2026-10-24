@@ -50,7 +50,7 @@ export function Switch({
         {...props}
         id={id ?? fallbackId}
         type="checkbox"
-        // oxlint-disable-next-line jsx-a11y/role-has-required-aria-props -- the native checkedness is the state; ARIA in HTML forbids aria-checked here
+        // oxlint-disable-next-line jsx-a11y/role-has-required-aria-props -- oxlint bug: lacks jsx-a11y's isSemanticRoleElement exemption for input[type=checkbox][role=switch]; ARIA in HTML forbids aria-checked here
         role="switch"
         aria-disabled={disabled ? true : undefined}
         className={styles["track"]}
