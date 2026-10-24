@@ -20,6 +20,7 @@ const budgets: Readonly<Record<string, string>> = {
   meter: "1.1 kB",
   progress: "1.1 kB",
   provider: "5.4 kB",
+  select: "3.4 kB",
   separator: "700 B",
   skeleton: "630 B",
   "skip-link": "680 B",
