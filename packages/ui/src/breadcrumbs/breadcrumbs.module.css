@@ -1,0 +1,47 @@
+@import "@platform/tokens/components/breadcrumbs.css";
+
+@layer ab.components {
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ab-breadcrumbs-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font: var(--ab-breadcrumbs-font);
+  }
+
+  .item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-breadcrumbs-gap);
+    min-block-size: var(--ab-size-target-min);
+  }
+
+  .separator {
+    --ab-icon-ink: var(--ab-breadcrumbs-separator-icon-color);
+  }
+
+  .item:first-child > .separator {
+    display: none;
+  }
+
+  .link {
+    overflow-wrap: anywhere;
+  }
+
+  .link:not([aria-current="page"]) {
+    color: var(--ab-breadcrumbs-item-text-color);
+  }
+
+  .link[aria-current="page"] {
+    text-decoration-line: none;
+  }
+
+  @media (forced-colors: active) {
+    .link[aria-current="page"] {
+      color: CanvasText;
+    }
+  }
+}

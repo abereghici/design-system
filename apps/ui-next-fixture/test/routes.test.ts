@@ -175,6 +175,18 @@ const componentRoutes = [
     client: ["number-field/number-field.tsx"],
     html: 'aria-label="Increase"',
   },
+  {
+    name: "breadcrumbs",
+    tokens: ["breadcrumbs", "icon", "link"],
+    client: [],
+    html: '<nav aria-label="Breadcrumb">',
+  },
+  {
+    name: "pagination",
+    tokens: ["pagination", "icon", "icon-button", "spinner"],
+    client: ["icon-button/icon-button.tsx"],
+    html: 'href="/pagination?page=3">3</a>',
+  },
 ];
 
 describe("each component route ships only its own CSS, tokens and client code", () => {

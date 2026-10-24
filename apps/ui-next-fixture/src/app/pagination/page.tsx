@@ -1,0 +1,16 @@
+import NextLink from "next/link";
+
+import { Pagination } from "@platform/ui/pagination";
+
+export default function Page() {
+  return (
+    <main>
+      <Pagination
+        page={2}
+        count={12}
+        getPageUrl={(page) => `/pagination?page=${page}`}
+        linkComponent={NextLink}
+      />
+    </main>
+  );
+}
