@@ -190,7 +190,7 @@ Default.test(
   },
 );
 
-// @ts-expect-error A locale must name the Popover's Close.
+// @ts-expect-error -- a locale must name the Popover's Close
 void ({ ...roRO, labels: { ...roRO.labels, popover: {} } } satisfies Locale);
 
 export const ControlledOpen = meta.story({

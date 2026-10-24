@@ -3,7 +3,7 @@
 import { createContext, use, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ComponentProps, ReactNode, RefObject } from "react";
 
-import { composeRefs, Slot } from "../slot/slot.tsx";
+import { Slot, composeRefs, join } from "../slot/slot.tsx";
 
 import { Controller } from "./controller.ts";
 import type { ChangeEventDetails, Options, Reason } from "./controller.ts";
@@ -37,9 +37,6 @@ export function useModal(): ModalContext {
   if (context === null) throw new Error("Dialog parts must be inside their Root");
   return context;
 }
-
-export const join = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
 
 export function ModalRoot(props: RootProps & Pick<ModalContext, "styles" | "component">) {
   const { open, defaultOpen = false, styles, component, children } = props;

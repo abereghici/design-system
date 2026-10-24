@@ -1,12 +1,9 @@
 import { cloneElement, isValidElement } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { Slot } from "../slot/slot.tsx";
+import { Slot, join } from "../slot/slot.tsx";
 
 import styles from "./card.module.css";
-
-const join = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
 
 const body = (content: ReactNode) => <div className={styles["layout"]}>{content}</div>;
 

@@ -160,10 +160,8 @@ Existing (ported from the source): `context-menu-min-width`, `context-menu-paddi
 
 Proposed new (the DropdownMenu pair, so the two menus stay overridable one by one):
 
-| Token                                   | References            | `$type` | Why                              |
-| --------------------------------------- | --------------------- | ------- | -------------------------------- |
-| `context-menu-item-text-color-disabled` | `color-text-disabled` | color   | Disabled Item label              |
-| `context-menu-item-icon-color-disabled` | `color-icon-disabled` | color   | Disabled Item icon and indicator |
+| Token | References | `$type` | Why |
+| ----- | ---------- | ------- | --- |
 
 As in DropdownMenu, the diamond size, the Label's block padding and the Separator width use semantic tokens directly. The pointer anchor needs no token.
 

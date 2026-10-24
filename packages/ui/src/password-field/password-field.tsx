@@ -2,6 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { FieldContext } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
 import { IconButton } from "../icon-button/icon-button.tsx";
@@ -11,12 +12,10 @@ import type { Labels } from "../provider/locale.tsx";
 import { InputGroup, TextInput } from "../text-field/text-field.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
 
-export interface PasswordFieldVisibleChangeEventDetails {
-  readonly reason: "toggle-press" | "form-submit";
-  readonly event: Event;
-  /** Keeps the current visibility. */
-  readonly cancel: () => void;
-}
+import { passwordFieldLabels } from "./labels.ts";
+
+/** `cancel()`: keeps the current visibility. */
+export type PasswordFieldVisibleChangeEventDetails = Details<"toggle-press" | "form-submit">;
 
 type ControlProps = Omit<
   Field.ControlProps,
@@ -93,7 +92,7 @@ function Control({
   const toggle = (
     <IconButton
       size="sm"
-      aria-label={labels?.show ?? locale.labels.passwordField.show}
+      aria-label={labels?.show ?? locale.labels.passwordField?.show ?? passwordFieldLabels.show}
       aria-controls={inputId}
       pressed={visible}
       disabled={field?.disabled === true}

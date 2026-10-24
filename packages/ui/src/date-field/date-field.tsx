@@ -9,7 +9,7 @@ import { Control } from "./date-field-control.tsx";
 import type { ControlProps, DateFieldOptions } from "./date-field-control.tsx";
 import type { Validity } from "./date-field-validity.ts";
 
-export type { DateFieldChangeEventDetails } from "./date-field-control.tsx";
+export type { DateFieldChangeEventDetails } from "./date-field-editing.ts";
 
 export type DateFieldProps = DateFieldOptions &
   Omit<ControlProps, "options" | "onValidity" | "end"> & {

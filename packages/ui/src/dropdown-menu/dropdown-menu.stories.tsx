@@ -1,6 +1,7 @@
 import { expect, fn, waitFor } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
+import { Dialog } from "@platform/ui/dialog";
 import { CopyIcon } from "@platform/ui/icons/copy";
 import { TrashIcon } from "@platform/ui/icons/trash";
 import { Kbd } from "@platform/ui/kbd";
@@ -214,3 +215,42 @@ Default.test("highlights the item under the pointer", async ({ canvas }) => {
   await user.hover(canvas.getByRole("menuitemradio", { name: "Oldest" }));
   await expect(canvas.getByRole("menuitemradio", { name: "Oldest" })).toHaveFocus();
 });
+
+Default.test(
+  "Escape closes only the topmost layer: the menu, then the Dialog it sits in",
+  {
+    render: () => (
+      <Dialog.Root>
+        <Dialog.Trigger asChild>
+          <Button>Rename…</Button>
+        </Dialog.Trigger>
+        <Dialog.Content>
+          <Dialog.Title>Rename project?</Dialog.Title>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger asChild>
+              <Button>Actions</Button>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content>
+              <DropdownMenu.Item>Duplicate</DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
+        </Dialog.Content>
+      </Dialog.Root>
+    ),
+  },
+  async ({ canvas }) => {
+    const user = await trusted();
+    await user.click(canvas.getByRole("button", { name: "Rename…" }));
+    canvas.getByRole("button", { name: "Actions" }).focus();
+    await user.keyboard("{Enter}");
+    await expect(canvas.getByRole("menuitem", { name: "Duplicate" })).toHaveFocus();
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(canvas.queryByRole("menu")).toBeNull());
+    await expect(canvas.getByRole("button", { name: "Actions" })).toHaveFocus();
+    await waitFor(() =>
+      expect(canvas.getByRole("dialog", { name: "Rename project?" })).toBeVisible(),
+    );
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
+  },
+);

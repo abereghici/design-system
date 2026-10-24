@@ -4,16 +4,13 @@ import { useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
-import { Slot } from "../slot/slot.tsx";
+import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { Slot, join } from "../slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./icon-button.module.css";
 
-export interface IconButtonChangeEventDetails {
-  readonly reason: "none";
-  readonly event: MouseEvent<HTMLButtonElement>;
-  readonly cancel: () => void;
-}
+export type IconButtonChangeEventDetails = Details<"none", MouseEvent<HTMLButtonElement>>;
 
 type AccessibleName =
   | { "aria-label": string; "aria-labelledby"?: string }
@@ -97,7 +94,7 @@ export function IconButton({
       aria-busy={loading ? true : undefined}
       data-loading={loading ? "" : undefined}
       data-size={size}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
       onClick={handleClick}
     >
       {loading && !asChild ? <Spinner aria-hidden /> : props.children}

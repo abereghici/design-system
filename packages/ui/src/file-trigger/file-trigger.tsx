@@ -3,6 +3,7 @@
 import { createContext, use, useEffect, useId, useRef } from "react";
 import type { ComponentProps, MouseEvent, ReactElement, RefObject } from "react";
 
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { FieldContext, useFieldControl } from "../field/field-control.ts";
 import { Slot } from "../slot/slot.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
@@ -50,12 +51,8 @@ export function FileInput({ inputRef, triggerRef, ...props }: FileInputProps) {
   );
 }
 
-export interface FileTriggerSelectEventDetails {
-  readonly reason: "none";
-  readonly event: Event;
-  /** Clears the selection from the file input. */
-  readonly cancel: () => void;
-}
+/** `cancel()`: clears the selection from the file input. */
+export type FileTriggerSelectEventDetails = Details<"none">;
 
 export interface FileTriggerProps extends NativeProps {
   /** Exactly one element, usually a Button; it opens the system file picker. */

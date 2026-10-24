@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { Slot } from "../slot/slot.tsx";
+import { Slot, join } from "../slot/slot.tsx";
 
 import styles from "./visually-hidden.module.css";
 
@@ -16,10 +16,5 @@ export interface VisuallyHiddenProps extends ComponentProps<"span"> {
  */
 export function VisuallyHidden({ asChild = false, className, ...props }: VisuallyHiddenProps) {
   const Root = asChild ? Slot : "span";
-  return (
-    <Root
-      {...props}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
-    />
-  );
+  return <Root {...props} className={join(styles["root"], className)} />;
 }

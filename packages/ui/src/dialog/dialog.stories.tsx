@@ -8,8 +8,7 @@ import { TextField } from "@platform/ui/text-field";
 
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
-
-import type { Locale } from "../provider/locale.tsx";
+import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Dialog from "./dialog.tsx";
 
@@ -171,8 +170,8 @@ Default.test(
   },
   async ({ canvas }) => {
     await waitFor(() => expect(canvas.getByRole("button", { name: "Închide" })).toBeVisible());
-    // @ts-expect-error A locale must carry the Dialog labels.
-    void ({ tag: "fr-FR", labels: { ...roRO.labels, dialog: {} } } satisfies Locale);
+    // @ts-expect-error -- a locale must carry the Dialog labels
+    void ({ tag: "fr-FR", labels: { ...roRO.labels, dialog: {} } } satisfies typeof roRO);
   },
 );
 
@@ -229,6 +228,22 @@ export const Controlled = meta.story({
     docs: { description: { story: "The parent holds `open` and updates it on change." } },
   },
 });
+
+Default.test(
+  "closes on Escape and returns focus to the Trigger",
+  async ({ args, canvas, userEvent }) => {
+    const trigger = canvas.getByRole("button", { name: "Rename…" });
+    await userEvent.click(trigger);
+    await expect(canvas.getByRole("textbox", { name: "Name" })).toHaveFocus();
+    await (await trusted()).keyboard("{Escape}");
+    await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
+    await expect(trigger).toHaveFocus();
+    await expect(args.onOpenChange).toHaveBeenLastCalledWith(
+      false,
+      expect.objectContaining({ reason: "escape-key" }),
+    );
+  },
+);
 
 Controlled.test("opens and closes through open", async ({ args, canvas, userEvent }) => {
   const opener = canvas.getByRole("button", { name: "Rename…" });

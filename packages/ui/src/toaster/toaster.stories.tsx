@@ -15,7 +15,7 @@ import { remove, snapshot } from "../toast/toast.ts";
 import { Toaster } from "./toaster.tsx";
 
 // @ts-expect-error -- a locale must name the Toaster region and the toast's Dismiss button
-({ tag: "fr-FR", labels: { ...roRO.labels, toaster: {}, toast: {} } }) satisfies Locale;
+({ tag: "fr-FR", labels: { ...roRO.labels, toaster: {} } }) satisfies Locale;
 
 const page = within(document.body);
 const region = () => page.findByRole("region", { name: "Notifications" });

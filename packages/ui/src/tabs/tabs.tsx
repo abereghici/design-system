@@ -4,6 +4,7 @@ import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
+import { join } from "../slot/slot.tsx";
 import { changeDetails } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
@@ -24,9 +25,6 @@ function useTabs(part: string) {
   if (tabs === null) throw new Error(`Tabs.${part} must be inside Tabs.Root`);
   return tabs;
 }
-
-const classes = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
 
 export type RootProps = Omit<ComponentProps<"div">, "defaultValue"> & {
   /** Called before the change commits; `details.cancel()` keeps the current tab. */
@@ -57,7 +55,7 @@ export function Root({ value, defaultValue, onValueChange, className, ...props }
 
   return (
     <TabsContext value={{ id, value: current, select }}>
-      <div {...props} className={classes(styles["root"], className)} />
+      <div {...props} className={join(styles["root"], className)} />
     </TabsContext>
   );
 }
@@ -90,7 +88,7 @@ export type ListProps = ComponentProps<"div"> &
   ({ "aria-label": string } | { "aria-labelledby": string });
 
 export function List({ className, ...props }: ListProps) {
-  return <div {...props} role="tablist" className={classes(styles["list"], className)} />;
+  return <div {...props} role="tablist" className={join(styles["list"], className)} />;
 }
 
 export interface TriggerProps extends Omit<ComponentProps<"button">, "type" | "role"> {
@@ -117,7 +115,7 @@ export function Trigger({
       aria-controls={`${tabs.id}-content-${value}`}
       aria-selected={selected}
       tabIndex={selected ? 0 : -1}
-      className={classes(styles["trigger"], className)}
+      className={join(styles["trigger"], className)}
       onPointerDown={(event) => {
         onPointerDown?.(event);
         const list = listOf(event.currentTarget);
@@ -149,7 +147,7 @@ export function Content({ value, className, ...props }: ContentProps) {
       id={`${tabs.id}-content-${value}`}
       aria-labelledby={`${tabs.id}-trigger-${value}`}
       hidden={value !== tabs.value}
-      className={classes(styles["content"], className)}
+      className={join(styles["content"], className)}
     />
   );
 }

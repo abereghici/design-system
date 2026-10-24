@@ -294,7 +294,7 @@ Proposed new:
 Flags for review:
 
 - **`command-offset` vs the source's 88 px.** `command-offset` → `space-section`, which is 88 but 64 below 760 px wide (`"(width < 760px)": "{primitive.dimension-64}"`). The source gives one value; the smaller offset on phones keeps room for results above the keyboard (judgement call to keep the token as ported).
-- **`command-enter-scale` is unused** (Motion: fade only). Keep it for a later pointer-gated scale or remove it; the build adds no rule for it.
+- **`command-enter-scale` is deleted** (Motion: fade only).
 - Empty uses semantic tokens directly (`color-icon-subtlest`, `color-text-subtle`, `type-body-sm`, `space-inset-xl`, `space-stack-sm`), as DropdownMenu does for values no app is expected to change; no new Dictionary word.
 
 ## Built-in labels

@@ -2,6 +2,8 @@
 
 import type { ComponentProps, FocusEvent, KeyboardEvent, Ref } from "react";
 
+import { join } from "../slot/slot.tsx";
+
 import styles from "./toolbar.module.css";
 
 type AccessibleName =
@@ -87,7 +89,7 @@ export function Toolbar({ ref, className, onKeyDown, onFocus, ...props }: Toolba
       tabIndex={-1}
       {...props}
       ref={(root) => (root === null ? undefined : connect(root, ref))}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
       onKeyDown={handleKeyDown}
       onFocus={handleFocus}
     />

@@ -55,11 +55,13 @@ Root (nav) → Groups (group → label, optional → list) → Items (li) → Li
 
 `Sidebar.Group`
 
-| Prop       | Type                    | Default | Notes                                                                                                 |
-| ---------- | ----------------------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| `label`    | `ReactNode`             |         | The group's visible name. Present: `role="group"` + `aria-labelledby`. Absent: a plain list, no role. |
-| `children` | `ReactNode`             |         | `Sidebar.Item`s, rendered inside the `<ul>`.                                                          |
-| …native    | `ComponentProps<"div">` |         | `ref`, `className` and native attributes on the group `<div>`.                                        |
+| Prop          | Type                    | Default | Notes                                                                                                                                                                                                                                                                 |
+| ------------- | ----------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`       | `ReactNode`             |         | The group's visible name. Present: `role="group"` + `aria-labelledby`. Absent: a plain list, no role.                                                                                                                                                                 |
+| `collapsible` | `boolean`               | `false` | With a `label`: the label becomes the `<summary>` of a native `<details>` holding the list (a chevron at the inline end turns when open). shadcn: "To make a `SidebarGroup` collapsible, wrap it in a `Collapsible`." (https://ui.shadcn.com/docs/components/sidebar) |
+| `defaultOpen` | `boolean`               | `false` | Starts a collapsible group open (shadcn's example: `<Collapsible defaultOpen className="group/collapsible">`).                                                                                                                                                        |
+| `children`    | `ReactNode`             |         | `Sidebar.Item`s, rendered inside the `<ul>`.                                                                                                                                                                                                                          |
+| …native       | `ComponentProps<"div">` |         | `ref`, `className` and native attributes on the group `<div>`.                                                                                                                                                                                                        |
 
 `Sidebar.Item`: `ComponentProps<"li">`.
 
@@ -81,7 +83,7 @@ Names, checked against the reference libraries:
 - **Current page as `aria-current`, no `isActive`.** shadcn: "Use the `isActive` prop to mark a menu item as active."; Mantine NavLink: "Set the `active` prop to add active styles to `NavLink`."; Radix `active`. The attribute is the API, as in Navbar (judgement call, platform first; shared contract).
 - **`asChild`**: Radix Slot (spec #1); Mantine NavLink "use components in the `component` prop, for example, Next.js `Link`".
 - **Required name**: APG "If a page includes more than one navigation landmark, each should have a unique label." A Sidebar usually sits beside a Navbar, so the type requires one and there is no English default.
-- **Left out (YAGNI):** collapsing the whole sidebar (shadcn `collapsible: "offcanvas" | "icon" | "none"`, `SidebarRail`, `SidebarTrigger`, the "`cmd+b`" shortcut, `SidebarProvider` state; Mantine `collapsed: { mobile, desktop }`), the off-canvas mobile drawer (Mantine "The navbar is hidden on mobile by default and can be toggled with the burger button."; phase 4 composes a Sheet around the same Root), collapsible groups and nested links (shadcn `SidebarMenuSub`, Mantine nested `NavLink` children; later composable from Accordion's `<details>`), `side` and `variant` (shadcn `left`/`right`, `sidebar`/`floating`/`inset`), a fixed width (shadcn `SIDEBAR_WIDTH = "16rem"`; the app's grid owns it), group and item actions and badges (`SidebarGroupAction`, `SidebarMenuAction`, `SidebarMenuBadge`), `disabled` links (Link precedent).
+- **Left out (YAGNI):** collapsing the whole sidebar (shadcn `collapsible: "offcanvas" | "icon" | "none"`, `SidebarRail`, `SidebarTrigger`, the "`cmd+b`" shortcut, `SidebarProvider` state; Mantine `collapsed: { mobile, desktop }`), the off-canvas mobile drawer (Mantine "The navbar is hidden on mobile by default and can be toggled with the burger button."; phase 4 composes a Sheet around the same Root), nested links (shadcn `SidebarMenuSub`, Mantine nested `NavLink` children), `side` and `variant` (shadcn `left`/`right`, `sidebar`/`floating`/`inset`), a fixed width (shadcn `SIDEBAR_WIDTH = "16rem"`; the app's grid owns it), group and item actions and badges (`SidebarGroupAction`, `SidebarMenuAction`, `SidebarMenuBadge`), `disabled` links (Link precedent).
 
 ## States
 
@@ -119,7 +121,7 @@ APG pattern: **Link** (https://www.w3.org/WAI/ARIA/apg/patterns/link/), inside a
 | Enter           | "Executes the link and moves focus to the link target." (APG Link)                   |
 | Shift + F10     | "(Optional): Opens a context menu for the link." Provided by the browser. (APG Link) |
 
-Group labels are not focusable.
+Group labels are not focusable, except a collapsible group's label: it is the native `<summary>`, a tab stop that Enter or Space opens and folds (APG Disclosure: "Enter: activates the disclosure control and toggles the visibility of the disclosure content. Space: activates the disclosure control and toggles the visibility of the disclosure content.", https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/). Links in a folded group are not rendered for Tab.
 
 **RTL:** no arrow keys, so nothing swaps.
 

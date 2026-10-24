@@ -4,7 +4,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 import * as Field from "../field/field.tsx";
 import { SearchIcon } from "../icon/icons/search.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { Listbox } from "../listbox/listbox.tsx";
 import { InputGroup } from "../text-field/text-field.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
@@ -101,14 +101,14 @@ interface ListProps {
 
 function List({ c, labelledBy, label, children }: ListProps) {
   return (
-    <div
+    <Listbox
       {...listProps(c)}
       aria-labelledby={labelledBy}
       aria-label={label}
       className={styles["list"]}
     >
       <ValueContext value={c.value}>{children}</ValueContext>
-    </div>
+    </Listbox>
   );
 }
 
@@ -151,9 +151,7 @@ export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, validate, ...rest } = props;
   const [options, { size = "md", className, style, labels, name, form, children, ...input }] =
     split(rest);
-  const locale = useLocale();
-  const noResults = labels?.noResults ?? locale.labels.combobox.noResults;
-  const c = useCombobox(options, locale.tag, noResults);
+  const [c, noResults] = useCombobox(options, labels);
   const field = { className, style, name, invalid, disabled: input.disabled, id: part(c, "root") };
   return (
     <Field.Root

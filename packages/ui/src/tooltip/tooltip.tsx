@@ -3,8 +3,9 @@
 import { createContext, use, useEffectEvent, useId, useLayoutEffect, useState } from "react";
 import type { ComponentProps, ReactNode, SyntheticEvent } from "react";
 
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId, isOpen, sourceOf } from "../floating/floating.ts";
-import { Slot } from "../slot/slot.tsx";
+import { Slot, join } from "../slot/slot.tsx";
 
 import styles from "./tooltip.module.css";
 
@@ -15,12 +16,8 @@ export type ChangeReason =
   | "escape-key"
   | "none";
 
-export interface ChangeEventDetails {
-  readonly reason: ChangeReason;
-  readonly event: Event | undefined;
-  /** Skips the show or hide; the Tooltip runs every change itself, so each one can be cancelled. */
-  readonly cancel: () => void;
-}
+/** `cancel()`: skips the show or hide; the Tooltip runs every change itself, so each one can be cancelled. */
+export type ChangeEventDetails = Details<ChangeReason, Event | undefined>;
 
 type Mode = "pointer" | "focus";
 
@@ -222,7 +219,7 @@ export function Content({ side = "top", align = "center", className, ...props }:
       popover="manual"
       data-side={side}
       data-align={align}
-      className={className === undefined ? styles["content"] : `${styles["content"]} ${className}`}
+      className={join(styles["content"], className)}
       onTransitionStart={(event) => {
         props.onTransitionStart?.(event);
         seen.add(event.currentTarget);

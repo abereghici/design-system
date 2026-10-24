@@ -2,13 +2,13 @@ import { useRef, useState } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
 import { PlusIcon } from "@platform/ui/icons/plus";
-import { SearchIcon } from "@platform/ui/icons/search";
 import { Kbd } from "@platform/ui/kbd";
 import { roRO } from "@platform/ui/locales/ro-RO";
 import { Provider } from "@platform/ui/provider";
 
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
+import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Command from "./index.parts.ts";
 
@@ -23,10 +23,7 @@ const palette = (
           New document
           <Kbd keys="mod+n" aria-hidden />
         </Command.Item>
-        <Command.Item keywords={["find"]}>
-          <SearchIcon data-icon="inline-start" />
-          Search files
-        </Command.Item>
+        <Command.Item keywords={["find"]}>Search files</Command.Item>
         <Command.Item disabled>Copy link</Command.Item>
       </Command.Group>
       <Command.Group heading="Navigation">
@@ -175,7 +172,7 @@ Default.test(
   async ({ canvas, userEvent }) => {
     await userEvent.type(canvas.getByRole("combobox", { name: "Caută comenzi" }), "zzz");
     await waitFor(() => expect(canvas.getByRole("status")).toHaveTextContent("Niciun rezultat"));
-    // @ts-expect-error A locale must carry the Command labels.
+    // @ts-expect-error -- a locale must carry the Command labels
     void ({ tag: "fr-FR", labels: { ...roRO.labels, command: {} } } satisfies typeof roRO);
   },
 );
@@ -216,23 +213,24 @@ const outside = { keys: "[MouseLeft]", coords: { clientX: 1, clientY: 1 } };
 
 export const InADialog = meta.story({
   render: (args) => <Palette {...args} />,
-  parameters: {
-    docs: {
-      description: { story: "The ⌘K palette: the app holds `open` and binds the shortcut." },
-    },
-  },
+  parameters: { docs: { description: { story: "The ⌘K palette; the app holds `open`." } } },
 });
 
 InADialog.test(
-  "opens as a modal named Command palette, focusing the input",
+  "opens as a modal named Command palette, focusing the input, and closes on Escape",
   async ({ canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole("button", { name: "Search" }));
+    const opener = canvas.getByRole("button", { name: "Search" });
+    await userEvent.click(opener);
     await waitFor(() =>
       expect(canvas.getByRole("dialog", { name: "Command palette" })).toBeVisible(),
     );
     const input = canvas.getByRole("combobox", { name: "Search commands" });
     await waitFor(() => expect(input).toHaveFocus());
     await expect(highlighted(input)).toHaveTextContent("New document");
+    await (await trusted()).keyboard("{Escape}");
+    await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
+    await expect(onOpenChange).toHaveBeenLastCalledWith(false, reason("escape-key"));
+    await expect(opener).toHaveFocus();
   },
 );
 

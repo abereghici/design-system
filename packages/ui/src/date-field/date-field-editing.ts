@@ -2,9 +2,13 @@ import { useEffect, useEffectEvent, useLayoutEffect, useRef } from "react";
 import type { ChangeEvent, KeyboardEvent, RefObject } from "react";
 
 import type { DatePart, dateFormats, Temporal } from "../date/date.ts";
+import type { ChangeEventDetails as Details } from "../events/events.ts";
 
 import { stepKey, typeDigit } from "./segments.ts";
 import type { Segments } from "./segments.ts";
+
+/** `cancel()`: keeps the previous segments. */
+export type DateFieldChangeEventDetails = Details<"input-change" | "keyboard">;
 
 type Reason = "input-change" | "keyboard";
 type Buffer = { readonly part: DatePart; readonly text: string } | null;

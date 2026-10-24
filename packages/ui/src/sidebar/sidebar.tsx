@@ -1,12 +1,9 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { Slot } from "../slot/slot.tsx";
+import { Slot, join } from "../slot/slot.tsx";
 
 import styles from "./sidebar.module.css";
-
-const join = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
 
 type AccessibleName =
   | { "aria-label": string; "aria-labelledby"?: string }
@@ -29,11 +26,23 @@ export function Root({ className, ...props }: RootProps) {
 export interface GroupProps extends ComponentProps<"div"> {
   /** The group's visible name; with it the group is announced by that name. */
   label?: ReactNode;
+  /** With a `label`: folds the links under it, a native `<details>` disclosure the label opens. */
+  collapsible?: boolean;
+  /** Starts a collapsible group unfolded. */
+  defaultOpen?: boolean;
 }
 
-export function Group({ label, className, children, ...props }: GroupProps) {
+export function Group({
+  label,
+  collapsible = false,
+  defaultOpen = false,
+  className,
+  children,
+  ...props
+}: GroupProps) {
   const id = useId();
   const labelled = label !== undefined;
+  const list = <ul className={styles["list"]}>{children}</ul>;
   return (
     <div
       role={labelled ? "group" : undefined}
@@ -41,12 +50,23 @@ export function Group({ label, className, children, ...props }: GroupProps) {
       {...props}
       className={join(styles["group"], className)}
     >
-      {labelled && (
-        <div id={id} className={styles["label"]}>
-          {label}
-        </div>
+      {labelled && collapsible ? (
+        <details open={defaultOpen} className={styles["collapsible"]}>
+          <summary id={id} className={`${styles["label"]} ${styles["summary"]}`}>
+            {label}
+          </summary>
+          {list}
+        </details>
+      ) : (
+        <>
+          {labelled && (
+            <div id={id} className={styles["label"]}>
+              {label}
+            </div>
+          )}
+          {list}
+        </>
       )}
-      <ul className={styles["list"]}>{children}</ul>
     </div>
   );
 }

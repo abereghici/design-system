@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import { join } from "../slot/slot.tsx";
+
 import styles from "./icon.module.css";
 
 export interface IconProps extends ComponentProps<"svg"> {
@@ -28,7 +30,7 @@ export function Icon({ size = "md", label, className, ...props }: IconProps) {
       {...props}
       {...(label === undefined ? { "aria-hidden": true } : { role: "img", "aria-label": label })}
       data-size={size}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
     />
   );
 }

@@ -148,8 +148,8 @@ describe("per-component JS", () => {
     ["heading", "var(--ab-type-heading-lg)", 0],
     ["text", "var(--ab-type-body-md)", 0],
     ["scroll-area", "animation-timeline:scroll(self)", 0],
-    ["spinner", "var(--ab-spinner-color)", 5],
-    ["table", "var(--ab-table-body-font)", 10],
+    ["spinner", "var(--ab-spinner-color)", 4],
+    ["table", "var(--ab-table-body-font)", 12],
     ["skeleton", "var(--ab-skeleton-background-color)", 4],
     ["progress", "var(--ab-progress-indicator-background-color)", 11],
     ["meter", "var(--ab-meter-indicator-background-color)", 13],
@@ -174,10 +174,29 @@ describe("per-component JS", () => {
     expect(route("skip-link").html).toContain(">Skip to main content</a>");
     expect(route("link").html).toMatch(/<a class="[^"]+" href="\/">Home<\/a>/v);
   });
+});
+
+describe("locale, labels and direction", () => {
+  test("the root layout sets dir from getDirection on the server", () => {
+    expect(button.html).toContain('<html lang="en" dir="ltr"');
+  });
+
+  test("a sorted Table header renders aria-sort and its button on the server", () => {
+    expect(route("table").html).toMatch(
+      /<th scope="col" aria-sort="ascending" class="[^"]+"><button type="button"/v,
+    );
+  });
 
   test("a locale reaches client components, and ships only on the route that imports it", () => {
     expect(locale.html).toContain("<output>ro-RO</output>");
     expect(button.js).not.toContain('"ro-RO"');
+  });
+
+  test("a client component ships its own default labels and no other component's", () => {
+    const alert = route("alert");
+    expect(alert.js).toContain('"Dismiss"');
+    expect(alert.js).not.toContain("Command palette");
+    expect(alert.js).not.toContain("Skip to main content");
   });
 });
 

@@ -5,7 +5,10 @@ import type { ComponentProps, MouseEvent } from "react";
 import { dispatchFeedback } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { useLocale } from "../provider/locale.tsx";
+import { join } from "../slot/slot.tsx";
 
+import { alertLabels } from "./labels.ts";
+import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./alert.module.css";
 
 export interface CloseProps extends ComponentProps<"button"> {
@@ -39,11 +42,12 @@ export function Close({
 
   return (
     <button
-      aria-label={labels?.close ?? locale.labels.alert.close}
+      aria-label={labels?.close ?? locale.labels.alert?.close ?? alertLabels.close}
       {...props}
       type={type}
       aria-disabled={disabled ? true : undefined}
-      className={className === undefined ? styles["close"] : `${styles["close"]} ${className}`}
+      data-size="sm"
+      className={join(`${iconButton["root"]} ${styles["close"]}`, className)}
       onClick={handleClick}
     >
       <XIcon size="sm" />

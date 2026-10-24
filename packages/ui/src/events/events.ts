@@ -5,6 +5,14 @@
  */
 export type FeedbackReason = "user" | "programmatic";
 
+/** What an `on…Change` callback receives: why the change happened and the event behind it. */
+export interface ChangeEventDetails<Reason extends string, Cause = Event> {
+  readonly reason: Reason;
+  readonly event: Cause;
+  /** Keeps the previous state. */
+  readonly cancel: () => void;
+}
+
 export interface FeedbackEventDetail<Component extends string = string> {
   readonly component: Component;
   readonly reason: FeedbackReason;

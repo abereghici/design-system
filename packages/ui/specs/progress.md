@@ -123,7 +123,7 @@ Dictionary changes: the component word **`progress`**, and the element word **`v
 
 ## Built-in labels
 
-None. The name comes from `label`, `aria-label` or `aria-labelledby`, and the only generated text is the number, formatted with `Intl.NumberFormat`. Locale: the `locale` prop's `tag`, else English (`"en"`). A Server Component can't read the Provider's client context or `document.documentElement.lang`, so the app passes the same locale object it gives the Provider (decision Q15-2). Only the value text depends on the locale: `aria-valuenow` is a plain number, and assistive technology presents it as a percentage itself (WAI-ARIA 1.2, see Behaviour).
+None. The name comes from `label`, `aria-label` or `aria-labelledby`, and the only generated text is the number, formatted with `Intl.NumberFormat`. Locale: the `locale` prop's `tag`, else `"en-US"`, as every component without a locale. A Server Component can't read the Provider's client context, so the app passes the same locale object it gives the Provider (decision Q15-2). Only the value text depends on the locale: `aria-valuenow` is a plain number, and assistive technology presents it as a percentage itself (WAI-ARIA 1.2, see Behaviour).
 
 ## Feedback events
 

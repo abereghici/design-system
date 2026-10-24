@@ -1,11 +1,8 @@
 import type { ComponentProps } from "react";
 
-import { Slot } from "../slot/slot.tsx";
+import { Slot, join } from "../slot/slot.tsx";
 
 import styles from "./navbar.module.css";
-
-const join = (own: string | undefined, className: string | undefined) =>
-  className === undefined ? own : `${own} ${className}`;
 
 type AccessibleName =
   | { "aria-label": string; "aria-labelledby"?: string }

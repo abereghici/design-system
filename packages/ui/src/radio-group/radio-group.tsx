@@ -5,6 +5,7 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
 import { useFieldControl } from "../field/field-control.ts";
+import { join } from "../slot/slot.tsx";
 import { changeDetails, followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
@@ -76,7 +77,7 @@ export function Root({
         role="radiogroup"
         aria-orientation={orientation}
         data-orientation={orientation}
-        className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+        className={join(styles["root"], className)}
         onKeyDown={(event) => {
           pointerMarker.onKeyDown(event);
           onKeyDown?.(event);
@@ -90,12 +91,7 @@ export function Root({
 export type LabelProps = ComponentProps<"legend">;
 
 export function Label({ className, ...props }: LabelProps) {
-  return (
-    <legend
-      {...props}
-      className={className === undefined ? styles["label"] : `${styles["label"]} ${className}`}
-    />
-  );
+  return <legend {...props} className={join(styles["label"], className)} />;
 }
 
 export interface ItemProps extends Omit<
@@ -139,7 +135,7 @@ export function Item({
   return (
     <label
       htmlFor={bindings.id ?? fallbackId}
-      className={className === undefined ? styles["item"] : `${styles["item"]} ${className}`}
+      className={join(styles["item"], className)}
       style={style}
     >
       <input

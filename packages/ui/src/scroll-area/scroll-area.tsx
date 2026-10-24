@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { Slot } from "../slot/slot.tsx";
+import { Slot, join } from "../slot/slot.tsx";
 
 import styles from "./scroll-area.module.css";
 
@@ -22,11 +22,5 @@ export function ScrollArea({
   ...props
 }: ScrollAreaProps) {
   const Root = asChild ? Slot : "div";
-  return (
-    <Root
-      {...props}
-      tabIndex={tabIndex}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
-    />
-  );
+  return <Root {...props} tabIndex={tabIndex} className={join(styles["root"], className)} />;
 }

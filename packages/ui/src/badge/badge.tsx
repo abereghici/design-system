@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 
 import type { Locale } from "../provider/locale.tsx";
+import { join } from "../slot/slot.tsx";
 
 import styles from "./badge.module.css";
 
@@ -14,8 +15,8 @@ export interface BadgeProps extends Omit<ComponentProps<"span">, "children"> {
   /** A numeric count above it renders as `max` plus the overflow label ("99+"). */
   max?: number;
   /**
-   * A shipped locale (`@platform/ui/locales/*`) whose tag formats a numeric count, on the server. A
-   * Server Component can't read the Provider's `locale`, so without it the count is English.
+   * A shipped locale (`@platform/ui/locales/*`) that formats a numeric count on the server. A
+   * Server Component can't read the Provider's `locale`, so without it the count is en-US.
    */
   locale?: Locale;
   labels?: BadgeLabels;
@@ -42,13 +43,13 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const overflow = typeof children === "number" && children > max;
-  const formatter = new Intl.NumberFormat(locale?.tag ?? "en");
+  const formatter = new Intl.NumberFormat(locale?.tag ?? "en-US");
   return (
     <span
       {...props}
       data-variant={variant}
       data-overflow={overflow || undefined}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
     >
       {typeof children === "string"
         ? children

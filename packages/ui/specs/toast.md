@@ -154,7 +154,7 @@ The tuck offset reuses `toast-stack-gap` (8, "−8px … per step"), as the prot
 | ------------- | --------- | --------- | ------------------------- |
 | `toast.close` | "Dismiss" | "Închide" | The Dismiss button's name |
 
-Added to the `Labels` type as `readonly toast: { readonly close: string }` and to `en-US.ts` and `ro-RO.ts`. The Toaster reads it with `useLocale().labels.toast` and its own `labels` prop wins (`toaster.md`). "Dismiss" is the source's word and the Alert Close default; Sonner says "Close toast", React Aria "Close".
+The Toaster owns the Dismiss name as `toaster.close` (`toaster.md`); Toast is a store with no UI, so it has no labels. "Dismiss" is the source's word and the Alert Close default; Sonner says "Close toast", React Aria "Close".
 
 ## Feedback events
 

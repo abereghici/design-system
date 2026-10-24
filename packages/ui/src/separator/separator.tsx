@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import { join } from "../slot/slot.tsx";
+
 import styles from "./separator.module.css";
 
 interface SeparatorBaseProps extends ComponentProps<"hr"> {
@@ -40,7 +42,7 @@ export function Separator({
       {...props}
       data-orientation={orientation}
       data-variant={variant}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
     />
   );
 }

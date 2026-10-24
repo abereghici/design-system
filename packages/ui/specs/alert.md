@@ -31,7 +31,7 @@ Root → status icon → Title (optional) + Description (optional) → Close (op
 - **Status icon.** Rendered by Root from `variant`, decorative (`aria-hidden`): `info` for neutral, `check-circle` for success, `warning` for warning, `danger` for danger (glyphs from the icon set; the info and warning glyphs carry the bob diamond, the one motif on this surface). Not a Part and not replaceable in phase 1.
 - **Title.** A `<div>` in label type. Not a heading: an Alert is a message, not a section of the outline (design decision; shadcn and Chakra also render a `div`, see API).
 - **Description.** A `<div>` in body type. May hold Links, inline code or a short list.
-- **Close.** A native `<button>` with the `x` icon, drawn with IconButton's sm tokens (`icon-button-*`), at the inline end of the first row. It is not an IconButton instance, so one press dispatches only `ab-dismiss`. The only interactive Part.
+- **Close.** A native `<button>` with the `x` icon, styled by IconButton's CSS Module at `data-size="sm"` (as Dialog's Close), at the inline end of the first row. It is not an IconButton instance, so one press dispatches only `ab-dismiss`. The only interactive Part.
 
 At least one of Title or Description is required. There is no Action Part: an action is a Link or Button inside Description (shadcn's `AlertAction` is the only reference Part for it; deferred until a product needs it).
 

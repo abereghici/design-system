@@ -4,6 +4,7 @@ import { Button } from "@platform/ui/button";
 
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
+import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as AlertDialog from "./alert-dialog.tsx";
 
@@ -47,6 +48,26 @@ Default.test(
     const dialog = canvas.getByRole("alertdialog", { name: "Delete project?" });
     await expect(dialog).toHaveAccessibleDescription("This removes 12 files. You can’t undo this.");
     await expect(canvas.getByRole("button", { name: "Cancel" })).toHaveFocus();
+  },
+);
+
+Default.test(
+  "treats Escape as Cancel: closes, returns focus to the Trigger and dispatches ab-dismiss",
+  async ({ args, canvas, userEvent }) => {
+    const trigger = canvas.getByRole("button", { name: "Delete project" });
+    await userEvent.click(trigger);
+    const dismissals = listen("ab-dismiss");
+    await (await trusted()).keyboard("{Escape}");
+    await waitFor(() => expect(canvas.queryByRole("alertdialog")).toBeNull());
+    dismissals.stop();
+    await expect(trigger).toHaveFocus();
+    await expect(args.onOpenChange).toHaveBeenLastCalledWith(
+      false,
+      expect.objectContaining({ reason: "escape-key" }),
+    );
+    await expect(dismissals.events.map(({ detail }) => detail)).toEqual([
+      { component: "AlertDialog", reason: "user" },
+    ]);
   },
 );
 

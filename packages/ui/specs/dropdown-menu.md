@@ -219,10 +219,8 @@ Existing (ported from the source): `dropdown-menu-min-width`, `dropdown-menu-pad
 
 Proposed new:
 
-| Token                                    | References            | `$type` | Why                                                        |
-| ---------------------------------------- | --------------------- | ------- | ---------------------------------------------------------- |
-| `dropdown-menu-item-text-color-disabled` | `color-text-disabled` | color   | Disabled Item label; the source has no disabled Item token |
-| `dropdown-menu-item-icon-color-disabled` | `color-icon-disabled` | color   | Disabled Item icon and indicator                           |
+| Token | References | `$type` | Why |
+| ----- | ---------- | ------- | --- |
 
 The diamond size (`size-indicator`), the Label's block padding (`space-inset-xs`) and the Separator width (`border-width-default`) use semantic tokens directly; no app is expected to change them. The check and the diamond reuse `dropdown-menu-item-icon-color-selected`.
 

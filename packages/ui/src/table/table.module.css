@@ -21,6 +21,52 @@
     border-block-end: none;
   }
 
+  .row[data-selected] {
+    background-color: var(--ab-table-row-background-color-selected);
+  }
+
+  .sort-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-space-inline-xs);
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  /* Drawn in CSS, not with an Icon, so a Table without sorting ships no Icon styles. */
+  .sort-label::after {
+    content: "";
+    inline-size: var(--ab-size-icon-sm);
+    block-size: var(--ab-size-icon-sm);
+    background-color: var(--ab-table-sort-icon-color);
+    mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>')
+      center / 100% no-repeat;
+  }
+
+  .column-header:not([aria-sort]) .sort-label::after {
+    visibility: hidden;
+  }
+
+  .column-header[aria-sort="ascending"] .sort-label::after {
+    rotate: 180deg;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .sort-label:hover::after {
+      visibility: visible;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .sort-label::after {
+      background-color: ButtonText;
+    }
+  }
+
   .column-header,
   .cell {
     padding-block: var(--ab-table-padding-block);

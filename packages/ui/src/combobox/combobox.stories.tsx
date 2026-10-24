@@ -250,7 +250,7 @@ Default.test(
     await expect(highlighted()).toHaveAccessibleName("Ștefan Țurcanu");
     await type("q");
     await expect(canvas.getByRole("status")).toHaveTextContent("Niciun rezultat");
-    // @ts-expect-error A locale must carry the Combobox labels.
+    // @ts-expect-error -- a locale must carry the Combobox labels
     void ({ tag: "fr-FR", labels: { ...roRO.labels, combobox: {} } } satisfies Locale);
   },
 );

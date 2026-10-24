@@ -5,10 +5,11 @@ import { LayersIcon } from "@platform/ui/icons/layers";
 import { MailIcon } from "@platform/ui/icons/mail";
 
 import preview from "#.storybook/preview.tsx";
+import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Sidebar from "./sidebar.tsx";
 
-// @ts-expect-error A Sidebar without aria-label or aria-labelledby leaves its landmark unnamed.
+// @ts-expect-error -- a Sidebar without aria-label or aria-labelledby leaves its landmark unnamed
 <Sidebar.Root>{null}</Sidebar.Root>;
 
 const groups = (
@@ -99,3 +100,48 @@ Default.test(
     ]);
   },
 );
+
+export const Collapsible = meta.story({
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A `collapsible` Group folds its links under its label, a native disclosure; `defaultOpen` starts it open.",
+      },
+    },
+  },
+  args: {
+    children: (
+      <>
+        {groups}
+        <Sidebar.Group label="Settings" collapsible>
+          <Sidebar.Item>
+            <Sidebar.Link href="#billing">Billing</Sidebar.Link>
+          </Sidebar.Item>
+        </Sidebar.Group>
+      </>
+    ),
+  },
+});
+
+Collapsible.test(
+  "shows a folded group's links once its label is pressed",
+  async ({ canvas, userEvent }) => {
+    await expect(canvas.getByRole("link", { name: "Billing" })).not.toBeVisible();
+    await userEvent.click(canvas.getByText("Settings"));
+    await expect(canvas.getByRole("group", { name: "Settings" })).toBeVisible();
+    await expect(canvas.getByRole("link", { name: "Billing" })).toBeVisible();
+  },
+);
+
+Collapsible.test("opens and folds a group from the keyboard", async ({ canvas, userEvent }) => {
+  await userEvent.tab();
+  await userEvent.tab();
+  await userEvent.tab();
+  await userEvent.tab();
+  await expect(canvas.getByText("Settings")).toHaveFocus();
+  await (await trusted()).keyboard("{Enter}");
+  await expect(canvas.getByRole("link", { name: "Billing" })).toBeVisible();
+  await (await trusted()).keyboard("{Enter}");
+  await expect(canvas.getByRole("link", { name: "Billing" })).not.toBeVisible();
+});

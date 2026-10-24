@@ -2,6 +2,7 @@ import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import type { Locale } from "../provider/locale.tsx";
+import { join } from "../slot/slot.tsx";
 
 import styles from "./progress.module.css";
 
@@ -20,15 +21,15 @@ export type ProgressProps = Omit<ComponentProps<"progress">, "children" | "value
     /** With `style: "percent"` the fraction `value / max` is formatted, otherwise `value`. */
     formatOptions?: Intl.NumberFormatOptions;
     /**
-     * A shipped locale (`@platform/ui/locales/*`) whose tag formats the value, on the server. A
-     * Server Component can't read the Provider's `locale`, so without it the value is English.
+     * A shipped locale (`@platform/ui/locales/*`) that formats it on the server. A Server Component
+     * can't read the Provider's `locale`, so without it the value is en-US.
      */
     locale?: Locale;
   };
 
 /**
  * How far a task has got, or that it is running when `value` is `null`. The value text is formatted
- * with `Intl.NumberFormat` on the server, in English unless you pass a shipped `locale`. For a
+ * with `Intl.NumberFormat` on the server, in en-US unless you pass a shipped `locale`. For a
  * short wait inside a control use Spinner or Button's `loading`; for a measurement that isn't
  * progress use Meter.
  */
@@ -49,13 +50,13 @@ export function Progress({
     now === undefined
       ? undefined
       : (valueLabel ??
-        new Intl.NumberFormat(locale?.tag ?? "en", formatOptions).format(
+        new Intl.NumberFormat(locale?.tag ?? "en-US", formatOptions).format(
           formatOptions.style === "percent" ? now / max : now,
         ));
   return (
     <div
       data-state={now === undefined ? "indeterminate" : now === max ? "complete" : "loading"}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
       style={style}
     >
       {label !== undefined && (

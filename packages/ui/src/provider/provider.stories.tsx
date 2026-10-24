@@ -11,14 +11,6 @@ function Tag() {
   return <output>{useLocale().tag}</output>;
 }
 
-const withDocumentLang = (lang: string) => () => {
-  const previous = document.documentElement.lang;
-  document.documentElement.lang = lang;
-  return () => {
-    document.documentElement.lang = previous;
-  };
-};
-
 const meta = preview.meta({
   title: "Components/Utilities/Provider",
   component: Provider,
@@ -27,21 +19,9 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test(
-  "without a locale or a document language, components use en-US",
-  { beforeEach: withDocumentLang("") },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("status")).toHaveTextContent("en-US");
-  },
-);
-
-Default.test(
-  "without a locale, components format in the document language",
-  { beforeEach: withDocumentLang("fr-FR") },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("status")).toHaveTextContent("fr-FR");
-  },
-);
+Default.test("without a locale, components use en-US", async ({ canvas }) => {
+  await expect(canvas.getByRole("status")).toHaveTextContent("en-US");
+});
 
 Default.test(
   "passes its locale to client components",

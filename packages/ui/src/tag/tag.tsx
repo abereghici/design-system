@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import { join } from "../slot/slot.tsx";
+
 import styles from "./tag.module.css";
 
 export interface TagProps extends ComponentProps<"span"> {
@@ -14,11 +16,5 @@ export interface TagProps extends ComponentProps<"span"> {
  * StatusDot.
  */
 export function Tag({ variant = "neutral", className, ...props }: TagProps) {
-  return (
-    <span
-      {...props}
-      data-variant={variant}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
-    />
-  );
+  return <span {...props} data-variant={variant} className={join(styles["root"], className)} />;
 }

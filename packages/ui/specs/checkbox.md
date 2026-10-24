@@ -114,10 +114,9 @@ Existing (ported from the source): `checkbox-size`, `checkbox-border-radius`, `c
 
 Proposed new:
 
-| Token                           | References            | `$type`   | Why                                                  |
-| ------------------------------- | --------------------- | --------- | ---------------------------------------------------- |
-| `checkbox-icon-size`            | `size-icon-xs`        | dimension | Check and minus glyph size (14) inside the 16 px box |
-| `checkbox-border-color-invalid` | `color-border-danger` | color     | Invalid state (Field contract)                       |
+| Token                           | References            | `$type` | Why                            |
+| ------------------------------- | --------------------- | ------- | ------------------------------ |
+| `checkbox-border-color-invalid` | `color-border-danger` | color   | Invalid state (Field contract) |
 
 Contrast matrix additions (`packages/tokens/src/contrast.ts`, non-text 3:1): `background-accent-bold` on `surface-default`, `surface-raised`, `surface-nested`, `surface-floating`.
 

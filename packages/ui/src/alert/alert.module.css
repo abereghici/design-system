@@ -1,5 +1,4 @@
 @import "@platform/tokens/components/alert.css";
-@import "@platform/tokens/components/icon-button.css";
 
 @layer ab.components {
   .root {
@@ -59,45 +58,8 @@
   }
 
   .close {
-    display: grid;
-    place-items: center;
     grid-row: 1;
     grid-column: 3;
-    inline-size: var(--ab-icon-button-sm-size);
-    block-size: var(--ab-icon-button-sm-size);
-    padding: 0;
-    border: 0;
-    border-radius: var(--ab-icon-button-border-radius);
-    background-color: transparent;
-    color: var(--ab-icon-button-icon-color);
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    transition-property: background-color, color, scale;
-    transition-duration:
-      var(--ab-motion-duration-hover-out), var(--ab-motion-duration-hover-out),
-      var(--ab-motion-duration-press);
-    transition-timing-function:
-      var(--ab-motion-easing-color), var(--ab-motion-easing-color), var(--ab-motion-easing-enter);
-  }
-
-  .close:not([aria-disabled="true"]):active {
-    background-color: var(--ab-icon-button-background-color-pressed);
-    scale: var(--ab-icon-button-scale-pressed);
-  }
-
-  .close[aria-disabled="true"] {
-    color: var(--ab-color-icon-disabled);
-    cursor: not-allowed;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .close:not([aria-disabled="true"]):hover {
-      background-color: var(--ab-icon-button-background-color-hovered);
-      color: var(--ab-icon-button-icon-color-hovered);
-      transition-duration:
-        var(--ab-motion-duration-hover-in), var(--ab-motion-duration-hover-in),
-        var(--ab-motion-duration-press);
-    }
   }
 
   @media (prefers-contrast: more) {

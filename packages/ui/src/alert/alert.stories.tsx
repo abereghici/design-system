@@ -92,7 +92,7 @@ Default.test(
   },
   async ({ canvas }) => {
     await expect(canvas.getByRole("button", { name: "Închide" })).toBeVisible();
-    // @ts-expect-error A locale must carry the Alert labels.
+    // @ts-expect-error -- a locale must carry the Alert labels
     void ({ tag: "fr-FR", labels: {} } satisfies Locale);
   },
 );

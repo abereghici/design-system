@@ -1,51 +1,40 @@
-import type { Locale } from "../locale.tsx";
+import { alertLabels } from "../../alert/labels.ts";
+import { breadcrumbsLabels } from "../../breadcrumbs/labels.ts";
+import { calendarLabels } from "../../calendar/labels.ts";
+import { comboboxLabels } from "../../combobox/labels.ts";
+import { commandLabels } from "../../command/labels.ts";
+import { dateFieldLabels } from "../../date-field/labels.ts";
+import { datePickerLabels } from "../../date-picker/labels.ts";
+import { dialogLabels } from "../../dialog/labels.ts";
+import { kbdLabels } from "../../kbd/labels.ts";
+import { numberFieldLabels } from "../../number-field/labels.ts";
+import { paginationLabels } from "../../pagination/labels.ts";
+import { passwordFieldLabels } from "../../password-field/labels.ts";
+import { popoverLabels } from "../../popover/labels.ts";
+import { sheetLabels } from "../../sheet/labels.ts";
+import { skipLinkLabels } from "../../skip-link/labels.ts";
+import { spinnerLabels } from "../../spinner/labels.ts";
+import { toasterLabels } from "../../toaster/labels.ts";
 
-export const enUS: Locale = {
+export const enUS = {
   tag: "en-US",
   labels: {
-    alert: { close: "Dismiss" },
-    spinner: { loading: "Loading" },
-    kbd: {
-      command: "Command",
-      control: "Control",
-      shift: "Shift",
-      option: "Option",
-      enter: "Enter",
-      backspace: "Backspace",
-      arrowUp: "Up arrow",
-      arrowDown: "Down arrow",
-      arrowLeft: "Left arrow",
-      arrowRight: "Right arrow",
-    },
-    skipLink: { label: "Skip to main content" },
-    passwordField: { show: "Show password" },
-    numberField: { increment: "Increase", decrement: "Decrease" },
-    breadcrumbs: { root: "Breadcrumb" },
-    pagination: { root: "Pagination", previous: "Previous page", next: "Next page" },
-    popover: { close: "Close" },
-    dialog: { close: "Close" },
-    combobox: { noResults: "No results" },
-    sheet: { close: "Close" },
-    toast: { close: "Dismiss" },
-    toaster: { region: "Notifications" },
-    dateField: {
-      dayPlaceholder: "dd",
-      monthPlaceholder: "mm",
-      yearPlaceholder: "yyyy",
-      empty: "Empty",
-      incomplete: "Enter a complete date",
-      unavailable: "This date is not available",
-    },
-    calendar: { previousMonth: "Previous month", nextMonth: "Next month" },
-    datePicker: { chooseDate: "Choose date" },
-    command: {
-      dialog: "Command palette",
-      search: "Search commands",
-      placeholder: "Type a command or search…",
-      empty: "No results",
-      navigate: "Navigate",
-      open: "Open",
-      close: "Close",
-    },
+    alert: alertLabels,
+    breadcrumbs: breadcrumbsLabels,
+    calendar: calendarLabels,
+    combobox: comboboxLabels,
+    command: commandLabels,
+    dateField: dateFieldLabels,
+    datePicker: datePickerLabels,
+    dialog: dialogLabels,
+    kbd: kbdLabels,
+    numberField: numberFieldLabels,
+    pagination: paginationLabels,
+    passwordField: passwordFieldLabels,
+    popover: popoverLabels,
+    sheet: sheetLabels,
+    skipLink: skipLinkLabels,
+    spinner: spinnerLabels,
+    toaster: toasterLabels,
   },
 };

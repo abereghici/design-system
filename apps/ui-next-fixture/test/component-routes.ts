@@ -137,7 +137,7 @@ export const componentRoutes = [
     html: 'data-side="end"',
   },
   { name: "navbar", tokens: ["navbar"], client: [], html: '<nav aria-label="Main">' },
-  { name: "sidebar", tokens: ["sidebar"], client: [], html: 'role="group" aria-labelledby=' },
+  { name: "sidebar", tokens: ["sidebar"], client: [], html: "Settings</summary>" },
   {
     name: "tooltip",
     tokens: ["tooltip", "icon", "icon-button", "spinner"],

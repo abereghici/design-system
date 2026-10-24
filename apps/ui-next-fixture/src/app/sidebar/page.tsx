@@ -17,6 +17,11 @@ export default function Page() {
           </Sidebar.Link>
         </Sidebar.Item>
       </Sidebar.Group>
+      <Sidebar.Group label="Settings" collapsible>
+        <Sidebar.Item>
+          <Sidebar.Link href="/billing">Billing</Sidebar.Link>
+        </Sidebar.Item>
+      </Sidebar.Group>
     </Sidebar.Root>
   );
 }

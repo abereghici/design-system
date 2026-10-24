@@ -5,8 +5,9 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
 import { CheckIcon } from "../icon/icons/check.tsx";
+import { join } from "../slot/slot.tsx";
 
-import { join, useItem } from "./menu.tsx";
+import { useItem } from "./menu.tsx";
 import type { ItemBaseProps, ItemChangeEventDetails } from "./menu.tsx";
 import styles from "./menu.module.css";
 

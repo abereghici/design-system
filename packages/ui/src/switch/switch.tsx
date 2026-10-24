@@ -4,6 +4,7 @@ import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import { useFieldControl } from "../field/field-control.ts";
+import { join } from "../slot/slot.tsx";
 import { pointerMarker, toggleClick } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
@@ -55,7 +56,7 @@ export function Switch({
     <label
       {...pointerMarker}
       htmlFor={bindings.id ?? fallbackId}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
       style={style}
     >
       <input

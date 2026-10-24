@@ -5,6 +5,7 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
 import { useFieldControl } from "../field/field-control.ts";
+import { join } from "../slot/slot.tsx";
 import { changeDetails, followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
@@ -61,7 +62,7 @@ export function Root({
       <fieldset
         {...props}
         role="radiogroup"
-        className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+        className={join(styles["root"], className)}
         onPointerDown={(event) => {
           pointerMarker.onPointerDown(event);
           onPointerDown?.(event);
@@ -91,10 +92,7 @@ export function Item({ value, children, className, style, onClick, ...props }: I
     name: group.name,
   });
   return (
-    <label
-      className={className === undefined ? styles["item"] : `${styles["item"]} ${className}`}
-      style={style}
-    >
+    <label className={join(styles["item"], className)} style={style}>
       <input
         {...bindings}
         type="radio"

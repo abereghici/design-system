@@ -9,8 +9,8 @@ import type { Locale } from "./locale.tsx";
 
 export interface ProviderProps {
   /**
-   * The language tag and built-in labels, from `@platform/ui/locales/*`. Without it, components
-   * use the en-US labels and format in `document.documentElement.lang`.
+   * The language tag and built-in labels, from `@platform/ui/locales/*`. Without it, client
+   * components use en-US, as Server Components do without their own `locale`.
    */
   locale?: Locale;
   children?: ReactNode;

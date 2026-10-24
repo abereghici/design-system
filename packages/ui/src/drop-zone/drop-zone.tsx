@@ -5,6 +5,7 @@ import type { ComponentProps, DragEvent, RefObject } from "react";
 
 import { FieldContext } from "../field/field-control.ts";
 import { FileInput, PickerContext } from "../file-trigger/file-trigger.tsx";
+import { join } from "../slot/slot.tsx";
 
 import styles from "./drop-zone.module.css";
 
@@ -160,7 +161,7 @@ export function DropZone({
     <PickerContext value={picker}>
       <div
         {...props}
-        className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+        className={join(styles["root"], className)}
         data-drop-target={target}
         data-invalid={field?.invalid === true || undefined}
         data-disabled={blocked || undefined}

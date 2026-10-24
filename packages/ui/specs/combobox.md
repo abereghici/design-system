@@ -207,7 +207,6 @@ Proposed new (mirroring `select-picker-*` and `select-option-*`):
 
 | Token                                 | References                  | `$type`     | Why                                                              |
 | ------------------------------------- | --------------------------- | ----------- | ---------------------------------------------------------------- |
-| `combobox-icon-color`                 | `color-icon-subtle`         | color       | The chevron, as `select-icon-color`                              |
 | `combobox-list-padding`               | `space-inset-xs`            | dimension   | List inner padding (4)                                           |
 | `combobox-list-border-radius`         | `radius-lg`                 | dimension   | 12, as the menus                                                 |
 | `combobox-list-background-color`      | `color-material-thick`      | color       | Material popover                                                 |
@@ -226,8 +225,6 @@ Proposed new (mirroring `select-picker-*` and `select-option-*`):
 | `combobox-option-text-color`          | `color-text-default`        | color       | Option text                                                      |
 | `combobox-option-icon-color`          | `color-icon-subtle`         | color       | Leading Item icon, as `dropdown-menu-item-icon-color`            |
 | `combobox-option-icon-color-selected` | `color-icon-accent`         | color       | The chosen Item's check ("moss checkmark")                       |
-| `combobox-option-text-color-disabled` | `color-text-disabled`       | color       | Disabled Item text                                               |
-| `combobox-option-icon-color-disabled` | `color-icon-disabled`       | color       | Disabled Item icon                                               |
 
 The group label (`type-overline-sm`, `color-text-subtlest`), the empty row (`type-body-xs`, `color-text-subtle`) and the forced-colors border (`border-width-default`) use semantic tokens directly, as Select's group label. The focus ring uses `focus-ring-width` and `color-border-focused` directly. All names pass `naming.ts` with existing words (`list`, `option`, `enter`, `exit`, `icon`).
 

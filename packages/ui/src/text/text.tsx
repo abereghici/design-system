@@ -1,5 +1,7 @@
 import type { ComponentProps, ElementType, Ref } from "react";
 
+import { join } from "../slot/slot.tsx";
+
 import styles from "./text.module.css";
 
 type Role =
@@ -38,7 +40,7 @@ export function Text({
       data-variant={variant}
       data-size={size}
       data-color={color}
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+      className={join(styles["root"], className)}
     />
   );
 }
