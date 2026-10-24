@@ -10,7 +10,7 @@ import { Logo } from "@platform/ui/logo";
 <Logo className={styles.hero} />                 {/* sized by the app: inline-size: 96px */}
 ```
 
-Status: draft for brand-owner review (phase 1). Source: the brand book's "Brand mark" section, `assets/marks/README.md` and `components/Mark/preview.html` in the artifact (the source's Mark, renamed Logo by spec #1). Pipeline: ticket #11, ADR-0005. Built in #11 (`src/logo/logo.tsx`): `label`, the minimum size and `logo-color`/`logo-stroke-width` match this spec. The default size differs: #11 renders 32 px (`width`/`height`), this spec proposes `max(1em, var(--ab-logo-min-size))`. The phase-1 build reconciles it after review.
+Status: draft for brand-owner review (phase 1). Source: the brand book's "Brand mark" section, `assets/marks/README.md` and `components/Mark/preview.html` in the artifact (the source's Mark, renamed Logo by spec #1). Pipeline: ticket #11, ADR-0005. Built in #11 (`src/logo/logo.tsx`): `label`, the minimum size and `logo-color`/`logo-stroke-width` match this spec. The default size, `max(1em, var(--ab-logo-min-size))`, was reconciled in #16; the path data is inline in `logo.tsx`.
 
 ## Anatomy
 

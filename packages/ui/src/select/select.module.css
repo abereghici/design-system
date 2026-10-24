@@ -1,0 +1,221 @@
+@import "@platform/tokens/components/input.css";
+@import "@platform/tokens/components/select.css";
+
+@layer ab.components {
+  .root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ab-input-gap);
+  }
+
+  .label {
+    color: var(--ab-input-label-text-color);
+    font: var(--ab-input-label-font);
+  }
+
+  .root:has(.select:required) .label::after {
+    content: " *" / "";
+    color: var(--ab-input-error-text-color);
+  }
+
+  .description,
+  .error {
+    margin: 0;
+    font: var(--ab-input-helper-font);
+  }
+
+  .description {
+    color: var(--ab-input-helper-text-color);
+  }
+
+  .error {
+    color: var(--ab-input-error-text-color);
+  }
+
+  .error:empty {
+    display: none;
+  }
+
+  .root[data-disabled] :is(.label, .description) {
+    color: var(--ab-color-text-disabled);
+  }
+
+  .control {
+    position: relative;
+    display: grid;
+    align-items: center;
+  }
+
+  .select {
+    appearance: none;
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--ab-input-height);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--ab-input-padding-inline)
+      calc(var(--ab-input-padding-inline) * 2 + var(--ab-icon-sm-size));
+    border: var(--ab-input-border-width) solid var(--ab-input-border-color);
+    border-radius: var(--ab-input-border-radius);
+    background-color: var(--ab-input-background-color);
+    box-shadow: var(--ab-input-shadow);
+    color: var(--ab-input-text-color);
+    font: var(--ab-input-font);
+    cursor: pointer;
+    transition:
+      border-color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color),
+      outline-color var(--ab-motion-duration-hover-in) var(--ab-motion-easing-color);
+  }
+
+  .root[data-size="lg"] .select {
+    block-size: var(--ab-input-lg-height);
+  }
+
+  .select:has(option[value=""]:checked) {
+    color: var(--ab-input-placeholder-color);
+  }
+
+  .icon {
+    position: absolute;
+    inset-inline-end: var(--ab-input-padding-inline);
+    color: var(--ab-select-icon-color);
+    pointer-events: none;
+    transition: rotate var(--ab-motion-duration-swap) var(--ab-motion-easing-enter);
+  }
+
+  .select:open + .icon {
+    rotate: 180deg;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .select:hover:not(:disabled, [aria-disabled="true"], :focus-visible) {
+      border-color: var(--ab-input-border-color-hovered);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+
+  .select:focus-visible {
+    border-color: var(--ab-input-border-color-focused);
+    outline: var(--ab-focus-ring-width) solid var(--ab-input-border-color-focused);
+    outline-offset: 0;
+  }
+
+  .select:is(:user-invalid, [aria-invalid="true"]) {
+    border-color: var(--ab-input-border-color-invalid);
+    outline-color: var(--ab-input-border-color-invalid);
+  }
+
+  .select:is(:disabled, [aria-disabled="true"]) {
+    border-color: var(--ab-input-border-color-disabled);
+    background-color: var(--ab-input-background-color-disabled);
+    box-shadow: none;
+    color: var(--ab-input-text-color-disabled);
+    cursor: not-allowed;
+  }
+
+  @supports (appearance: base-select) {
+    .select,
+    .select::picker(select) {
+      appearance: base-select;
+    }
+
+    .select {
+      display: flex;
+      align-items: center;
+    }
+
+    .select::picker-icon {
+      display: none;
+    }
+
+    .select::picker(select) {
+      position-anchor: auto;
+      inset: auto;
+      inset-block-start: anchor(self-end);
+      inset-inline-start: anchor(self-start);
+      position-try-fallbacks: flip-block;
+      box-sizing: border-box;
+      min-inline-size: anchor-size(inline);
+      max-block-size: var(--ab-select-picker-max-height);
+      margin: 0;
+      margin-block: var(--ab-select-picker-offset);
+      padding: var(--ab-select-picker-padding);
+      border: 0;
+      border-radius: var(--ab-select-picker-border-radius);
+      background-color: var(--ab-select-picker-background-color);
+      backdrop-filter: blur(var(--ab-select-picker-blur)) saturate(var(--ab-select-picker-saturate));
+      box-shadow: var(--ab-select-picker-shadow);
+      opacity: 0;
+      scale: var(--ab-select-picker-enter-scale);
+      transform-origin: top center;
+      transition:
+        opacity var(--ab-select-picker-exit-duration) var(--ab-select-picker-easing),
+        scale var(--ab-select-picker-exit-duration) var(--ab-select-picker-easing),
+        overlay var(--ab-select-picker-exit-duration) allow-discrete,
+        display var(--ab-select-picker-exit-duration) allow-discrete;
+    }
+
+    .select:open::picker(select) {
+      opacity: 1;
+      scale: 1;
+      transition-duration: var(--ab-select-picker-enter-duration);
+    }
+
+    @starting-style {
+      .select:open::picker(select) {
+        opacity: 0;
+        scale: var(--ab-select-picker-enter-scale);
+      }
+    }
+
+    .select option {
+      display: flex;
+      align-items: center;
+      gap: var(--ab-select-option-gap);
+      min-block-size: var(--ab-select-option-height);
+      padding-block: 0;
+      padding-inline: var(--ab-select-option-padding-inline);
+      border-radius: var(--ab-select-option-border-radius);
+      color: var(--ab-select-option-text-color);
+      font: var(--ab-select-option-font);
+      cursor: pointer;
+      outline-offset: calc(var(--ab-focus-ring-width) * -1);
+    }
+
+    .select option:is(:hover, :focus-visible) {
+      background-color: var(--ab-select-option-background-color-hovered);
+    }
+
+    .select option::checkmark {
+      content: "";
+      order: 1;
+      inline-size: var(--ab-icon-sm-size);
+      block-size: var(--ab-icon-sm-size);
+      margin-inline-start: auto;
+      background: currentColor;
+      color: var(--ab-select-option-icon-color-selected);
+      mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="black" stroke-width="2" stroke-linecap="square"><path d="M3.5 8.5 L6.5 11.5 L12.5 4.5"/></svg>')
+        center / 100% no-repeat;
+    }
+
+    .select optgroup {
+      color: var(--ab-color-text-subtlest);
+      font: var(--ab-type-overline-sm);
+      letter-spacing: var(--ab-type-overline-sm-letter-spacing);
+      text-transform: var(--ab-type-overline-sm-text-transform);
+    }
+
+    @media (forced-colors: active) {
+      .select::picker(select) {
+        outline: 1px solid CanvasText;
+        outline-offset: -1px;
+      }
+
+      .select option::checkmark {
+        forced-color-adjust: none;
+        background: CanvasText;
+      }
+    }
+  }
+}

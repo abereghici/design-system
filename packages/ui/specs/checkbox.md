@@ -133,7 +133,7 @@ None.
 | ----------- | --------------------------------------------------------- | -------- |
 | `ab-toggle` | After a user change commits (not cancelled, not disabled) | `"user"` |
 
-Detail: `{ component: "Checkbox", reason }`, dispatched from the input. The source asks for a "Soft click on change". A controlled change made by the parent dispatches nothing. `events.ts` widens `ToggleEvent`'s component union with `"Checkbox"`.
+Detail: `{ component: "Checkbox", reason }`, dispatched from the input. The source asks for a "Soft click on change". A controlled change made by the parent dispatches nothing. `events.ts` widens `ToggleFeedbackEvent`'s component union with `"Checkbox"`.
 
 ## Sources
 

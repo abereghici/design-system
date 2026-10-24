@@ -54,4 +54,4 @@ The agreed technology stack for the platform monorepo: web apps, the design syst
 - No CSS-in-JS and no utility CSS framework; styling is CSS Modules plus tokens.
 - UI behaviour comes from native elements and APIs (`<dialog>`, `popover`, invoker commands, anchor positioning); there is no headless UI library (ADR-0001) and no web component layer for now.
 - Tests: every story runs as a Vitest browser test through `@storybook/addon-vitest`, with axe violations failing the run (`a11y.test: 'error'`) and a manual screen-reader pass per component. Screenshots are taken after each story inside the pinned Playwright container, with baselines in Git LFS. `vitest-browser-react` covers pure helpers that have no story. Build tooling such as `@platform/tokens` is tested with Vitest in Node.
-- Date components take and return Temporal types. `temporal-polyfill` is loaded by those components only while Safari lacks Temporal (ADR-0004, proposed).
+- Date components take and return Temporal types. `temporal-polyfill` is imported by those components only, as its side-effect-free entry, while Safari lacks Temporal (ADR-0004, accepted 2026-10-24).

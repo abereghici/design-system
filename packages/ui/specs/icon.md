@@ -12,7 +12,7 @@ import { Icon } from "@platform/ui/icon";
 <Icon size="sm"><path d="M4 12 L20 12" /></Icon> {/* a custom glyph on the 24-unit grid */}
 ```
 
-Status: draft for brand-owner review (phase 1). Source guides: `components/Icon/README.md` and `assets/icons/README.md` in the artifact. Pipeline: ticket #11 (Icon and Logo pipeline), ADR-0005. Built in #11 (`src/icon/icon.tsx`, `src/icons/*.tsx`): `size`, `label`, the `:where()` size rules and the `@platform/ui/icons/<name>` → `<Name>Icon` subpaths match this spec. RTL mirroring is not built yet.
+Status: draft for brand-owner review (phase 1). Source guides: `components/Icon/README.md` and `assets/icons/README.md` in the artifact. Pipeline: ticket #11 (Icon and Logo pipeline), ADR-0005. Built in #11 (`src/icon/icon.tsx`, `src/icon/icons/*.tsx`): `size`, `label`, the `:where()` size rules and the `@platform/ui/icons/<name>` → `<Name>Icon` subpaths match this spec. RTL mirroring was added in #16: the generator marks the mirrored glyphs `data-mirror`, and `.root:where([data-mirror]):dir(rtl)` sets `scale: -1 1` (`:dir()` on an inline `<svg>` verified in Chromium, Firefox and WebKit).
 
 ## Anatomy
 

@@ -4,5 +4,5 @@ export type {
   FeedbackEventDetail,
   FeedbackReason,
   PressEvent,
-  ToggleEvent,
+  ToggleFeedbackEvent,
 } from "./events.ts";
