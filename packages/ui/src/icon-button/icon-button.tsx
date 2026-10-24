@@ -36,6 +36,8 @@ export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "ari
     asChild?: boolean;
   };
 
+const feedback = { component: "IconButton", reason: "user" } as const;
+
 function changeEventDetails(
   event: MouseEvent<HTMLButtonElement>,
 ): [IconButtonChangeEventDetails, () => boolean] {
@@ -70,17 +72,14 @@ export function IconButton({
     }
     onClick?.(event);
     if (current === undefined) {
-      dispatchFeedback(event.currentTarget, "ab-press", {
-        component: "IconButton",
-        reason: "user",
-      });
+      dispatchFeedback(event.currentTarget, "ab-press", feedback);
       return;
     }
     const [details, cancelled] = changeEventDetails(event);
     onPressedChange?.(!current, details);
     if (cancelled()) return;
     setUncontrolled(!current);
-    dispatchFeedback(event.currentTarget, "ab-toggle", { component: "IconButton", reason: "user" });
+    dispatchFeedback(event.currentTarget, "ab-toggle", feedback);
   }
 
   const Root = asChild ? Slot : "button";
