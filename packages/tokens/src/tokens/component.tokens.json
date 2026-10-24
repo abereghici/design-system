@@ -284,10 +284,6 @@
       "$type": "color",
       "$value": "{semantic.color-icon-subtle}"
     },
-    "spinner-stroke-width": {
-      "$type": "number",
-      "$value": "{semantic.stroke-width-lg}"
-    },
     "spinner-duration": {
       "$type": "duration",
       "$value": "{semantic.motion-duration-loop}"
@@ -331,22 +327,6 @@
     "icon-xl-stroke-width": {
       "$type": "number",
       "$value": "{semantic.stroke-width-sm}"
-    },
-    "icon-color": {
-      "$type": "color",
-      "$value": "{semantic.color-icon-subtle}"
-    },
-    "icon-color-hovered": {
-      "$type": "color",
-      "$value": "{semantic.color-icon-default}"
-    },
-    "icon-color-selected": {
-      "$type": "color",
-      "$value": "{semantic.color-icon-selected}"
-    },
-    "icon-color-disabled": {
-      "$type": "color",
-      "$value": "{semantic.color-icon-disabled}"
     },
     "logo-color": {
       "$type": "color",
@@ -508,10 +488,6 @@
       "$type": "duration",
       "$value": "{semantic.motion-duration-toggle}"
     },
-    "checkbox-easing": {
-      "$type": "string",
-      "$value": "{semantic.motion-easing-spring}"
-    },
     "radio-size": {
       "$type": "dimension",
       "$value": "{semantic.size-icon-sm}"
@@ -648,10 +624,6 @@
       "$type": "dimension",
       "$value": "{semantic.size-container-xs}"
     },
-    "combobox-icon-color": {
-      "$type": "color",
-      "$value": "{semantic.color-icon-subtle}"
-    },
     "combobox-list-padding": {
       "$type": "dimension",
       "$value": "{semantic.space-inset-xs}"
@@ -723,14 +695,6 @@
     "combobox-option-icon-color-selected": {
       "$type": "color",
       "$value": "{semantic.color-icon-accent}"
-    },
-    "combobox-option-text-color-disabled": {
-      "$type": "color",
-      "$value": "{semantic.color-text-disabled}"
-    },
-    "combobox-option-icon-color-disabled": {
-      "$type": "color",
-      "$value": "{semantic.color-icon-disabled}"
     },
     "segmented-control-height": {
       "$type": "dimension",
@@ -1724,10 +1688,6 @@
       "$type": "color",
       "$value": "{semantic.color-background-neutral-subtle-pressed}"
     },
-    "command-item-shortcut-text-color": {
-      "$type": "color",
-      "$value": "{semantic.color-text-subtlest}"
-    },
     "command-footer-padding-inline": {
       "$type": "dimension",
       "$value": "{semantic.space-inset-lg}"
@@ -1743,10 +1703,6 @@
     "command-footer-font": {
       "$type": "typography",
       "$value": "{semantic.type-data-sm}"
-    },
-    "command-enter-scale": {
-      "$type": "number",
-      "$value": "{semantic.motion-scale-enter}"
     },
     "command-enter-duration": {
       "$type": "duration",
@@ -2107,10 +2063,6 @@
     "fieldset-legend-text-color": {
       "$type": "color",
       "$value": "{semantic.color-text-default}"
-    },
-    "checkbox-icon-size": {
-      "$type": "dimension",
-      "$value": "{semantic.size-icon-xs}"
     },
     "checkbox-border-color-invalid": {
       "$type": "color",
@@ -2583,22 +2535,6 @@
     "popover-close-offset": {
       "$type": "dimension",
       "$value": "{semantic.space-inset-xs}"
-    },
-    "dropdown-menu-item-text-color-disabled": {
-      "$type": "color",
-      "$value": "{semantic.color-text-disabled}"
-    },
-    "dropdown-menu-item-icon-color-disabled": {
-      "$type": "color",
-      "$value": "{semantic.color-icon-disabled}"
-    },
-    "context-menu-item-text-color-disabled": {
-      "$type": "color",
-      "$value": "{semantic.color-text-disabled}"
-    },
-    "context-menu-item-icon-color-disabled": {
-      "$type": "color",
-      "$value": "{semantic.color-icon-disabled}"
     },
     "dialog-close-offset": {
       "$type": "dimension",

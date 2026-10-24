@@ -86,7 +86,7 @@ Not mirrored: the Spinner keeps turning clockwise. Adobe Spectrum: "Icons that r
 
 All exist (ported from the source): `spinner-size` (→ `size-icon-sm`), `spinner-lg-size` (→ `size-icon-lg`), `spinner-color` (→ `color-icon-subtle`), `spinner-stroke-width` (→ `stroke-width-lg`), `spinner-duration` (→ `motion-duration-loop`).
 
-No new tokens. The reduced-motion pulse uses semantic `motion-easing-move` directly. `spinner-stroke-width` is unused since the staves became a mask.
+No new tokens. The reduced-motion pulse uses semantic `motion-easing-move` directly. `spinner-stroke-width` was deleted: the staves are a mask.
 
 ## Built-in labels
 
