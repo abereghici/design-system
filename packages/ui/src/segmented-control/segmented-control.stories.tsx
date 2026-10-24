@@ -2,6 +2,7 @@ import { expect, fn } from "storybook/test";
 
 import { MoonIcon } from "@platform/ui/icons/moon";
 import { SunIcon } from "@platform/ui/icons/sun";
+import { Toolbar } from "@platform/ui/toolbar";
 
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
@@ -112,6 +113,26 @@ Default.test(
     await userEvent.click(canvas.getByRole("radio", { name: "Board" }));
     await expect(args.onValueChange).toHaveBeenCalledWith("board", expect.anything());
     await expect(canvas.getByRole("radio", { name: "Calendar" })).toBeChecked();
+  },
+);
+
+Default.test(
+  "leaves the arrow keys to an enclosing Toolbar in RTL",
+  {
+    globals: { dir: "rtl" },
+    decorators: [
+      (Story) => (
+        <Toolbar aria-label="Board tools">
+          <Story />
+        </Toolbar>
+      ),
+    ],
+  },
+  async ({ canvas, userEvent }) => {
+    await userEvent.tab();
+    await userEvent.keyboard("{ArrowLeft}");
+    await expect(canvas.getByRole("radio", { name: "Board" })).toHaveFocus();
+    await expect(canvas.getByRole("radio", { name: "List" })).toBeChecked();
   },
 );
 
