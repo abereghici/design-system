@@ -17,19 +17,19 @@ Root (label) → track (native input) → thumb → label text.
 
 - **Root.** A native `<label>` around everything, so the whole row toggles. Gap `switch-gap` (8); text in `switch-label-font`.
 - **Track.** A native `<input type="checkbox" role="switch">` with `appearance: none`, drawn as the track: `switch-track-width` × `switch-track-height` (32 × 20), radius `switch-border-radius` (full), fill `switch-track-background-color`, `switch-track-padding` (2) inside.
-- **Thumb.** A decorative `<span>` over the track, `switch-thumb-size` (16), fill `switch-thumb-background-color`, `switch-thumb-shadow` (raised elevation). It sits at the inline start when off and the inline end when on.
+- **Thumb.** The track's `::before` (as the source CSS), `switch-thumb-size` (16), fill `switch-thumb-background-color`, `switch-thumb-shadow` (raised elevation). It sits at the inline start when off and the inline end when on.
 
 ## API
 
-| Prop              | Type                                                             | Default         | Notes                                                                                                        |
-| ----------------- | ---------------------------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------ |
-| `children`        | `ReactNode`                                                      |                 | The label: names the setting, never the state. Without children, `aria-label`/`aria-labelledby` is required. |
-| `checked`         | `boolean`                                                        |                 | Controlled.                                                                                                  |
-| `defaultChecked`  | `boolean`                                                        | `false`         | Uncontrolled.                                                                                                |
-| `onCheckedChange` | `(checked: boolean, details: Switch.ChangeEventDetails) => void` |                 | Before the change commits. `details`: `reason` (`"none"`), `event`, `cancel()`.                              |
-| `name`, `value`   | `string`                                                         | `value`: `"on"` | Native; a Switch can still be submitted when a form needs it.                                                |
-| `disabled`        | `boolean`                                                        | `false`         | `aria-disabled="true"`, focusable, change blocked.                                                           |
-| …native           | `ComponentProps<"input">` minus `type` and `role`                |                 | `ref`, `id`, `onChange`, `aria-*` on the input; `className`, `style` on the root label.                      |
+| Prop              | Type                                                            | Default         | Notes                                                                                                        |
+| ----------------- | --------------------------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------ |
+| `children`        | `ReactNode`                                                     |                 | The label: names the setting, never the state. Without children, `aria-label`/`aria-labelledby` is required. |
+| `checked`         | `boolean`                                                       |                 | Controlled.                                                                                                  |
+| `defaultChecked`  | `boolean`                                                       | `false`         | Uncontrolled.                                                                                                |
+| `onCheckedChange` | `(checked: boolean, details: SwitchChangeEventDetails) => void` |                 | Before the change commits. `details`: `reason` (`"none"`), `event`, `cancel()`.                              |
+| `name`, `value`   | `string`                                                        | `value`: `"on"` | Native; a Switch can still be submitted when a form needs it.                                                |
+| `disabled`        | `boolean`                                                       | `false`         | `aria-disabled="true"`, focusable, change blocked.                                                           |
+| …native           | `ComponentProps<"input">` minus `type` and `role`               |                 | `ref`, `id`, `onChange`, `aria-*` on the input; `className`, `style` on the root label.                      |
 
 There is no `size`: the source has one size, and coarse pointers get their target from the whole label row.
 
@@ -61,7 +61,7 @@ On/off is position plus fill, never colour alone (brand book "Not color alone").
 
 ## Motion
 
-- **Thumb travel:** `translate` over `switch-duration` (`motion-duration-toggle`, 180 ms) with `switch-easing` (`motion-easing-spring`), a direct-manipulation spring (brand book: "Springs. Only where the user directly causes the movement: switch thumbs…"). The source guide says 400 ms; the ported tokens say `motion-duration-toggle` (180 ms). The tokens are kept (review item).
+- **Thumb travel:** `translate` over `motion-duration-spring` (400 ms) with `switch-easing` (`motion-easing-spring`), a direct-manipulation spring (brand book: "Springs. Only where the user directly causes the movement: switch thumbs…"). The source guide and the source CSS both say 400 ms, so the thumb follows them; `switch-duration` (180 ms) times the track colour. The held stretch grows over `motion-duration-swap` with `motion-easing-enter` (source CSS).
 - **Held stretch:** while `:active`, the thumb's `inline-size` grows to `switch-thumb-width-pressed`, anchored on the side it will leave from, so it "stretches 4px while held — direct manipulation feel" (source).
 - Track fill: colour over the same duration, `motion-easing-color`.
 - **Reduced motion:** no travel animation and no stretch: the thumb jumps to its side and the track colour fades (brand book: reduced motion "removes movement, scaling, blur and stagger. Opacity and color fades remain.").

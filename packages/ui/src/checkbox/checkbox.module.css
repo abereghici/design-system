@@ -1,0 +1,113 @@
+@import "@platform/tokens/components/checkbox.css";
+
+@layer ab.components {
+  .root {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-checkbox-gap);
+    min-block-size: var(--ab-size-control-xs);
+    font: var(--ab-checkbox-label-font);
+    letter-spacing: var(--ab-type-label-sm-letter-spacing);
+    color: var(--ab-color-text-default);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .input {
+    appearance: none;
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    margin: 0;
+    inline-size: var(--ab-checkbox-size);
+    block-size: var(--ab-checkbox-size);
+    border: var(--ab-checkbox-border-width) solid var(--ab-checkbox-border-color);
+    border-radius: var(--ab-checkbox-border-radius);
+    background-color: var(--ab-checkbox-background-color);
+    cursor: inherit;
+    transition:
+      background-color var(--ab-checkbox-duration) var(--ab-motion-easing-color),
+      border-color var(--ab-checkbox-duration) var(--ab-motion-easing-color),
+      scale var(--ab-motion-duration-press) var(--ab-motion-easing-enter);
+  }
+
+  .input::before {
+    content: "";
+    inline-size: 100%;
+    block-size: 100%;
+    background-color: var(--ab-checkbox-icon-color-checked);
+    mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="black" stroke-width="2" stroke-linecap="square"><path d="M3.5 8.5 L6.5 11.5 L12.5 4.5"/></svg>')
+      center / 100% no-repeat;
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+    transition: opacity var(--ab-checkbox-duration) var(--ab-motion-easing-color);
+  }
+
+  .input:dir(rtl)::before {
+    clip-path: inset(0 0 0 100%);
+  }
+
+  .input:indeterminate::before {
+    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="black" stroke-width="2"><path d="M4 8 H12"/></svg>');
+  }
+
+  .input:is(:checked, :indeterminate) {
+    border-color: var(--ab-checkbox-background-color-checked);
+    background-color: var(--ab-checkbox-background-color-checked);
+  }
+
+  .input:is(:checked, :indeterminate)::before {
+    clip-path: inset(0);
+    opacity: 1;
+  }
+
+  .input:is(:user-invalid, [aria-invalid="true"]) {
+    border-color: var(--ab-checkbox-border-color-invalid);
+  }
+
+  .input:active:not([aria-disabled="true"], :disabled) {
+    scale: var(--ab-checkbox-scale-pressed);
+  }
+
+  .input:is([aria-disabled="true"], :disabled) {
+    opacity: var(--ab-opacity-disabled);
+  }
+
+  /* The draw is the pointer's: keyboard toggles only fade (brand book, no keyboard motion). */
+  @media (prefers-reduced-motion: no-preference) {
+    .root[data-pointer] .input::before {
+      transition:
+        opacity var(--ab-checkbox-duration) var(--ab-motion-easing-color),
+        clip-path var(--ab-checkbox-duration) var(--ab-motion-easing-exit);
+    }
+
+    .root[data-pointer] .input:is(:checked, :indeterminate)::before {
+      transition-delay: calc(var(--ab-checkbox-duration) / 4);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .root:hover .input:not(:checked, :indeterminate, :disabled, [aria-disabled="true"]) {
+      border-color: var(--ab-checkbox-border-color-hovered);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .input {
+      border-color: CanvasText;
+    }
+
+    .input:is(:checked, :indeterminate) {
+      border-color: Highlight;
+      background-color: Highlight;
+    }
+
+    .input::before {
+      background-color: HighlightText;
+    }
+
+    .input:is([aria-disabled="true"], :disabled) {
+      border-color: GrayText;
+    }
+  }
+}
