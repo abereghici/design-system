@@ -12,10 +12,13 @@ export interface FeedbackEventDetail<Component extends string = string> {
 
 export type PressEvent = CustomEvent<FeedbackEventDetail<"Button">>;
 
+export type DismissEvent = CustomEvent<FeedbackEventDetail<"Alert">>;
+
 declare global {
   // lib.dom's Document, Window and HTMLElement event maps extend this one, so every target is typed.
   interface GlobalEventHandlersEventMap {
     "ab-press": PressEvent;
+    "ab-dismiss": DismissEvent;
   }
 }
 

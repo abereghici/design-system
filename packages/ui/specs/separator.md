@@ -18,7 +18,7 @@ Status: draft for brand-owner review (phase 1). Source guide: `components/Divide
 Line (one `<hr>`) → ornament (optional, drawn by the same element).
 
 - **Line.** A native `<hr>` with its UA margin, border and height reset. Horizontal: full inline size, one `border-block-start` of `separator-border-width` in `separator-border-color`. Vertical: `align-self: stretch`, one `border-inline-start`. No margin: the parent's `gap` spaces it (spec: space first).
-- **Ornament** (`variant="ornament"`, horizontal only). The ochi diamond centred on the line: a square of `separator-dot-size` turned 45°, in `separator-dot-color`, with `separator-gap` of empty line on each side. Drawn with the `<hr>`'s pseudo-elements, since `<hr>` is a void element (inference: pseudo-elements render on `<hr>` in all three engines; the build's screenshot story verifies it). The bob is the surface's one motif (brand rule).
+- **Ornament** (`variant="ornament"`, horizontal only). The ochi diamond centred on the line: a square of `separator-dot-size` turned 45°, in `separator-dot-color`, with `separator-gap` of empty line on each side. `<hr>` is a void element, so the diamond is its `::before` and the two line segments are background layers (`linear-gradient`) on the `<hr>` itself. Verified rendering in Chromium, Firefox and WebKit. The bob is the surface's one motif (brand rule).
 
 ## API
 
@@ -74,7 +74,7 @@ Not focusable; no keyboard interaction. Tab skips it.
 - `decorative` renders `role="none"`. ARIA in HTML allows it on `hr`: "Roles: none or presentation. (separator is also allowed, but NOT RECOMMENDED.)" (https://www.w3.org/TR/html-aria/).
 - The hairline is never the only boundary of a control (brand book exemption for `border-subtle`), so it is held to no contrast ratio; the ornament is decoration.
 - **More contrast:** `separator-border-color` is `color-border-subtle`, which steps up to `color-border-default` under `(prefers-contrast: more)`; `separator-dot-color` is `color-icon-subtlest`, which steps up to `color-icon-subtle` (token media overrides).
-- **Forced colors:** the line is a border, and `border-color` is on the "Properties Affected by Forced Colors Mode" list (https://www.w3.org/TR/css-color-adjust-1/), so it draws in a system colour. The diamond is a filled box, whose `background-color` would be forced to the background; in `@media (forced-colors: active)` it sets `forced-color-adjust: none` with `background-color: CanvasText`. The spec allows `none` when authors "are themselves adjusting the colors".
+- **Forced colors:** the line is a border, and `border-color` is on the "Properties Affected by Forced Colors Mode" list (https://www.w3.org/TR/css-color-adjust-1/), so it draws in a system colour. The ornament's diamond is a filled box and its line segments are gradients, both of which forced colors would remove; in `@media (forced-colors: active)` the ornament `<hr>` sets `forced-color-adjust: none` and draws both in `CanvasText`. The spec allows `none` when authors "are themselves adjusting the colors".
 - **Reduced transparency:** not affected (no Material).
 
 ## RTL

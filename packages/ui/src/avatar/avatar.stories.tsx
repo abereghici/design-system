@@ -32,6 +32,10 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
+Default.test("comes in a small size", { args: { size: "sm" } }, async ({ canvas }) => {
+  await expect(canvas.getByRole("img", { name: "Alexandru Bereghici" })).toBeInTheDocument();
+});
+
 Default.test("is named by its image's alt", async ({ canvas }) => {
   await expect(canvas.getByRole("img", { name: "Alexandru Bereghici" })).toBeInTheDocument();
 });

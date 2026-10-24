@@ -93,6 +93,15 @@ describe("each component route ships only its own CSS, tokens and client code", 
       client: ["avatar/avatar-image.tsx"],
       html: 'alt="Ana Popescu"',
     },
+    { name: "card", tokens: ["card"], client: [], html: "<h1" },
+    { name: "separator", tokens: ["separator"], client: [], html: "<hr" },
+    {
+      name: "alert",
+      tokens: ["alert", "icon", "icon-button"],
+      client: ["alert/alert-close.tsx"],
+      html: 'aria-label="Dismiss"',
+    },
+    { name: "empty-state", tokens: ["empty-state", "icon"], client: [], html: "No files yet" },
   ])("$name", ({ name, tokens, client, html }) => {
     const r = route(name);
     expect(r.html).toContain(html);

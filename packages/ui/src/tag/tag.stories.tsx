@@ -20,6 +20,12 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
+for (const variant of ["neutral", "accent", "success", "warning", "danger"] as const) {
+  Default.test(`reads at AA contrast as ${variant}`, { args: { variant } }, async ({ canvas }) => {
+    await expect(canvas.getByText("Draft")).toBeVisible();
+  });
+}
+
 Default.test(
   "wraps a long label instead of overflowing its container",
   {

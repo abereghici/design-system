@@ -4,13 +4,17 @@ import { globSync } from "node:fs";
 import type { SizeLimitConfig } from "size-limit";
 
 const budgets: Readonly<Record<string, string>> = {
+  alert: "2.15 kB",
   avatar: "1.6 kB",
   badge: "690 B",
   button: "800 B",
+  card: "1.2 kB",
+  "empty-state": "740 B",
   events: "20 B",
   icon: "520 B",
   logo: "470 B",
   provider: "5.4 kB",
+  separator: "700 B",
   "status-dot": "490 B",
   tag: "600 B",
 };
@@ -39,6 +43,6 @@ export default [
   ...checks(
     "src/provider/locales/*.ts",
     (path) => path.slice("src/provider/".length, -".ts".length),
-    "120 B",
+    "145 B",
   ),
 ] satisfies SizeLimitConfig;
