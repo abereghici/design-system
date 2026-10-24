@@ -115,6 +115,8 @@ const COMPONENTS = [
   "navbar",
   "sidebar",
   "table",
+  "date-field",
+  "calendar",
 ];
 
 const PROPERTIES = [
@@ -204,6 +206,9 @@ const MODIFIERS = new Set([
   "legend",
   "range",
   "caption",
+  "segment",
+  "cell",
+  "today",
 ]);
 
 const outsideDictionary = (words: readonly string[]) =>
