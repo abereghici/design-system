@@ -2411,6 +2411,102 @@
     "table-caption-text-color": {
       "$type": "color",
       "$value": "{semantic.color-text-default}"
+    },
+    "tooltip-enter-scale": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-enter}"
+    },
+    "tooltip-exit-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-exit}"
+    },
+    "tooltip-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-enter}"
+    },
+    "popover-enter-scale": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-enter}"
+    },
+    "popover-enter-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-popover}"
+    },
+    "popover-exit-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-exit}"
+    },
+    "popover-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-enter}"
+    },
+    "popover-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-sm}"
+    },
+    "popover-title-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-md}"
+    },
+    "popover-title-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "popover-description-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "popover-close-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xs}"
+    },
+    "dropdown-menu-item-text-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-text-disabled}"
+    },
+    "dropdown-menu-item-icon-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-disabled}"
+    },
+    "context-menu-item-text-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-text-disabled}"
+    },
+    "context-menu-item-icon-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-disabled}"
+    },
+    "dialog-close-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "dialog-title-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-sm}"
+    },
+    "sheet-title-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "sheet-description-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-sm}"
+    },
+    "sheet-description-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "sheet-title-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-sm}"
+    },
+    "sheet-footer-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "sheet-close-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
     }
   }
 }
