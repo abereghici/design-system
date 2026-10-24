@@ -25,7 +25,7 @@ export function Section({
   );
 }
 
-export function TokenValue({ token }: { token: Token }) {
+function TokenValue({ token }: { token: Token }) {
   const media = Object.entries(token.media);
   return (
     <>

@@ -4,7 +4,7 @@ import { FONT_FAMILIES, FONT_SUBSETS, fontFileName } from "./fonts.ts";
 import { THEMES, isWholeReference, valueIn, type ThemeId } from "./theme.ts";
 import { inTierOrder, tierOf } from "./tiers.ts";
 
-export interface ArtifactEntry<Value> {
+interface ArtifactEntry<Value> {
   readonly name: string;
   readonly value: Value;
   readonly usage: string;
@@ -12,12 +12,12 @@ export interface ArtifactEntry<Value> {
 
 export type Themed = string | { readonly light: string; readonly dark: string };
 
-export interface ArtifactFamily<Value = string> {
+interface ArtifactFamily<Value = string> {
   readonly note?: string;
   readonly tokens: readonly ArtifactEntry<Value>[];
 }
 
-export interface ArtifactTypeStyle {
+interface ArtifactTypeStyle {
   readonly name: string;
   readonly fontSize: string;
   readonly lineHeight: string;
@@ -26,7 +26,7 @@ export interface ArtifactTypeStyle {
   readonly usage: string;
 }
 
-export interface ArtifactType {
+interface ArtifactType {
   readonly fonts: readonly {
     readonly family: string;
     readonly file: string;

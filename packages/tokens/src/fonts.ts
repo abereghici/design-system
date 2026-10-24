@@ -12,9 +12,9 @@ export const FONT_SUBSETS = [
   },
 ] as const;
 
-export type FontSubset = (typeof FONT_SUBSETS)[number];
+type FontSubset = (typeof FONT_SUBSETS)[number];
 
-export interface FontFamily {
+interface FontFamily {
   readonly family: string;
   readonly stem: string;
   readonly weight: string;

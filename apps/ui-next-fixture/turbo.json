@@ -3,7 +3,7 @@
   "extends": ["//"],
   "tasks": {
     "test": {
-      "dependsOn": ["$TURBO_EXTENDS$", "^build", "check-types"]
+      "dependsOn": ["^build", "check-types"]
     }
   }
 }

@@ -13,12 +13,12 @@ const isDurationObject = (value: unknown): value is { value: unknown; unit: unkn
 
 export const SOURCE_GLOB = `${import.meta.dirname}/tokens/*.tokens.json`;
 
-export interface BuildInput {
+interface BuildInput {
   readonly tokens?: DesignTokens;
   readonly source?: readonly string[];
 }
 
-export interface BuildOutput {
+interface BuildOutput {
   readonly css: string;
   readonly components: Readonly<Record<string, string>>;
   readonly artifact: ArtifactTokens;
@@ -28,7 +28,6 @@ export async function buildTokens(input: BuildInput): Promise<BuildOutput> {
   const sd = new StyleDictionary({
     ...(input.tokens === undefined ? {} : { tokens: input.tokens }),
     ...(input.source === undefined ? {} : { source: [...input.source] }),
-    usesDtcg: true,
     log: { verbosity: "silent", errors: { brokenReferences: "throw" } },
     hooks: {
       transforms: {
@@ -36,6 +35,7 @@ export async function buildTokens(input: BuildInput): Promise<BuildOutput> {
           type: "name",
           transform: (token) => `ab-${token.path.slice(1).join("-")}`,
         },
+        // The built-in time/seconds would rewrite an authored 70ms as 0.07s.
         "ab/duration": {
           type: "value",
           filter: (token) => token.$type === "duration" && isDurationObject(token.$value),

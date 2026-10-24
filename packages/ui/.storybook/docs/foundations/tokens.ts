@@ -66,7 +66,7 @@ const isTier = (value: string | undefined): value is Tier =>
 
 const REFERENCE = /^\{(?<tier>primitive|semantic|component)\.(?<name>[^\{\}]+)\}$/v;
 
-export function referenced(value: unknown): Token | undefined {
+function referenced(value: unknown): Token | undefined {
   const groups = typeof value === "string" ? REFERENCE.exec(value)?.groups : undefined;
   const tier = groups?.["tier"];
   const name = groups?.["name"];

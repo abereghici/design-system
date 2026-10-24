@@ -4,7 +4,7 @@ import { THEMES, valueIn } from "./theme.ts";
 import { tierOf } from "./tiers.ts";
 
 // An unregistered custom property can't interpolate, so animated tokens get @property, with inherits: false so a change never restyles a whole subtree.
-export const ANIMATED_EXTENSION = "com.bereghici.animated";
+const ANIMATED_EXTENSION = "com.bereghici.animated";
 
 const SYNTAX: Readonly<Record<string, string>> = {
   color: "<color>",
@@ -13,7 +13,7 @@ const SYNTAX: Readonly<Record<string, string>> = {
   number: "<number>",
 };
 
-export const isAnimated = (token: TransformedToken): boolean => {
+const isAnimated = (token: TransformedToken): boolean => {
   const extensions: unknown = token.original["$extensions"];
   return (
     typeof extensions === "object" &&
