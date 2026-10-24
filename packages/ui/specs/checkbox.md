@@ -26,21 +26,21 @@ Root (label) → box (native input) → check → label text.
 
 - **Root.** A native `<label>` around everything, so the whole row is the hit target (source: "Native checkbox inside its label — the whole row is the hit target."). Gap `checkbox-gap` (8) between the box and the text; text in `checkbox-label-font` (13/500).
 - **Box.** A native `<input type="checkbox">` with `appearance: none`, drawn as a 16 px square (`checkbox-size`), radius `checkbox-border-radius` (5), `checkbox-border-width` hairline in `checkbox-border-color`, fill `checkbox-background-color`. The label also points at it with `for` (MDN: "you can simultaneously nest _and_ provide `id`/`for` for maximum compatibility").
-- **Check.** The `check` glyph from the icon set (`minus` while indeterminate), 14 px (`checkbox-icon-size`), in `checkbox-icon-color-checked`, drawn over the box; decorative.
+- **Check.** The box's `::before`, filled with `checkbox-icon-color-checked` through a CSS mask of the source's check path (a bar while indeterminate), as the source CSS draws it (`project/archived/components/css/forms.css`); decorative, no extra element. `checkbox-icon-size` stays unused (the mask fills the box).
 
 ## API
 
-| Prop              | Type                                                               | Default         | Notes                                                                                                            |
-| ----------------- | ------------------------------------------------------------------ | --------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `children`        | `ReactNode`                                                        |                 | The label text. Without children, `aria-label` or `aria-labelledby` is required (props union).                   |
-| `checked`         | `boolean`                                                          |                 | Controlled.                                                                                                      |
-| `defaultChecked`  | `boolean`                                                          | `false`         | Uncontrolled.                                                                                                    |
-| `onCheckedChange` | `(checked: boolean, details: Checkbox.ChangeEventDetails) => void` |                 | Called before the change commits. `details`: `reason` (`"none"`), `event`, `cancel()`.                           |
-| `indeterminate`   | `boolean`                                                          | `false`         | Mixed state. Sets the DOM `indeterminate` property; visual and accessibility only (see Behaviour).               |
-| `name`, `value`   | `string`                                                           | `value`: `"on"` | Native. A checked box submits `name=value`.                                                                      |
-| `required`        | `boolean`                                                          | `false`         | Native: must be checked to submit. Errors follow the Field contract when wrapped in a Field.                     |
-| `disabled`        | `boolean`                                                          | `false`         | `aria-disabled="true"`, focusable, change blocked (spec #1).                                                     |
-| …native           | `ComponentProps<"input">` minus `type`                             |                 | `ref`, `id`, `form`, `onChange`, `aria-*` go on the `<input>`. `className` and `style` go on the root `<label>`. |
+| Prop              | Type                                                              | Default         | Notes                                                                                                            |
+| ----------------- | ----------------------------------------------------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `children`        | `ReactNode`                                                       |                 | The label text. Without children, `aria-label` or `aria-labelledby` is required (props union).                   |
+| `checked`         | `boolean`                                                         |                 | Controlled.                                                                                                      |
+| `defaultChecked`  | `boolean`                                                         | `false`         | Uncontrolled.                                                                                                    |
+| `onCheckedChange` | `(checked: boolean, details: CheckboxChangeEventDetails) => void` |                 | Called before the change commits. `details`: `reason` (`"none"`), `event`, `cancel()`.                           |
+| `indeterminate`   | `boolean`                                                         | `false`         | Mixed state. Sets the DOM `indeterminate` property; visual and accessibility only (see Behaviour).               |
+| `name`, `value`   | `string`                                                          | `value`: `"on"` | Native. A checked box submits `name=value`.                                                                      |
+| `required`        | `boolean`                                                         | `false`         | Native: must be checked to submit. Errors follow the Field contract when wrapped in a Field.                     |
+| `disabled`        | `boolean`                                                         | `false`         | `aria-disabled="true"`, focusable, change blocked (spec #1).                                                     |
+| …native           | `ComponentProps<"input">` minus `type`                            |                 | `ref`, `id`, `form`, `onChange`, `aria-*` go on the `<input>`. `className` and `style` go on the root `<label>`. |
 
 Names, checked against the reference libraries:
 
@@ -66,15 +66,15 @@ Names, checked against the reference libraries:
 
 ## Behaviour
 
-- **Change and cancel.** In the input's `click` handler the box has already flipped (HTML's legacy-pre-activation behaviour), so the component calls `onCheckedChange(input.checked, details)` there. `details.cancel()` calls `event.preventDefault()`, which makes the browser restore the previous checkedness (inference from the HTML activation behaviour; the build ticket tests it in three engines). Uncontrolled: the native state is the state. Controlled: the parent's `checked` wins on the next render.
-- **Indeterminate** is the DOM property, set in an effect. MDN: "This is purely a visual change. It has no impact on whether the checkbox's `value` is used in a form submission. That is decided by the `checked` state, regardless of the `indeterminate` state." A user click clears it (native); the parent decides the next state, following APG's tri-state rules ("Checking the overall checkbox checks all options in the group. Unchecking the overall checkbox will uncheck all options in the group.").
+- **Change and cancel.** In the input's `click` handler the box has already flipped (HTML's legacy-pre-activation behaviour), so the component calls `onCheckedChange(input.checked, details)` there. `details.cancel()` calls `event.preventDefault()`, which makes the browser restore the previous checkedness (HTML's legacy-canceled-activation behaviour; observed for a click and for Space in Chromium, Firefox and WebKit, #26). Uncontrolled: the native state is the state. Controlled: the parent's `checked` wins on the next render.
+- **Indeterminate** is the DOM property, set from the input's ref callback on every render. MDN: "This is purely a visual change. It has no impact on whether the checkbox's `value` is used in a form submission. That is decided by the `checked` state, regardless of the `indeterminate` state." A user click clears it (native); the parent decides the next state, following APG's tri-state rules ("Checking the overall checkbox checks all options in the group. Unchecking the overall checkbox will uncheck all options in the group.").
 - **Disabled** (`aria-disabled`): the click handler calls `preventDefault()` and returns, so the box does not flip, no callback runs and no event is dispatched; a label click and Space reach the same handler. Inside a disabled Fieldset the input is natively disabled.
 - `required` and errors follow the Field contract when the Checkbox sits in a `Field.Root` (the "accept the terms" case).
 - Client component (`'use client'`): the click handler and the `indeterminate` effect.
 
 ## Motion
 
-- Checking: the fill fades in over `checkbox-duration` (`motion-duration-toggle`, 180 ms), then the check draws from the inline start to the inline end (`stroke-dashoffset` from the path length to 0) over the same duration with `checkbox-easing` (`motion-easing-spring`), starting `calc(var(--ab-checkbox-duration) / 4)` (45 ms) after the fill. Source: "Fill fades (180ms), then the check draws left→right with a 45ms delay". The check is the stroked icon path, so the draw needs no extra artwork.
+- Checking: the fill fades in over `checkbox-duration` (`motion-duration-toggle`, 180 ms) and the check is revealed from the inline start to the inline end by `clip-path: inset()` over the same duration with `motion-easing-exit`, starting `calc(var(--ab-checkbox-duration) / 4)` (45 ms) after the fill (the source CSS). Source: "Fill fades (180ms), then the check draws left→right with a 45ms delay".
 - Unchecking: fill and check fade out together over `motion-duration-exit` (150 ms); exits are faster than entrances.
 - Press: scale to `checkbox-scale-pressed` over `motion-duration-press`.
 - **Reduced motion:** the check does not draw; it fades in with the fill. The press scale resolves to 1 (`motion-scale-pressed` media override). Colour and opacity fades stay.
