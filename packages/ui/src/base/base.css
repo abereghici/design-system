@@ -1,11 +1,3 @@
-/*
- * The opt-in base stylesheet: `import "@platform/ui/base.css"` once, after the layer order
- * statement and `@platform/tokens/tokens.css`. Everything sits in `ab.reset` and `ab.base`, so
- * any unlayered app CSS and every component (`ab.components`) wins over it. Patterns that aren't
- * components (selection, focus) read semantic tokens directly (brand book rule R6).
- * Sources for each rule: docs/research/base-stylesheet.md.
- */
-
 @layer ab.reset {
   /* A more intuitive box-sizing model. */
   *,

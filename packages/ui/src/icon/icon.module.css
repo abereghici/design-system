@@ -1,3 +1,5 @@
+@import "@platform/tokens/components/icon.css";
+
 @layer ab.components {
   /*
    * Size rules stay at (0,1,0), `:where()` adding nothing, so a host component's descendant rule

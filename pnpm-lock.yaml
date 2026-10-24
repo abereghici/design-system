@@ -374,6 +374,9 @@ importers:
 
   apps/ui-next-fixture:
     dependencies:
+      '@platform/tokens':
+        specifier: workspace:*
+        version: link:../../packages/tokens
       '@platform/ui':
         specifier: workspace:*
         version: link:../../packages/ui

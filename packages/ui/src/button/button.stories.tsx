@@ -68,6 +68,18 @@ Primary.test("yields to unlayered app CSS", async ({ canvas }) => {
   }
 });
 
+Primary.test("takes its component tokens from unlayered app CSS", async ({ canvas }) => {
+  const appStyles = document.createElement("style");
+  appStyles.textContent = ":root { --ab-button-primary-background-color: rgb(1, 2, 3); }";
+  document.head.prepend(appStyles);
+  try {
+    const style = getComputedStyle(canvas.getByRole("button", { name: "Save changes" }));
+    await expect(style.backgroundColor).toBe("rgb(1, 2, 3)");
+  } finally {
+    appStyles.remove();
+  }
+});
+
 export const DarkRightToLeft = meta.story({ globals: { theme: "dark", dir: "rtl" } });
 
 DarkRightToLeft.test(

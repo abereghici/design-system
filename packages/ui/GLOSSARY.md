@@ -35,3 +35,11 @@ _Avoid_: Mark, brand mark
 **Separator**:
 A thin line dividing content or groups of items.
 _Avoid_: Divider, rule, hr
+
+**Provider**:
+The component an app mounts once at its root. It brings the global stylesheets (layer order, shared tokens, fonts, base) and the optional Locale, so apps import no CSS.
+_Avoid_: Root, app shell, LocaleProvider, ThemeProvider
+
+**Locale**:
+A typed object holding a BCP 47 tag and every built-in label in that language (`enUS`, `roRO`), passed to the Provider.
+_Avoid_: Translations, messages, i18n bundle

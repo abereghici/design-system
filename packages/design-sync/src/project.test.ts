@@ -56,7 +56,7 @@ test("every story file in @platform/ui becomes a card, with no list kept by hand
   const stories = await findStories(PATHS.ui);
   // The Cover is the one hand-written preview.
   expect(cardNames().filter((name) => name !== "Cover")).toHaveLength(stories.length);
-  expect(built.components).toEqual(["Button", "Icon", "Logo"]);
+  expect(built.components).toEqual(["Button", "Icon", "Logo", "Provider"]);
   expect(cardNames()).toEqual(
     expect.arrayContaining(["FoundationsIcons", "FoundationsLogo", "Logo"]),
   );
@@ -114,7 +114,7 @@ test("a story's dir global applies to its canvas; the page's Theme applies to ev
 test("the bundle header names the namespace and the components", async () => {
   const [line] = (await read("components/bundle.js")).split("\n");
   expect(line).toBe(
-    `/* @ds-bundle: {"format":4,"namespace":"${NAMESPACE}","components":[{"name":"Button"},{"name":"Icon"},{"name":"Logo"}]} */`,
+    `/* @ds-bundle: {"format":4,"namespace":"${NAMESPACE}","components":[{"name":"Button"},{"name":"Icon"},{"name":"Logo"},{"name":"Provider"}]} */`,
   );
 });
 
