@@ -5,7 +5,6 @@ import { expect } from "storybook/test";
 import type { IconProps } from "@platform/ui/icon";
 import { expectSameDrawing } from "#.storybook/test/geometry.ts";
 
-// Every generated icon module and every source SVG, keyed by icon name.
 const modules = import.meta.glob<Record<string, ComponentType<IconProps>>>("../../../src/icons/*.tsx", {
   eager: true,
 });
@@ -39,25 +38,21 @@ const meta = preview.meta({
   parameters: { layout: "padded" },
 });
 
-export const AllIcons = meta.story({});
+export const Default = meta.story({});
 
-AllIcons.test("has one icon for every source SVG", async ({ canvasElement }) => {
+Default.test("has one icon for every source SVG", async ({ canvasElement }) => {
   const shown = [...canvasElement.querySelectorAll("li")].map((item) => item.dataset["icon"]);
   await expect(shown).toEqual([...sourceText.keys()].toSorted((a, b) => a.localeCompare(b)));
 });
 
-AllIcons.test("draws every source icon exactly", async ({ canvasElement }) => {
+Default.test("draws every source icon exactly", async ({ canvasElement }) => {
   for (const item of canvasElement.querySelectorAll("li")) {
     const name = item.dataset["icon"]!;
     await expectSameDrawing(item.querySelector("svg")!, sourceText.get(name)!);
   }
 });
 
-AllIcons.test("hides every icon from assistive technology", async ({ canvasElement }) => {
+Default.test("hides every icon from assistive technology", async ({ canvasElement }) => {
   const svgs = [...canvasElement.querySelectorAll("svg")];
   await expect(svgs.filter((svg) => svg.getAttribute("aria-hidden") !== "true")).toEqual([]);
 });
-
-export const Large = meta.story({ args: { size: "xl" } });
-
-export const DarkRightToLeft = meta.story({ globals: { theme: "dark", dir: "rtl" } });
