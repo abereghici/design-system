@@ -20,5 +20,7 @@ export const roRO: Locale = {
     skipLink: { label: "Salt la conținutul principal" },
     passwordField: { show: "Afișează parola" },
     numberField: { increment: "Mărește", decrement: "Micșorează" },
+    breadcrumbs: { root: "Cale de navigare" },
+    pagination: { root: "Paginare", previous: "Pagina anterioară", next: "Pagina următoare" },
   },
 };

@@ -40,8 +40,8 @@ Root (nav) → Groups (group → label, optional → list) → Items (li) → Li
 - **Label** (drawn by Group from its `label` prop). A `<div>` with a generated `id`, text `sidebar-group-label-font` in `sidebar-group-label-text-color`, padding-inline `sidebar-group-label-padding-inline` so it lines up with the link text.
 - **Item.** A native `<li>`, no styles of its own.
 - **Link.** A native `<a href>` (not the Link component; Link spec: "a navigation list that wants bare text uses its own component, e.g. Navbar/Sidebar"). A full-width flex row of at least `sidebar-item-min-height`, padding-inline `sidebar-item-padding-inline`, gap `sidebar-item-gap`, radius `sidebar-item-border-radius`, text `sidebar-item-font` in `sidebar-item-text-color`, no underline.
-- **Indicator.** On the current link only: a bar of `sidebar-indicator-width` (2 px) in `sidebar-indicator-color` along the link's inline-start edge, drawn by the link's `::before` pseudo-element. The same bar as the Navbar's, turned to the column's axis.
-- **Icon** (optional) is a child marked `data-icon="inline-start"`, as in Button, Tag and Navbar. The Link sets it to `icon-sm-size` and `icon-sm-stroke-width`. Decorative; the text names the link.
+- **Indicator.** On the current link only: a bar of `sidebar-indicator-width` (2 px) in `sidebar-indicator-color` along the link's inline-start edge, drawn by the link's `::before` pseudo-element, inset at both block ends by the item's radius so it runs along the straight part of the fill's edge. The same bar as the Navbar's, turned to the column's axis.
+- **Icon** (optional) is a child marked `data-icon="inline-start"`, as in Button, Tag and Navbar. The Link sets `--ab-icon-size` / `--ab-icon-stroke-width` to `size-icon-sm` and `stroke-width-lg` (the values behind `icon-sm-*`). Decorative; the text names the link.
 
 ## API
 
@@ -100,7 +100,7 @@ Names, checked against the reference libraries:
 - **Current page.** The app sets `aria-current="page"` on the one link to the page on screen (MDN: "Only mark one element in a set of elements as current with `aria-current`."). In the Next.js App Router that needs a client link wrapper through `asChild` ("`usePathname` is a **Client Component** hook", https://nextjs.org/docs/app/api-reference/functions/use-pathname), as in Navbar. A link to a parent section of the current page is not marked (judgement call: `aria-current="page"` means this page; MDN's other values are not needed yet).
 - **Scrolling.** The Sidebar does not scroll itself. The app's column scrolls (native `overflow-y: auto` on the grid track, or a ScrollArea around the Root) when the links are taller than the viewport, so the Sidebar never nests a second scroller inside the app's (judgement call).
 - **Narrow widths.** The Sidebar is in flow, so the app's layout stacks it above the content (or leaves it out) below `breakpoint-md` (760 px), as the brand book's layout does for its label column ("Under 760 the label column stacks."); WCAG 1.4.10 asks for no "scrolling in two dimensions" at 320 CSS px (https://www.w3.org/WAI/WCAG22/Understanding/reflow.html). Links are full width and their text wraps (min-height, not a fixed height), so a stacked Sidebar reflows. An off-canvas drawer needs a Floating layer and is phase 4.
-- Server Component: no `'use client'`, no state and no handlers. `useId` in Group is a render-time hook with no client behaviour (inference, see Names).
+- Server Component: no `'use client'`, no state and no handlers. `useId` in Group is a render-time hook with no client behaviour (verified: the ui-next-fixture route renders the labelled group on the server).
 
 ## Motion
 
