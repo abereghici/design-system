@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useEffect, useEffectEvent, useRef, useState } from "react";
 import type { ComponentProps, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 
 import type { ChangeEventDetails as Details } from "../events/events.ts";
@@ -117,6 +117,9 @@ function stepKey(event: KeyboardEvent, step: number, largeStep: number, { min, m
 
 type Reason = NumberFieldChangeEventDetails["reason"];
 
+const inputMode = (step: number, min: number | undefined) =>
+  Number.isInteger(step) && (min ?? -1) >= 0 ? ("numeric" as const) : ("decimal" as const);
+
 function useNumber({
   value,
   defaultValue = null,
@@ -135,7 +138,19 @@ function useNumber({
     onValueChange?.(next, { reason, event, cancel });
     if (!cancelled) setOwn(next);
   };
-  return { committed, text, setText, commit };
+  const reset = useEffectEvent(() => {
+    setOwn(defaultValue);
+    setText(null);
+  });
+  const hidden = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const form = hidden.current?.form;
+    form?.addEventListener("reset", reset);
+    return () => {
+      form?.removeEventListener("reset", reset);
+    };
+  }, []);
+  return { committed, text, setText, commit, hidden };
 }
 
 function useNumberValue({
@@ -152,19 +167,22 @@ function useNumberValue({
 }: Omit<ControlProps, "labels" | "startElement" | "readOnly">) {
   const app = useLocale();
   const { format, parse } = numberFormat(locale ?? app.tag, formatOptions);
-  const { committed, text, setText, commit } = useNumber({ value, defaultValue, onValueChange });
-  const bounds = { min, max, step };
+  const { committed, text, setText, commit, hidden } = useNumber({
+    value,
+    defaultValue,
+    onValueChange,
+  });
   const current = () => {
     const parsed = text === null ? committed : parse(text);
     return parsed !== null && Number.isNaN(parsed) ? committed : parsed;
   };
   const settle = (next: number | null, reason: Reason, event: SyntheticEvent) => {
-    commit(next === null ? null : fit(next, bounds), reason, event);
+    commit(next === null ? null : fit(next, { min, max, step }), reason, event);
   };
   return {
     rest,
-    inputMode:
-      Number.isInteger(step) && (min ?? -1) >= 0 ? ("numeric" as const) : ("decimal" as const),
+    hidden,
+    inputMode: inputMode(step, min),
     committed,
     display: text ?? (committed === null ? "" : format(committed)),
     setText,
@@ -178,7 +196,7 @@ function useNumberValue({
       settle(current(), "input-commit", event);
     },
     keyStep: (event: KeyboardEvent) => {
-      const to = stepKey(event, step, largeStep, bounds);
+      const to = stepKey(event, step, largeStep, { min, max, step });
       if (to === null) return;
       event.preventDefault();
       settle(to(current() ?? min ?? 0), "keyboard", event);
@@ -188,7 +206,7 @@ function useNumberValue({
 
 function Control({ labels, startElement, readOnly, ...options }: ControlProps) {
   const field = use(FieldContext);
-  const { rest: props, ...number } = useNumberValue(options);
+  const { rest: props, hidden, ...number } = useNumberValue(options);
   const bindings = Field.useFieldControl<HTMLInputElement, typeof props>({
     ...props,
     onChange: (event) => {
@@ -227,7 +245,7 @@ function Control({ labels, startElement, readOnly, ...options }: ControlProps) {
           if (!blocked) number.keyStep(event);
         }}
       />
-      <input type="hidden" name={props.name} value={number.committed ?? ""} />
+      <input ref={hidden} type="hidden" name={props.name} value={number.committed ?? ""} />
     </InputGroup>
   );
 }
