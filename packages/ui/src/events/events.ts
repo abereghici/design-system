@@ -44,7 +44,7 @@ export type DismissEvent = CustomEvent<
 
 export type AppearEvent = CustomEvent<FeedbackEventDetail<"Toast">>;
 
-export type ConfirmEvent = CustomEvent<FeedbackEventDetail<"AlertDialog" | "Toast">>;
+export type ConfirmEvent = CustomEvent<FeedbackEventDetail<"AlertDialog" | "Toast" | "Command">>;
 
 declare global {
   // lib.dom's Document, Window and HTMLElement event maps extend this one, so every target is typed.

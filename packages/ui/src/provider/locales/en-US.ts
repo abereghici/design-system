@@ -36,5 +36,14 @@ export const enUS: Locale = {
       unavailable: "This date is not available",
     },
     calendar: { previousMonth: "Previous month", nextMonth: "Next month" },
+    command: {
+      dialog: "Command palette",
+      search: "Search commands",
+      placeholder: "Type a command or search…",
+      empty: "No results",
+      navigate: "Navigate",
+      open: "Open",
+      close: "Close",
+    },
   },
 };

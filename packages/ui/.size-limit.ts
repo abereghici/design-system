@@ -7,7 +7,7 @@ const budgets: Readonly<Record<string, string>> = {
   alert: "2.5 kB",
   avatar: "1.6 kB",
   badge: "690 B",
-  breadcrumbs: "1.95 kB",
+  breadcrumbs: "2 kB",
   button: "2.75 kB",
   calendar: "24.6 kB",
   card: "1.3 kB",
@@ -43,8 +43,8 @@ const budgets: Readonly<Record<string, string>> = {
   skeleton: "630 B",
   sidebar: "1.45 kB",
   slider: "4 kB",
-  "skip-link": "860 B",
-  spinner: "1.05 kB",
+  "skip-link": "900 B",
+  spinner: "1.1 kB",
   switch: "2.3 kB",
   "status-dot": "490 B",
   table: "700 B",
@@ -63,6 +63,7 @@ const budgets: Readonly<Record<string, string>> = {
   dialog: "4.35 kB",
   "alert-dialog": "4.2 kB",
   sheet: "4.6 kB",
+  command: "7.8 kB",
 };
 
 const checks = (pattern: string, subpath: (path: string) => string, limit?: string) =>
@@ -89,6 +90,6 @@ export default [
   ...checks(
     "src/provider/locales/*.ts",
     (path) => path.slice("src/provider/".length, -".ts".length),
-    "590 B",
+    "640 B",
   ),
 ] satisfies SizeLimitConfig;
