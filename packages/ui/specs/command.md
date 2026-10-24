@@ -124,16 +124,16 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State            | How it shows                                                                                   | Exposed as                                                                |
-| ---------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| query empty      | Every Item, in document order, under its group heading                                         | Input value `""`                                                          |
+| State            | How it shows                                                                                   | Exposed as                                                                    |
+| ---------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| query empty      | Every Item, in document order, under its group heading                                         | Input value `""`                                                              |
 | searching        | Matching Items only, best match first within each Group; Groups with no match are not rendered | Non-matching Items have `hidden`; empty Groups are `display: none` (`:has()`) |
-| item highlighted | Fill `command-item-background-color-selected`, no transition                                   | `aria-selected="true"`, `data-highlighted`; Input `aria-activedescendant` |
-| item disabled    | Text and icon in `command-item-{text,icon}-color-disabled`; never highlighted                  | `aria-disabled="true"`                                                    |
-| no results       | Empty's icon and text; the List shows nothing                                                  | Empty's text content; no `aria-activedescendant`                          |
-| dialog open      | Top-anchored surface over a transparent backdrop; page inert and not scrolling           | `[open]`, `:modal` (Dialog)                                               |
-| dialog entering  | Fades in                                                                                       | `@starting-style`                                                         |
-| dialog exiting   | Fades out (Chromium only)                                                                      | Transition on `display` / `overlay`                                       |
+| item highlighted | Fill `command-item-background-color-selected`, no transition                                   | `aria-selected="true"`, `data-highlighted`; Input `aria-activedescendant`     |
+| item disabled    | Text and icon in `command-item-{text,icon}-color-disabled`; never highlighted                  | `aria-disabled="true"`                                                        |
+| no results       | Empty's icon and text; the List shows nothing                                                  | Empty's text content; no `aria-activedescendant`                              |
+| dialog open      | Top-anchored surface over a transparent backdrop; page inert and not scrolling                 | `[open]`, `:modal` (Dialog)                                                   |
+| dialog entering  | Fades in                                                                                       | `@starting-style`                                                             |
+| dialog exiting   | Fades out (Chromium only)                                                                      | Transition on `display` / `overlay`                                           |
 
 ## Behaviour
 
