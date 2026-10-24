@@ -28,21 +28,18 @@
     --enter-duration: var(--ab-dropdown-menu-enter-duration);
     --exit-duration: var(--ab-dropdown-menu-exit-duration);
     --easing: var(--ab-dropdown-menu-easing);
-    --item-text-color-disabled: var(--ab-dropdown-menu-item-text-color-disabled);
-    --item-icon-color-disabled: var(--ab-dropdown-menu-item-icon-color-disabled);
 
     inset-block-start: anchor(self-end);
     inset-inline-start: anchor(self-start);
     position-try-fallbacks: flip-block;
     min-inline-size: max(var(--ab-dropdown-menu-min-width), anchor-size(self-inline));
-    margin-block-start: var(--ab-dropdown-menu-offset);
+    margin: var(--ab-dropdown-menu-offset);
   }
 
   .content:where([data-side="top"]) {
     --origin-block: bottom;
 
     inset-block: auto anchor(self-start);
-    margin-block: 0 var(--ab-dropdown-menu-offset);
   }
 
   .content:where([data-align="end"]) {

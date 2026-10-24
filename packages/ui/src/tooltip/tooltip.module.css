@@ -9,13 +9,11 @@
     position-anchor: auto;
     inset: auto;
     inset-block-end: anchor(self-start);
-    left: anchor(center);
-    translate: -50% 0;
+    justify-self: anchor-center;
     position-try-fallbacks: flip-block;
     box-sizing: border-box;
     max-inline-size: var(--ab-tooltip-max-width);
-    margin: 0;
-    margin-block-end: var(--ab-tooltip-offset);
+    margin: var(--ab-tooltip-offset);
     padding: var(--ab-tooltip-padding-block) var(--ab-tooltip-padding-inline);
     border: 0;
     border-radius: var(--ab-tooltip-border-radius);
@@ -73,18 +71,17 @@
 
   .content:where([data-side="bottom"]) {
     inset-block: anchor(self-end) auto;
-    margin-block: var(--ab-tooltip-offset) 0;
     transform-origin: top center;
   }
 
   .content:where([data-align="start"]) {
     inset-inline: anchor(self-start) auto;
-    translate: none;
+    justify-self: auto;
   }
 
   .content:where([data-align="end"]) {
     inset-inline: auto anchor(self-end);
-    translate: none;
+    justify-self: auto;
   }
 
   @media (forced-colors: active) {

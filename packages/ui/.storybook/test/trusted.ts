@@ -3,3 +3,10 @@ export async function trusted() {
   const { userEvent } = await import("vitest/browser");
   return userEvent;
 }
+
+/** Moves the pointer off the story so hover state never leaks between proofs. */
+export async function parkPointer() {
+  // vitest/browser throws when imported outside Vitest, e.g. when the Storybook UI renders the story.
+  const user = await trusted().catch(() => null);
+  await user?.hover(document.body, { position: { x: 0, y: 0 } });
+}
