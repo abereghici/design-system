@@ -1,7 +1,3 @@
-// Turns the source SVGs (assets/icons/*.svg, assets/logo/*.svg, copied verbatim from the Bereghici
-// Design System artifact) into server-safe React glyph modules. SVGO strips the C2PA metadata,
-// namespaces and default attributes, and shortens the path data; the stories check that every
-// glyph still draws the source geometry.
 import { readdir, readFile } from "node:fs/promises";
 
 import { format } from "oxfmt";
@@ -16,8 +12,7 @@ const iconSources = new URL("assets/icons/", root);
 const logoSources = new URL("assets/logo/", root);
 const logoFiles = ["stalpul-cerului-moss.svg", "stalpul-cerului-lichen.svg"];
 
-// What Icon (src/icon/icon.tsx) and Logo (src/logo/logo.tsx) draw with. A source file that
-// strokes differently would be redrawn wrong, so generation stops instead.
+// A source that strokes differently from Icon or Logo would be redrawn wrong, so generation stops.
 const iconRoot = {
   fill: "none",
   stroke: "currentColor",
@@ -73,7 +68,6 @@ function componentName(name: string) {
   return `${name.replaceAll(/(?:^|-)([a-z0-9])/gv, (_, char: string) => char.toUpperCase())}Icon`;
 }
 
-/** The source icon names, sorted (`check-circle`, …). */
 export async function iconSourceNames() {
   return (await readdir(iconSources))
     .filter((file) => file.endsWith(".svg"))
@@ -124,7 +118,6 @@ export const logoPath = "${shapes[0]}";
 `;
 }
 
-/** Every generated module, keyed by its path from the package root, formatted like the repo. */
 export async function generateGlyphs() {
   const modules = new Map<string, string>();
   for (const name of await iconSourceNames()) {

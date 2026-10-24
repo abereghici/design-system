@@ -5,9 +5,12 @@ import { expect } from "storybook/test";
 import type { IconProps } from "@platform/ui/icon";
 import { expectSameDrawing } from "#.storybook/test/geometry.ts";
 
-const modules = import.meta.glob<Record<string, ComponentType<IconProps>>>("../../../src/icons/*.tsx", {
-  eager: true,
-});
+const modules = import.meta.glob<Record<string, ComponentType<IconProps>>>(
+  "../../../src/icons/*.tsx",
+  {
+    eager: true,
+  },
+);
 const sources = import.meta.glob<string>("../../../assets/icons/*.svg", {
   query: "?raw",
   import: "default",

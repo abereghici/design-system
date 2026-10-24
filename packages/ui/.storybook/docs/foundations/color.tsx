@@ -12,7 +12,6 @@ const PROPERTIES = [
   ["Brand", "brand", "A fixed identity hue for the Logo, imagery and print only."],
 ] as const;
 
-/** Semantic color roles, one table per color property, each swatch drawn in both Themes. */
 export function ColorRoles() {
   return (
     <>
@@ -59,11 +58,8 @@ const HUES = [
   ["Clay", "Danger"],
 ] as const;
 
-// Palette steps are primitive tokens: shown so the source of every role is visible. Product code
-// never reads them (R4).
 const step = (row: Token) => <Chip name={row.name} />;
 
-/** The seven palettes, every step and translucent variant. */
 export function Palettes() {
   return (
     <>

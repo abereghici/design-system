@@ -7,7 +7,6 @@ const meta = preview.meta({ title: "Foundations/Elevation", tags: ["!autodocs"] 
 
 export const Levels = meta.story({ render: () => <Elevation /> });
 
-// The four Elevation levels and eight layers of the token source, lowest to highest.
 Levels.test("lists the Elevation levels and layers in order", async ({ canvas }) => {
   const names = (caption: string) =>
     within(canvas.getByRole("table", { name: caption }))

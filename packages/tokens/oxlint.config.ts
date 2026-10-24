@@ -5,8 +5,7 @@ import { defineConfig } from "oxlint";
 export default defineConfig({
   extends: [base, node],
   rules: {
-    // Style Dictionary's token types are mutable interfaces with `any` index signatures that
-    // cannot be made deeply readonly; the build reads them and never mutates them.
+    // Style Dictionary and fflate types are mutable; the build only reads them.
     "typescript/prefer-readonly-parameter-types": [
       "error",
       {
@@ -18,7 +17,6 @@ export default defineConfig({
             package: "style-dictionary",
             name: ["Dictionary", "DesignTokens", "TransformedToken", "FormatFnArguments"],
           },
-          // fflate's zip entry info, only read by the unzip filter in scripts/fonts.ts.
           { from: "package", package: "fflate", name: "UnzipFileInfo" },
         ],
       },

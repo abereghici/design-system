@@ -22,9 +22,6 @@ const meta = preview.meta({
 
 export const Elements = meta.story({});
 
-// Expected values are the token source's literals (packages/tokens/src/tokens/*.tokens.json):
-// focus-ring-width = dimension-2 (2px), focus-ring-offset = dimension-3 (3px),
-// light color-border-focused = palette-moss-900 #263316.
 Elements.test("draws the focus ring on keyboard focus", async ({ canvas, userEvent }) => {
   const button = canvas.getByRole("button", { name: "Save changes" });
   await userEvent.tab();
@@ -38,8 +35,6 @@ Elements.test("draws the focus ring on keyboard focus", async ({ canvas, userEve
   ]).toEqual(["solid", "2px", "3px", "rgb(38, 51, 22)"]);
 });
 
-// light color-background-highlight = palette-ember-100 #ffd8ac,
-// color-text-on-highlight = palette-sage-950 #171914.
 Elements.test("marks selected text with the highlight Role", async ({ canvas }) => {
   const style = getComputedStyle(canvas.getByRole("heading"), "::selection");
   await expect([style.backgroundColor, style.color]).toEqual([
@@ -48,8 +43,6 @@ Elements.test("marks selected text with the highlight Role", async ({ canvas }) 
   ]);
 });
 
-// type-body-md: font-family-figtree, font-size-17 (1.0625rem = 17px at the default root size),
-// line-height-160 (1.6, so 27.2px).
 Elements.test("sets body text and form controls in the body type role", async ({ canvas }) => {
   const paragraph = getComputedStyle(canvas.getByText(/^Body text/v));
   const button = getComputedStyle(canvas.getByRole("button", { name: "Save changes" }));
@@ -69,8 +62,7 @@ Elements.test("reserves a stable scrollbar gutter", async () => {
   await expect(getComputedStyle(document.documentElement).scrollbarGutter).toBe("stable");
 });
 
-// `text-wrap: pretty` and `interpolate-size` are not in every engine (docs/research/
-// base-stylesheet.md); an engine that doesn't know them ignores the declaration.
+// An engine without `text-wrap: pretty` or `interpolate-size` ignores the declaration.
 Elements.test("balances headings and wraps paragraphs prettily", async ({ canvas }) => {
   const heading = getComputedStyle(canvas.getByRole("heading"));
   const paragraph = getComputedStyle(canvas.getByText(/^Body text/v));
@@ -90,8 +82,6 @@ Elements.test("lets sizes transition to keywords unless motion is reduced", asyn
 
 Elements.test("yields to unlayered app CSS", async ({ canvas, userEvent }) => {
   const appStyles = document.createElement("style");
-  // A type selector (0,0,1) beats the base `:focus-visible` (0,1,0) only because the base sits
-  // in a cascade layer and this rule doesn't.
   appStyles.textContent = "button { outline-color: rgb(1, 2, 3); }";
   document.head.append(appStyles);
   try {
@@ -105,8 +95,6 @@ Elements.test("yields to unlayered app CSS", async ({ canvas, userEvent }) => {
 
 export const DarkRightToLeft = meta.story({ globals: { theme: "dark", dir: "rtl" } });
 
-// dark color-border-focused = palette-lichen-200 #eceac9; dark color-surface-default =
-// palette-night-950 #12150f.
 DarkRightToLeft.test("follows the Theme", async ({ canvas, userEvent }) => {
   const button = canvas.getByRole("button", { name: "Save changes" });
   await userEvent.tab();

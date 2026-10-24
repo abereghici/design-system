@@ -13,7 +13,6 @@ import { hexIn, token, tokens, type ThemeId, type Token } from "./tokens.ts";
 
 const color = (name: string) => token("semantic", `color-${name}`);
 
-/** The ratio of a pair in a Theme, as the source validator computes it. */
 const ratioIn = (foreground: string, background: string, theme: ThemeId) =>
   contrastRatio(hexIn(color(foreground), theme), hexIn(color(background), theme));
 
@@ -98,7 +97,6 @@ function Grid({
   );
 }
 
-// Text on fills at 4.5:1, and (ticket #15) status icons on their subtle fills at 3:1.
 const FILL_PAIRS = [
   ...CONTRAST_PAIRS.map(([foreground, background]) => ({ foreground, background, minimum: 4.5 })),
   ...CONTRAST_NON_TEXT_PAIRS.map(([foreground, background]) => ({
@@ -142,7 +140,6 @@ function Pairs({ theme }: { theme: ThemeId }) {
   );
 }
 
-/** The AA contrast matrix, computed from the token source in both Themes. */
 export function ContrastMatrix() {
   return (
     <>
@@ -193,7 +190,6 @@ const targetPreview = (row: Token) =>
     <span className={styles["target"]} style={{ "--target": cssVar(row.name) }} />
   ) : null;
 
-/** Focus ring and target size (WCAG 2.4.7, 2.4.11, 2.5.8). */
 export function FocusAndTarget() {
   return (
     <Section

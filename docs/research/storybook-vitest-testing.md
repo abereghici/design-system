@@ -84,7 +84,7 @@ How do we make Storybook the hub for docs, component tests, a11y tests and scree
 **Story-level tests: `Story.test()`**
 
 - **Experimental, behind a flag.** [csf-next](https://storybook.js.org/docs/api/csf/csf-next): "(⚠️ **Experimental**) … must be enabled via the [`experimentalTestSyntax` feature flag]". Example: `PrimaryDisabled.test('should be disabled', async ({ canvas, userEvent, args }) => { … })`. [main-config-features](https://storybook.js.org/docs/api/main-config/main-config-features): `features: { experimentalTestSyntax: true }`.
-- **What a test is, in source.** [`core/src/csf/csf-factories.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/core/src/csf/csf-factories.ts): `.test(name, fn)` or `.test(name, annotations, fn)` extends the story. It sets tags `[Tag.TEST_FN, \`!${Tag.AUTODOCS}\`, …]` and a `play` that runs the story's `play`, then the test function. So a test is a hidden child story, kept out of autodocs.
+- **What a test is, in source.** [`core/src/csf/csf-factories.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/core/src/csf/csf-factories.ts): `.test(name, fn)` or `.test(name, annotations, fn)` extends the story. It sets tags `[Tag.TEST_FN, \`!${Tag.AUTODOCS}\`, …]`and a`play`that runs the story's`play`, then the test function. So a test is a hidden child story, kept out of autodocs.
 
 **`expect`, `fn`, `userEvent`**
 
@@ -130,7 +130,7 @@ How do we make Storybook the hub for docs, component tests, a11y tests and scree
 - **Animations.** "When using the Playwright provider, animations are automatically disabled when using the built-in assertion: the `animations` option's value in `screenshotOptions` is set to `"disabled"` by default."
 - **Global defaults** go in `test.browser.expect.toMatchScreenshot` ([browser.expect](https://vitest.dev/config/browser/expect)).
 - **Baseline paths and naming.** [browser.expect](https://vitest.dev/config/browser/expect):
-  - The default `resolveScreenshotPath` is `` path.resolve(root, testFileDirectory, screenshotDirectory, testFileName, `${arg}-${browserName}-${platform}${ext}`) ``.
+  - The default `resolveScreenshotPath` is ``path.resolve(root, testFileDirectory, screenshotDirectory, testFileName, `${arg}-${browserName}-${platform}${ext}`)``.
   - `screenshotDirectory` defaults to `__screenshots__`.
   - `platform` is "The value of [`process.platform`]".
   - [VRT guide](https://vitest.dev/guide/browser/visual-regression-testing): "This ensures screenshots from different environments don't overwrite each other", and "Reference screenshots live in `__screenshots__` folders next to your tests. **Commit them to your repository.**"
@@ -144,7 +144,7 @@ How do we make Storybook the hub for docs, component tests, a11y tests and scree
 - **The image.** [Playwright Docker](https://playwright.dev/docs/docker): `mcr.microsoft.com/playwright:v%%VERSION%%-noble`. The tag `v1.64.1-noble` exists in the MCR tag list. "The Playwright package/dependency is not included in the image and should be installed separately". Recommended flags: `--init`, and "`--ipc=host` is recommended when using Chromium".
 - **Remote mode.** Same page: `npx -y playwright@%%VERSION%% run-server --port 3000 --host 0.0.0.0`, and "ensure the Playwright version in your tests matches the version running in the Docker container."
 - **Vitest side of remote mode.** [playwright config](https://vitest.dev/config/browser/playwright): `connectOptions: { wsEndpoint: 'ws://127.0.0.1:6677/', exposeNetwork: '<loopback>' }`. **Version note:** this page's Docker example pins `mcr.microsoft.com/playwright:v1.61.0-noble`, which is older than our 1.64.1.
-- **Remote mode gives the wrong platform name** (inference from the quotes above). `platform` is the *Node* `process.platform`. With `connectOptions`, Vitest runs on the host (for example `darwin`) while the browser renders on Linux, so baselines would be named `-darwin` but contain Linux pixels. Either run Vitest itself inside the `v1.64.1-noble` image (platform = `linux`), or drop `platform` from `resolveScreenshotPath` when connecting remotely.
+- **Remote mode gives the wrong platform name** (inference from the quotes above). `platform` is the _Node_ `process.platform`. With `connectOptions`, Vitest runs on the host (for example `darwin`) while the browser renders on Linux, so baselines would be named `-darwin` but contain Linux pixels. Either run Vitest itself inside the `v1.64.1-noble` image (platform = `linux`), or drop `platform` from `resolveScreenshotPath` when connecting remotely.
 
 **Applying it to stories**
 
@@ -153,7 +153,7 @@ How do we make Storybook the hub for docs, component tests, a11y tests and scree
   - [vitest-addon migration guide](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon/migration-guide): "There are solutions for image snapshot testing that integrate with the Storybook testing widget: On the cloud with the [Visual tests addon]; Locally with [`storybook-addon-vis`]". The latter is a community addon and was not evaluated.
 - **Inference from source: a Vitest `afterEach` can screenshot each story.**
   - [`vitest-plugin/test-utils.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/addons/vitest/src/vitest-plugin/test-utils.ts): the generated test sets `context.story = composedStory`, calls `await setViewport(composedStory.parameters, composedStory.globals)`, then `await composedStory.run(undefined)`.
-  - [`portable-stories.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/core/src/preview-api/modules/store/csf/portable-stories.ts) `runStory` first runs the *previous* story's cleanups ("for (const callback of [...cleanups].reverse())"). It then mounts into a `div` appended to `document.body`, and in a test environment it calls `pauseAnimations()` before `applyAfterEach`.
+  - [`portable-stories.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/core/src/preview-api/modules/store/csf/portable-stories.ts) `runStory` first runs the _previous_ story's cleanups ("for (const callback of [...cleanups].reverse())"). It then mounts into a `div` appended to `document.body`, and in a test environment it calls `pauseAnimations()` before `applyAfterEach`.
   - So the story DOM is still mounted when the Vitest test ends. A Vitest `afterEach((ctx) => …)` in a setup file used only by the Storybook project can `await expect(page.elementLocator(document.body)).toMatchScreenshot()`, gated on `ctx.story.tags` (for example a custom `vrt` tag). The addon's own setup file uses the same hook shape: `afterEach((ctx) => { restoreDefaultChannel(); … })` ([`setup-file.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/addons/vitest/src/vitest-plugin/setup-file.ts)).
   - **Unverified.** Neither Storybook nor Vitest documents this. Verify it with a spike.
 - **Using `preview.ts` `afterEach` instead.** That story-level hook runs in both Storybook and Vitest. Calling `toMatchScreenshot` there would mean importing `vitest/browser` into the preview bundle. Not documented; avoid.
@@ -268,98 +268,106 @@ Source keys:
 
 ```ts
 // packages/ui/vite.config.ts — shared by Storybook (merged automatically) and Vitest (mergeConfig)
-import { defineConfig } from 'vite';                                  // [PR]
-import react, { reactCompilerPreset } from '@vitejs/plugin-react';     // [PR]
-import babel from '@rolldown/plugin-babel';                           // [PR]
+import { defineConfig } from "vite"; // [PR]
+import react, { reactCompilerPreset } from "@vitejs/plugin-react"; // [PR]
+import babel from "@rolldown/plugin-babel"; // [PR]
 export default defineConfig({
-  plugins: [react(), babel({ presets: [reactCompilerPreset()] })],    // [PR] Babel React Compiler; Storybook merges this [SB-vite]
+  plugins: [react(), babel({ presets: [reactCompilerPreset()] })], // [PR] Babel React Compiler; Storybook merges this [SB-vite]
 });
 ```
 
 ```ts
 // packages/ui/.storybook/main.ts
-import { defineMain } from '@storybook/react-vite/node';              // [SB-csfnext] + react-vite/src/node/index.ts
+import { defineMain } from "@storybook/react-vite/node"; // [SB-csfnext] + react-vite/src/node/index.ts
 export default defineMain({
-  framework: '@storybook/react-vite',                                 // [SB-csfnext]
-  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(ts|tsx)'],      // [SB-csfnext] (paths: [repo]/[inf])
-  addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'], // [SB-csfnext] addons array; names [SB-vitest]/[SB-a11y]
+  framework: "@storybook/react-vite", // [SB-csfnext]
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(ts|tsx)"], // [SB-csfnext] (paths: [repo]/[inf])
+  addons: ["@storybook/addon-docs", "@storybook/addon-a11y", "@storybook/addon-vitest"], // [SB-csfnext] addons array; names [SB-vitest]/[SB-a11y]
   // features: { experimentalTestSyntax: true },                      // [SB-csfnext] only if adopting Story.test() (experimental)
 });
 ```
 
 ```ts
 // packages/ui/.storybook/preview.ts
-import { definePreview } from '@storybook/react-vite';                // [SB-csfnext]
-import addonA11y from '@storybook/addon-a11y';                         // [SB-a11y]
-import addonDocs from '@storybook/addon-docs';                         // [SB-autodocs]
+import { definePreview } from "@storybook/react-vite"; // [SB-csfnext]
+import addonA11y from "@storybook/addon-a11y"; // [SB-a11y]
+import addonDocs from "@storybook/addon-docs"; // [SB-autodocs]
 export default definePreview({
-  addons: [addonDocs(), addonA11y()],                                 // [SB-csfnext] [SB-a11y] [SB-autodocs]
-  tags: ['autodocs'],                                                 // [SB-autodocs]
-  parameters: { a11y: { test: 'error' } },                            // [SB-a11y] default is 'todo' (a11y/src/preview.tsx)
+  addons: [addonDocs(), addonA11y()], // [SB-csfnext] [SB-a11y] [SB-autodocs]
+  tags: ["autodocs"], // [SB-autodocs]
+  parameters: { a11y: { test: "error" } }, // [SB-a11y] default is 'todo' (a11y/src/preview.tsx)
 });
 ```
 
 ```ts
 // packages/ui/vitest.config.ts
-import path from 'node:path';                                         // [SB-vitest]
-import { fileURLToPath } from 'node:url';                             // [SB-vitest]
-import { defineConfig, mergeConfig } from 'vitest/config';            // [SB-vitest]
-import { playwright } from '@vitest/browser-playwright';              // [SB-vitest] [V-pw]
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';// [SB-vitest]
-import viteConfig from './vite.config.ts';                            // [SB-vitest]
+import path from "node:path"; // [SB-vitest]
+import { fileURLToPath } from "node:url"; // [SB-vitest]
+import { defineConfig, mergeConfig } from "vitest/config"; // [SB-vitest]
+import { playwright } from "@vitest/browser-playwright"; // [SB-vitest] [V-pw]
+import { storybookTest } from "@storybook/addon-vitest/vitest-plugin"; // [SB-vitest]
+import viteConfig from "./vite.config.ts"; // [SB-vitest]
 
-const dirname = path.dirname(fileURLToPath(import.meta.url));         // [SB-vitest]
+const dirname = path.dirname(fileURLToPath(import.meta.url)); // [SB-vitest]
 const browser = {
-  enabled: true,                                                      // [SB-vitest]
-  provider: playwright(),                                             // [V-pw]
-  headless: true,                                                     // [SB-vitest] [V-vrt]
-  instances: [{ browser: 'chromium', viewport: { width: 1280, height: 720 } }], // [SB-vitest] [V-vrt]; add firefox/webkit [V-pw multiple-setups]
+  enabled: true, // [SB-vitest]
+  provider: playwright(), // [V-pw]
+  headless: true, // [SB-vitest] [V-vrt]
+  instances: [{ browser: "chromium", viewport: { width: 1280, height: 720 } }], // [SB-vitest] [V-vrt]; add firefox/webkit [V-pw multiple-setups]
   expect: {
     toMatchScreenshot: {
-      comparatorName: 'pixelmatch',                                   // [V-vrt]
-      comparatorOptions: { allowedMismatchedPixelRatio: 0.01 },       // [V-vrt]
+      comparatorName: "pixelmatch", // [V-vrt]
+      comparatorOptions: { allowedMismatchedPixelRatio: 0.01 }, // [V-vrt]
     },
   },
 } as const;
 
-export default mergeConfig(viteConfig, defineConfig({                 // [SB-vitest]
-  test: {
-    projects: [                                                       // [SB-vitest] [V-migr] inline projects inherit root (extends: true default)
-      {
-        plugins: [storybookTest({ configDir: path.join(dirname, '.storybook') })], // [SB-vitest] configDir required for non-default cwd
-        test: {
-          name: 'storybook',                                          // [SB-vitest]
-          browser,
-          // no setupFiles needed for project annotations              // [SB-utils] "Since Storybook 10.3 … applies these automatically"
-          // setupFiles: ['./.storybook/vitest.vrt.ts'],               // [inf] optional story screenshots, see below
+export default mergeConfig(
+  viteConfig,
+  defineConfig({
+    // [SB-vitest]
+    test: {
+      projects: [
+        // [SB-vitest] [V-migr] inline projects inherit root (extends: true default)
+        {
+          plugins: [storybookTest({ configDir: path.join(dirname, ".storybook") })], // [SB-vitest] configDir required for non-default cwd
+          test: {
+            name: "storybook", // [SB-vitest]
+            browser,
+            // no setupFiles needed for project annotations              // [SB-utils] "Since Storybook 10.3 … applies these automatically"
+            // setupFiles: ['./.storybook/vitest.vrt.ts'],               // [inf] optional story screenshots, see below
+          },
         },
-      },
-      {
-        test: {
-          name: 'unit',                                               // [V-vrt] project split
-          include: ['src/**/*.test.tsx'],                             // [inf]
-          browser,                                                    // [VBR] vitest-browser-react needs browser mode
+        {
+          test: {
+            name: "unit", // [V-vrt] project split
+            include: ["src/**/*.test.tsx"], // [inf]
+            browser, // [VBR] vitest-browser-react needs browser mode
+          },
         },
-      },
-      {
-        plugins: [storybookTest({ configDir: path.join(dirname, '.storybook') })], // [SB-vitest]
-        test: {
-          name: 'storybook-reduced-motion',                           // [inf]
-          browser: { ...browser, provider: playwright({ contextOptions: { reducedMotion: 'reduce' } }) }, // [V-pw] contextOptions; PW newContext option
+        {
+          plugins: [storybookTest({ configDir: path.join(dirname, ".storybook") })], // [SB-vitest]
+          test: {
+            name: "storybook-reduced-motion", // [inf]
+            browser: {
+              ...browser,
+              provider: playwright({ contextOptions: { reducedMotion: "reduce" } }),
+            }, // [V-pw] contextOptions; PW newContext option
+          },
         },
-      },
-    ],
-  },
-}));
+      ],
+    },
+  }),
+);
 ```
 
 ```ts
 // packages/ui/.storybook/vitest.vrt.ts — INFERENCE, unverified (see §3)
-import { afterEach, expect } from 'vitest';                           // [SB-testutils] addon's own setup-file uses afterEach((ctx) => …)
-import { page } from 'vitest/browser';                                // [V-vrt]
+import { afterEach, expect } from "vitest"; // [SB-testutils] addon's own setup-file uses afterEach((ctx) => …)
+import { page } from "vitest/browser"; // [V-vrt]
 afterEach(async (ctx) => {
-  const story = (ctx as { story?: { tags: string[] } }).story;        // [SB-testutils] test-utils sets context.story
-  if (!story?.tags.includes('vrt')) return;                           // [inf] opt-in custom tag
+  const story = (ctx as { story?: { tags: string[] } }).story; // [SB-testutils] test-utils sets context.story
+  if (!story?.tags.includes("vrt")) return; // [inf] opt-in custom tag
   await expect(page.elementLocator(document.body)).toMatchScreenshot(); // [V-vrt] [inf] story stays mounted until the next run
 });
 ```

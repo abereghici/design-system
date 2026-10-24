@@ -1,6 +1,4 @@
-// `pnpm icons`: regenerates src/icons/*.tsx and src/logo/logo-path.ts from assets/. Generated files
-// the sources no longer produce are deleted. Each file in src/icons/ is its own public subpath
-// through the `"./icons/*"` export pattern, so nothing else may live there.
+// Every file in src/icons/ is a public subpath (`"./icons/*"`), so stale generated files are deleted.
 import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 
 import { GENERATED_HEADER, generateGlyphs } from "./generate-icons.ts";

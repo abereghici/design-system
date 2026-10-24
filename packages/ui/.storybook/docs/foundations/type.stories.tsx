@@ -8,10 +8,8 @@ const meta = preview.meta({
   tags: ["!autodocs"],
 });
 
-/** The type specimen: every type role of the token source, with latin-ext sample text. */
 export const Roles = meta.story({ render: () => <TypeRoles /> });
 
-// The 17 `typography` tokens of packages/tokens/src/tokens/semantic.tokens.json.
 const ROLES = [
   "type-heading-lg",
   "type-heading-md",
@@ -38,8 +36,6 @@ Roles.test("renders a specimen of every type role", async ({ canvas }) => {
   await expect(names).toEqual(ROLES.map((role) => `--ab-${role}`));
 });
 
-// type-heading-lg = font-family-noto-serif, font-weight-500; type-overline-sm =
-// text-transform-uppercase; type-code-md = font-family-system-mono.
 Roles.test("sets each specimen in its role", async ({ canvas }) => {
   const sample = (role: string) =>
     getComputedStyle(
@@ -55,9 +51,7 @@ Roles.test("sets each specimen in its role", async ({ canvas }) => {
   await expect(family("type-code-md")).toBe("ui-monospace, SF Mono, Menlo, Consolas, monospace");
 });
 
-// Romanian ș and ț (U+0219, U+021B) sit only in the latin-ext subsets (packages/tokens/src/fonts.ts).
-// `document.fonts.ready` can settle before layout has requested a face, so load the faces that
-// cover "șț" directly: an empty list means no face covers them, a missing file rejects.
+// `document.fonts.ready` can settle before layout requests a face, so load the faces that cover "șț" directly.
 Roles.test("loads the latin-ext faces the sample text needs", async () => {
   const faces = await Promise.all([
     document.fonts.load('500 16px "Noto Serif"', "șț"),

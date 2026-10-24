@@ -1,9 +1,7 @@
-// Space, radius, elevation and material: the shape-and-depth foundations.
 import { cssVar, InEachTheme, Rules, Section, TokenTable } from "./docs.tsx";
 import styles from "./shape.module.css";
 import { field, resolve, token, tokens, type Token } from "./tokens.ts";
 
-/** A dimension token's value in px (every dimension the docs measure is authored in px). */
 const px = (tier: "semantic" | "component", name: string): number => {
   const resolved = resolve(token(tier, name).value, "light");
   const value = field(resolved, "value");
@@ -41,7 +39,6 @@ const corner = (row: Token) => (
   <span aria-hidden="true" className={styles["corner"]} style={{ "--corner": cssVar(row.name) }} />
 );
 
-/** Nested corners in the component tokens: outer radius, the padding between, inner radius. */
 const CONCENTRIC = [
   [
     "DropdownMenu → item",

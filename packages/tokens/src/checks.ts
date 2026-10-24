@@ -8,7 +8,6 @@ import { checkAnimated } from "./property.ts";
 import { authoredDark, isThemed, isWholeReference, THEME_EXTENSION } from "./theme.ts";
 import { TIERS, tierOf, type Tier } from "./tiers.ts";
 
-/** Thrown when a token set breaks the system's rules; `problems` lists every violation. */
 export class TokenCheckError extends Error {
   readonly problems: readonly string[];
 
@@ -21,7 +20,6 @@ export class TokenCheckError extends Error {
   }
 }
 
-/** The tier each tier may reference (R2, R3); primitive tokens hold literals only (R1). */
 const REFERENCES: Record<Tier, Tier | undefined> = {
   primitive: undefined,
   semantic: "primitive",
@@ -30,7 +28,6 @@ const REFERENCES: Record<Tier, Tier | undefined> = {
 
 const REFERENCE = /\{[^\{\}]+\}/v;
 
-/** Whether any string inside an authored value (including composite values) is a reference. */
 const containsReference = (value: unknown): boolean => {
   if (typeof value === "string") return REFERENCE.test(value);
   if (typeof value === "object" && value !== null) {
@@ -58,7 +55,6 @@ const checkTier = (token: TransformedToken, dictionary: Dictionary): string[] =>
         ? [`${label}: a primitive token must hold a literal, not reference another token`]
         : [];
     }
-    // A semantic composite references through its members; everything else is one reference.
     const members =
       tier === "semantic" && isComposite(value)
         ? leavesOf(value).filter((leaf) => typeof leaf !== "boolean")
@@ -96,7 +92,6 @@ const checkNaming = (token: TransformedToken): string[] => {
   return problem === undefined ? [] : [`--${token.name}: ${problem}`];
 };
 
-/** Semantic colors are resolved per Theme, except brand colors, which are fixed identity hues. */
 const isThemedColor = (token: TransformedToken): boolean =>
   tierOf(token) === "semantic" &&
   token.$type === "color" &&
@@ -121,10 +116,6 @@ const checkThemes = (token: TransformedToken): string[] => {
   return [`${label}: only semantic colors are themed; brand colors and other tokens are fixed`];
 };
 
-/**
- * Media overrides live on semantic tokens and point at a primitive token or, as the source's
- * "step up one emphasis level" overrides do, at another semantic token.
- */
 const checkMedia = (token: TransformedToken, dictionary: Dictionary): string[] => {
   const overrides = mediaOverrides(token);
   const label = `--${token.name}`;
@@ -158,7 +149,6 @@ const checkMedia = (token: TransformedToken, dictionary: Dictionary): string[] =
   });
 };
 
-/** Every rule violation in the token set, as readable messages. Empty when the set is valid. */
 export const checkTokens = (dictionary: Dictionary): string[] => {
   const problems = dictionary.allTokens.flatMap((token) => [
     ...checkTier(token, dictionary),

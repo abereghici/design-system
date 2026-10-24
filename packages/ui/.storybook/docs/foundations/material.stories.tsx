@@ -8,8 +8,6 @@ const meta = preview.meta({ title: "Foundations/Material", tags: ["!autodocs"] }
 
 export const Thickness = meta.story({ render: () => <Material /> });
 
-// color-material-thin: palette-sage-0-a56 light, palette-night-900-a56 dark; palette-sage-0
-// (light) / palette-night-900 (dark) under reduced transparency.
 Thickness.test(
   "shows each material with its reduced-transparency fill",
   async ({ canvasElement }) => {

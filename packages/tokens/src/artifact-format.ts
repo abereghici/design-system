@@ -4,23 +4,12 @@ import { FONT_FAMILIES, FONT_SUBSETS, fontFileName } from "./fonts.ts";
 import { THEMES, isWholeReference, valueIn, type ThemeId } from "./theme.ts";
 import { inTierOrder, tierOf } from "./tiers.ts";
 
-/**
- * The claude.ai Design System artifact's `tokens.json` shape (the type's format.md, "tokens.json
- * grammar"): `type` is `{ fonts, families, groups }`, and every other family is a flat list of
- * `{ name, value, usage }`. Colors and shadows carry their Themes (light first). Every value is a
- * literal: no `var()`, `light-dark()`, `color-mix()`, `clamp()` or named colors.
- *
- * Like the source artifact's own tokens.json, it lists tiers 1 and 2. Component tokens (tier 3)
- * are for component code only and reach the artifact's previews through the CSS; the length
- * families could not hold them anyway ("≤60 tokens per other family", format.md).
- */
 export interface ArtifactEntry<Value> {
   readonly name: string;
   readonly value: Value;
   readonly usage: string;
 }
 
-/** A plain string is the first Theme's value; every other Theme inherits it. */
 export type Themed = string | { readonly light: string; readonly dark: string };
 
 export interface ArtifactFamily<Value = string> {
@@ -52,7 +41,6 @@ export interface ArtifactType {
   }[];
 }
 
-/** The families besides `color` and `type`, in the order the page shows them. */
 const LISTS = [
   "spacing",
   "radius",
@@ -84,7 +72,6 @@ const NOTES: Partial<Record<List, string>> = {
   shadow: "The Elevations: a hairline ring, an inner highlight (dark only) and soft shadows.",
 };
 
-/** Where a tier-1 or tier-2 token goes. `undefined`: shown through `type`, or not at all. */
 type Placement = { readonly list: List } | { readonly in: "color" | "type" } | undefined;
 
 const BY_NAME: readonly (readonly [RegExp, List])[] = [
@@ -101,14 +88,10 @@ const BY_NAME: readonly (readonly [RegExp, List])[] = [
   [/^ab-(?:layout|breakpoint)-/v, "layout"],
 ];
 
-/** Shown through `type`, or left out: the page has "No motion family" (format.md). */
 const UNLISTED =
   /^ab-(?:type-|font-|line-height-|letter-spacing-|text-transform-|duration-|easing-|motion-)/v;
 
-/**
- * The family a token is listed in. An unmapped tier-1 or tier-2 token throws, so a new kind of
- * token has to be placed here on purpose.
- */
+// An unmapped tier-1 or tier-2 token throws, so a new kind of token is placed here on purpose.
 const placementOf = (token: TransformedToken): Placement => {
   if (tierOf(token) === "component") return undefined;
   if (token.$type === "color") return { in: "color" };
@@ -131,11 +114,9 @@ const themed = (light: string, dark: string): Themed => (light === dark ? light 
 const colorValue = (token: TransformedToken, dictionary: Dictionary): Themed =>
   themed(String(valueIn(token, "light", dictionary)), String(valueIn(token, "dark", dictionary)));
 
-/** A member of a composite value (a shadow layer, a type style), or `undefined`. */
 const memberOf = (value: unknown, key: string): unknown =>
   typeof value === "object" && value !== null ? Reflect.get(value, key) : undefined;
 
-/** One shadow layer in a Theme, its referenced members resolved. */
 const layerCss = (layer: unknown, theme: ThemeId, dictionary: Dictionary): string => {
   const member = (key: string) => {
     const value = memberOf(layer, key);
@@ -147,7 +128,6 @@ const layerCss = (layer: unknown, theme: ThemeId, dictionary: Dictionary): strin
   return `${inset}${lengths} ${member("color")}`;
 };
 
-/** An Elevation's layers in a Theme, references to other Elevations expanded. */
 const shadowLayers = (
   token: TransformedToken,
   theme: ThemeId,
@@ -174,7 +154,6 @@ const shadowValue = (token: TransformedToken, dictionary: Dictionary): Themed =>
     shadowLayers(token, "dark", dictionary).join(", "),
   );
 
-/** `clamp(min, preferred, max)` → max: "the size shown is the 1280px end" (source usage notes). */
 const shownSize = (fontSize: unknown) => {
   const text = String(fontSize);
   const fluid = /^clamp\(.*,\s*(?<max>[^,\(\)]+)\)$/v.exec(text);
@@ -201,7 +180,6 @@ const FONTS: ArtifactType["fonts"] = FONT_FAMILIES.flatMap((family) =>
   })),
 );
 
-/** `type`: the font files, the families (tier-1 font stacks) and the tier-2 type styles. */
 const typeOf = (tokens: readonly TransformedToken[]): ArtifactType => {
   const families: Record<string, string> = {};
   const groups = new Map<string, { family: string; styles: ArtifactTypeStyle[] }>();
@@ -230,7 +208,6 @@ const typeOf = (tokens: readonly TransformedToken[]): ArtifactType => {
   };
 };
 
-/** The artifact-shaped tokens for a checked, transformed dictionary. */
 export const toArtifactTokens = (dictionary: Dictionary): ArtifactTokens => {
   const tokens = inTierOrder(dictionary.allTokens);
   const colors: TransformedToken[] = [];

@@ -1,6 +1,3 @@
-// The brand book's prose pages: principles, personality, Logo and iconography. The text is the
-// brand owner's copy from the source design system (project/README.md), with the spec's renames
-// (Logo for "mark", Separator for "divider").
 import { Logo } from "@platform/ui/logo";
 import { cssVar, Rules, Section, Swatch, TokenTable } from "./docs.tsx";
 import styles from "./docs.module.css";
@@ -192,7 +189,6 @@ export function Personality() {
 
 const LOGO_SIZES = [16, 24, 32, 48] as const;
 
-/** The Logo at the brand book's sizes in the interface color, and in the brand colors. */
 export function LogoSpecimen() {
   return (
     <Section

@@ -15,7 +15,14 @@ export default definePreview({
   tags: ["autodocs", "screenshot"],
   beforeEach: rememberStoryCanvas,
   parameters: {
-    a11y: { test: "error" },
+    a11y: {
+      test: "error",
+      // axe reads -webkit-text-fill-color, which forced colors leave unforced, so it compares the
+      // authored text color with the forced background. The user's palette owns contrast there.
+      config: {
+        rules: [{ id: "color-contrast", enabled: !matchMedia("(forced-colors: active)").matches }],
+      },
+    },
     docs: { page: DocsPage, source: { type: "dynamic" } },
     options: {
       storySort: {

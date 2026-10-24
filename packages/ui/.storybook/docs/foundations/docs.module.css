@@ -1,4 +1,3 @@
-/* Foundations pages (Storybook only). Semantic tokens only, like product code. */
 @layer ab.components {
   .section {
     display: grid;

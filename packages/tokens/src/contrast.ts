@@ -36,7 +36,6 @@ const checkPair = (
   return ratio < minimum ? [`${label}: ${ratio.toFixed(2)}:1, needs ${minimum}:1`] : [];
 };
 
-/** Every allowed text, icon and border pairing below WCAG 2.2 AA, in every Theme. */
 export const checkContrast = (dictionary: Dictionary): string[] =>
   THEMES.flatMap(({ id }) =>
     CONTRAST_REQUIREMENTS.flatMap((requirement) => checkPair(requirement, id, dictionary)),

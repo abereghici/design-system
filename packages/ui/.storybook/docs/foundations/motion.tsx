@@ -6,7 +6,6 @@ type Point = readonly [x: number, y: number];
 
 const SAMPLES = 32;
 
-/** Points of a cubic Bézier easing from (0, 0) to (1, 1), sampled along its parameter. */
 const bezier = ([x1, y1, x2, y2]: readonly number[]): Point[] =>
   Array.from({ length: SAMPLES + 1 }, (_, index) => {
     const t = index / SAMPLES;
@@ -14,11 +13,6 @@ const bezier = ([x1, y1, x2, y2]: readonly number[]): Point[] =>
     return [at(x1, x2), at(y1, y2)];
   });
 
-/**
- * Points of a `linear()` easing. CSS Easing 2: an entry is an output and an optional input
- * percentage; a missing input on the first entry is 0% and on the last 100%. The source's
- * springs give every other input.
- */
 const linear = (text: string): Point[] =>
   text
     .slice("linear(".length, -1)
@@ -32,10 +26,6 @@ const linear = (text: string): Point[] =>
       ];
     });
 
-/**
- * Points of an easing token's value. CSS Easing 1: "ease" is `cubic-bezier(0.25, 0.1, 0.25, 1)`
- * and "linear" is a straight line.
- */
 const points = (value: unknown): Point[] => {
   if (Array.isArray(value) && value.every((item) => typeof item === "number")) return bezier(value);
   if (value === "ease") return bezier([0.25, 0.1, 0.25, 1]);
@@ -58,9 +48,7 @@ const toPath = (curve: readonly Point[]) =>
     .join(" ");
 
 const curve = (row: Token) => (
-  // An inline SVG takes `role="img"` plus a name, the documented pattern for an accessible SVG
-  // (https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/img_role);
-  // an <img> could not read the token colors.
+  // An <img> can't read the token colors, so the inline SVG takes role="img".
   <svg
     // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
     role="img"

@@ -9,7 +9,6 @@ const meta = preview.meta({ title: "Foundations/Motion", tags: ["!autodocs"] });
 // Static curves and tables only, so screenshots are deterministic.
 export const Tokens = meta.story({ render: () => <Motion /> });
 
-// The nine motion-easing tokens of the token source.
 Tokens.test("plots every easing", async ({ canvas }) => {
   await expect(
     canvas.getAllByRole("img", { name: /curve$/v }).map((plot) => plot.getAttribute("aria-label")),
@@ -28,7 +27,6 @@ Tokens.test("plots every easing", async ({ canvas }) => {
   );
 });
 
-// motion-scale-pressed is scale-97, and scale-100 under reduced motion.
 Tokens.test("shows the reduced-motion value of each movement", async ({ canvas }) => {
   const table = canvas.getByRole("table", { name: "Scale, distance and blur" });
   await expect(cellText(table, tokenRow("motion-scale-pressed"), "Value")).toBe(
@@ -36,8 +34,6 @@ Tokens.test("shows the reduced-motion value of each movement", async ({ canvas }
   );
 });
 
-// easing-spring-snappy ends at .9985 at 100% (packages/tokens/src/tokens/primitive.tokens.json),
-// and a cubic Bézier ends at (1, 1): both plots end on the 1.0 guide line, at y = 20.
 Tokens.test("ends each curve at its final value", async ({ canvas }) => {
   const end = (name: string) =>
     canvas

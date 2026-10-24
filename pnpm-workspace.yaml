@@ -6,15 +6,11 @@ catalogMode: strict
 catalogPrune: true
 trustPolicy: no-downgrade
 
-# semver 6.3.1 (published after 7.5.x) fails `no-downgrade`. It arrives through
-# @storybook/react-vite 10.6.3 > react-docgen 8.0.4 > @babel/core 7.29.7, so that edge is moved
-# to the already-locked, trusted 7.x line instead of excluding it from the trust policy.
-# https://pnpm.io/settings/dependency-resolution#overrides
+# semver@6 fails `trustPolicy: no-downgrade` (via react-docgen > @babel/core), so pin the trusted 7.x line.
 overrides:
   "semver@^6": 7.8.5
 
-# esbuild's postinstall only re-checks its platform binary, which pnpm already installs
-# from esbuild's optionalDependencies, so its script stays off.
+# pnpm already installs esbuild's platform binary; its postinstall only re-checks it.
 allowBuilds:
   esbuild: false
 

@@ -47,9 +47,7 @@ Default.test(
   "announces its label as an image",
   { args: { label: "Bereghici" } },
   async ({ canvas }) => {
-    await expect(canvas.getByRole("img", { name: "Bereghici" })).not.toHaveAttribute(
-      "aria-hidden",
-    );
+    await expect(canvas.getByRole("img", { name: "Bereghici" })).not.toHaveAttribute("aria-hidden");
   },
 );
 

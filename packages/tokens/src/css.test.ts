@@ -94,7 +94,6 @@ test("a type style is a font shorthand of var() references, like the source", as
 
 test("an Elevation is a box-shadow list of var() references, like the source", async () => {
   const { css } = await buildTokens({ tokens: validTokens() });
-  // Source: elevation.css. DTCG shadows always carry a spread, so `0` is written out.
   expect(css).toContain(
     "--ab-elevation-ring: var(--ab-dimension-0) var(--ab-dimension-0) var(--ab-dimension-0) var(--ab-dimension-1) var(--ab-color-shadow-ring);",
   );
@@ -123,11 +122,9 @@ test("media overrides are emitted as @media blocks on :root, inside the layer", 
       "  }",
     ].join("\n"),
   );
-  // Source: color.css, "hairlines and the faintest ink step up one emphasis level".
   expect(css).toMatch(
     /@media \(prefers-contrast: more\) \{\n {4}:root \{\n(?: {6}.+\n)* {6}--ab-color-border-subtle: var\(--ab-color-border-default\);\n/v,
   );
-  // Source: elevation.css, solid sage-0 (light) and night-900 (dark) under reduced transparency.
   expect(css).toContain(
     "      --ab-color-material-thick: light-dark(var(--ab-palette-sage-0), var(--ab-palette-night-900));",
   );
@@ -172,7 +169,6 @@ test("an animated token is registered with @property and inherits: false, in its
 
 test("a themed color with the same value in both Themes needs no light-dark()", async () => {
   const { css } = await buildTokens({ tokens: validTokens() });
-  // Source: color.css declares --ab-color-backdrop as night-950-a64 in light and in dark.
   expect(css).toContain("--ab-color-backdrop: var(--ab-palette-night-950-a64);");
 });
 

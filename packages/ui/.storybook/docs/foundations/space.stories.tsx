@@ -8,7 +8,6 @@ const meta = preview.meta({ title: "Foundations/Space", tags: ["!autodocs"] });
 
 export const Scale = meta.story({ render: () => <Space /> });
 
-// space-section is dimension-88, and dimension-64 on narrow viewports (`(width < 760px)`).
 Scale.test("lists the semantic space with its narrow-viewport override", async ({ canvas }) => {
   const table = within(canvas.getByRole("table", { name: "Semantic space" }));
   await expect(table.getAllByRole("rowheader")).toHaveLength(18);

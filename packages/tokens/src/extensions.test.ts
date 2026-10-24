@@ -3,8 +3,6 @@ import { expect, test } from "vitest";
 import { buildTokens } from "./build.ts";
 import { validTokens } from "./test-fixtures.ts";
 
-// Media overrides
-
 const media = (overrides: Readonly<Record<string, unknown>>) => ({
   "com.bereghici.media": overrides,
 });
@@ -58,8 +56,6 @@ test("only themed colors take a per-Theme media override", async () => {
     "--ab-radius-sm: the (pointer: coarse) override has per-Theme values, but only themed colors are themed",
   );
 });
-
-// Animated tokens (@property)
 
 const animated = { "com.bereghici.animated": true };
 

@@ -1,14 +1,10 @@
 import { expect } from "storybook/test";
 
 const SAMPLES = 64;
-// In user units (the 24- or 32-unit grid). Engines measure equivalent path data with float noise
-// (largest seen: 1.1e-5, in Firefox), while the source coordinates are written to 0.01, so a
-// real change moves some sample by far more than this.
+// Engines report float noise up to 1.1e-5 (Firefox); source coordinates are written to 0.01.
 const TOLERANCE = 0.001;
 
-// What a path draws, in its own user units: its length and points sampled along it, whether it is
-// filled and stroked, and how its strokes end and join. SVGO rewrites the path data (relative
-// commands, shorthand), so the strings are not compared; the drawing is.
+// SVGO rewrites path data, so drawings are compared, not path strings.
 function drawing(svg: SVGSVGElement) {
   const { x, y, width, height } = svg.viewBox.baseVal;
   const paths = [...svg.querySelectorAll("path")].map((path) => {
@@ -29,11 +25,9 @@ function drawing(svg: SVGSVGElement) {
   return { viewBox: [x, y, width, height], paths };
 }
 
-/** Asserts that a rendered glyph draws the same shapes as a source SVG file's text. */
 export async function expectSameDrawing(rendered: SVGSVGElement, sourceText: string) {
   const source = new DOMParser().parseFromString(sourceText, "image/svg+xml").documentElement;
   if (!(source instanceof SVGSVGElement)) throw new Error("The source is not an SVG document");
-  // Geometry and computed style need the source in the document. It is never painted.
   const holder = document.createElement("div");
   holder.style.cssText = "position: fixed; inline-size: 0; block-size: 0; overflow: hidden";
   holder.append(document.importNode(source, true));
@@ -41,7 +35,6 @@ export async function expectSameDrawing(rendered: SVGSVGElement, sourceText: str
   try {
     const expected = drawing(holder.querySelector("svg")!);
     const actual = drawing(rendered);
-    // Each shape becomes its largest distance from the source's, at the same sample.
     const compared = actual.paths.map(({ shape, ...rest }, index) => {
       const target = expected.paths[index]?.shape ?? [];
       const deviation = Math.max(

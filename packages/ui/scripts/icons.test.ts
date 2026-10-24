@@ -47,7 +47,6 @@ describe("icon generation", () => {
   });
 
   test("every icon is its own subpath, and src/icons/ holds nothing else", async () => {
-    // `"./icons/*": "./src/icons/*.tsx"` makes every file there public (ticket #13).
     expect(packageJson.exports["./icons/*"]).toBe("./src/icons/*.tsx");
     const files = await readdir(new URL("src/icons/", root));
     expect(files.toSorted()).toEqual(

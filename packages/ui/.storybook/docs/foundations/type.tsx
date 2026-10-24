@@ -2,16 +2,11 @@ import { cssVar, Rules, Section, TokenTable } from "./docs.tsx";
 import { describe, tokens, type Token } from "./tokens.ts";
 import styles from "./type.module.css";
 
-/**
- * Specimen text: Romanian, so it needs the latin-ext subsets too (ș, ț, ă), with figures for the
- * data roles.
- */
 export const SPECIMEN_TEXT = "Stâlpul cerului ține cerul: 1 234,50 lei";
 
 const roles = () => tokens("semantic", /^type-[a-z]+-[a-z0-9]+$/v);
 
-// A type role is the `font` shorthand plus the longhands `font` can't set (letter spacing, and
-// for some roles text transform and numeric figures), each its own `type-*-<property>` token.
+// `font` can't set letter spacing, text transform or numeric figures, so each is its own `type-*-<property>` token.
 const subToken = (role: string, property: string) =>
   tokens("semantic", new RegExp(`^${role}-${property}$`, "v")).length > 0
     ? cssVar(`${role}-${property}`)
@@ -24,7 +19,6 @@ const roleStyle = (role: string) => ({
   fontVariantNumeric: subToken(role, "font-variant-numeric"),
 });
 
-/** The composite's members as text: family · size · weight / line height. */
 function Members({ role }: { role: Token }) {
   const members = Object.entries(
     typeof role.value === "object" && role.value !== null ? role.value : {},
@@ -40,7 +34,6 @@ function Members({ role }: { role: Token }) {
   );
 }
 
-/** The type specimen: one row per type role, set in that role. */
 export function TypeRoles() {
   return (
     <Section

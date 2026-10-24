@@ -1,5 +1,3 @@
-// Reads the output of `next build` and `next analyze export` (run by the `test` script) and checks
-// what shipped from @platform/ui. Method: docs/research/turbopack-tree-shaking-react-compiler.md.
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -27,7 +25,6 @@ const graph: readonly GraphModule[] = readFileSync(graphFile, "utf8")
   .map((line): unknown => JSON.parse(line))
   .filter((record) => isGraphModule(record));
 
-/** Package-relative paths of every @platform/ui module in the graph, across all layers. */
 const shipped = new Set(
   graph.filter((m) => m.path.startsWith(uiPrefix)).map((m) => m.path.slice(uiPrefix.length)),
 );
@@ -56,8 +53,6 @@ describe("tree-shaking of @platform/ui", () => {
   });
 
   test("the subpath's index.ts re-export is pruned (needs `sideEffects` in package.json)", () => {
-    // Without the declaration Turbopack keeps `src/button/index.ts [app-rsc] (ecmascript) <locals>`
-    // (observed). With it, the import goes straight to button.tsx.
     expect(shipped).not.toContain("src/button/index.ts");
   });
 });

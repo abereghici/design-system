@@ -1,4 +1,3 @@
-// Building blocks of the foundations pages (Storybook only; not exported from the package).
 import type { ReactNode } from "react";
 
 import styles from "./docs.module.css";
@@ -6,10 +5,8 @@ import { describe, type ThemeId, type Token } from "./tokens.ts";
 
 export const THEME_IDS = ["light", "dark"] as const satisfies readonly ThemeId[];
 
-/** A token as a CSS custom property reference. */
 export const cssVar = (name: string) => `var(--ab-${name})`;
 
-/** A page section: a heading, an optional lead paragraph and its content. */
 export function Section({
   title,
   lead,
@@ -28,7 +25,6 @@ export function Section({
   );
 }
 
-/** The authored value of a token as text, per Theme and per media override. */
 export function TokenValue({ token }: { token: Token }) {
   const media = Object.entries(token.media);
   return (
@@ -49,7 +45,6 @@ export function TokenValue({ token }: { token: Token }) {
   );
 }
 
-/** A table of tokens: an optional preview, the CSS name, the value and the usage text. */
 export function TokenTable({
   caption,
   rows,
@@ -88,7 +83,6 @@ export function TokenTable({
   );
 }
 
-/** Renders its content once per Theme, each inside its own `data-theme` subtree. */
 export function InEachTheme({ children }: { children: ReactNode }) {
   return (
     <span className={styles["themes"]}>
@@ -101,14 +95,12 @@ export function InEachTheme({ children }: { children: ReactNode }) {
   );
 }
 
-/** A filled square in one color token (decorative: the table row names it). */
 export function Chip({ name }: { name: string }) {
   return (
     <span aria-hidden="true" className={styles["swatch"]} style={{ "--swatch": cssVar(name) }} />
   );
 }
 
-/** A filled square in one color token, drawn in each Theme (decorative: the row names it). */
 export function Swatch({ name }: { name: string }) {
   return (
     <InEachTheme>
@@ -117,7 +109,6 @@ export function Swatch({ name }: { name: string }) {
   );
 }
 
-/** A plain list of brand book statements. */
 export function Rules({ items }: { items: readonly (readonly [string, string])[] }) {
   return (
     <dl className={styles["rules"]}>

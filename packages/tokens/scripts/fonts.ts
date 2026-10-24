@@ -1,9 +1,3 @@
-/**
- * Rebuilds fonts/ from the pinned upstream OFL sources: downloads them, checks their sha256,
- * subsets each family into the FONT_SUBSETS with HarfBuzz (variation axes kept whole) and writes
- * `<stem>-<subset>.woff2` plus `<stem>-OFL.txt`. The output is committed; run `pnpm fonts` only
- * to move to a new upstream release.
- */
 import { createHash } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 
@@ -17,13 +11,10 @@ interface Download {
   readonly sha256: string;
 }
 
-/** A family's upstream: two plain files, or two entries of a release zip. */
 type Upstream =
   | { readonly font: Download; readonly licence: Download }
   | { readonly zip: Download; readonly font: string; readonly licence: string };
 
-// The commit and the release are the ones google/fonts ships (ofl/figtree/METADATA.pb and
-// ofl/notoserif/METADATA.pb, `source { … }`).
 const FIGTREE_COMMIT = "032dfa7fe219ef3a02890d6d3add84eacc9aebfe";
 const UPSTREAM: Readonly<Record<(typeof FONT_FAMILIES)[number]["stem"], Upstream>> = {
   Figtree: {

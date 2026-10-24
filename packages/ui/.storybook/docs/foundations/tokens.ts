@@ -1,6 +1,4 @@
-// The foundations pages are generated from the DTCG token source, so a token added, renamed or
-// re-valued in packages/tokens shows up here without editing a page. Documentation only: the
-// docs read primitive tokens to show where values come from, which product code never does (R4).
+// The docs read primitive tokens to show where values come from; product code never does (R4).
 import component from "@platform/tokens/source/component.tokens.json";
 import primitive from "@platform/tokens/source/primitive.tokens.json";
 import semantic from "@platform/tokens/source/semantic.tokens.json";
@@ -15,18 +13,13 @@ interface SourceToken {
   readonly $extensions?: Readonly<Record<string, unknown>>;
 }
 
-/** A token as the docs show it. */
 export interface Token {
-  /** The name after `--ab-` (`color-text-subtle`). */
   readonly name: string;
   readonly tier: Tier;
   readonly type: string;
   readonly description: string;
-  /** The authored value: a reference, a literal, or a composite of either. */
   readonly value: unknown;
-  /** The dark Theme's authored value, for themed colors. */
   readonly dark: unknown;
-  /** Media query → authored value (`com.bereghici.media`). */
   readonly media: Readonly<Record<string, unknown>>;
 }
 
@@ -39,7 +32,6 @@ const sources: Readonly<Record<Tier, Readonly<Record<string, SourceToken>>>> = {
   component: component.component,
 };
 
-/** A property of an object value, or undefined for anything else. */
 export const field = (value: unknown, key: string): unknown =>
   typeof value === "object" && value !== null ? Reflect.get(value, key) : undefined;
 
@@ -56,14 +48,12 @@ const toToken = (tier: Tier, name: string, source: SourceToken): Token => {
   };
 };
 
-/** Every token of a tier whose name matches, in source order. */
 export function tokens(tier: Tier, name: RegExp): Token[] {
   return Object.entries(sources[tier])
     .filter(([tokenName]) => name.test(tokenName))
     .map(([tokenName, source]) => toToken(tier, tokenName, source));
 }
 
-/** One token, or an error naming the token: a page must not silently drop a row. */
 export function token(tier: Tier, name: string): Token {
   const source = sources[tier][name];
   if (source === undefined) throw new Error(`No ${tier} token named ${name}`);
@@ -76,7 +66,6 @@ const isTier = (value: string | undefined): value is Tier =>
 
 const REFERENCE = /^\{(?<tier>primitive|semantic|component)\.(?<name>[^\{\}]+)\}$/v;
 
-/** The token a whole-reference value points at, or undefined for a literal. */
 export function referenced(value: unknown): Token | undefined {
   const groups = typeof value === "string" ? REFERENCE.exec(value)?.groups : undefined;
   const tier = groups?.["tier"];
@@ -84,7 +73,6 @@ export function referenced(value: unknown): Token | undefined {
   return isTier(tier) && name !== undefined ? token(tier, name) : undefined;
 }
 
-/** A value as text: a reference becomes the token name, a DTCG literal its CSS text. */
 export function describe(value: unknown): string {
   const target = referenced(value);
   if (target !== undefined) return target.name;
@@ -94,7 +82,6 @@ export function describe(value: unknown): string {
   if (light !== undefined && dark !== undefined) {
     return `${describe(light)} light · ${describe(dark)} dark`;
   }
-  // A DTCG shadow layer, in `box-shadow` order.
   const layer = ["offsetX", "offsetY", "blur", "spread", "color"].map((key) => field(value, key));
   if (layer.every((part) => part !== undefined)) {
     const inset = field(value, "inset") === true ? "inset " : "";
@@ -106,18 +93,15 @@ export function describe(value: unknown): string {
   return JSON.stringify(value);
 }
 
-/** The authored value of a token in a Theme (its dark value, when it has one). */
 export const valueIn = (subject: Token, theme: ThemeId): unknown =>
   theme === "dark" && subject.dark !== undefined ? subject.dark : subject.value;
 
-/** The value a token resolves to in a Theme, following references to a primitive literal. */
 export function resolve(value: unknown, theme: ThemeId): unknown {
   const target = referenced(value);
   if (target === undefined) return value;
   return resolve(valueIn(target, theme), theme);
 }
 
-/** A color token's `#rrggbb` (or `#rrggbbaa`) in a Theme. */
 export function hexIn(subject: Token, theme: ThemeId): string {
   const resolved = resolve(valueIn(subject, theme), theme);
   const [hex, alpha] = [field(resolved, "hex"), field(resolved, "alpha")];
