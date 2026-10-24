@@ -18,5 +18,7 @@ export const enUS: Locale = {
       arrowRight: "Right arrow",
     },
     skipLink: { label: "Skip to main content" },
+    passwordField: { show: "Show password" },
+    numberField: { increment: "Increase", decrement: "Decrease" },
   },
 };

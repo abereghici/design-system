@@ -4,6 +4,7 @@ import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
+import { useFieldControl } from "../field/field-control.ts";
 import { changeDetails, pointerMarker } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
@@ -127,8 +128,14 @@ export function Item({
   const group = use(GroupContext);
   if (group === null) throw new Error("RadioGroup.Item must be inside RadioGroup.Root");
   const fallbackId = useId();
-  const blocked = disabled || group.disabled;
-
+  const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>({
+    ...props,
+    id,
+    name: group.name,
+    disabled: disabled || group.disabled,
+    onChange,
+  });
+  const blocked = bindings["aria-disabled"] === true;
   function handleClick(event: MouseEvent<HTMLInputElement>) {
     if (blocked) event.preventDefault();
     else {
@@ -136,25 +143,22 @@ export function Item({
       group?.select(value, event);
     }
   }
-
   return (
     <label
-      htmlFor={id ?? fallbackId}
+      htmlFor={bindings.id ?? fallbackId}
       className={className === undefined ? styles["item"] : `${styles["item"]} ${className}`}
       style={style}
     >
       <input
-        {...props}
-        id={id ?? fallbackId}
+        {...bindings}
+        id={bindings.id ?? fallbackId}
         type="radio"
-        name={group.name}
         value={value}
         checked={value === group.value}
         required={group.required}
-        aria-disabled={blocked ? true : undefined}
         className={styles["radio"]}
         onClick={handleClick}
-        onChange={(event) => onChange?.(event)}
+        onChange={bindings.onChange}
       />
       {children}
     </label>

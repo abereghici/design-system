@@ -3,6 +3,7 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
+import { useFieldControl } from "../field/field-control.ts";
 import { pointerMarker, toggleClick } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
@@ -42,6 +43,13 @@ export function Checkbox({
   ...props
 }: CheckboxProps) {
   const fallbackId = useId();
+  const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>({
+    ...props,
+    id,
+    disabled,
+    onChange: (event) => onChange?.(event),
+  });
+  const blocked = bindings["aria-disabled"] === true;
 
   function setRef(input: HTMLInputElement | null): void | (() => void) {
     if (input !== null) input.indeterminate = indeterminate;
@@ -52,20 +60,17 @@ export function Checkbox({
   return (
     <label
       {...pointerMarker}
-      htmlFor={id ?? fallbackId}
+      htmlFor={bindings.id ?? fallbackId}
       className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
       style={style}
     >
       <input
-        {...props}
+        {...bindings}
         ref={setRef}
-        id={id ?? fallbackId}
+        id={bindings.id ?? fallbackId}
         type="checkbox"
-        aria-disabled={disabled ? true : undefined}
         className={styles["input"]}
-        onClick={toggleClick("Checkbox", disabled, onClick, onCheckedChange)}
-        // React warns about a controlled `checked` without onChange; the change runs in onClick.
-        onChange={(event) => onChange?.(event)}
+        onClick={toggleClick("Checkbox", blocked, onClick, onCheckedChange)}
       />
       {children}
     </label>

@@ -3,6 +3,7 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
+import { useFieldControl } from "../field/field-control.ts";
 import { pointerMarker, toggleClick } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
@@ -38,25 +39,33 @@ export function Switch({
   ...props
 }: SwitchProps) {
   const fallbackId = useId();
+  const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>({
+    ...props,
+    id,
+    disabled,
+    onChange: (event) => onChange?.(event),
+  });
 
   return (
     <label
       {...pointerMarker}
-      htmlFor={id ?? fallbackId}
+      htmlFor={bindings.id ?? fallbackId}
       className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
       style={style}
     >
       <input
-        {...props}
-        id={id ?? fallbackId}
+        {...bindings}
+        id={bindings.id ?? fallbackId}
         type="checkbox"
         // oxlint-disable-next-line jsx-a11y/role-has-required-aria-props -- oxlint bug: lacks jsx-a11y's isSemanticRoleElement exemption for input[type=checkbox][role=switch]; ARIA in HTML forbids aria-checked here
         role="switch"
-        aria-disabled={disabled ? true : undefined}
         className={styles["track"]}
-        onClick={toggleClick("Switch", disabled, onClick, onCheckedChange)}
-        // React warns about a controlled `checked` without onChange; the change runs in onClick.
-        onChange={(event) => onChange?.(event)}
+        onClick={toggleClick(
+          "Switch",
+          bindings["aria-disabled"] === true,
+          onClick,
+          onCheckedChange,
+        )}
       />
       {children}
     </label>

@@ -1,25 +1,14 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
-import type {
-  ChangeEvent,
-  ComponentProps,
-  FocusEvent,
-  KeyboardEvent,
-  ReactNode,
-  SyntheticEvent,
-} from "react";
+import type { ComponentProps, KeyboardEvent, ReactNode } from "react";
 
+import * as Field from "../field/field.tsx";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
 
+import fieldStyles from "../field/field.module.css";
 import styles from "./select.module.css";
 
-export interface ChangeEventDetails {
-  readonly reason: "none";
-  readonly event: ChangeEvent<HTMLSelectElement>;
-  /** Restores the previous value. */
-  readonly cancel: () => void;
-}
+export type ChangeEventDetails = Field.ChangeEventDetails<HTMLSelectElement>;
 
 type Naming =
   | { label: ReactNode }
@@ -35,8 +24,6 @@ type ControlProps = Omit<
   onValueChange?: (value: string, details: ChangeEventDetails) => void;
   /** Shown until the user chooses; with `required`, choosing nothing fails `valueMissing`. */
   placeholder?: string | undefined;
-  /** Custom rule run on every change; a string becomes the `setCustomValidity()` message. */
-  validate?: (value: string, formData: FormData) => string | null | undefined;
   /**
    * Renders `aria-disabled="true"`: the select stays focusable and announced, and it neither
    * opens nor changes value. A disabled `<fieldset>` still disables it natively.
@@ -52,73 +39,29 @@ export type RootProps = Naming &
     errorMessage?: ReactNode | ((validity: ValidityState) => ReactNode);
     /** Forces the invalid state, e.g. from an external validation library. */
     invalid?: boolean;
+    validate?: Field.RootProps["validate"];
     /** Exposed as `data-size`. Replaces the native `size`, which turns a select into a list box. */
     size?: "md" | "lg";
   };
-
-type Failure = { readonly message: string; readonly validity: ValidityState } | null;
 
 const blocked = (event: KeyboardEvent) =>
   /^(?:Arrow|Page|Home|End|Enter)/v.test(event.key) ||
   (event.key.length === 1 && !event.ctrlKey && !event.metaKey);
 
-function changeEventDetails(
-  event: ChangeEvent<HTMLSelectElement>,
-): [ChangeEventDetails, () => boolean] {
-  let cancelled = false;
-  const cancel = () => {
-    cancelled = true;
-  };
-  return [{ reason: "none", event, cancel }, () => cancelled];
-}
-
-type ChangeOptions = {
-  [Key in "validate" | "onValueChange" | "onChange" | "onFocus"]: ControlProps[Key] | undefined;
-} & { disabled: boolean };
-
-function useChange({ disabled, validate, onValueChange, onChange, onFocus }: ChangeOptions) {
-  const previous = useRef("");
-  return {
-    onFocus(event: FocusEvent<HTMLSelectElement>) {
-      previous.current = event.currentTarget.value;
-      onFocus?.(event);
-    },
-    onChange(event: ChangeEvent<HTMLSelectElement>) {
-      const select = event.currentTarget;
-      if (disabled) {
-        select.value = previous.current;
-        return;
-      }
-      onChange?.(event);
-      const [details, cancelled] = changeEventDetails(event);
-      onValueChange?.(select.value, details);
-      if (cancelled()) select.value = previous.current;
-      previous.current = select.value;
-      const rule = validate?.(select.value, new FormData(select.form ?? undefined));
-      if (validate !== undefined) select.setCustomValidity(rule ?? "");
-    },
-  };
-}
-
 function Control({
   placeholder,
   defaultValue = placeholder === undefined ? undefined : "",
-  validate,
-  disabled = false,
-  onValueChange,
-  onChange,
-  onFocus,
   children,
   ...props
 }: ControlProps) {
+  const bindings = Field.useFieldControl<HTMLSelectElement, typeof props>(props);
+  const disabled = bindings["aria-disabled"] === true;
   return (
     <div className={styles["control"]}>
       <select
-        {...props}
-        {...useChange({ disabled, validate, onValueChange, onChange, onFocus })}
+        {...bindings}
         defaultValue={props.value === undefined ? defaultValue : undefined}
-        aria-disabled={disabled || undefined}
-        className={styles["select"]}
+        className={`${fieldStyles["control"]} ${styles["select"]}`}
         onKeyDown={(event) => {
           if (disabled && blocked(event)) event.preventDefault();
           props.onKeyDown?.(event);
@@ -140,94 +83,32 @@ function Control({
   );
 }
 
-const messageOf = (errorMessage: RootProps["errorMessage"], failure: Failure) =>
-  typeof errorMessage === "function"
-    ? failure !== null && errorMessage(failure.validity)
-    : (errorMessage ?? failure?.message);
-
-function Messages({
-  ids,
-  shown,
-  description,
-  message,
-}: {
-  ids: string;
-  shown: boolean;
-  description: ReactNode;
-  message: ReactNode;
-}) {
-  return (
-    <>
-      {description !== undefined && (
-        <p id={`${ids}description`} className={styles["description"]} hidden={shown}>
-          {description}
-        </p>
-      )}
-      <div id={`${ids}error`} className={styles["error"]} aria-live="assertive">
-        {shown ? message : null}
-      </div>
-    </>
-  );
-}
-
-function useFailure() {
-  const [failure, setFailure] = useState<Failure>(null);
-  const sync = ({ target }: SyntheticEvent) => {
-    if (!(target instanceof HTMLSelectElement)) return;
-    const userInvalid = target.matches(":user-invalid");
-    setFailure(
-      userInvalid ? { message: target.validationMessage, validity: target.validity } : null,
-    );
-  };
-  return [failure, sync] as const;
-}
-
 /** A native `<select>` with a built-in label, description and error. */
 export function Root({
   label,
   description,
   errorMessage,
   invalid,
+  validate,
   size = "md",
   className,
   style,
-  id,
   ...props
 }: RootProps) {
-  const ids = useId();
-  const [failure, sync] = useFailure();
-  const shown = invalid ?? failure !== null;
-
   return (
-    <div
-      className={className === undefined ? styles["root"] : `${styles["root"]} ${className}`}
+    <Field.Root
+      className={className}
       style={style}
       data-size={size}
-      data-invalid={shown || undefined}
-      data-disabled={props.disabled === true || undefined}
-      onChange={sync}
-      onBlur={sync}
-      onInvalid={sync}
+      name={props.name}
+      invalid={invalid}
+      validate={validate}
+      disabled={props.disabled}
     >
-      {label !== undefined && (
-        <label htmlFor={id ?? `${ids}select`} className={styles["label"]}>
-          {label}
-        </label>
-      )}
-      <Control
-        {...props}
-        id={id ?? `${ids}select`}
-        aria-invalid={shown || undefined}
-        aria-describedby={
-          shown ? `${ids}error` : description === undefined ? undefined : `${ids}description`
-        }
-      />
-      <Messages
-        ids={ids}
-        shown={shown}
-        description={description}
-        message={messageOf(errorMessage, failure)}
-      />
-    </div>
+      {label !== undefined && <Field.Label>{label}</Field.Label>}
+      <Control {...props} />
+      {description !== undefined && <Field.Description>{description}</Field.Description>}
+      <Field.Error>{errorMessage}</Field.Error>
+    </Field.Root>
   );
 }

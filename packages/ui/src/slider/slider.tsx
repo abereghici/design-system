@@ -3,6 +3,7 @@
 import { Children, createContext, isValidElement, use, useId, useState } from "react";
 import type { ComponentProps, KeyboardEvent, PointerEvent } from "react";
 
+import { useFieldControl } from "../field/field-control.ts";
 import { useLocale } from "../provider/locale.tsx";
 
 import styles from "./slider.module.css";
@@ -78,13 +79,11 @@ function useSliderState(options: Options, scale: Scale) {
     setUncontrolled(output(next));
     return next;
   }
-
   function commit(from: readonly number[], to: readonly number[], details: CommitEventDetails) {
     if (to.some((entry, index) => entry !== from[index])) {
       options.onValueCommitted?.(output(to), details);
     }
   }
-
   return {
     ...scale,
     id: useId(),
@@ -243,17 +242,19 @@ export function Thumb({ className, style, id, onKeyDown, onChange, ...props }: T
   const index = use(ThumbIndex);
   const value = slider.values[index] ?? slider.min;
   const [lo, hi] = slider.bounds(index);
-
+  const ownId = id ?? `${slider.id}-${index}`;
+  const own = { id: index === 0 ? ownId : undefined, name: slider.name, disabled: slider.disabled };
+  const bindings = useFieldControl<HTMLInputElement, ThumbProps>({ ...props, ...own });
+  const blocked = bindings["aria-disabled"] === true;
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     onKeyDown?.(event);
     const target = keyTarget(event, value, slider.step, slider.largeStep);
     if (target === undefined || event.defaultPrevented) return;
     event.preventDefault();
-    if (slider.disabled) return;
+    if (blocked) return;
     const next = slider.change(index, target, "keyboard", event.nativeEvent);
     slider.commit(slider.values, next, { reason: "keyboard", event: event.nativeEvent });
   }
-
   return (
     <div
       className={className === undefined ? styles["thumb"] : `${styles["thumb"]} ${className}`}
@@ -261,21 +262,19 @@ export function Thumb({ className, style, id, onKeyDown, onChange, ...props }: T
       style={{ insetInlineStart: `${slider.percent(value)}%`, ...style }}
     >
       <input
-        {...props}
-        id={id ?? `${slider.id}-${index}`}
+        {...bindings}
+        id={ownId}
         type="range"
         min={lo}
         max={hi}
         step={slider.step}
         value={value}
-        name={slider.name}
         aria-valuetext={slider.format(value)}
-        aria-disabled={slider.disabled ? true : undefined}
         className={styles["input"]}
         onKeyDown={handleKeyDown}
         onChange={(event) => {
           onChange?.(event);
-          if (slider.disabled) return;
+          if (blocked) return;
           slider.change(index, event.currentTarget.valueAsNumber, "keyboard", event.nativeEvent);
         }}
       />

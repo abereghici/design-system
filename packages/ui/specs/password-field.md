@@ -26,14 +26,14 @@ Label → container (input, reveal toggle) → description or error.
 
 ## API
 
-| Prop                                        | Type                                                                           | Default                     | Notes                                                                                                                                        |
-| ------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `visible`                                   | `boolean`                                                                      |                             | Controlled: whether the value is shown as text.                                                                                              |
-| `defaultVisible`                            | `boolean`                                                                      | `false`                     | Uncontrolled counterpart.                                                                                                                    |
-| `onVisibleChange`                           | `(visible: boolean, details: PasswordField.VisibleChangeEventDetails) => void` |                             | Called before the change commits. `details`: `reason` (`"toggle-press"` or `"form-submit"`), `event`, `cancel()`.                            |
-| `labels`                                    | `{ show?: string }`                                                            | `{ show: "Show password" }` | The toggle's accessible name. Falls back to LocaleProvider, then English.                                                                    |
-| `autoComplete`                              | `"current-password" \| "new-password" \| "one-time-code" \| "off"`             | `"current-password"`        | Narrowed from the native type to the values that fit a password field.                                                                       |
-| TextField props except `type`, `endElement` |                                                                                |                             | `label`, `description`, `errorMessage`, `invalid`, `validate`, `size`, `startElement`, `disabled`, `onValueChange`, native input attributes. |
+| Prop                                        | Type                                                                          | Default                     | Notes                                                                                                                                        |
+| ------------------------------------------- | ----------------------------------------------------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `visible`                                   | `boolean`                                                                     |                             | Controlled: whether the value is shown as text.                                                                                              |
+| `defaultVisible`                            | `boolean`                                                                     | `false`                     | Uncontrolled counterpart.                                                                                                                    |
+| `onVisibleChange`                           | `(visible: boolean, details: PasswordFieldVisibleChangeEventDetails) => void` |                             | Called before the change commits. `details`: `reason` (`"toggle-press"` or `"form-submit"`), `event`, `cancel()`.                            |
+| `labels`                                    | `{ show?: string }`                                                           | `{ show: "Show password" }` | The toggle's accessible name. Falls back to the Provider's locale (`passwordField.show`).                                                    |
+| `autoComplete`                              | `"current-password" \| "new-password" \| "one-time-code" \| "off"`            | `"current-password"`        | Narrowed from the native type to the values that fit a password field.                                                                       |
+| TextField props except `type`, `endElement` |                                                                               |                             | `label`, `description`, `errorMessage`, `invalid`, `validate`, `size`, `startElement`, `disabled`, `onValueChange`, native input attributes. |
 
 Names, checked against the reference libraries:
 
@@ -47,10 +47,10 @@ Names, checked against the reference libraries:
 
 TextField's states, plus the toggle's:
 
-| State  | How it shows                                              | Exposed as                                                                    |
-| ------ | --------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| hidden | Dots; toggle at rest                                      | input `type="password"`, toggle `aria-pressed="false"`                        |
-| shown  | Plain text; toggle selected (IconButton's selected state) | input `type="text"`, toggle `aria-pressed="true"`, `data-visible` on the root |
+| State  | How it shows                                              | Exposed as                                             |
+| ------ | --------------------------------------------------------- | ------------------------------------------------------ |
+| hidden | Dots; toggle at rest                                      | input `type="password"`, toggle `aria-pressed="false"` |
+| shown  | Plain text; toggle selected (IconButton's selected state) | input `type="text"`, toggle `aria-pressed="true"`      |
 
 ## Behaviour
 
