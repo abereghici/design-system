@@ -43,6 +43,15 @@ describe("@platform/ui exports", () => {
     }
   });
 
+  test("every src/locales/<tag>.ts is the subpath @platform/ui/locales/<tag>", () => {
+    const entries = globSync("src/locales/*.ts", { cwd: uiDir });
+    expect(entries.toSorted()).toEqual(["src/locales/en-US.ts", "src/locales/ro-RO.ts"]);
+    for (const entry of entries) {
+      const tag = entry.slice("src/locales/".length, -".ts".length);
+      expect(resolve(`@platform/ui/locales/${tag}`)).toBe(join(uiDir, entry));
+    }
+  });
+
   test("the package root is not exported (Node)", () => {
     expect(() => resolve("@platform/ui")).toThrow(
       expect.objectContaining({ code: "ERR_PACKAGE_PATH_NOT_EXPORTED" }),

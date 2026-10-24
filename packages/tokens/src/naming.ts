@@ -219,8 +219,11 @@ const MODIFIERS = new Set([
 const outsideDictionary = (words: readonly string[]) =>
   words.length > 0 ? `uses words outside the Dictionary: ${words.join(", ")}` : undefined;
 
+export const componentOf = (name: string): string | undefined =>
+  COMPONENTS.find((c) => name.startsWith(`${c}-`));
+
 const checkComponentName = (name: string): string | undefined => {
-  const component = COMPONENTS.find((c) => name.startsWith(`${c}-`));
+  const component = componentOf(name);
   if (component === undefined) {
     return `names no component in the Dictionary (${COMPONENTS.join(", ")})`;
   }

@@ -76,7 +76,7 @@ export async function entrySource(
   });
   return [
     // The stylesheet Storybook stories run under: the layer order and @platform/tokens.
-    `import ${spec(path.join(uiDir, ".storybook", "preview.css"))};`,
+    `import ${spec(path.join(uiDir, "src", "provider", "provider.css"))};`,
     `import { CardPreview, collectCards } from ${spec(path.join(runtimeDir, "cards.tsx"))};`,
     ...entries.map((file, index) => `import * as entry${index} from ${spec(file)};`),
     ...sources.map(({ stories }, index) => `import * as stories${index} from ${spec(stories)};`),

@@ -1,9 +1,9 @@
-import "./preview.css";
-
 import addonA11y from "@storybook/addon-a11y";
 import addonDocs from "@storybook/addon-docs";
 import { definePreview } from "@storybook/react-vite";
 import { useEffect } from "storybook/preview-api";
+
+import { Provider } from "../src/provider/provider.tsx";
 
 // Toolbar globals for the Theme contract (packages/tokens/README.md) and text direction.
 // "system" leaves `data-theme` off, which means the System theme.
@@ -84,7 +84,11 @@ export default definePreview({
       useEffect(() => {
         applyDocumentGlobals(theme, dir);
       }, [theme, dir]);
-      return <Story />;
+      return (
+        <Provider>
+          <Story />
+        </Provider>
+      );
     },
   ],
 });

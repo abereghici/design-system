@@ -1,9 +1,6 @@
 import preview from "#.storybook/preview";
 import { expect } from "storybook/test";
 
-// The base stylesheet is opt-in for apps; Storybook opts in (.storybook/preview.css), so this
-// sample shows plain HTML elements exactly as an app that imports `@platform/ui/base.css` gets
-// them.
 function Sample() {
   return (
     <article>
