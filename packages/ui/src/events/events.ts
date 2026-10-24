@@ -19,7 +19,7 @@ export type ToggleFeedbackEvent = CustomEvent<
   >
 >;
 
-export type DismissEvent = CustomEvent<FeedbackEventDetail<"Alert">>;
+export type DismissEvent = CustomEvent<FeedbackEventDetail<"Alert" | "Popover">>;
 
 declare global {
   // lib.dom's Document, Window and HTMLElement event maps extend this one, so every target is typed.

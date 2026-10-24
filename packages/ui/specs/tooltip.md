@@ -48,7 +48,7 @@ Root (no DOM) → Trigger (the control) + Content (Floating layer: text, then an
 | `open`         | `boolean`                                                           |         | Controlled.                                                                                                                          |
 | `defaultOpen`  | `boolean`                                                           | `false` | Uncontrolled.                                                                                                                        |
 | `onOpenChange` | `(open: boolean, details: Tooltip.Root.ChangeEventDetails) => void` |         | `details`: `reason`, `event`, `cancel()`. Reasons below. Every change can be cancelled: the Tooltip runs every show and hide itself. |
-| `disabled`     | `boolean`                                                           | `false` | No Tooltip: no listeners, no `aria-describedby`. Closes an open one with `reason: "none"`.                                           |
+| `disabled`     | `boolean`                                                           | `false` | No Tooltip: no listeners, no `aria-describedby`. An open one closes without a callback.                                              |
 | `children`     | `ReactNode`                                                         |         | One Trigger and one Content.                                                                                                         |
 
 `reason`: `"trigger-hover"` (pointer entered, or left both Trigger and Content), `"trigger-focus"` (keyboard focus arrived or left), `"trigger-press"` (the press that hides it), `"escape-key"`, `"none"` (another Tooltip opened, `disabled` turned on, or a controlled change).
@@ -144,7 +144,7 @@ Focus never moves: APG "Focus stays on the triggering element while the tooltip 
 
 Logical properties only: `inset-inline-start` / `inset-inline-end` for `align`, padding and gap logical. The Content inherits `dir` from the Trigger's parent in the top layer, and the spike #4 recipe places it correctly in an RTL island. The Kbd keeps its own `dir="ltr"` (Kbd spec).
 
-Positioning, from spike #4 (Q4-2): `margin: 0; position-anchor: auto; inset: auto;` then `side="top"`: `inset-block-end: anchor(self-start); margin-block-end: var(--ab-tooltip-offset)`, `side="bottom"`: `inset-block-start: anchor(self-end); margin-block-start: var(--ab-tooltip-offset)`; `align="start"`: `inset-inline-start: anchor(self-start)`, `align="end"`: `inset-inline-end: anchor(self-end)`, `align="center"`: `justify-self: anchor-center`; and `position-try-fallbacks: flip-block`. Spike #4: "`anchor()` on logical insets … places the popover correctly in all three engines, in LTR and in an RTL island, and `flip-block` still flips it." `anchor-center` was not covered by the spike; the build ticket tests it in an RTL island and at the viewport edge (inference). Never `position-visibility` (spike #4 gap 6).
+Positioning, from spike #4 (Q4-2): `margin: 0; position-anchor: auto; inset: auto;` then `side="top"`: `inset-block-end: anchor(self-start); margin-block-end: var(--ab-tooltip-offset)`, `side="bottom"`: `inset-block-start: anchor(self-end); margin-block-start: var(--ab-tooltip-offset)`; `align="start"`: `inset-inline-start: anchor(self-start)`, `align="end"`: `inset-inline-end: anchor(self-end)`, `align="center"`: `left: anchor(center); translate: -50% 0` (physical, so it is direction-agnostic). The build tested `justify-self: anchor-center` in an RTL island: Chromium and WebKit centred it, Firefox placed it far outside the viewport (the same family as spike #4's `position-area` RTL-island bug), so it is not used; and `position-try-fallbacks: flip-block`. Spike #4: "`anchor()` on logical insets … places the popover correctly in all three engines, in LTR and in an RTL island, and `flip-block` still flips it." Never `position-visibility` (spike #4 gap 6).
 
 ## Component tokens
 
@@ -158,7 +158,7 @@ Proposed new:
 | `tooltip-exit-duration` | `motion-duration-exit` | duration    | Exit fade (150 ms); flagged in Motion, longer than the 125 ms entry |
 | `tooltip-easing`        | `motion-easing-enter`  | cubicBezier | Ease-out for entry and exit                                         |
 
-No Kbd override token: the Kbd keeps its own colours inside the Tooltip. The forced-colors border uses `border-width-default` directly.
+No Kbd override token. To match the source (`.ab-tooltip .ab-kbd{background:transparent;color:inherit;border-color:currentColor;opacity:.72}`) the Content sets Kbd's own custom properties on itself (transparent fill, text and border at 72 % of `currentColor`), as Button does. The forced-colors border uses `border-width-default` directly.
 
 ## Built-in labels
 
