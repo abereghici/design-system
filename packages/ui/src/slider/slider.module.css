@@ -1,0 +1,107 @@
+@import "@platform/tokens/components/slider.css";
+
+@layer ab.components {
+  .root {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-inline-md);
+  }
+
+  .track {
+    position: relative;
+    flex: 1;
+    block-size: var(--ab-slider-height);
+    touch-action: none;
+    cursor: pointer;
+  }
+
+  .root:where([data-disabled]) .track {
+    cursor: default;
+    opacity: var(--ab-opacity-disabled);
+  }
+
+  .track::before,
+  .range {
+    content: "";
+    position: absolute;
+    inset-block-start: calc(50% - var(--ab-slider-track-height) / 2);
+    block-size: var(--ab-slider-track-height);
+    border-radius: var(--ab-slider-track-border-radius);
+  }
+
+  .track::before {
+    inset-inline: 0;
+    background-color: var(--ab-slider-track-background-color);
+  }
+
+  .range {
+    background-color: var(--ab-slider-range-background-color);
+  }
+
+  .thumb {
+    position: absolute;
+    inset-block-start: calc(50% - var(--ab-slider-thumb-size) / 2);
+    margin-inline-start: calc(var(--ab-slider-thumb-size) / -2);
+    inline-size: var(--ab-slider-thumb-size);
+    block-size: var(--ab-slider-thumb-size);
+    border: var(--ab-slider-thumb-border-width) solid var(--ab-slider-thumb-border-color);
+    border-radius: var(--ab-radius-full);
+    background-color: var(--ab-slider-thumb-background-color);
+    box-shadow: var(--ab-slider-thumb-shadow);
+    transition: box-shadow var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color);
+  }
+
+  .thumb:has(.input:focus-visible) {
+    outline: var(--ab-focus-ring-width) solid var(--ab-color-border-focused);
+    outline-offset: var(--ab-focus-ring-offset);
+  }
+
+  .thumb:has(.input:is(:user-invalid, [aria-invalid="true"])) {
+    border-color: var(--ab-color-border-danger);
+  }
+
+  /* The visual thumb is the control; the native input stays for focus, AT, forms and reset. */
+  .input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .value {
+    font: var(--ab-slider-value-font);
+    letter-spacing: var(--ab-type-data-sm-letter-spacing);
+    font-variant-numeric: var(--ab-slider-value-font-variant-numeric);
+    color: var(--ab-slider-value-text-color);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .root:not([data-disabled]) .thumb:hover {
+      box-shadow: var(--ab-elevation-overlay);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .track::before {
+      outline: 1px solid CanvasText;
+    }
+
+    .range {
+      background-color: Highlight;
+    }
+
+    .thumb {
+      border-color: ButtonText;
+      background-color: ButtonFace;
+    }
+
+    .root:where([data-disabled]) :is(.range, .thumb) {
+      border-color: GrayText;
+      background-color: GrayText;
+    }
+  }
+}
