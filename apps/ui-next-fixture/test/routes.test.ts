@@ -1,5 +1,6 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { readdirSync, readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { describe, expect, test } from "vitest";
 
@@ -7,6 +8,13 @@ import component from "@platform/tokens/source/component.tokens.json";
 
 const next = join(import.meta.dirname, "..", ".next");
 const componentTokens = Object.keys(component.component).map((name) => `--ab-${name}:`);
+// Longest name first, so `--ab-icon-button-*` belongs to icon-button, not icon.
+const components = readdirSync(
+  dirname(fileURLToPath(import.meta.resolve("@platform/tokens/components/button.css"))),
+)
+  .map((file) => file.replace(/\.css$/v, ""))
+  .toSorted((a, b) => b.length - a.length);
+const ownerOf = (token: string) => components.find((name) => token.startsWith(`--ab-${name}-`));
 
 interface Route {
   readonly html: string;
@@ -38,10 +46,12 @@ const iconButton = route("icon-button");
 const uiClientModules = (r: Route) =>
   [...new Set(r.clientModules.match(/(?<=packages\/ui\/src\/)[\w.\/\-]+(?=")/gv))].toSorted();
 
-// Only token sheets count: a component may redefine another's token on itself (Button restyles Kbd hints).
+// A token ships when its sheet defines it or a component rule reads it. A component redefining another's token on itself (Button restyles Kbd hints) does neither.
 const shippedComponentTokens = (css: string) => {
   const sheets = css.match(/@layer ab\.tokens\{:root\{[^\}]*\}\}/gv)?.join("") ?? "";
-  return componentTokens.filter((token) => sheets.includes(token));
+  return componentTokens.filter(
+    (token) => sheets.includes(token) || css.includes(`var(${token.slice(0, -1)})`),
+  );
 };
 
 describe("the Provider owns the global CSS", () => {
@@ -138,7 +148,7 @@ describe("each component route ships only its own CSS, tokens and client code", 
     const r = route(name);
     expect(r.html).toContain(html);
     const shipped = shippedComponentTokens(r.css);
-    const owner = (token: string) => tokens.findLast((word) => token.startsWith(`--ab-${word}-`));
+    const owner = (token: string) => tokens.find((word) => word === ownerOf(token));
     expect(shipped.filter((token) => owner(token) === undefined)).toEqual([]);
     expect(new Set(shipped.map((token) => owner(token)))).toEqual(new Set(tokens));
     expect(uiClientModules(r)).toEqual([...client, "provider/locale.tsx"].toSorted());

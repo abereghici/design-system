@@ -3,7 +3,7 @@
 @layer ab.components {
   .root {
     --ab-icon-size: var(--ab-icon-button-icon-size);
-    --ab-icon-stroke-width: var(--ab-icon-sm-stroke-width);
+    --ab-icon-stroke-width: var(--ab-stroke-width-lg);
     --ab-spinner-color: currentColor;
 
     display: inline-grid;

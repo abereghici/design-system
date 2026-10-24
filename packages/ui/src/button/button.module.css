@@ -3,7 +3,7 @@
 @layer ab.components {
   .root {
     --ab-icon-size: var(--ab-button-icon-size);
-    --ab-icon-stroke-width: var(--ab-icon-sm-stroke-width);
+    --ab-icon-stroke-width: var(--ab-stroke-width-lg);
     --ab-icon-ink: var(--ab-button-secondary-icon-color);
     --ab-kbd-background-color: transparent;
     --ab-kbd-text-color: currentColor;
