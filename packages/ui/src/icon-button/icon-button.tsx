@@ -48,7 +48,12 @@ function changeEventDetails(
   return [{ reason: "none", event, cancel }, () => cancelled];
 }
 
-/** Triggers an action with an icon instead of a text label. */
+/**
+ * A square native `<button>` whose only content is an icon, named by `aria-label` or
+ * `aria-labelledby` (the type requires one). With `pressed` or `defaultPressed` it is a toggle
+ * button. A press dispatches `ab-press`; a toggle dispatches `ab-toggle` instead. Use a Button with
+ * a visible label whenever space allows.
+ */
 export function IconButton({
   size = "md",
   pressed,

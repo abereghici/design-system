@@ -1,0 +1,50 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Foundations/Tokens" />
+
+# Tokens
+
+Every visual decision is a CSS custom property named `--ab-…`, in three tiers. Each tier may point only at the tier below it, so a change to a primitive flows to every intent and component that uses it.
+
+| Tier          | Holds                         | Example                                | Used by              |
+| ------------- | ----------------------------- | -------------------------------------- | -------------------- |
+| 1 · Primitive | A literal value               | `--ab-palette-moss-900`                | Semantic tokens only |
+| 2 · Semantic  | An intent, resolved per Theme | `--ab-color-background-accent-bold`    | Components, app code |
+| 3 · Component | One decision of one component | `--ab-button-primary-background-color` | That component       |
+
+App code uses semantic tokens, and component tokens to restyle one component. It never uses a primitive: a primitive says what a value is, not what it is for. The model follows Material Design 3 (reference, system, component), Spectrum (global, alias, component) and Primer (base, functional, component).
+
+## Naming
+
+All names are lowercase and hyphenated, and a segment is left out when it holds the default.
+
+- **Primitives state their value.** `dimension-16` is 16px, `palette-sage-500` is step 500 of Sage (0 is white, 950 the darkest, `-a64` adds 64% opacity), `line-height-160` is 1.6, `duration-200` is 200ms.
+- **Semantic tokens state their purpose** in a fixed order: `color-{property}-{role}-{emphasis}-{state}`, `type-{category}-{size}`, `space-{axis}-{size}`, `size-{element}-{size}`, `elevation-{level}`, `motion-{property}-{use}`.
+- **Component tokens** read `{component}-{variant}-{element}-{property}-{state}`, as in `button-primary-background-color-hovered`.
+
+## Dictionary
+
+Semantic and component names may use only these words; the build rejects any other. The full list, with every component and element word, is the validator's own (`packages/tokens/src/naming.ts`).
+
+| Group    | Words                                                                                                                           |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Property | `surface` (a page layer), `background` (an element's fill), `text`, `icon`, `border`, `backdrop`, `material`, `shadow`, `brand` |
+| Surface  | `default` (the page), `raised` (one step up), `nested` (a panel inside a raised one), `floating` (menus, popovers, dialogs)     |
+| Role     | neutral (left out), `accent`, `selected`, `success`, `warning`, `danger`, `highlight`, `inverse`                                |
+| Emphasis | `subtlest`, `subtle`, default (left out), `bold`, and `on-{role}` for content on that role's bold fill                          |
+| State    | rest (left out), `hovered`, `pressed`, `focused`, `selected`, `checked`, `invalid`, `disabled`                                  |
+| Size     | `2xs` to `2xl`, always ascending; `min` and `recommended` for target sizes                                                      |
+| Space    | `inline` (horizontal gap), `inset` (padding), `stack` (vertical gap), `section` (between page sections)                         |
+| Type     | `heading`, `display` (serif); `body`, `label` (sans); `data`, `overline`, `code`                                                |
+
+## Rules
+
+The token build checks every rule and fails with the full list of problems.
+
+- **R1** Primitives hold literals only. **R2** Semantic tokens reference one primitive. **R3** Component tokens reference one semantic token.
+- **R4** Product code never references a primitive.
+- **R5** Every themed color has a light and a dark value; component tokens are the same in every Theme.
+- **R6** Patterns that aren't components (selection, highlight, focus) use semantic tokens directly.
+- **R7** Every name matches its tier's grammar and uses only Dictionary words.
+
+Two semantic tokens may compose other semantic tokens: a type style uses its own font size, and an Elevation composes the ring, highlight and shadow colors.

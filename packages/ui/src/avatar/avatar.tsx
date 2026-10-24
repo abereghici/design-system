@@ -12,6 +12,12 @@ export interface RootProps extends ComponentProps<"span"> {
   size?: "sm" | "md";
 }
 
+/**
+ * A person's picture, with their initials (or a generic glyph) while it loads or when it fails. The
+ * Image's `alt` is the avatar's one accessible name, whichever Part shows; the Fallback is never
+ * announced. When the name is written beside it, use `alt=""` and `aria-hidden` on Root. For the
+ * brand sign, use the Logo.
+ */
 export function Root({ size = "md", className, ...props }: RootProps) {
   return (
     <span

@@ -7,17 +7,9 @@ import { enUS } from "../provider/locales/en-US.ts";
 import { Badge } from "./badge.tsx";
 
 const meta = preview.meta({
-  title: "Components/Badge",
+  title: "Components/Feedback/Badge",
   component: Badge,
   args: { children: 3 },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'A count or a one-glyph mark ("!") placed next to the tab, nav item or button it counts. A number is formatted with `Intl.NumberFormat` and capped at `max`. It is a Server Component, so pass `locale` to format in the app\'s language. Put the exact count in the owner\'s accessible name ("Inbox, 1 280 unread"). For a static word ("Draft"), use a Tag; for a state marker in a dense list, a StatusDot.',
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

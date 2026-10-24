@@ -1,0 +1,44 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Guides/Internationalization" />
+
+# Internationalization
+
+Components contain a few words of their own (a close button's name, "Loading", the names of keys) and format a few numbers. A **locale** supplies both: a BCP 47 tag and every built-in label.
+
+## Choose a locale
+
+Each shipped locale is a typed object on its own entry point. Pass it to `Provider`:
+
+```tsx
+import { roRO } from "@platform/ui/locales/ro-RO";
+import { Provider } from "@platform/ui/provider";
+
+<Provider locale={roRO}>{children}</Provider>;
+```
+
+Shipped: `en-US` and `ro-RO`. Without a locale, components use the English labels and format numbers in the language of `<html lang>`.
+
+## Change some labels
+
+A locale is a plain object, so spread a shipped one and replace what you need. TypeScript checks that every label is still there.
+
+```tsx
+import { enUS } from "@platform/ui/locales/en-US";
+
+const enGB = {
+  ...enUS,
+  tag: "en-GB",
+  labels: { ...enUS.labels, spinner: { loading: "Loading…" } },
+};
+```
+
+To change a label for one instance, pass the component's `labels` prop where it has one (for example SkipLink and Spinner).
+
+## Server Components
+
+Context doesn't reach Server Components. Components that format numbers on the server (Badge, Meter, Progress) take their own `locale` prop; pass the same shipped locale you give the Provider.
+
+## Direction
+
+Right-to-left languages also need `dir` on `<html>`: see [Right-to-left](?path=/docs/guides-right-to-left--docs).

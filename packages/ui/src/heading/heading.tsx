@@ -11,6 +11,12 @@ export interface HeadingProps extends ComponentProps<"h1"> {
   size?: "xs" | "sm" | "md" | "lg";
 }
 
+/**
+ * A native `<h1>`–`<h6>` that titles a section in the serif heading type. `as` sets the level from
+ * the document outline and `size` sets the look, which follows the level unless set. For a serif
+ * statement that isn't a section title, use Text `variant="display"`; for a title inside a Card or
+ * Dialog, use its title Part.
+ */
 export function Heading({
   as: Element,
   size = sizeOfLevel[Element],

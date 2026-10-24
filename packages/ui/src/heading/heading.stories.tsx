@@ -5,17 +5,9 @@ import preview from "#.storybook/preview.tsx";
 import { Heading } from "./heading.tsx";
 
 const meta = preview.meta({
-  title: "Components/Heading",
+  title: "Components/Typography/Heading",
   component: Heading,
   args: { as: "h2" as const, children: "Overdue invoices" },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'A native `<h1>`–`<h6>` that titles a section in the serif heading type. `as` sets the level from the document outline and `size` sets the look, which follows the level unless set. For a serif statement that isn\'t a section title, use Text `variant="display"`; for a title inside a Card or Dialog, use its title Part.',
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

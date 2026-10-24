@@ -9,6 +9,7 @@
     "./tokens.json": "./dist/tokens.json",
     "./fonts.css": "./dist/fonts.css",
     "./fonts/*": "./fonts/*",
+    "./font-faces": "./src/fonts.ts",
     "./contrast-matrix": "./src/contrast-matrix.ts",
     "./source/*.tokens.json": "./src/tokens/*.tokens.json"
   },

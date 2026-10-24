@@ -11,17 +11,9 @@ import type { MeterProps } from "./meter.tsx";
 ({ value: 92, label: "Storage", high: 90 }) satisfies MeterProps;
 
 const meta = preview.meta({
-  title: "Components/Meter",
+  title: "Components/Feedback/Meter",
   component: Meter,
   args: { value: 42, label: "Storage" },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A measurement within a known range: storage used, a quota, a score. With `low`, `high` and `optimum` the fill takes the success, warning or danger colour of the HTML meter's regions, and a string `valueLabel` must say the same in words. The value text is formatted with `Intl.NumberFormat` on the server, in English unless you pass a shipped `locale`. For progress use Progress; for a value the user sets, Slider.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

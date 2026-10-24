@@ -5,7 +5,7 @@ import preview from "#.storybook/preview.tsx";
 import { Separator } from "./separator.tsx";
 
 const meta = preview.meta({
-  title: "Components/Separator",
+  title: "Components/Containers/Separator",
   component: Separator,
   decorators: [
     (Story) => (
@@ -16,14 +16,6 @@ const meta = preview.meta({
       </div>
     ),
   ],
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'A native `<hr>` hairline between groups of content. Prefer space first: use it only when space alone leaves the grouping unclear. `variant="ornament"` (the ochi diamond) is for editorial pages, never dense UI. A separator the user drags to resize panes is a window splitter, not this component.',
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

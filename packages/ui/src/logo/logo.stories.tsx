@@ -5,16 +5,8 @@ import preview from "#.storybook/preview.tsx";
 import { Logo } from "./logo.tsx";
 
 const meta = preview.meta({
-  title: "Components/Logo",
+  title: "Components/Images and icons/Logo",
   component: Logo,
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Stâlpul cerului, the Bereghici Logo, in `--ab-logo-color`. One em square by default, so it scales with the text it sits in; size it with CSS `inline-size` and `block-size`. It never renders below `--ab-logo-min-size` (16px). For an interface glyph, use an icon.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

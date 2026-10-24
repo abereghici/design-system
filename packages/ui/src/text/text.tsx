@@ -19,6 +19,10 @@ export type TextProps = Omit<ComponentProps<"p">, "color" | "ref"> &
     ref?: Ref<HTMLElement>;
   };
 
+/**
+ * Sets a run of text in one type role: body, label, data, code, overline or display. A paragraph by
+ * default. For a section title use Heading, for a keyboard key Kbd, and for a link Link.
+ */
 export function Text({
   variant = "body",
   size = variant === "overline" ? "sm" : "md",

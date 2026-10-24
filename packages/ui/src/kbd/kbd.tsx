@@ -63,7 +63,11 @@ function key(
   return face?.text ?? words[id] ?? (name.length === 1 ? name.toUpperCase() : name);
 }
 
-/** Shows a keyboard shortcut, one keycap per key. It never binds the shortcut. */
+/**
+ * Shows a keyboard shortcut, one keycap per key: `mod` is ⌘ on Apple platforms and Ctrl elsewhere.
+ * It shows the key and never binds it; inside a control, pass `aria-hidden` and set
+ * `aria-keyshortcuts` on the control.
+ */
 export function Kbd({ keys, platform, labels, children, className, ...props }: KbdProps) {
   const content =
     keys === undefined

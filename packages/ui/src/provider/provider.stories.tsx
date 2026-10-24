@@ -20,17 +20,9 @@ const withDocumentLang = (lang: string) => () => {
 };
 
 const meta = preview.meta({
-  title: "Components/Provider",
+  title: "Components/Utilities/Provider",
   component: Provider,
   args: { children: <Tag /> },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "The app root: mount it once in the root layout. It brings the layer order, the shared tokens, the fonts (preloading Figtree latin) and the base stylesheet, so apps import no CSS, and it passes the `locale` to client components.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});
@@ -56,6 +48,24 @@ Default.test(
   { args: { locale: roRO } },
   async ({ canvas }) => {
     await expect(canvas.getByRole("status")).toHaveTextContent("ro-RO");
+  },
+);
+
+Default.test(
+  "its base stylesheet yields to unlayered app CSS",
+  { args: { children: <button type="button">Save changes</button> } },
+  async ({ canvas, userEvent }) => {
+    const appStyles = document.createElement("style");
+    appStyles.textContent = "button { outline-color: rgb(1, 2, 3); }";
+    document.head.append(appStyles);
+    try {
+      const button = canvas.getByRole("button", { name: "Save changes" });
+      await userEvent.tab();
+      await expect(button).toHaveFocus();
+      await expect(getComputedStyle(button).outlineColor).toBe("rgb(1, 2, 3)");
+    } finally {
+      appStyles.remove();
+    }
   },
 );
 

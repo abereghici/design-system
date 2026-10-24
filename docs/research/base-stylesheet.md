@@ -51,7 +51,7 @@ Each test checks computed styles against token-source literals, in all six proje
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | Remove `text-wrap: pretty`            | Chromium and WebKit, both projects. Firefox has no `pretty`, so the test checks it only where `CSS.supports` says it exists |
 | Remove `text-wrap: balance`           | All engines                                                                                                                 |
-| Make `interpolate-size` unconditional | `storybook-reduced-motion (chromium)`                                                                                       |
+| Make `interpolate-size` unconditional | `chromium-reduced-motion` instance                                                                                          |
 | Remove `interpolate-size`             | `storybook (chromium)`, the only engine that has it                                                                         |
 | Remove the `::selection` background   | All engines                                                                                                                 |
 | Remove `font: inherit`                | All engines                                                                                                                 |

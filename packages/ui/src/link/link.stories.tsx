@@ -7,17 +7,9 @@ import preview from "#.storybook/preview.tsx";
 import { Link } from "./link.tsx";
 
 const meta = preview.meta({
-  title: "Components/Link",
+  title: "Components/Navigation/Link",
   component: Link,
   args: { href: "#token-guide", children: "token guide" },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "A native `<a href>` for navigation, always underlined, inheriting the surrounding type. Wrap a router link with `asChild`. To trigger an action, use a Button; to jump past repeated navigation, use a SkipLink.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

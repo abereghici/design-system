@@ -18,7 +18,9 @@ Svg (one `<svg viewBox="0 0 32 32">`) → one path.
 
 - **Svg.** Inline `<svg>` on the source's 32-unit grid, `fill="none"`, `stroke="currentColor"`, `stroke-width` from `logo-stroke-width` (3 grid units), `stroke-linecap="square"`, `stroke-linejoin="miter"`. Square.
 - **Path.** The source path, reproduced exactly (spec #1 user story 65): `M11 9 L5 16 L11 23 M21 9 L27 16 L21 23 M16 6 L18.5 11 L13.5 16 L18.5 21 L16 26`.
-- **Colour.** `color: var(--ab-logo-color)`; the stroke follows it. One colour only.
+- **Colour.** `color: var(--ab-logo-color)`; the stroke follows it. One colour only. On imagery, set `--ab-logo-color` to `var(--ab-color-brand-moss)` or `var(--ab-color-brand-lichen)` on a parent.
+- **Minimum size.** 16px (`logo-min-size`); the CSS clamps a smaller width.
+- **Clear space.** Keep half the Logo's width free on every side. The Logo adds no margin, so the layout keeps the space.
 
 ## API
 

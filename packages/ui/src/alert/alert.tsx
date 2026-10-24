@@ -30,6 +30,13 @@ export interface RootProps extends ComponentProps<"div"> {
   role?: ComponentProps<"div">["role"];
 }
 
+/**
+ * An inline message about the page or a task that stays relevant until the situation changes. It
+ * has no role by default; pass `role="alert"` only for an urgent message inserted after load.
+ * `Alert.Close` calls your `onClick`, where the app removes the Alert and moves focus to what the
+ * message was about. For brief confirmation use a Toast; for a decision that must interrupt, an
+ * AlertDialog.
+ */
 export function Root({ variant = "neutral", className, children, ...props }: RootProps) {
   const Icon = icons[variant];
   return (

@@ -182,7 +182,13 @@ function useFailure() {
   return [failure, sync] as const;
 }
 
-/** A native `<select>` with a built-in label, description and error. */
+/**
+ * Chooses one value from a short, known list (up to about 15 options). It is a native `<select>`:
+ * keyboard, typeahead, screen readers, autofill, mobile pickers and form submission are the
+ * platform's. Engines with customizable select draw the brand picker; the others show the operating
+ * system's. For a long or searchable list use Combobox; for 2–6 options that should stay visible,
+ * RadioGroup.
+ */
 export function Root({
   label,
   description,

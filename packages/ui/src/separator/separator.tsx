@@ -20,6 +20,12 @@ interface VerticalProps extends SeparatorBaseProps {
 
 export type SeparatorProps = HorizontalProps | VerticalProps;
 
+/**
+ * A native `<hr>` hairline between groups of content. Prefer space first: use it only when space
+ * alone leaves the grouping unclear. `variant="ornament"` (the ochi diamond) is for editorial
+ * pages, never dense UI. A separator the user drags to resize panes is a window splitter, not this
+ * component.
+ */
 export function Separator({
   orientation = "horizontal",
   variant = "solid",

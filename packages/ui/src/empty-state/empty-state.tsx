@@ -7,6 +7,13 @@ import styles from "./empty-state.module.css";
 const join = (own: string | undefined, className: string | undefined) =>
   className === undefined ? own : `${own} ${className}`;
 
+/**
+ * Stands in for content that isn't there yet (an empty list, a search with no results), in place of
+ * the empty region. The Title says what is missing, the Description why or what to do, and the
+ * actions that follow offer the next step. It is not a live region: announce a filter's empty
+ * result from your own always-rendered `role="status"`. For a load still running, use Skeleton or
+ * Spinner; for an error, an Alert.
+ */
 export function Root({ className, ...props }: ComponentProps<"div">) {
   return <div {...props} className={join(styles["root"], className)} />;
 }

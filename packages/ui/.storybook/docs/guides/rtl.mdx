@@ -1,0 +1,26 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Guides/Right-to-left" />
+
+# Right-to-left
+
+Set `dir="rtl"` on `<html>` (or on a region) and every component mirrors. There is nothing else to configure.
+
+```html
+<html lang="ar" dir="rtl"></html>
+```
+
+- **Logical properties throughout.** Components use `inline-start` and `inline-end`, `padding-inline` and `inset-inline`, never `left` and `right`, so layout follows the writing direction.
+- **Icons in a label** are marked by where they sit, not by side: `data-icon="inline-start"` puts the icon before the text in either direction.
+
+  ```tsx
+  <Button>
+    <PlusIcon data-icon="inline-start" />
+    New
+  </Button>
+  ```
+
+- **What doesn't mirror:** the Logo, and glyphs that show something physical rather than a direction in the text, such as a clock or a check.
+- **Your own CSS** should use logical properties too, so it mirrors with the components.
+
+In this Storybook, the toolbar's Direction sets `dir` on the pages and examples.

@@ -5,17 +5,9 @@ import preview from "#.storybook/preview.tsx";
 import { Text } from "./text.tsx";
 
 const meta = preview.meta({
-  title: "Components/Text",
+  title: "Components/Typography/Text",
   component: Text,
   args: { children: "Invoices are sent on the first working day of the month." },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Sets a run of text in one type role: body, label, data, code, overline or display. A paragraph by default. For a section title use Heading, for a keyboard key Kbd, and for a link Link.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

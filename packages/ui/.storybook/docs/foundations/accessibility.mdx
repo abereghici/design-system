@@ -1,13 +1,41 @@
 import { Canvas, Meta } from "@storybook/addon-docs/blocks";
 
-import * as AccessibilityStories from "./accessibility.stories";
+import * as ButtonStories from "../../../src/button/button.stories.tsx";
+import { ContrastTable } from "../blocks/contrast-table.tsx";
 
-<Meta of={AccessibilityStories} />
+<Meta title="Foundations/Accessibility" />
 
 # Accessibility
 
-Target: WCAG 2.2 Level AA. The contrast matrix is computed from the token source and the same pair list the tokens build checks (`@platform/tokens/contrast-matrix`).
+The target is **WCAG 2.2 Level AA**, in both Themes, for every component. Most of it is built in: native elements carry their roles and keyboard behaviour, and the tokens carry contrast, target size and the user's preferences. Each component page ends with its keyboard map and accessibility notes.
 
-<Canvas of={AccessibilityStories.Contrast} sourceState="none" />
+| Criterion                                 | How the system meets it                                                                         |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| 1.4.3 Contrast (Minimum)                  | Every text role is at least 4.5:1 on every background it may sit on, checked by the token build |
+| 1.4.11 Non-text Contrast                  | Icons and control borders are at least 3:1                                                      |
+| 1.4.1 Use of Color                        | A state pairs color with a label, a shape, a weight change or an underline                      |
+| 1.4.4 Resize Text                         | Sizes in `rem`; fluid steps grow at most 1.14×                                                  |
+| 1.4.10, 1.4.12 Reflow, Text Spacing       | Fluid columns, unitless line heights, no fixed text heights                                     |
+| 2.4.7, 2.4.11 Focus Visible, Not Obscured | A 2px `--ab-color-border-focused` ring at a 3px offset, never removed                           |
+| 2.5.8 Target Size (Minimum)               | At least 24 × 24px (`--ab-size-target-min`); controls grow to 44px on coarse pointers           |
+| 2.2.2, 2.3.3 Motion                       | Reduced motion removes movement through the tokens; no loops or scroll-linked motion            |
 
-<Canvas of={AccessibilityStories.Focus} sourceState="none" />
+## Contrast
+
+The lowest ratio of each foreground over every background it may sit on, computed from the tokens with the same matrix the token build enforces. `--ab-color-border-subtle` is decorative and is never a control's only boundary; `disabled` roles are exempt, so pair them with an explanation.
+
+<ContrastTable />
+
+## Focus
+
+Tab to the button: the ring is the same on every focusable component.
+
+<Canvas of={ButtonStories.Default} />
+
+## User preferences
+
+- **Color scheme:** the System Theme follows the operating system live.
+- **Increased contrast** (`prefers-contrast: more`): subtle borders, subtlest text and subtlest icons step up one emphasis level.
+- **Reduced transparency:** every material becomes the solid floating surface.
+- **Reduced motion:** movement goes, fades stay.
+- **Forced colors:** components that draw edges with shadows or fills redraw them in system colors.

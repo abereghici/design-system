@@ -17,6 +17,12 @@ export interface RootProps extends ComponentProps<"div"> {
   asChild?: boolean;
 }
 
+/**
+ * Groups content about one subject so cards can be scanned and compared, flat in the flow of the
+ * page. Compose `Card.Header` (`Title`, `Description`), `Content` and `Footer`. A link inside
+ * `Card.Title` stretches over the whole card. Don't nest cards or use one as a page section:
+ * separate in-flow content with space, a Separator or a surface step.
+ */
 export function Root({
   layout = "column",
   asChild = false,

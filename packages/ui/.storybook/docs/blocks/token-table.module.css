@@ -1,0 +1,7 @@
+.sample {
+  display: block;
+  inline-size: var(--ab-size-control-lg);
+  block-size: var(--ab-size-control-md);
+  margin-block-start: var(--ab-space-stack-xs);
+  background-color: var(--ab-color-surface-raised);
+}

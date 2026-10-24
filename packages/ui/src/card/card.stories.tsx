@@ -30,7 +30,7 @@ const center = (element: Element) => {
 };
 
 const meta = preview.meta({
-  title: "Components/Card",
+  title: "Components/Containers/Card",
   component: Card.Root,
   args: {
     children: (
@@ -41,14 +41,6 @@ const meta = preview.meta({
         </Card.Footer>
       </>
     ),
-  },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Groups content about one subject so cards can be scanned and compared, flat in the flow of the page. Compose `Card.Header` (`Title`, `Description`), `Content` and `Footer`. A link inside `Card.Title` stretches over the whole card. Don't nest cards or use one as a page section: separate in-flow content with space, a Separator or a surface step.",
-      },
-    },
   },
 });
 

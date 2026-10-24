@@ -28,17 +28,9 @@ async function blocksActivation({ canvas, userEvent, args }: Context) {
 }
 
 const meta = preview.meta({
-  title: "Components/Button",
+  title: "Components/Actions/Button",
   component: Button,
   args: { children: "Save changes", onClick: fn() },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'A native `<button type="button">` for an action: one primary per view, secondary for the rest, tertiary in toolbars and dense rows, danger only to confirm a destructive action. Every press dispatches a bubbling `ab-press` event after `onClick`. For an icon-only action, use IconButton; to navigate, use Link.',
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

@@ -17,6 +17,12 @@ export interface SpinnerProps extends ComponentProps<"span"> {
   labels?: Partial<Labels["spinner"]>;
 }
 
+/**
+ * Eight turning staves for a wait of unknown length. Show it only once a wait passes about 400 ms:
+ * start a timer when the request starts and mount the Spinner when it fires. Set `aria-busy` on the
+ * region it stands in. For measurable progress use Progress; for content of known shape use
+ * Skeleton; inside a busy Button use the Button's `loading`.
+ */
 export function Spinner({ size = "sm", labels, className, ...props }: SpinnerProps) {
   const decorative = props["aria-hidden"] === true || props["aria-hidden"] === "true";
   return (

@@ -32,17 +32,9 @@ function reads(...texts: string[]) {
 }
 
 const meta = preview.meta({
-  title: "Components/Kbd",
+  title: "Components/Typography/Kbd",
   component: Kbd,
   args: { keys: "mod+k" },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Shows a keyboard shortcut, one keycap per key: `mod` is ⌘ on Apple platforms and Ctrl elsewhere. It shows the key and never binds it; inside a control, pass `aria-hidden` and set `aria-keyshortcuts` on the control.",
-      },
-    },
-  },
 });
 
 export const Default = meta.story({});

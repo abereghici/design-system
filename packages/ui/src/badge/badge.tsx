@@ -25,6 +25,13 @@ export interface BadgeProps extends Omit<ComponentProps<"span">, "children"> {
 
 const overflowLabel = (max: string) => `${max}+`;
 
+/**
+ * A count or a one-glyph mark ("!") placed next to the tab, nav item or button it counts. A number
+ * is formatted with `Intl.NumberFormat` and capped at `max`. It is a Server Component, so pass
+ * `locale` to format in the app's language. Put the exact count in the owner's accessible name
+ * ("Inbox, 1 280 unread"). For a static word ("Draft"), use a Tag; for a state marker in a dense
+ * list, a StatusDot.
+ */
 export function Badge({
   variant = "neutral",
   max = 99,
