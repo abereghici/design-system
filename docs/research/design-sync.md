@@ -50,6 +50,16 @@ Extra sources:
 3. **No change for `light-dark()`.** The artifact-shaped tokens output with literal values per Theme stays as planned. It is required, not optional.
 4. **Tooling.** The proof uses esbuild, which `from-code.md` names ("bun build or esbuild, format iife"). esbuild is not in `docs/tech-stack.md`. The preview-bundle ticket picks between esbuild and Vite's library mode (Vite is already in the stack).
 
+## Ticket #14 (2026-10-24): the pipeline
+
+The pipeline is `packages/design-sync` (its README has the maintainer step). It replaced `packages/design-sync-spike`. Findings that change or extend spike #3, each observed in this repo with Vite 8.3.5, Playwright 1.64.1 Chromium and React 19.3.1:
+
+1. **Vite library mode builds everything.** Format `iife` builds `components/lib/react.js` (8.4 kB), `react-dom.js` (212 kB) and `bundle.js` (about 375 kB with three components and the icon gallery). Story files need Vite: `icon-gallery.stories.tsx` uses `import.meta.glob`, and the Logo stories use `?raw`. esbuild left the catalog with the spike.
+2. **Vite's defaults lower our CSS.** The default `build.target` is "baseline-widely-available" (`ESBUILD_BASELINE_WIDELY_AVAILABLE_TARGET` = Chrome 111 and peers in vite@8.3.5 `dist/node/chunks/node.js`). With it, the CSS minifier rewrote every `light-dark()` into `--lightningcss-light`/`--lightningcss-dark` variables, and turned `@layer ab.reset, ab.tokens, ab.base, ab.components;` into `@layer ab.reset;`. `target: "esnext"` stopped the first; `cssMinify: false` keeps the CSS as authored. _Inference:_ any Vite build of `@platform/ui` CSS (for example `storybook build`) gets the same lowering unless it sets a target; not checked here.
+3. **The page's literal tokens.css breaks nested Themes.** In the frame, `<html data-theme="dark">` gives the dark Button colour (`rgb(236, 234, 201)`). A `data-theme="dark"` on an element inside a light page does not: the page's unlayered `--ab-color-background-accent-bold: #263316` on `:root` is what `--ab-button-primary-background-color: var(…)` substitutes on `:root`, and the subtree's redefinition comes too late. This is the case `craft.md` describes ("the page's values cannot reach inside"). Previews therefore ignore a story's `theme` global.
+4. **The artifact's caps rule out tier 3 in tokens.json.** `format.md`: "≤60 tokens per other family". The full set has 200 lengths for `spacing` and 30 radii. The tokens file now lists tiers 1 and 2 (172 colours; the largest list family is `spacing` with 50), like the source artifact's own file.
+5. **Still not observed live.** No artifact was created or written (the hard rule for this ticket). The previews were checked in Chromium against the documented frame contract only.
+
 ## Question
 
 How does the design-sync mechanism keep a claude.ai "Design System" artifact in sync with a code repository? We need to know four things:

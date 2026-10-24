@@ -1,12 +1,18 @@
 import type { Dictionary, TransformedToken } from "style-dictionary/types";
 
-import { THEMES, valueIn } from "./theme.ts";
-import { inTierOrder } from "./tiers.ts";
+import { FONT_FAMILIES, FONT_SUBSETS, fontFileName } from "./fonts.ts";
+import { THEMES, isWholeReference, valueIn, type ThemeId } from "./theme.ts";
+import { inTierOrder, tierOf } from "./tiers.ts";
 
 /**
- * The claude.ai Design System artifact's `tokens.json` shape, read by `/design-sync`: every
- * family is a flat list of `{ name, value, usage }`, colors carry their Themes (light first),
- * and every value is a literal (no `var()`, `light-dark()`, `color-mix()` or named colors).
+ * The claude.ai Design System artifact's `tokens.json` shape (the type's format.md, "tokens.json
+ * grammar"): `type` is `{ fonts, families, groups }`, and every other family is a flat list of
+ * `{ name, value, usage }`. Colors and shadows carry their Themes (light first). Every value is a
+ * literal: no `var()`, `light-dark()`, `color-mix()`, `clamp()` or named colors.
+ *
+ * Like the source artifact's own tokens.json, it lists tiers 1 and 2. Component tokens (tier 3)
+ * are for component code only and reach the artifact's previews through the CSS; the length
+ * families could not hold them anyway ("≤60 tokens per other family", format.md).
  */
 export interface ArtifactEntry<Value> {
   readonly name: string;
@@ -15,50 +21,103 @@ export interface ArtifactEntry<Value> {
 }
 
 /** A plain string is the first Theme's value; every other Theme inherits it. */
-export type ThemedColor = string | { readonly light: string; readonly dark: string };
+export type Themed = string | { readonly light: string; readonly dark: string };
 
-export interface ArtifactTokens {
-  readonly name: string;
-  readonly version: 1;
-  readonly color: {
-    readonly themes: typeof THEMES;
-    readonly tokens: readonly ArtifactEntry<ThemedColor>[];
-  };
-  readonly spacing: { readonly tokens: readonly ArtifactEntry<string>[] };
-  readonly radius: { readonly tokens: readonly ArtifactEntry<string>[] };
+export interface ArtifactFamily<Value = string> {
+  readonly note?: string;
+  readonly tokens: readonly ArtifactEntry<Value>[];
 }
 
-type Family = "color" | "spacing" | "radius";
+export interface ArtifactTypeStyle {
+  readonly name: string;
+  readonly fontSize: string;
+  readonly lineHeight: string;
+  readonly fontWeight: number;
+  readonly letterSpacing: string;
+  readonly usage: string;
+}
 
-/** Lengths that belong to the type and material families, which this format doesn't list yet. */
-const NOT_SPACING = /font-size|letter-spacing|blur/v;
+export interface ArtifactType {
+  readonly fonts: readonly {
+    readonly family: string;
+    readonly file: string;
+    readonly weight: string;
+    readonly style: "normal";
+  }[];
+  readonly families: Readonly<Record<string, string>>;
+  readonly groups: readonly {
+    readonly name: string;
+    readonly family: string;
+    readonly styles: readonly ArtifactTypeStyle[];
+  }[];
+}
 
-/** `$type`s the artifact has no family for here yet (type, motion, shadow; see #14). */
-const UNLISTED = new Set([
-  "cubicBezier",
-  "duration",
-  "fontFamily",
-  "fontWeight",
-  "number",
+/** The families besides `color` and `type`, in the order the page shows them. */
+const LISTS = [
+  "spacing",
+  "radius",
   "shadow",
-  "string",
-  "typography",
-]);
+  "size",
+  "strokeWidth",
+  "line",
+  "opacity",
+  "blur",
+  "saturate",
+  "scale",
+  "zIndex",
+  "layout",
+] as const;
+
+type List = (typeof LISTS)[number];
+
+export type ArtifactTokens = {
+  readonly name: string;
+  readonly version: 1;
+  readonly color: ArtifactFamily<Themed> & { readonly themes: typeof THEMES };
+  readonly type: ArtifactType;
+  readonly shadow: ArtifactFamily<Themed>;
+} & { readonly [Key in Exclude<List, "shadow">]: ArtifactFamily };
+
+const NOTES: Partial<Record<List, string>> = {
+  line: "Border widths, focus rings and underlines.",
+  layout: "Column and label widths, the gutter and the breakpoint.",
+  shadow: "The Elevations: a hairline ring, an inner highlight (dark only) and soft shadows.",
+};
+
+/** Where a tier-1 or tier-2 token goes. `undefined`: shown through `type`, or not at all. */
+type Placement = { readonly list: List } | { readonly in: "color" | "type" } | undefined;
+
+const BY_NAME: readonly (readonly [RegExp, List])[] = [
+  [/^ab-(?:dimension-9999|radius-)/v, "radius"],
+  [/^ab-(?:dimension|space)-/v, "spacing"],
+  [/^ab-size-/v, "size"],
+  [/^ab-stroke-width-/v, "strokeWidth"],
+  [/^ab-(?:border-width|focus-ring|underline)-/v, "line"],
+  [/^ab-opacity-/v, "opacity"],
+  [/^ab-(?:material-)?blur-/v, "blur"],
+  [/^ab-(?:material-)?saturate-/v, "saturate"],
+  [/^ab-scale-/v, "scale"],
+  [/^ab-z-index-/v, "zIndex"],
+  [/^ab-(?:layout|breakpoint)-/v, "layout"],
+];
+
+/** Shown through `type`, or left out: the page has "No motion family" (format.md). */
+const UNLISTED =
+  /^ab-(?:type-|font-|line-height-|letter-spacing-|text-transform-|duration-|easing-|motion-)/v;
 
 /**
- * Which artifact family a token is listed in, or `undefined` when it is deliberately left out.
- * An unknown `$type` throws, so a new one has to be mapped here on purpose.
+ * The family a token is listed in. An unmapped tier-1 or tier-2 token throws, so a new kind of
+ * token has to be placed here on purpose.
  */
-const familyOf = (token: TransformedToken): Family | undefined => {
-  if (token.$type === "color") return "color";
-  if (token.$type === "dimension") {
-    if (NOT_SPACING.test(token.name)) return undefined;
-    return token.name.includes("radius") ? "radius" : "spacing";
-  }
-  if (UNLISTED.has(String(token.$type))) return undefined;
-  throw new Error(
-    `--${token.name}: no artifact family for $type "${String(token.$type)}" (see src/artifact-format.ts)`,
-  );
+const placementOf = (token: TransformedToken): Placement => {
+  if (tierOf(token) === "component") return undefined;
+  if (token.$type === "color") return { in: "color" };
+  if (token.$type === "shadow") return { list: "shadow" };
+  if (token.$type === "typography") return { in: "type" };
+  const named = BY_NAME.find(([pattern]) => pattern.test(token.name));
+  if (named !== undefined) return { list: named[1] };
+  if (UNLISTED.test(token.name)) return undefined;
+  throw new Error(`--${token.name}: no artifact family (see src/artifact-format.ts)`);
 };
 
 const entry = <Value>(token: TransformedToken, value: Value): ArtifactEntry<Value> => ({
@@ -67,25 +126,145 @@ const entry = <Value>(token: TransformedToken, value: Value): ArtifactEntry<Valu
   usage: token.$description ?? "",
 });
 
-const themedColor = (token: TransformedToken, dictionary: Dictionary): ThemedColor => {
-  const light = String(valueIn(token, "light", dictionary));
-  const dark = String(valueIn(token, "dark", dictionary));
-  return light === dark ? light : { light, dark };
+const themed = (light: string, dark: string): Themed => (light === dark ? light : { light, dark });
+
+const colorValue = (token: TransformedToken, dictionary: Dictionary): Themed =>
+  themed(String(valueIn(token, "light", dictionary)), String(valueIn(token, "dark", dictionary)));
+
+/** A member of a composite value (a shadow layer, a type style), or `undefined`. */
+const memberOf = (value: unknown, key: string): unknown =>
+  typeof value === "object" && value !== null ? Reflect.get(value, key) : undefined;
+
+/** One shadow layer in a Theme, its referenced members resolved. */
+const layerCss = (layer: unknown, theme: ThemeId, dictionary: Dictionary): string => {
+  const member = (key: string) => {
+    const value = memberOf(layer, key);
+    const target = isWholeReference(value) ? dictionary.tokenMap.get(value) : undefined;
+    return String(target === undefined ? value : valueIn(target, theme, dictionary));
+  };
+  const inset = memberOf(layer, "inset") === true ? "inset " : "";
+  const lengths = ["offsetX", "offsetY", "blur", "spread"].map((key) => member(key)).join(" ");
+  return `${inset}${lengths} ${member("color")}`;
+};
+
+/** An Elevation's layers in a Theme, references to other Elevations expanded. */
+const shadowLayers = (
+  token: TransformedToken,
+  theme: ThemeId,
+  dictionary: Dictionary,
+): string[] => {
+  const authored: unknown = token.original.$value;
+  const layers: unknown[] = Array.isArray(authored) ? authored : [authored];
+  const css: string[] = [];
+  for (const layer of layers) {
+    if (!isWholeReference(layer)) {
+      css.push(layerCss(layer, theme, dictionary));
+      continue;
+    }
+    const target = dictionary.tokenMap.get(layer);
+    if (target === undefined) throw new Error(`--${token.name}: ${layer} does not exist`);
+    css.push(...shadowLayers(target, theme, dictionary));
+  }
+  return css;
+};
+
+const shadowValue = (token: TransformedToken, dictionary: Dictionary): Themed =>
+  themed(
+    shadowLayers(token, "light", dictionary).join(", "),
+    shadowLayers(token, "dark", dictionary).join(", "),
+  );
+
+/** `clamp(min, preferred, max)` → max: "the size shown is the 1280px end" (source usage notes). */
+const shownSize = (fontSize: unknown) => {
+  const text = String(fontSize);
+  const fluid = /^clamp\(.*,\s*(?<max>[^,\(\)]+)\)$/v.exec(text);
+  return fluid?.groups?.["max"]?.trim() ?? text;
+};
+
+const capitalized = (word: string) => `${word.slice(0, 1).toUpperCase()}${word.slice(1)}`;
+
+const styleOf = (token: TransformedToken): ArtifactTypeStyle => ({
+  name: token.name,
+  fontSize: shownSize(memberOf(token.$value, "fontSize")),
+  lineHeight: String(memberOf(token.$value, "lineHeight")),
+  fontWeight: Number(memberOf(token.$value, "fontWeight")),
+  letterSpacing: String(memberOf(token.$value, "letterSpacing")),
+  usage: token.$description ?? "",
+});
+
+const FONTS: ArtifactType["fonts"] = FONT_FAMILIES.flatMap((family) =>
+  FONT_SUBSETS.map((subset) => ({
+    family: family.family,
+    file: `fonts/${fontFileName(family, subset)}`,
+    weight: family.weight,
+    style: "normal" as const,
+  })),
+);
+
+/** `type`: the font files, the families (tier-1 font stacks) and the tier-2 type styles. */
+const typeOf = (tokens: readonly TransformedToken[]): ArtifactType => {
+  const families: Record<string, string> = {};
+  const groups = new Map<string, { family: string; styles: ArtifactTypeStyle[] }>();
+  for (const token of tokens) {
+    if (token.$type === "fontFamily" && tierOf(token) === "primitive") {
+      families[token.name.replace("ab-font-family-", "")] = String(token.$value);
+    }
+  }
+  for (const token of tokens) {
+    if (token.$type !== "typography" || tierOf(token) !== "semantic") continue;
+    const category = /^ab-type-(?<cat>[a-z]+)-/v.exec(token.name)?.groups?.["cat"] ?? "";
+    const stack = memberOf(token.$value, "fontFamily");
+    const family = Object.keys(families).find((key) => families[key] === stack) ?? "";
+    const group = groups.get(category) ?? { family, styles: [] };
+    group.styles.push(styleOf(token));
+    groups.set(category, group);
+  }
+  return {
+    fonts: FONTS,
+    families,
+    groups: [...groups.keys()].map((category) => ({
+      name: capitalized(category),
+      family: groups.get(category)?.family ?? "",
+      styles: groups.get(category)?.styles ?? [],
+    })),
+  };
 };
 
 /** The artifact-shaped tokens for a checked, transformed dictionary. */
 export const toArtifactTokens = (dictionary: Dictionary): ArtifactTokens => {
-  const byFamily = Map.groupBy(inTierOrder(dictionary.allTokens), (token) => familyOf(token));
-  const listed = (family: Family) => byFamily.get(family) ?? [];
-  // `Map.groupBy` keys the left-out tokens under `undefined`; `listed` never reads that group.
+  const tokens = inTierOrder(dictionary.allTokens);
+  const colors: TransformedToken[] = [];
+  const lists = new Map<List, TransformedToken[]>(LISTS.map((list) => [list, []]));
+  for (const token of tokens) {
+    const placement = placementOf(token);
+    if (placement === undefined) continue;
+    if ("list" in placement) lists.get(placement.list)?.push(token);
+    else if (placement.in === "color") colors.push(token);
+  }
+  const family = <Value>(list: List, value: (token: TransformedToken) => Value) => ({
+    ...(NOTES[list] === undefined ? {} : { note: NOTES[list] }),
+    tokens: (lists.get(list) ?? []).map((token) => entry(token, value(token))),
+  });
+  const plain = (list: List) => family(list, (token) => String(token.$value));
   return {
     name: "Bereghici Design System",
     version: 1,
     color: {
       themes: THEMES,
-      tokens: listed("color").map((token) => entry(token, themedColor(token, dictionary))),
+      tokens: colors.map((token) => entry(token, colorValue(token, dictionary))),
     },
-    spacing: { tokens: listed("spacing").map((token) => entry(token, String(token.$value))) },
-    radius: { tokens: listed("radius").map((token) => entry(token, String(token.$value))) },
+    type: typeOf(tokens),
+    spacing: plain("spacing"),
+    radius: plain("radius"),
+    shadow: family("shadow", (token) => shadowValue(token, dictionary)),
+    size: plain("size"),
+    strokeWidth: plain("strokeWidth"),
+    line: plain("line"),
+    opacity: plain("opacity"),
+    blur: plain("blur"),
+    saturate: plain("saturate"),
+    scale: plain("scale"),
+    zIndex: plain("zIndex"),
+    layout: plain("layout"),
   };
 };
