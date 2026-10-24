@@ -1,0 +1,66 @@
+@import "@platform/tokens/components/navbar.css";
+
+@layer ab.components {
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ab-navbar-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .link {
+    --ab-icon-size: var(--ab-size-icon-sm);
+    --ab-icon-stroke-width: var(--ab-stroke-width-lg);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-navbar-item-gap);
+    box-sizing: border-box;
+    min-block-size: var(--ab-navbar-item-min-height);
+    padding-inline: var(--ab-navbar-item-padding-inline);
+    border-radius: var(--ab-navbar-item-border-radius);
+    font: var(--ab-navbar-item-font);
+    color: var(--ab-navbar-item-text-color);
+    text-decoration-line: none;
+    -webkit-tap-highlight-color: transparent;
+    transition-property: color, background-color;
+    transition-duration: var(--ab-motion-duration-hover-out);
+    transition-timing-function: var(--ab-motion-easing-color);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .link:hover {
+      background-color: var(--ab-navbar-item-background-color-hovered);
+      color: var(--ab-navbar-item-text-color-hovered);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+
+  .link:active {
+    background-color: var(--ab-navbar-item-background-color-pressed);
+  }
+
+  .link[aria-current="page"] {
+    color: var(--ab-navbar-item-text-color-selected);
+  }
+
+  /* Inset to the text, as the Tabs indicator spans its tab's label, so the bar stays clear of the rounded hover fill. */
+  .link[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    inset-inline: var(--ab-navbar-item-padding-inline);
+    inset-block-end: 0;
+    block-size: var(--ab-navbar-indicator-height);
+    background-color: var(--ab-navbar-indicator-color);
+  }
+
+  @media (forced-colors: active) {
+    .link[aria-current="page"]::after {
+      background-color: Highlight;
+    }
+  }
+}

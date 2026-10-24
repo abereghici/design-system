@@ -1,0 +1,10 @@
+@import "@platform/tokens/components/toolbar.css";
+
+@layer ab.components {
+  .root {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ab-toolbar-gap);
+  }
+}
