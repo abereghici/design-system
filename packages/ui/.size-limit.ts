@@ -14,6 +14,7 @@ const budgets: Readonly<Record<string, string>> = {
   checkbox: "1.95 kB",
   "date-field": "25.6 kB",
   "date-picker": "30.4 kB",
+  direction: "160 B",
   "drop-zone": "2.4 kB",
   combobox: "8.25 kB",
   "context-menu": "6.3 kB",

@@ -168,6 +168,7 @@ describe("per-component JS", () => {
   );
 
   test("Server Components label and format on the server", () => {
+    expect(button.html).toContain('<html lang="en" dir="ltr"');
     expect(route("spinner").html).toContain('aria-label="Loading"');
     expect(route("progress").html).toContain("40\u00A0%");
     expect(route("meter").html).toContain("42%");

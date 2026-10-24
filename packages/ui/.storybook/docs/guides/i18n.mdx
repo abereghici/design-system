@@ -17,7 +17,7 @@ import { Provider } from "@platform/ui/provider";
 <Provider locale={roRO}>{children}</Provider>;
 ```
 
-Shipped: `en-US` and `ro-RO`. Without a locale, components use the English labels and format numbers in the language of `<html lang>`.
+Shipped: `en-US` and `ro-RO`. Without a locale, components use their own en-US labels and format numbers in en-US. Each component carries only its own default labels, so importing one never ships another's strings.
 
 ## Change some labels
 
@@ -37,8 +37,16 @@ To change a label for one instance, pass the component's `labels` prop where it 
 
 ## Server Components
 
-Context doesn't reach Server Components. Components that format numbers on the server (Badge, Meter, Progress) take their own `locale` prop; pass the same shipped locale you give the Provider.
+Context doesn't reach Server Components. The ones that label or format on the server (Badge, Breadcrumbs, Meter, Pagination, Progress, SkipLink, Spinner) take their own `locale` prop; pass the same shipped locale you give the Provider. Their `labels` prop still overrides single strings.
 
 ## Direction
 
-Right-to-left languages also need `dir` on `<html>`: see [Right-to-left](?path=/docs/guides-right-to-left--docs).
+Right-to-left languages also need `dir` on `<html>`. `getDirection` from `@platform/ui/direction` reads it from the tag and is safe on the server:
+
+```tsx
+import { getDirection } from "@platform/ui/direction";
+
+<html lang={locale.tag} dir={getDirection(locale.tag)}>
+```
+
+See [Right-to-left](?path=/docs/guides-right-to-left--docs).
