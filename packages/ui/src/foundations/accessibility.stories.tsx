@@ -10,10 +10,6 @@ const meta = preview.meta({
 
 export const Contrast = meta.story({ render: () => <ContrastMatrix /> });
 
-// The source design system's validator checks 207 pairs per Theme: 8 text and 16 non-text
-// roles on 8 backgrounds, plus 15 explicit pairs (notes/source-artifact.md). Ticket #15 added 6
-// for Alert (text-subtle and each status icon on the status subtle fills), and ticket #22 adds 5
-// for the form controls (the accent fill on each surface, the thumb on the accent fill): 218.
 Contrast.test("lists every pair of the AA matrix in both Themes", async ({ canvas }) => {
   for (const theme of ["Light", "Dark"]) {
     const table = within(canvas.getByRole("region", { name: `${theme} Theme` }));

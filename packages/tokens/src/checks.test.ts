@@ -238,7 +238,6 @@ test("subtle text is checked at 4.5:1 against a status subtle fill", async () =>
   );
 });
 
-// Checkbox, RadioGroup, Switch and Slider show their state with the accent fill (ticket #22).
 test("the checked accent fill is checked at 3:1 against each surface", async () => {
   const tokens = validTokens();
   tokens.semantic["color-background-accent-bold"] = themed("palette-moss-900", "palette-night-900");

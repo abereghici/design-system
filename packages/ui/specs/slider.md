@@ -33,7 +33,7 @@ Status: draft for brand-owner review (phase 2). No source guide: drafted from th
 
 Root → Track → Range → Thumb(s); Value (optional).
 
-- **Root.** A `<div>`, `slider-height` (24, 32 on coarse pointers) tall: the pointer target. Exposed as `data-orientation`.
+- **Root.** A `<div>`, `slider-height` (24, 32 on coarse pointers) tall: the pointer target.
 - **Track.** The full scale: a `slider-track-height` (6) bar, radius `slider-track-border-radius` (full), fill `slider-track-background-color` (`color-border-default`).
 - **Range.** The filled part, `slider-range-background-color` (accent): from the inline start to the thumb, or between the two thumbs.
 - **Thumb.** A `<div>` drawn as a 16 px circle (`slider-thumb-size`) with fill `slider-thumb-background-color`, a 2 px border (`slider-thumb-border-width`) in `slider-thumb-border-color` (accent) and `slider-thumb-shadow`. It contains a native `<input type="range">`, visually hidden over the thumb, which is the focusable control.
@@ -43,40 +43,39 @@ Root → Track → Range → Thumb(s); Value (optional).
 
 `Slider.Root`
 
-| Prop                    | Type                                                                      | Default             | Notes                                                                                                                                               |
-| ----------------------- | ------------------------------------------------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `value`                 | `number \| readonly number[]`                                             |                     | Controlled. An array gives one thumb per entry.                                                                                                     |
-| `defaultValue`          | `number \| readonly number[]`                                             | `min`               | Uncontrolled.                                                                                                                                       |
-| `onValueChange`         | `(value: number \| number[], details: Slider.ChangeEventDetails) => void` |                     | On every change while dragging or stepping. `details`: `reason` (`"track-press"`, `"drag"`, `"keyboard"`), `event`, `cancel()`, `activeThumbIndex`. |
-| `onValueCommitted`      | `(value: number \| number[], details: Slider.CommitEventDetails) => void` |                     | Once, when the pointer is released or after a key step. Not called if the value did not change.                                                     |
-| `min` / `max`           | `number`                                                                  | `0` / `100`         |                                                                                                                                                     |
-| `step`                  | `number`                                                                  | `1`                 |                                                                                                                                                     |
-| `largeStep`             | `number`                                                                  | `10 × step`         | Page Up / Page Down and Shift+Arrow.                                                                                                                |
-| `minStepsBetweenValues` | `number`                                                                  | `0`                 | Range sliders: the thumbs cannot get closer than this many steps.                                                                                   |
-| `orientation`           | `"horizontal" \| "vertical"`                                              | `"horizontal"`      | Vertical runs from the block end (bottom) up.                                                                                                       |
-| `format`                | `Intl.NumberFormatOptions`                                                |                     | Formats `aria-valuetext` and Value.                                                                                                                 |
-| `locale`                | `Intl.LocalesArgument`                                                    | from LocaleProvider | Then the nearest `lang`, then `"en"`.                                                                                                               |
-| `name`                  | `string`                                                                  |                     | Each thumb's input carries it, so a range submits two `name` entries in order.                                                                      |
-| `disabled`              | `boolean`                                                                 | `false`             | `aria-disabled="true"` on every input; focusable; no change.                                                                                        |
-| …native                 | `ComponentProps<"div">`                                                   |                     |                                                                                                                                                     |
+| Prop                    | Type                                                                      | Default             | Notes                                                                                                                           |
+| ----------------------- | ------------------------------------------------------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `value`                 | `number \| readonly number[]`                                             |                     | Controlled. An array gives one thumb per entry.                                                                                 |
+| `defaultValue`          | `number \| readonly number[]`                                             | `min`               | Uncontrolled.                                                                                                                   |
+| `onValueChange`         | `(value: number \| number[], details: Slider.ChangeEventDetails) => void` |                     | On every change while dragging or stepping. `details`: `reason` (`"track-press"`, `"drag"`, `"keyboard"`), `event`, `cancel()`. |
+| `onValueCommitted`      | `(value: number \| number[], details: Slider.CommitEventDetails) => void` |                     | Once, when the pointer is released or after a key step. Not called if the value did not change.                                 |
+| `min` / `max`           | `number`                                                                  | `0` / `100`         |                                                                                                                                 |
+| `step`                  | `number`                                                                  | `1`                 |                                                                                                                                 |
+| `largeStep`             | `number`                                                                  | `10 × step`         | Page Up / Page Down and Shift+Arrow.                                                                                            |
+| `minStepsBetweenValues` | `number`                                                                  | `0`                 | Range sliders: the thumbs cannot get closer than this many steps.                                                               |
+| `format`                | `Intl.NumberFormatOptions`                                                |                     | Formats `aria-valuetext` and Value.                                                                                             |
+| `locale`                | `Intl.LocalesArgument`                                                    | from LocaleProvider | Then the nearest `lang`, then `"en"`.                                                                                           |
+| `name`                  | `string`                                                                  |                     | Each thumb's input carries it, so a range submits two `name` entries in order.                                                  |
+| `disabled`              | `boolean`                                                                 | `false`             | `aria-disabled="true"` on every input; focusable; no change.                                                                    |
+| …native                 | `ComponentProps<"div">`                                                   |                     |                                                                                                                                 |
 
-`Slider.Track`, `Slider.Range`: `ComponentProps<"div">`. `Slider.Thumb`: `ComponentProps<"input">` (the hidden range input) minus `type`, `value`, `min`, `max`, `step`; `className`/`style` go on the visual thumb; `aria-label` / `aria-labelledby` name it. `Slider.Value`: `ComponentProps<"output">`, with `children?: (formatted: string[], values: number[]) => ReactNode`.
+`Slider.Track`, `Slider.Range`: `ComponentProps<"div">`. `Slider.Thumb`: `ComponentProps<"input">` (the hidden range input) minus `type`, `value`, `min`, `max`, `step`; `className`/`style` go on the visual thumb; `aria-label` / `aria-labelledby` name it. `Slider.Value`: `ComponentProps<"output">`; it shows the formatted values, joined by an en dash for a range.
 
 Names, checked against the reference libraries:
 
 - **`Slider` with `Root`, `Track`, `Range`, `Thumb`**: Radix `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` (https://www.radix-ui.com/primitives/docs/components/slider); Ark `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb`; Base UI `Slider.Root`, `Slider.Track`, `Slider.Indicator`, `Slider.Thumb` (https://base-ui.com/react/components/slider); React Aria `Slider`, `SliderTrack`, `SliderFill`, `SliderThumb`; Mantine and MUI `Slider`. Radix and Ark say `Range`; spec #1 follows Radix's Part names.
-- **`Slider.Value` as `<output>`**: Base UI "Value `<output>`"; React Aria `SliderOutput` (an `HTMLOutputElement`); Ark `Slider.ValueText`. Base UI's `children: ((formattedValues: string[], values: number[]) => ReactNode)` is kept.
+- **`Slider.Value` as `<output>`**: Base UI "Value `<output>`"; React Aria `SliderOutput` (an `HTMLOutputElement`); Ark `Slider.ValueText`. Base UI's render-function `children` is left out until a product needs custom value text.
 - **`value: number | number[]`**: Base UI "`value` / `defaultValue` `number | number[]`"; MUI `Array<number> | number`; React Aria number or number[]. Radix and Ark always take arrays. Three to two, and one thumb is the common case.
 - **`onValueChange` / `onValueCommitted`**: Base UI `onValueChange`, `onValueCommitted` ("Does not fire if the value did not change"); Radix `onValueCommit`, Ark `onValueChangeEnd`, React Aria `onChangeEnd`. Base UI's pair, as spec #1 follows its `eventDetails`.
 - **`largeStep`, `minStepsBetweenValues`, `format`, `locale`**: Base UI "`largeStep` … `10`, …when using Page Up/Page Down or Shift + Arrow Up/Arrow Down.", `minStepsBetweenValues`, `format` (`Intl.NumberFormatOptions`), `locale`. Radix and Ark say `minStepsBetweenThumbs`; Base UI's name is kept with its siblings.
 - **A native `<input type="range">` inside each thumb**: Base UI "Thumb: Renders a `<div>` element and a nested `<input type="range">`."; Radix "By default, `Slider.Thumb` renders a visually hidden `input` for form submission."; React Aria SliderThumb `inputRef` "A ref for the HTML input element."; MUI and Mantine render a hidden input for `name`.
-- **Not built: marks/ticks, a value tooltip, `inverted`.** MUI `marks`, `valueLabelDisplay`; Mantine `marks`, `label`; Radix `inverted`. Deferred. Native `list`/`<datalist>` ticks are not used (webstatus.dev `datalist`: limited).
+- **Not built: vertical `orientation`, marks/ticks, a value tooltip, `inverted`.** Radix, Base UI and Ark `orientation`; MUI `marks`, `valueLabelDisplay`; Mantine `marks`, `label`; Radix `inverted`. Deferred (YAGNI): no product or source guide needs them yet. Native `list`/`<datalist>` ticks are not used (webstatus.dev `datalist`: limited).
 
 ## States
 
 | State         | How it shows                                                    | Exposed as                                                       |
 | ------------- | --------------------------------------------------------------- | ---------------------------------------------------------------- |
-| rest          | Track, accent range, thumb                                      | `data-orientation`                                               |
+| rest          | Track, accent range, thumb                                      | —                                                                |
 | hovered       | Thumb shadow grows to the overlay elevation; fine pointers only | `:hover` on the thumb                                            |
 | dragging      | Thumb follows the pointer 1:1                                   | `data-dragging` on Root and thumb                                |
 | focus-visible | 2 px ring, 3 px offset around the thumb                         | `:focus-visible` on the input → `:has()` on the thumb            |
@@ -125,7 +124,7 @@ APG: "Focus is placed on the slider (the visual object that the mouse user would
 
 ## Accessibility
 
-- Role `slider` per thumb (native), value from the native `value`, `aria-valuetext` formatted, `aria-orientation="vertical"` for a vertical slider.
+- Role `slider` per thumb (native), value from the native `value`, `aria-valuetext` formatted.
 - **Name:** a single thumb is named by `Field.Label` (`for` the input). Each thumb of a range needs its own `aria-label` (Minimum / Maximum); the type requires it when `value` is an array (props union). APG: "If a slider has a visible label, it is referenced by aria-labelledby on the slider element. Otherwise, the slider element has a label provided by aria-label."
 - MDN, `slider` role: "When `aria-valuetext` is an important feature for a slider, consider using select with option elements instead." Documented on the docs page for named steps (Low / Medium / High).
 - **Contrast.** Track `color-border-default` (matrix, 3:1 on surfaces), range `background-accent-bold` (added to the matrix on every surface), thumb border `color-border-accent` (matrix) and thumb fill `surface-floating` against the range (added, 3:1).
@@ -136,7 +135,7 @@ APG: "Focus is placed on the slider (the visual object that the mouse user would
 
 ## RTL
 
-Horizontal sliders run from the inline start: in RTL the minimum is on the right and the range fills right to left; positions use `inset-inline-start` percentages. Vertical sliders are not affected by direction. Arrow keys: see Keyboard.
+Horizontal sliders run from the inline start: in RTL the minimum is on the right and the range fills right to left; positions use `inset-inline-start` percentages. Arrow keys: see Keyboard.
 
 ## Component tokens
 
@@ -173,6 +172,6 @@ None. Sliding is continuous and high-frequency; the brand marks toggles, toasts 
 - Brand book: Motion ("Springs. Only where the user directly causes the movement"), Accessibility.
 - MDN `<input type="range">`: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/range · `slider` role: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/slider_role · `::-webkit-slider-thumb`: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/::-webkit-slider-thumb · `<output>`: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/output
 - ARIA in HTML: https://www.w3.org/TR/html-aria/
-- Baseline (webstatus.dev, 2026-10-24): `input-range` widely available; `pointer-events-api` widely available; `vertical-form-controls` newly available (low 2024-04-18); `datalist` limited (not used); `has` widely available.
+- Baseline (webstatus.dev, 2026-10-24): `input-range` widely available; `pointer-events-api` widely available; `datalist` limited (not used); `has` widely available.
 - WAI-ARIA APG Slider and Slider (Multi-Thumb): https://www.w3.org/WAI/ARIA/apg/patterns/slider/, https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/
 - Radix Slider: https://www.radix-ui.com/primitives/docs/components/slider · Base UI Slider: https://base-ui.com/react/components/slider · React Aria Slider: https://react-aria.adobe.com/Slider · Ark Slider: https://ark-ui.com/react/docs/components/slider · Mantine Slider: https://mantine.dev/core/slider/ · MUI Slider: https://mui.com/material-ui/api/slider/

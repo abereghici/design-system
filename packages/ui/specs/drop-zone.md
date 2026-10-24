@@ -34,7 +34,6 @@ Root → content (text, FileTrigger) → hidden file input.
 | `multiple`                 | `boolean`                                                     | `false` | Without it, only the first accepted file is kept.                                                                                                     |
 | `name`, `required`, `form` | native                                                        |         | On the hidden input; the files submit with the form.                                                                                                  |
 | `disabled`                 | `boolean`                                                     | `false` | Drops are refused (the cursor shows no drop) and the inner FileTrigger is disabled.                                                                   |
-| `inputRef`                 | `Ref<HTMLInputElement>`                                       |         | The hidden input.                                                                                                                                     |
 | …native                    | `ComponentProps<"div">`                                       |         | `ref`, `className`, `aria-*`.                                                                                                                         |
 
 Names, checked against the reference libraries:

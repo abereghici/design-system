@@ -30,8 +30,6 @@ function Ratio({ foreground, background, minimum, theme }: PairProps) {
   return ratio < minimum ? `${ratio.toFixed(2)}:1 below ${minimum}:1` : `${ratio.toFixed(2)}:1`;
 }
 
-// The ratio label of an icon or border cell is drawn in the text role that is itself checked on
-// that fill: `text-default` on surfaces, `text-on-accent` on the accent fill (ticket #22 pairs).
 const labelOn = (background: string): string =>
   background === "background-accent-bold" ? "color-text-on-accent" : "color-text-default";
 
@@ -40,8 +38,6 @@ function Cell({ foreground, background, minimum, theme, text }: PairProps & { te
     <td
       data-background={background}
       className={styles["cell"]}
-      // Text roles are drawn in their own color, so axe checks the same pair; icons and borders
-      // draw a sample bar next to the ratio label.
       style={{
         "--cell-background": cssVar(`color-${background}`),
         "--cell-sample": cssVar(`color-${foreground}`),

@@ -41,10 +41,8 @@ FileTrigger draws nothing. The list of chosen files is the app's to render (from
 | `multiple`                 | `boolean`                                                          | `false` | Native.                                                                                                 |
 | `directory`                | `boolean`                                                          | `false` | Native `webkitdirectory`: pick a folder; all files inside are selected.                                 |
 | `onSelect`                 | `(files: File[], details: FileTrigger.SelectEventDetails) => void` |         | After the user picks files. `details`: `reason` (`"none"`), `event`, `cancel()` (clears the selection). |
-| `onCancel`                 | `(event: Event) => void`                                           |         | The native `cancel` event: the picker was closed without a new choice.                                  |
 | `name`, `required`, `form` | native                                                             |         | On the hidden input, so the files submit with the form and `valueMissing` applies.                      |
 | `disabled`                 | `boolean`                                                          | `false` | Passed to the trigger (`aria-disabled`); the picker does not open.                                      |
-| `inputRef`                 | `Ref<HTMLInputElement>`                                            |         | The hidden input, for reading `files` or resetting.                                                     |
 
 Names, checked against the reference libraries:
 
@@ -52,7 +50,6 @@ Names, checked against the reference libraries:
 - **`accept`, `multiple`, `directory`**: the native attribute names, as Mantine (`accept: string`, `multiple`) and Ark (`accept`, `directory`). React Aria says `acceptedFileTypes: readonly string[]`, `allowsMultiple`, `acceptDirectory`; we keep the platform's names, which consumers already know from HTML (judgement call).
 - **No `capture` / `defaultCamera`.** React Aria `defaultCamera`, Ark and Mantine `capture`. HTML media capture is limited (webstatus.dev `html-media-capture`: Chrome Android, Firefox Android and Safari iOS only), below the floor.
 - **`onSelect`**: React Aria "`onSelect: (files: FileList | null) => void` — Handler when a user selects a file." An array of `File` plus spec #1's `details`; Mantine's `onChange` is the same moment.
-- **`inputRef`**: Base UI's name for hidden inputs elsewhere ("A ref to access the hidden `<input>` element.").
 
 ## States
 
@@ -61,7 +58,7 @@ FileTrigger has no states of its own; the trigger shows its own (Button's). With
 ## Behaviour
 
 - **Opening the picker.** The trigger's click calls `input.click()` on the hidden input, inside the user's gesture. `showPicker()` is not used: webstatus.dev `show-picker-input` is limited (no Safari iOS). MDN: "`showPicker()` … NotAllowedError: Thrown if not explicitly triggered by a user action".
-- **Selection.** On the input's `change`, FileTrigger calls `onSelect([...input.files], details)`. `cancel()` sets `input.value = ""`. Choosing the same files again, or closing the picker, fires `cancel` instead. MDN: "fires on an input element when the user cancels the file picker dialog via the Esc key or the cancel button and when the user re-selects the same files that were previously selected of `type="file"`."
+- **Selection.** On the input's `change`, FileTrigger calls `onSelect([...input.files], details)`. `cancel()` sets `input.value = ""`. Choosing the same files again, or closing the picker, fires the native `cancel` event instead, which a consumer can listen to on the trigger's form or document if needed (no prop). MDN: "fires on an input element when the user cancels the file picker dialog via the Esc key or the cancel button and when the user re-selects the same files that were previously selected of `type="file"`."
 - **Form submission is native.** Because the input keeps `name` and the `FileList`, `FormData` includes the files, and a React action or `multipart/form-data` post receives them with no extra code.
 - **Validation:** `required` gives `valueMissing`; `accept` is a picker hint, not a constraint, so a type check belongs in `onSelect` or Field's `validate`. The hidden input cannot be focused, so Form's focus-first-invalid moves focus to the trigger instead, and the trigger carries `aria-invalid` and the error's `aria-describedby`.
 - **Disabled:** the trigger is `aria-disabled` and its click returns before `input.click()`.
