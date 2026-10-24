@@ -28,7 +28,7 @@ Root (fieldset) → Label (legend) → Items (label → radio → diamond → te
 - **Label.** A native `<legend>`, the group's name, in the field label type (`fieldset-legend-font`).
 - **Item.** A native `<label>` around a native `<input type="radio">` and the text; the whole row is the hit target. Gap `radio-gap` (8), text in `radio-label-font`.
 - **Radio.** The input with `appearance: none`, drawn as a 16 px circle (`radio-size`, `radio-border-radius` full), `radio-border-width` hairline in `radio-border-color`, fill `radio-background-color`.
-- **Diamond.** The checked indicator: a 6 px diamond, the _ochi_ (`radio-indicator-size`, `radio-indicator-color-checked`) centred in the accent-filled circle; decorative. The brand book places the bob motif here ("The radio's selected indicator").
+- **Diamond.** The radio's `::before` (as the source CSS): a 6 px square rotated 45°, the _ochi_ (`radio-indicator-size`, `radio-indicator-color-checked`), centred in the accent-filled circle; decorative. The brand book places the bob motif here ("The radio's selected indicator").
 
 ## API
 
@@ -80,14 +80,14 @@ Names, checked against the reference libraries:
 ## Behaviour
 
 - **Native group.** Every radio shares `name`. MDN: "A radio group is defined by giving each of radio buttons in the group the same name. Once a radio group is established, selecting any radio button in that group automatically deselects any currently-selected radio button in the same group." The browser provides the arrow keys and the single tab stop (Keyboard).
-- **Change and cancel** run in the radio's `click` handler, which also fires for arrow-key selection (inference: browsers fire `click` when arrows check a radio; the build ticket tests it in three engines and adds a `keydown` path if one does not). `details.cancel()` → `preventDefault()`, which restores the previously checked radio (HTML's legacy-canceled-activation behaviour for radios; inference).
+- **Change and cancel** run in the radio's `click` handler, which also fires for arrow-key selection (observed in Chromium, Firefox and WebKit, #27). Root keeps the chosen value (React state when uncontrolled) and renders each radio's `checked` from it; a click on the already chosen radio changes nothing. `details.cancel()` → `preventDefault()`, which restores the previously checked radio (HTML's legacy-canceled-activation behaviour for radios; observed in all three engines).
 - **Disabled group or item** (`aria-disabled`): the `click` handler prevents the change, as Checkbox. Arrow keys still move focus onto a disabled radio (APG keeps disabled items discoverable; "Options in a Listbox" sit under its convention 2), but cannot check it. Inside a disabled Fieldset, the radios are natively disabled.
 - **Required:** native. MDN: "If no radio button is selected when the form is submitted, the radio group is not included in the submitted form data at all". The error belongs to a `Field.Root` around the group (Field contract); `aria-invalid` goes on each radio.
 - Client component (`'use client'`) for Root and Item (context, handlers). Label is a plain element.
 
 ## Motion
 
-- **The diamond settles with a light spring** (source: "settles with a light spring"): `scale` from 0 to 1 (rotated 45°) over `radio-duration` (`motion-duration-toggle`, 180 ms) with `radio-easing` (`motion-easing-spring-bouncy`). Brand book: springs only for direct manipulation and toggles, "the radio diamond" by name.
+- **The diamond settles with a light spring** (source: "settles with a light spring"): `scale` from 0 to 1 over `motion-duration-spring` (400 ms) with `radio-easing` (`motion-easing-spring-bouncy`), and back to 0 over `motion-duration-exit` with `motion-easing-exit` (source CSS). Press scales the circle to `motion-scale-pressed`. Brand book: springs only for direct manipulation and toggles, "the radio diamond" by name.
 - Fill: colour fade over the same duration, `motion-easing-color`. The previously checked radio fades out over `motion-duration-exit` (150 ms) with no spring.
 - **Reduced motion:** the diamond appears at full size with the fill fade; no scale.
 - **Instant exit:** the old diamond disappears in the frame the new one is checked; nothing waits for it.
@@ -106,7 +106,7 @@ APG pattern: **Radio Group**, not in a toolbar (https://www.w3.org/WAI/ARIA/apg/
 
 APG notes a native difference: "In some browsers, if none of the radio buttons are selected, moving focus into the radio group with Shift + Tab will place focus on the last radio button instead of the first radio button." Accepted as native behaviour.
 
-**RTL:** spec #1 story 54 asks for Left/Right to follow the visual direction. Whether each engine swaps them for native radios in RTL is not documented (MDN's radio page has no keyboard text). The build ticket tests it in three engines; where an engine does not swap, a `keydown` handler on the Root swaps Left and Right when the Root matches `:dir(rtl)` (spec #1: "Direction is read from the DOM when a key is pressed").
+**RTL:** spec #1 story 54 asks for Left/Right to follow the visual direction. Whether each engine swaps them for native radios in RTL is not documented (MDN's radio page has no keyboard text). Observed with real key presses (#27): Chromium and Firefox swap them for native radios in RTL, WebKit does not. So a `keydown` handler on the Root takes Left and Right whenever the Root matches `:dir(rtl)` (spec #1: "Direction is read from the DOM when a key is pressed"): it prevents the native move and focuses and clicks the next (Left) or previous (Right) radio, wrapping, so every engine behaves the same.
 
 ## Accessibility
 

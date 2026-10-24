@@ -23,7 +23,7 @@ async function blocksActivation({ canvas, userEvent, args }: Context) {
   for (const { stop } of feedback) stop();
   await expect(args.onClick).not.toHaveBeenCalled();
   await expect(args.onPressedChange).not.toHaveBeenCalled();
-  await expect(feedback.flatMap(({ events }) => events)).toEqual([]);
+  await expect(feedback.flatMap(({ events }): Event[] => events)).toEqual([]);
 }
 
 // @ts-expect-error An IconButton without aria-label or aria-labelledby has no accessible name.
