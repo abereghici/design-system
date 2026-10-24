@@ -33,6 +33,7 @@ function route(name: string): Route {
 const button = route("index");
 const logo = route("logo");
 const locale = route("locale");
+const iconButton = route("icon-button");
 
 const uiClientModules = (r: Route) =>
   [...new Set(r.clientModules.match(/(?<=packages\/ui\/src\/)[\w.\/\-]+(?=")/gv))].toSorted();
@@ -68,18 +69,25 @@ describe("the Provider owns the global CSS", () => {
 });
 
 describe("per-component CSS", () => {
-  test("a route that imports Button ships Button's CSS and only Button's component tokens", () => {
+  test("a route that imports Button ships only Button's and its Spinner's component tokens", () => {
     expect(button.css).toContain("var(--ab-button-primary-background-color)");
     expect(shippedComponentTokens(button.css)).toContain("--ab-button-primary-background-color:");
-    expect(shippedComponentTokens(button.css).filter((t) => !t.startsWith("--ab-button-"))).toEqual(
-      [],
-    );
+    expect(
+      shippedComponentTokens(button.css).filter((t) => !/^--ab-(button|spinner)-/v.test(t)),
+    ).toEqual([]);
   });
 
   test("a route that imports Logo ships Logo's tokens and none of Button's", () => {
     expect(shippedComponentTokens(logo.css)).toContain("--ab-logo-color:");
     expect(shippedComponentTokens(logo.css).filter((t) => !t.startsWith("--ab-logo-"))).toEqual([]);
     expect(logo.css).not.toContain("--ab-button-");
+  });
+
+  test("a route that imports IconButton and an icon ships only their component tokens", () => {
+    const shipped = shippedComponentTokens(iconButton.css);
+    expect(shipped).toContain("--ab-icon-button-background-color-selected:");
+    expect(shipped).toContain("--ab-icon-md-size:");
+    expect(shipped.filter((t) => !/^--ab-(icon|spinner)-/v.test(t))).toEqual([]);
   });
 });
 
@@ -120,6 +128,10 @@ describe("per-component JS", () => {
     expect(button.js).toContain("ab-press");
     expect(uiClientModules(logo)).toEqual(["provider/locale.tsx"]);
     expect(logo.js).not.toContain("ab-press");
+    expect(uiClientModules(iconButton)).toEqual([
+      "icon-button/icon-button.tsx",
+      "provider/locale.tsx",
+    ]);
   });
 
   test.each([
@@ -129,6 +141,8 @@ describe("per-component JS", () => {
     ["skeleton", "var(--ab-skeleton-background-color)", 4],
     ["progress", "var(--ab-progress-indicator-background-color)", 11],
     ["meter", "var(--ab-meter-indicator-background-color)", 13],
+    ["link", "var(--ab-link-underline-color)", 5],
+    ["skip-link", "var(--ab-skip-link-background-color)", 7],
   ])(
     "the %s route renders on the server and ships its CSS and tokens only",
     (name, rule, count) => {
@@ -145,10 +159,24 @@ describe("per-component JS", () => {
     expect(route("spinner").html).toContain('aria-label="Loading"');
     expect(route("progress").html).toContain("40\u00A0%");
     expect(route("meter").html).toContain("42%");
+    expect(route("skip-link").html).toContain(">Skip to main content</a>");
+    expect(route("link").html).toMatch(/<a class="[^"]+" href="\/">Home<\/a>/v);
   });
 
   test("a locale reaches client components, and ships only on the route that imports it", () => {
     expect(locale.html).toContain("<output>ro-RO</output>");
     expect(button.js).not.toContain('"ro-RO"');
+  });
+});
+
+describe("a client leaf inside a Server Component", () => {
+  test("Kbd renders its platform keys as Ctrl on the server and resolves them on the client", () => {
+    const kbd = route("kbd");
+    expect(uiClientModules(kbd)).toEqual(["kbd/kbd-key.tsx", "provider/locale.tsx"]);
+    expect(kbd.html).toContain("Ctrl");
+    expect(kbd.html).toContain("Enter");
+    const tokens = shippedComponentTokens(kbd.css);
+    expect(tokens).toHaveLength(10);
+    expect(tokens.filter((t) => !t.startsWith("--ab-kbd-"))).toEqual([]);
   });
 });

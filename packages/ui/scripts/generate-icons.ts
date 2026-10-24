@@ -9,10 +9,8 @@ import formatConfig from "../../../oxfmt.config.ts";
 
 const root = new URL("../", import.meta.url);
 const iconSources = new URL("assets/icons/", root);
-const logoSources = new URL("assets/logo/", root);
-const logoFiles = ["stalpul-cerului-moss.svg", "stalpul-cerului-lichen.svg"];
 
-// A source that strokes differently from Icon or Logo would be redrawn wrong, so generation stops.
+// A source that strokes differently from Icon would be redrawn wrong, so generation stops.
 const iconRoot = {
   fill: "none",
   stroke: "currentColor",
@@ -20,8 +18,7 @@ const iconRoot = {
   "stroke-width": "1.75",
   viewBox: "0 0 24 24",
 };
-const logoRoot = { viewBox: "0 0 32 32" };
-const logoPathStyle = { fill: "none", "stroke-linecap": "square", "stroke-width": "3" };
+const mirrored = new Set(["arrow-right", "arrow-up-right", "chevron-right", "log-out"]);
 // Icon children may only fill a dot (`fill="currentColor" stroke="none"`) on top of the stroke.
 const iconPathAttributes = new Set(["d", "fill", "stroke"]);
 
@@ -90,28 +87,8 @@ async function iconModule(name: string) {
 import type { IconProps } from "../icon.tsx";
 
 export function ${component}(props: IconProps) {
-  return <Icon {...props}>${children.join("")}</Icon>;
+  return <Icon {...props}${mirrored.has(name) ? " data-mirror" : ""}>${children.join("")}</Icon>;
 }
-`;
-}
-
-async function logoModule() {
-  const shapes = await Promise.all(
-    logoFiles.map(async (name) => {
-      const file = `assets/logo/${name}`;
-      const svg = optimise(await readFile(new URL(name, logoSources), "utf8"), file);
-      expectAttributes(svg.attributes, logoRoot, file);
-      const [path, ...others] = paths(svg, file);
-      if (path === undefined || others.length > 0) throw new Error(`${file}: expected one <path>`);
-      // Each colourway strokes in its brand colour; the Logo strokes in `currentColor` instead.
-      const { d, stroke: _colour, ...style } = path;
-      expectAttributes(style, logoPathStyle, file);
-      if (d === undefined) throw new Error(`${file}: <path> has no d`);
-      return d;
-    }),
-  );
-  if (new Set(shapes).size !== 1) throw new Error("The Logo colourways draw different shapes");
-  return `export const logoPath = "${shapes[0]}";
 `;
 }
 
@@ -120,7 +97,6 @@ export async function generateGlyphs() {
   for (const name of await iconSourceNames()) {
     modules.set(`src/icon/icons/${name}.tsx`, await iconModule(name));
   }
-  modules.set("src/logo/logo-path.ts", await logoModule());
   for (const [path, text] of modules) {
     const result = await format(path, text, formatConfig);
     if (result.errors.length > 0) throw new Error(`${path}: ${JSON.stringify(result.errors)}`);

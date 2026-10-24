@@ -28,13 +28,13 @@ Group (outer `<kbd>`) → Key (one inner `<kbd>` per key) → glyph or text, plu
 
 ## API
 
-| Prop       | Type                    | Default  | Notes                                                                                                                                                                                                                                                                                                                                                 |
-| ---------- | ----------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `keys`     | `string`                |          | `+`-separated, case-insensitive key names: `"mod+k"`, `"shift+enter"`. Named keys: `mod`, `ctrl`, `shift`, `alt`, `enter`, `backspace`, `esc`, `tab`, `space`, `up`, `down`, `left`, `right`, `plus`. Anything else renders as written, a single letter upper-cased. Typed as a union of the named keys plus `string & {}`, so editors complete them. |
-| `children` | `ReactNode`             |          | Used when `keys` is absent: one Key with this content, as in every reference library.                                                                                                                                                                                                                                                                 |
-| `platform` | `"apple" \| "other"`    | detected | Resolves the platform keys (`mod`, `ctrl`, `shift`, `alt`). Pass it when the server knows the platform; omit it to detect on the client (see Behaviour).                                                                                                                                                                                              |
-| `labels`   | `Partial<KbdLabels>`    | English  | Spoken names of glyph keys (see Built-in labels).                                                                                                                                                                                                                                                                                                     |
-| …native    | `ComponentProps<"kbd">` |          | `ref`, `className`, `aria-hidden` and every native attribute go on the Group.                                                                                                                                                                                                                                                                         |
+| Prop       | Type                    | Default  | Notes                                                                                                                                                                                                                                                                                                                                                                                    |
+| ---------- | ----------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `keys`     | `string`                |          | `+`-separated, case-insensitive key names: `"mod+k"`, `"shift+enter"`. Named keys: `mod`, `ctrl`, `shift`, `alt`, `enter`, `backspace`, `esc`, `tab`, `space`, `up`, `down`, `left`, `right`, `plus`. Anything else renders as written, a single letter upper-cased. Typed as a union of the named keys plus `string & Record<never, never>` (lint bans `{}`), so editors complete them. |
+| `children` | `ReactNode`             |          | Used when `keys` is absent: one Key with this content, as in every reference library.                                                                                                                                                                                                                                                                                                    |
+| `platform` | `"apple" \| "other"`    | detected | Resolves the platform keys (`mod`, `ctrl`, `shift`, `alt`). Pass it when the server knows the platform; omit it to detect on the client (see Behaviour).                                                                                                                                                                                                                                 |
+| `labels`   | `Partial<KbdLabels>`    | English  | Spoken names of glyph keys (see Built-in labels).                                                                                                                                                                                                                                                                                                                                        |
+| …native    | `ComponentProps<"kbd">` |          | `ref`, `className`, `aria-hidden` and every native attribute go on the Group.                                                                                                                                                                                                                                                                                                            |
 
 Glyphs (source: "`mod` resolves per platform (⌘ / Ctrl). Glyphs: ⇧ ⌥ ↵ ⌫ ↑ ↓."):
 
@@ -61,13 +61,13 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State             | How it shows                              | Exposed as                                      |
-| ----------------- | ----------------------------------------- | ----------------------------------------------- |
-| rest              | Keycaps as in Anatomy                     |                                                 |
-| platform resolved | Glyphs for the platform                   | `data-platform="apple" \| "other"` on the Group |
-| hidden            | Visible, not announced (inside a control) | `aria-hidden="true"`                            |
+| State             | How it shows                              | Exposed as           |
+| ----------------- | ----------------------------------------- | -------------------- |
+| rest              | Keycaps as in Anatomy                     |                      |
+| platform resolved | Glyphs for the platform                   | the keycap text      |
+| hidden            | Visible, not announced (inside a control) | `aria-hidden="true"` |
 
-No interactive states.
+No interactive states. No `data-platform` is rendered: the Group is server-rendered and the platform is resolved per key (built in #17).
 
 ## Behaviour
 
@@ -75,9 +75,9 @@ No interactive states.
 - **Platform detection** (only when `keys` contains `mod`, `ctrl`, `shift` or `alt` and `platform` is not passed): those keys render through one small client leaf (`'use client'` on the leaf file only, spec #1 user story 5). It reads the platform with `useSyncExternalStore`:
   - `getServerSnapshot` returns `"other"`. React: "It will be used only during server rendering and during hydration of server-rendered content on the client. The server snapshot must be the same between the client and the server" (https://react.dev/reference/react/useSyncExternalStore). Server HTML and the hydration render agree, so there is no hydration mismatch.
   - `getSnapshot` reads the platform once; React then re-renders with it, so on Apple "Ctrl" becomes "⌘" right after hydration. The Key's `min-width` keeps the swap from moving the layout much (inference).
-  - Detection is a pure helper tested without a story (spec #1 Testing Decisions: "Kbd platform detection"). It follows MDN: "One case where `navigator.platform` can be useful is when you need to show users advice about whether the modifier key for keyboard shortcuts is the `⌘` command key (found on Apple systems) rather than the `Ctrl` control key" with `navigator.platform.startsWith("Mac") || navigator.platform === "iPhone"` (https://developer.mozilla.org/en-US/docs/Web/API/Navigator/platform; the page shows it as "Baseline Widely available"). We add `"iPad"` (inference; iPadOS may also report a Mac platform, which the `startsWith("Mac")` test covers).
+  - Detection is tested through stories that set `navigator.platform` before rendering (built in #17; no separate helper was needed). It follows MDN: "One case where `navigator.platform` can be useful is when you need to show users advice about whether the modifier key for keyboard shortcuts is the `⌘` command key (found on Apple systems) rather than the `Ctrl` control key" with `navigator.platform.startsWith("Mac") || navigator.platform === "iPhone"` (https://developer.mozilla.org/en-US/docs/Web/API/Navigator/platform; the page shows it as "Baseline Widely available"). We add `"iPad"` (inference; iPadOS may also report a Mac platform, which the `startsWith("Mac")` test covers).
   - Not `navigator.userAgentData`: "This feature is not Baseline because it does not work in some of the most widely-used browsers." (https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgentData), below the ADR-0002 floor.
-- **Passing `platform`** skips the client leaf: no flash and no client JavaScript. An app can derive it on the server from a request header. `Sec-CH-UA-Platform` "is a low entropy hint. Unless blocked by a user agent permission policy, it is sent by default" with values such as `"macOS"`, `"iOS"`, `"Windows"`, but it is "not Baseline because it does not work in some of the most widely-used browsers" (https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-CH-UA-Platform), so an app falls back to the `User-Agent` header or to omitting the prop (inference). Kbd itself reads no headers.
+- **Passing `platform`** resolves the modifiers on the server: no flash. Keys that end up as text (Ctrl, Shift, letters) need no client JavaScript; a glyph key (⌘, ↵, arrows) still renders through the client leaf, because its spoken name comes from the Provider's locale (built in #17). An app can derive it on the server from a request header. `Sec-CH-UA-Platform` "is a low entropy hint. Unless blocked by a user agent permission policy, it is sent by default" with values such as `"macOS"`, `"iOS"`, `"Windows"`, but it is "not Baseline because it does not work in some of the most widely-used browsers" (https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Sec-CH-UA-Platform), so an app falls back to the `User-Agent` header or to omitting the prop (inference). Kbd itself reads no headers.
 - A Kbd shows a hint, never the only label of an action (source).
 
 ## Motion
@@ -115,7 +115,7 @@ No new tokens. The border widths use semantic `border-width-default` (sides, top
 
 ## Built-in labels
 
-Spoken names for glyph keys, rendered as visually hidden text. English defaults, overridable per instance through `labels` or app-wide through `LocaleProvider` (spec #1).
+Spoken names for glyph keys, rendered as visually hidden text. English defaults, overridable per instance through `labels` or app-wide through the Provider's `locale` (spec #1).
 
 | Key     | Label                                                | Default                                                  |
 | ------- | ---------------------------------------------------- | -------------------------------------------------------- |

@@ -199,7 +199,7 @@ export function LogoSpecimen() {
     >
       <div className={styles["specimens"]}>
         {LOGO_SIZES.map((size) => (
-          <Logo key={size} width={size} height={size} label={`Bereghici Logo, ${size}px`} />
+          <Logo key={size} style={{ fontSize: size }} label={`Bereghici Logo, ${size}px`} />
         ))}
       </div>
       <div className={styles["specimens"]}>
@@ -208,18 +208,14 @@ export function LogoSpecimen() {
           style={{ backgroundColor: cssVar("color-brand-lichen") }}
         >
           <Logo
-            width={48}
-            height={48}
             label="Bereghici Logo, brand moss"
-            style={{ color: cssVar("color-brand-moss") }}
+            style={{ fontSize: 48, color: cssVar("color-brand-moss") }}
           />
         </span>
         <span className={styles["ground"]} style={{ backgroundColor: cssVar("color-brand-moss") }}>
           <Logo
-            width={48}
-            height={48}
             label="Bereghici Logo, brand lichen"
-            style={{ color: cssVar("color-brand-lichen") }}
+            style={{ fontSize: 48, color: cssVar("color-brand-lichen") }}
           />
         </span>
       </div>

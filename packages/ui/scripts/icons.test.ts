@@ -7,10 +7,9 @@ import { generateGlyphs, iconSourceNames } from "./generate-icons.ts";
 const root = new URL("../", import.meta.url);
 
 async function committedGeneratedFiles() {
-  const paths = [
-    ...(await readdir(new URL("src/icon/icons/", root))).map((name) => `src/icon/icons/${name}`),
-    "src/logo/logo-path.ts",
-  ];
+  const paths = (await readdir(new URL("src/icon/icons/", root))).map(
+    (name) => `src/icon/icons/${name}`,
+  );
   return new Map(
     await Promise.all(
       paths.map(async (path) => [path, await readFile(new URL(path, root), "utf8")] as const),
