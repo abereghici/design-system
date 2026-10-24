@@ -33,17 +33,17 @@ Label → field box (segments and separators) → description or error. A visual
 
 `DateField`
 
-| Prop                                                                                      | Type                                                                                | Default | Notes                                                                                                                                                         |
-| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`, `description`, `errorMessage`, `invalid`, `validate`, `size`, `required`, `name` | as Select                                                                           |         | `size`: `"md"` \| `"lg"`, exposed as `data-size`. `validate` receives the ISO string (`""` when there is no complete date).                                    |
-| `value`                                                                                   | `Temporal.PlainDate \| null`                                                        |         | Controlled. `null` is no date.                                                                                                                                |
-| `defaultValue`                                                                            | `Temporal.PlainDate \| null`                                                        | `null`  | Uncontrolled.                                                                                                                                                 |
+| Prop                                                                                      | Type                                                                                 | Default | Notes                                                                                                                                                                                                        |
+| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `label`, `description`, `errorMessage`, `invalid`, `validate`, `size`, `required`, `name` | as Select                                                                            |         | `size`: `"md"` \| `"lg"`, exposed as `data-size`. `validate` receives the ISO string (`""` when there is no complete date).                                                                                  |
+| `value`                                                                                   | `Temporal.PlainDate \| null`                                                         |         | Controlled. `null` is no date.                                                                                                                                                                               |
+| `defaultValue`                                                                            | `Temporal.PlainDate \| null`                                                         | `null`  | Uncontrolled.                                                                                                                                                                                                |
 | `onValueChange`                                                                           | `(value: Temporal.PlainDate \| null, details: DateField.ChangeEventDetails) => void` |         | Called when the complete date changes, or becomes incomplete (`null`). `reason`: `"input-change"` (typing, Backspace, Delete), `"keyboard"` (arrow keys, Home, End). `cancel()` keeps the previous segments. |
-| `min`, `max`                                                                              | `Temporal.PlainDate`                                                                |         | Written to the hidden input as ISO strings, so `rangeUnderflow` / `rangeOverflow` and the browser's message apply.                                            |
-| `disabled`                                                                                | `boolean`                                                                           | `false` | `aria-disabled="true"` on the group and every segment: focusable, nothing changes, the value still submits.                                                   |
-| `labels`                                                                                  | `Partial<Locale["labels"]["dateField"]>`                                            |         | Per-instance override of the root UI provider's Locale (Built-in labels).                                                                                     |
-| `className`, `style`                                                                      |                                                                                     |         | On the Field root.                                                                                                                                            |
-| …native                                                                                   | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                         |         | `ref`, `id`, `aria-*` go on the group; `form` goes on the hidden input.                                                                                        |
+| `min`, `max`                                                                              | `Temporal.PlainDate`                                                                 |         | Written to the hidden input as ISO strings, so `rangeUnderflow` / `rangeOverflow` and the browser's message apply.                                                                                           |
+| `disabled`                                                                                | `boolean`                                                                            | `false` | `aria-disabled="true"` on the group and every segment: focusable, nothing changes, the value still submits.                                                                                                  |
+| `labels`                                                                                  | `Partial<Locale["labels"]["dateField"]>`                                             |         | Per-instance override of the root UI provider's Locale (Built-in labels).                                                                                                                                    |
+| `className`, `style`                                                                      |                                                                                      |         | On the Field root.                                                                                                                                                                                           |
+| …native                                                                                   | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                          |         | `ref`, `id`, `aria-*` go on the group; `form` goes on the hidden input.                                                                                                                                      |
 
 `details` is `{ reason, event, cancel() }` (shared contract).
 
@@ -60,15 +60,15 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State             | How it shows                                                                                      | Exposed as                                                    |
-| ----------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| empty             | Every segment shows its placeholder; separators in the placeholder colour                         | `aria-valuetext` = `labels.empty` on each segment             |
-| hovered           | Border `input-border-color-hovered`; fine pointers only                                           | `:hover` under `@media (hover: hover)`                        |
-| focused           | Border `input-border-color-focused` and the 2 px focus ring on the field box; the focused segment fills | `:focus-within` on the group, `:focus-visible` on the segment |
-| partially filled  | The filled segments show digits; the empty ones their placeholder                                 | `aria-valuenow` on filled segments only                       |
-| complete          | Every segment shows digits                                                                        | hidden input `value`                                          |
-| invalid           | Border `input-border-color-invalid`; error replaces the description                               | `aria-invalid="true"` on the group, `data-invalid` (Field contract) |
-| disabled          | TextField's disabled colours; no hover                                                            | `aria-disabled="true"`, or `:disabled` on the hidden input inside a disabled Fieldset |
+| State            | How it shows                                                                                            | Exposed as                                                                            |
+| ---------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| empty            | Every segment shows its placeholder; separators in the placeholder colour                               | `aria-valuetext` = `labels.empty` on each segment                                     |
+| hovered          | Border `input-border-color-hovered`; fine pointers only                                                 | `:hover` under `@media (hover: hover)`                                                |
+| focused          | Border `input-border-color-focused` and the 2 px focus ring on the field box; the focused segment fills | `:focus-within` on the group, `:focus-visible` on the segment                         |
+| partially filled | The filled segments show digits; the empty ones their placeholder                                       | `aria-valuenow` on filled segments only                                               |
+| complete         | Every segment shows digits                                                                              | hidden input `value`                                                                  |
+| invalid          | Border `input-border-color-invalid`; error replaces the description                                     | `aria-invalid="true"` on the group, `data-invalid` (Field contract)                   |
+| disabled         | TextField's disabled colours; no hover                                                                  | `aria-disabled="true"`, or `:disabled` on the hidden input inside a disabled Fieldset |
 
 ## Behaviour
 
@@ -100,18 +100,18 @@ None. Typing is keyboard-initiated and high-frequency (brand book: "No motion on
 
 APG pattern: **Spinbutton** (https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/), one per segment, with a direct-edit text field. APG: "Typically, the text field also allows users to directly edit the value." and "Focus remains on the text field during operation."
 
-| Key                  | APG                                                                                                      | Here                                                                                                                                       |
-| -------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| Up Arrow             | "Increases the value."                                                                                   | +1, wrapping from the maximum to the minimum (12 → 1). An empty segment starts at today's part (`Temporal.Now.plainDateISO()`).           |
-| Down Arrow           | "Decreases the value."                                                                                   | −1, wrapping from the minimum to the maximum. Empty: today's part.                                                                         |
-| Home                 | "If the spinbutton has a minimum value, sets the value to its minimum."                                  | Month 1, day 1, year 1.                                                                                                                    |
-| End                  | "If the spinbutton has a maximum value, sets the value to its maximum."                                  | Month 12, day `daysInMonth` (31 when unknown), year 9999.                                                                                  |
-| Digits               | "Printable Characters: Type characters in the textbox." "many implementations allow only certain characters as part of the value" | Typing rules (Behaviour); other characters are ignored, except the separator, which moves on.                                              |
-| Backspace            | Standard editing key                                                                                     | Removes the last typed digit; on an empty segment, moves focus to the previous segment.                                                    |
-| Delete               | Standard editing key                                                                                     | Clears the segment.                                                                                                                        |
-| Left / Right Arrow   | (not in APG)                                                                                             | Previous / next segment in visual order; swapped in RTL.                                                                                   |
-| Tab / Shift + Tab    | (page Tab sequence)                                                                                      | Next / previous segment, then out of the field.                                                                                            |
-| Enter                | (not in APG)                                                                                             | Implicit submission of the form (inference: the build ticket checks `requestSubmit` runs, since a segment is not an input).               |
+| Key                | APG                                                                                                                               | Here                                                                                                                            |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Up Arrow           | "Increases the value."                                                                                                            | +1, wrapping from the maximum to the minimum (12 → 1). An empty segment starts at today's part (`Temporal.Now.plainDateISO()`). |
+| Down Arrow         | "Decreases the value."                                                                                                            | −1, wrapping from the minimum to the maximum. Empty: today's part.                                                              |
+| Home               | "If the spinbutton has a minimum value, sets the value to its minimum."                                                           | Month 1, day 1, year 1.                                                                                                         |
+| End                | "If the spinbutton has a maximum value, sets the value to its maximum."                                                           | Month 12, day `daysInMonth` (31 when unknown), year 9999.                                                                       |
+| Digits             | "Printable Characters: Type characters in the textbox." "many implementations allow only certain characters as part of the value" | Typing rules (Behaviour); other characters are ignored, except the separator, which moves on.                                   |
+| Backspace          | Standard editing key                                                                                                              | Removes the last typed digit; on an empty segment, moves focus to the previous segment.                                         |
+| Delete             | Standard editing key                                                                                                              | Clears the segment.                                                                                                             |
+| Left / Right Arrow | (not in APG)                                                                                                                      | Previous / next segment in visual order; swapped in RTL.                                                                        |
+| Tab / Shift + Tab  | (page Tab sequence)                                                                                                               | Next / previous segment, then out of the field.                                                                                 |
+| Enter              | (not in APG)                                                                                                                      | Implicit submission of the form (inference: the build ticket checks `requestSubmit` runs, since a segment is not an input).     |
 
 Page Up / Page Down ("(Optional): Increases the value by a larger step than Up Arrow.") are left out (YAGNI). Up, Down, Home, End, Backspace, Delete and digits call `preventDefault()`; Tab and every modified key (Ctrl, Meta, Alt) are the browser's. APG: "IMPORTANT: Be sure that JavaScript does not interfere with browser-provided text editing functions by capturing key events for the keys used to perform them."
 
@@ -140,23 +140,23 @@ Existing: the field box's `input-*` set (TextField spec), including `input-place
 
 Proposed new:
 
-| Token                                        | References                  | `$type`   | Why                                   |
-| -------------------------------------------- | --------------------------- | --------- | ------------------------------------- |
-| `date-field-segment-background-color-focused` | `color-background-selected` | color     | The focused segment's fill            |
-| `date-field-segment-text-color-focused`       | `color-text-selected`       | color     | Text on that fill                     |
+| Token                                         | References                  | `$type`   | Why                                     |
+| --------------------------------------------- | --------------------------- | --------- | --------------------------------------- |
+| `date-field-segment-background-color-focused` | `color-background-selected` | color     | The focused segment's fill              |
+| `date-field-segment-text-color-focused`       | `color-text-selected`       | color     | Text on that fill                       |
 | `date-field-segment-border-radius`            | `radius-xs`                 | dimension | 5: concentric inside the 8 px field box |
 
 New Dictionary words: component `date-field`, modifier `segment` (React Aria's and Ark's Part word). The focus ring uses `focus-ring-width` and `color-border-focused` directly.
 
 ## Built-in labels
 
-| Key                          | en-US                  | ro-RO                     | Used by                                              |
-| ---------------------------- | ---------------------- | ------------------------- | ---------------------------------------------------- |
-| `dateField.dayPlaceholder`   | "dd"                   | "zz"                      | Empty day segment                                    |
-| `dateField.monthPlaceholder` | "mm"                   | "ll"                      | Empty month segment                                  |
-| `dateField.yearPlaceholder`  | "yyyy"                 | "aaaa"                    | Empty year segment                                   |
-| `dateField.empty`            | "Empty"                | "Necompletat"             | `aria-valuetext` of an empty segment                 |
-| `dateField.incomplete`       | "Enter a complete date" | "Introduceți o dată completă" | Validation message of a partial date             |
+| Key                          | en-US                        | ro-RO                              | Used by                                                                           |
+| ---------------------------- | ---------------------------- | ---------------------------------- | --------------------------------------------------------------------------------- |
+| `dateField.dayPlaceholder`   | "dd"                         | "zz"                               | Empty day segment                                                                 |
+| `dateField.monthPlaceholder` | "mm"                         | "ll"                               | Empty month segment                                                               |
+| `dateField.yearPlaceholder`  | "yyyy"                       | "aaaa"                             | Empty year segment                                                                |
+| `dateField.empty`            | "Empty"                      | "Necompletat"                      | `aria-valuetext` of an empty segment                                              |
+| `dateField.incomplete`       | "Enter a complete date"      | "Introduceți o dată completă"      | Validation message of a partial date                                              |
 | `dateField.unavailable`      | "This date is not available" | "Această dată nu este disponibilă" | Validation message of a typed unavailable date (DatePicker's `isDateUnavailable`) |
 
 From the `labels` prop, then the root UI provider's Locale, then English. DateField adds `dateField: { … }` to the locale type and every shipped locale (en-US, ro-RO). The placeholders spell the format (APG's example describes the format to everyone; its textbox gets "the date format description" via `aria-describedby`); here the segments' names and order carry it to assistive technology.

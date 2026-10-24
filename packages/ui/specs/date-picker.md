@@ -41,18 +41,18 @@ Root (DateField with a trigger in its field box) + Content (Floating layer holdi
 
 `DatePicker.Root`
 
-| Prop                                                                                                        | Type                                                                                         | Default | Notes                                                                                                        |
-| ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------ |
-| `label`, `description`, `errorMessage`, `invalid`, `validate`, `size`, `required`, `name`, `min`, `max`, `disabled` | as DateField                                                                         |         | `min` / `max` also bound the Calendar.                                                                      |
-| `value`                                                                                                     | `Temporal.PlainDate \| null`                                                                 |         | Controlled.                                                                                                  |
-| `defaultValue`                                                                                              | `Temporal.PlainDate \| null`                                                                 | `null`  | Uncontrolled.                                                                                                |
-| `onValueChange`                                                                                             | `(value: Temporal.PlainDate \| null, details: DatePicker.Root.ChangeEventDetails) => void`    |         | `reason`: DateField's (`"input-change"`, `"keyboard"`) plus `"day-press"` from the Calendar.                 |
-| `isDateUnavailable`                                                                                         | `(date: Temporal.PlainDate) => boolean`                                                      |         | Unavailable in the Calendar; a typed unavailable date is invalid with `labels.unavailable` (DateField label). |
-| `open`                                                                                                      | `boolean`                                                                                    |         | Controlled.                                                                                                  |
-| `defaultOpen`                                                                                               | `boolean`                                                                                    | `false` | Uncontrolled.                                                                                                |
-| `onOpenChange`                                                                                              | `(open: boolean, details: DatePicker.Root.OpenChangeEventDetails) => void`                   |         | `reason`: Popover's (`"trigger-press"`, `"outside-press"`, `"escape-key"`, `"focus-out"`, `"none"`) plus `"day-press"`. |
-| `labels`                                                                                                    | `Partial<Locale["labels"]["datePicker"] & Locale["labels"]["dateField"]>`                     |         | Per-instance override (Built-in labels).                                                                     |
-| …native                                                                                                     | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                                  |         | On the Field root: `className`, `style`, `onPointerEnter`, `onFocus` (the warm-up recipe).                   |
+| Prop                                                                                                                | Type                                                                                       | Default | Notes                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `label`, `description`, `errorMessage`, `invalid`, `validate`, `size`, `required`, `name`, `min`, `max`, `disabled` | as DateField                                                                               |         | `min` / `max` also bound the Calendar.                                                                                  |
+| `value`                                                                                                             | `Temporal.PlainDate \| null`                                                               |         | Controlled.                                                                                                             |
+| `defaultValue`                                                                                                      | `Temporal.PlainDate \| null`                                                               | `null`  | Uncontrolled.                                                                                                           |
+| `onValueChange`                                                                                                     | `(value: Temporal.PlainDate \| null, details: DatePicker.Root.ChangeEventDetails) => void` |         | `reason`: DateField's (`"input-change"`, `"keyboard"`) plus `"day-press"` from the Calendar.                            |
+| `isDateUnavailable`                                                                                                 | `(date: Temporal.PlainDate) => boolean`                                                    |         | Unavailable in the Calendar; a typed unavailable date is invalid with `labels.unavailable` (DateField label).           |
+| `open`                                                                                                              | `boolean`                                                                                  |         | Controlled.                                                                                                             |
+| `defaultOpen`                                                                                                       | `boolean`                                                                                  | `false` | Uncontrolled.                                                                                                           |
+| `onOpenChange`                                                                                                      | `(open: boolean, details: DatePicker.Root.OpenChangeEventDetails) => void`                 |         | `reason`: Popover's (`"trigger-press"`, `"outside-press"`, `"escape-key"`, `"focus-out"`, `"none"`) plus `"day-press"`. |
+| `labels`                                                                                                            | `Partial<Locale["labels"]["datePicker"] & Locale["labels"]["dateField"]>`                  |         | Per-instance override (Built-in labels).                                                                                |
+| …native                                                                                                             | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                                |         | On the Field root: `className`, `style`, `onPointerEnter`, `onFocus` (the warm-up recipe).                              |
 
 `DatePicker.Content`: `ComponentProps<"div">` (`ref`, `className`, `children`). `id`, `role`, `popover`, `aria-label` are owned.
 
@@ -69,10 +69,10 @@ Names, checked against the reference libraries:
 
 The field box's states are DateField's. Added:
 
-| State    | How it shows                                  | Exposed as                                        |
-| -------- | --------------------------------------------- | ------------------------------------------------- |
-| open     | Panel below the field box (above after a flip) | `aria-expanded="true"` on the trigger; `:popover-open` |
-| opened by a pointer | The Popover entry scale runs        | `data-pointer` (Popover)                          |
+| State               | How it shows                                   | Exposed as                                             |
+| ------------------- | ---------------------------------------------- | ------------------------------------------------------ |
+| open                | Panel below the field box (above after a flip) | `aria-expanded="true"` on the trigger; `:popover-open` |
+| opened by a pointer | The Popover entry scale runs                   | `data-pointer` (Popover)                               |
 
 ## Behaviour
 
@@ -86,6 +86,7 @@ The field box's states are DateField's. Added:
   ```tsx
   "use client";
   import { lazy, Suspense } from "react";
+
   import { DatePicker } from "@platform/ui/date-picker";
   import { Spinner } from "@platform/ui/spinner";
 
@@ -94,7 +95,12 @@ The field box's states are DateField's. Added:
 
   export function DueDate() {
     return (
-      <DatePicker.Root label="Due date" name="due" onPointerEnter={loadCalendar} onFocus={loadCalendar}>
+      <DatePicker.Root
+        label="Due date"
+        name="due"
+        onPointerEnter={loadCalendar}
+        onFocus={loadCalendar}
+      >
         <DatePicker.Content>
           <Suspense fallback={<Spinner />}>
             <Calendar />
@@ -106,6 +112,7 @@ The field box's states are DateField's. Added:
   ```
 
   React `lazy`: "It needs to eventually resolve to an object whose `.default` property is a valid React component type" (Command spec quote). Temporal and its polyfill are not split: the DateField needs them to produce a value (ADR-0004), so only the grid's code is deferred (inference against the performance note's "any Temporal-dependent code": the field is Temporal-dependent too). The build ticket proves the split in `apps/ui-next-fixture`: a route whose initial JavaScript has the DatePicker and not the Calendar, which loads after the first open.
+
 - **Disabled:** the trigger is `aria-disabled` (IconButton) and the panel does not open; the field is DateField's.
 - Client components (`'use client'`): Root and Content.
 
@@ -120,13 +127,13 @@ Popover's motion (Popover spec): a pointer open fades and scales from `popover-e
 
 APG pattern: **Date Picker Dialog** example (https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/), non-modal: the panel is a Popover (Floating layer), so Tab can leave it (and closes it, `"focus-out"`) instead of APG's wrap from "OK" to "Previous Year".
 
-| Where            | Key          | APG                                                                                                                              | Here                                                                 |
-| ---------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Segments         | all          | (Spinbutton)                                                                                                                     | DateField's map.                                                     |
-| Trigger          | Space, Enter | "Open the date picker dialog. Move focus to selected date, i.e., the date displayed in the date input text field. If no date has been selected, places focus on the current date." | As APG (native button activation runs the click handler).            |
-| Panel            | Escape       | "Closes the dialog and returns focus to the "Choose Date" button."                                                               | As APG (Popover light dismiss); the value is unchanged.             |
-| Panel            | Tab          | "Moves focus to next element in the dialog Tab sequence."                                                                        | Previous, Next, the day; from the day, out of the panel, which closes. |
-| Panel, day grid  | all          | "Date Picker Dialog: Date Grid" table                                                                                            | Calendar's map; Space / Enter choose, close and return focus.        |
+| Where           | Key          | APG                                                                                                                                                                                | Here                                                                   |
+| --------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Segments        | all          | (Spinbutton)                                                                                                                                                                       | DateField's map.                                                       |
+| Trigger         | Space, Enter | "Open the date picker dialog. Move focus to selected date, i.e., the date displayed in the date input text field. If no date has been selected, places focus on the current date." | As APG (native button activation runs the click handler).              |
+| Panel           | Escape       | "Closes the dialog and returns focus to the "Choose Date" button."                                                                                                                 | As APG (Popover light dismiss); the value is unchanged.                |
+| Panel           | Tab          | "Moves focus to next element in the dialog Tab sequence."                                                                                                                          | Previous, Next, the day; from the day, out of the panel, which closes. |
+| Panel, day grid | all          | "Date Picker Dialog: Date Grid" table                                                                                                                                              | Calendar's map; Space / Enter choose, close and return focus.          |
 
 Escape inside the panel is the Popover's close request; a DatePicker inside a Dialog closes only its panel (HTML closes the topmost auto popover first; inference from the close-request steps, Popover spec).
 
@@ -150,9 +157,9 @@ None new. The field box uses `input-*` and `date-field-*`, the trigger `icon-but
 
 ## Built-in labels
 
-| Key                     | en-US         | ro-RO          | Used by                         |
-| ----------------------- | ------------- | -------------- | ------------------------------- |
-| `datePicker.chooseDate` | "Choose date" | "Alegeți data" | Trigger name and panel name     |
+| Key                     | en-US         | ro-RO          | Used by                     |
+| ----------------------- | ------------- | -------------- | --------------------------- |
+| `datePicker.chooseDate` | "Choose date" | "Alegeți data" | Trigger name and panel name |
 
 Plus DateField's labels for the field (including `dateField.unavailable`) and Calendar's for the grid. DatePicker adds `datePicker: { chooseDate }` to the locale type and every shipped locale. APG uses "Choose Date" for both the button and the dialog.
 

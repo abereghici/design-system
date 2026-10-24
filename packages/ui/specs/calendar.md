@@ -11,7 +11,7 @@ import { Calendar } from "@platform/ui/calendar";
   isDateUnavailable={(date) => date.dayOfWeek > 5}
   value={delivery}
   onValueChange={setDelivery}
-/>
+/>;
 ```
 
 Status: draft for brand-owner review (phase 6). No source guide: drafted from the brand book (Motion, Interaction principles, Shape and depth), the WAI-ARIA APG Date Picker Dialog example and Grid pattern, React Aria Calendar, Ark DatePicker and shadcn Calendar. Temporal: ADR-0004 (accepted 2026-10-24).
@@ -33,15 +33,15 @@ Root → header (Previous, month heading, Next) → grid (weekday row, six week 
 
 `Calendar`
 
-| Prop                | Type                                                                                | Default | Notes                                                                                                          |
-| ------------------- | ----------------------------------------------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------- |
-| `value`             | `Temporal.PlainDate \| null`                                                        |         | Controlled.                                                                                                    |
-| `defaultValue`      | `Temporal.PlainDate \| null`                                                        | `null`  | Uncontrolled.                                                                                                  |
-| `onValueChange`     | `(value: Temporal.PlainDate, details: Calendar.ChangeEventDetails) => void`         |         | `reason`: `"day-press"` (click, Enter or Space on a day). `cancel()` keeps the previous value.                 |
-| `min`, `max`        | `Temporal.PlainDate`                                                                |         | Days outside are unavailable; Previous / Next stop at their months.                                            |
-| `isDateUnavailable` | `(date: Temporal.PlainDate) => boolean`                                             |         | Unavailable days stay focusable and readable, but cannot be chosen.                                            |
-| `labels`            | `Partial<Locale["labels"]["calendar"]>`                                             |         | Per-instance override (Built-in labels).                                                                       |
-| …native             | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                         |         | `ref`, `className`, `aria-label`, `aria-labelledby` on Root. `role` is owned.                                   |
+| Prop                | Type                                                                        | Default | Notes                                                                                          |
+| ------------------- | --------------------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------- |
+| `value`             | `Temporal.PlainDate \| null`                                                |         | Controlled.                                                                                    |
+| `defaultValue`      | `Temporal.PlainDate \| null`                                                | `null`  | Uncontrolled.                                                                                  |
+| `onValueChange`     | `(value: Temporal.PlainDate, details: Calendar.ChangeEventDetails) => void` |         | `reason`: `"day-press"` (click, Enter or Space on a day). `cancel()` keeps the previous value. |
+| `min`, `max`        | `Temporal.PlainDate`                                                        |         | Days outside are unavailable; Previous / Next stop at their months.                            |
+| `isDateUnavailable` | `(date: Temporal.PlainDate) => boolean`                                     |         | Unavailable days stay focusable and readable, but cannot be chosen.                            |
+| `labels`            | `Partial<Locale["labels"]["calendar"]>`                                     |         | Per-instance override (Built-in labels).                                                       |
+| …native             | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                 |         | `ref`, `className`, `aria-label`, `aria-labelledby` on Root. `role` is owned.                  |
 
 Inside `DatePicker.Content`, the Calendar takes `value`, `min`, `max` and `isDateUnavailable` from the DatePicker (DatePicker spec); set them on `DatePicker.Root`.
 
@@ -58,15 +58,15 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State          | How it shows                                                                                       | Exposed as                                     |
-| -------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| rest           | Day number in `calendar-cell-text-color`                                                           |                                                |
-| hovered        | Fill `calendar-cell-background-color-hovered`, no transition; available days, fine pointers only   | `:hover` under `@media (hover: hover)`         |
-| focused        | The 2 px focus ring with no offset, on the cell                                                    | `:focus-visible`                               |
-| selected       | Fill `calendar-cell-background-color-selected`, text `calendar-cell-text-color-selected`           | `aria-selected="true"`                         |
-| today          | 1 px border `calendar-today-border-color`                                                          | `aria-current="date"`                          |
-| unavailable    | Text `calendar-cell-text-color-disabled`; no hover                                                 | `aria-disabled="true"`                         |
-| month boundary | Previous or Next unavailable                                                                       | `aria-disabled="true"` on the IconButton       |
+| State          | How it shows                                                                                     | Exposed as                               |
+| -------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------- |
+| rest           | Day number in `calendar-cell-text-color`                                                         |                                          |
+| hovered        | Fill `calendar-cell-background-color-hovered`, no transition; available days, fine pointers only | `:hover` under `@media (hover: hover)`   |
+| focused        | The 2 px focus ring with no offset, on the cell                                                  | `:focus-visible`                         |
+| selected       | Fill `calendar-cell-background-color-selected`, text `calendar-cell-text-color-selected`         | `aria-selected="true"`                   |
+| today          | 1 px border `calendar-today-border-color`                                                        | `aria-current="date"`                    |
+| unavailable    | Text `calendar-cell-text-color-disabled`; no hover                                               | `aria-disabled="true"`                   |
+| month boundary | Previous or Next unavailable                                                                     | `aria-disabled="true"` on the IconButton |
 
 ## Behaviour
 
@@ -90,20 +90,20 @@ None. Month changes swap the grid in one frame: they come from keys and repeated
 
 APG patterns: **Date Picker Dialog** example, "Date Grid" table (https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/), on the **Grid** pattern (https://www.w3.org/WAI/ARIA/apg/patterns/grid/: "Only one of the focusable elements contained by the grid is included in the page tab sequence.").
 
-| Key                | APG                                                                                                                                                                                  | Here                                         |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------- |
-| Right Arrow        | "Moves focus to the next day."                                                                                                                                                       | As APG; swapped in RTL.                      |
-| Left Arrow         | "Moves focus to the previous day."                                                                                                                                                   | As APG; swapped in RTL.                      |
-| Down Arrow         | "Moves focus to the same day of the next week."                                                                                                                                      | As APG.                                      |
-| Up Arrow           | "Moves focus to the same day of the previous week."                                                                                                                                  | As APG.                                      |
-| Home               | "Moves focus to the first day (e.g Sunday) of the current week."                                                                                                                     | The Locale's first day of the week.          |
-| End                | "Moves focus to the last day (e.g. Saturday) of the current week."                                                                                                                   | The Locale's last day of the week.           |
-| Page Up            | "Changes the grid of dates to the previous month. Moves focus to the day of the month that has the same number. If that day does not exist, moves focus to the last day of the month." | As APG.                                      |
-| Page Down          | "Changes the grid of dates to the next month." (same focus rule)                                                                                                                     | As APG.                                      |
-| Shift + Page Up    | "Changes the grid of dates to the same month in the previous year." (same focus rule)                                                                                                | As APG.                                      |
-| Shift + Page Down  | "Changes the grid of dates to the same month in the next year." (same focus rule)                                                                                                    | As APG.                                      |
-| Space, Enter       | "Select the date, close the dialog, and move focus to the "Choose Date" button."                                                                                                     | Chooses the day; inside DatePicker also closes and returns focus (DatePicker spec). |
-| Tab / Shift + Tab  | "Moves focus to next element in the dialog Tab sequence. Note that, as specified in the Grid Pattern, only one button in the calendar grid is in the Tab sequence."                  | Previous, Next, the focused day.             |
+| Key               | APG                                                                                                                                                                                    | Here                                                                                |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Right Arrow       | "Moves focus to the next day."                                                                                                                                                         | As APG; swapped in RTL.                                                             |
+| Left Arrow        | "Moves focus to the previous day."                                                                                                                                                     | As APG; swapped in RTL.                                                             |
+| Down Arrow        | "Moves focus to the same day of the next week."                                                                                                                                        | As APG.                                                                             |
+| Up Arrow          | "Moves focus to the same day of the previous week."                                                                                                                                    | As APG.                                                                             |
+| Home              | "Moves focus to the first day (e.g Sunday) of the current week."                                                                                                                       | The Locale's first day of the week.                                                 |
+| End               | "Moves focus to the last day (e.g. Saturday) of the current week."                                                                                                                     | The Locale's last day of the week.                                                  |
+| Page Up           | "Changes the grid of dates to the previous month. Moves focus to the day of the month that has the same number. If that day does not exist, moves focus to the last day of the month." | As APG.                                                                             |
+| Page Down         | "Changes the grid of dates to the next month." (same focus rule)                                                                                                                       | As APG.                                                                             |
+| Shift + Page Up   | "Changes the grid of dates to the same month in the previous year." (same focus rule)                                                                                                  | As APG.                                                                             |
+| Shift + Page Down | "Changes the grid of dates to the same month in the next year." (same focus rule)                                                                                                      | As APG.                                                                             |
+| Space, Enter      | "Select the date, close the dialog, and move focus to the "Choose Date" button."                                                                                                       | Chooses the day; inside DatePicker also closes and returns focus (DatePicker spec). |
+| Tab / Shift + Tab | "Moves focus to next element in the dialog Tab sequence. Note that, as specified in the Grid Pattern, only one button in the calendar grid is in the Tab sequence."                    | Previous, Next, the focused day.                                                    |
 
 Ark's DatePicker maps Home / End to "the first day of the current month" / "the last day of the current month"; APG's week rule is kept. Every key above calls `preventDefault()` (Page keys would scroll the page).
 
@@ -133,27 +133,27 @@ Existing: `icon-button-*` (Previous / Next).
 
 Proposed new:
 
-| Token                                    | References                                 | `$type`    | Why                                         |
-| ---------------------------------------- | ------------------------------------------ | ---------- | ------------------------------------------- |
-| `calendar-cell-size`                     | `size-control-md`                          | dimension  | Day cell square (32; larger on coarse pointers) |
-| `calendar-cell-border-radius`            | `radius-sm`                                | dimension  | 8, as menu items                            |
-| `calendar-cell-font`                     | `type-data-md`                             | typography | Tabular figures for day numbers             |
-| `calendar-cell-text-color`               | `color-text-default`                       | color      | Day number                                  |
-| `calendar-cell-background-color-hovered` | `color-background-neutral-subtle-hovered`  | color      | Hover fill                                  |
-| `calendar-cell-background-color-selected`| `color-background-accent-bold`             | color      | The chosen day                              |
-| `calendar-cell-text-color-selected`      | `color-text-on-accent`                     | color      | Its number                                  |
-| `calendar-cell-text-color-disabled`      | `color-text-disabled`                      | color      | Unavailable days                            |
-| `calendar-today-border-color`            | `color-border-accent`                      | color      | Today's marker                              |
-| `calendar-header-font`                   | `type-label-md`                            | typography | Month heading                               |
+| Token                                     | References                                | `$type`    | Why                                             |
+| ----------------------------------------- | ----------------------------------------- | ---------- | ----------------------------------------------- |
+| `calendar-cell-size`                      | `size-control-md`                         | dimension  | Day cell square (32; larger on coarse pointers) |
+| `calendar-cell-border-radius`             | `radius-sm`                               | dimension  | 8, as menu items                                |
+| `calendar-cell-font`                      | `type-data-md`                            | typography | Tabular figures for day numbers                 |
+| `calendar-cell-text-color`                | `color-text-default`                      | color      | Day number                                      |
+| `calendar-cell-background-color-hovered`  | `color-background-neutral-subtle-hovered` | color      | Hover fill                                      |
+| `calendar-cell-background-color-selected` | `color-background-accent-bold`            | color      | The chosen day                                  |
+| `calendar-cell-text-color-selected`       | `color-text-on-accent`                    | color      | Its number                                      |
+| `calendar-cell-text-color-disabled`       | `color-text-disabled`                     | color      | Unavailable days                                |
+| `calendar-today-border-color`             | `color-border-accent`                     | color      | Today's marker                                  |
+| `calendar-header-font`                    | `type-label-md`                           | typography | Month heading                                   |
 
 The weekday row (`type-label-sm`, `color-text-subtle`) and gaps use semantic tokens directly. The focus ring uses `focus-ring-width` and `color-border-focused` directly. New Dictionary words: component `calendar`, modifiers `cell` (the Grid pattern's and React Aria's `CalendarCell` word) and `today`.
 
 ## Built-in labels
 
-| Key                      | en-US            | ro-RO              | Used by            |
-| ------------------------ | ---------------- | ------------------ | ------------------ |
-| `calendar.previousMonth` | "Previous month" | "Luna anterioară"  | Previous IconButton |
-| `calendar.nextMonth`     | "Next month"     | "Luna următoare"   | Next IconButton    |
+| Key                      | en-US            | ro-RO             | Used by             |
+| ------------------------ | ---------------- | ----------------- | ------------------- |
+| `calendar.previousMonth` | "Previous month" | "Luna anterioară" | Previous IconButton |
+| `calendar.nextMonth`     | "Next month"     | "Luna următoare"  | Next IconButton     |
 
 From the `labels` prop, then the root UI provider's Locale, then English. Calendar adds `calendar: { previousMonth, nextMonth }` to the locale type and every shipped locale. Weekday, month and date texts are `Intl` output, not labels.
 
