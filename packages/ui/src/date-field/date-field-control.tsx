@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import { dateFormats } from "../date/date.ts";
@@ -110,7 +110,6 @@ function useControl(options: ControlOptions, onValidity: (validity: Validity) =>
   const { field, blocked, invalid } = useField(options.disabled);
   const names = useLabels("dateField", dateFieldLabels, options.labels);
   const formats = dateFormats(options.locale);
-  const group = useRef<HTMLFieldSetElement>(null);
   const date = useDate(options);
   const name = field?.name ?? options.name;
   const validity = useValidity(options, {
@@ -123,14 +122,13 @@ function useControl(options: ControlOptions, onValidity: (validity: Validity) =>
     validity.apply(date.segments, date.committed);
   });
   const editing = useSegmentEditing({
-    group,
     date,
     validity,
     blocked,
     formats,
     submit: validity.submit,
   });
-  return { field, names, formats, group, date, name, validity, blocked, invalid, editing };
+  return { field, names, formats, date, name, validity, blocked, invalid, editing };
 }
 
 const isFirstInvalid = (input: HTMLInputElement) =>
@@ -156,6 +154,7 @@ function HiddenInput({
       tabIndex={-1}
       aria-hidden="true"
       id={field?.controlId}
+      ref={field?.register}
       name={name}
       form={options.form}
       required={options.required}
@@ -187,15 +186,13 @@ export interface ControlProps extends Omit<
 
 export function Control({ options, onValidity, end, ...props }: ControlProps) {
   const control = useControl(options, onValidity);
-  const { field, formats, group, date, blocked } = control;
+  const { field, formats, date, blocked, editing } = control;
   return (
     <fieldset
       aria-labelledby={field?.labelId}
       aria-describedby={field?.describedBy}
       aria-disabled={blocked || undefined}
-      {...props}
-      ref={group}
-      className={`${fieldStyles["control"]} ${styles["group"]}`}
+      {...editing.groupProps(`${fieldStyles["control"]} ${styles["group"]}`, props)}
     >
       {formats.layout.map((item, index) =>
         "part" in item ? (

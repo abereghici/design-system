@@ -30,12 +30,17 @@ export function Content({
   return (
     <dialog
       aria-labelledby={props["aria-label"] === undefined ? `${popover.contentId}-title` : undefined}
-      {...mergeProps({ className: styles["content"] }, props)}
-      {...popover.contentProps({
-        onBeforeToggle: (event) => {
-          initialFocus?.current?.toggleAttribute("autofocus", event.newState === "open");
+      {...mergeProps(
+        {
+          className: styles["content"],
+          ...popover.contentProps({
+            onBeforeToggle: (event) => {
+              initialFocus?.current?.toggleAttribute("autofocus", event.newState === "open");
+            },
+          }),
         },
-      })}
+        props,
+      )}
       data-side={side}
       data-align={align}
     />

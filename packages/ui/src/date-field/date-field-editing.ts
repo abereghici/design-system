@@ -1,9 +1,10 @@
-import { useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from "react";
-import type { ChangeEvent, KeyboardEvent, RefObject } from "react";
+import { useEffectEvent, useLayoutEffect, useRef, useState } from "react";
+import type { ChangeEvent, FocusEvent, KeyboardEvent, PointerEvent, RefObject } from "react";
 
 import type { DatePart, dateFormats, Temporal } from "../date/date.ts";
 import { isComposing, requestChange, trackComposition } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { fromDate, stepKey, toDate, typeDigit } from "./segments.ts";
 import type { Segments } from "./segments.ts";
@@ -66,7 +67,6 @@ export function useDate({ value, defaultValue = null, onValueChange, onFormReset
 }
 
 interface Editing {
-  readonly group: RefObject<HTMLElement | null>;
   readonly date: ReturnType<typeof useDate>;
   readonly validity: {
     readonly apply: (segments: Segments, date: Temporal.PlainDate | null) => void;
@@ -100,32 +100,6 @@ function useFocus(formats: Formats, segments: Segments) {
     isSegment: (target: EventTarget | null) =>
       order.some((part) => elements.current.get(part) === target),
   };
-}
-
-function useGroupEvents(
-  group: Editing["group"],
-  focus: ReturnType<typeof useFocus>,
-  onLeave: () => void,
-) {
-  const onPointerDown = useEffectEvent((event: PointerEvent) => {
-    if (focus.isSegment(event.target)) return;
-    if (event.target instanceof Element && event.target.closest("button") !== null) return;
-    event.preventDefault();
-    focus.firstEmpty(-1);
-  });
-  const onFocusOut = useEffectEvent((event: FocusEvent) => {
-    const into = event.relatedTarget;
-    if (!(into instanceof Node && group.current?.contains(into) === true)) onLeave();
-  });
-  useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
-    group.current?.addEventListener("pointerdown", onPointerDown, { signal });
-    group.current?.addEventListener("focusout", onFocusOut, { signal });
-    return () => {
-      controller.abort();
-    };
-  }, [group]);
 }
 
 interface Context {
@@ -191,25 +165,61 @@ function pressKey(
   else if (!blocked && stepped !== null) context.change(stepped, null, "keyboard", nativeEvent);
 }
 
-/** Typing, keys and focus moves of the DateField segments. */
-export function useSegmentEditing({ group, date, validity, blocked, formats, submit }: Editing) {
-  const focus = useFocus(formats, date.segments);
+/** Whether the user or the app changed the date; a committed change reports validity at once. */
+function useEdited(committed: string | undefined, validity: Editing["validity"]) {
   const edited = useRef(false);
-  const committed = date.committed?.toString();
   const last = useRef(committed);
+  const report = useEffectEvent(() => {
+    validity.report();
+  });
   useLayoutEffect(() => {
     if (last.current === committed) return;
     last.current = committed;
     edited.current = true;
-    validity.report();
-  });
-  useGroupEvents(group, focus, () => {
-    if (edited.current) validity.report(true);
-  });
+    report();
+  }, [committed]);
+  return {
+    edited,
+    markEdited: () => {
+      edited.current = true;
+    },
+  };
+}
+
+/** The group's props: a press between segments focuses the first empty one; leaving reports validity. */
+function useGroupProps(
+  focus: ReturnType<typeof useFocus>,
+  edited: RefObject<boolean>,
+  validity: Editing["validity"],
+) {
+  return <Props extends object>(className: string, consumer: Props) =>
+    mergeProps(
+      {
+        className,
+        onPointerDown: (event: PointerEvent<HTMLElement>) => {
+          if (focus.isSegment(event.target)) return;
+          if (event.target instanceof Element && event.target.closest("button") !== null) return;
+          event.preventDefault();
+          focus.firstEmpty(-1);
+        },
+        onBlur: (event: FocusEvent<HTMLElement>) => {
+          const into = event.relatedTarget;
+          if (into instanceof Node && event.currentTarget.contains(into)) return;
+          if (edited.current) validity.report(true);
+        },
+      },
+      consumer,
+    );
+}
+
+/** Typing, keys and focus moves of the DateField segments. */
+export function useSegmentEditing({ date, validity, blocked, formats, submit }: Editing) {
+  const focus = useFocus(formats, date.segments);
+  const { edited, markEdited } = useEdited(date.committed?.toString(), validity);
   const change = (next: Segments, text: Buffer, reason: Reason, event: Event) => {
     const result = date.edit(next, text, reason, event);
     if (result === null) return false;
-    edited.current = true;
+    markEdited();
     validity.clearServerError?.();
     validity.apply(result.segments, result.date);
     validity.report();
@@ -218,6 +228,7 @@ export function useSegmentEditing({ group, date, validity, blocked, formats, sub
   const typed = (part: DatePart) => (date.buffer?.part === part ? date.buffer.text : "");
   const context = { date, focus, change, typed, formats };
   return {
+    groupProps: useGroupProps(focus, edited, validity),
     register: focus.register,
     onCompositionEnd: trackComposition(),
     focusFirstEmpty: () => {

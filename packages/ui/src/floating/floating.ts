@@ -1,8 +1,9 @@
-import { useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "react";
-import type { ComponentProps, MouseEvent, ToggleEvent } from "react";
+import { useId, useLayoutEffect, useState } from "react";
+import type { ComponentProps, FocusEvent, MouseEvent, ToggleEvent } from "react";
 
 import { composeEventHandlers, dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { getDocument, useEvent } from "../events/use-event.ts";
 
 export type ChangeReason =
   | "trigger-press"
@@ -140,22 +141,20 @@ function leaves(contentId: string, next: EventTarget | null) {
   );
 }
 
-function recordInput(element: HTMLElement, focusOut: (event: FocusEvent) => void) {
+/** Remembers the open layer's last Escape or outside press, so its close reports the reason. */
+function useInputRecord(contentId: string, open: boolean) {
   const record = (event: Event) => {
+    const element = document.getElementById(contentId);
+    if (element === null) return;
     if (event instanceof KeyboardEvent && event.key !== "Escape") return;
     const inside = event.target instanceof Node && element.contains(event.target);
     if (event instanceof PointerEvent && inside) return;
     layerOf(element).input = event;
   };
-  const controller = new AbortController();
-  const { signal } = controller;
-  for (const type of ["keydown", "pointerdown", "pointerup"] as const) {
-    document.addEventListener(type, record, { capture: true, signal });
-  }
-  element.addEventListener("focusout", focusOut, { signal });
-  return () => {
-    controller.abort();
-  };
+  const target = open ? getDocument : null;
+  useEvent("keydown", record, target, true);
+  useEvent("pointerdown", record, target, true);
+  useEvent("pointerup", record, target, true);
 }
 
 function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, component: Component) {
@@ -206,11 +205,15 @@ function contentPropsOf(
   component: Component,
   options: Options,
   setOpen: (open: boolean) => void,
+  focusOut: (event: globalThis.FocusEvent) => void,
   hooks: ContentHooks = {},
 ) {
   return {
     id,
     popover: "auto",
+    onBlur: (event: FocusEvent<HTMLElement>) => {
+      focusOut(event.nativeEvent);
+    },
     onBeforeToggle: (event: ToggleEvent<HTMLElement>) => {
       beforeToggle(options, event, component);
       hooks.onBeforeToggle?.(event);
@@ -246,7 +249,7 @@ function controlsOf(
     else element.hidePopover();
     return true;
   };
-  const focusOut = (event: FocusEvent) => {
+  const focusOut = (event: globalThis.FocusEvent) => {
     if (!leaves(contentId, event.relatedTarget)) return;
     setTimeout(() => {
       toggle(false, "focus-out", event);
@@ -272,11 +275,7 @@ export function useFloating(
   const contentId = useId();
 
   const controls = controlsOf(contentId, options, findSource);
-  const onFocusOut = useEffectEvent(controls.focusOut);
-  useEffect(() => {
-    const element = document.getElementById(contentId);
-    return current && element !== null ? recordInput(element, onFocusOut) : undefined;
-  }, [contentId, current]);
+  useInputRecord(contentId, current);
 
   useLayoutEffect(() => {
     reconcile(contentId, current, findSource);
@@ -288,7 +287,7 @@ export function useFloating(
     request: controls.request,
     toggle: controls.toggle,
     contentProps: (hooks?: ContentHooks) =>
-      contentPropsOf(contentId, component, options, setUncontrolled, hooks),
+      contentPropsOf(contentId, component, options, setUncontrolled, controls.focusOut, hooks),
     triggerProps: <Props extends TriggerHandlers>(props: Props) =>
       triggerPropsOf(props, { ...controls, open: current, anchored: anchor !== undefined }),
   };

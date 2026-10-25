@@ -24,10 +24,9 @@ interface Wiring {
   readonly reset: () => void;
 }
 
-const hiddenInput = (id: string | undefined) => {
-  const node = id === undefined ? null : document.getElementById(id);
-  return node instanceof HTMLInputElement ? node : null;
-};
+function write(node: { value: string }, value: string) {
+  node.value = value;
+}
 
 /** Writes the value and custom validity to the hidden date input and reports its validity. */
 export function useValidity(
@@ -35,19 +34,18 @@ export function useValidity(
   { incomplete, unavailable, onValidity, reset }: Wiring,
 ) {
   const { field } = useField();
-  const id = field?.controlId;
   const server = field?.serverError;
   const touched = useRef(false);
   const apply = (segments: Segments, date: Temporal.PlainDate | null) => {
-    const node = hiddenInput(id);
+    const node = field?.control ?? null;
     if (node === null) return;
-    node.value = date?.toString() ?? "";
+    write(node, date?.toString() ?? "");
     const partial = date === null && Object.values(segments).some((part) => part !== undefined);
     const rejected = date !== null && isDateUnavailable?.(date) === true;
     setValidity(node, partial ? incomplete : rejected ? unavailable : undefined, server, validate);
   };
   const report = (commit = false) => {
-    const node = hiddenInput(id);
+    const node = field?.control ?? null;
     if (commit) touched.current = true;
     if (node === null || !touched.current) return;
     onValidity({ invalid: !node.validity.valid, message: node.validationMessage });
@@ -59,10 +57,10 @@ export function useValidity(
       touched.current = false;
       onValidity({ invalid: false, message: "" });
     },
-    () => hiddenInput(id)?.form,
+    field?.control?.form ?? null,
   );
   const submit = () => {
-    hiddenInput(id)?.form?.requestSubmit();
+    field?.control?.form?.requestSubmit();
   };
   return { apply, report, submit, clearServerError: field?.clearServerError };
 }

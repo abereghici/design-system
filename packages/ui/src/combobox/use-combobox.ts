@@ -56,17 +56,19 @@ function sync(c: Combobox, emptyText: string) {
 }
 
 function useListeners(c: Combobox) {
-  const reread = useEffectEvent(() => {
+  // A form control reports a committed value with a native change, which the Field validates on.
+  const reread = useEffectEvent((value: string | null) => {
     const memory = memoryOf(c);
     const previous = memory.value;
-    memory.value = c.value;
-    if (previous !== undefined && previous !== c.value) {
+    memory.value = value;
+    if (previous !== undefined && previous !== value) {
       inputOf(c)?.dispatchEvent(new Event("change", { bubbles: true }));
     }
   });
+  const { value } = c;
   useEffect(() => {
-    reread();
-  });
+    reread(value);
+  }, [value]);
 
   useEvent(
     "pointerdown",

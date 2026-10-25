@@ -5,6 +5,7 @@ import type { ReactNode, SyntheticEvent } from "react";
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { getDocument, useEvent } from "../events/use-event.ts";
 import { isOpen, sourceOf } from "../floating/floating.ts";
 
 export type ChangeReason =
@@ -65,20 +66,17 @@ function hide(element: HTMLElement) {
   element.hidePopover();
 }
 
-function present(
-  element: HTMLElement,
-  mode: Mode | undefined,
-  closeOther: () => void,
-  escape: (event: KeyboardEvent) => void,
-) {
+function sync(contentId: string, open: boolean, mode: Mode | undefined, closeOther: () => void) {
+  requested.delete(contentId);
+  const element = document.getElementById(contentId);
+  if (element === null || open === isOpen(element)) return;
+  if (!open) {
+    hide(element);
+    return;
+  }
   warmth.closeOpen();
   show(element, mode);
   warmth.closeOpen = closeOther;
-  const controller = new AbortController();
-  document.addEventListener("keydown", escape, { capture: true, signal: controller.signal });
-  return () => {
-    controller.abort();
-  };
 }
 
 export interface RootProps {
@@ -123,18 +121,19 @@ export function Root({
     document.getElementById(contentId)?.toggleAttribute("data-instant", true);
     change(false, "none");
   });
-  const escape = useEffectEvent((event: KeyboardEvent) => {
-    if (event.key !== "Escape") return;
-    event.preventDefault();
-    change(false, "escape-key");
-  });
+  useEvent(
+    "keydown",
+    (event) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      change(false, "escape-key");
+    },
+    current ? getDocument : null,
+    true,
+  );
 
   useLayoutEffect(() => {
-    requested.delete(contentId);
-    const element = document.getElementById(contentId);
-    if (element !== null && !current && isOpen(element)) hide(element);
-    const opening = element !== null && current && !isOpen(element);
-    return opening ? present(element, mode, closeOther, escape) : undefined;
+    sync(contentId, current, mode, closeOther);
   }, [contentId, current, mode]);
 
   return <TooltipContext value={{ disabled, contentId, change }}>{children}</TooltipContext>;

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useId, useLayoutEffect, useState } from "react";
+import { createContext, use, useId, useState } from "react";
 import type { ReactNode } from "react";
 
 import { Controller } from "./dialog-controller.ts";
@@ -59,13 +59,4 @@ export function ModalRoot(props: RootProps & Pick<ModalContext, "styles" | "comp
     controller,
   };
   return <Context value={context}>{children}</Context>;
-}
-
-export function usePresence(set: (present: boolean) => void) {
-  useLayoutEffect(() => {
-    set(true);
-    return () => {
-      set(false);
-    };
-  }, [set]);
 }

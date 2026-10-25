@@ -50,6 +50,24 @@ Default.test("names and describes its control", async ({ canvas }) => {
 });
 
 Default.test(
+  "names a control that has its own id",
+  {
+    args: {
+      children: (
+        <>
+          <Field.Label>Handle</Field.Label>
+          <Field.Control id="handle" />
+        </>
+      ),
+    },
+  },
+  async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByText("Handle"));
+    await expect(canvas.getByRole("textbox", { name: "Handle" })).toHaveFocus();
+  },
+);
+
+Default.test(
   "replaces the description with the browser's message after a failed submit",
   { decorators: [inAForm] },
   async ({ canvas, userEvent }) => {

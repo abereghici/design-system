@@ -21,8 +21,10 @@ export function Content({ side = "bottom", align = "start", ...props }: ContentP
   const menu = useDropdownMenu();
   return (
     <div
-      {...mergeProps({ className: `${menuStyles["content"]} ${styles["content"]}` }, props)}
-      {...menuContentProps(menu)}
+      {...mergeProps(
+        { className: `${menuStyles["content"]} ${styles["content"]}`, ...menuContentProps(menu) },
+        props,
+      )}
       aria-labelledby={`${menu.floating.contentId}-trigger`}
       data-side={side}
       data-align={align}
