@@ -18,12 +18,21 @@ const price = (
   <>
     <Slider.Track>
       <Slider.Range />
-      <Slider.Thumb aria-label="Minimum price" />
-      <Slider.Thumb aria-label="Maximum price" />
+      <Slider.Thumb index={0} aria-label="Minimum price" />
+      <Slider.Thumb index={1} aria-label="Maximum price" />
     </Slider.Track>
     <Slider.Value />
   </>
 );
+
+function PriceThumbs() {
+  return (
+    <>
+      <Slider.Thumb index={0} aria-label="Minimum price" />
+      <Slider.Thumb index={1} aria-label="Maximum price" />
+    </>
+  );
+}
 
 const meta = preview.meta({
   title: "Components/Slider",
@@ -194,6 +203,24 @@ Default.test(
     await expect(args.onValueChange).toHaveBeenLastCalledWith([70, 80], expect.anything());
     await userEvent.tab();
     await userEvent.keyboard("{Home}");
+    await expect(canvas.getByRole("slider", { name: "Maximum price" })).toHaveValue("80");
+  },
+);
+
+Default.test(
+  "keeps each thumb's value when the thumbs are wrapped in a component",
+  {
+    args: {
+      defaultValue: [20, 80],
+      children: (
+        <Slider.Track>
+          <PriceThumbs />
+        </Slider.Track>
+      ),
+    },
+  },
+  async ({ canvas }) => {
+    await expect(canvas.getByRole("slider", { name: "Minimum price" })).toHaveValue("20");
     await expect(canvas.getByRole("slider", { name: "Maximum price" })).toHaveValue("80");
   },
 );

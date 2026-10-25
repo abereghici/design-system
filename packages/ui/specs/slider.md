@@ -20,8 +20,8 @@ import { Field } from "@platform/ui/field";
 <Slider.Root name="price" defaultValue={[20, 80]} min={0} max={200} step={5} format={{ style: "currency", currency: "EUR" }}>
   <Slider.Track>
     <Slider.Range />
-    <Slider.Thumb aria-label="Minimum price" />
-    <Slider.Thumb aria-label="Maximum price" />
+    <Slider.Thumb index={0} aria-label="Minimum price" />
+    <Slider.Thumb index={1} aria-label="Maximum price" />
   </Slider.Track>
   <Slider.Value />
 </Slider.Root>
@@ -58,7 +58,7 @@ Root → Track → Range → Thumb(s); Value (optional).
 | `disabled`              | `boolean`                                                                 | `false`     | `aria-disabled="true"` on every input; focusable; no change.                                                                    |
 | …native                 | `ComponentProps<"div">`                                                   |             |                                                                                                                                 |
 
-`Slider.Track`, `Slider.Range`: `ComponentProps<"div">`. `Slider.Thumb`: `ComponentProps<"input">` (the hidden range input) minus `type`, `value`, `min`, `max`, `step`; `className`/`style` go on the visual thumb; `aria-label` / `aria-labelledby` name it. `Slider.Value`: `ComponentProps<"output">`; it shows the formatted values, joined by an en dash for a range.
+`Slider.Track`, `Slider.Range`: `ComponentProps<"div">`. `Slider.Thumb`: `ComponentProps<"input">` (the hidden range input) minus `type`, `value`, `min`, `max`, `step`, plus `index` (default `0`), the entry of a range value it sets (Base UI Slider.Thumb `index`: "The index of the thumb which corresponds to the index of its value in the `value` or `defaultValue` array"; counting Thumbs among the Track children missed wrapped ones); `className`/`style` go on the visual thumb; `aria-label` / `aria-labelledby` name it. `Slider.Value`: `ComponentProps<"output">`; it shows the formatted values, joined by an en dash for a range.
 
 Names, checked against the reference libraries:
 

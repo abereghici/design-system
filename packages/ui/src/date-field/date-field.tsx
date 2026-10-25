@@ -4,10 +4,12 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 
 import * as Field from "../field/field.tsx";
+import { join } from "../slot/slot.tsx";
 
 import { Control } from "./date-field-control.tsx";
 import type { ControlProps, DateFieldOptions } from "./date-field-control.tsx";
 import type { Validity } from "./date-field-validity.ts";
+import styles from "./date-field.module.css";
 
 export type { DateFieldChangeEventDetails } from "./date-field-editing.ts";
 
@@ -74,7 +76,7 @@ export function DateFieldFrame({
   const options = { value, defaultValue, onValueChange, min, max, name, form, required };
   return (
     <Field.Root
-      className={className}
+      className={join(styles["root"], className)}
       style={style}
       data-size={size}
       name={name}

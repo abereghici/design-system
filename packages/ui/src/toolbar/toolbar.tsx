@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import type { ComponentProps, FocusEvent, KeyboardEvent, Ref } from "react";
 
 import { join } from "../slot/slot.tsx";
@@ -69,6 +70,11 @@ function destination(event: KeyboardEvent<HTMLDivElement>) {
  * Sliders inside, since they need the arrow keys themselves.
  */
 export function Toolbar({ ref, className, onKeyDown, onFocus, ...props }: ToolbarProps) {
+  const attach = useCallback(
+    (root: HTMLDivElement | null) => (root === null ? undefined : connect(root, ref)),
+    [ref],
+  );
+
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     onKeyDown?.(event);
     // A control inside (a SegmentedControl, a Slider) already handled the arrow key.
@@ -89,7 +95,7 @@ export function Toolbar({ ref, className, onKeyDown, onFocus, ...props }: Toolba
       role="toolbar"
       tabIndex={-1}
       {...props}
-      ref={(root) => (root === null ? undefined : connect(root, ref))}
+      ref={attach}
       className={join(styles["root"], className)}
       onKeyDown={handleKeyDown}
       onFocus={handleFocus}

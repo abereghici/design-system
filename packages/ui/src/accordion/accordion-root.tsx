@@ -29,7 +29,7 @@ export const ItemContext = createContext<string | null>(null);
 export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
   /** Lets several Items stay open at once; by default opening one closes the other. */
   multiple?: boolean;
-  /** The `value`s of the open Items, when your state holds them. */
+  /** The `value`s of the open Items, when your state holds them; one at most without `multiple`. */
   value?: readonly string[];
   /** The Items open on the first render when it holds its own state. */
   defaultValue?: readonly string[];
@@ -53,7 +53,7 @@ export function Root({
 }: RootProps) {
   const name = useId();
   const [uncontrolled, setUncontrolled] = useState(defaultValue);
-  const current = value ?? uncontrolled;
+  const current = multiple ? (value ?? uncontrolled) : (value ?? uncontrolled).slice(0, 1);
 
   function change(item: string, open: boolean, event: SyntheticEvent<HTMLElement>) {
     const next = open

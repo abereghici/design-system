@@ -29,7 +29,7 @@ export type CalendarChangeEventDetails = Details<"day-press">;
 
 export interface CalendarProps extends Omit<
   ComponentProps<"fieldset">,
-  "defaultValue" | "onChange" | "role" | "children"
+  "defaultValue" | "onChange" | "role" | "children" | "disabled" | "name" | "form"
 > {
   /** The chosen date, when your state holds it; `null` is no date. */
   value?: Temporal.PlainDate | null | undefined;
@@ -81,7 +81,8 @@ function useCalendar(
   const [uncontrolled, setUncontrolled] = useState(defaultValue);
   const selected = value === undefined ? uncontrolled : value;
   const start = clamp(selected ?? today, min, max);
-  const [focused, setFocused] = useState(start);
+  const [moved, setFocused] = useState<Temporal.PlainDate | null>(null);
+  const focused = moved === null ? start : clamp(moved, min, max);
   const outside = (date: Temporal.PlainDate) => clamp(date, min, max) !== date;
   const unavailable = (date: Temporal.PlainDate) =>
     outside(date) || isDateUnavailable?.(date) === true;

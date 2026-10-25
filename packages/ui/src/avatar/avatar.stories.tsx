@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
@@ -21,6 +22,25 @@ const person = (src: string) => (
   </>
 );
 
+const imageRef = fn<(image: HTMLImageElement | null) => void>();
+
+function ChangingPhoto() {
+  const [src, setSrc] = useState(photo);
+  return (
+    <>
+      <Avatar.Root>{person(src)}</Avatar.Root>
+      <button
+        type="button"
+        onClick={() => {
+          setSrc(broken);
+        }}
+      >
+        Change photo
+      </button>
+    </>
+  );
+}
+
 const meta = preview.meta({
   title: "Components/Avatar",
   component: Avatar.Root,
@@ -42,6 +62,40 @@ Default.test("shows the picture once it has loaded", async ({ canvas }) => {
   await waitFor(() => expect(onLoadingStatusChange).toHaveBeenLastCalledWith("loaded"));
   await waitFor(() => expect(canvas.getByText("AB")).not.toBeVisible());
 });
+
+Default.test(
+  "reports loading again when the photo changes",
+  { render: ChangingPhoto },
+  async ({ canvas, userEvent }) => {
+    await waitFor(() => expect(onLoadingStatusChange).toHaveBeenLastCalledWith("loaded"));
+    onLoadingStatusChange.mockClear();
+    await userEvent.click(canvas.getByRole("button", { name: "Change photo" }));
+    await waitFor(() => expect(onLoadingStatusChange).toHaveBeenLastCalledWith("error"));
+    await expect(onLoadingStatusChange.mock.calls).toEqual([["loading"], ["error"]]);
+  },
+);
+
+Default.test(
+  "hands a callback ref the image once",
+  {
+    args: {
+      children: (
+        <Avatar.Image
+          src={photo}
+          alt="Alexandru Bereghici"
+          ref={imageRef}
+          onLoadingStatusChange={onLoadingStatusChange}
+        />
+      ),
+    },
+  },
+  async ({ canvas }) => {
+    await waitFor(() => expect(onLoadingStatusChange).toHaveBeenLastCalledWith("loaded"));
+    await expect(imageRef.mock.calls).toEqual([
+      [canvas.getByRole("img", { name: "Alexandru Bereghici" })],
+    ]);
+  },
+);
 
 Default.test(
   "keeps the initials when the picture fails, with the same name",

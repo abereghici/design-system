@@ -109,8 +109,7 @@ export function Root(props: RootProps) {
   const name = useLabels("datePicker", datePickerLabels, labels).chooseDate;
   const date = useValue(props);
   const trigger = useRef<HTMLButtonElement>(null);
-  const fieldBox = () => trigger.current?.closest("fieldset") ?? null;
-  const floating = useFloating("Popover", { open, defaultOpen, onOpenChange }, fieldBox);
+  const floating = useFloating("Popover", { open, defaultOpen, onOpenChange });
   const panel = { floating, name, trigger };
   return (
     <DateFieldFrame
