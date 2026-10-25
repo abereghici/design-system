@@ -19,11 +19,12 @@ Status: draft for brand-owner review (phase 2). No source guide: drafted from th
 
 ## Anatomy
 
-Root → content (text, FileTrigger) → hidden file input.
+Root → content (text, FileTrigger) → hidden file input → selection (file names, Clear).
 
 - **Root.** A `<div>` with `drop-zone-padding` (24), `drop-zone-gap` (8) between its children (centred column), radius `drop-zone-border-radius` (12), a dashed `drop-zone-border-width` border in `drop-zone-border-color`, fill `drop-zone-background-color` (`surface-raised`), text in `drop-zone-font` / `drop-zone-text-color`. In flow: no elevation (brand principle 5).
 - **Content.** The consumer's: a sentence (a `<span>` or text, which inherits the zone's font and colour; a `<p>` brings its UA margins) and a FileTrigger. The FileTrigger inside uses the DropZone's hidden input instead of its own, so drops and picks land in one `FileList`.
 - **Hidden input.** FileTrigger's visually hidden native `<input type="file">` (see FileTrigger, Anatomy) carrying `name`, `accept`, `multiple`, `required`; it is the Field's control, and on focus it hands focus to the FileTrigger inside.
+- **Selection.** FileTrigger's (see FileTrigger, Anatomy), last in the centred column: the dropped or picked file names and Clear.
 
 ## API
 
@@ -34,6 +35,7 @@ Root → content (text, FileTrigger) → hidden file input.
 | `multiple`                 | `boolean`                                                     | `false` | Without it, only the first accepted file is kept.                                                                                                     |
 | `name`, `required`, `form` | native                                                        |         | On the hidden input; the files submit with the form.                                                                                                  |
 | `disabled`                 | `boolean`                                                     | `false` | Drops are refused (the cursor shows no drop) and the inner FileTrigger is disabled.                                                                   |
+| `labels`                   | `{ clear?: string }`                                          |         | Per-instance override of the root UI provider's locale (Built-in labels).                                                                             |
 | …native                    | `ComponentProps<"div">`                                       |         | `ref`, `className`, `aria-*`.                                                                                                                         |
 
 Names, checked against the reference libraries:
@@ -51,9 +53,10 @@ Names, checked against the reference libraries:
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | rest        | Dashed `drop-zone-border-color`, `drop-zone-background-color`                                                                            | —                                                     |
 | drop target | Border `drop-zone-border-color-hovered` (accent), fill `drop-zone-background-color-hovered` (accent subtle) while files are dragged over | `data-drop-target`                                    |
+| with files  | The file names and Clear at the bottom of the column                                                                                     | —                                                     |
 | rejected    | Border `drop-zone-border-color-invalid` while the dragged items can't be accepted (type known during the drag and not matching `accept`) | `data-drop-target="rejected"`                         |
 | invalid     | Border `drop-zone-border-color-invalid`; the error below (Field contract)                                                                | `aria-invalid` on the trigger, Field's `data-invalid` |
-| disabled    | No drop target state; the text keeps its colours (as Field's disabled rule) and the FileTrigger shows Button's disabled look             | `data-disabled`                                       |
+| disabled    | No drop target state; the instruction text stays readable (Disabled look) and the FileTrigger shows Button's disabled look               | `data-disabled`                                       |
 
 The drop target state is shown by the border colour and the fill together, and the text does not change, so the zone does not resize under the cursor.
 
@@ -114,7 +117,7 @@ The drop-target state reuses the Dictionary's `hovered` state word: a drag over 
 
 ## Built-in labels
 
-None. The instruction text is the consumer's.
+`fileTrigger.clear` ("Clear files"), shared with FileTrigger. The instruction text is the consumer's.
 
 ## Feedback events
 

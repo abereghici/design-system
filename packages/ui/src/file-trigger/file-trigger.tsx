@@ -1,14 +1,18 @@
 "use client";
 
-import { createContext, use, useEffect, useId, useRef } from "react";
+import { createContext, use, useEffect, useId, useRef, useState } from "react";
 import type { ComponentProps, MouseEvent, ReactElement, RefObject } from "react";
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useField, useFieldControl } from "../field/field-control.ts";
+import { useField, useFieldControl, useFormReset } from "../field/field-control.ts";
+import { XIcon } from "../icon/icons/x.tsx";
+import { useLabels } from "../provider/locale.tsx";
+import { fileTrigger as fileTriggerLabels } from "../provider/locales/en-US/file-trigger.ts";
 import { Slot } from "../slot/slot.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
+import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./file-trigger.module.css";
 
 type NativeProps = Pick<
@@ -28,27 +32,67 @@ interface FileInputProps extends NativeProps {
   readonly inputRef: Picker["input"];
   readonly triggerRef: Picker["trigger"];
   readonly disabled: boolean;
+  readonly labels: { clear?: string } | undefined;
 }
 
-/** The native file input that holds the selection for the form and joins the Field. */
-export function FileInput({ inputRef, triggerRef, ...props }: FileInputProps) {
+/**
+ * The native file input that holds the selection for the form and joins the Field, followed by the
+ * chosen file names and a Clear button.
+ */
+export function FileInput({ inputRef, triggerRef, labels, ...props }: FileInputProps) {
   const bindings = useFieldControl<HTMLInputElement, NativeProps & { disabled: boolean }>(props);
+  const { clear } = useLabels("fileTrigger", fileTriggerLabels, labels);
+  const [names, setNames] = useState<string[]>([]);
+  useFormReset(
+    () => inputRef.current,
+    () => {
+      setNames([]);
+    },
+  );
   return (
-    <VisuallyHidden asChild>
-      <input
-        {...bindings}
-        ref={inputRef}
-        type="file"
-        tabIndex={-1}
-        aria-hidden
-        // The input is focusable only so a blocked submit can focus it; focus moves on to the visible trigger.
-        onFocus={() => triggerRef.current?.focus()}
-        onChange={undefined}
-        onClick={(event) => {
-          if (bindings["aria-disabled"] === true) event.preventDefault();
-        }}
-      />
-    </VisuallyHidden>
+    <>
+      <VisuallyHidden asChild>
+        <input
+          {...bindings}
+          ref={inputRef}
+          type="file"
+          tabIndex={-1}
+          aria-hidden
+          // The input is focusable only so a blocked submit can focus it; focus moves on to the visible trigger.
+          onFocus={() => triggerRef.current?.focus()}
+          onChange={undefined}
+          onInput={(event) => {
+            setNames([...(event.currentTarget.files ?? [])].map((file) => file.name));
+          }}
+          onClick={(event) => {
+            if (bindings["aria-disabled"] === true) event.preventDefault();
+          }}
+        />
+      </VisuallyHidden>
+      <span className={styles["selection"]}>
+        {/* Always rendered: a live region must exist before its text changes. */}
+        <output className={styles["names"]}>{names.join(", ")}</output>
+        {names.length > 0 && (
+          <button
+            type="button"
+            aria-label={clear}
+            aria-disabled={props.disabled || undefined}
+            data-size="sm"
+            className={iconButton["root"]}
+            onClick={() => {
+              const input = inputRef.current;
+              if (input === null || props.disabled) return;
+              input.value = "";
+              input.dispatchEvent(new Event("input", { bubbles: true }));
+              input.dispatchEvent(new Event("change", { bubbles: true }));
+              triggerRef.current?.focus();
+            }}
+          >
+            <XIcon />
+          </button>
+        )}
+      </span>
+    </>
   );
 }
 
@@ -70,6 +114,8 @@ export interface FileTriggerProps extends NativeProps {
    * nothing.
    */
   onSelect?: (files: File[], details: FileTriggerSelectEventDetails) => void;
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  labels?: { clear?: string };
 }
 
 function selectOnce(input: HTMLInputElement, onSelect: FileTriggerProps["onSelect"]) {
@@ -91,14 +137,15 @@ function selectOnce(input: HTMLInputElement, onSelect: FileTriggerProps["onSelec
 
 /**
  * Opens the system file picker from its one child (usually a Button), and the chosen files submit
- * with the form. It draws nothing itself: show the chosen files from `onSelect`. To also accept files
- * dragged onto an area, put it inside a DropZone.
+ * with the form; their names show next to it with a Clear button. To also accept files dragged onto
+ * an area, put it inside a DropZone.
  */
 export function FileTrigger({
   children,
   directory = false,
   disabled = false,
   onSelect,
+  labels,
   ...props
 }: FileTriggerProps) {
   const zone = use(PickerContext);
@@ -119,23 +166,30 @@ export function FileTrigger({
     target.click();
   }
 
+  const button = (
+    <Slot
+      ref={triggerRef}
+      id={field === undefined ? undefined : id}
+      aria-labelledby={field === undefined ? undefined : `${field.labelId} ${id}`}
+      aria-describedby={field?.describedBy}
+      aria-invalid={invalid}
+      {...{ disabled: blocked || undefined }}
+      onClick={open}
+    >
+      {children}
+    </Slot>
+  );
+  if (zone !== undefined) return button;
   return (
-    <>
-      <Slot
-        ref={triggerRef}
-        className={styles["trigger"]}
-        id={field === undefined ? undefined : id}
-        aria-labelledby={field === undefined ? undefined : `${field.labelId} ${id}`}
-        aria-describedby={field?.describedBy}
-        aria-invalid={invalid}
-        {...{ disabled: blocked || undefined }}
-        onClick={open}
-      >
-        {children}
-      </Slot>
-      {zone === undefined && (
-        <FileInput {...props} inputRef={input} triggerRef={trigger} disabled={blocked} />
-      )}
-    </>
+    <span className={styles["root"]}>
+      {button}
+      <FileInput
+        {...props}
+        inputRef={input}
+        triggerRef={trigger}
+        disabled={blocked}
+        labels={labels}
+      />
+    </span>
   );
 }

@@ -87,6 +87,17 @@ Default.test(
 );
 
 Default.test(
+  "shows and announces the dropped file names, and clears them",
+  async ({ canvas, userEvent }) => {
+    drop(canvas.getByText("Drop CSV files here, or"), january, february);
+    await expect(canvas.getByRole("status")).toHaveTextContent("january.csv, february.csv");
+    await userEvent.click(canvas.getByRole("button", { name: "Clear files" }));
+    await expect(canvas.getByRole("status")).toBeEmptyDOMElement();
+    await expect(canvas.getByRole("button", { name: "Choose files" })).toHaveFocus();
+  },
+);
+
+Default.test(
   "keeps only the first file without multiple",
   { args: { multiple: false }, decorators: [inAForm] },
   async ({ canvas, args }) => {

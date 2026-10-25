@@ -6,8 +6,12 @@ import { Button } from "@platform/ui/button";
 import { Field } from "@platform/ui/field";
 import { Form } from "@platform/ui/form";
 import { PlusIcon } from "@platform/ui/icons/plus";
+import { roRO } from "@platform/ui/locales/ro-RO";
+import { Provider } from "@platform/ui/provider";
 
 import preview from "#.storybook/preview.tsx";
+
+import type { Locale } from "../provider/locale.tsx";
 
 import { FileTrigger } from "./file-trigger.tsx";
 import type { FileTriggerSelectEventDetails } from "./file-trigger.tsx";
@@ -59,6 +63,33 @@ Default.test(
       [photo],
       expect.objectContaining({ reason: "none" }),
     );
+  },
+);
+
+Default.test(
+  "shows and announces the chosen file names, and clears them",
+  { args: { name: "avatar" }, decorators: [inAForm] },
+  async ({ canvas, canvasElement, userEvent }) => {
+    await expect(canvas.queryByRole("button", { name: "Clear files" })).toBeNull();
+    await userEvent.click(canvas.getByRole("button", { name: "Choose image" }));
+    pick(canvasElement, photo, new File(["jpg"], "cover.jpg", { type: "image/jpeg" }));
+    await expect(canvas.getByRole("status")).toHaveTextContent("photo.png, cover.jpg");
+    await userEvent.click(canvas.getByRole("button", { name: "Clear files" }));
+    await expect(canvas.getByRole("status")).toBeEmptyDOMElement();
+    await expect(canvas.getByRole("button", { name: "Choose image" })).toHaveFocus();
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+    await expect(new FormData(form).get("avatar")).toHaveProperty("size", 0);
+  },
+);
+
+Default.test(
+  "names Clear in the Provider's locale",
+  { decorators: [(Story) => <Provider locale={roRO}>{Story()}</Provider>] },
+  async ({ canvas, canvasElement }) => {
+    pick(canvasElement, photo);
+    await expect(canvas.getByRole("button", { name: "Golește fișierele" })).toBeVisible();
+    // @ts-expect-error -- a locale must carry the FileTrigger labels
+    void ({ tag: "fr-FR", labels: { ...roRO.labels, fileTrigger: {} } } satisfies Locale);
   },
 );
 

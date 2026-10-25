@@ -296,13 +296,12 @@ ServerSearchResults.test("shows the Items the app renders", async ({ canvas, use
   await expect(input).toHaveValue("platform/web");
 });
 
-export const Loading = meta.story({
-  args: { loading: true, children: undefined },
-  parameters: { docs: { description: { story: "`loading` while the app fetches Items." } } },
-});
-
-Loading.test("shows and announces Loading… in place of No results", async ({ canvas }) => {
-  await type("a");
-  await expect(canvas.getByRole("status")).toHaveTextContent("Loading…");
-  await expect(canvas.getByText("Loading…", { ignore: "output" })).toBeVisible();
-});
+Default.test(
+  "shows and announces Loading… in place of No results while loading",
+  { args: { loading: true, children: undefined } },
+  async ({ canvas }) => {
+    await type("a");
+    await expect(canvas.getByRole("status")).toHaveTextContent("Loading…");
+    await expect(canvas.getByText("Loading…", { ignore: "output" })).toBeVisible();
+  },
+);

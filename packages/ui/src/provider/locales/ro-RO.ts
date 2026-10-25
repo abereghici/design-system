@@ -26,6 +26,7 @@ export const roRO: Locale = {
     dialog: { close: "Închide" },
     combobox: { noResults: "Niciun rezultat", loading: "Se încarcă…" },
     sheet: { close: "Închide" },
+    fileTrigger: { clear: "Golește fișierele" },
     toaster: { region: "Notificări", close: "Închide" },
     dateField: {
       dayPlaceholder: "zz",
