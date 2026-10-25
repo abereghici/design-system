@@ -26,12 +26,17 @@ export function Content({ children, ...props }: ContentProps) {
   const base = `${popoverStyles["content"]} ${styles["content"]}`;
   return (
     <dialog
-      {...mergeProps({ className: base }, props)}
-      {...floating.contentProps({
-        onBeforeToggle: (event) => {
-          if (event.newState === "open") rememberFocus(floating.contentId, trigger.current);
+      {...mergeProps(
+        {
+          className: base,
+          ...floating.contentProps({
+            onBeforeToggle: (event) => {
+              if (event.newState === "open") rememberFocus(floating.contentId, trigger.current);
+            },
+          }),
         },
-      })}
+        props,
+      )}
       aria-label={name}
     >
       {mounted && <DatePickerContext value={picker}>{children}</DatePickerContext>}

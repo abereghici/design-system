@@ -4,8 +4,9 @@ import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } fr
 import { createPortal } from "react-dom";
 import type { ComponentProps, RefObject } from "react";
 
+import { sharedListener } from "../events/events.ts";
 import { composeRefs, mergeProps } from "../slot/slot.tsx";
-import { close, mark, snapshot, subscribe } from "../toast/toast.ts";
+import { close, mark, progressOf, snapshot, subscribe } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
@@ -25,44 +26,36 @@ export interface ToasterProps extends Omit<
 
 const none: readonly ToastRecord[] = [];
 
-const onVisibility = (listener: () => void) => {
-  const controller = new AbortController();
-  document.addEventListener("visibilitychange", listener, { signal: controller.signal });
-  return () => {
-    controller.abort();
-  };
-};
+const onVisibility = sharedListener("visibilitychange", () => document);
 
-const openModals = () =>
-  typeof document === "undefined"
-    ? []
-    : [...document.querySelectorAll<HTMLDialogElement>("dialog:modal")];
+// `toggle` does not bubble; a capturing listener on document still sees every dialog's:
+// https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/toggle_event
+const onToggle = sharedListener("toggle", () => document, true);
 
-function useTopmostModal() {
-  const [modals, setModals] = useState<readonly HTMLDialogElement[]>(openModals);
-  useEffect(() => {
-    const controller = new AbortController();
-    const onToggle = ({ target }: Event) => {
-      if (!(target instanceof HTMLDialogElement)) return;
-      setModals((list) => {
-        const rest = list.filter((dialog) => dialog !== target);
-        return target.matches(":modal") ? [...rest, target] : rest;
-      });
-    };
-    // `toggle` does not bubble; a capturing listener on document still sees every dialog's:
-    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/toggle_event
-    document.addEventListener("toggle", onToggle, { capture: true, signal: controller.signal });
-    return () => {
-      controller.abort();
-    };
-  }, []);
-  return modals.at(-1);
+let modals: readonly HTMLDialogElement[] = [];
+
+function subscribeModals(listener: () => void) {
+  if (modals.length === 0)
+    modals = [...document.querySelectorAll<HTMLDialogElement>("dialog:modal")];
+  return onToggle(({ target }) => {
+    if (!(target instanceof HTMLDialogElement)) return;
+    const rest = modals.filter((dialog) => dialog !== target);
+    modals = target.matches(":modal") ? [...rest, target] : rest;
+    listener();
+  });
 }
+
+const useTopmostModal = () =>
+  useSyncExternalStore(
+    subscribeModals,
+    () => modals.at(-1) ?? null,
+    () => null,
+  );
 
 function useAnnounced(toasts: readonly ToastRecord[]) {
   const [heard, setHeard] = useState<ReadonlySet<string>>(new Set());
   useEffect(() => {
-    const fresh = toasts.filter((record) => record.announced !== true).map(({ id }) => id);
+    const fresh = toasts.filter(({ id }) => progressOf(id).announced !== true).map(({ id }) => id);
     // A live region announces changes, not content it was inserted with: fill it a task later:
     // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions
     const timer = setTimeout(() => {
@@ -76,25 +69,47 @@ function useAnnounced(toasts: readonly ToastRecord[]) {
   return heard;
 }
 
-function useTimers(toasts: readonly ToastRecord[], paused: boolean) {
+function tokenDuration(node: Element, danger: boolean) {
+  const value = getComputedStyle(node).getPropertyValue(
+    danger ? "--ab-toast-danger-duration" : "--ab-toast-duration",
+  );
+  const time = /(?<amount>[\d.]+)(?<unit>m?s)/v.exec(value)?.groups;
+  return Number(time?.["amount"] ?? 0) * (time?.["unit"] === "s" ? 1000 : 1);
+}
+
+/** Closes each toast when its time runs out; the cleanup keeps what is left of it. */
+function startTimers(node: Element, toasts: readonly ToastRecord[]) {
+  const start = performance.now();
+  const running = toasts
+    .filter(({ exiting }) => !exiting)
+    .map(({ id, duration, variant }) => ({
+      id,
+      remaining: progressOf(id).remaining ?? duration ?? tokenDuration(node, variant === "danger"),
+    }))
+    .filter(({ remaining }) => remaining < Infinity);
+  const timers = running.map(({ id, remaining }) =>
+    setTimeout(() => {
+      close(id);
+    }, remaining),
+  );
+  return () => {
+    const elapsed = performance.now() - start;
+    for (const timer of timers) clearTimeout(timer);
+    for (const { id, remaining } of running) {
+      mark(id, { remaining: Math.max(0, remaining - elapsed) });
+    }
+  };
+}
+
+function useTimers(
+  region: RefObject<HTMLElement | null>,
+  toasts: readonly ToastRecord[],
+  paused: boolean,
+) {
   useEffect(() => {
-    const start = performance.now();
-    const running = paused
-      ? []
-      : toasts.filter(({ exiting, remaining }) => !exiting && (remaining ?? Infinity) < Infinity);
-    const timers = running.map(({ id, remaining }) =>
-      setTimeout(() => {
-        close(id);
-      }, remaining),
-    );
-    return () => {
-      const elapsed = performance.now() - start;
-      for (const timer of timers) clearTimeout(timer);
-      for (const { id, remaining = 0 } of running) {
-        mark(id, { remaining: Math.max(0, remaining - elapsed) });
-      }
-    };
-  }, [toasts, paused]);
+    const node = region.current;
+    return node === null || paused ? undefined : startTimers(node, toasts);
+  }, [region, toasts, paused]);
 }
 
 function stack(node: HTMLElement) {
@@ -109,31 +124,34 @@ function stack(node: HTMLElement) {
   }
 }
 
-function useRegion(region: RefObject<HTMLElement | null>, toasts: readonly ToastRecord[]) {
-  const newest = useRef<string>(undefined);
-  const resized = useRef<ResizeObserver>(undefined);
-  useLayoutEffect(() => {
-    const node = region.current;
-    if (node === null) return;
-    const id = toasts[0]?.id;
-    // Re-showing appends the Region to the top layer again, above layers opened since:
-    // https://developer.mozilla.org/en-US/docs/Glossary/Top_layer
-    const raise = id !== newest.current && !node.contains(document.activeElement);
-    if (node.matches(":popover-open") && (id === undefined || raise)) node.hidePopover();
-    if (id !== undefined && !node.matches(":popover-open")) node.showPopover();
-    newest.current = id;
-    resized.current ??= new ResizeObserver(() => {
-      stack(node);
-    });
-    for (const item of node.querySelectorAll(`.${styles["toast"]}`)) resized.current.observe(item);
+function observeStack(node: HTMLElement) {
+  const resized = new ResizeObserver(() => {
     stack(node);
   });
-  useEffect(
-    () => () => {
-      resized.current?.disconnect();
-    },
-    [],
-  );
+  for (const item of node.querySelectorAll(`.${styles["toast"]}`)) resized.observe(item);
+  stack(node);
+  return () => {
+    resized.disconnect();
+  };
+}
+
+function useRegion(region: RefObject<HTMLElement | null>, toasts: readonly ToastRecord[]) {
+  const newest = useRef<string>(undefined);
+  useLayoutEffect(() => {
+    const node = region.current;
+    const id = toasts[0]?.id;
+    const raise = id !== newest.current && node?.contains(document.activeElement) === false;
+    newest.current = id;
+    return node === null ? undefined : place(node, id, raise);
+  }, [region, toasts]);
+}
+
+function place(node: HTMLElement, newest: string | undefined, raise: boolean) {
+  // Re-showing appends the Region to the top layer again, above layers opened since:
+  // https://developer.mozilla.org/en-US/docs/Glossary/Top_layer
+  if (node.matches(":popover-open") && (newest === undefined || raise)) node.hidePopover();
+  if (newest !== undefined && !node.matches(":popover-open")) node.showPopover();
+  return observeStack(node);
 }
 
 function Announcer({ toasts, assertive }: { toasts: readonly ToastRecord[]; assertive: boolean }) {
@@ -159,8 +177,8 @@ function Layer({ closeLabel, ref, ...props }: ToasterProps) {
     () => false,
   );
   const heard = useAnnounced(toasts);
-  const { restore, interacting } = useFocusReturn(region);
-  useTimers(toasts, interacting || hidden);
+  const { restore, interacting, handlers } = useFocusReturn(region);
+  useTimers(region, toasts, interacting || hidden);
   useRegion(region, toasts);
   const announced = toasts.filter(({ id }) => heard.has(id));
   const position = (at: number) => toasts.slice(0, at).filter(({ exiting }) => !exiting).length;
@@ -169,7 +187,7 @@ function Layer({ closeLabel, ref, ...props }: ToasterProps) {
       <Announcer toasts={announced} assertive={false} />
       <Announcer toasts={announced} assertive />
       <section
-        {...mergeProps({ className: styles["region"] }, props)}
+        {...mergeProps({ className: styles["region"], ...handlers }, props)}
         ref={composeRefs(region, ref)}
         popover="manual"
         tabIndex={-1}
@@ -198,5 +216,5 @@ function Layer({ closeLabel, ref, ...props }: ToasterProps) {
  */
 export function Toaster(props: ToasterProps) {
   const modal = useTopmostModal();
-  return modal === undefined ? <Layer {...props} /> : createPortal(<Layer {...props} />, modal);
+  return modal === null ? <Layer {...props} /> : createPortal(<Layer {...props} />, modal);
 }

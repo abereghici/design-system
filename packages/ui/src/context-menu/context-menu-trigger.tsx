@@ -4,7 +4,7 @@ import type { ComponentProps, MouseEvent, PointerEvent as ReactPointerEvent } fr
 
 import { rememberFocus } from "../floating/floating.ts";
 import type { Menu } from "../menu/menu.tsx";
-import { Slot } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import { place, useContextMenu } from "./context-menu-root.tsx";
 
@@ -28,14 +28,25 @@ interface Press {
 
 const presses = new WeakMap<Element, Press>();
 
-function cancelNextClick() {
+/** Runs `listener` on this press's next `type` event; the next press drops it if none came. */
+function onceThisPress(type: "click" | "pointerup", listener: (event: Event) => void) {
+  const controller = new AbortController();
+  const { signal } = controller;
+  const options = { capture: true, signal };
   document.addEventListener(
-    "click",
+    type,
     (event) => {
-      event.preventDefault();
-      event.stopPropagation();
+      controller.abort();
+      listener(event);
     },
-    { capture: true, once: true },
+    options,
+  );
+  document.addEventListener(
+    "pointerdown",
+    () => {
+      controller.abort();
+    },
+    options,
   );
 }
 
@@ -63,7 +74,10 @@ function endPress(
   clearTimeout(press.timer);
   presses.delete(event.currentTarget);
   if (!press.long || event.type !== "pointerup") return;
-  cancelNextClick();
+  onceThisPress("click", (click) => {
+    click.preventDefault();
+    click.stopPropagation();
+  });
   setTimeout(() => {
     openAt(press.x, press.y);
   });
@@ -91,13 +105,9 @@ function openFromContextMenu(event: MouseEvent<HTMLDivElement>, floating: Menu["
     show();
     return;
   }
-  document.addEventListener(
-    "pointerup",
-    () => {
-      setTimeout(show);
-    },
-    { once: true },
-  );
+  onceThisPress("pointerup", () => {
+    setTimeout(show);
+  });
 }
 
 /** The area that opens the menu. It keeps its own look. */
@@ -111,33 +121,27 @@ export function Trigger({ disabled = false, asChild = false, ...props }: Trigger
   };
   return (
     <Area
-      {...props}
+      {...mergeProps(
+        {
+          onContextMenu: (event: MouseEvent<HTMLDivElement>) => {
+            if (disabled || event.defaultPrevented) return;
+            event.preventDefault();
+            if (presses.get(event.currentTarget)?.long !== true)
+              openFromContextMenu(event, floating);
+          },
+          onPointerDown: (event: ReactPointerEvent<HTMLDivElement>) => {
+            if (disabled) return;
+            if (!floating.open) rememberFocus(floating.contentId);
+            if (event.pointerType !== "mouse") startPress(event);
+          },
+          onPointerMove: end,
+          onPointerUp: end,
+          onPointerCancel: end,
+        },
+        props,
+      )}
       id={`${floating.contentId}-area`}
       data-popup-open={floating.open ? "" : undefined}
-      onContextMenu={(event: MouseEvent<HTMLDivElement>) => {
-        props.onContextMenu?.(event);
-        if (disabled || event.defaultPrevented) return;
-        event.preventDefault();
-        if (presses.get(event.currentTarget)?.long !== true) openFromContextMenu(event, floating);
-      }}
-      onPointerDown={(event: ReactPointerEvent<HTMLDivElement>) => {
-        props.onPointerDown?.(event);
-        if (disabled) return;
-        if (!floating.open) rememberFocus(floating.contentId);
-        if (event.pointerType !== "mouse") startPress(event);
-      }}
-      onPointerMove={(event: ReactPointerEvent<HTMLDivElement>) => {
-        props.onPointerMove?.(event);
-        end(event);
-      }}
-      onPointerUp={(event: ReactPointerEvent<HTMLDivElement>) => {
-        props.onPointerUp?.(event);
-        end(event);
-      }}
-      onPointerCancel={(event: ReactPointerEvent<HTMLDivElement>) => {
-        props.onPointerCancel?.(event);
-        end(event);
-      }}
     />
   );
 }

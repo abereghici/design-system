@@ -30,8 +30,8 @@ function assign<T>(ref: Ref<T> | undefined, node: T | null): ReturnType<RefCallb
 // Cached per pair so stable refs compose into a stable callback, and React doesn't detach and reattach on every render.
 const composed = new WeakMap<object, WeakMap<object, RefCallback<never>>>();
 
-export function composeRefs<T>(own: Ref<T>, consumer: Ref<T> | undefined): Ref<T> {
-  if (!own || !consumer) return own ?? consumer ?? null;
+export function composeRefs<T>(own: Ref<T>, consumer: Ref<T> | undefined): Ref<T> | undefined {
+  if (!own || !consumer) return own ?? consumer ?? undefined;
   const pairs = composed.get(own) ?? new WeakMap<object, RefCallback<T>>();
   composed.set(own, pairs);
   const cached = pairs.get(consumer);
@@ -46,6 +46,19 @@ export function composeRefs<T>(own: Ref<T>, consumer: Ref<T> | undefined): Ref<T
     };
   };
   pairs.set(consumer, ref);
+  return ref;
+}
+
+const presences = new WeakMap<(present: boolean) => void, RefCallback<Element>>();
+
+/** A ref that tells `set` whether its element is mounted, so a part can announce itself to its Root. */
+export function presenceRef(set: (present: boolean) => void): RefCallback<Element> {
+  const cached = presences.get(set);
+  if (cached) return cached;
+  const ref: RefCallback<Element> = (node) => {
+    set(node !== null);
+  };
+  presences.set(set, ref);
   return ref;
 }
 

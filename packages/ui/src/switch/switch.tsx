@@ -37,21 +37,13 @@ export type SwitchProps = Omit<ComponentProps<"input">, "type" | "role" | "child
 export function Switch({
   children,
   onCheckedChange,
-  disabled = false,
   className,
   style,
-  id,
   onClick,
-  onChange,
   ...props
 }: SwitchProps) {
   const fallbackId = useId();
-  const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>({
-    ...props,
-    id,
-    disabled,
-    onChange: (event) => onChange?.(event),
-  });
+  const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>(props);
 
   return (
     <label

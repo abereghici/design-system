@@ -54,36 +54,20 @@ export class Controller {
     this.#pending = pending;
   }
 
-  listen(dialog: HTMLDialogElement | null, component: Options["component"]): () => void {
-    const listeners = new AbortController();
-    const { signal } = listeners;
-    dialog?.addEventListener(
-      "keydown",
-      (event) => {
-        if (event.key === "Escape")
-          this.#pending = { reason: "escape-key", event, dismiss: dialog };
-      },
-      { signal },
-    );
-    dialog?.addEventListener(
-      "pointerdown",
-      (event) => {
-        this.#pressedOutside = outside(dialog, event);
-      },
-      { signal },
-    );
-    dialog?.addEventListener(
-      "click",
-      (event) => {
-        if (component === "AlertDialog" || !this.#pressedOutside || !outside(dialog, event)) return;
-        this.#pending = { reason: "outside-press", event, dismiss: dialog };
-        dialog.requestClose();
-      },
-      { signal },
-    );
-    return () => {
-      listeners.abort();
-    };
+  keyDown(dialog: HTMLDialogElement, event: KeyboardEvent): void {
+    if (event.key === "Escape") this.#pending = { reason: "escape-key", event, dismiss: dialog };
+  }
+
+  pointerDown(dialog: HTMLDialogElement, event: MouseEvent): void {
+    this.#pressedOutside = outside(dialog, event);
+  }
+
+  click(dialog: HTMLDialogElement, event: MouseEvent, options: Options): void {
+    if (options.component === "AlertDialog" || !this.#pressedOutside || !outside(dialog, event)) {
+      return;
+    }
+    this.#pending = { reason: "outside-press", event, dismiss: dialog };
+    dialog.requestClose();
   }
 
   sync(dialog: HTMLDialogElement | null, open: boolean): void {

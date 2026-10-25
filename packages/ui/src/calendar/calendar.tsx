@@ -9,17 +9,17 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
+import { flushSync } from "react-dom";
 import type { ComponentProps, FocusEvent, KeyboardEvent, MouseEvent } from "react";
 
 import { DatePickerContext, dateFormats, Temporal } from "../date/date.ts";
 import type { DatePickerContextValue } from "../date/date.ts";
-import { requestChange } from "../events/events.ts";
+import { requestChange, sharedListener } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { IconButton } from "../icon-button/icon-button.tsx";
-import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { mergeProps } from "../slot/slot.tsx";
 
 import { Grid, keyTarget } from "./calendar-grid.tsx";
+import { Header } from "./calendar-header.tsx";
 import styles from "./calendar.module.css";
 
 export type CalendarChangeEventDetails = Details<"day-press">;
@@ -54,13 +54,7 @@ export interface CalendarProps extends Omit<
   nextMonthLabel: string;
 }
 
-const onFocusIn = (listener: () => void) => {
-  const controller = new AbortController();
-  document.addEventListener("focusin", listener, { signal: controller.signal });
-  return () => {
-    controller.abort();
-  };
-};
+const onFocusIn = sharedListener("focusin", () => document);
 
 const clamp = (date: Temporal.PlainDate, min?: Temporal.PlainDate, max?: Temporal.PlainDate) => {
   if (min !== undefined && Temporal.PlainDate.compare(date, min) < 0) return min;
@@ -98,6 +92,12 @@ function useCalendar(
   const selected = value === undefined ? uncontrolled : value;
   const start = clamp(selected ?? today, min, max);
   const [userFocus, setFocused] = useState<Temporal.PlainDate | null>(null);
+  const open = picker?.open === true;
+  const [wasOpen, setWasOpen] = useState(open);
+  if (open !== wasOpen) {
+    setWasOpen(open);
+    if (open) setFocused(null);
+  }
   const focused = userFocus === null ? start : clamp(userFocus, min, max);
   const outside = (date: Temporal.PlainDate) => !clamp(date, min, max).equals(date);
   const unavailable = (date: Temporal.PlainDate) =>
@@ -115,47 +115,6 @@ function useCalendar(
   return { today, selected, start, focused, setFocused, outside, unavailable, choose };
 }
 
-interface HeaderProps {
-  readonly previousMonthLabel: string;
-  readonly nextMonthLabel: string;
-  readonly heading: string;
-  readonly headingId: string;
-  readonly before: boolean;
-  readonly after: boolean;
-  readonly page: (months: number) => void;
-}
-
-function Header(props: HeaderProps) {
-  const { previousMonthLabel, nextMonthLabel, heading, headingId, before, after, page } = props;
-  return (
-    <div className={styles["header"]}>
-      <IconButton
-        size="sm"
-        aria-label={previousMonthLabel}
-        disabled={!before}
-        onClick={() => {
-          page(-1);
-        }}
-      >
-        <ChevronRightIcon size="sm" className={styles["previous"]} />
-      </IconButton>
-      <h2 id={headingId} aria-live="polite" className={styles["heading"]}>
-        {heading}
-      </h2>
-      <IconButton
-        size="sm"
-        aria-label={nextMonthLabel}
-        disabled={!after}
-        onClick={() => {
-          page(1);
-        }}
-      >
-        <ChevronRightIcon size="sm" />
-      </IconButton>
-    </div>
-  );
-}
-
 const dayOf = (target: EventTarget) => {
   const iso = target instanceof HTMLElement ? target.dataset["date"] : undefined;
   return iso === undefined ? null : Temporal.PlainDate.from(iso);
@@ -165,20 +124,6 @@ const focusDay = (grid: HTMLElement | null, day: Temporal.PlainDate) => {
   grid?.querySelector<HTMLElement>(`[data-date="${day.toString()}"]`)?.focus();
 };
 
-function useFocusOnOpen(
-  picker: DatePickerContextValue | null,
-  start: Temporal.PlainDate,
-  show: (day: Temporal.PlainDate) => void,
-) {
-  const open = picker?.open === true;
-  const onOpen = useEffectEvent(() => {
-    if (picker?.canFocus() === true) show(start);
-  });
-  useEffect(() => {
-    if (open) onOpen();
-  }, [open]);
-}
-
 function useGrid(
   calendar: ReturnType<typeof useCalendar>,
   firstDay: number,
@@ -186,19 +131,13 @@ function useGrid(
 ) {
   const { focused, setFocused, outside, choose } = calendar;
   const grid = useRef<HTMLTableElement>(null);
-  const moved = useRef(false);
-  useEffect(() => {
-    if (!moved.current) return;
-    moved.current = false;
-    focusDay(grid.current, focused);
-  }, [focused]);
-  useFocusOnOpen(picker, calendar.start, (day) => {
-    if (day.equals(focused)) focusDay(grid.current, day);
-    else {
-      moved.current = true;
-      setFocused(day);
-    }
+  const open = picker?.open === true;
+  const focusOnOpen = useEffectEvent(() => {
+    if (picker?.canFocus() === true) focusDay(grid.current, focused);
   });
+  useEffect(() => {
+    if (open) focusOnOpen();
+  }, [open]);
   return {
     grid,
     onKeyDown: (event: KeyboardEvent<HTMLTableElement>) => {
@@ -211,8 +150,11 @@ function useGrid(
       if (target === null) return;
       event.preventDefault();
       if (outside(target)) return;
-      moved.current = true;
-      setFocused(target);
+      // The day may be in a month that isn't drawn yet.
+      flushSync(() => {
+        setFocused(target);
+      });
+      focusDay(grid.current, target);
     },
     onClick: (event: MouseEvent<HTMLTableElement>) => {
       const day = dayOf(event.target);

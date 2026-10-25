@@ -1,8 +1,16 @@
-import { createContext, use, useEffect, useRef } from "react";
-import type { ChangeEvent, ChangeEventHandler, FocusEvent, FocusEventHandler } from "react";
+import { createContext, use, useRef } from "react";
+import type {
+  ChangeEvent,
+  ChangeEventHandler,
+  FocusEvent,
+  FocusEventHandler,
+  Ref,
+  RefCallback,
+} from "react";
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { composeRefs } from "../slot/slot.tsx";
 
 /** The native elements a Field validates. */
 export type FormControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
@@ -22,7 +30,10 @@ interface FieldState {
   readonly validity: ValidityState | undefined;
   readonly serverError: string | undefined;
   readonly clearServerError: () => void;
-  readonly setControlId: (id: string) => void;
+  /** The control's element, once it is mounted. */
+  readonly control: FormControl | null;
+  /** The control's ref: the Field finds its element, id and form through it. */
+  readonly register: RefCallback<FormControl>;
   readonly describe: (described: boolean) => void;
 }
 
@@ -38,6 +49,7 @@ export interface ControlBindings<Element extends FormControl> {
   name?: string | undefined;
   disabled?: boolean | undefined;
   "aria-describedby"?: string | undefined;
+  ref?: Ref<Element> | undefined;
   onFocus?: FocusEventHandler<Element> | undefined;
   onChange?: ChangeEventHandler<Element> | undefined;
   onValueChange?: ((value: string, details: ChangeEventDetails<Element>) => void) | undefined;
@@ -82,15 +94,12 @@ export function setValidity(
 export function useFieldControl<
   Element extends FormControl,
   Props extends ControlBindings<Element>,
->({ id, name, disabled, onFocus, onChange, onValueChange, ...props }: Props) {
+>({ id, name, disabled, ref, onFocus, onChange, onValueChange, ...props }: Props) {
   const { field, blocked, invalid } = useField(disabled);
   const previous = useRef("");
-  const setControlId = field?.setControlId;
-  useEffect(() => {
-    if (id !== undefined) setControlId?.(id);
-  }, [id, setControlId]);
   return {
     ...props,
+    ref: composeRefs<Element>(field?.register ?? null, ref),
     id: id ?? field?.controlId,
     name: field?.name ?? name,
     "aria-disabled": blocked || undefined,

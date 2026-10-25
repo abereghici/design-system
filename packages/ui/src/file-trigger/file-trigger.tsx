@@ -7,7 +7,7 @@ import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useEvent } from "../events/use-event.ts";
 import { useField, useFieldControl } from "../field/use-field.ts";
-import { Slot } from "../slot/slot.tsx";
+import { Slot, composeRefs } from "../slot/slot.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import { Selection } from "./file-trigger-selection.tsx";
@@ -68,7 +68,7 @@ export function FileInput({
         <input
           {...bindings}
           {...{ webkitdirectory: directory ? "" : undefined }}
-          ref={inputRef}
+          ref={composeRefs(inputRef, bindings.ref)}
           type="file"
           tabIndex={-1}
           aria-hidden

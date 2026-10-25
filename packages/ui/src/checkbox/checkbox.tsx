@@ -40,21 +40,13 @@ export function Checkbox({
   children,
   onCheckedChange,
   indeterminate = false,
-  disabled = false,
   className,
   style,
-  id,
   onClick,
-  onChange,
   ...props
 }: CheckboxProps) {
   const fallbackId = useId();
-  const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>({
-    ...props,
-    id,
-    disabled,
-    onChange: (event) => onChange?.(event),
-  });
+  const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>(props);
   const blocked = bindings["aria-disabled"] === true;
 
   function setIndeterminate(input: HTMLInputElement | null) {

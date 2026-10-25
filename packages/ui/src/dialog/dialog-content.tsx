@@ -1,7 +1,15 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
-import type { ComponentProps, RefObject, SyntheticEvent, ToggleEvent } from "react";
+import type {
+  ComponentProps,
+  KeyboardEvent,
+  MouseEvent,
+  PointerEvent,
+  RefObject,
+  SyntheticEvent,
+  ToggleEvent,
+} from "react";
 
 import { composeRefs, mergeProps } from "../slot/slot.tsx";
 
@@ -23,7 +31,6 @@ export function Content({ initialFocus, ref, ...props }: ContentProps) {
   const options: Options = { open, onOpenChange, component, initialFocus };
   const wanted = open ?? context.defaultOpen;
 
-  useLayoutEffect(() => controller.listen(dialog.current, component), [controller, component]);
   useLayoutEffect(() => {
     controller.sync(dialog.current, wanted);
   }, [controller, wanted]);
@@ -35,6 +42,15 @@ export function Content({ initialFocus, ref, ...props }: ContentProps) {
       {...mergeProps(
         {
           className: context.styles["content"],
+          onKeyDown: (event: KeyboardEvent<HTMLDialogElement>) => {
+            controller.keyDown(event.currentTarget, event.nativeEvent);
+          },
+          onPointerDown: (event: PointerEvent<HTMLDialogElement>) => {
+            controller.pointerDown(event.currentTarget, event.nativeEvent);
+          },
+          onClick: (event: MouseEvent<HTMLDialogElement>) => {
+            controller.click(event.currentTarget, event.nativeEvent, options);
+          },
           onBeforeToggle: (event: ToggleEvent<HTMLDialogElement>) => {
             controller.beforeToggle(event.currentTarget, event.nativeEvent, options);
           },

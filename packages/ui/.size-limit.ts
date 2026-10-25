@@ -60,7 +60,7 @@ const budgets: Readonly<Record<string, string>> = {
   toaster: "7.4 kB",
   toolbar: "990 B",
   tooltip: "2.5 kB",
-  "text-area": "2.85 kB",
+  "text-area": "2.9 kB",
   "text-field": "3.05 kB",
   "visually-hidden": "650 B",
   dialog: "4.15 kB",
@@ -88,6 +88,6 @@ export default [
   ...checks(
     "src/icon/icons/*.tsx",
     (path) => path.slice("src/icon/".length, -".tsx".length),
-    "1.01 kB",
+    "1.05 kB",
   ),
 ] satisfies SizeLimitConfig;

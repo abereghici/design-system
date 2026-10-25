@@ -20,8 +20,10 @@ export function Content(props: ContentProps) {
     <>
       <span id={`${menu.floating.contentId}-anchor`} aria-hidden className={styles["anchor"]} />
       <div
-        {...mergeProps({ className: `${menuStyles["content"]} ${styles["content"]}` }, props)}
-        {...menuContentProps(menu)}
+        {...mergeProps(
+          { className: `${menuStyles["content"]} ${styles["content"]}`, ...menuContentProps(menu) },
+          props,
+        )}
       />
     </>
   );
