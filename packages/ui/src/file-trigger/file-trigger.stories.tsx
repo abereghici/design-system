@@ -144,6 +144,13 @@ Default.test(
   },
 );
 
+export const WithFiles = meta.story({
+  parameters: { docs: { description: { story: "After a pick: the names and Clear." } } },
+  play: ({ canvasElement }) => {
+    pick(canvasElement, photo);
+  },
+});
+
 export const InAField = meta.story({
   args: {
     multiple: true,

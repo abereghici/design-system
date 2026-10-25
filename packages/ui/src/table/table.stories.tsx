@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { expect } from "storybook/test";
 
 import { Checkbox } from "@platform/ui/checkbox";
+import { EmptyState } from "@platform/ui/empty-state";
 import { Link } from "@platform/ui/link";
 import { ScrollArea } from "@platform/ui/scroll-area";
 
@@ -107,6 +108,46 @@ Default.test(
     await expect(canvas.getByRole("link", { name: "INV-001" })).toHaveFocus();
   },
 );
+
+export const Empty = meta.story({
+  parameters: {
+    docs: {
+      description: {
+        story: "With no rows, one cell spans every column and holds an EmptyState.",
+      },
+    },
+  },
+  args: {
+    children: (
+      <>
+        <Table.Caption>Invoices, 2026</Table.Caption>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>Invoice</Table.ColumnHeader>
+            <Table.ColumnHeader>Status</Table.ColumnHeader>
+            <Table.ColumnHeader>Issued</Table.ColumnHeader>
+            <Table.ColumnHeader style={end}>Amount</Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell colSpan={4}>
+              <EmptyState.Root>
+                <EmptyState.Title>No invoices yet</EmptyState.Title>
+                <EmptyState.Description>Invoices you issue show here.</EmptyState.Description>
+              </EmptyState.Root>
+            </Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </>
+    ),
+  },
+});
+
+Empty.test("keeps its column headers and says why it is empty", async ({ canvas }) => {
+  await expect(canvas.getAllByRole("columnheader")).toHaveLength(4);
+  await expect(canvas.getByRole("cell", { name: /No invoices yet/v })).toBeVisible();
+});
 
 export const InAScrollArea = meta.story({
   parameters: {

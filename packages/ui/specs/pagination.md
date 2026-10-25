@@ -33,7 +33,7 @@ Root (nav → list) → Previous → page items and ellipses → Next.
 - **Previous / Next.** The IconButton component (md) with `asChild` around a link, each in its own `<li>`, so they look and press exactly like IconButton. Icon `ChevronRightIcon`, turned for Previous (RTL). Named by `labels.previous` / `labels.next`. With no target (first / last page) it is a plain disabled IconButton (Behaviour).
 - **Page item.** A link per page, `<li>` → `<a href>` (or `linkComponent`), at least `pagination-item-min-width` wide and `pagination-item-height` tall, `pagination-item-padding-inline` for long numbers, radius `pagination-item-border-radius`, text `pagination-item-font` (tabular figures) in `pagination-item-text-color`. The visible text is the number formatted with `Intl.NumberFormat`; the accessible name is `labels.page`.
 - **Current page item.** Fill `pagination-item-background-color-selected`, text `pagination-item-text-color-selected`, and a 1 px inset ring `pagination-item-border-color-selected`; carries `aria-current="page"`.
-- **Ellipsis.** An `<li aria-hidden="true">` with a `MoreIcon` (`size="sm"`), the same footprint as a page item, `currentColor` from `pagination-item-text-color`. Not focusable, not a link.
+- **Ellipsis.** An `<li aria-hidden="true">` with a `MoreIcon` (`size="sm"`) turned 90° into a horizontal ellipsis, as MUI ("…"), shadcn `PaginationEllipsis` (`MoreHorizontal`), Carbon and Primer draw elided pages (upright it reads as "more actions"), the same footprint as a page item, `currentColor` from `pagination-item-text-color`. Not focusable, not a link.
 
 ## API
 

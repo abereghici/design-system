@@ -62,6 +62,13 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
+export const WithFiles = meta.story({
+  parameters: { docs: { description: { story: "After a drop: the names and Clear." } } },
+  play: ({ canvas }) => {
+    drop(canvas.getByText("Drop CSV files here, or"), january, february);
+  },
+});
+
 Default.test(
   "calls onDrop with the accepted files and the rejected ones in details",
   async ({ canvas, args }) => {

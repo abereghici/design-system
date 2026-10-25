@@ -1,13 +1,37 @@
 @import "@platform/tokens/components/tabs.css";
 
+@property --fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
 @layer ab.components {
+  /* Each trigger is padded by --pad so its inset focus ring clears the label; the list's negative
+     margin, smaller gap, inset hairline and inset indicator keep the zip's geometry at rest. */
   .list {
+    --pad: var(--ab-space-inline-xs);
+
     position: relative;
     display: flex;
-    gap: var(--ab-tabs-gap);
+    gap: calc(var(--ab-tabs-gap) - 2 * var(--pad));
     box-sizing: content-box;
     block-size: var(--ab-tabs-height);
+    margin-inline: calc(var(--pad) * -1);
     border-block-end: var(--ab-tabs-list-border-width) solid var(--ab-tabs-list-border-color);
+    border-image: linear-gradient(
+        to right,
+        transparent var(--pad),
+        var(--ab-tabs-list-border-color) 0 calc(100% - var(--pad)),
+        transparent 0
+      )
+      0 0 1 / 0 0 var(--ab-tabs-list-border-width);
     overflow-x: auto;
     scrollbar-width: none;
     anchor-scope: --ab-tabs-selected;
@@ -17,7 +41,7 @@
     content: "";
     position: absolute;
     position-anchor: --ab-tabs-selected;
-    inset-inline: anchor(self-start) anchor(self-end);
+    inset-inline: calc(anchor(self-start) + var(--pad)) calc(anchor(self-end) + var(--pad));
     inset-block-end: 0;
     block-size: var(--ab-tabs-indicator-height);
     background-color: var(--ab-tabs-indicator-color);
@@ -28,8 +52,9 @@
     display: inline-flex;
     align-items: center;
     gap: var(--ab-space-inline-xs);
-    padding: 0;
+    padding: 0 var(--pad);
     border: 0;
+    border-radius: var(--ab-radius-xs);
     background: none;
     font: var(--ab-tabs-item-font);
     color: var(--ab-tabs-item-text-color);
@@ -73,6 +98,45 @@
   @media (prefers-reduced-motion: no-preference) {
     .list[data-pointer]::after {
       transition: inset-inline var(--ab-tabs-duration) var(--ab-tabs-easing);
+    }
+  }
+
+  /* The edges fade only when there is more to scroll (brand book), like ScrollArea, but inline. */
+  @supports (animation-timeline: scroll()) {
+    .list {
+      mask-image: linear-gradient(
+        to var(--to, right),
+        transparent,
+        #000 var(--fade-start),
+        #000 calc(100% - var(--fade-end)),
+        transparent
+      );
+      animation: tabs-fade linear both;
+      animation-timeline: scroll(self inline);
+    }
+
+    .list:dir(rtl) {
+      --to: left;
+    }
+
+    .list:has(.trigger:focus-visible) {
+      mask-image: none;
+    }
+  }
+
+  @keyframes tabs-fade {
+    0% {
+      --fade-end: var(--ab-space-inline-lg);
+    }
+
+    8%,
+    92% {
+      --fade-start: var(--ab-space-inline-lg);
+      --fade-end: var(--ab-space-inline-lg);
+    }
+
+    100% {
+      --fade-start: var(--ab-space-inline-lg);
     }
   }
 

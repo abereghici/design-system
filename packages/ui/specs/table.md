@@ -42,6 +42,7 @@ Root (table) → Caption → Header (thead) → Body (tbody) → Rows → Column
 - **RowHeader.** A native `<th scope="row">` for the cell that names its row (an invoice number, a member's name). Looks like a Cell (`text-align: start`, the UA bold reset to `table-body-font`); the difference is semantic (judgement call: quiet, one text style per row).
 - **Cell.** A native `<td>`, `table-body-font` / `table-body-text-color`, `vertical-align: baseline`.
 - Every cell has `table-padding-block` and `table-padding-inline`.
+- **Empty.** No component of its own: with no rows, the Body holds one Row whose Cell spans every column (`colSpan`) and holds an EmptyState, so the column headers stay. React Aria `TableBody` `renderEmptyState`, shadcn's data table ("No results." in a `colSpan` row), MUI DataGrid's no-rows overlay and Carbon's empty-state pattern all keep the headers and say why it is empty.
 
 A wide table goes inside a [ScrollArea](./scroll-area.md), which scrolls it horizontally without touching the table's semantics (see Behaviour).
 
