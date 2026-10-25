@@ -1,5 +1,7 @@
 import { expect } from "storybook/test";
 
+import { Link } from "@platform/ui/link";
+
 import preview from "#.storybook/preview.tsx";
 
 import { enUS } from "../provider/locales/en-US.ts";
@@ -59,9 +61,9 @@ Default.test(
 export const InALink = meta.story({
   decorators: [
     (Story) => (
-      <a href="#inbox">
+      <Link href="#inbox">
         Inbox <Story />
-      </a>
+      </Link>
     ),
   ],
   parameters: {

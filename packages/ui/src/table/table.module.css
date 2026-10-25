@@ -47,12 +47,16 @@
       center / 100% no-repeat;
   }
 
-  .column-header:not([aria-sort]) .sort-label::after {
+  .column-header:where(:not([aria-sort])) .sort-label::after {
     visibility: hidden;
   }
 
   .column-header[aria-sort="ascending"] .sort-label::after {
     rotate: 180deg;
+  }
+
+  .sort-label:focus-visible::after {
+    visibility: visible;
   }
 
   @media (hover: hover) and (pointer: fine) {

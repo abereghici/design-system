@@ -13,6 +13,7 @@ const meta = preview.meta({
   component: Form,
   args: {
     "aria-label": "Sign up",
+    style: { display: "grid", gap: "var(--ab-space-stack-md)", maxInlineSize: "20rem" },
     onSubmit: fn((event: { preventDefault: () => void }) => {
       event.preventDefault();
     }),

@@ -15,7 +15,7 @@
   .root:where([data-orientation="horizontal"]) {
     display: flex;
     flex-wrap: wrap;
-    column-gap: calc(2 * var(--ab-radio-gap));
+    column-gap: var(--ab-space-inline-lg);
   }
 
   .label {
