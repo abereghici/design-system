@@ -87,7 +87,12 @@
   }
 
   .radio:is([aria-disabled="true"], :disabled) {
-    opacity: var(--ab-opacity-disabled);
+    border-color: var(--ab-color-border-disabled);
+    background-color: var(--ab-color-background-disabled);
+  }
+
+  .radio:is([aria-disabled="true"], :disabled)::before {
+    background-color: var(--ab-color-icon-disabled);
   }
 
   /* Arrow-key changes skip the spring (brand book, no keyboard motion). */

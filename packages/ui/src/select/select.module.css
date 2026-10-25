@@ -30,6 +30,10 @@
     transition: rotate var(--ab-motion-duration-swap) var(--ab-motion-easing-enter);
   }
 
+  .select[aria-disabled="true"] + .icon {
+    color: var(--ab-color-icon-disabled);
+  }
+
   .select:open + .icon {
     rotate: 180deg;
   }

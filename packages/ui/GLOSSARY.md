@@ -36,6 +36,10 @@ _Avoid_: Roving focus (that is Menu's), list navigation
 The one seam between a Field and the control inside it: `useFieldControl` for a native input, `useField` for a composite control (DateField segments, a FileTrigger, a DropZone), giving the Field's ids, blocked state, `aria-invalid` and server error, and `useFormReset` for a form reset.
 _Avoid_: Field context (as an API), input binding
 
+**Disabled look**:
+The one treatment every disabled control gets: its parts swap to the `*-disabled` colour roles (`text-disabled` ink, `icon-disabled` glyphs and marks, `background-disabled` fill, `border-disabled` edge), the label next to it takes `text-disabled`, and the description that says why stays readable. Never `opacity`: a disabled control stays focusable (`aria-disabled`), and opacity on it fades its focus ring below WCAG 1.4.11's 3:1, then fades again in any disabled ancestor. Button, Field, Command and Calendar set the precedent; Primer (`fgColor-disabled`, `bgColor-disabled`), Carbon (`$text-disabled`, `$icon-disabled`) and Atlassian (`color.text.disabled`) do the same.
+_Avoid_: Dimmed, greyed out, faded, inactive
+
 **Icon**:
 A glyph from the carved icon set on the 24-unit grid, stroked in the surrounding text colour; decorative unless it has a label. Each one is its own component (`SearchIcon`).
 _Avoid_: Glyph (as a component name), symbol, pictogram

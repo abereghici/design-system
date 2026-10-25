@@ -39,7 +39,14 @@
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .root:where(:not([aria-disabled="true"], [aria-busy="true"])):hover {
+    .root:where(
+        :not(
+          [aria-disabled="true"],
+          [aria-busy="true"],
+          [aria-pressed="true"],
+          [aria-expanded="true"]
+        )
+      ):hover {
       background-color: var(--ab-icon-button-background-color-hovered);
       color: var(--ab-icon-button-icon-color-hovered);
       transition-duration:
@@ -62,7 +69,7 @@
   }
 
   .root:where([aria-disabled="true"]) {
-    opacity: var(--ab-opacity-disabled);
+    color: var(--ab-color-icon-disabled);
     cursor: not-allowed;
   }
 
@@ -78,7 +85,6 @@
 
     .root:where([aria-disabled="true"]) {
       color: GrayText;
-      opacity: 1;
     }
   }
 }

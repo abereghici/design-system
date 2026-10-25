@@ -59,7 +59,7 @@ Names, checked against the reference libraries:
 | pressed (active) | Scale 0.97 and fill `icon-button-background-color-pressed`, 100 ms                                                                                       | `:active`                                       |
 | selected         | Fill `icon-button-background-color-selected`, icon `icon-button-icon-color-selected`. Applies when toggled on or when it controls an open Floating layer | `aria-pressed="true"` or `aria-expanded="true"` |
 | focus-visible    | 2 px focus ring, 3 px offset, `color-border-focused`                                                                                                     | `:focus-visible`                                |
-| disabled         | `opacity-disabled` (40%, the source's value); no hover or press                                                                                          | `aria-disabled="true"`                          |
+| disabled         | icon `color-icon-disabled` (Disabled look, GLOSSARY); the source's 40% opacity faded the focus ring below 3:1; no hover or press                         | `aria-disabled="true"`                          |
 | loading          | Spinner in place of the icon; no hover or press                                                                                                          | `aria-busy="true"`, `data-loading`              |
 
 ## Behaviour
@@ -116,7 +116,7 @@ Proposed new:
 | `icon-button-scale-pressed`         | `{semantic.motion-scale-pressed}`  | number  | The source's "pressed (scale .97)"; mirrors `button-scale-pressed` so an app can tune press depth per component. |
 | `icon-button-border-color-selected` | `{semantic.color-border-selected}` | color   | The selected state's ring (above).                                                                               |
 
-Consumed as semantic tokens directly: `opacity-disabled` (no `opacity` property in the Dictionary, and the value is the system's single disabled opacity), `focus-ring-width`, `focus-ring-offset`, `color-border-focused` (R6), and the `motion-*` tokens. No new Dictionary words.
+Consumed as semantic tokens directly: `color-icon-disabled`, `focus-ring-width`, `focus-ring-offset`, `color-border-focused` (R6), and the `motion-*` tokens. No new Dictionary words.
 
 ## Built-in labels
 

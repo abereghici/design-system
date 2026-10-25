@@ -111,7 +111,7 @@ Names, checked against the reference libraries:
 | disabled            | TextField's disabled colours; no hover                                                            | `aria-disabled="true"` or `:disabled`                               |
 | option highlighted  | Fill `combobox-option-background-color-hovered`, no transition                                    | `aria-selected="true"`, `data-highlighted`, `aria-activedescendant` |
 | option chosen       | Check in `combobox-option-icon-color-selected`, text in `combobox-option-text-color-selected`     | `data-selected` (Base UI: "Present when the item is selected.")     |
-| option disabled     | `opacity-disabled` on the row, as the source's `.ab-option[aria-disabled]`; never highlighted     | `aria-disabled="true"`, `aria-selected="false"`                     |
+| option disabled     | Text and icon in the `*-disabled` colours (Disabled look, GLOSSARY); never highlighted            | `aria-disabled="true"`, `aria-selected="false"`                     |
 | empty               | The "No results" row                                                                              | `data-empty` on the list; status region text                        |
 | loading             | The empty row reads "Loading…"                                                                    | `loading` prop; status region text                                  |
 

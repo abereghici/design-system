@@ -72,14 +72,14 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State         | How it shows                                                    | Exposed as                                                       |
-| ------------- | --------------------------------------------------------------- | ---------------------------------------------------------------- |
-| rest          | Track, accent range, thumb                                      | —                                                                |
-| hovered       | Thumb shadow grows to the overlay elevation; fine pointers only | `:hover` on the thumb                                            |
-| dragging      | Thumb follows the pointer 1:1                                   | `data-dragging` on Root and thumb                                |
-| focus-visible | 2 px ring, 3 px offset around the thumb                         | `:focus-visible` on the input → `:has()` on the thumb            |
-| invalid       | Thumb border `color-border-danger`                              | `aria-invalid="true"` (Field contract; only `validate` can fail) |
-| disabled      | `opacity-disabled`; no hover; pointer ignored                   | `aria-disabled="true"` or `:disabled`                            |
+| State         | How it shows                                                                                                                                                                           | Exposed as                                                       |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| rest          | Track, accent range, thumb                                                                                                                                                             | —                                                                |
+| hovered       | Thumb shadow grows to the overlay elevation; fine pointers only                                                                                                                        | `:hover` on the thumb                                            |
+| dragging      | Thumb follows the pointer 1:1                                                                                                                                                          | `data-dragging` on Root and thumb                                |
+| focus-visible | 2 px ring, 3 px offset around the thumb                                                                                                                                                | `:focus-visible` on the input → `:has()` on the thumb            |
+| invalid       | Thumb border `color-border-danger`                                                                                                                                                     | `aria-invalid="true"` (Field contract; only `validate` can fail) |
+| disabled      | range `color-icon-disabled`, thumb `color-border-disabled` / `color-background-disabled` without shadow, the value stays readable (Disabled look, GLOSSARY); no hover; pointer ignored | `aria-disabled="true"` or `:disabled`                            |
 
 ## Behaviour
 

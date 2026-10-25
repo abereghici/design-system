@@ -122,15 +122,15 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State               | How it shows                                                                                              | Exposed as                                             |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| closed              | Trigger only                                                                                              | `aria-expanded="false"` on the Trigger                 |
-| open                | Content shown next to the Trigger                                                                         | `:popover-open` on the Content, `aria-expanded="true"` |
-| opened by a pointer | The entry scale runs (Motion)                                                                             | `data-pointer` on the Content                          |
-| item highlighted    | Fill `dropdown-menu-item-background-color-hovered` (plus the focus ring from the keyboard), no transition | `:focus-visible` or `:hover` on the Item (zip rules)   |
-| item disabled       | Whole row at `opacity-disabled`, as the zip draws it; no hover fill                                       | `aria-disabled="true"`                                 |
-| item danger         | Text and icon in `dropdown-menu-item-danger-{text,icon}-color`                                            | `data-variant="danger"`                                |
-| checked             | Check (CheckboxItem) or diamond (RadioItem) in the indicator box                                          | `aria-checked="true"`                                  |
+| State               | How it shows                                                                                                                                    | Exposed as                                             |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| closed              | Trigger only                                                                                                                                    | `aria-expanded="false"` on the Trigger                 |
+| open                | Content shown next to the Trigger                                                                                                               | `:popover-open` on the Content, `aria-expanded="true"` |
+| opened by a pointer | The entry scale runs (Motion)                                                                                                                   | `data-pointer` on the Content                          |
+| item highlighted    | Fill `dropdown-menu-item-background-color-hovered` (plus the focus ring from the keyboard), no transition                                       | `:focus-visible` or `:hover` on the Item (zip rules)   |
+| item disabled       | Text, icon, check and shortcut in the `*-disabled` colours (Disabled look, GLOSSARY); the zip's row opacity faded the focus ring; no hover fill | `aria-disabled="true"`                                 |
+| item danger         | Text and icon in `dropdown-menu-item-danger-{text,icon}-color`                                                                                  | `data-variant="danger"`                                |
+| checked             | Check (CheckboxItem) or diamond (RadioItem) in the indicator box                                                                                | `aria-checked="true"`                                  |
 
 ## Behaviour
 
