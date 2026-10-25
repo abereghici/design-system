@@ -52,14 +52,14 @@ _Avoid_: Mark, brand mark
 A thin line dividing content or groups of items.
 _Avoid_: Divider, rule, hr
 
-**Provider**:
+**UIProvider**:
 The component an app mounts once at its root. It brings the global stylesheets (layer order, shared tokens, fonts, base) and the optional Locale, so apps import no CSS.
 _Avoid_: Root, app shell, LocaleProvider, ThemeProvider
 
 **Locale**:
-A typed object holding a BCP 47 tag and every built-in label in that language (`enUS`, `roRO`), passed to the Provider.
+A typed object holding a BCP 47 tag and every built-in label in that language (`enUS`, `roRO`), passed to the UIProvider.
 _Avoid_: Translations, messages, i18n bundle
 
 **Built-in label**:
-A string a component supplies by default, from its namespace in the Locale. It names only elements the component owns (a Close button, the steppers), and it gives way to any name the consumer gives (`aria-label`, `aria-labelledby`, or a `<label for>` through `id`). Precedence: the consumer's `labels`, then the Provider's Locale, then the component's own en-US namespace.
+A string a component supplies by default, from its namespace in the Locale. It names only elements the component owns (a Close button, the steppers), and it gives way to any name the consumer gives (`aria-label`, `aria-labelledby`, or a `<label for>` through `id`). Precedence: the consumer's `labels`, then the UIProvider's Locale, then the component's own en-US namespace.
 _Avoid_: Default text, i18n key

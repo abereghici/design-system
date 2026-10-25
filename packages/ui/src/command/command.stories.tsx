@@ -4,7 +4,7 @@ import { expect, fn, waitFor } from "storybook/test";
 import { PlusIcon } from "@platform/ui/icons/plus";
 import { Kbd } from "@platform/ui/kbd";
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
@@ -170,8 +170,8 @@ Default.test(
 );
 
 Default.test(
-  "speaks the Provider's locale",
-  { decorators: [(Story) => <Provider locale={roRO}>{Story()}</Provider>] },
+  "speaks the UIProvider's locale",
+  { decorators: [(Story) => <UIProvider locale={roRO}>{Story()}</UIProvider>] },
   async ({ canvas, userEvent }) => {
     await userEvent.type(canvas.getByRole("combobox", { name: "Caută comenzi" }), "zzz");
     await waitFor(() => expect(canvas.getByRole("status")).toHaveTextContent("Niciun rezultat"));

@@ -3,7 +3,7 @@ import { expect, fn } from "storybook/test";
 import type { Decorator } from "@storybook/react-vite";
 
 import { Button } from "@platform/ui/button";
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 
 import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
@@ -161,14 +161,14 @@ Default.test(
 );
 
 Default.test(
-  "formats and parses in the Provider's locale",
+  "formats and parses in the UIProvider's locale",
   {
     args: { label: "Preț", name: "price", defaultValue: 1234.5, min: 0, max: 1e6, step: 0.1 },
     decorators: [
       (Story) => (
-        <Provider locale={roRO}>
+        <UIProvider locale={roRO}>
           <Story />
-        </Provider>
+        </UIProvider>
       ),
     ],
   },

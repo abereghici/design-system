@@ -4,7 +4,7 @@ import type { Decorator } from "@storybook/react-vite";
 
 import { Button } from "@platform/ui/button";
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 import { toast } from "@platform/ui/toast";
 import type { Locale } from "@platform/ui/provider";
 
@@ -83,9 +83,9 @@ Default.test(
   {
     decorators: [
       (Story) => (
-        <Provider locale={roRO}>
+        <UIProvider locale={roRO}>
           <Story />
-        </Provider>
+        </UIProvider>
       ),
     ],
   },

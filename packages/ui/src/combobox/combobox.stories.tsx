@@ -4,7 +4,7 @@ import { expect, fn, screen, waitFor } from "storybook/test";
 import { Dialog } from "@platform/ui/dialog";
 import { UserIcon } from "@platform/ui/icons/user";
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { trusted } from "#.storybook/test/trusted.ts";
@@ -240,8 +240,8 @@ Default.test(
 );
 
 Default.test(
-  "matches Romanian accents and speaks the Provider's locale",
-  { decorators: [(Story) => <Provider locale={roRO}>{Story()}</Provider>] },
+  "matches Romanian accents and speaks the UIProvider's locale",
+  { decorators: [(Story) => <UIProvider locale={roRO}>{Story()}</UIProvider>] },
   async ({ canvas }) => {
     await type("țur");
     await expect(highlighted()).toHaveAccessibleName("Ștefan Țurcanu");

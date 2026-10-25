@@ -19,7 +19,7 @@ Two source exports exist for documentation (the Storybook foundations pages in `
 - `@platform/tokens/source/{primitive,semantic,component}.tokens.json`: the DTCG source files.
 - `@platform/tokens/contrast-matrix`: the AA contrast pairs and the WCAG ratio formula, the same module the build check uses.
 
-Apps import none of these by hand. `Provider` from `@platform/ui/provider` brings the layer order (`ab.reset, ab.tokens, ab.base, ab.components`), `tokens.css`, `fonts.css` and the base stylesheet, and each component brings its own `components/<component>.css`. Unlayered app CSS always wins over the design system, including over component tokens set on `:root` or on a subtree.
+Apps import none of these by hand. `UIProvider` from `@platform/ui/provider` brings the layer order (`ab.reset, ab.tokens, ab.base, ab.components`), `tokens.css`, `fonts.css` and the base stylesheet, and each component brings its own `components/<component>.css`. Unlayered app CSS always wins over the design system, including over component tokens set on `:root` or on a subtree.
 
 Apps must target the Baseline newly available floor (ADR-0002), for example `"browserslist": ["baseline newly available"]` in a Next.js app's `package.json`. With Next's default targets, Lightning CSS lowers `light-dark()` into `--lightningcss-light` toggles, and `data-theme` subtrees stop switching (`docs/research/turbopack-tree-shaking-react-compiler.md`).
 
@@ -109,8 +109,8 @@ Two variable families, self-hosted from their upstream OFL sources, each in a ro
 
 Code uses the system monospace stack, with no webfont.
 
-- **`Provider` brings `fonts.css`.** Each `@font-face` has its subset's `unicode-range`, so a browser downloads a file only when the page has a character in that range. A page of plain English text never fetches the latin-ext files. The italic faces share their family name with the romans and declare `font-style: italic`, so a browser downloads an italic file only when italic text renders, and never synthesizes an oblique for these families. Faces use `font-display: swap`.
-- **`Provider` preloads exactly one file: Figtree latin**, with React's `preload()`. It is the body text face, and it is the file almost every page needs. The other files, the italics among them, are not preloaded: a preload ignores `unicode-range`, so it would download them on every page. The preload and the `@font-face` request the same hashed URL, so the file is fetched once.
+- **`UIProvider` brings `fonts.css`.** Each `@font-face` has its subset's `unicode-range`, so a browser downloads a file only when the page has a character in that range. A page of plain English text never fetches the latin-ext files. The italic faces share their family name with the romans and declare `font-style: italic`, so a browser downloads an italic file only when italic text renders, and never synthesizes an oblique for these families. Faces use `font-display: swap`.
+- **`UIProvider` preloads exactly one file: Figtree latin**, with React's `preload()`. It is the body text face, and it is the file almost every page needs. The other files, the italics among them, are not preloaded: a preload ignores `unicode-range`, so it would download them on every page. The preload and the `@font-face` request the same hashed URL, so the file is fetched once.
 - **Licence.** Both families are under the SIL Open Font License 1.1. The licence texts ship next to the files (`fonts/Figtree-OFL.txt`, `fonts/NotoSerif-OFL.txt`).
 - **Rebuilding.** `pnpm fonts` downloads the pinned upstream files (the commit and release google/fonts ships), checks their sha256, subsets them with HarfBuzz and rewrites `fonts/`. Run it only to move to a new upstream release, then commit the result. The subset ranges and descriptors live in `src/fonts.ts`.
 

@@ -17,7 +17,7 @@ export interface CloseProps extends Omit<ComponentProps<"button">, "command" | "
    * button.
    */
   asChild?: boolean;
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: { close?: string };
 }
 

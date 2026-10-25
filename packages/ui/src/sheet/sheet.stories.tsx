@@ -2,7 +2,7 @@ import { expect, fn, waitFor } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
@@ -120,14 +120,14 @@ Default.test(
 );
 
 Default.test(
-  "names Close in the Provider's locale",
+  "names Close in the UIProvider's locale",
   {
     args: { defaultOpen: true },
     decorators: [
       (Story) => (
-        <Provider locale={roRO}>
+        <UIProvider locale={roRO}>
           <Story />
-        </Provider>
+        </UIProvider>
       ),
     ],
   },

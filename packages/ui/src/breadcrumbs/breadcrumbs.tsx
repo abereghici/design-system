@@ -12,10 +12,10 @@ import styles from "./breadcrumbs.module.css";
 export interface RootProps extends ComponentProps<"nav"> {
   /**
    * A shipped locale (`@platform/ui/locales/*`). This renders on the server, where the
-   * Provider's `locale` can't reach, so pass it for any language other than en-US.
+   * UIProvider's `locale` can't reach, so pass it for any language other than en-US.
    */
   locale?: Locale;
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: Partial<Labels["breadcrumbs"]>;
 }
 

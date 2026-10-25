@@ -1,7 +1,7 @@
 import { expect } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 
 import preview from "#.storybook/preview.tsx";
 
@@ -76,14 +76,14 @@ Default.test(
 );
 
 Default.test(
-  "takes spoken names from the Provider's locale",
+  "takes spoken names from the UIProvider's locale",
   {
     args: { platform: "apple" },
     decorators: [
       (Story) => (
-        <Provider locale={roRO}>
+        <UIProvider locale={roRO}>
           <Story />
-        </Provider>
+        </UIProvider>
       ),
     ],
   },

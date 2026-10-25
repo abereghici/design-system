@@ -7,7 +7,7 @@ import { Field } from "@platform/ui/field";
 import { Form } from "@platform/ui/form";
 import { PlusIcon } from "@platform/ui/icons/plus";
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 
 import preview from "#.storybook/preview.tsx";
 
@@ -81,8 +81,8 @@ Default.test(
 );
 
 Default.test(
-  "names Clear in the Provider's locale",
-  { decorators: [(Story) => <Provider locale={roRO}>{Story()}</Provider>] },
+  "names Clear in the UIProvider's locale",
+  { decorators: [(Story) => <UIProvider locale={roRO}>{Story()}</UIProvider>] },
   async ({ canvas, canvasElement }) => {
     pick(canvasElement, photo);
     await expect(canvas.getByRole("button", { name: "Golește fișierele" })).toBeVisible();

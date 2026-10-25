@@ -56,7 +56,7 @@ Names, checked against the reference libraries:
 - No script: the platform does the jump. GOV.UK v4.0.0 "Added JavaScript that moves focus to the skip link’s target to improve the consistency of screen reader behaviour."; with `tabIndex={-1}` on the target, the native focusing steps do the same, so we don't (inference from the HTML steps above).
 - Plain `<a href="#main">`, never a router link: a same-page fragment needs no client routing.
 - Several SkipLinks may follow each other (WCAG 2.4.1 sufficient technique "G124: Adding links at the top of the page to each area of the content"), each with its own `href` and text.
-- Server Component: no `'use client'`. The label comes from `children` or `labels`; the Provider's optional `locale` is a client context that a Server Component can't read, so an app that localises passes `labels` (or children) in its layout (judgement call).
+- Server Component: no `'use client'`. The label comes from `children` or `labels`; the UIProvider's optional `locale` is a client context that a Server Component can't read, so an app that localises passes `labels` (or children) in its layout (judgement call).
 
 Tests: the stories prove the first Tab shows it and the next Tab hides it. The Enter → `<main>` jump is the browser's fragment navigation; the Vitest browser runner closes its connection on a fragment navigation in all three engines, so it is not automated (built in #17).
 

@@ -27,7 +27,7 @@ export interface DropZoneProps
   onDrop?: (files: File[], details: DropZoneDropEventDetails) => void;
   /** Refuses drops and turns off the FileTrigger inside, such as while an upload runs. */
   disabled?: boolean;
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: { clear?: string };
 }
 

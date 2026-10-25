@@ -39,7 +39,7 @@ export type RootProps = Naming &
      * already rendered stay.
      */
     loading?: boolean;
-    /** Replaces the built-in text of the Provider's locale, for this instance only. */
+    /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
     labels?: { noResults?: string; loading?: string };
     /**
      * Helper text under the field, such as a format hint; the error message takes its place while

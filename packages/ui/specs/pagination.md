@@ -157,7 +157,7 @@ The `selected` state word stands for `aria-current="page"`: the Dictionary has n
 | `next`     | "Next page"                   | Next link's `aria-label`                                     |
 | `page`     | ``(page) => `Page ${page}` `` | Each page link's `aria-label`; receives the formatted number |
 
-`root`, `previous` and `next` are in the locale type and every shipped locale; Pagination is a Server Component and cannot read the Provider, so they arrive through `locale` (or `labels`). `page` is a function, so it is a `labels` key only. Defaults follow Ark's (`"previous page"`, `"next page"`, `` `page ${page}` ``) in sentence case.
+`root`, `previous` and `next` are in the locale type and every shipped locale; Pagination is a Server Component and cannot read the UIProvider, so they arrive through `locale` (or `labels`). `page` is a function, so it is a `labels` key only. Defaults follow Ark's (`"previous page"`, `"next page"`, `` `page ${page}` ``) in sentence case.
 
 ## Feedback events
 

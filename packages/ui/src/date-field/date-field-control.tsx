@@ -46,7 +46,7 @@ export interface DateFieldOptions {
    * invalid.
    */
   validate?: ((value: string, formData: FormData) => string | null | undefined) | undefined;
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: Partial<Labels["dateField"]> | undefined;
 }
 
