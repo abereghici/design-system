@@ -86,7 +86,8 @@ function useListeners(c: Combobox) {
       const list = listOf(c);
       const label =
         defaultInputValue ?? textOf(list === null ? null : chosenOf(list, defaultValue));
-      // The reset event fires before the form resets its controls, so the label goes in afterwards.
+      // The reset event fires before the form resets its controls, so the label goes in afterwards:
+      // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#resetting-a-form
       queueMicrotask(() => {
         const input = inputOf(c);
         if (input !== null) input.value = label;

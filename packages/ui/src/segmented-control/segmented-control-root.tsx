@@ -19,6 +19,10 @@ interface Group {
 export const GroupContext = createContext<Group | null>(null);
 
 export type RootProps = Omit<ComponentProps<"fieldset">, "defaultValue"> & {
+  /** The chosen segment's `value`, when your state holds it. */
+  value?: string;
+  /** The segment chosen on the first render when it holds its own state. */
+  defaultValue?: string;
   /** Called before the choice changes; `details.cancel()` keeps the old one. */
   onValueChange?: (value: string, details: ChangeEventDetails) => void;
 } & ({ value: string; defaultValue?: never } | { defaultValue: string; value?: never }) &

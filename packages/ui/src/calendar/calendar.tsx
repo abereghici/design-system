@@ -99,7 +99,7 @@ function useCalendar(
   const start = clamp(selected ?? today, min, max);
   const [userFocus, setFocused] = useState<Temporal.PlainDate | null>(null);
   const focused = userFocus === null ? start : clamp(userFocus, min, max);
-  const outside = (date: Temporal.PlainDate) => clamp(date, min, max) !== date;
+  const outside = (date: Temporal.PlainDate) => !clamp(date, min, max).equals(date);
   const unavailable = (date: Temporal.PlainDate) =>
     outside(date) || isDateUnavailable?.(date) === true;
   const choose = (date: Temporal.PlainDate, event: Event) => {

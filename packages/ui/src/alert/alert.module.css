@@ -59,7 +59,6 @@
     font: var(--ab-alert-description-font);
   }
 
-  /* Centred on the title's first line box, so the row stays one line tall and alert-body-gap holds. */
   .close {
     grid-row: 1;
     grid-column: 3;

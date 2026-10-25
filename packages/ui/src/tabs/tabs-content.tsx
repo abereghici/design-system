@@ -8,9 +8,11 @@ import { useTabs } from "./tabs-root.tsx";
 import styles from "./tabs.module.css";
 
 export interface ContentProps extends ComponentProps<"div"> {
+  /** The `value` of the Trigger that shows this panel. */
   value: string;
 }
 
+/** The panel shown while its Trigger is selected. */
 export function Content({ value, ...props }: ContentProps) {
   const tabs = useTabs("Content");
   return (

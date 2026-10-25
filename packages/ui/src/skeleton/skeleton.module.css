@@ -1,7 +1,8 @@
 @import "@platform/tokens/components/skeleton.css";
 
 @layer ab.components {
-  /* Two selectors' weight, so the placeholder overrides the wrapped component's own fill and border. */
+  /* Two selectors' weight, so the placeholder overrides the wrapped component's own fill and border:
+     https://www.w3.org/TR/selectors-4/#specificity-rules */
   .root[data-loading] {
     border-color: transparent;
     box-shadow: none;

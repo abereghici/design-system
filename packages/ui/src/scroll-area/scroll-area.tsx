@@ -9,6 +9,8 @@ export interface ScrollAreaProps extends ComponentProps<"div"> {
    * Makes its one child the box, such as a named `<section>` that screen-reader users can jump to.
    */
   asChild?: boolean;
+  /** `0` lets keyboard users Tab to it and scroll; `-1` when a focusable child already lets them. */
+  tabIndex?: number;
 }
 
 /**

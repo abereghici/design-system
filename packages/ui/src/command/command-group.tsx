@@ -12,6 +12,7 @@ export interface GroupProps extends ComponentProps<"fieldset"> {
   heading: string;
 }
 
+/** A set of Items under a `heading`; hidden while none of them match. */
 export function Group({ heading, children, ...props }: GroupProps) {
   const id = useId();
   return (

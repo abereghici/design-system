@@ -44,6 +44,7 @@ function step(
   slider.commit(slider.values, next, { reason: "keyboard", event: event.nativeEvent });
 }
 
+/** The handle people drag or step; name it with `aria-label` in a range. */
 export function Thumb({
   index = 0,
   className,

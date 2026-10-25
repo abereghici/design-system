@@ -38,7 +38,8 @@
     margin: var(--ab-context-menu-offset);
   }
 
-  /* Physical top/left on purpose: the anchor is placed with clientX/clientY, which are physical viewport coordinates in every direction. */
+  /* Physical top/left on purpose: the anchor is placed with clientX/clientY, which are physical
+     viewport coordinates in every direction: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/clientX */
   .anchor {
     position: fixed;
     top: 0;

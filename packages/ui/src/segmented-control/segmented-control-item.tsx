@@ -14,9 +14,11 @@ export interface ItemProps extends Omit<
   ComponentProps<"input">,
   "type" | "name" | "checked" | "value"
 > {
+  /** The control's value when this segment is chosen. */
   value: string;
 }
 
+/** One segment; its children are the visible label. */
 export function Item({ value, children, className, style, onClick, ...props }: ItemProps) {
   const group = use(GroupContext);
   if (group === null) throw new Error("SegmentedControl.Item must be inside SegmentedControl.Root");

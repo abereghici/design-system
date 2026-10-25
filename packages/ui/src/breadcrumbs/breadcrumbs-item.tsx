@@ -5,6 +5,7 @@ import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./breadcrumbs.module.css";
 
+/** One step of the trail, holding a Link. */
 export function Item({ children, ...props }: ComponentProps<"li">) {
   return (
     <li {...mergeProps({ className: styles["item"] }, props)}>

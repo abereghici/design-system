@@ -14,6 +14,7 @@ export interface GroupProps extends ComponentProps<"div"> {
   defaultOpen?: boolean;
 }
 
+/** A set of Items under an optional `label`; with `collapsible`, people can fold it. */
 export function Group({
   label,
   collapsible = false,

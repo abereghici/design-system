@@ -6,7 +6,8 @@ import type { ButtonProps } from "./alert-dialog-root.tsx";
 import { useClose } from "./alert-dialog-root.tsx";
 import button from "../button/button.module.css";
 
-// React's autoFocus focuses at mount, while the dialog is closed; the attribute is what the dialog focusing steps read.
+// React's autoFocus focuses at mount, while the dialog is closed; the attribute is what the dialog
+// focusing steps read: https://html.spec.whatwg.org/multipage/interactive-elements.html#dialog-focusing-steps
 const autofocus = (node: HTMLButtonElement | null) => {
   node?.setAttribute("autofocus", "");
 };

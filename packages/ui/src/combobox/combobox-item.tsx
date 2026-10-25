@@ -11,9 +11,10 @@ import { ValueContext } from "./use-combobox.ts";
 import styles from "./combobox.module.css";
 
 export interface ItemProps extends ComponentProps<"div"> {
+  /** What the form submits and `onValueChange` reports when this Item is chosen. */
   value: string;
   /** Aliases the typed text also matches, e.g. a nickname or a former name. */
-  keywords?: readonly string[];
+  keywords?: ReadonlyArray<string>;
   /** Shown, so people know the option exists, but it can't be chosen. */
   disabled?: boolean;
 }

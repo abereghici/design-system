@@ -30,7 +30,8 @@
     cursor: pointer;
   }
 
-  /* WebKit draws its disclosure triangle from this pseudo-element, not from list-style. */
+  /* WebKit draws its disclosure triangle from this pseudo-element, not from list-style:
+     https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary#changing_the_summarys_icon */
   .summary::-webkit-details-marker {
     display: none;
   }
@@ -98,7 +99,6 @@
     color: var(--ab-sidebar-item-text-color-selected);
   }
 
-  /* Inset by the corner radius so the bar runs along the straight part of the rounded fill's edge. */
   .link[aria-current="page"]::before {
     content: "";
     position: absolute;

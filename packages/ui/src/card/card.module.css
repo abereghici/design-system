@@ -13,7 +13,8 @@
     transition-timing-function: var(--ab-motion-easing-color);
   }
 
-  /* A container query styles the container's descendants, never the container itself. */
+  /* A container query styles the container's descendants, never the container itself:
+     https://www.w3.org/TR/css-contain-3/#container-queries */
   .layout {
     display: flex;
     flex-direction: column;
@@ -63,7 +64,8 @@
     font: var(--ab-card-description-font);
   }
 
-  /* Positioned after the Header in source order, so they paint above the stretched link. */
+  /* Positioned after the Header in source order, so they paint above the stretched link:
+     https://www.w3.org/TR/CSS22/zindex.html */
   .content,
   .footer {
     position: relative;

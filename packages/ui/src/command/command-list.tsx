@@ -10,18 +10,20 @@ import { mergeProps } from "../slot/slot.tsx";
 import { DialogContext, useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";
 
-type Naming =
-  | {
-      /** The list's name, such as "Commands". */
-      "aria-label": string;
-    }
-  | {
-      /** The `id` of visible text that names the list. */
-      "aria-labelledby": string;
-    };
+interface Name {
+  /** The list's name, such as "Commands". */
+  "aria-label"?: string;
+  /** The `id` of visible text that names the list. */
+  "aria-labelledby"?: string;
+}
 
-export type ListProps = Omit<ComponentProps<"div">, "aria-label" | "aria-labelledby"> & Naming;
+type Naming = { "aria-label": string } | { "aria-labelledby": string };
 
+export type ListProps = Omit<ComponentProps<"div">, "aria-label" | "aria-labelledby"> &
+  Name &
+  Naming;
+
+/** The list of Groups and Items, filtered as people type. */
 export function List(props: ListProps) {
   const command = useCommand();
   const press = use(DialogContext);
@@ -32,7 +34,8 @@ export function List(props: ListProps) {
           ref: command.list,
           className: styles["list"],
           onMouseDown: (event: MouseEvent) => {
-            // A press would otherwise move focus to the list, and the Input would lose its caret and keys.
+            // A press would otherwise move focus to the list, and the Input would lose its caret and keys:
+            // https://w3c.github.io/uievents/#event-type-mousedown
             event.preventDefault();
           },
           onPointerMove: (event: PointerEvent) => {

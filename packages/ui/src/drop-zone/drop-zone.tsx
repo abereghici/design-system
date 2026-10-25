@@ -70,7 +70,8 @@ const preventDrop = (event: globalThis.DragEvent) => {
 let zones = 0;
 let listening = new AbortController();
 
-// Module-wide so one pair of window listeners serves every mounted zone; without them a file dropped outside a zone replaces the page.
+// Module-wide so one pair of window listeners serves every mounted zone; without them a file
+// dropped outside a zone replaces the page: https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop
 function usePreventDocumentDrop() {
   useEffect(() => {
     zones += 1;

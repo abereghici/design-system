@@ -69,7 +69,8 @@ function useVisibility(
     const input = inputOf(inputId);
     const form = input?.form;
     const hide = (event: Event) => {
-      // The type must switch before the submission reads the form, not on React's next render.
+      // The type must switch before the submission reads the form, not on React's next render:
+      // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-submission-algorithm
       if (current && change(false, "form-submit", event) && input !== null) input.type = "password";
     };
     const controller = new AbortController();

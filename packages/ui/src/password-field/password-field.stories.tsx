@@ -32,7 +32,10 @@ const inAForm: Decorator = (Story) => (
 const meta = preview.meta({
   title: "Components/PasswordField",
   component: PasswordField,
-  argTypes: textFieldArgTypes,
+  argTypes: {
+    ...textFieldArgTypes,
+    onValueChange: { control: false, description: "Called as the user types, with the new text." },
+  },
   args: {
     label: "Password",
     name: "password",
