@@ -4,7 +4,13 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { unzipSync } from "fflate";
 import subsetFont from "subset-font";
 
-import { codePointsIn, FONT_FAMILIES, FONT_STYLES, FONT_SUBSETS, fontFileName } from "../src/fonts.ts";
+import {
+  codePointsIn,
+  FONT_FAMILIES,
+  FONT_STYLES,
+  FONT_SUBSETS,
+  fontFileName,
+} from "../src/fonts.ts";
 
 interface Download {
   readonly url: string;
@@ -64,13 +70,20 @@ async function sources(
 ): Promise<{ fonts: Styles<Uint8Array>; licence: Uint8Array }> {
   if (!("zip" in upstream)) {
     return {
-      fonts: { normal: await download(upstream.fonts.normal), italic: await download(upstream.fonts.italic) },
+      fonts: {
+        normal: await download(upstream.fonts.normal),
+        italic: await download(upstream.fonts.italic),
+      },
       licence: await download(upstream.licence),
     };
   }
   const wanted = new Set([upstream.fonts.normal, upstream.fonts.italic, upstream.licence]);
   const files = unzipSync(await download(upstream.zip), { filter: ({ name }) => wanted.has(name) });
-  const { [upstream.fonts.normal]: normal, [upstream.fonts.italic]: italic, [upstream.licence]: licence } = files;
+  const {
+    [upstream.fonts.normal]: normal,
+    [upstream.fonts.italic]: italic,
+    [upstream.licence]: licence,
+  } = files;
   if (normal === undefined || italic === undefined || licence === undefined) {
     throw new Error(`${upstream.zip.url}: missing ${[...wanted].join(" or ")}`);
   }
