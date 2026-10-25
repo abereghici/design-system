@@ -2,7 +2,7 @@ import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useSt
 
 import { byId, isOpen, sourceOf } from "../floating/floating.ts";
 import { filterOptions, enabled, textOf } from "../listbox/listbox.tsx";
-import { useLabels, useLocale } from "../ui-provider/locale.tsx";
+import { useLabels } from "../ui-provider/locale.tsx";
 import { combobox as comboboxLabels } from "../ui-provider/locales/en-US/combobox.ts";
 
 import { chosenOf, dismiss, highlight, inputOf, listOf, memoryOf, part } from "./combobox-state.ts";
@@ -35,13 +35,13 @@ function showEmpty(c: Combobox, list: HTMLElement, empty: boolean, text: string)
   if (status !== null) status.textContent = c.open && empty ? text : "";
 }
 
-function sync(c: Combobox, tag: string, emptyText: string) {
+function sync(c: Combobox, emptyText: string) {
   const list = listOf(c);
   const input = inputOf(c);
   if (list === null || input === null) return;
   applyText(c, list, input);
   placePopover(c, list);
-  const shown = filterOptions(list, c.options.filter === null ? "" : c.query, tag);
+  const shown = filterOptions(list, c.options.filter === null ? "" : c.query, c.options.locale);
   showEmpty(c, list, shown.length === 0, emptyText);
   const memory = memoryOf(c);
   const key = c.open ? shown.map((option) => option.id).join(" ") : "";
@@ -111,7 +111,6 @@ export function useCombobox(
   labels: { noResults?: string; loading?: string } | undefined,
   loading = false,
 ): [Combobox, string] {
-  const locale = useLocale();
   const text = useLabels("combobox", comboboxLabels, labels);
   const empty = loading ? text.loading : text.noResults;
   const [ownValue, setValue] = useState(options.defaultValue ?? null);
@@ -128,7 +127,7 @@ export function useCombobox(
     setQuery,
   };
   useLayoutEffect(() => {
-    sync(c, locale.tag, empty);
+    sync(c, empty);
   });
   useListeners(c);
   return [c, empty];

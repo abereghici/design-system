@@ -151,6 +151,7 @@ const split = ({
   defaultOpen,
   onOpenChange,
   filter,
+  locale,
   ...rest
 }: Omit<RootProps, "label" | "description" | "errorMessage" | "invalid" | "validate">) =>
   [
@@ -165,6 +166,7 @@ const split = ({
       defaultOpen,
       onOpenChange,
       filter,
+      locale,
       disabled: rest.disabled,
     },
     { ...rest, defaultValue: inputValue ?? defaultInputValue },
