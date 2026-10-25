@@ -147,7 +147,7 @@ Proposed new (`navbar` is a new component word):
 
 Every word but `navbar` is in the Dictionary (`item`, `indicator`; `gap`, `min-height`, `padding-inline`, `border-radius`, `font`, `text-color`, `background-color`, `color`, `height`; `hovered`, `pressed`, `selected`). The current state uses the `selected` state word, the Dictionary's "The current item in a set".
 
-## Built-in labels
+## Author-written text
 
 None. The landmark name is required from the app (`aria-label`/`aria-labelledby`), and the links' text is children.
 

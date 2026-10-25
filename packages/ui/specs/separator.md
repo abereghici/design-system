@@ -95,7 +95,7 @@ Proposed new tokens, for the ornament (the source drew it with no tokens of its 
 
 All words are in the Dictionary (`separator`, element `dot`, properties `size`, `color`, `gap`). No new Dictionary words.
 
-## Built-in labels
+## Author-written text
 
 None.
 

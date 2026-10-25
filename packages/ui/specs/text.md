@@ -99,7 +99,7 @@ None. Text maps each prop value to one semantic token (`type-*`, `color-text-*`)
 
 No new Dictionary words.
 
-## Built-in labels
+## Author-written text
 
 None. Every string comes from the children.
 

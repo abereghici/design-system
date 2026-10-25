@@ -61,13 +61,13 @@ A thin line dividing content or groups of items.
 _Avoid_: Divider, rule, hr
 
 **UIProvider**:
-The component an app mounts once at its root. It brings the global stylesheets (layer order, shared tokens, fonts, base) and the optional Locale, so apps import no CSS.
+The component an app mounts once at its root. It brings the global stylesheets (layer order, shared tokens, fonts, base), so apps import no CSS. It holds no state and no text.
 _Avoid_: Root, app shell, LocaleProvider, ThemeProvider
 
 **Locale**:
-A typed object holding a BCP 47 tag and every built-in label in that language (`enUS`, `roRO`), passed to the UIProvider.
-_Avoid_: Translations, messages, i18n bundle
+The optional `locale` prop (a BCP 47 tag such as `"ro-RO"`) of a component that formats numbers or dates; it goes straight to `Intl`, and without it `Intl` uses the runtime's default.
+_Avoid_: Locale object, translations, i18n bundle
 
-**Built-in label**:
-A string a component supplies by default, from its namespace in the Locale. It names only elements the component owns (a Close button, the steppers), and it gives way to any name the consumer gives (`aria-label`, `aria-labelledby`, or a `<label for>` through `id`). Precedence: the consumer's `labels`, then the UIProvider's Locale, then the component's own en-US namespace.
-_Avoid_: Default text, i18n key
+**Author-written text**:
+Every name, label and message a component shows or announces comes from the app, as children or a named prop (`aria-label`, `closeLabel`, `noOptionsText`); the library ships none. Where a part would otherwise have no accessible name, its prop type requires the text.
+_Avoid_: Built-in label, default text, i18n key

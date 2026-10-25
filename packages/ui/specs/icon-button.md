@@ -118,7 +118,7 @@ Proposed new:
 
 Consumed as semantic tokens directly: `color-icon-disabled`, `focus-ring-width`, `focus-ring-offset`, `color-border-focused` (R6), and the `motion-*` tokens. No new Dictionary words.
 
-## Built-in labels
+## Author-written text
 
 None. The name comes from `aria-label` / `aria-labelledby`.
 

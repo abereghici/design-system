@@ -104,7 +104,7 @@ Dictionary changes: the component word **`skeleton`**, and the element word **`p
 
 Easing uses `motion-easing-color` directly (R6-style pattern: a colour fade, as every hover).
 
-## Built-in labels
+## Author-written text
 
 None. Skeleton has no text; the loading status message, if any, belongs to the Spinner or Progress that describes the region.
 

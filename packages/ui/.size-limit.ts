@@ -90,9 +90,4 @@ export default [
     (path) => path.slice("src/icon/".length, -".tsx".length),
     "1.01 kB",
   ),
-  ...checks(
-    "src/ui-provider/locales/*.ts",
-    (path) => path.slice("src/ui-provider/".length, -".ts".length),
-    "730 B",
-  ),
 ] satisfies SizeLimitConfig;

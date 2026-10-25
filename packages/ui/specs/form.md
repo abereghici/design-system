@@ -82,7 +82,7 @@ Nothing to mirror.
 
 None. Form draws nothing.
 
-## Built-in labels
+## Author-written text
 
 None.
 

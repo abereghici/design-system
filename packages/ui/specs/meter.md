@@ -122,7 +122,7 @@ The fills use icon roles, as `status-dot-*-background-color` do, because the bui
 
 Dictionary changes: the component word **`meter`**, and the element word **`value`** (shared with Progress). `track`, `indicator`, `success`, `warning` and `danger` already exist.
 
-## Built-in labels
+## Author-written text
 
 None. The name is the consumer's, the judgement is the consumer's `valueLabel` (it depends on what is measured: "almost full" is right for storage, wrong for a battery), and the default value text is a number formatted with `Intl.NumberFormat` in `locale`. The locale resolves as in Progress: the `locale` prop, else the runtime's default.
 

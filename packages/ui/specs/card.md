@@ -141,7 +141,7 @@ Proposed new:
 
 The row-layout gap is semantic `space-inline-lg`; the column gap reuses `card-gap`. Focus ring: semantic `focus-ring-width`, `focus-ring-offset`, `color-border-focused` (R6).
 
-## Built-in labels
+## Author-written text
 
 None. Every string comes from the consumer's Parts.
 

@@ -134,7 +134,7 @@ Proposed new:
 
 New Dictionary component word: `toolbar`. `gap` is an existing property.
 
-## Built-in labels
+## Author-written text
 
 None. The consumer names the toolbar.
 

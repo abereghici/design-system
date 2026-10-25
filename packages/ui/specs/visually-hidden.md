@@ -94,7 +94,7 @@ Not affected. The A11Y Project: "Unlike CSS positioning and negative text-indent
 
 None, existing or new. Nothing is drawn; the technique's values are constants.
 
-## Built-in labels
+## Author-written text
 
 None. The content is the children.
 
