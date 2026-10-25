@@ -2,7 +2,13 @@
 @import "@platform/tokens/components/date-field.css";
 
 @layer ab.components {
+  /* DatePicker lines its panel up with the field box through this name, one per field. */
+  .root {
+    anchor-scope: --ab-date-field-box;
+  }
+
   .group {
+    anchor-name: --ab-date-field-box;
     position: relative;
     display: flex;
     align-items: center;

@@ -27,7 +27,7 @@ export function keyTarget(event: KeyboardEvent, date: Temporal.PlainDate, firstD
   return moves.get(event.key)?.() ?? null;
 }
 
-export interface GridProps {
+interface GridProps {
   readonly grid: RefObject<HTMLTableElement | null>;
   readonly headingId: string;
   readonly formats: Formats;

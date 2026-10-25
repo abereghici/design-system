@@ -63,7 +63,6 @@ export function Switch({
         {...bindings}
         id={bindings.id ?? fallbackId}
         type="checkbox"
-        // oxlint-disable-next-line jsx-a11y/role-has-required-aria-props -- oxlint bug: lacks jsx-a11y's isSemanticRoleElement exemption for input[type=checkbox][role=switch]; ARIA in HTML forbids aria-checked here
         role="switch"
         className={styles["track"]}
         onClick={toggleClick(

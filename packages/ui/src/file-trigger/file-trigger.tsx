@@ -20,7 +20,7 @@ type NativeProps = Pick<
   "accept" | "multiple" | "name" | "required" | "form"
 >;
 
-export interface Picker {
+interface Picker {
   readonly input: RefObject<HTMLInputElement | null>;
   readonly trigger: RefObject<HTMLElement | null>;
   readonly disabled: boolean;

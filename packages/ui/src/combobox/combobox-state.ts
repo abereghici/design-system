@@ -41,14 +41,9 @@ export function highlight(
 
 export type ChangeEventDetails<Reason extends string = string> = Details<Reason, Event | undefined>;
 
-export type ValueReason = "item-press" | "input-clear" | "escape-key";
-export type InputReason =
-  | "input-change"
-  | "item-press"
-  | "escape-key"
-  | "focus-out"
-  | "outside-press";
-export type OpenReason = InputReason | "input-press" | "list-navigation" | "none";
+type ValueReason = "item-press" | "input-clear" | "escape-key";
+type InputReason = "input-change" | "item-press" | "escape-key" | "focus-out" | "outside-press";
+type OpenReason = InputReason | "input-press" | "list-navigation" | "none";
 export type Callback<Value, Reason extends string> = (
   value: Value,
   details: ChangeEventDetails<Reason>,
@@ -74,7 +69,7 @@ export interface Options {
   disabled?: boolean | undefined;
 }
 
-export type Edge = "chosen" | "first" | "last";
+type Edge = "chosen" | "first" | "last";
 
 interface Memory {
   pointer: boolean;

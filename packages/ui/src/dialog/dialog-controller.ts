@@ -5,7 +5,8 @@ import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { returnFocus } from "../floating/floating.ts";
 
 declare global {
-  // Baseline newly available (2026-05-11) but not yet in TypeScript's DOM lib.
+  // Baseline newly available (2026-05-11) but not yet in TypeScript's DOM lib:
+  // https://html.spec.whatwg.org/#dom-toggleevent-source
   interface ToggleEvent {
     readonly source: Element | null;
   }
@@ -100,7 +101,8 @@ export class Controller {
       return;
     }
     if (!internal) {
-      // A pointer press leaves the Trigger without :focus-visible; Safari doesn't focus it at all.
+      // A pointer press leaves the Trigger without :focus-visible; Safari doesn't focus it at all
+      // (https://webkit.org/b/22261).
       this.#pointer = event.source !== null && !event.source.matches(":focus-visible");
       this.#opener = event.source;
     }
@@ -139,7 +141,8 @@ export class Controller {
     this.#pending = null;
     if (this.#skipClose) this.#skipClose = false;
     else requestChange(options.onOpenChange, false, "none", event);
-    // WebKit doesn't focus a clicked button, so its close steps leave focus on <body> or in the closed dialog.
+    // WebKit doesn't focus a clicked button (https://webkit.org/b/22261), so its close steps leave
+    // focus on <body> or in the closed dialog.
     returnFocus(dialog, this.#opener);
     this.#opener = null;
   }

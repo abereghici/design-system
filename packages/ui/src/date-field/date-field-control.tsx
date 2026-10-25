@@ -47,7 +47,7 @@ export interface DateFieldOptions extends DateValueOptions {
   labels?: Partial<Labels["dateField"]> | undefined;
 }
 
-export interface ControlOptions extends DateFieldOptions {
+interface ControlOptions extends DateFieldOptions {
   readonly isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
   readonly onFormReset?: (() => void) | undefined;
 }
@@ -167,7 +167,8 @@ function HiddenInput({
       onClick={editing.focusFirstEmpty}
       onInvalid={(event) => {
         validity.report(true);
-        // WebKit neither focuses a visually hidden invalid control nor forwards a label click as focus.
+        // WebKit neither focuses a visually hidden invalid control nor forwards a label click as focus
+        // (https://webkit.org/b/236725, a duplicate of https://webkit.org/b/22261).
         if (isFirstInvalid(event.currentTarget)) setTimeout(editing.focusFirstEmpty);
       }}
     />
