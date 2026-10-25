@@ -14,11 +14,37 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-for (const variant of ["neutral", "accent", "success", "warning", "danger"] as const) {
-  Default.test(`reads at AA contrast as ${variant}`, { args: { variant } }, async ({ canvas }) => {
+Default.test(
+  "reads at AA contrast as accent",
+  { args: { variant: "accent" } },
+  async ({ canvas }) => {
     await expect(canvas.getByText("Draft")).toBeVisible();
-  });
-}
+  },
+);
+
+Default.test(
+  "reads at AA contrast as success",
+  { args: { variant: "success" } },
+  async ({ canvas }) => {
+    await expect(canvas.getByText("Draft")).toBeVisible();
+  },
+);
+
+Default.test(
+  "reads at AA contrast as warning",
+  { args: { variant: "warning" } },
+  async ({ canvas }) => {
+    await expect(canvas.getByText("Draft")).toBeVisible();
+  },
+);
+
+Default.test(
+  "reads at AA contrast as danger",
+  { args: { variant: "danger" } },
+  async ({ canvas }) => {
+    await expect(canvas.getByText("Draft")).toBeVisible();
+  },
+);
 
 Default.test(
   "wraps a long label instead of overflowing its container",

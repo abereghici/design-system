@@ -2,13 +2,11 @@ import addonA11y from "@storybook/addon-a11y";
 import addonDocs from "@storybook/addon-docs";
 import { definePreview } from "@storybook/react-vite";
 import addonPseudoStates from "storybook-addon-pseudo-states";
-import { useEffect } from "storybook/preview-api";
 
-import { UIProvider } from "@platform/ui/ui-provider";
-
+import { withGlobals } from "./decorators/with-globals.tsx";
 import { meaningfulControls } from "./docs/arg-types.ts";
 import { transform } from "./docs/source.ts";
-import { applyGlobals, directions, DocsContainer, DocsPage, mdx, themes } from "./globals.tsx";
+import { directions, DocsContainer, DocsPage, mdx, themes } from "./globals.tsx";
 import { rememberStoryCanvas } from "./screenshots/canvas.ts";
 
 export { partsOf } from "./docs/arg-types.ts";
@@ -77,17 +75,5 @@ export default definePreview({
     },
   },
   initialGlobals: { theme: "system", dir: "ltr" },
-  decorators: [
-    (Story, { globals }) => {
-      useEffect(() => {
-        applyGlobals(globals);
-      }, [globals]);
-
-      return (
-        <UIProvider>
-          <Story />
-        </UIProvider>
-      );
-    },
-  ],
+  decorators: [withGlobals],
 });

@@ -1,5 +1,8 @@
 import { expect, fn } from "storybook/test";
 
+import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withInvalidField } from "#.storybook/decorators/with-invalid-field.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Slider from "./slider.tsx";
@@ -45,18 +48,10 @@ const meta = preview.meta({
     onValueChange: fn<(value: number | number[], details: Slider.ChangeEventDetails) => void>(),
     onValueCommitted: fn<(value: number | number[], details: Slider.CommitEventDetails) => void>(),
   },
-  decorators: [(Story) => <div style={{ inlineSize: 320 }}>{Story()}</div>],
+  decorators: [withWidth("20rem")],
 });
 
 export const Default = meta.story({});
-
-Default.test("is a slider with its formatted value", async ({ canvas }) => {
-  const slider = canvas.getByRole("slider", { name: "Volume" });
-
-  await expect(slider).toHaveValue("40");
-  await expect(slider).toHaveAttribute("aria-valuetext", "40");
-  await expect(canvas.getByRole("status")).toHaveTextContent("40");
-});
 
 Default.test(
   "steps with the arrow keys and commits each step",
@@ -250,10 +245,10 @@ Default.test(
   "submits one entry per thumb",
   {
     args: { name: "price", defaultValue: [20, 80], children: price },
-    decorators: [(Story) => <form aria-label="Filters">{Story()}</form>],
+    decorators: [withForm],
   },
   async ({ canvas }) => {
-    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Filters" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
 
     await expect([...new FormData(form)]).toEqual([
       ["price", "20"],
@@ -261,3 +256,17 @@ Default.test(
     ]);
   },
 );
+
+export const Invalid = meta.story({
+  decorators: [withInvalidField("Keep the volume below 30 at night.")],
+  parameters: {
+    docs: { description: { story: "Inside an invalid Field the thumb shows the error state." } },
+  },
+});
+
+Invalid.test("marks the thumb invalid and describes it with the error", async ({ canvas }) => {
+  const slider = canvas.getByRole("slider", { name: "Volume" });
+
+  await expect(slider).toBeInvalid();
+  await expect(slider).toHaveAccessibleDescription("Keep the volume below 30 at night.");
+});

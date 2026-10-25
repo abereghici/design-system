@@ -29,11 +29,6 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a radio group with the chosen view checked", async ({ canvas }) => {
-  await expect(canvas.getByRole("radiogroup", { name: "View" })).toBeVisible();
-  await expect(canvas.getByRole("radio", { name: "List" })).toBeChecked();
-});
-
 Default.test(
   "chooses a view on click and dispatches one ab-toggle",
   async ({ canvas, userEvent, args }) => {

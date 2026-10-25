@@ -1,10 +1,7 @@
 import { expect, fn, screen, waitFor } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
-import type { Decorator } from "@storybook/react-vite";
-
-import { Button } from "@platform/ui/button";
-
+import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
 import preview from "#.storybook/preview.tsx";
 import { confirmComposition } from "#.storybook/test/trusted.ts";
 
@@ -14,24 +11,9 @@ import type { DateFieldChangeEventDetails, DateFieldProps } from "./date-field.t
 // @ts-expect-error -- a date typed in part is invalid, so it needs its error
 ({ label: "Date of birth" }) satisfies DateFieldProps;
 
-const submitted = fn<(data: FormData) => void>();
 const date = (iso: string) => Temporal.PlainDate.from(iso);
 const names = () =>
   screen.getAllByRole("spinbutton").map((segment) => segment.getAttribute("aria-label"));
-
-const inAForm: Decorator = (Story) => (
-  <form
-    aria-label="Profile"
-    noValidate={false}
-    onSubmit={(event) => {
-      event.preventDefault();
-      submitted(new FormData(event.currentTarget));
-    }}
-  >
-    <Story />
-    <Button type="submit">Save</Button>
-  </form>
-);
 
 const meta = preview.meta({
   title: "Components/DateField",
@@ -48,14 +30,6 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({});
-
-Default.test(
-  "is a group named by its label with month, day and year spinbuttons in en-US order",
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("group", { name: "Date of birth" })).toBeVisible();
-    await expect(names()).toEqual(["month", "day", "year"]);
-  },
-);
 
 Default.test(
   "orders and names the segments for ro-RO, with the author's placeholders",
@@ -220,7 +194,7 @@ export const Editing = meta.story({
     userEvent.type(canvas.getByRole("spinbutton", { name: "month" }), "4"),
 });
 
-export const InAForm = meta.story({ decorators: [inAForm], args: { required: true } });
+export const InAForm = meta.story({ decorators: [withForm], args: { required: true } });
 
 InAForm.test(
   "submits the ISO date",
@@ -284,7 +258,7 @@ InAForm.test(
     await userEvent.type(day, "{Backspace}{Backspace}");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(day).toBeInvalid();
-    canvas.getByRole<HTMLFormElement>("form", { name: "Profile" }).reset();
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
     await waitFor(() => expect(day).toHaveValue("24"));
     await expect(day).not.toBeInvalid();
   },

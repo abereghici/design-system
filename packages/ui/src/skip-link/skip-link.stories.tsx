@@ -3,6 +3,7 @@ import { expect } from "storybook/test";
 import { Button } from "@platform/ui/button";
 
 import preview from "#.storybook/preview.tsx";
+import { atCentre } from "#.storybook/test/pointer.ts";
 
 import { SkipLink } from "./skip-link.tsx";
 import type { SkipLinkProps } from "./skip-link.tsx";
@@ -32,12 +33,6 @@ const meta = preview.meta({
 export const Default = meta.story({});
 
 /** What a pointer finds at the link's centre: the link only while it is shown. */
-const atCentre = (element: Element) => {
-  const { x, y, width, height } = element.getBoundingClientRect();
-
-  return document.elementFromPoint(x + width / 2, y + height / 2);
-};
-
 Default.test("is hidden until focused", async ({ canvas }) => {
   const link = canvas.getByRole("link", { name: "Skip to main content" });
 

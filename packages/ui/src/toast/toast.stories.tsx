@@ -74,19 +74,37 @@ Default.test("announces the toast politely, once", async () => {
   await expect(within(document.body).getByRole("alert")).toHaveTextContent("");
 });
 
-for (const variant of ["success", "warning"] as const) {
-  Default.test(
-    `shows a ${variant} toast with its description`,
-    {
-      beforeEach: showing({ variant, title: "Published", description: "Live at bereghici.dev" }),
-    },
-    async () => {
-      const toasts = within(await region());
+Default.test(
+  "reads at AA contrast as success",
+  {
+    beforeEach: showing({
+      variant: "success",
+      title: "Published",
+      description: "Live at bereghici.dev",
+    }),
+  },
+  async () => {
+    const toasts = within(await region());
 
-      await waitFor(() => expect(toasts.getByText("Live at bereghici.dev")).toBeVisible());
-    },
-  );
-}
+    await waitFor(() => expect(toasts.getByText("Live at bereghici.dev")).toBeVisible());
+  },
+);
+
+Default.test(
+  "reads at AA contrast as warning",
+  {
+    beforeEach: showing({
+      variant: "warning",
+      title: "Published",
+      description: "Live at bereghici.dev",
+    }),
+  },
+  async () => {
+    const toasts = within(await region());
+
+    await waitFor(() => expect(toasts.getByText("Live at bereghici.dev")).toBeVisible());
+  },
+);
 
 Default.test(
   "announces a danger toast assertively",

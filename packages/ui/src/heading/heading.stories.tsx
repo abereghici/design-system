@@ -12,10 +12,6 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a heading at the level `as` names", async ({ canvas }) => {
-  await expect(canvas.getByRole("heading", { level: 2, name: "Overdue invoices" })).toBeVisible();
-});
-
 Default.test(
   "keeps its level when its size differs",
   { args: { as: "h1", size: "xs" } },

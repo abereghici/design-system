@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { expect, fn } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
-
 import { Button } from "@platform/ui/button";
 import { Field } from "@platform/ui/field";
 import { FileTrigger } from "@platform/ui/file-trigger";
-import { Form } from "@platform/ui/form";
 
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview from "#.storybook/preview.tsx";
+import { pick } from "#.storybook/test/files.ts";
 
 import { DropZone } from "./drop-zone.tsx";
 import type { DropZoneDropEventDetails, DropZoneProps } from "./drop-zone.tsx";
@@ -17,7 +16,7 @@ const january = new File(["a,b"], "january.csv", { type: "text/csv" });
 const february = new File(["a,b"], "february.csv", { type: "text/csv" });
 const photo = new File(["png"], "photo.png", { type: "image/png" });
 
-/** Drags files from the desktop over `target` and drops them, as the browser reports it. */
+/** Drops files on `target` with the drag events the browser fires: Playwright drags only page elements, never files from the desktop. */
 const drop = (target: Element, ...files: File[]) => {
   const dataTransfer = new DataTransfer();
 
@@ -27,12 +26,6 @@ const drop = (target: Element, ...files: File[]) => {
     target.dispatchEvent(new DragEvent(type, { bubbles: true, cancelable: true, dataTransfer }));
   }
 };
-
-const inAForm: Decorator = (Story) => (
-  <form aria-label="Import">
-    <Story />
-  </form>
-);
 
 const submitted = (form: HTMLFormElement) =>
   new FormData(form).getAll("files").map((file) => (file instanceof File ? file.name : file));
@@ -65,15 +58,8 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-export const WithFiles = meta.story({
-  parameters: { docs: { description: { story: "After a drop: the names and Clear." } } },
-  play: ({ canvas }) => {
-    drop(canvas.getByText("Drop CSV files here, or"), january, february);
-  },
-});
-
 Default.test(
-  "calls onDrop with the accepted files and the rejected ones in details",
+  "reports the accepted files, and the rejected ones in details",
   async ({ canvas, args }) => {
     drop(canvas.getByText("Drop CSV files here, or"), january, photo);
     await expect(args.onDrop).toHaveBeenCalledOnce();
@@ -86,10 +72,10 @@ Default.test(
 
 Default.test(
   "submits the dropped files with the form",
-  { decorators: [inAForm] },
+  { decorators: [withForm] },
   async ({ canvas }) => {
     drop(canvas.getByText("Drop CSV files here, or"), january, february);
-    await expect(submitted(canvas.getByRole("form", { name: "Import" }))).toEqual([
+    await expect(submitted(canvas.getByRole("form", { name: "Profile" }))).toEqual([
       "january.csv",
       "february.csv",
     ]);
@@ -109,11 +95,11 @@ Default.test(
 
 Default.test(
   "keeps only the first file without multiple",
-  { args: { multiple: false }, decorators: [inAForm] },
+  { args: { multiple: false }, decorators: [withForm] },
   async ({ canvas, args }) => {
     drop(canvas.getByText("Drop CSV files here, or"), january, february);
     await expect(args.onDrop).toHaveBeenCalledWith([january], expect.anything());
-    await expect(submitted(canvas.getByRole("form", { name: "Import" }))).toEqual(["january.csv"]);
+    await expect(submitted(canvas.getByRole("form", { name: "Profile" }))).toEqual(["january.csv"]);
   },
 );
 
@@ -125,34 +111,26 @@ Default.test(
         if (files[0]?.name === "february.csv") details.cancel();
       },
     },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas }) => {
     const zone = canvas.getByText("Drop CSV files here, or");
 
     drop(zone, january);
     drop(zone, february);
-    await expect(submitted(canvas.getByRole("form", { name: "Import" }))).toEqual(["january.csv"]);
+    await expect(submitted(canvas.getByRole("form", { name: "Profile" }))).toEqual(["january.csv"]);
   },
 );
 
 Default.test(
   "submits files picked through its FileTrigger",
-  { decorators: [inAForm] },
+  { decorators: [withForm] },
   async ({ canvas, canvasElement, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Choose files" }));
 
-    const input = canvasElement.querySelector<HTMLInputElement>("input[type=file]");
-    const transfer = new DataTransfer();
+    pick(canvasElement, january);
 
-    transfer.items.add(january);
-
-    if (input !== null) {
-      input.files = transfer.files;
-      input.dispatchEvent(new Event("change", { bubbles: true }));
-    }
-
-    await expect(submitted(canvas.getByRole("form", { name: "Import" }))).toEqual(["january.csv"]);
+    await expect(submitted(canvas.getByRole("form", { name: "Profile" }))).toEqual(["january.csv"]);
   },
 );
 
@@ -216,19 +194,17 @@ Default.test(
     args: { required: true },
     decorators: [
       (Story) => (
-        <Form aria-label="Import">
-          <Field.Root>
-            <Field.Label>Statements</Field.Label>
-            <Story />
-            <Field.Error />
-          </Field.Root>
-          <Button type="submit">Import</Button>
-        </Form>
+        <Field.Root>
+          <Field.Label>Statements</Field.Label>
+          <Story />
+          <Field.Error />
+        </Field.Root>
       ),
+      withForm,
     ],
   },
   async ({ canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole("button", { name: "Import" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
 
     const trigger = canvas.getByRole("button", { name: "Statements Choose files" });
 
@@ -236,3 +212,10 @@ Default.test(
     await expect(trigger).toHaveAttribute("aria-invalid", "true");
   },
 );
+
+export const WithFiles = meta.story({
+  parameters: { docs: { description: { story: "After a drop: the names and Clear." } } },
+  play: ({ canvas }) => {
+    drop(canvas.getByText("Drop CSV files here, or"), january, february);
+  },
+});

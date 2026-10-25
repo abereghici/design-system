@@ -6,6 +6,7 @@ import { Button } from "@platform/ui/button";
 import { toast } from "@platform/ui/toast";
 
 import preview from "#.storybook/preview.tsx";
+import { atCentre } from "#.storybook/test/pointer.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
 import { remove, snapshot } from "../toast/toast.ts";
@@ -24,12 +25,6 @@ const settle = (ms: number) =>
   new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
-const topmost = (element: Element) => {
-  const { x, y, width, height } = element.getBoundingClientRect();
-
-  return element.contains(document.elementFromPoint(x + width / 2, y + height / 2));
-};
-
 const withSave: Decorator = (Story) => (
   <>
     <Button>Save</Button>
@@ -137,6 +132,49 @@ Default.test(
   },
 );
 
+Default.test(
+  "stays on top of an open popover and inside an open modal dialog",
+  { decorators: [withDialog] },
+  async ({ canvas, userEvent }) => {
+    const undo = fn<() => void>();
+    const menu = canvas.getByRole("menu", { hidden: true });
+
+    menu.showPopover();
+    toast({ title: "Archived", action: { label: "Undo", onClick: undo }, duration: Infinity });
+
+    const archived = within(await region()).getByRole("button", { name: "Undo" });
+
+    await waitFor(() => expect(archived.contains(atCentre(archived))).toBe(true));
+    menu.hidePopover();
+
+    await userEvent.click(canvas.getByRole("button", { name: "Edit" }));
+
+    const dialog = page.getByRole("dialog", { name: "Edit profile" });
+
+    toast({ title: "Renamed", action: { label: "Undo", onClick: undo }, duration: Infinity });
+    await waitFor(() =>
+      expect(within(dialog).getByText("Renamed", { selector: "div" })).toBeVisible(),
+    );
+    await waitFor(() => expect(within(dialog).getByRole("status")).toHaveTextContent("Renamed"));
+    within(dialog).getByRole("button", { name: "Rename" }).focus();
+    await userEvent.tab();
+
+    const renamed = within(dialog).getAllByRole("button", { name: "Undo" })[0];
+
+    await expect(renamed).toHaveFocus();
+    await expect(renamed?.contains(atCentre(renamed))).toBe(true);
+
+    const user = await trusted();
+
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(page.queryByText("Renamed", { selector: "div" })).toBeNull());
+    await expect(dialog).toBeVisible();
+    within(dialog).getByRole("button", { name: "Rename" }).focus();
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(dialog).not.toBeVisible());
+  },
+);
+
 export const Stacked = meta.story({
   decorators: [withSave],
   beforeEach: () => {
@@ -163,48 +201,5 @@ Stacked.test(
 
     dismisses[3]?.focus();
     await expect(dismisses[2]).toHaveFocus();
-  },
-);
-
-Default.test(
-  "stays on top of an open popover and inside an open modal dialog",
-  { decorators: [withDialog] },
-  async ({ canvas, userEvent }) => {
-    const undo = fn<() => void>();
-    const menu = canvas.getByRole("menu", { hidden: true });
-
-    menu.showPopover();
-    toast({ title: "Archived", action: { label: "Undo", onClick: undo }, duration: Infinity });
-
-    const archived = within(await region()).getByRole("button", { name: "Undo" });
-
-    await waitFor(() => expect(topmost(archived)).toBe(true));
-    menu.hidePopover();
-
-    await userEvent.click(canvas.getByRole("button", { name: "Edit" }));
-
-    const dialog = page.getByRole("dialog", { name: "Edit profile" });
-
-    toast({ title: "Renamed", action: { label: "Undo", onClick: undo }, duration: Infinity });
-    await waitFor(() =>
-      expect(within(dialog).getByText("Renamed", { selector: "div" })).toBeVisible(),
-    );
-    await waitFor(() => expect(within(dialog).getByRole("status")).toHaveTextContent("Renamed"));
-    within(dialog).getByRole("button", { name: "Rename" }).focus();
-    await userEvent.tab();
-
-    const renamed = within(dialog).getAllByRole("button", { name: "Undo" })[0];
-
-    await expect(renamed).toHaveFocus();
-    await expect(renamed !== undefined && topmost(renamed)).toBe(true);
-
-    const user = await trusted();
-
-    await user.keyboard("{Escape}");
-    await waitFor(() => expect(page.queryByText("Renamed", { selector: "div" })).toBeNull());
-    await expect(dialog).toBeVisible();
-    within(dialog).getByRole("button", { name: "Rename" }).focus();
-    await user.keyboard("{Escape}");
-    await waitFor(() => expect(dialog).not.toBeVisible());
   },
 );

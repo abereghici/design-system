@@ -40,10 +40,6 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is announced as a separator", async ({ canvas }) => {
-  await expect(canvas.getByRole("separator")).not.toHaveAttribute("aria-orientation");
-});
-
 Default.test(
   "is hidden from assistive technology when decorative",
   { args: { decorative: true } },

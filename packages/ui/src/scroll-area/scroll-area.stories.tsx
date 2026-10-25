@@ -1,6 +1,8 @@
-import { expect } from "storybook/test";
+import { expect, waitFor } from "storybook/test";
 
 import preview from "#.storybook/preview.tsx";
+import { atCentre } from "#.storybook/test/pointer.ts";
+import { trusted } from "#.storybook/test/trusted.ts";
 
 import { ScrollArea } from "./scroll-area.tsx";
 
@@ -27,17 +29,14 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test(
-  "is a tab stop with no role of its own",
-  async ({ canvas, canvasElement, userEvent }) => {
-    await userEvent.tab();
+Default.test("scrolls with the keyboard once Tab reaches it", async ({ canvas }) => {
+  const user = await trusted();
+  const last = canvas.getByText(terms.at(-1) ?? "");
 
-    const area = canvasElement.querySelector(":focus");
-
-    await expect(area).toContainElement(canvas.getByText(first));
-    await expect(area).not.toHaveAttribute("role");
-  },
-);
+  await expect(atCentre(last)).not.toBe(last);
+  await user.keyboard("{Tab}{End}");
+  await waitFor(() => expect(atCentre(last)).toBe(last));
+});
 
 Default.test(
   "renders a named section as a region through asChild",

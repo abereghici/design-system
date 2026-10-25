@@ -1,27 +1,11 @@
 import { expect } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
+import { Checkbox } from "@platform/ui/checkbox";
 
-import { Button } from "@platform/ui/button";
-
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
-import { Checkbox } from "../checkbox/checkbox.tsx";
-
 import * as Field from "./field.tsx";
-
-const inAForm: Decorator = (Story) => (
-  <form
-    aria-label="Profile"
-    onSubmit={(event) => {
-      event.preventDefault();
-    }}
-  >
-    <Story />
-    <Button type="submit">Save</Button>
-    <Button type="reset">Reset</Button>
-  </form>
-);
 
 const meta = preview.meta({
   title: "Components/Field",
@@ -70,7 +54,7 @@ Default.test(
 
 Default.test(
   "replaces the description with the browser's message after a failed submit",
-  { decorators: [inAForm] },
+  { decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole<HTMLInputElement>("textbox", { name: "Handle" });
 
@@ -84,7 +68,7 @@ Default.test(
 
 Default.test(
   "clears the error when the form is reset",
-  { decorators: [inAForm] },
+  { decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
 
@@ -98,7 +82,7 @@ Default.test(
 Default.test(
   "shows a message per failure",
   {
-    decorators: [inAForm],
+    decorators: [withForm],
     args: {
       children: (
         <>
@@ -125,7 +109,7 @@ Default.test(
 Default.test(
   "runs validate on every change",
   {
-    decorators: [inAForm],
+    decorators: [withForm],
     args: {
       validate: (value: string) => (value === "@admin" ? "That handle is reserved." : null),
     },
@@ -180,7 +164,7 @@ Default.test(
 Default.test(
   "adds a description and an error to a Checkbox",
   {
-    decorators: [inAForm],
+    decorators: [withForm],
     args: {
       name: "terms",
       children: (

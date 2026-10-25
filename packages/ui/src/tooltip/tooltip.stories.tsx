@@ -112,6 +112,17 @@ Default.test("hides when its Trigger is pressed", async ({ canvas }) => {
   ]);
 });
 
+Default.test("never opens from a touch", async ({ canvas, userEvent }) => {
+  await userEvent.pointer({
+    keys: "[TouchA]",
+    target: canvas.getByRole("button", { name: "Copy link" }),
+  });
+  // user-event's touch then focuses the Trigger by script, which the :focus-visible heuristics match
+  // though a real tap would not, so the proof checks the pointer path only:
+  // https://drafts.csswg.org/selectors-4/#the-focus-visible-pseudo
+  await expect(reasons()).not.toContainEqual([true, "trigger-hover"]);
+});
+
 Default.test("stays hidden after its Trigger is clicked", async ({ canvas }) => {
   const user = await trusted();
 

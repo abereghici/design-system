@@ -4,3 +4,9 @@ exports[`Default   > base story 1`] = `
 - slider "Volume": "40"
 - status: "40"
 `;
+
+exports[`Invalid   > base story 1`] = `
+- slider "Volume": "40"
+- status: "40"
+- text: Keep the volume below 30 at night.
+`;

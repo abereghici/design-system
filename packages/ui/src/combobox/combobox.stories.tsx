@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { expect, fn, screen, waitFor } from "storybook/test";
 
-import { Dialog } from "@platform/ui/dialog";
 import { UserIcon } from "@platform/ui/icons/user";
 
+import { withDialog } from "#.storybook/decorators/with-dialog.tsx";
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
 
@@ -20,7 +21,7 @@ const onOpenChange = fn<NonNullable<Combobox.RootProps["onOpenChange"]>>();
 const reasons = (callback: { mock: { calls: [unknown, { reason: string }][] } }) =>
   callback.mock.calls.map(([value, { reason }]) => [value, reason]);
 const field = (name = "Assignee") => screen.getByRole<HTMLInputElement>("combobox", { name });
-const highlighted = () => document.querySelector('[role="option"][aria-selected="true"]');
+const highlighted = () => screen.queryByRole("option", { selected: true });
 const names = () => screen.queryAllByRole("option").map((option) => option.textContent);
 const submitted = () => new FormData(screen.getByRole<HTMLFormElement>("form")).get("assignee");
 const type = async (keys: string, name?: string) => {
@@ -66,17 +67,11 @@ const meta = preview.meta({
     ),
   },
   decorators: [
+    withForm,
     (Story) => (
-      <form
-        aria-label="Task"
-        style={{ maxInlineSize: "20rem", paddingBlockEnd: "16rem" }}
-        onSubmit={(event) => {
-          event.preventDefault();
-        }}
-      >
+      <div style={{ maxInlineSize: "20rem", paddingBlockEnd: "16rem" }}>
         <Story />
-        <button type="submit">Save</button>
-      </form>
+      </div>
     ),
   ],
 });
@@ -168,17 +163,11 @@ Default.test("moves past disabled, wrapping, with Home and End", async ({ canvas
   await expect(reasons(onOpenChange)).toEqual([[true, "list-navigation"]]);
 });
 
-const inADialog = (Story: () => React.ReactNode) => (
-  <Dialog.Root defaultOpen>
-    <Dialog.Content aria-label="Assign task">{Story()}</Dialog.Content>
-  </Dialog.Root>
-);
-
 Default.test(
   "restores on Escape, then clears, keeping its Dialog open",
-  { args: { defaultValue: "ab" }, decorators: [inADialog] },
+  { args: { defaultValue: "ab" }, decorators: [withDialog] },
   async ({ canvas }) => {
-    const dialog = canvas.getByRole("dialog", { name: "Assign task" });
+    const dialog = canvas.getByRole("dialog", { name: "Edit" });
 
     await waitFor(() => expect(dialog).toBeVisible());
     await expect(field()).toHaveValue("Alexandru Bereghici");
@@ -228,7 +217,7 @@ Default.test(
     await userEvent.keyboard("mu{Enter}");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(field()).toHaveAccessibleDescription("Mugur is on leave.");
-    canvas.getByRole<HTMLFormElement>("form").reset();
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
     await waitFor(() => expect(field()).toHaveValue("Ioana Munteanu"));
     await waitFor(() => expect(submitted()).toBe("im"));
   },
@@ -273,6 +262,15 @@ function ServerSearch(args: Combobox.RootProps) {
   );
 }
 
+Default.test(
+  "announces its loading text in place of No results",
+  { args: { loading: true, loadingText: "Loading…" } },
+  async () => {
+    await type("zzz");
+    await expect(screen.getByRole("status")).toHaveTextContent("Loading…");
+  },
+);
+
 export const Open = meta.story({
   parameters: { docs: { description: { story: "Open, with the first option highlighted." } } },
   play: async ({ canvas, userEvent }) => {
@@ -294,12 +292,3 @@ ServerSearchResults.test("shows the Items the app renders", async ({ canvas, use
   await userEvent.keyboard("{Backspace}{Enter}");
   await expect(field("Repository")).toHaveValue("platform/web");
 });
-
-Default.test(
-  "announces its loading text in place of No results",
-  { args: { loading: true, loadingText: "Loading…" } },
-  async () => {
-    await type("zzz");
-    await expect(screen.getByRole("status")).toHaveTextContent("Loading…");
-  },
-);

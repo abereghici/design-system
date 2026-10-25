@@ -1,33 +1,25 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Default   > base story 1`] = `
-- text: Due date
-- group "Due date":
-  - spinbutton "month": "03"
-  - spinbutton "day": "12"
-  - spinbutton "year": "2025"
-  - button "Choose date"
-- button "After"
-`;
-
-exports[`In A Form   > base story 1`] = `
-- form "Booking":
-  - text: Due date *" / "
-  - group "Due date *\\" / \\"":
+- form "Profile":
+  - text: Due date
+  - group "Due date":
     - spinbutton "month": "03"
     - spinbutton "day": "12"
     - spinbutton "year": "2025"
     - button "Choose date"
   - button "Save"
-- button "After"
+  - button "Reset"
 `;
 
 exports[`Lazy Calendar   > base story 1`] = `
-- text: Due date
-- group "Due date":
-  - spinbutton "month": "03"
-  - spinbutton "day": "12"
-  - spinbutton "year": "2025"
-  - button "Choose date"
-- button "After"
+- form "Profile":
+  - text: Due date
+  - group "Due date":
+    - spinbutton "month": "03"
+    - spinbutton "day": "12"
+    - spinbutton "year": "2025"
+    - button "Choose date"
+  - button "Save"
+  - button "Reset"
 `;

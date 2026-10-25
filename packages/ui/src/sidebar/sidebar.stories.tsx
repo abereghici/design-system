@@ -52,18 +52,6 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a named navigation landmark", async ({ canvas }) => {
-  await expect(canvas.getByRole("navigation", { name: "Workspace" })).toBeVisible();
-});
-
-Default.test("names a labelled group by its label and lists its links", async ({ canvas }) => {
-  const projects = canvas.getByRole("group", { name: "Projects" });
-
-  await expect(projects).toBeVisible();
-  await expect(canvas.getAllByRole("group")).toEqual([projects]);
-  await expect(canvas.getAllByRole("list")).toHaveLength(2);
-});
-
 Default.test("marks the current page", async ({ canvas }) => {
   await expect(canvas.getByRole("link", { name: "Tokens" })).toHaveAttribute(
     "aria-current",

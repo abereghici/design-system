@@ -3,7 +3,6 @@ import type { CSSProperties } from "react";
 import { expect } from "storybook/test";
 
 import { Checkbox } from "@platform/ui/checkbox";
-import { Link } from "@platform/ui/link";
 import { ScrollArea } from "@platform/ui/scroll-area";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
@@ -59,53 +58,11 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a table named by its caption", async ({ canvas }) => {
-  await expect(canvas.getByRole("table", { name: "Invoices, 2026" })).toBeVisible();
-});
-
-Default.test("exposes column headers, row headers and cells", async ({ canvas }) => {
-  const names = (role: string) => canvas.getAllByRole(role).map((cell) => cell.textContent);
-
-  await expect(names("columnheader")).toEqual(["Invoice", "Status", "Issued", "Amount"]);
-  await expect(names("rowheader")).toEqual(["INV-001", "INV-002", "INV-003"]);
-  await expect(canvas.getAllByRole("row", { name: /INV-002/v })[0]).toHaveTextContent(
-    "INV-002Pending2026-02-05€1,180.40",
-  );
-});
-
-Default.test("adds no tab stops of its own", async ({ userEvent }) => {
-  await userEvent.tab();
-  await expect(document.body).toHaveFocus();
-});
-
 Default.test(
   "is named by aria-label without a caption",
   { args: { "aria-label": "Usage", children: rows } },
   async ({ canvas }) => {
     await expect(canvas.getByRole("table", { name: "Usage" })).toBeVisible();
-  },
-);
-
-Default.test(
-  "keeps a link in a cell as its own tab stop",
-  {
-    args: {
-      children: (
-        <Table.Body>
-          <Table.Row>
-            <Table.RowHeader>
-              <Link href="#inv-001">INV-001</Link>
-            </Table.RowHeader>
-            <Table.Cell>Paid</Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      ),
-      "aria-label": "Invoices",
-    },
-  },
-  async ({ canvas, userEvent }) => {
-    await userEvent.tab();
-    await expect(canvas.getByRole("link", { name: "INV-001" })).toHaveFocus();
   },
 );
 

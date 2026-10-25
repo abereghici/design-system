@@ -1,10 +1,10 @@
 import { expect } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
-
 import { Button } from "@platform/ui/button";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
+import { atCentre } from "#.storybook/test/pointer.ts";
 
 import * as Card from "./card.tsx";
 
@@ -14,21 +14,6 @@ const header = (
     <Card.Description>2 active</Card.Description>
   </Card.Header>
 );
-
-const withWidth = (inlineSize: string): Decorator =>
-  function WithWidth(Story) {
-    return (
-      <div style={{ inlineSize }}>
-        <Story />
-      </div>
-    );
-  };
-
-const center = (element: Element) => {
-  const { x, y, width, height } = element.getBoundingClientRect();
-
-  return document.elementFromPoint(x + width / 2, y + height / 2);
-};
 
 const meta = preview.meta({
   title: "Components/Card",
@@ -47,10 +32,6 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({});
-
-Default.test("names itself with a level-3 heading", async ({ canvas }) => {
-  await expect(canvas.getByRole("heading", { level: 3, name: "API keys" })).toBeVisible();
-});
 
 Default.test(
   "takes the heading level of the child it renders",
@@ -149,7 +130,7 @@ Linked.test(
 Linked.test(
   "takes a click anywhere on the card as a click on its title link",
   async ({ canvas }) => {
-    await expect(center(canvas.getByText("Updated 2 hours ago"))).toBe(
+    await expect(atCentre(canvas.getByText("Updated 2 hours ago"))).toBe(
       canvas.getByRole("link", { name: "Quarterly report" }),
     );
   },
@@ -171,5 +152,5 @@ Linked.test(
 Linked.test("keeps its footer actions clickable", async ({ canvas }) => {
   const share = canvas.getByRole("button", { name: "Share" });
 
-  await expect(center(share)).toBe(share);
+  await expect(atCentre(share)).toBe(share);
 });

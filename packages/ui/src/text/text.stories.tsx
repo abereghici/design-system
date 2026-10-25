@@ -25,12 +25,6 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a paragraph", async ({ canvas }) => {
-  await expect(canvas.getByRole("paragraph")).toHaveTextContent(
-    "Invoices are sent on the first working day of the month.",
-  );
-});
-
 Default.test(
   "renders code as a code element",
   { args: { variant: "code", children: "pnpm build" } },

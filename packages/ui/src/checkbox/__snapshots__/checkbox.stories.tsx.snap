@@ -5,6 +5,11 @@ exports[`Default   > base story 1`] = `
 - text: Email me updates
 `;
 
+exports[`Invalid 1`] = `
+- checkbox "I accept the terms"
+- text: I accept the terms Accept the terms to continue.
+`;
+
 exports[`Long Label 1`] = `
 - checkbox "Send a copy of every report to reports-archive@platform-production.example.com"
 - text: Send a copy of every report to reports-archive@platform-production.example.com

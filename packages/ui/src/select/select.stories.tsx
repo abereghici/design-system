@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
-
-import { Button } from "@platform/ui/button";
-
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
@@ -19,18 +16,6 @@ const regions = (
       <Select.Item value="sg">Singapore</Select.Item>
     </Select.Group>
   </>
-);
-
-const inAForm: Decorator = (Story) => (
-  <form
-    aria-label="Settings"
-    onSubmit={(event) => {
-      event.preventDefault();
-    }}
-  >
-    <Story />
-    <Button type="submit">Save</Button>
-  </form>
 );
 
 const meta = preview.meta({
@@ -52,10 +37,6 @@ const basePicker = () => CSS.supports("appearance: base-select");
 
 export const Default = meta.story({});
 
-Default.test("is a combobox named by its label", async ({ canvas }) => {
-  await expect(canvas.getByRole("combobox", { name: "Region" })).toBeVisible();
-});
-
 Default.test("shows the placeholder until the user chooses", async ({ canvas }) => {
   await expect(canvas.getByRole("combobox", { name: "Region" })).toHaveDisplayValue(
     "Choose a region",
@@ -68,20 +49,17 @@ Default.test("groups options under a named group", async ({ canvas }) => {
   );
 });
 
-Default.test(
-  "calls onValueChange with the chosen value and shows its text",
-  async ({ args, canvas, userEvent }) => {
-    const select = canvas.getByRole("combobox", { name: "Region" });
+Default.test("reports the chosen value and shows its text", async ({ args, canvas, userEvent }) => {
+  const select = canvas.getByRole("combobox", { name: "Region" });
 
-    await userEvent.selectOptions(select, "jp");
-    await expect(select).toHaveDisplayValue("Japan");
-    await expect(args.onValueChange).toHaveBeenCalledTimes(1);
-    await expect(args.onValueChange).toHaveBeenCalledWith(
-      "jp",
-      expect.objectContaining({ reason: "none" }),
-    );
-  },
-);
+  await userEvent.selectOptions(select, "jp");
+  await expect(select).toHaveDisplayValue("Japan");
+  await expect(args.onValueChange).toHaveBeenCalledTimes(1);
+  await expect(args.onValueChange).toHaveBeenCalledWith(
+    "jp",
+    expect.objectContaining({ reason: "none" }),
+  );
+});
 
 Default.test(
   "keeps the previous value when the change is cancelled",
@@ -154,7 +132,7 @@ Default.test(
       description: "Where your data is stored.",
       errorMessage: "Choose a region.",
     },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas, userEvent }) => {
     const select = canvas.getByRole("combobox", { name: "Region" });
@@ -168,7 +146,7 @@ Default.test(
 
 Default.test(
   "shows the browser's message when no error message is given",
-  { args: { required: true }, decorators: [inAForm] },
+  { args: { required: true }, decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const select = canvas.getByRole<HTMLSelectElement>("combobox", { name: "Region" });
 
@@ -180,7 +158,7 @@ Default.test(
 
 Default.test(
   "clears the error once a valid option is chosen",
-  { args: { required: true, errorMessage: "Choose a region." }, decorators: [inAForm] },
+  { args: { required: true, errorMessage: "Choose a region." }, decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const select = canvas.getByRole("combobox", { name: "Region" });
 
@@ -195,7 +173,7 @@ Default.test(
   "shows the message from validate once the form is submitted",
   {
     args: { validate: (value) => (value === "na" ? "North America is full." : null) },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas, userEvent }) => {
     const select = canvas.getByRole("combobox", { name: "Region" });
@@ -220,9 +198,9 @@ Default.test(
 
 Default.test(
   "submits the chosen value with its form",
-  { args: { defaultValue: "sg" }, decorators: [inAForm] },
+  { args: { defaultValue: "sg" }, decorators: [withForm] },
   async ({ canvas }) => {
-    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Settings" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
 
     await expect(new FormData(form).get("region")).toBe("sg");
   },

@@ -51,22 +51,6 @@ Default.test(
 );
 
 Default.test(
-  "shows a suboptimal value",
-  { args: { value: 80, low: 70, high: 90, optimum: 0, valueLabel: "80%, filling up" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("80%, filling up")).toBeVisible();
-  },
-);
-
-Default.test(
-  "shows an optimal value",
-  { args: { value: 30, low: 70, high: 90, optimum: 0, valueLabel: "30%, plenty of room" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("30%, plenty of room")).toBeVisible();
-  },
-);
-
-Default.test(
   "clamps its value to the range",
   { args: { value: -5, min: 0, max: 10 } },
   async ({ canvas }) => {

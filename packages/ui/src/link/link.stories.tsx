@@ -14,11 +14,6 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a link named by its text and reached with Tab", async ({ canvas, userEvent }) => {
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "token guide" })).toHaveFocus();
-});
-
 Default.test(
   "names itself from its text, not its icon",
   {

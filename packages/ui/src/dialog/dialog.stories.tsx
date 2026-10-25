@@ -196,13 +196,6 @@ function ControlledDialog(props: Dialog.RootProps) {
   );
 }
 
-export const Controlled = meta.story({
-  render: ControlledDialog,
-  parameters: {
-    docs: { description: { story: "The parent holds `open` and updates it on change." } },
-  },
-});
-
 Default.test(
   "closes on Escape and returns focus to the Trigger",
   async ({ args, canvas, userEvent }) => {
@@ -219,6 +212,13 @@ Default.test(
     );
   },
 );
+
+export const Controlled = meta.story({
+  render: ControlledDialog,
+  parameters: {
+    docs: { description: { story: "The parent holds `open` and updates it on change." } },
+  },
+});
 
 Controlled.test("opens and closes through open", async ({ args, canvas, userEvent }) => {
   const opener = canvas.getByRole("button", { name: "Rename…" });

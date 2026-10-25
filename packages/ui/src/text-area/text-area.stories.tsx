@@ -1,24 +1,9 @@
 import { expect, fn } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
-
-import { Button } from "@platform/ui/button";
-
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { TextArea } from "./text-area.tsx";
-
-const inAForm: Decorator = (Story) => (
-  <form
-    aria-label="Feedback"
-    onSubmit={(event) => {
-      event.preventDefault();
-    }}
-  >
-    <Story />
-    <Button type="submit">Send</Button>
-  </form>
-);
 
 const meta = preview.meta({
   title: "Components/TextArea",
@@ -34,15 +19,9 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a textbox named by its label", async ({ canvas }) => {
-  const textarea = canvas.getByRole("textbox", { name: "Message" });
-
-  await expect(textarea).toHaveAccessibleDescription("Grows with your text.");
-});
-
 Default.test(
   "inserts a line break on Enter and reports each value",
-  { decorators: [inAForm] },
+  { decorators: [withForm] },
   async ({ args, canvas, userEvent }) => {
     const textarea = canvas.getByRole("textbox", { name: "Message" });
 
@@ -57,11 +36,11 @@ Default.test(
 
 Default.test(
   "replaces the description with the error after a failed submit",
-  { args: { required: true, errorMessage: "Write a message." }, decorators: [inAForm] },
+  { args: { required: true, errorMessage: "Write a message." }, decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const textarea = canvas.getByRole("textbox", { name: "Message" });
 
-    await userEvent.click(canvas.getByRole("button", { name: "Send" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(textarea).toHaveAttribute("aria-invalid", "true");
     await expect(textarea).toHaveAccessibleDescription("Write a message.");
   },

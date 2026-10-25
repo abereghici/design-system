@@ -1,15 +1,16 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Default   > base story 1`] = `
-- form "Task":
+- form "Profile":
   - text: Assignee
   - combobox "Assignee"
   - status
   - button "Save"
+  - button "Reset"
 `;
 
 exports[`Open 1`] = `
-- form "Task":
+- form "Profile":
   - text: Assignee
   - combobox "Assignee" [expanded]
   - listbox "Assignee":
@@ -22,12 +23,14 @@ exports[`Open 1`] = `
       - option "Ștefan Țurcanu"
   - status
   - button "Save"
+  - button "Reset"
 `;
 
 exports[`Server Search Results   > base story 1`] = `
-- form "Task":
+- form "Profile":
   - text: Repository
   - combobox "Repository"
   - status
   - button "Save"
+  - button "Reset"
 `;

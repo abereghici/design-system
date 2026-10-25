@@ -2,6 +2,7 @@ import { expect, fn, waitFor } from "storybook/test";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
+import { trusted } from "#.storybook/test/trusted.ts";
 
 import { Accordion } from "./index.ts";
 
@@ -22,7 +23,7 @@ const meta = preview.meta({
         </Accordion.Item>
         <Accordion.Item value="browsers">
           <Accordion.Trigger>Which browsers are supported?</Accordion.Trigger>
-          <Accordion.Content>{browsers}</Accordion.Content>
+          <Accordion.Content id="browsers">{browsers}</Accordion.Content>
         </Accordion.Item>
       </>
     ),
@@ -58,12 +59,34 @@ Default.test(
   },
 );
 
-Default.test("puts every trigger in the tab sequence", async ({ canvas, userEvent }) => {
-  await userEvent.tab();
-  await expect(canvas.getByText("How are tokens versioned?")).toHaveFocus();
-  await userEvent.tab();
+Default.test("toggles the focused item with Enter and Space", async ({ canvas, args }) => {
+  const user = await trusted();
+
+  await user.keyboard("{Tab}{Tab}");
   await expect(canvas.getByText("Which browsers are supported?")).toHaveFocus();
+  await user.keyboard("{Enter}");
+  await waitFor(() => expect(canvas.getByText(browsers)).toBeVisible());
+  await user.keyboard(" ");
+  await waitFor(() => expect(canvas.getByText(browsers)).not.toBeVisible());
+  await expect(args.onValueChange).toHaveBeenLastCalledWith(
+    [],
+    expect.objectContaining({ reason: "trigger-press" }),
+  );
 });
+
+Default.test(
+  "opens the item a link points into and reports reason none",
+  async ({ canvas, args }) => {
+    location.hash = "browsers";
+    await waitFor(() => expect(canvas.getByText(browsers)).toBeVisible());
+    history.replaceState(null, "", location.pathname + location.search);
+    await expect(canvas.getByText(tokens)).not.toBeVisible();
+    await expect(args.onValueChange).toHaveBeenCalledWith(
+      ["browsers"],
+      expect.objectContaining({ reason: "none" }),
+    );
+  },
+);
 
 Default.test(
   "opens only the first of several values without multiple",

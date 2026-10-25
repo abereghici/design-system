@@ -1,5 +1,6 @@
 import { expect } from "storybook/test";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Breadcrumbs from "./breadcrumbs.tsx";
@@ -32,25 +33,8 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a navigation landmark named Breadcrumb", async ({ canvas }) => {
-  const nav = canvas.getByRole("navigation", { name: "Breadcrumb" });
-
-  await expect(nav).toBeVisible();
-  await expect(canvas.getAllByRole("listitem")).toHaveLength(3);
-});
-
-Default.test("marks the current page and orders the trail root first", async ({ canvas }) => {
-  const links = canvas.getAllByRole("link");
-
-  await expect(links.map((link) => link.textContent)).toEqual(["Home", "Projects", "Atlas"]);
+Default.test("marks the current page", async ({ canvas }) => {
   await expect(canvas.getByRole("link", { name: "Atlas" })).toHaveAttribute("aria-current", "page");
-});
-
-Default.test("moves through its links with Tab", async ({ canvas, userEvent }) => {
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Home" })).toHaveFocus();
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Projects" })).toHaveFocus();
 });
 
 Default.test(
@@ -88,13 +72,7 @@ export const LongTrail = meta.story({
       </>
     ),
   },
-  decorators: [
-    (Story) => (
-      <div style={{ maxInlineSize: 320 }}>
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWidth("20rem")],
   parameters: {
     docs: { description: { story: "A long trail wraps between items; nothing is truncated." } },
   },

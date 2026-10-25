@@ -1,9 +1,6 @@
 import { expect, fn } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
-
-import { Button } from "@platform/ui/button";
-
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
@@ -16,18 +13,6 @@ import type {
 
 // @ts-expect-error -- the show-password toggle shows only an icon, so it needs a name
 ({ label: "Password" }) satisfies PasswordFieldProps;
-
-const inAForm: Decorator = (Story) => (
-  <form
-    aria-label="Sign in"
-    onSubmit={(event) => {
-      event.preventDefault();
-    }}
-  >
-    <Story />
-    <Button type="submit">Sign in</Button>
-  </form>
-);
 
 const meta = preview.meta({
   title: "Components/PasswordField",
@@ -110,9 +95,9 @@ Default.test(
 
 Default.test(
   "hides the value again when the form is submitted",
-  { args: { defaultVisible: true }, decorators: [inAForm] },
+  { args: { defaultVisible: true }, decorators: [withForm] },
   async ({ args, canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole("button", { name: "Sign in" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(canvas.queryByRole("textbox", { name: "Password" })).toBeNull();
     await expect(args.onVisibleChange).toHaveBeenCalledWith(
       false,

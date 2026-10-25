@@ -68,11 +68,13 @@ Default.test("shows one key from its children", { render: () => <Kbd>Esc</Kbd> }
 
 export const InAButton = meta.story({
   args: { keys: "mod+enter", "aria-hidden": true },
-  render: (args) => (
-    <Button variant="primary" aria-keyshortcuts="Meta+Enter Control+Enter">
-      Publish <Kbd {...args} />
-    </Button>
-  ),
+  decorators: [
+    (Story) => (
+      <Button variant="primary" aria-keyshortcuts="Meta+Enter Control+Enter">
+        Publish <Story />
+      </Button>
+    ),
+  ],
   parameters: {
     docs: {
       description: {

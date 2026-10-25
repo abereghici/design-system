@@ -1,6 +1,7 @@
 import { expect } from "storybook/test";
 
 import preview from "#.storybook/preview.tsx";
+import { moves } from "#.storybook/test/motion.ts";
 
 import { Spinner } from "./spinner.tsx";
 import type { SpinnerProps } from "./spinner.tsx";
@@ -18,10 +19,6 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a status that says its message", async ({ canvas }) => {
-  await expect(canvas.getByRole("status")).toHaveTextContent("Loading");
-});
-
 Default.test(
   "is hidden from assistive technology when decorative",
   { args: { "aria-hidden": true, children: undefined } },
@@ -31,14 +28,7 @@ Default.test(
 );
 
 Default.test("turns only when motion is allowed", async ({ canvas }) => {
-  const turning = canvas
-    .getByRole("status")
-    .getAnimations({ subtree: true })
-    .some(
-      ({ effect }) =>
-        effect instanceof KeyframeEffect &&
-        effect.getKeyframes().some((frame) => "rotate" in frame),
-    );
-
-  await expect(turning).toBe(!matchMedia("(prefers-reduced-motion: reduce)").matches);
+  await expect(moves(canvas.getByRole("status"))).toBe(
+    !matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
 });

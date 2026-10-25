@@ -1,4 +1,4 @@
-import { expect, fn, waitFor } from "storybook/test";
+import { expect, fn, waitFor, within } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
 import { Dialog } from "@platform/ui/dialog";
@@ -22,9 +22,7 @@ async function openWithKeyboard() {
 
   await user.keyboard("{Tab}{Enter}");
 
-  const first = document.querySelector('[role="menuitem"]');
-
-  await waitFor(() => expect(first).toHaveFocus());
+  await waitFor(() => expect(within(document.body).getAllByRole("menuitem")[0]).toHaveFocus());
 }
 
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);

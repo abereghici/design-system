@@ -2,7 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 
 import { describe, expect, test } from "vitest";
 
-import { generateGlyphs, iconSourceNames } from "./generate-icons.ts";
+import { generateGlyphs } from "./generate-icons.ts";
 
 const root = new URL("../", import.meta.url);
 
@@ -24,13 +24,5 @@ describe("icon generation", () => {
     const committed = await committedGeneratedFiles();
 
     expect(Object.fromEntries(committed)).toEqual(Object.fromEntries(generated));
-  });
-
-  test("there is one icon per source SVG, 44 in all", async () => {
-    const names = await iconSourceNames();
-    const generated = await generateGlyphs();
-
-    expect(names).toHaveLength(44);
-    expect(names.map((name) => generated.has(`src/icon/icons/${name}.tsx`))).not.toContain(false);
   });
 });

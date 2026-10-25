@@ -64,6 +64,20 @@ Default.test("opens on a right click at its first item", async ({ canvas }) => {
   await expect(reasons()).toEqual([[true, "trigger-press"]]);
 });
 
+Default.test("moves with the arrow keys, wrapping, and End", async ({ canvas }) => {
+  const user = await trusted();
+  const item = (name: string) => canvas.getByRole("menuitem", { name });
+
+  await user.click(canvas.getByRole("button", { name: "Report.pdf" }), { button: "right" });
+  await waitFor(() => expect(item("Duplicate")).toHaveFocus());
+  await user.keyboard("{End}");
+  await expect(item("Delete")).toHaveFocus();
+  await user.keyboard("{ArrowDown}");
+  await expect(item("Duplicate")).toHaveFocus();
+  await user.keyboard("{ArrowDown}");
+  await expect(canvas.getByRole("menuitemcheckbox", { name: "Pinned" })).toHaveFocus();
+});
+
 Default.test(
   "closes on Escape, returns focus to where it was and dispatches ab-dismiss",
   async ({ canvas }) => {
@@ -121,11 +135,12 @@ Default.test(
     },
   },
   async ({ canvas }) => {
-    const button = canvas.getByRole("button", { name: "Report.pdf" });
-    const event = new MouseEvent("contextmenu", { bubbles: true, cancelable: true, button: 2 });
+    const user = await trusted();
+    const menus = listen("contextmenu");
 
-    button.dispatchEvent(event);
-    await expect(event.defaultPrevented).toBe(false);
+    await user.click(canvas.getByRole("button", { name: "Report.pdf" }), { button: "right" });
+    menus.stop();
+    await expect(menus.events.map(({ defaultPrevented }) => defaultPrevented)).toEqual([false]);
     await expect(canvas.queryByRole("menu")).toBeNull();
   },
 );

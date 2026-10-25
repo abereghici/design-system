@@ -1,6 +1,7 @@
 import { expect } from "storybook/test";
 
 import preview from "#.storybook/preview.tsx";
+import { moves } from "#.storybook/test/motion.ts";
 
 import { Progress } from "./progress.tsx";
 
@@ -46,15 +47,9 @@ Default.test(
   "sweeps only when motion is allowed",
   { args: { value: null } },
   async ({ canvasElement }) => {
-    const sweeping = canvasElement
-      .getAnimations({ subtree: true })
-      .some(
-        ({ effect }) =>
-          effect instanceof KeyframeEffect &&
-          effect.getKeyframes().some((frame) => "translate" in frame),
-      );
-
-    await expect(sweeping).toBe(!matchMedia("(prefers-reduced-motion: reduce)").matches);
+    await expect(moves(canvasElement)).toBe(
+      !matchMedia("(prefers-reduced-motion: reduce)").matches,
+    );
   },
 );
 

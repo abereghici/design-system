@@ -1,5 +1,7 @@
 import { expect, fn } from "storybook/test";
 
+import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withInvalidField } from "#.storybook/decorators/with-invalid-field.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -120,10 +122,10 @@ Default.test(
   "submits name=value when checked",
   {
     args: { name: "updates", value: "weekly", defaultChecked: true },
-    decorators: [(Story) => <form aria-label="Preferences">{Story()}</form>],
+    decorators: [withForm],
   },
   async ({ canvas }) => {
-    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Preferences" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
 
     await expect([...new FormData(form)]).toEqual([["updates", "weekly"]]);
   },
@@ -164,5 +166,13 @@ export const LongLabel = meta.story({
   },
   parameters: {
     docs: { description: { story: "A long label wraps, with the box on its first line." } },
+  },
+});
+
+export const Invalid = meta.story({
+  args: { children: "I accept the terms" },
+  decorators: [withInvalidField("Accept the terms to continue.")],
+  parameters: {
+    docs: { description: { story: "Inside an invalid Field the box shows the error state." } },
   },
 });

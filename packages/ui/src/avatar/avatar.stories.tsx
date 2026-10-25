@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { expect, fn, waitFor } from "storybook/test";
+import { hydrateRoot } from "react-dom/client";
+import { renderToString } from "react-dom/server";
+import { expect, fn, isInaccessible, waitFor, within } from "storybook/test";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
@@ -51,18 +53,27 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("comes in a small size", { args: { size: "sm" } }, async ({ canvas }) => {
-  await expect(canvas.getByRole("img", { name: "Alexandru Bereghici" })).toBeInTheDocument();
-});
-
-Default.test("is named by its image's alt", async ({ canvas }) => {
-  await expect(canvas.getByRole("img", { name: "Alexandru Bereghici" })).toBeInTheDocument();
-});
-
 Default.test("shows the picture once it has loaded", async ({ canvas }) => {
   await waitFor(() => expect(onLoadingStatusChange).toHaveBeenLastCalledWith("loaded"));
   await waitFor(() => expect(canvas.getByText("AB")).not.toBeVisible());
 });
+
+Default.test(
+  "shows a server-rendered photo that loaded before hydration",
+  async ({ canvasElement }) => {
+    const host = document.createElement("div");
+    const avatar = <Avatar.Root>{person(photo)}</Avatar.Root>;
+
+    canvasElement.append(host);
+    host.innerHTML = renderToString(avatar);
+    await within(host).getByRole<HTMLImageElement>("img").decode();
+
+    const root = hydrateRoot(host, avatar);
+
+    await waitFor(() => expect(within(host).getByText("AB")).not.toBeVisible());
+    root.unmount();
+  },
+);
 
 Default.test(
   "reports loading again when the photo changes",
@@ -109,6 +120,7 @@ Default.test(
 );
 
 export const Initials = meta.story({
+  tags: ["!aria-snapshot"],
   args: { children: <Avatar.Fallback name="Ana Maria Popescu" /> },
   parameters: {
     docs: {
@@ -133,5 +145,13 @@ Initials.test(
 );
 
 Initials.test("is not announced", async ({ canvas }) => {
-  await expect(canvas.getByText("AP")).toHaveAttribute("aria-hidden", "true");
+  await expect(isInaccessible(canvas.getByText("AP"))).toBe(true);
+});
+
+export const Anonymous = meta.story({
+  args: { children: <Avatar.Fallback /> },
+  tags: ["!aria-snapshot"],
+  parameters: {
+    docs: { description: { story: "Without a name, the Fallback shows a generic person glyph." } },
+  },
 });

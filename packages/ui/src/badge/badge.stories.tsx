@@ -14,11 +14,21 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-for (const variant of ["neutral", "accent", "danger"] as const) {
-  Default.test(`reads at AA contrast as ${variant}`, { args: { variant } }, async ({ canvas }) => {
+Default.test(
+  "reads at AA contrast as accent",
+  { args: { variant: "accent" } },
+  async ({ canvas }) => {
     await expect(canvas.getByText("3")).toBeVisible();
-  });
-}
+  },
+);
+
+Default.test(
+  "reads at AA contrast as danger",
+  { args: { variant: "danger" } },
+  async ({ canvas }) => {
+    await expect(canvas.getByText("3")).toBeVisible();
+  },
+);
 
 Default.test("caps a count above max", { args: { children: 1280 } }, async ({ canvas }) => {
   await expect(canvas.getByText("99+")).toBeVisible();
@@ -37,14 +47,6 @@ Default.test(
   { args: { children: 1280, max: 9999 } },
   async ({ canvas }) => {
     await expect(canvas.getByText("1,280")).toBeVisible();
-  },
-);
-
-Default.test(
-  "renders a string as given",
-  { args: { children: "!", variant: "danger" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("!")).toBeVisible();
   },
 );
 

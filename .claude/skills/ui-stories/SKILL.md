@@ -9,7 +9,7 @@ A story file has three readers: the docs page, the Vitest run (every story is a 
 
 - `src/<name>/<name>.stories.tsx` sits beside the component. `src/` holds no MDX and no story helpers.
 - The introduction, guides and foundations are unattached MDX in `.storybook/docs/` (`introduction.mdx`, `guides/`, `foundations/`) with `<Meta title>` and no story file. Token visuals use the `ColorPalette`, `Typeset` and `IconGallery` Doc Blocks, otherwise `TokenTable` or `ContrastTable` from `.storybook/docs/blocks/`. Values come from `@platform/tokens/tokens.json` (motion from the token source), never typed by hand. A live example is `<Canvas of={…}>` of an existing component story.
-- Shared helpers live under `.storybook/` by purpose: `test/` (proof helpers, setup files), `screenshots/`, `docs/`, and `decorators/` or `components/` once a second story needs one. `src/` imports them as `#.storybook/<path>.<ext>`, extension included. Lint rejects relative paths into `.storybook`.
+- Shared helpers live under `.storybook/` by purpose: `test/` (proof helpers, setup files), `screenshots/`, `docs/`, `decorators/` (any decorator that isn't tied to one story's content, even with a single consumer) and `components/` once a second story needs one. `src/` imports them as `#.storybook/<path>.<ext>`, extension included. Lint rejects relative paths into `.storybook`.
 - Harness code imports components as a consumer does: `@platform/ui/<name>`.
 - Titles are `Introduction`, `Guides/<Page>`, `Foundations/<Page>` and `Components/<Name>`, with no category level: components sort A to Z (`storySort` `method: "alphabetical"`). A new guide or foundation page gets its place in `storySort.order` (`.storybook/preview.tsx`) in the same change.
 
@@ -26,6 +26,7 @@ A story file has three readers: the docs page, the Vitest run (every story is a 
 - `Default` is first and is driven by `args` alone. The meta's `args` holds every required prop and an `fn()` for every callback.
 - Add another docs story only for what Controls can't show: structure in `render`, context from a decorator, or state logic. Name it for what it adds (`InAForm`, `Controlled`, `InheritsColor`). A value a reader gets by changing a control is shown by that control.
 - Context (a form, a surface, a coloured host) is a decorator. `render` draws the component alone.
+- A decorator is named `with<Context>` (`withForm`, `withWidth`), local ones too.
 - A controlled story's `render` is a local component that holds the value in React `useState`, seeded from `args`, and calls `args.onX` on every change. Pass it directly (`render: ControlledSelect`), so the snippet shows the JSX it returns rather than its name.
 - Snippets are generated (`docs.source.type: "dynamic"`), and the preview's `transform` (`.storybook/docs/source.ts`) adds the public imports and compound namespaces. Write `docs.source.code` only where the dynamic snippet can't show the code (a `lazy()` import), with the reason in the commit.
 

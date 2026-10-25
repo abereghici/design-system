@@ -60,7 +60,7 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a button named by its aria-label", async ({ canvas, userEvent, args }) => {
+Default.test("is a plain button that reports a press", async ({ canvas, userEvent, args }) => {
   const button = canvas.getByRole("button", { name: "Pin" });
 
   await expect(button).not.toHaveAttribute("aria-pressed");
@@ -99,13 +99,13 @@ Default.test(
   },
 );
 
-Default.test("keeps its name at the sm size", { args: { size: "sm" } }, async ({ canvas }) => {
-  await expect(canvas.getByRole("button", { name: "Pin" })).toBeVisible();
-});
-
-Default.test("keeps its name at the lg size", { args: { size: "lg" } }, async ({ canvas }) => {
-  await expect(canvas.getByRole("button", { name: "Pin" })).toBeVisible();
-});
+Default.test(
+  "passes the accessibility checks at the sm size",
+  { args: { size: "sm" } },
+  async ({ canvas }) => {
+    await expect(canvas.getByRole("button", { name: "Pin" })).toBeVisible();
+  },
+);
 
 Default.test(
   "stays focusable and blocks activation when disabled",

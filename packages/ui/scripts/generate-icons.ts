@@ -69,7 +69,7 @@ function componentName(name: string) {
   return `${name.replaceAll(/(?:^|-)([a-z0-9])/gv, (_, char: string) => char.toUpperCase())}Icon`;
 }
 
-export async function iconSourceNames() {
+async function iconSourceNames() {
   return (await readdir(iconSources))
     .filter((file) => file.endsWith(".svg"))
     .map((file) => file.slice(0, -".svg".length))

@@ -2,9 +2,9 @@ import { lazy, Suspense } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
-import { Button } from "@platform/ui/button";
 import { Calendar } from "@platform/ui/calendar";
 
+import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
 import { dateFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
@@ -13,7 +13,6 @@ import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 import * as DatePicker from "./date-picker.tsx";
 
 const date = (iso: string) => Temporal.PlainDate.from(iso);
-const submitted = fn<(data: FormData) => void>();
 const onOpenChange = fn<NonNullable<DatePicker.RootProps["onOpenChange"]>>();
 const onValueChange = fn<NonNullable<DatePicker.RootProps["onValueChange"]>>();
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
@@ -52,12 +51,10 @@ const meta = preview.meta({
     await parkPointer();
   },
   decorators: [
+    withForm,
     (Story) => (
-      <div
-        style={{ display: "grid", gap: "0.5rem", maxInlineSize: "20rem", paddingBlockEnd: "24rem" }}
-      >
+      <div style={{ maxInlineSize: "20rem", paddingBlockEnd: "24rem" }}>
         <Story />
-        <Button variant="tertiary">After</Button>
       </div>
     ),
   ],
@@ -187,7 +184,7 @@ Default.test("closes when Tab leaves the panel, on to the next control", async (
   await user.keyboard("{Tab}");
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
   await expect(reasons().at(-1)).toEqual([false, "focus-out"]);
-  await expect(canvas.getByRole("button", { name: "After" })).toHaveFocus();
+  await expect(canvas.getByRole("button", { name: "Save" })).toHaveFocus();
 });
 
 Default.test("closes when its trigger is pressed again", async ({ canvas }) => {
@@ -222,25 +219,7 @@ Default.test("does not open while disabled", { args: { disabled: true } }, async
   await expect(canvas.queryByRole("dialog")).toBeNull();
 });
 
-export const InAForm = meta.story({
-  decorators: [
-    (Story) => (
-      <form
-        aria-label="Booking"
-        onSubmit={(event) => {
-          event.preventDefault();
-          submitted(new FormData(event.currentTarget));
-        }}
-      >
-        <Story />
-        <Button type="submit">Save</Button>
-      </form>
-    ),
-  ],
-  args: { required: true },
-});
-
-InAForm.test("submits the chosen day", async ({ canvas }) => {
+Default.test("submits the chosen day", async ({ canvas }) => {
   const user = await trusted();
 
   submitted.mockClear();
@@ -251,7 +230,7 @@ InAForm.test("submits the chosen day", async ({ canvas }) => {
   await expect(submitted.mock.calls[0]?.[0].get("due")).toBe("2025-03-20");
 });
 
-InAForm.test(
+Default.test(
   "marks a typed unavailable date invalid after leaving the field",
   {
     args: {

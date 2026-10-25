@@ -1,9 +1,6 @@
 import { expect, fn } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
-
-import { Button } from "@platform/ui/button";
-
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
@@ -13,19 +10,6 @@ import type { NumberFieldChangeEventDetails, NumberFieldProps } from "./number-f
 
 // @ts-expect-error -- the step buttons show only icons, so they need names
 ({ label: "Seats" }) satisfies NumberFieldProps;
-
-const inAForm: Decorator = (Story) => (
-  <form
-    aria-label="Order"
-    onSubmit={(event) => {
-      event.preventDefault();
-    }}
-  >
-    <Story />
-    <Button type="submit">Order</Button>
-    <Button type="reset">Reset</Button>
-  </form>
-);
 
 const meta = preview.meta({
   title: "Components/NumberField",
@@ -45,12 +29,6 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({});
-
-Default.test("is a textbox named by its label, with named step buttons", async ({ canvas }) => {
-  await expect(canvas.getByRole("textbox", { name: "Seats" })).toHaveValue("5");
-  await expect(canvas.getByRole("button", { name: "Increase" })).toBeVisible();
-  await expect(canvas.getByRole("button", { name: "Decrease" })).toBeVisible();
-});
 
 Default.test(
   "steps with the arrow, page, home and end keys",
@@ -162,12 +140,12 @@ Default.test(
       step: 0.5,
       formatOptions: { style: "currency", currency: "EUR" },
     },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas }) => {
     await expect(canvas.getByRole("textbox", { name: "Price" })).toHaveValue("€1,234.50");
 
-    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Order" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
 
     await expect(new FormData(form).getAll("price")).toEqual(["1234.5"]);
   },
@@ -200,12 +178,12 @@ Default.test(
   "fails valueMissing only when required and empty",
   {
     args: { required: true, defaultValue: null, errorMessage: "Enter a number of seats." },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
 
-    await userEvent.click(canvas.getByRole("button", { name: "Order" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAttribute("aria-invalid", "true");
     await expect(input).toHaveAccessibleDescription("Enter a number of seats.");
   },
@@ -231,7 +209,7 @@ Default.test(
 
 Default.test(
   "restores the default value on form reset",
-  { decorators: [inAForm] },
+  { decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
 
@@ -241,7 +219,7 @@ Default.test(
     await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
     await expect(input).toHaveValue("5");
 
-    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Order" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
 
     await expect(new FormData(form).getAll("seats")).toEqual(["5"]);
   },

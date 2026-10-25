@@ -1,10 +1,10 @@
 import { expect, fn } from "storybook/test";
 
-import preview from "#.storybook/preview.tsx";
+import { Button } from "@platform/ui/button";
+import { DateField } from "@platform/ui/date-field";
+import { TextField } from "@platform/ui/text-field";
 
-import { Button } from "../button/button.tsx";
-import { DateField } from "../date-field/date-field.tsx";
-import { TextField } from "../text-field/text-field.tsx";
+import preview from "#.storybook/preview.tsx";
 
 import { Form } from "./form.tsx";
 
@@ -30,10 +30,6 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({});
-
-Default.test("is a form landmark named by its label", async ({ canvas }) => {
-  await expect(canvas.getByRole("form", { name: "Sign up" })).toBeVisible();
-});
 
 Default.test(
   "blocks the submit and focuses the first invalid field",

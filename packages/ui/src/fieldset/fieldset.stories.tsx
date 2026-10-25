@@ -1,18 +1,11 @@
 import { expect } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
+import { TextField } from "@platform/ui/text-field";
 
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
-import { TextField } from "../text-field/text-field.tsx";
-
 import * as Fieldset from "./fieldset.tsx";
-
-const inAForm: Decorator = (Story) => (
-  <form aria-label="Billing">
-    <Story />
-  </form>
-);
 
 const meta = preview.meta({
   title: "Components/Fieldset",
@@ -36,21 +29,15 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a group named by its legend", async ({ canvas }) => {
-  await expect(canvas.getByRole("group", { name: "Billing address" })).toContainElement(
-    canvas.getByRole("textbox", { name: "City" }),
-  );
-});
-
 Default.test(
   "disables every control inside: skipped by Tab and left out of the submission",
-  { args: { disabled: true }, decorators: [inAForm] },
+  { args: { disabled: true }, decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     await expect(canvas.getByRole("textbox", { name: "Street" })).toBeDisabled();
     await userEvent.tab();
-    await expect(document.body).toHaveFocus();
+    await expect(canvas.getByRole("button", { name: "Save" })).toHaveFocus();
 
-    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Billing" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
 
     await expect(new FormData(form).has("street")).toBe(false);
   },

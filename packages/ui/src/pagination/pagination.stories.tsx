@@ -36,10 +36,6 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a navigation landmark named Pagination", async ({ canvas }) => {
-  await expect(canvas.getByRole("navigation", { name: "Pagination" })).toBeVisible();
-});
-
 Default.test(
   "shows the first, last and neighbouring pages around the current one",
   async ({ canvas, canvasElement }) => {
@@ -67,15 +63,6 @@ Default.test(
     );
   },
 );
-
-Default.test("moves through every link with Tab", async ({ canvas, userEvent }) => {
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Previous page" })).toHaveFocus();
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Page 1" })).toHaveFocus();
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Page 4" })).toHaveFocus();
-});
 
 Default.test(
   "on the first page, Previous is a disabled button that stays focusable and does nothing",

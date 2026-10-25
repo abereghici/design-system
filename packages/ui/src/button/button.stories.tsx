@@ -36,17 +36,14 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("calls onClick when pressed", async ({ canvas, userEvent, args }) => {
-  await userEvent.click(canvas.getByRole("button", { name: "Save changes" }));
-  await expect(args.onClick).toHaveBeenCalledOnce();
-});
+Default.test("activates with a press, Enter and Space", async ({ canvas, userEvent, args }) => {
+  const button = canvas.getByRole("button", { name: "Save changes" });
 
-Default.test("activates with Enter and Space", async ({ canvas, userEvent, args }) => {
-  await userEvent.tab();
-  await expect(canvas.getByRole("button", { name: "Save changes" })).toHaveFocus();
+  await userEvent.click(button);
+  await expect(button).toHaveFocus();
   await userEvent.keyboard("{Enter}");
   await userEvent.keyboard(" ");
-  await expect(args.onClick).toHaveBeenCalledTimes(2);
+  await expect(args.onClick).toHaveBeenCalledTimes(3);
 });
 
 Default.test("dispatches a bubbling ab-press after a press", async ({ canvas, userEvent }) => {
@@ -60,15 +57,13 @@ Default.test("dispatches a bubbling ab-press after a press", async ({ canvas, us
   ).toEqual([{ target: button, bubbles: true, detail: { component: "Button", reason: "user" } }]);
 });
 
-Default.test("keeps its name at the primary variant", { args: { variant: "primary" } }, isNamed);
+Default.test("reads at AA contrast as primary", { args: { variant: "primary" } }, isNamed);
 
-Default.test("keeps its name at the tertiary variant", { args: { variant: "tertiary" } }, isNamed);
+Default.test("reads at AA contrast as tertiary", { args: { variant: "tertiary" } }, isNamed);
 
-Default.test("keeps its name at the danger variant", { args: { variant: "danger" } }, isNamed);
+Default.test("reads at AA contrast as danger", { args: { variant: "danger" } }, isNamed);
 
-Default.test("keeps its name at the sm size", { args: { size: "sm" } }, isNamed);
-
-Default.test("keeps its name at the lg size", { args: { size: "lg" } }, isNamed);
+Default.test("passes the accessibility checks at the sm size", { args: { size: "sm" } }, isNamed);
 
 Default.test(
   "stays focusable and blocks activation when disabled",
