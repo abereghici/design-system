@@ -24,6 +24,10 @@ export function useTabs(part: string) {
 }
 
 export type RootProps = Omit<ComponentProps<"div">, "defaultValue"> & {
+  /** The open tab's `value`, when your state holds it. */
+  value?: string;
+  /** The tab open on the first render when it holds its own state. */
+  defaultValue?: string;
   /** Called before another tab opens; `details.cancel()` keeps the current one. */
   onValueChange?: (value: string, details: ChangeEventDetails) => void;
 } & ({ value: string; defaultValue?: never } | { defaultValue: string; value?: never });

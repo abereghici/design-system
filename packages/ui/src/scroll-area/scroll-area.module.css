@@ -3,7 +3,8 @@
     overflow: auto;
   }
 
-  /* Without scroll timelines the animation would run once on the document timeline and park on its last frame, fading the top edge for good. */
+  /* Without scroll timelines the animation would run once on the document timeline and park on its
+     last frame, fading the top edge for good: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/animation-timeline */
   @supports (animation-timeline: scroll()) {
     .root {
       mask-image:

@@ -49,7 +49,8 @@ function useTopmostModal() {
         return target.matches(":modal") ? [...rest, target] : rest;
       });
     };
-    // `toggle` does not bubble; a capturing listener on document still sees every dialog's.
+    // `toggle` does not bubble; a capturing listener on document still sees every dialog's:
+    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/toggle_event
     document.addEventListener("toggle", onToggle, { capture: true, signal: controller.signal });
     return () => {
       controller.abort();
@@ -62,7 +63,8 @@ function useAnnounced(toasts: readonly ToastRecord[]) {
   const [heard, setHeard] = useState<ReadonlySet<string>>(new Set());
   useEffect(() => {
     const fresh = toasts.filter((record) => record.announced !== true).map(({ id }) => id);
-    // A live region announces changes, not content it was inserted with: fill it a task later.
+    // A live region announces changes, not content it was inserted with: fill it a task later:
+    // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions
     const timer = setTimeout(() => {
       for (const id of fresh) mark(id, { announced: true });
       if (fresh.length > 0) setHeard((ids) => ids.union(new Set(fresh)));
@@ -114,7 +116,8 @@ function useRegion(region: RefObject<HTMLElement | null>, toasts: readonly Toast
     const node = region.current;
     if (node === null) return;
     const id = toasts[0]?.id;
-    // Re-showing appends the Region to the top layer again, above layers opened since.
+    // Re-showing appends the Region to the top layer again, above layers opened since:
+    // https://developer.mozilla.org/en-US/docs/Glossary/Top_layer
     const raise = id !== newest.current && !node.contains(document.activeElement);
     if (node.matches(":popover-open") && (id === undefined || raise)) node.hidePopover();
     if (id !== undefined && !node.matches(":popover-open")) node.showPopover();

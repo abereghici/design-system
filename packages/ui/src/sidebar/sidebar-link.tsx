@@ -4,17 +4,17 @@ import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import styles from "./sidebar.module.css";
 
-export type LinkProps = ComponentProps<"a"> &
-  (
-    | { href: string; asChild?: false }
-    | {
-        /**
-         * Gives the link's look to its one child, such as your router's link, which carries the
-         * `href`.
-         */
-        asChild: true;
-      }
-  );
+interface LinkBase extends ComponentProps<"a"> {
+  /** Where it goes; with `asChild`, the child carries it instead. */
+  href?: string;
+  /**
+   * Gives the link's look to its one child, such as your router's link, which carries the
+   * `href`.
+   */
+  asChild?: boolean;
+}
+
+export type LinkProps = LinkBase & ({ href: string; asChild?: false } | { asChild: true });
 
 /** Set `aria-current="page"` on the link to the page on screen. */
 export function Link({ asChild = false, ...props }: LinkProps) {

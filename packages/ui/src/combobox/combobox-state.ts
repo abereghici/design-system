@@ -48,14 +48,23 @@ export type Callback<Value, Reason extends string> = (
 ) => void;
 
 export interface Options {
+  /** The chosen Item's `value`, when your state holds it; `null` is none. */
   value?: string | null | undefined;
+  /** The Item chosen on the first render when it holds its own state. */
   defaultValue?: string | null | undefined;
+  /** Called before the choice changes; `details.cancel()` keeps the current one. */
   onValueChange?: Callback<string | null, ValueReason> | undefined;
+  /** The typed text, when your state holds it; pair it with `onInputValueChange`. */
   inputValue?: string | undefined;
+  /** The text on the first render when it holds its own state. */
   defaultInputValue?: string | undefined;
+  /** Called before the typed text changes; `details.cancel()` keeps the current text. */
   onInputValueChange?: Callback<string, InputReason> | undefined;
+  /** Whether the list is open, when your state holds it; pair it with `onOpenChange`. */
   open?: boolean | undefined;
+  /** Opens the list on the first render when it holds its own state. */
   defaultOpen?: boolean | undefined;
+  /** Called before the list opens or closes; `details.cancel()` keeps it as it is. */
   onOpenChange?: Callback<boolean, OpenReason> | undefined;
   /** `null` turns the built-in filtering off: every Item shows, in your order (server search). */
   filter?: null | undefined;

@@ -11,6 +11,7 @@ export interface ColumnHeaderProps extends ComponentProps<"th"> {
   sortDirection?: "ascending" | "descending" | undefined;
 }
 
+/** Names a column; with `sortDirection` it shows and announces the sort. */
 export function ColumnHeader({ sortDirection, ...props }: ColumnHeaderProps) {
   return (
     <th

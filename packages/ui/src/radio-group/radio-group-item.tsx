@@ -15,11 +15,13 @@ export interface ItemProps extends Omit<
   ComponentProps<"input">,
   "type" | "name" | "checked" | "value"
 > {
+  /** The group's value, and what the form submits, when this option is chosen. */
   value: string;
   /** Keeps this option visible and reachable, but it can't be chosen. */
   disabled?: boolean;
 }
 
+/** One option; its children are the visible label. */
 export function Item({
   value,
   disabled = false,

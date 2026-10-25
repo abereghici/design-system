@@ -12,6 +12,7 @@ export interface TitleProps extends ComponentProps<"h3"> {
   asChild?: boolean;
 }
 
+/** The Card's heading. */
 export function Title({ asChild = false, ...props }: TitleProps) {
   const Element = asChild ? Slot : "h3";
   return <Element {...mergeProps({ className: styles["title"] }, props)} />;

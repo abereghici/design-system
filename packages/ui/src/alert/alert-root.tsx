@@ -20,7 +20,8 @@ export interface RootProps extends ComponentProps<"div"> {
   variant?: "neutral" | "success" | "warning" | "danger";
   /**
    * Pass `"alert"` only for an urgent message inserted after the page loads, so screen readers
-   * announce it at once. A message present from the start is read in order and needs none.
+   * announce it at once; `"status"` only on an Alert already shown whose text then changes. A
+   * message present from the start is read in order and needs none.
    */
   role?: ComponentProps<"div">["role"];
 }

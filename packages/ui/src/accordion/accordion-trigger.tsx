@@ -12,6 +12,7 @@ import styles from "./accordion.module.css";
 
 export type TriggerProps = ComponentProps<"summary">;
 
+/** The heading button that opens and closes its Item. */
 export function Trigger({ children, onClick, ...props }: TriggerProps) {
   const accordion = useAccordion("Trigger");
   const item = use(ItemContext);

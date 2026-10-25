@@ -23,18 +23,17 @@ export type OpenChangeEventDetails = FloatingDetails<
 
 type Unavailable =
   | { isDateUnavailable?: undefined; unavailableMessage?: undefined }
-  | {
-      /**
-       * Days that can't be chosen, such as weekends or booked dates; typing one marks the field
-       * invalid.
-       */
-      isDateUnavailable: (date: Temporal.PlainDate) => boolean;
-      /** The error for a typed day that can't be chosen, such as "This date is not available". */
-      unavailableMessage: string;
-    };
+  | { isDateUnavailable: (date: Temporal.PlainDate) => boolean; unavailableMessage: string };
 
 export type RootProps = Omit<DateFieldProps, "value" | "defaultValue" | "onValueChange"> &
   Unavailable & {
+    /**
+     * Days that can't be chosen, such as weekends or booked dates; typing one marks the field
+     * invalid.
+     */
+    isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
+    /** The error for a typed day that can't be chosen, such as "This date is not available". */
+    unavailableMessage?: string | undefined;
     /** The chosen date, when your state holds it; `null` is no date. */
     value?: Temporal.PlainDate | null | undefined;
     /** The starting value when it holds its own state. */

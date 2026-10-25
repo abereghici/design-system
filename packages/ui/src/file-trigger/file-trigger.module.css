@@ -23,7 +23,8 @@
     white-space: nowrap;
   }
 
-  /* Out of the flow, not hidden: the empty live region must stay in the accessibility tree. */
+  /* Out of the flow, not hidden: the empty live region must stay in the accessibility tree:
+     https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions */
   .selection:has(.names:empty) {
     position: absolute;
   }

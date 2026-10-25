@@ -14,7 +14,7 @@ interface SelectionProps {
 export function Selection({ names, clearLabel, disabled, onClear }: SelectionProps) {
   return (
     <span className={styles["selection"]}>
-      {/* Always rendered: a live region must exist before its text changes. */}
+      {/* Always rendered: a live region must exist before its text changes: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions */}
       <output className={styles["names"]}>{names.join(", ")}</output>
       {names.length > 0 && clearLabel !== undefined && (
         <IconButton size="sm" aria-label={clearLabel} disabled={disabled} onClick={onClear}>

@@ -5,6 +5,7 @@ import { mergeProps } from "../slot/slot.tsx";
 import styles from "./select.module.css";
 
 export interface ItemProps extends ComponentProps<"option"> {
+  /** What the form submits and `onValueChange` reports when this option is chosen. */
   value: string;
 }
 

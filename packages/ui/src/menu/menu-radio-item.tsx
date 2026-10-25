@@ -10,9 +10,11 @@ import { useItem } from "./menu.tsx";
 import type { ItemBaseProps } from "./menu.tsx";
 
 export interface RadioItemProps extends ItemBaseProps {
+  /** The RadioGroup's `value` when this item is chosen. */
   value: string;
 }
 
+/** One choice of a RadioGroup; choosing it closes the menu, unless `closeOnClick` is off. */
 export function RadioItem({ value, onClick, children, ...rest }: RadioItemProps) {
   const { menu, props, blocked, close: closeMenu } = useItem(rest, "menuitemradio");
   const group = use(RadioGroupContext);

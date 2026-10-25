@@ -41,6 +41,7 @@ function drag(event: PointerEvent<HTMLDivElement>, slider: Slider) {
 
 export type TrackProps = ComponentProps<"div">;
 
+/** The rail the Thumbs move along; a press on it moves the nearest Thumb. */
 export function Track(props: TrackProps) {
   const slider = useSlider();
   return (

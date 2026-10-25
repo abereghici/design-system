@@ -31,6 +31,8 @@ export interface ButtonProps extends Omit<ComponentProps<"button">, "onClick"> {
    * nearby why it is unavailable.
    */
   disabled?: boolean;
+  /** `submit` sends its form; the default, `button`, does nothing on its own. */
+  type?: "button" | "submit" | "reset";
   /**
    * Gives the Button's look to its one child, such as a router link that should look like a button.
    */

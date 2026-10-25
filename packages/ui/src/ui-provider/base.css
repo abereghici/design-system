@@ -23,7 +23,8 @@
     overflow-wrap: break-word;
   }
 
-  /* Size changes are movement, which reduced motion removes. */
+  /* Size changes are movement, which reduced motion removes:
+     https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html */
   @media (prefers-reduced-motion: no-preference) {
     :root {
       interpolate-size: allow-keywords;

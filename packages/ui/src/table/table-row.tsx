@@ -12,6 +12,7 @@ export interface RowProps extends ComponentProps<"tr"> {
   selected?: boolean;
 }
 
+/** One row of Cells. */
 export function Row({ selected = false, ...props }: RowProps) {
   return (
     <tr

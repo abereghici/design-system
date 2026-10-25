@@ -85,7 +85,8 @@ function useValidity({ name, validate }: Pick<RootProps, "name" | "validate">, c
     const commit = () => {
       setFailure(target === null ? null : failureOf(target));
     };
-    // React's onChange on a text input is the input event; user validity turns on at the native change.
+    // React's onChange on a text input is the input event; user validity turns on at the native
+    // change: https://react.dev/reference/react-dom/components/input#props
     const controller = new AbortController();
     target?.addEventListener("change", commit, { signal: controller.signal });
     form?.addEventListener("reset", clearServerError, { signal: controller.signal });

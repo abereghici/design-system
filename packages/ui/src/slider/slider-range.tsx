@@ -9,6 +9,7 @@ import styles from "./slider.module.css";
 
 export type RangeProps = ComponentProps<"div">;
 
+/** The filled part of the Track, up to the value or between the Thumbs. */
 export function Range({ style, ...props }: RangeProps) {
   const { values, percent } = useSlider();
   const first = values.length > 1 ? percent(values[0] ?? 0) : 0;

@@ -19,7 +19,8 @@ export interface CloseProps extends Omit<ComponentProps<"button">, "aria-label" 
   disabled?: boolean;
 }
 
-export function Close({ disabled = false, type = "button", onClick, ...props }: CloseProps) {
+/** The dismiss button; your `onClick` removes the Alert. */
+export function Close({ disabled = false, onClick, ...props }: CloseProps) {
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     if (disabled) {
       event.preventDefault();
@@ -31,8 +32,8 @@ export function Close({ disabled = false, type = "button", onClick, ...props }: 
 
   return (
     <button
+      type="button"
       {...mergeProps({ className: `${iconButton["root"]} ${styles["close"]}` }, props)}
-      type={type}
       aria-disabled={disabled ? true : undefined}
       data-size="sm"
       onClick={handleClick}

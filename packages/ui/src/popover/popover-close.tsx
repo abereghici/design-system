@@ -10,20 +10,22 @@ import { usePopover } from "./popover-root.tsx";
 import iconButtonStyles from "../icon-button/icon-button.module.css";
 import styles from "./popover.module.css";
 
-type Shape =
-  | {
-      /** Makes its one child (a Button such as Done) close the Popover. */
-      asChild: true;
-      children: ReactElement;
-    }
-  | {
-      asChild?: false;
-      /** The name of the `x` button, such as "Close": it shows only an icon. */
-      "aria-label": string;
-      children?: never;
-    };
+interface CloseBase {
+  /** Makes its one child (a Button such as Done) close the Popover. */
+  asChild?: boolean;
+  /** The name of the `x` button, such as "Close": it shows only an icon. */
+  "aria-label"?: string;
+  /** With `asChild`, the one child that closes it. */
+  children?: ReactElement;
+}
 
-export type CloseProps = Omit<ComponentProps<"button">, "aria-label" | "children"> & Shape;
+type Shape =
+  | { asChild: true; children: ReactElement }
+  | { asChild?: false; "aria-label": string; children?: never };
+
+export type CloseProps = Omit<ComponentProps<"button">, "aria-label" | "children"> &
+  CloseBase &
+  Shape;
 
 /** Closes the Popover. Without children it is the `x` button in the corner. */
 export function Close({ asChild = false, ...props }: CloseProps) {

@@ -36,6 +36,7 @@ export interface TriggerProps extends Omit<ComponentProps<"button">, "type" | "r
   value: string;
 }
 
+/** A tab that shows the Content with the same `value`. */
 export function Trigger({ value, onClick, onPointerDown, onKeyDown, ...props }: TriggerProps) {
   const tabs = useTabs("Trigger");
   const selected = value === tabs.value;

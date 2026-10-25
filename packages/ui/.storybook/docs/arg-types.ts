@@ -12,6 +12,17 @@ const controls = new Map<string, "boolean" | "number" | "text">([
 const names: Record<string, string> = {
   label: "The visible name of the control. Every field needs one, or an `aria-label`.",
   "aria-label": "The name screen readers announce, for a control without visible text.",
+  children: "What it shows.",
+  name: "The form field name its value submits under.",
+  placeholder: "An example of what to type, not a label: it disappears once the user types.",
+  type: "The native type, as on the HTML element.",
+  autoComplete: "Tells the browser and password managers what to fill in.",
+  accept: "The file types the picker offers, as on a file input: `image/*`, `.csv`.",
+  href: "Where the link goes.",
+  onClick: "Called when it is pressed, by pointer, keyboard or assistive technology.",
+  onSubmit: "Called when the form submits; call `event.preventDefault()` to handle it yourself.",
+  style: "Inline styles for the outer element.",
+  tabIndex: "Makes it focusable (`0`), so keyboard users can reach and scroll it.",
 };
 
 /**
@@ -64,6 +75,18 @@ export const partsOf = (namespace: Record<string, unknown>) =>
         entry[0] !== "Root" && /^[A-Z]/v.test(entry[0]) && typeof entry[1] === "function",
     ),
   );
+
+/** Rows for the DateField props DatePicker takes through `Omit<>`, which react-docgen skips. */
+export const dateFieldArgTypes = {
+  locale: {
+    control: "text",
+    description: "The language of the field and its Calendar, such as `ro-RO`.",
+  },
+  incompleteMessage: {
+    control: "text",
+    description: "The error for a date typed only in part, such as “Enter a complete date”.",
+  },
+} satisfies Record<string, InputType>;
 
 /**
  * Rows for props react-docgen can't read: it skips props a component takes through `Pick<>` of

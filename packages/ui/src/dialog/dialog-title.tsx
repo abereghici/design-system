@@ -11,6 +11,7 @@ export interface TitleProps extends ComponentProps<"h2"> {
   asChild?: boolean;
 }
 
+/** The heading that names the dialog. */
 export function Title({ asChild = false, ...props }: TitleProps) {
   const { id, setTitle, styles } = useModal();
   usePresence(setTitle);

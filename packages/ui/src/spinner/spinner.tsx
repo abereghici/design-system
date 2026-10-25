@@ -6,19 +6,15 @@ import visuallyHidden from "../visually-hidden/visually-hidden.module.css";
 import styles from "./spinner.module.css";
 
 type Message =
-  | {
-      /** What is working, such as "Loading", read by screen readers and not shown. */
-      children: ReactNode;
-      "aria-hidden"?: false | undefined;
-    }
-  | {
-      /** Hides it from assistive technology, inside a control that already says it is busy. */
-      "aria-hidden": true;
-      children?: undefined;
-    };
+  | { children: ReactNode; "aria-hidden"?: false | undefined }
+  | { "aria-hidden": true; children?: undefined };
 
 export type SpinnerProps = Omit<ComponentProps<"span">, "children" | "aria-hidden"> &
   Message & {
+    /** What is working, such as "Loading", read by screen readers and not shown. */
+    children?: ReactNode;
+    /** Hides it from assistive technology, inside a control that already says it is busy. */
+    "aria-hidden"?: boolean | undefined;
     /** `sm` beside text or inside a control, `lg` for a region. */
     size?: "sm" | "lg";
   };
