@@ -3,6 +3,7 @@
 @layer ab.components {
   .root {
     display: inline-grid;
+    grid-template: 100% / 100%;
     flex-shrink: 0;
     vertical-align: middle;
     inline-size: var(--ab-avatar-md-size);

@@ -2,6 +2,7 @@ import { expect, fn } from "storybook/test";
 
 import type { Decorator } from "@storybook/react-vite";
 
+import { Button } from "@platform/ui/button";
 import { UIProvider } from "@platform/ui/provider";
 
 import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
@@ -25,8 +26,8 @@ const inAForm: Decorator = (Story) => (
     }}
   >
     <Story />
-    <button type="submit">Order</button>
-    <button type="reset">Reset</button>
+    <Button type="submit">Order</Button>
+    <Button type="reset">Reset</Button>
   </form>
 );
 

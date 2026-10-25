@@ -6,6 +6,7 @@ export { command } from "./command.ts";
 export { dateField } from "./date-field.ts";
 export { datePicker } from "./date-picker.ts";
 export { dialog } from "./dialog.ts";
+export { fileTrigger } from "./file-trigger.ts";
 export { kbd } from "./kbd.ts";
 export { numberField } from "./number-field.ts";
 export { pagination } from "./pagination.ts";

@@ -1,5 +1,7 @@
 import { expect } from "storybook/test";
 
+import { Link } from "@platform/ui/link";
+
 import preview from "#.storybook/preview.tsx";
 
 import { VisuallyHidden } from "./visually-hidden.tsx";
@@ -29,10 +31,10 @@ Default.test(
 export const InALink = meta.story({
   decorators: [
     (Story) => (
-      <a href="https://github.com/abereghici" target="_blank" rel="noreferrer">
+      <Link href="https://github.com/abereghici" target="_blank" rel="noreferrer">
         GitHub
         <Story />
-      </a>
+      </Link>
     ),
   ],
   parameters: {

@@ -97,7 +97,11 @@
   }
 
   .item:where([aria-disabled="true"]) {
-    opacity: var(--ab-opacity-disabled);
+    --ab-icon-ink: var(--ab-color-icon-disabled);
+    --ab-kbd-text-color: var(--ab-color-text-disabled);
+    --item-icon-color-selected: var(--ab-color-icon-disabled);
+
+    color: var(--ab-color-text-disabled);
   }
 
   .indicator {

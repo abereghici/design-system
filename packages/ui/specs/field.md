@@ -70,12 +70,12 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State    | How it shows                                                                                    | Exposed as                                                     |
-| -------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| rest     | Label, control, description                                                                     | —                                                              |
-| invalid  | Error text replaces the description; the control shows its invalid border (each control's spec) | `data-invalid` on Root, `aria-invalid="true"` on the control   |
-| disabled | The control's disabled look; label and description keep their colours (source `forms.css`)      | `data-disabled` on Root, `aria-disabled="true"` on the control |
-| required | `*` after the label text                                                                        | native `required` on the control                               |
+| State    | How it shows                                                                                                                              | Exposed as                                                     |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| rest     | Label, control, description                                                                                                               | —                                                              |
+| invalid  | Error text replaces the description; the control shows its invalid border (each control's spec)                                           | `data-invalid` on Root, `aria-invalid="true"` on the control   |
+| disabled | The control's disabled look; the label takes `color-text-disabled`, the description (the reason) stays readable (Disabled look, GLOSSARY) | `data-disabled` on Root, `aria-disabled="true"` on the control |
+| required | `*` after the label text                                                                                                                  | native `required` on the control                               |
 
 ## Behaviour
 

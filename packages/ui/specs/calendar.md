@@ -58,15 +58,15 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State          | How it shows                                                                                     | Exposed as                               |
-| -------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------- |
-| rest           | Day number in `calendar-cell-text-color`                                                         |                                          |
-| hovered        | Fill `calendar-cell-background-color-hovered`, no transition; available days, fine pointers only | `:hover` under `@media (hover: hover)`   |
-| focused        | The 2 px focus ring with no offset, on the cell                                                  | `:focus-visible`                         |
-| selected       | Fill `calendar-cell-background-color-selected`, text `calendar-cell-text-color-selected`         | `aria-selected="true"`                   |
-| today          | 1 px border `calendar-today-border-color`                                                        | `aria-current="date"`                    |
-| unavailable    | Text `calendar-cell-text-color-disabled`; no hover                                               | `aria-disabled="true"`                   |
-| month boundary | Previous or Next unavailable                                                                     | `aria-disabled="true"` on the IconButton |
+| State          | How it shows                                                                                                                                                                 | Exposed as                               |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| rest           | Day number in `calendar-cell-text-color`                                                                                                                                     |                                          |
+| hovered        | Fill `calendar-cell-background-color-hovered`, no transition; available days, fine pointers only                                                                             | `:hover` under `@media (hover: hover)`   |
+| focused        | The 2 px focus ring with no offset, on the cell; on the selected day it stands off by its width (the ring is the fill colour; React Aria and Spectrum calendars leave a gap) | `:focus-visible`                         |
+| selected       | Fill `calendar-cell-background-color-selected`, text `calendar-cell-text-color-selected`                                                                                     | `aria-selected="true"`                   |
+| today          | 1 px border `calendar-today-border-color`                                                                                                                                    | `aria-current="date"`                    |
+| unavailable    | Text `calendar-cell-text-color-disabled`; no hover                                                                                                                           | `aria-disabled="true"`                   |
+| month boundary | Previous or Next unavailable                                                                                                                                                 | `aria-disabled="true"` on the IconButton |
 
 ## Behaviour
 

@@ -62,7 +62,12 @@
   }
 
   .track:is([aria-disabled="true"], :disabled) {
-    opacity: var(--ab-opacity-disabled);
+    background-color: var(--ab-color-background-disabled);
+  }
+
+  .track:is([aria-disabled="true"], :disabled)::before {
+    background-color: var(--ab-color-icon-disabled);
+    box-shadow: none;
   }
 
   @media (prefers-reduced-motion: no-preference) {

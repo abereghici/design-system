@@ -1,1 +1,1 @@
-export const combobox = { noResults: "No results" };
+export const combobox = { noResults: "No results", loading: "Loading…" };

@@ -62,6 +62,13 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
+export const WithFiles = meta.story({
+  parameters: { docs: { description: { story: "After a drop: the names and Clear." } } },
+  play: ({ canvas }) => {
+    drop(canvas.getByText("Drop CSV files here, or"), january, february);
+  },
+});
+
 Default.test(
   "calls onDrop with the accepted files and the rejected ones in details",
   async ({ canvas, args }) => {
@@ -83,6 +90,17 @@ Default.test(
       "january.csv",
       "february.csv",
     ]);
+  },
+);
+
+Default.test(
+  "shows and announces the dropped file names, and clears them",
+  async ({ canvas, userEvent }) => {
+    drop(canvas.getByText("Drop CSV files here, or"), january, february);
+    await expect(canvas.getByRole("status")).toHaveTextContent("january.csv, february.csv");
+    await userEvent.click(canvas.getByRole("button", { name: "Clear files" }));
+    await expect(canvas.getByRole("status")).toBeEmptyDOMElement();
+    await expect(canvas.getByRole("button", { name: "Choose files" })).toHaveFocus();
   },
 );
 
@@ -191,7 +209,7 @@ Default.test(
             <Story />
             <Field.Error />
           </Field.Root>
-          <button type="submit">Import</button>
+          <Button type="submit">Import</Button>
         </Form>
       ),
     ],

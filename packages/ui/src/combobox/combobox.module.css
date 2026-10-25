@@ -112,7 +112,9 @@
   }
 
   .option:where([aria-disabled="true"]) {
-    opacity: var(--ab-opacity-disabled);
+    --ab-icon-ink: var(--ab-color-icon-disabled);
+
+    color: var(--ab-color-text-disabled);
   }
 
   .indicator {

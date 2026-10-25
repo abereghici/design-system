@@ -12,6 +12,10 @@
     font: var(--ab-input-label-font);
   }
 
+  .root:where([data-disabled], :disabled *) .label {
+    color: var(--ab-color-text-disabled);
+  }
+
   .root:has(:required) .label::after {
     content: " *" / "";
     color: var(--ab-input-error-text-color);

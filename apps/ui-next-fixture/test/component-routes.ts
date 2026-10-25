@@ -71,13 +71,13 @@ export const componentRoutes = [
   },
   {
     name: "file-trigger",
-    tokens: ["button", "spinner"],
+    tokens: ["button", "spinner", "icon", "icon-button"],
     client: ["button/button.tsx", "file-trigger/file-trigger.tsx"],
     html: 'type="file"',
   },
   {
     name: "drop-zone",
-    tokens: ["drop-zone", "button", "spinner"],
+    tokens: ["drop-zone", "button", "spinner", "icon", "icon-button"],
     client: ["button/button.tsx", "drop-zone/drop-zone.tsx", "file-trigger/file-trigger.tsx"],
     html: "Drop CSV files here",
   },

@@ -41,14 +41,14 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State         | How it shows                                                                              | Exposed as                            |
-| ------------- | ----------------------------------------------------------------------------------------- | ------------------------------------- |
-| off           | Track `switch-track-background-color` (`color-border-default`), thumb at the inline start | `:checked` not matching               |
-| hovered       | Track `switch-track-background-color-hovered`; fine pointers only                         | `:hover`                              |
-| held          | Thumb stretches from 16 to `switch-thumb-width-pressed` (20) toward the travel direction  | `:active`                             |
-| on            | Track `switch-track-background-color-checked` (accent), thumb at the inline end           | `:checked`                            |
-| focus-visible | 2 px ring, 3 px offset around the track                                                   | `:focus-visible`                      |
-| disabled      | track `opacity-disabled`, label `color-text-disabled`; no hover, no stretch               | `aria-disabled="true"` or `:disabled` |
+| State         | How it shows                                                                                                                                               | Exposed as                            |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| off           | Track `switch-track-background-color` (`color-border-default`), thumb at the inline start                                                                  | `:checked` not matching               |
+| hovered       | Track `switch-track-background-color-hovered`; fine pointers only                                                                                          | `:hover`                              |
+| held          | Thumb stretches from 16 to `switch-thumb-width-pressed` (20) toward the travel direction                                                                   | `:active`                             |
+| on            | Track `switch-track-background-color-checked` (accent), thumb at the inline end                                                                            | `:checked`                            |
+| focus-visible | 2 px ring, 3 px offset around the track                                                                                                                    | `:focus-visible`                      |
+| disabled      | track `color-background-disabled`, thumb `color-icon-disabled` without shadow, label `color-text-disabled` (Disabled look, GLOSSARY); no hover, no stretch | `aria-disabled="true"` or `:disabled` |
 
 On/off is position plus fill, never colour alone (brand book "Not color alone").
 

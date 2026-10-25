@@ -99,7 +99,7 @@ export function Pagination({
         {range(page, count).map((item) =>
           typeof item === "string" ? (
             <li key={item} aria-hidden="true" className={styles["ellipsis"]}>
-              <MoreIcon size="sm" />
+              <MoreIcon size="sm" className={styles["more"]} />
             </li>
           ) : (
             <li key={item}>
