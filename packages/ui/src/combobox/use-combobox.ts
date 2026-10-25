@@ -2,8 +2,6 @@ import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useSt
 
 import { byId, isOpen, sourceOf } from "../floating/floating.ts";
 import { filterOptions, enabled, textOf } from "../listbox/listbox.tsx";
-import { useLabels } from "../ui-provider/locale.tsx";
-import { combobox as comboboxLabels } from "../ui-provider/locales/en-US/combobox.ts";
 
 import { chosenOf, dismiss, highlight, inputOf, listOf, memoryOf, part } from "./combobox-state.ts";
 import type { Combobox, Options } from "./combobox-state.ts";
@@ -105,14 +103,8 @@ function useListeners(c: Combobox) {
   }, []);
 }
 
-/** The Combobox's state and its empty-list text. The open list, the input's text and the highlight live in the DOM. */
-export function useCombobox(
-  options: Options,
-  labels: { noResults?: string; loading?: string } | undefined,
-  loading = false,
-): [Combobox, string] {
-  const text = useLabels("combobox", comboboxLabels, labels);
-  const empty = loading ? text.loading : text.noResults;
+/** The Combobox's state, given its empty-list text. The open list, the input's text and the highlight live in the DOM. */
+export function useCombobox(options: Options, empty: string): Combobox {
   const [ownValue, setValue] = useState(options.defaultValue ?? null);
   const [ownOpen, setOpen] = useState(options.defaultOpen ?? false);
   const [query, setQuery] = useState("");
@@ -130,5 +122,5 @@ export function useCombobox(
     sync(c, empty);
   });
   useListeners(c);
-  return [c, empty];
+  return c;
 }

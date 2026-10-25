@@ -6,8 +6,6 @@ import type { ComponentProps, RefObject, SyntheticEvent } from "react";
 import { Content } from "../dialog/dialog-content.tsx";
 import { ModalRoot } from "../dialog/dialog-modal.tsx";
 import { requestChange } from "../events/events.ts";
-import { useLabels } from "../ui-provider/locale.tsx";
-import { command as commandLabels } from "../ui-provider/locales/en-US/command.ts";
 
 import { DialogContext, Root } from "./command-root.tsx";
 import type { Callback, RootProps } from "./command-root.tsx";
@@ -17,8 +15,13 @@ type Reason = "outside-press" | "escape-key" | "item-press" | "none";
 
 export interface DialogProps
   extends
-    Omit<ComponentProps<"dialog">, "open" | "id">,
-    Pick<RootProps, "inputValue" | "defaultInputValue" | "onInputValueChange" | "filter"> {
+    Omit<ComponentProps<"dialog">, "open" | "id" | "aria-label">,
+    Pick<
+      RootProps,
+      "inputValue" | "defaultInputValue" | "onInputValueChange" | "filter" | "locale"
+    > {
+  /** The palette's name, such as "Command palette". */
+  "aria-label": string;
   /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
   open?: boolean;
   /** Opens it on the first render when it holds its own state. */
@@ -30,8 +33,6 @@ export interface DialogProps
    * place.
    */
   finalFocus?: RefObject<HTMLElement | null>;
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: { dialog?: string };
 }
 
 function handleClose(
@@ -49,8 +50,9 @@ function handleClose(
 
 /** The ⌘K palette: a top-anchored modal Command. The app binds ⌘K / Ctrl K and holds `open`. */
 export function Dialog(props: DialogProps) {
-  const { open, defaultOpen = false, onOpenChange, finalFocus: _, labels, ...rest } = props;
-  const { inputValue, defaultInputValue, onInputValueChange, filter, children, ...native } = rest;
+  const { open, defaultOpen = false, onOpenChange, finalFocus: _, ...rest } = props;
+  const { inputValue, defaultInputValue, onInputValueChange, filter, locale, children, ...native } =
+    rest;
   const [uncontrolled, setUncontrolled] = useState(defaultOpen);
   const [closes, setCloses] = useState(0);
   const close = (reason: Exclude<Reason, "none">, event: Event) => {
@@ -70,7 +72,6 @@ export function Dialog(props: DialogProps) {
       }}
     >
       <Content
-        aria-label={useLabels("command", commandLabels, labels).dialog}
         {...native}
         onClose={(event) => {
           handleClose(event, props);
@@ -88,6 +89,7 @@ export function Dialog(props: DialogProps) {
             defaultInputValue={closes === 0 ? defaultInputValue : ""}
             onInputValueChange={onInputValueChange}
             filter={filter}
+            locale={locale}
           >
             {children}
           </Root>

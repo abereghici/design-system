@@ -27,12 +27,25 @@ type Naming =
   | { label?: undefined; "aria-label": string }
   | { label?: undefined; "aria-labelledby": string };
 
+type Loading =
+  | { loading?: false | undefined; loadingText?: string | undefined }
+  | {
+      /**
+       * Shows `loadingText` in place of `noOptionsText` while the app fetches Items; the Items
+       * already rendered stay.
+       */
+      loading: boolean;
+      /** The text shown and announced while `loading`, such as "Loading…". */
+      loadingText: string;
+    };
+
 type InputProps = Omit<
   ComponentProps<"input">,
   "size" | "type" | "value" | "defaultValue" | "disabled" | "children"
 >;
 
 export type RootProps = Naming &
+  Loading &
   InputProps &
   Options & {
     /** The Items and Groups to choose from. */
@@ -42,13 +55,8 @@ export type RootProps = Naming &
      * nearby why it is unavailable.
      */
     disabled?: boolean;
-    /**
-     * Shows "Loading…" in place of "No results" while the app fetches Items; the Items that are
-     * already rendered stay.
-     */
-    loading?: boolean;
-    /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-    labels?: { noResults?: string; loading?: string };
+    /** The text shown and announced while no Item matches, such as "No results". */
+    noOptionsText: string;
     /**
      * Helper text under the field, such as a format hint; the error message takes its place while
      * invalid.
@@ -181,9 +189,21 @@ export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, validate, ...rest } = props;
   const [
     options,
-    { size = "md", className, style, loading, labels, name, form, children, ...input },
+    {
+      size = "md",
+      className,
+      style,
+      loading,
+      loadingText,
+      noOptionsText,
+      name,
+      form,
+      children,
+      ...input
+    },
   ] = split(rest);
-  const [c, empty] = useCombobox(options, labels, loading);
+  const empty = (loading === true ? loadingText : undefined) ?? noOptionsText;
+  const c = useCombobox(options, empty);
   const field = { className, style, name, invalid, disabled: input.disabled, id: part(c, "root") };
   return (
     <Field.Root

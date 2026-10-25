@@ -1,23 +1,23 @@
 import type { MouseEvent } from "react";
 import { expect, fn } from "storybook/test";
 
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/ui-provider";
-
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
-import type { Locale } from "../ui-provider/locale.tsx";
-
 import * as Alert from "./alert.tsx";
+
+// @ts-expect-error -- Close shows only an icon, so it needs a name
+({}) satisfies Alert.CloseProps;
+// @ts-expect-error -- Close shows only its icon, so it takes no children
+({ "aria-label": "Dismiss", children: "Dismiss" }) satisfies Alert.CloseProps;
 
 const onClose = fn<(event: MouseEvent<HTMLButtonElement>) => void>();
 
-const message = (close: Alert.CloseProps = {}) => (
+const message = (close: Partial<Alert.CloseProps> = {}) => (
   <>
     <Alert.Title>Couldn’t save changes</Alert.Title>
     <Alert.Description>The file is read-only. Duplicate it to edit.</Alert.Description>
-    <Alert.Close onClick={onClose} {...close} />
+    <Alert.Close aria-label="Dismiss" onClick={onClose} {...close} />
   </>
 );
 
@@ -77,31 +77,5 @@ Default.test(
     dismissals.stop();
     await expect(onClose).not.toHaveBeenCalled();
     await expect(dismissals.events).toEqual([]);
-  },
-);
-
-Default.test(
-  "names Dismiss in the UIProvider's locale",
-  {
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("button", { name: "Închide" })).toBeVisible();
-    // @ts-expect-error -- a locale must carry the Alert labels
-    void ({ tag: "fr-FR", labels: {} } satisfies Locale);
-  },
-);
-
-Default.test(
-  "takes a per-instance label over the locale",
-  { args: { children: message({ labels: { close: "Hide message" } }) } },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("button", { name: "Hide message" })).toBeVisible();
   },
 );

@@ -5,8 +5,6 @@ import type { ComponentProps } from "react";
 
 import { Kbd } from "../kbd/kbd.tsx";
 import { mergeProps } from "../slot/slot.tsx";
-import { useLabels } from "../ui-provider/locale.tsx";
-import { command as commandLabels } from "../ui-provider/locales/en-US/command.ts";
 
 import { DialogContext } from "./command-root.tsx";
 import styles from "./command.module.css";
@@ -19,21 +17,24 @@ const hint = (keys: string, label: string) => (
 );
 
 export interface FooterProps extends ComponentProps<"div"> {
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: { navigate?: string; open?: string; close?: string };
+  /** The words beside the arrow keys, such as "Navigate". */
+  navigateLabel?: string;
+  /** The words beside Enter, such as "Open". */
+  openLabel?: string;
+  /** The words beside Escape in a Command.Dialog, such as "Close". */
+  closeLabel?: string;
 }
 
-/** Teaches the keys (navigate, open, close) to people who can see the palette. */
-export function Footer({ labels, children, ...props }: FooterProps) {
+/** Teaches the keys (navigate, open, close) to people who can see the palette; each key shows with its words. */
+export function Footer({ navigateLabel, openLabel, closeLabel, children, ...props }: FooterProps) {
   const inDialog = use(DialogContext) !== null;
-  const text = useLabels("command", commandLabels, labels);
   return (
     <div aria-hidden="true" {...mergeProps({ className: styles["footer"] }, props)}>
       {children ?? (
         <>
-          {hint("up+down", text.navigate)}
-          {hint("enter", text.open)}
-          {inDialog && hint("esc", text.close)}
+          {navigateLabel !== undefined && hint("up+down", navigateLabel)}
+          {openLabel !== undefined && hint("enter", openLabel)}
+          {inDialog && closeLabel !== undefined && hint("esc", closeLabel)}
         </>
       )}
     </div>

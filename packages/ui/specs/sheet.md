@@ -154,13 +154,9 @@ Proposed new (mirroring Dialog's set):
 
 The Close uses the `icon-button-*` tokens; the more-contrast and forced-colors borders use `border-width-default` and `color-border-default` directly. Body padding reuses `sheet-padding`.
 
-## Built-in labels
+## Author-written text
 
-| Key     | Default | Used by                                   |
-| ------- | ------- | ----------------------------------------- |
-| `close` | "Close" | `Sheet.Close` (icon-only) accessible name |
-
-From the `labels` prop, then the root UI provider's locale, then English. Sheet adds its `close` key to the locale type and every shipped locale (en-US, ro-RO).
+None. The icon-only `Sheet.Close` requires its `aria-label` by type, as Dialog's.
 
 ## Feedback events
 

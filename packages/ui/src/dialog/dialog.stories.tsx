@@ -2,15 +2,16 @@ import { useRef, useState } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
-import { roRO } from "@platform/ui/locales/ro-RO";
 import { TextField } from "@platform/ui/text-field";
-import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Dialog from "./dialog.tsx";
+
+// @ts-expect-error -- the x button shows only an icon, so it needs a name
+({}) satisfies Dialog.CloseProps;
 
 const content = (props: Dialog.ContentProps = {}) => (
   <Dialog.Content {...props}>
@@ -23,7 +24,7 @@ const content = (props: Dialog.ContentProps = {}) => (
       </Dialog.Close>
       <Button variant="primary">Rename</Button>
     </Dialog.Footer>
-    <Dialog.Close />
+    <Dialog.Close aria-label="Close" />
   </Dialog.Content>
 );
 
@@ -154,47 +155,6 @@ Default.test(
   async ({ canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Rename…" }));
     await expect(canvas.getByRole("button", { name: "Rename" })).toHaveFocus();
-  },
-);
-
-Default.test(
-  "names Close in the UIProvider's locale",
-  {
-    args: { defaultOpen: true },
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
-  async ({ canvas }) => {
-    await waitFor(() => expect(canvas.getByRole("button", { name: "Închide" })).toBeVisible());
-    // @ts-expect-error -- a locale must carry the Dialog labels
-    void ({ tag: "fr-FR", labels: { ...roRO.labels, dialog: {} } } satisfies typeof roRO);
-  },
-);
-
-Default.test(
-  "takes a per-instance label over the locale",
-  {
-    args: {
-      defaultOpen: true,
-      children: (
-        <Dialog.Content aria-label="Rename project">
-          <Dialog.Close labels={{ close: "Dismiss rename" }} />
-        </Dialog.Content>
-      ),
-    },
-  },
-  async ({ canvas }) => {
-    await waitFor(() =>
-      expect(canvas.getByRole("dialog", { name: "Rename project" })).toBeVisible(),
-    );
-    await waitFor(() =>
-      expect(canvas.getByRole("button", { name: "Dismiss rename" })).toBeVisible(),
-    );
   },
 );
 

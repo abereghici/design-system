@@ -3,15 +3,16 @@ import { expect, fn, screen, waitFor } from "storybook/test";
 
 import { Dialog } from "@platform/ui/dialog";
 import { UserIcon } from "@platform/ui/icons/user";
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
 
-import type { Locale } from "../ui-provider/locale.tsx";
-
 import * as Combobox from "./combobox.tsx";
+
+// @ts-expect-error -- the empty list is announced, so it needs its text
+({ label: "Assignee" }) satisfies Combobox.RootProps;
+// @ts-expect-error -- while loading, the list announces its loading text
+({ label: "Assignee", noOptionsText: "No results", loading: true }) satisfies Combobox.RootProps;
 
 const onValueChange = fn<NonNullable<Combobox.RootProps["onValueChange"]>>();
 const onInputValueChange = fn<NonNullable<Combobox.RootProps["onInputValueChange"]>>();
@@ -45,6 +46,7 @@ const meta = preview.meta({
     label: "Assignee",
     name: "assignee",
     placeholder: "Search people",
+    noOptionsText: "No results",
     onValueChange,
     onInputValueChange,
     onOpenChange,
@@ -243,19 +245,6 @@ Default.test(
   },
 );
 
-Default.test(
-  "matches Romanian accents and speaks the UIProvider's locale",
-  { decorators: [(Story) => <UIProvider locale={roRO}>{Story()}</UIProvider>] },
-  async ({ canvas }) => {
-    await type("țur");
-    await expect(highlighted()).toHaveAccessibleName("Ștefan Țurcanu");
-    await type("q");
-    await expect(canvas.getByRole("status")).toHaveTextContent("Niciun rezultat");
-    // @ts-expect-error -- a locale must carry the Combobox labels
-    void ({ tag: "fr-FR", labels: { ...roRO.labels, combobox: {} } } satisfies Locale);
-  },
-);
-
 function ServerSearch(args: Combobox.RootProps) {
   const [query, setQuery] = useState("");
   return (
@@ -280,7 +269,7 @@ function ServerSearch(args: Combobox.RootProps) {
 }
 
 export const ServerSearchResults = meta.story({
-  args: { label: "Repository", name: "repo", labels: { noResults: "No repositories" } },
+  args: { label: "Repository", name: "repo", noOptionsText: "No repositories" },
   render: ServerSearch,
   parameters: { docs: { description: { story: "With `filter={null}` the app filters." } } },
 });
@@ -294,7 +283,11 @@ ServerSearchResults.test("shows the Items the app renders", async ({ canvas, use
   await expect(field("Repository")).toHaveValue("platform/web");
 });
 
-Default.test("announces Loading… in place of No results", { args: { loading: true } }, async () => {
-  await type("zzz");
-  await expect(screen.getByRole("status")).toHaveTextContent("Loading…");
-});
+Default.test(
+  "announces its loading text in place of No results",
+  { args: { loading: true, loadingText: "Loading…" } },
+  async () => {
+    await type("zzz");
+    await expect(screen.getByRole("status")).toHaveTextContent("Loading…");
+  },
+);

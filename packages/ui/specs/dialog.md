@@ -88,7 +88,7 @@ No Header, Body, Backdrop or Portal Part (see API).
 | ---------- | -------------------------- | -------------------- | --------------------------------------------------------------------------------------------------- |
 | `asChild`  | `boolean`                  | `false`              | Renders the single child (a Button) with `commandfor` and `command="request-close"` merged in.      |
 | `children` | `ReactNode`                |                      | Only with `asChild`. Without children, Close renders the icon-only `x` button.                      |
-| `labels`   | `{ close?: string }`       | `{ close: "Close" }` | Accessible name of the icon-only button. Falls back to the root UI provider's locale, then English. |
+| `aria-label` | `string` (required without `asChild`) |  | Accessible name of the icon-only button, such as "Close". |
 | …native    | `ComponentProps<"button">` |                      | `ref`, `className`, `onClick` and native attributes.                                                |
 
 Names, checked against the reference libraries:
@@ -102,7 +102,7 @@ Names, checked against the reference libraries:
 - **No `modal` prop.** Radix "Supports modal and non-modal modes." (`modal` default `true`); Base UI `modal` "`true`: user interaction is limited to just the dialog: focus is trapped, document page scroll is locked, and pointer interactions on outside elements are disabled." Always modal here (`showModal()`); a non-modal layer is a Popover.
 - **`asChild`** on Trigger, Close and Title: Radix lists "`asChild` `boolean` `false`" on Trigger, Close and Title.
 - **`initialFocus`**: Base UI Popup "`initialFocus` … Determines the element to focus when the dialog is opened. By default, focus moves to the first tabbable element inside the popup" with "`RefObject`: Move focus to the ref element." Only the `RefObject` form is taken. It is needed because React's `autoFocus` does not reach the native focusing steps on client renders (Behaviour).
-- **`labels.close`**: the typed `labels` prop and the locale object replace per-string props (phase-4 contract 12; Alert precedent `labels.close`).
+- **`aria-label`**: the icon-only Close requires its name by type; with `asChild` the child's own text names it (Base UI precedent: the library ships no strings).
 - Left out (YAGNI): Radix Content `onOpenAutoFocus`, `onCloseAutoFocus`, `onEscapeKeyDown`, `onPointerDownOutside`, `onInteractOutside` (the reasons plus `cancel()` cover them); Base UI `finalFocus`, `disablePointerDismissal`, `Viewport`; shadcn `showCloseButton` (Close is a Part the consumer includes or not) and its "Sticky Footer"; MUI `fullScreen`, `maxWidth` and sizes; Ark `trapFocus`, `preventScroll`, `restoreFocus` (native); `forceMount` / `keepMounted` (the `<dialog>` is always in the DOM).
 
 ## States
@@ -191,13 +191,9 @@ Proposed new:
 
 The Close uses the existing `icon-button-*` tokens; the more-contrast and forced-colors borders use `border-width-default` and `color-border-default` directly. The backdrop keeps `z-index` out of it: the top layer orders layers by opening order, not `z-index`.
 
-## Built-in labels
+## Author-written text
 
-| Key     | Default | Used by                                    |
-| ------- | ------- | ------------------------------------------ |
-| `close` | "Close" | `Dialog.Close` (icon-only) accessible name |
-
-Close is a client component, so the label comes from the `labels` prop, then the root UI provider's locale, then English. Dialog adds its `close` key to the locale type and to every shipped locale (en-US, ro-RO).
+None. The icon-only `Dialog.Close` requires its `aria-label` by type; the Title, Description and button texts are the author's.
 
 ## Feedback events
 

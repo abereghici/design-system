@@ -2,16 +2,15 @@ import { useRef, useState } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
-import type { Locale } from "../ui-provider/locale.tsx";
-
 import * as Popover from "./popover.tsx";
+
+// @ts-expect-error -- the x button shows only an icon, so it needs a name
+({}) satisfies Popover.CloseProps;
 
 const onOpenChange = fn<NonNullable<Popover.RootProps["onOpenChange"]>>();
 
@@ -28,7 +27,7 @@ const filters = (
       <label>
         <input type="checkbox" name="mine" /> Assigned to me
       </label>
-      <Popover.Close />
+      <Popover.Close aria-label="Close" />
     </Popover.Content>
   </>
 );
@@ -172,27 +171,6 @@ Default.test(
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
   },
 );
-
-Default.test(
-  "names Close in the UIProvider's locale",
-  {
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
-  async ({ canvas }) => {
-    const user = await trusted();
-    await user.click(canvas.getByRole("button", { name: "Filters" }));
-    await waitFor(() => expect(canvas.getByRole("button", { name: "Închide" })).toBeVisible());
-  },
-);
-
-// @ts-expect-error -- a locale must name the Popover's Close
-void ({ ...roRO, labels: { ...roRO.labels, popover: {} } } satisfies Locale);
 
 export const ControlledOpen = meta.story({
   parameters: {

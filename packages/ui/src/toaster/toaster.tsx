@@ -7,8 +7,6 @@ import type { ComponentProps, RefObject } from "react";
 import { composeRefs, mergeProps } from "../slot/slot.tsx";
 import { close, mark, snapshot, subscribe } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
-import { useLabels } from "../ui-provider/locale.tsx";
-import { toaster as toasterLabels } from "../ui-provider/locales/en-US/toaster.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import { useFocusReturn } from "./toaster-keys.ts";
@@ -19,8 +17,10 @@ export interface ToasterProps extends Omit<
   ComponentProps<"section">,
   "popover" | "tabIndex" | "aria-label" | "aria-keyshortcuts" | "children"
 > {
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: { region?: string; close?: string };
+  /** The name of the toasts' region, such as "Notifications", which people can jump to. */
+  "aria-label": string;
+  /** The name of each toast's close button, such as "Dismiss": it shows only an icon. */
+  closeLabel: string;
 }
 
 const none: readonly ToastRecord[] = [];
@@ -147,9 +147,8 @@ function Announcer({ toasts, assertive }: { toasts: readonly ToastRecord[]; asse
   );
 }
 
-function Layer({ labels, ref, ...props }: ToasterProps) {
+function Layer({ closeLabel, ref, ...props }: ToasterProps) {
   const toasts = useSyncExternalStore(subscribe, snapshot, () => none);
-  const names = useLabels("toaster", toasterLabels, labels);
   const region = useRef<HTMLElement>(null);
   const hidden = useSyncExternalStore(
     onVisibility,
@@ -168,11 +167,9 @@ function Layer({ labels, ref, ...props }: ToasterProps) {
       <Announcer toasts={announced} assertive />
       <section
         {...mergeProps({ className: styles["region"] }, props)}
-        // React forbids passing a ref object through a plain function during render, so it composes here.
         ref={composeRefs(region, ref)}
         popover="manual"
         tabIndex={-1}
-        aria-label={names.region}
         aria-keyshortcuts="Alt+T"
       >
         <ol className={styles["list"]}>
@@ -181,7 +178,7 @@ function Layer({ labels, ref, ...props }: ToasterProps) {
               key={record.id}
               record={record}
               index={position(at)}
-              closeLabel={names.close}
+              closeLabel={closeLabel}
               restore={restore}
             />
           ))}
