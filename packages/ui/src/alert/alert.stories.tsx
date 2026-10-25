@@ -2,7 +2,7 @@ import type { MouseEvent } from "react";
 import { expect, fn } from "storybook/test";
 
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
@@ -81,13 +81,13 @@ Default.test(
 );
 
 Default.test(
-  "names Dismiss in the Provider's locale",
+  "names Dismiss in the UIProvider's locale",
   {
     decorators: [
       (Story) => (
-        <Provider locale={roRO}>
+        <UIProvider locale={roRO}>
           <Story />
-        </Provider>
+        </UIProvider>
       ),
     ],
   },

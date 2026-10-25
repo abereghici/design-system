@@ -29,7 +29,7 @@ export interface DialogProps
    * place.
    */
   finalFocus?: RefObject<HTMLElement | null>;
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: { dialog?: string };
 }
 

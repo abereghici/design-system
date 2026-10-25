@@ -45,7 +45,7 @@ export interface KbdProps extends ComponentProps<"kbd"> {
    * user's platform; otherwise the page shows the other keys until it detects the platform.
    */
   platform?: "apple" | "other";
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: Partial<KbdLabels>;
 }
 

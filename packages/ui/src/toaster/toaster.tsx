@@ -19,7 +19,7 @@ export interface ToasterProps extends Omit<
   ComponentProps<"section">,
   "popover" | "tabIndex" | "aria-label" | "aria-keyshortcuts" | "children"
 > {
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: { region?: string; close?: string };
 }
 
@@ -194,7 +194,7 @@ function Layer({ labels, className, ref, ...props }: ToasterProps) {
 /**
  * Shows the toasts added with `toast()` from `@platform/ui/toast`, stacked at the bottom of the
  * screen, timed and announced to screen readers. Mount exactly one, near the root inside the
- * Provider. Toasts stay usable while a dialog is open.
+ * UIProvider. Toasts stay usable while a dialog is open.
  */
 export function Toaster(props: ToasterProps) {
   const modal = useTopmostModal();

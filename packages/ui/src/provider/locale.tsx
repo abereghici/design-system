@@ -20,7 +20,7 @@ export function LocaleProvider({ value, children }: { value: Locale; children: R
   return <LocaleContext value={value}>{children}</LocaleContext>;
 }
 
-/** `labelsOf` with the Provider's Locale. */
+/** `labelsOf` with the UIProvider's Locale. */
 export function useLabels<Namespace extends keyof Labels>(
   namespace: Namespace,
   defaults: Labels[Namespace],
@@ -29,7 +29,7 @@ export function useLabels<Namespace extends keyof Labels>(
   return labelsOf(defaults, useLocale().labels[namespace], labels);
 }
 
-/** The Provider's `locale`, or en-US with no labels so each component falls back to its own. */
+/** The UIProvider's `locale`, or en-US with no labels so each component falls back to its own. */
 export function useLocale(): { readonly tag: string; readonly labels: Partial<Labels> } {
   return use(LocaleContext) ?? { tag: "en-US", labels: {} };
 }

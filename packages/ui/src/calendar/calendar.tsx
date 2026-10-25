@@ -45,7 +45,7 @@ export interface CalendarProps extends Omit<
   max?: Temporal.PlainDate | undefined;
   /** Days that can't be chosen, such as weekends or booked dates. They stay readable. */
   isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: Partial<Labels["calendar"]> | undefined;
 }
 

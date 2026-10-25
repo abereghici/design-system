@@ -21,7 +21,7 @@ This works because each themed token is a `light-dark()` value that resolves whe
 
 ## Letting the user choose
 
-The app owns the choice and where it is stored. Set `data-theme` only for an explicit light or dark choice, and remove it for System. To paint the right Theme before the page hydrates, follow the Next.js guide [How to prevent flash before hydration](https://nextjs.org/docs/app/guides/preventing-flash-before-hydration): store the choice in a cookie, set the attribute from a small inline script in `<head>`, and declare `viewport.colorScheme = "light dark"` so the browser paints the right canvas. `docs/research/theme-switching.md` has a complete recipe.
+The app owns the choice and where it is stored. Set `data-theme` only for an explicit light or dark choice, and remove it for System. To paint the right Theme before the page hydrates, follow the Next.js guide [How to prevent flash before hydration](https://nextjs.org/docs/app/guides/preventing-flash-before-hydration): store the choice in a cookie, set the attribute from a small inline script in `<head>`, and declare `viewport.colorScheme = "light dark"` so the browser paints the right canvas.
 
 ## User preferences
 

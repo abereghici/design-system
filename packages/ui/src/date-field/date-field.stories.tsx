@@ -5,7 +5,7 @@ import type { Decorator } from "@storybook/react-vite";
 
 import { Button } from "@platform/ui/button";
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 
 import preview from "#.storybook/preview.tsx";
 import { confirmComposition } from "#.storybook/test/trusted.ts";
@@ -69,9 +69,9 @@ Default.test(
   {
     decorators: [
       (Story) => (
-        <Provider locale={roRO}>
+        <UIProvider locale={roRO}>
           <Story />
-        </Provider>
+        </UIProvider>
       ),
     ],
   },

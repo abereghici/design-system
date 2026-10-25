@@ -8,7 +8,7 @@ import { listen } from "#.storybook/test/listen.ts";
 
 import type { Locale } from "../provider/locale.tsx";
 import { roRO } from "../provider/locales/ro-RO.ts";
-import { Provider } from "../provider/provider.tsx";
+import { UIProvider } from "../provider/provider.tsx";
 
 import { PasswordField } from "./password-field.tsx";
 import type { PasswordFieldVisibleChangeEventDetails } from "./password-field.tsx";
@@ -117,9 +117,9 @@ Default.test(
   {
     decorators: [
       (Story) => (
-        <Provider locale={roRO}>
+        <UIProvider locale={roRO}>
           <Story />
-        </Provider>
+        </UIProvider>
       ),
     ],
   },

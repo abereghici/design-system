@@ -18,7 +18,7 @@ export interface InputProps extends Omit<
   "value" | "defaultValue" | "type"
 > {
   /**
-   * Overrides the Provider's locale: `search` is the accessible name, `placeholder` the default hint.
+   * Overrides the UIProvider's locale: `search` is the accessible name, `placeholder` the default hint.
    * To name it by visible text, pass `aria-labelledby`, which wins over `search`.
    */
   labels?: { search?: string; placeholder?: string };
@@ -68,7 +68,7 @@ export function Input({
 }
 
 export interface EmptyProps extends ComponentProps<"output"> {
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: { empty?: string };
 }
 
@@ -97,7 +97,7 @@ const hint = (keys: string, label: string) => (
 );
 
 export interface FooterProps extends ComponentProps<"div"> {
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: { navigate?: string; open?: string; close?: string };
 }
 

@@ -2,7 +2,7 @@ import { expect, fn } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 
 import preview from "#.storybook/preview.tsx";
 
@@ -178,9 +178,9 @@ Default.test(
   {
     decorators: [
       (Story) => (
-        <Provider locale={roRO}>
+        <UIProvider locale={roRO}>
           <Story />
-        </Provider>
+        </UIProvider>
       ),
     ],
   },

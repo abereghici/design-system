@@ -126,7 +126,7 @@ export function Title({ asChild = false, className, ...props }: TitleProps) {
 export interface CloseProps extends ComponentProps<"button"> {
   /** Makes its one child (a Button such as Done) close the Popover. */
   asChild?: boolean;
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: { close?: string };
 }
 

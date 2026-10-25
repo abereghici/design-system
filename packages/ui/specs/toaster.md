@@ -1,20 +1,20 @@
 # Toaster
 
-The region that shows toasts: a "Notifications" landmark at the bottom centre of the viewport that stacks, times, announces and positions every toast the app adds with `toast()`. Mount it once, near the root, inside the Provider. It stays above Floating layers, including an open modal Dialog, Sheet, AlertDialog or Command dialog, and stays usable there. What one toast looks like and does is in `toast.md`.
+The region that shows toasts: a "Notifications" landmark at the bottom centre of the viewport that stacks, times, announces and positions every toast the app adds with `toast()`. Mount it once, near the root, inside the UIProvider. It stays above Floating layers, including an open modal Dialog, Sheet, AlertDialog or Command dialog, and stays usable there. What one toast looks like and does is in `toast.md`.
 
 ```tsx
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 import { Toaster } from "@platform/ui/toaster";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ro">
       <body>
-        <Provider locale={roRO}>
+        <UIProvider locale={roRO}>
           {children}
           <Toaster />
-        </Provider>
+        </UIProvider>
       </body>
     </html>
   );
@@ -47,7 +47,7 @@ Names, checked against the reference libraries:
 - **`Toaster`**: Sonner "Toaster: This component renders all the toasts, you can place it anywhere in your app." (https://sonner.emilkowal.ski/toaster); Ark "`<Toaster toaster={toaster}>`" (https://ark-ui.com/react/docs/components/toast); shadcn "Add the Toaster component." with `<Toaster />` in `app/layout.tsx` (https://ui.shadcn.com/docs/components/sonner); the source "`<Toaster />   // once, near the root`" and the brand book "**Toaster:** hosts the toast stack." Radix and Base UI call the area `Toast.Viewport` (Radix "The fixed area where toasts appear."; Base UI "A container viewport for toasts."), React Aria `ToastRegion` ("A ToastRegion displays one or more toast notifications."), Mantine `Notifications`. Toaster is the name of the libraries that, like this one, pair an app-level component with a `toast()` call, and the source's.
 - **`labels.region` = "Notifications"**: the source "Region landmark "Notifications" (Alt+T to focus)"; Radix Provider `label` default "Notification" and Viewport `label` default "Notifications ({hotkey})"; Sonner "`containerAriaLabel = 'Notifications'`"; Base UI Viewport "`'aria-label': 'Notifications'`" (`ToastViewport.tsx`). Radix and Sonner append the hotkey to the name ("`${containerAriaLabel} ${hotkeyLabel}`"); here it is `aria-keyshortcuts="Alt+T"` instead, which ARIA defines for exactly this: "Indicates keyboard shortcuts that an author has implemented to activate or give focus to an element." (judgement call: the name stays the source's word and the key is exposed as a property).
 - **`labels.close`**: the Toaster renders every toast, so the per-instance override of `toast.close` lives here (`toast.md`, Built-in labels).
-- Left out (YAGNI): `position` / `placement` (Sonner "Changes the place where all toasts will be rendered." with six positions; Ark `placement`; Mantine `position`): the source places one bottom-centre stack. `offset` / `mobileOffset` (Sonner), `gap` (Sonner, Ark) and `duration` (Sonner `toastOptions`, Radix Provider, Base UI Provider `timeout`): tokens. `expand` / `visibleToasts` (Sonner), `limit` (Base UI "The maximum number of toasts that can be displayed at once."), `max` (Ark): fixed at 3 by the source. `hotkey` (Sonner, Ark, Radix Viewport): fixed to the source's Alt+T. `swipeDirections` / `swipeDirection` (Sonner, Radix, Base UI): fixed to down and sideways. `theme`, `dir`, `richColors`, `invert`, `icons`, `closeButton`, `toastOptions` (Sonner): inherited from the Provider or fixed. Multiple toasters (Sonner `id` + `toasterId`), Base UI anchored toasts and `Portal`, Radix `announcerContainer`, Ark `pauseOnPageIdle` (always on), safe-area insets (`env(safe-area-inset-bottom)`; no source need yet).
+- Left out (YAGNI): `position` / `placement` (Sonner "Changes the place where all toasts will be rendered." with six positions; Ark `placement`; Mantine `position`): the source places one bottom-centre stack. `offset` / `mobileOffset` (Sonner), `gap` (Sonner, Ark) and `duration` (Sonner `toastOptions`, Radix Provider, Base UI Provider `timeout`): tokens. `expand` / `visibleToasts` (Sonner), `limit` (Base UI "The maximum number of toasts that can be displayed at once."), `max` (Ark): fixed at 3 by the source. `hotkey` (Sonner, Ark, Radix Viewport): fixed to the source's Alt+T. `swipeDirections` / `swipeDirection` (Sonner, Radix, Base UI): fixed to down and sideways. `theme`, `dir`, `richColors`, `invert`, `icons`, `closeButton`, `toastOptions` (Sonner): inherited from the UIProvider or fixed. Multiple toasters (Sonner `id` + `toasterId`), Base UI anchored toasts and `Portal`, Radix `announcerContainer`, Ark `pauseOnPageIdle` (always on), safe-area insets (`env(safe-area-inset-bottom)`; no source need yet).
 
 ## States
 
@@ -62,7 +62,7 @@ Names, checked against the reference libraries:
 
 ## Behaviour
 
-- **Mounted once, rendered in place.** The Toaster subscribes to the toast store with `useSyncExternalStore` (React: "useSyncExternalStore is a React Hook that lets you subscribe to an external store."), with a `getServerSnapshot` that returns no toasts ("It will be used only during server rendering and during hydration of server-rendered content on the client."), so the server HTML and the first client render agree. It renders where it is placed, so it inherits `dir`, `lang` and `data-theme` from the Provider (phase-4 contract 1). Mount exactly one: a second Toaster would draw every toast twice (documented rule).
+- **Mounted once, rendered in place.** The Toaster subscribes to the toast store with `useSyncExternalStore` (React: "useSyncExternalStore is a React Hook that lets you subscribe to an external store."), with a `getServerSnapshot` that returns no toasts ("It will be used only during server rendering and during hydration of server-rendered content on the client."), so the server HTML and the first client render agree. It renders where it is placed, so it inherits `dir`, `lang` and `data-theme` from the UIProvider (phase-4 contract 1). Mount exactly one: a second Toaster would draw every toast twice (documented rule).
 - **Why a manual popover.** The Region must sit above menus, popovers and dialogs, which are all in the top layer, and no `z-index` can reach above that: MDN "The top layer … sits on top of all other layers displayed in a web document."; CSS Positioned Layout 4 "Top layer elements are rendered in the order they appear in the top layer; the last element in the top layer is rendered on top of everything else." `popover="manual"` puts the Region there without the behaviours a toast stack must not have: HTML "manual: Does not close other popovers; does not light dismiss or respond to close requests." Opening an `auto` popover does not close it ("If element's popover attribute is in the Auto state, then this will also close all other Auto popovers"), and MDN's `showModal()` note concerns `popover="auto"` only ("popover="auto" popovers are also dismissed by successful HTMLDialogElement.showModal()"; Dialog spec). So the ported `z-index-toast` is not used by the Toaster (flagged: the top layer replaces the Layer scale here, as the Dialog spec notes for modals). The prototype used `position: fixed` with `z-index: var(--ab-z-index-toast)`, which falls behind any open popover or dialog.
 - **Staying on top.** A layer opened after the Region is above it. When a toast is added while the Region is showing and focus is not inside it, the Toaster calls `hidePopover()` then `showPopover()`, which appends the Region to the end of the top layer again (CSS Positioned Layout 4, "To add an element to the top layer": "Append el to doc’s top layer."), so the new toast is never hidden behind a menu opened since (inference: the build ticket shows a toast while a DropdownMenu is open and checks it is visible and pressable). The re-show is skipped while focus is inside the Region, so it never pulls the user's focus.
 - **Above a modal dialog.** A modal `<dialog>` makes the rest of the document inert, the Toaster included: HTML "A Document document is blocked by a modal dialog subject if subject is the topmost dialog element in document's top layer. While document is so blocked, every node that is connected to document, with the exception of the subject element and its flat tree descendants, must become inert." Being in the top layer does not help: MDN `inert` "Modal <dialog>s generated with showModal() escape inertness … No other element can escape inertness.", and inert content "Cannot be focused", does not "have click events fired when clicked on" and is "hidden from assistive technologies as they are excluded from the accessibility tree". An Undo shown after a change made inside a Dialog would be visible but unpressable and unannounced. So while a modal is open, the Toaster renders its Announcers and Region inside the topmost one:
@@ -125,7 +125,7 @@ No `toaster` Dictionary word: the Toaster uses the toast tokens (`toast-offset`,
 | ---------------- | --------------- | ------------ | ------------------------- |
 | `toaster.region` | "Notifications" | "Notificări" | The Region's `aria-label` |
 
-`toaster` in `src/provider/locales/en-US/toaster.ts` (`{ region: "Notifications", close: "Dismiss" }`) are the en-US defaults; `enUS` composes them and `ro-RO.ts` translates them. The `labels` prop (`region`, `close`) wins over the Provider's locale, which wins over the defaults.
+`toaster` in `src/provider/locales/en-US/toaster.ts` (`{ region: "Notifications", close: "Dismiss" }`) are the en-US defaults; `enUS` composes them and `ro-RO.ts` translates them. The `labels` prop (`region`, `close`) wins over the UIProvider's locale, which wins over the defaults.
 
 ## Feedback events
 

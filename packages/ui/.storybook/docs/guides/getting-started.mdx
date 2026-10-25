@@ -20,19 +20,19 @@ Both packages live in this monorepo. Add them to an app's `package.json` as work
 
 The system targets Baseline newly available and uses those features directly, with no fallbacks. The `browserslist` entry matters: with Next.js's default targets, Lightning CSS lowers `light-dark()` and `data-theme` subtrees stop switching.
 
-## Mount the Provider
+## Mount the UIProvider
 
-Render `Provider` once, at the root of the app. It brings the cascade layer order, the tokens, the fonts (preloading Figtree latin) and the base stylesheet, so the app imports no CSS from the design system.
+Render `UIProvider` once, at the root of the app. It brings the cascade layer order, the tokens, the fonts (preloading Figtree latin) and the base stylesheet, so the app imports no CSS from the design system.
 
 ```tsx
 // app/layout.tsx
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <Provider>{children}</Provider>
+        <UIProvider>{children}</UIProvider>
       </body>
     </html>
   );

@@ -8,13 +8,13 @@ Components contain a few words of their own (a close button's name, "Loading", t
 
 ## Choose a locale
 
-Each shipped locale is a typed object on its own entry point. Pass it to `Provider`:
+Each shipped locale is a typed object on its own entry point. Pass it to `UIProvider`:
 
 ```tsx
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { Provider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/provider";
 
-<Provider locale={roRO}>{children}</Provider>;
+<UIProvider locale={roRO}>{children}</UIProvider>;
 ```
 
 Shipped: `en-US` and `ro-RO`. Without a locale, components use their own en-US labels and format numbers in en-US. Each component carries only its own default labels, so importing one never ships another's strings.
@@ -37,7 +37,7 @@ To change a label for one instance, pass the component's `labels` prop where it 
 
 ## Server Components
 
-Context doesn't reach Server Components. The ones that label or format on the server (Badge, Breadcrumbs, Meter, Pagination, Progress, SkipLink, Spinner) take their own `locale` prop; pass the same shipped locale you give the Provider. Their `labels` prop still overrides single strings.
+Context doesn't reach Server Components. The ones that label or format on the server (Badge, Breadcrumbs, Meter, Pagination, Progress, SkipLink, Spinner) take their own `locale` prop; pass the same shipped locale you give the UIProvider. Their `labels` prop still overrides single strings.
 
 ## Direction
 

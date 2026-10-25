@@ -56,7 +56,7 @@ const shippedComponentTokens = (css: string) => {
   );
 };
 
-describe("the Provider owns the global CSS", () => {
+describe("the UIProvider owns the global CSS", () => {
   test.each([
     ["button", button],
     ["logo", logo],

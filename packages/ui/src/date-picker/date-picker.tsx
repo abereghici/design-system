@@ -46,7 +46,7 @@ export interface RootProps extends Omit<
   defaultOpen?: boolean | undefined;
   /** Called before it opens or closes; `details.cancel()` keeps it as it is. */
   onOpenChange?: ((open: boolean, details: OpenChangeEventDetails) => void) | undefined;
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: Partial<Labels["datePicker"] & Labels["dateField"]> | undefined;
   /** The `DatePicker.Content`. */
   children?: ReactNode;
