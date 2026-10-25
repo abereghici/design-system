@@ -5,7 +5,7 @@ import type { ComponentProps, RefObject, SyntheticEvent } from "react";
 
 import { Content, ModalRoot } from "../dialog/modal.tsx";
 import { requestChange } from "../events/events.ts";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import { command as commandLabels } from "../provider/locales/en-US/command.ts";
 
 import { DialogContext, Root } from "./root.tsx";
@@ -48,7 +48,6 @@ export function Dialog(props: DialogProps) {
   const { inputValue, defaultInputValue, onInputValueChange, filter, children, ...native } = rest;
   const [own, setOwn] = useState(defaultOpen);
   const [closes, setCloses] = useState(0);
-  const locale = useLocale();
   const close = (reason: Exclude<Reason, "none">, event: Event) => {
     const accepted = requestChange(onOpenChange, false, reason, event);
     if (accepted) setOwn(false);
@@ -66,7 +65,7 @@ export function Dialog(props: DialogProps) {
       }}
     >
       <Content
-        aria-label={labels?.dialog ?? locale.labels.command?.dialog ?? commandLabels.dialog}
+        aria-label={useLabels("command", commandLabels, labels).dialog}
         {...native}
         onClose={(event) => {
           handleClose(event, props);

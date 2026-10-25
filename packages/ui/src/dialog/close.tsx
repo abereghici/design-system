@@ -3,7 +3,7 @@
 import type { ComponentProps, MouseEvent } from "react";
 
 import { XIcon } from "../icon/icons/x.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import { dialog as dialogLabels } from "../provider/locales/en-US/dialog.ts";
 import { sheet as sheetLabels } from "../provider/locales/en-US/sheet.ts";
 import { Slot, join } from "../slot/slot.tsx";
@@ -20,7 +20,11 @@ export interface CloseProps extends Omit<ComponentProps<"button">, "command" | "
 
 export function Close({ asChild = false, labels, className, onClick, ...props }: CloseProps) {
   const { id, controller, styles, component } = useModal();
-  const locale = useLocale();
+  const names = useLabels(
+    component === "Sheet" ? "sheet" : "dialog",
+    component === "Sheet" ? sheetLabels : dialogLabels,
+    labels,
+  );
 
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     onClick?.(event);
@@ -39,13 +43,7 @@ export function Close({ asChild = false, labels, className, onClick, ...props }:
   return (
     <button
       type="button"
-      aria-label={
-        labels?.close ??
-        (component === "Sheet"
-          ? (locale.labels.sheet ?? sheetLabels)
-          : (locale.labels.dialog ?? dialogLabels)
-        ).close
-      }
+      aria-label={names.close}
       {...props}
       data-size="sm"
       className={join(`${iconButton["root"]} ${styles["close"]}`, className)}

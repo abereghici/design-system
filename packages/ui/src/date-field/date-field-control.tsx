@@ -4,7 +4,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { dateFormats } from "../date/date.ts";
 import type { DatePart, Temporal } from "../date/date.ts";
 import { FieldContext } from "../field/field-control.ts";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels, useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { dateField as dateFieldLabels } from "../provider/locales/en-US/date-field.ts";
 
@@ -101,7 +101,7 @@ function filledAround(formats: Formats, index: number, segments: Segments) {
 function useControl(options: ControlOptions, onValidity: (validity: Validity) => void) {
   const field = use(FieldContext);
   const locale = useLocale();
-  const names = { ...dateFieldLabels, ...locale.labels.dateField, ...options.labels };
+  const names = useLabels("dateField", dateFieldLabels, options.labels);
   const formats = dateFormats(locale.tag);
   const group = useRef<HTMLFieldSetElement>(null);
   const date = useDate(options);

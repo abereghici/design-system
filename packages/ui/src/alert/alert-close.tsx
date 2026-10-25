@@ -4,7 +4,7 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import { alert as alertLabels } from "../provider/locales/en-US/alert.ts";
 import { join } from "../slot/slot.tsx";
 
@@ -29,8 +29,6 @@ export function Close({
   onClick,
   ...props
 }: CloseProps) {
-  const locale = useLocale();
-
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     if (disabled) {
       event.preventDefault();
@@ -42,7 +40,7 @@ export function Close({
 
   return (
     <button
-      aria-label={labels?.close ?? locale.labels.alert?.close ?? alertLabels.close}
+      aria-label={useLabels("alert", alertLabels, labels).close}
       {...props}
       type={type}
       aria-disabled={disabled ? true : undefined}

@@ -17,7 +17,7 @@ import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels, useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { calendar as calendarLabels } from "../provider/locales/en-US/calendar.ts";
 import { join } from "../slot/slot.tsx";
@@ -230,7 +230,7 @@ export function Calendar({
   return (
     <fieldset {...rest} className={join(styles["root"], className)}>
       <Header
-        names={{ ...calendarLabels, ...locale.labels.calendar, ...labels }}
+        names={useLabels("calendar", calendarLabels, labels)}
         heading={formats.heading(first)}
         headingId={headingId}
         before={!outside(first.subtract({ days: 1 }))}

@@ -27,7 +27,7 @@ export interface RootProps extends ComponentProps<"nav"> {
 export function Root({ locale, labels, children, ...props }: RootProps) {
   return (
     <nav
-      aria-label={labels?.root ?? locale?.labels.breadcrumbs.root ?? breadcrumbsLabels.root}
+      aria-label={{ ...breadcrumbsLabels, ...locale?.labels.breadcrumbs, ...labels }.root}
       {...props}
     >
       <ol className={styles["list"]}>{children}</ol>

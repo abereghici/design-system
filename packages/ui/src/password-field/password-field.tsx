@@ -8,7 +8,7 @@ import { FieldContext } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { InspectIcon } from "../icon/icons/inspect.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { passwordField as passwordFieldLabels } from "../provider/locales/en-US/password-field.ts";
 import { InputGroup, TextInput } from "../text-field/text-field.tsx";
@@ -82,14 +82,13 @@ function Control({
   ...props
 }: ControlProps) {
   const field = use(FieldContext);
-  const locale = useLocale();
   const inputId = field?.controlId;
   const [visible, change] = useVisibility(inputId, controlled, defaultVisible, onVisibleChange);
 
   const toggle = (
     <IconButton
       size="sm"
-      aria-label={labels?.show ?? locale.labels.passwordField?.show ?? passwordFieldLabels.show}
+      aria-label={useLabels("passwordField", passwordFieldLabels, labels).show}
       aria-controls={inputId}
       pressed={visible}
       disabled={field?.disabled === true}

@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } fr
 import { createPortal } from "react-dom";
 import type { ComponentProps, RefObject } from "react";
 
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import { toaster as toasterLabels } from "../provider/locales/en-US/toaster.ts";
 import { composeRefs, join } from "../slot/slot.tsx";
 import { close, mark, snapshot, subscribe } from "../toast/toast.ts";
@@ -149,7 +149,7 @@ function Announcer({ toasts, assertive }: { toasts: readonly ToastRecord[]; asse
 
 function Layer({ labels, className, ref, ...props }: ToasterProps) {
   const toasts = useSyncExternalStore(subscribe, snapshot, () => none);
-  const locale = useLocale().labels;
+  const names = useLabels("toaster", toasterLabels, labels);
   const region = useRef<HTMLElement>(null);
   const hidden = useSyncExternalStore(
     onVisibility,
@@ -171,7 +171,7 @@ function Layer({ labels, className, ref, ...props }: ToasterProps) {
         ref={composeRefs(region, ref)}
         popover="manual"
         tabIndex={-1}
-        aria-label={labels?.region ?? locale.toaster?.region ?? toasterLabels.region}
+        aria-label={names.region}
         aria-keyshortcuts="Alt+T"
         className={join(styles["region"], className)}
       >
@@ -181,7 +181,7 @@ function Layer({ labels, className, ref, ...props }: ToasterProps) {
               key={record.id}
               record={record}
               index={position(at)}
-              closeLabel={labels?.close ?? locale.toaster?.close ?? toasterLabels.close}
+              closeLabel={names.close}
               restore={restore}
             />
           ))}

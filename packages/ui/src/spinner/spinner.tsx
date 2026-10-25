@@ -32,8 +32,7 @@ export function Spinner({ size = "sm", locale, labels, className, ...props }: Sp
         ? {}
         : {
             role: "status",
-            "aria-label":
-              labels?.loading ?? locale?.labels.spinner.loading ?? spinnerLabels.loading,
+            "aria-label": { ...spinnerLabels, ...locale?.labels.spinner, ...labels }.loading,
           })}
       {...props}
       data-size={size}

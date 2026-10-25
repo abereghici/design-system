@@ -10,7 +10,7 @@ import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId, useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as FloatingDetails, Floating } from "../floating/floating.ts";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { datePicker as datePickerLabels } from "../provider/locales/en-US/date-picker.ts";
 import { pointerMarker } from "../toggle/toggle.ts";
@@ -99,9 +99,7 @@ function pickerOf(
 export function Root(props: RootProps) {
   const { defaultValue, open, defaultOpen, onOpenChange, isDateUnavailable, ...rest } = props;
   const { labels, disabled, children, ...field } = rest;
-  const locale = useLocale();
-  const name =
-    labels?.chooseDate ?? locale.labels.datePicker?.chooseDate ?? datePickerLabels.chooseDate;
+  const name = useLabels("datePicker", datePickerLabels, labels).chooseDate;
   const date = useValue(props);
   const trigger = useRef<HTMLButtonElement>(null);
   const fieldBox = () => trigger.current?.closest("fieldset") ?? null;

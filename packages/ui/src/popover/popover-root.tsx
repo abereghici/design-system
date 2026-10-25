@@ -11,7 +11,7 @@ import type {
   FloatingOptions,
 } from "../floating/floating.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import { popover as popoverLabels } from "../provider/locales/en-US/popover.ts";
 import { Slot, join } from "../slot/slot.tsx";
 
@@ -131,7 +131,7 @@ export interface CloseProps extends ComponentProps<"button"> {
 /** Closes the Popover. Without `asChild` it is an icon button in the top inline-end corner. */
 export function Close({ asChild = false, labels, className, ...props }: CloseProps) {
   const popover = usePopover();
-  const locale = useLocale();
+  const { close } = useLabels("popover", popoverLabels, labels);
   const shared = {
     ...props,
     commandfor: popover.contentId,
@@ -154,7 +154,7 @@ export function Close({ asChild = false, labels, className, ...props }: ClosePro
   return (
     <button
       type="button"
-      aria-label={labels?.close ?? locale.labels.popover?.close ?? popoverLabels.close}
+      aria-label={close}
       {...shared}
       data-size="sm"
       className={`${iconButtonStyles["root"]} ${join(styles["close"], className)}`}
