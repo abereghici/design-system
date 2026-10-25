@@ -156,7 +156,10 @@
       color: GrayText;
     }
 
-    /* Forced colors repaint the text fill that hides the busy label, so the busy Button keeps its own system colours. */
+    /* Chromium forces -webkit-text-fill-color too, though CSS Color Adjust 1 doesn't list it
+       (https://www.w3.org/TR/css-color-adjust-1/#forced-colors-properties), which repaints the hidden
+       busy label under the spinner (the Loading story's forced-colors screenshot); so the busy Button
+       keeps its own system colours. */
     .root:where([aria-busy="true"]) {
       forced-color-adjust: none;
       border-color: ButtonText;
