@@ -13,17 +13,22 @@ type Role =
 
 export type TextProps = Omit<ComponentProps<"p">, "color" | "ref"> &
   Role & {
-    /** The text Emphasis. `subtlest` is the lowest that passes AA: not for text needed to act. */
+    /** How much it stands out. `subtlest` is for hints only, never for text people need to act. */
     color?: "default" | "subtle" | "subtlest";
-    /** The element. Purely semantic. `p` by default, `code` for `variant="code"`. */
+    /**
+     * The element, chosen for meaning, never for looks: `p` by default, `code` for
+     * `variant="code"`.
+     */
     as?: "p" | "span" | "div" | "label" | "code";
+    /** The control it labels, with `as="label"`. */
     htmlFor?: string;
     ref?: Ref<HTMLElement>;
   };
 
 /**
- * Sets a run of text in one type role: body, label, data, code, overline or display. A paragraph by
- * default. For a section title use Heading, for a keyboard key Kbd, and for a link Link.
+ * Sets a run of text in one style: body, label, data, code, overline or display, so text looks the
+ * same across the product. A paragraph by default. For a section title use Heading, for a keyboard
+ * key Kbd, and for a link Link.
  */
 export function Text({
   variant = "body",

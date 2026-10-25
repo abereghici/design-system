@@ -7,7 +7,7 @@ import { UserIcon } from "@platform/ui/icons/user";
 import { roRO } from "@platform/ui/locales/ro-RO";
 import { Provider } from "@platform/ui/provider";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { trusted } from "#.storybook/test/trusted.ts";
 
 import type { Locale } from "../provider/locale.tsx";
@@ -40,8 +40,9 @@ const person = (value: string, name: string, keywords?: string[]) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/Combobox",
+  title: "Components/Combobox",
   component: Combobox.Root,
+  subcomponents: partsOf(Combobox),
   args: {
     label: "Assignee",
     name: "assignee",
@@ -283,9 +284,7 @@ function ServerSearch(args: Combobox.RootProps) {
 export const ServerSearchResults = meta.story({
   args: { label: "Repository", name: "repo", labels: { noResults: "No repositories" } },
   render: ServerSearch,
-  parameters: {
-    docs: { description: { story: "With `filter={null}` the app filters the Items." } },
-  },
+  parameters: { docs: { description: { story: "With `filter={null}` the app filters." } } },
 });
 
 ServerSearchResults.test("shows the Items the app renders", async ({ canvas, userEvent }) => {

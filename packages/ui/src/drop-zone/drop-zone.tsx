@@ -24,7 +24,7 @@ export interface DropZoneProps
     Pick<ComponentProps<"input">, "accept" | "multiple" | "name" | "required" | "form"> {
   /** Called after a drop with the accepted files (only the first one without `multiple`). */
   onDrop?: (files: File[], details: DropZoneDropEventDetails) => void;
-  /** Refuses drops and disables the FileTrigger inside. */
+  /** Refuses drops and turns off the FileTrigger inside, such as while an upload runs. */
   disabled?: boolean;
 }
 
@@ -90,7 +90,10 @@ interface DropTargetOptions {
   readonly input: RefObject<HTMLInputElement | null>;
 }
 
-/** Tracks files dragged over the zone (`dragleave` fires at every child boundary) and takes the drop. */
+/**
+ * Tracks files dragged over the zone (`dragleave` fires at every child boundary) and takes the
+ * drop.
+ */
 function useDropTarget({ accept, multiple, onDrop, blocked, input }: DropTargetOptions) {
   const depth = useRef(0);
   const [target, setTarget] = useState<"" | "rejected">();

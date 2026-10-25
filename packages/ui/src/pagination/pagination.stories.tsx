@@ -21,7 +21,7 @@ const controls = (canvasElement: HTMLElement) =>
     });
 
 const meta = preview.meta({
-  title: "Components/Navigation/Pagination",
+  title: "Components/Pagination",
   component: Pagination,
   args: { page: 5, count: 10, getPageUrl: (page: number) => `#page-${page}` },
 });

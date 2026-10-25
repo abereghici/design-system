@@ -75,7 +75,7 @@ export interface ItemProps extends ComponentProps<"div"> {
   value?: string;
   /** Extra words that match the query; not displayed. */
   keywords?: readonly string[];
-  /** Shown, but never highlighted or run. */
+  /** Shown, so people know the command exists, but it can't be run. */
   disabled?: boolean;
 }
 

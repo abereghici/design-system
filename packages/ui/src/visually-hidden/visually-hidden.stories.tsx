@@ -5,7 +5,7 @@ import preview from "#.storybook/preview.tsx";
 import { VisuallyHidden } from "./visually-hidden.tsx";
 
 const meta = preview.meta({
-  title: "Components/Utilities/VisuallyHidden",
+  title: "Components/VisuallyHidden",
   component: VisuallyHidden,
   args: { children: " (opens in a new tab)" },
 });

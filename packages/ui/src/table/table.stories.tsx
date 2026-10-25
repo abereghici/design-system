@@ -6,7 +6,7 @@ import { Checkbox } from "@platform/ui/checkbox";
 import { Link } from "@platform/ui/link";
 import { ScrollArea } from "@platform/ui/scroll-area";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Table from "./table.tsx";
 
@@ -44,8 +44,9 @@ const rows = (
 );
 
 const meta = preview.meta({
-  title: "Components/Containers/Table",
+  title: "Components/Table",
   component: Table.Root,
+  subcomponents: partsOf(Table),
   args: {
     children: (
       <>
@@ -148,14 +149,10 @@ InAScrollArea.test(
 const amountOf = (invoice: (typeof invoices)[number]) =>
   Number(invoice.amount.replaceAll(/[€,]/gv, ""));
 
+type Sort = { column: "id" | "amount"; direction: "ascending" | "descending" };
+
 function SortableInvoices() {
-  const [sort, setSort] = useState<{
-    column: "id" | "amount";
-    direction: "ascending" | "descending";
-  }>({
-    column: "id",
-    direction: "ascending",
-  });
+  const [sort, setSort] = useState<Sort>({ column: "id", direction: "ascending" });
   const sorted = invoices.toSorted((a, b) => {
     const order = sort.column === "id" ? a.id.localeCompare(b.id) : amountOf(a) - amountOf(b);
     return sort.direction === "ascending" ? order : -order;
@@ -207,7 +204,7 @@ export const Sortable = meta.story({
       },
     },
   },
-  render: () => <SortableInvoices />,
+  render: SortableInvoices,
 });
 
 Sortable.test(
@@ -280,7 +277,7 @@ export const Selectable = meta.story({
       },
     },
   },
-  render: () => <SelectableInvoices />,
+  render: SelectableInvoices,
 });
 
 Selectable.test("selects rows with their checkboxes", async ({ canvas, userEvent }) => {

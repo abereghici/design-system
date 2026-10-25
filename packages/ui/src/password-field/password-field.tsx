@@ -21,14 +21,23 @@ type ControlProps = Omit<
   Field.ControlProps,
   "type" | "autoComplete" | "size" | "aria-label" | "aria-labelledby"
 > & {
-  /** Controlled: whether the value is shown as plain text. */
+  /** Shows the password as plain text, when your state holds it. */
   visible?: boolean;
+  /** Shows the password as plain text on the first render. */
   defaultVisible?: boolean;
-  /** Called before the change commits. Submitting the form hides it with `reason: "form-submit"`. */
+  /**
+   * Called before the password shows or hides. Submitting the form hides it, so the browser never
+   * saves it shown.
+   */
   onVisibleChange?: (visible: boolean, details: PasswordFieldVisibleChangeEventDetails) => void;
-  /** The toggle's accessible name; falls back to the Provider's locale. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: Partial<Labels["passwordField"]>;
+  /**
+   * Tells password managers what to fill: `current-password` to sign in, `new-password` to sign up
+   * or change it.
+   */
   autoComplete?: "current-password" | "new-password" | "one-time-code" | "off";
+  /** Content before the input, such as a decorative icon. */
   startElement?: TextFieldProps["startElement"];
 };
 

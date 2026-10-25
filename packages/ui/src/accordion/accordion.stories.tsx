@@ -1,6 +1,6 @@
 import { expect, fn, waitFor } from "storybook/test";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
 import { Accordion } from "./index.ts";
@@ -9,8 +9,9 @@ const tokens = "Semantic Versioning. Renames are major; additions are minor.";
 const browsers = "The latest Chromium and Safari.";
 
 const meta = preview.meta({
-  title: "Components/Containers/Accordion",
+  title: "Components/Accordion",
   component: Accordion.Root,
+  subcomponents: partsOf(Accordion),
   args: {
     defaultValue: ["tokens"],
     children: (

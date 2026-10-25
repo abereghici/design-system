@@ -5,7 +5,7 @@ import preview from "#.storybook/preview.tsx";
 import { Heading } from "./heading.tsx";
 
 const meta = preview.meta({
-  title: "Components/Typography/Heading",
+  title: "Components/Heading",
   component: Heading,
   args: { as: "h2" as const, children: "Overdue invoices" },
 });

@@ -64,7 +64,10 @@ function navigate(event: KeyboardEvent<HTMLElement>) {
   return true;
 }
 
-/** The menu's keyboard, pointer highlight and initial focus; DropdownMenu and ContextMenu add placement. */
+/**
+ * The menu's keyboard, pointer highlight and initial focus; DropdownMenu and ContextMenu add
+ * placement.
+ */
 export function menuContentProps(menu: Menu) {
   const { onBeforeToggle, onToggle, ...native } = menu.floating.contentProps;
   return {
@@ -106,9 +109,9 @@ export function menuContentProps(menu: Menu) {
 }
 
 export interface ItemBaseProps extends ComponentProps<"button"> {
-  /** Closes the menu when the item is activated (click, Enter, Space). */
+  /** Closes the menu once the item is chosen; turn it off to let people choose several in a row. */
   closeOnClick?: boolean;
-  /** Renders `aria-disabled="true"`: arrow keys still reach it, activation is blocked. */
+  /** Keeps the item visible and reachable with the arrow keys, but it can't be chosen. */
   disabled?: boolean;
 }
 
@@ -156,7 +159,7 @@ export interface ItemProps extends ItemBaseProps {
   variant?: "default" | "danger";
 }
 
-/** An action. With `closeOnClick` (the default) the menu closes before `onClick` runs. */
+/** An action. The menu closes before your `onClick` runs, unless `closeOnClick` is off. */
 export function Item({ variant = "default", onClick, ...rest }: ItemProps) {
   const { menu, props, blocked, close: closeMenu } = useItem(rest, "menuitem");
   return (

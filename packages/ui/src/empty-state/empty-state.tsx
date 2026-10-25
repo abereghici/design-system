@@ -5,11 +5,11 @@ import { Slot, join } from "../slot/slot.tsx";
 import styles from "./empty-state.module.css";
 
 /**
- * Stands in for content that isn't there yet (an empty list, a search with no results), in place of
- * the empty region. The Title says what is missing, the Description why or what to do, and the
- * actions that follow offer the next step. It is not a live region: announce a filter's empty
- * result from your own always-rendered `role="status"`. For a load still running, use Skeleton or
- * Spinner; for an error, an Alert.
+ * Stands in for content that isn't there yet (an empty list, a search with no results). The Title
+ * says what is missing, the Description why or what to do, and the actions after it offer the next
+ * step. Screen readers don't announce it when it appears: announce a filter's empty result from your
+ * own `role="status"` region. For a load still running, use Skeleton or Spinner; for an error, an
+ * Alert.
  */
 export function Root({ className, ...props }: ComponentProps<"div">) {
   return <div {...props} className={join(styles["root"], className)} />;
@@ -20,7 +20,7 @@ export function Indicator({ className, ...props }: ComponentProps<"div">) {
 }
 
 export interface TitleProps extends ComponentProps<"h3"> {
-  /** Renders the one child heading (`<h2>`) so the level fits the page outline. */
+  /** Makes its one child heading the Title, so the level fits the page outline. */
   asChild?: boolean;
 }
 

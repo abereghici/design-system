@@ -6,7 +6,7 @@ import { roRO } from "@platform/ui/locales/ro-RO";
 import { Provider } from "@platform/ui/provider";
 import { TextField } from "@platform/ui/text-field";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
@@ -37,8 +37,9 @@ const children = (
 );
 
 const meta = preview.meta({
-  title: "Components/Overlays/Dialog",
+  title: "Components/Dialog",
   component: Dialog.Root,
+  subcomponents: partsOf(Dialog),
   args: { children, onOpenChange: fn() },
 });
 
@@ -223,7 +224,7 @@ function ControlledDialog(props: Dialog.RootProps) {
 }
 
 export const Controlled = meta.story({
-  render: (args) => <ControlledDialog {...args} />,
+  render: ControlledDialog,
   parameters: {
     docs: { description: { story: "The parent holds `open` and updates it on change." } },
   },

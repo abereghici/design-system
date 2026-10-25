@@ -6,15 +6,15 @@ import styles from "./fieldset.module.css";
 
 export interface RootProps extends ComponentProps<"fieldset"> {
   /**
-   * Native `disabled`: every control inside is disabled, skipped by Tab and left out of the
-   * submission. Use it when the whole group is unavailable and the Legend says why.
+   * Turns off every control inside: they are skipped by Tab and left out of the submission. Use it
+   * when the whole group is unavailable, and say why in the Legend.
    */
   disabled?: boolean;
 }
 
 /**
- * Groups related controls under one caption, its Legend, and can disable them all at once. It is
- * the native `<fieldset>` with its `<legend>`. For a single choice among options use RadioGroup.
+ * Groups related controls under one caption, its Legend, which screen readers announce with each
+ * control, and can turn them all off at once. For a single choice among options, use RadioGroup.
  */
 export function Root({ className, ...props }: RootProps) {
   return <fieldset {...props} className={join(styles["root"], className)} />;

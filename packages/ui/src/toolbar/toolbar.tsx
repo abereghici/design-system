@@ -63,10 +63,10 @@ function destination(event: KeyboardEvent<HTMLDivElement>) {
 }
 
 /**
- * Groups three or more related controls (IconButtons, Buttons, a SegmentedControl) into one tab
- * stop; the arrow keys move between them, wrapping at the ends and following the visual direction
- * in RTL. Disabled controls stay reachable. For one or two controls, place them directly; never put
- * text fields, Selects or Sliders inside.
+ * Groups three or more related controls (IconButtons, Buttons, a SegmentedControl) into one Tab
+ * stop, so keyboard users skip the group in one press; the arrow keys move between them. Name it
+ * with `aria-label`. For one or two controls, place them directly; never put text fields, Selects or
+ * Sliders inside, since they need the arrow keys themselves.
  */
 export function Toolbar({ ref, className, onKeyDown, onFocus, ...props }: ToolbarProps) {
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {

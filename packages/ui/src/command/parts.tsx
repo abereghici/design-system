@@ -66,11 +66,11 @@ export function Input({
 }
 
 export interface EmptyProps extends ComponentProps<"output"> {
-  /** Overrides the Provider's locale for the default text. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: { empty?: string };
 }
 
-/** A polite live region, before the List, that shows its children while nothing matches. */
+/** What to show while nothing matches; screen readers announce it. */
 export function Empty({ labels, className, children, ...props }: EmptyProps) {
   const { empty } = useCommand();
   const locale = useLocale();
@@ -96,11 +96,11 @@ const hint = (keys: string, label: string) => (
 );
 
 export interface FooterProps extends ComponentProps<"div"> {
-  /** Overrides the Provider's locale for the key hints. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: { navigate?: string; open?: string; close?: string };
 }
 
-/** Teaches the keys to sighted users; assistive technology gets them from the roles. */
+/** Teaches the keys (navigate, open, close) to people who can see the palette. */
 export function Footer({ labels, className, children, ...props }: FooterProps) {
   const inDialog = use(DialogContext) !== null;
   const text = { ...commandLabels, ...useLocale().labels.command, ...labels };

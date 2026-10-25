@@ -14,7 +14,7 @@ export interface ItemProps extends ComponentProps<"div"> {
   value: string;
   /** Aliases the typed text also matches, e.g. a nickname or a former name. */
   keywords?: readonly string[];
-  /** Shown but never highlighted or chosen. */
+  /** Shown, so people know the option exists, but it can't be chosen. */
   disabled?: boolean;
 }
 

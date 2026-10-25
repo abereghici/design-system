@@ -14,10 +14,10 @@ export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelle
   AccessibleName;
 
 /**
- * The app's vertical navigation: a named landmark of links to its sections, optionally in labelled
- * groups, placed in a column the app's layout owns (width, scrolling, stacking under 760 px). The
- * link to the page on screen carries `aria-current="page"`, a fill and the indicator bar. For a few
- * top-level destinations use a Navbar; for the path to this page, Breadcrumbs.
+ * The app's side navigation: links to its sections, optionally in labelled groups, in a column your
+ * layout sizes and scrolls. Give it a name, and mark the link to the page on screen with
+ * `aria-current="page"`. For a few top-level destinations, use a Navbar; for the path to this page,
+ * Breadcrumbs.
  */
 export function Root({ className, ...props }: RootProps) {
   return <nav {...props} className={join(styles["root"], className)} />;
@@ -26,7 +26,7 @@ export function Root({ className, ...props }: RootProps) {
 export interface GroupProps extends ComponentProps<"div"> {
   /** The group's visible name; with it the group is announced by that name. */
   label?: ReactNode;
-  /** With a `label`: folds the links under it, a native `<details>` disclosure the label opens. */
+  /** Lets people fold the group's links under its `label`, for long navigation. */
   collapsible?: boolean;
   /** Starts a collapsible group unfolded. */
   defaultOpen?: boolean;
@@ -79,7 +79,10 @@ export type LinkProps = ComponentProps<"a"> &
   (
     | { href: string; asChild?: false }
     | {
-        /** Renders the single child element (a router link), which carries the `href`. */
+        /**
+         * Gives the link's look to its one child, such as your router's link, which carries the
+         * `href`.
+         */
         asChild: true;
       }
   );

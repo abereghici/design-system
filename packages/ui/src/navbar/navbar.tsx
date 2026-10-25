@@ -13,10 +13,10 @@ export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelle
   AccessibleName;
 
 /**
- * The app's primary navigation: a named landmark holding a row of links, placed in the app's own
- * `<header>` beside the Logo link and actions. The link to the page on screen carries
- * `aria-current="page"` and the indicator bar. For many destinations in groups use a Sidebar; for
- * the path to this page, Breadcrumbs; for views within one page, Tabs.
+ * The app's main navigation: a row of links in the app's header, beside the Logo and actions. Give
+ * it a name, and mark the link to the page on screen with `aria-current="page"`. For many
+ * destinations in groups, use a Sidebar; for the path to this page, Breadcrumbs; for views within
+ * one page, Tabs.
  */
 export function Root({ children, ...props }: RootProps) {
   return (
@@ -34,7 +34,10 @@ export type LinkProps = ComponentProps<"a"> &
   (
     | { href: string; asChild?: false }
     | {
-        /** Renders the single child element (a router link), which carries the `href`. */
+        /**
+         * Gives the link's look to its one child, such as your router's link, which carries the
+         * `href`.
+         */
         asChild: true;
       }
   );

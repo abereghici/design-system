@@ -7,7 +7,7 @@ import preview from "#.storybook/preview.tsx";
 import { Link } from "./link.tsx";
 
 const meta = preview.meta({
-  title: "Components/Navigation/Link",
+  title: "Components/Link",
   component: Link,
   args: { href: "#token-guide", children: "token guide" },
 });

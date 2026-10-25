@@ -5,8 +5,25 @@ import preview from "#.storybook/preview.tsx";
 import { Separator } from "./separator.tsx";
 
 const meta = preview.meta({
-  title: "Components/Containers/Separator",
+  title: "Components/Separator",
   component: Separator,
+  argTypes: {
+    orientation: {
+      control: "inline-radio",
+      options: ["horizontal", "vertical"],
+      description: "`vertical` between items in a row, such as toolbar groups.",
+    },
+    variant: {
+      control: "inline-radio",
+      options: ["solid", "ornament"],
+      description:
+        "`ornament` adds a diamond at the center, for editorial pages only, never dense UI.",
+    },
+    decorative: {
+      control: "boolean",
+      description: "Hides the line from screen readers, for a purely visual break.",
+    },
+  },
   decorators: [
     (Story) => (
       <div style={{ display: "grid", gap: "1rem" }}>

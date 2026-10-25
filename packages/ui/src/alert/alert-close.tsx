@@ -12,11 +12,11 @@ import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./alert.module.css";
 
 export interface CloseProps extends ComponentProps<"button"> {
-  /** Overrides the Provider's locale for this button's accessible name. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: { close?: string };
   /**
-   * Renders `aria-disabled="true"`: the button stays focusable and announced, and activation is
-   * blocked.
+   * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+   * nearby why it is unavailable.
    */
   disabled?: boolean;
 }

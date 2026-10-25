@@ -5,12 +5,11 @@ import { join } from "../slot/slot.tsx";
 import styles from "./table.module.css";
 
 /**
- * A static data table on the native `<table>`, for rows and columns the user reads and compares.
- * Compose `Caption`, `Header`, `Body`, `Row`, `ColumnHeader`, `RowHeader` and `Cell`; cells are not
- * focusable, and a Link or Button inside one is its own tab stop. Sort with a `SortLabel` in a
- * `ColumnHeader`; select rows with a column of Checkboxes and `Row`'s `selected`. Put a wide table inside a
- * ScrollArea. For a short list of labelled values use a description list; for a grid moved through
- * with arrow keys, a grid widget.
+ * Rows and columns of data that people read and compare. Compose `Caption`, `Header`, `Body`, `Row`,
+ * `ColumnHeader`, `RowHeader` and `Cell`; a Link or Button inside a cell is its own tab stop. Sort
+ * with a `SortLabel` in a `ColumnHeader`; select rows with a column of Checkboxes and `Row`'s
+ * `selected`. Put a wide table inside a ScrollArea. For a short list of labelled values, use a
+ * description list.
  */
 export function Root({ className, ...props }: ComponentProps<"table">) {
   return <table {...props} className={join(styles["root"], className)} />;
@@ -29,7 +28,10 @@ export function Body({ className, ...props }: ComponentProps<"tbody">) {
 }
 
 export interface RowProps extends ComponentProps<"tr"> {
-  /** Draws the row as chosen. Its checkbox tells assistive technology; a table row has no selected state. */
+  /**
+   * Highlights the row as chosen. Pair it with a checked Checkbox in the row, which screen readers
+   * announce.
+   */
   selected?: boolean;
 }
 
@@ -44,7 +46,9 @@ export function Row({ selected = false, className, ...props }: RowProps) {
 }
 
 export interface ColumnHeaderProps extends ComponentProps<"th"> {
-  /** How the rows are sorted by this column, as `aria-sort`. Leave it out on every other column: only one header carries a sort. */
+  /**
+   * How the rows are sorted by this column, announced to screen readers. Set it on one column only.
+   */
   sortDirection?: "ascending" | "descending" | undefined;
 }
 
@@ -59,7 +63,10 @@ export function ColumnHeader({ sortDirection, className, ...props }: ColumnHeade
   );
 }
 
-/** The button inside a sortable ColumnHeader: its text names the column, and an arrow shows the sort. Your `onClick` reorders the rows. */
+/**
+ * The button inside a sortable ColumnHeader: its text names the column, and an arrow shows the
+ * sort. Your `onClick` reorders the rows.
+ */
 export function SortLabel({ className, ...props }: ComponentProps<"button">) {
   return <button {...props} type="button" className={join(styles["sort-label"], className)} />;
 }

@@ -5,7 +5,7 @@ import preview from "#.storybook/preview.tsx";
 import { StatusDot } from "./status-dot.tsx";
 
 const meta = preview.meta({
-  title: "Components/Feedback/StatusDot",
+  title: "Components/StatusDot",
   component: StatusDot,
   args: { variant: "success" },
   decorators: [

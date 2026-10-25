@@ -6,7 +6,7 @@ import { CopyIcon } from "@platform/ui/icons/copy";
 import { PinIcon } from "@platform/ui/icons/pin";
 import { Kbd } from "@platform/ui/kbd";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Tooltip from "./tooltip.tsx";
@@ -16,8 +16,9 @@ const onOpenChange = fn<NonNullable<Tooltip.RootProps["onOpenChange"]>>();
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const meta = preview.meta({
-  title: "Components/Overlays/Tooltip",
+  title: "Components/Tooltip",
   component: Tooltip.Root,
+  subcomponents: partsOf(Tooltip),
   args: {
     onOpenChange,
     children: (

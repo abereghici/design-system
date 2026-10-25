@@ -73,7 +73,7 @@ export type ContentProps = Omit<
   "id" | "open" | "popover" | "role" | "aria-label"
 >;
 
-/** The popover holding the Calendar. Its children mount on the first open, so they can be lazy. */
+/** The panel holding the Calendar. Its children load on the first open, so they can be lazy. */
 export function Content({ className, children, ...props }: ContentProps) {
   const panel = use(PanelContext);
   if (panel === null) throw new Error("DatePicker.Content must be inside DatePicker.Root");

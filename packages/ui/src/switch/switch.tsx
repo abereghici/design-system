@@ -19,19 +19,19 @@ type Name =
 
 export type SwitchProps = Omit<ComponentProps<"input">, "type" | "role" | "children"> &
   Name & {
-    /** Called in the click, before the change commits; `details.cancel()` keeps the old state. */
+    /** Called before the switch flips; `details.cancel()` keeps the old state. */
     onCheckedChange?: (checked: boolean, details: SwitchChangeEventDetails) => void;
     /**
-     * Renders `aria-disabled="true"`: the switch stays focusable and announced, and the change is
-     * blocked. A disabled `<fieldset>` still disables it natively.
+     * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+     * nearby why it is unavailable.
      */
     disabled?: boolean;
   };
 
 /**
- * A native checkbox with `role="switch"` inside its label, for an on/off setting that takes effect
- * immediately. Every committed change dispatches a bubbling `ab-toggle`. Its label names the
- * setting, never the state. Inside a form that needs Save, use Checkbox.
+ * An on/off setting that takes effect at once, such as notifications. Its children are its label,
+ * which names the setting, never the state. Every change dispatches a bubbling `ab-toggle`. Inside a
+ * form that needs Save, use Checkbox.
  */
 export function Switch({
   children,

@@ -5,7 +5,7 @@ import preview from "#.storybook/preview.tsx";
 import { Logo } from "./logo.tsx";
 
 const meta = preview.meta({
-  title: "Components/Images and icons/Logo",
+  title: "Components/Logo",
   component: Logo,
 });
 

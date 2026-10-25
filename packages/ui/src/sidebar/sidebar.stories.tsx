@@ -4,7 +4,7 @@ import { FilesIcon } from "@platform/ui/icons/files";
 import { LayersIcon } from "@platform/ui/icons/layers";
 import { MailIcon } from "@platform/ui/icons/mail";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Sidebar from "./sidebar.tsx";
@@ -37,8 +37,9 @@ const groups = (
 );
 
 const meta = preview.meta({
-  title: "Components/Navigation/Sidebar",
+  title: "Components/Sidebar",
   component: Sidebar.Root,
+  subcomponents: partsOf(Sidebar),
   args: { "aria-label": "Workspace", children: groups },
   decorators: [
     (Story) => (

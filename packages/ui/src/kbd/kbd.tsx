@@ -41,11 +41,11 @@ export interface KbdProps extends ComponentProps<"kbd"> {
    */
   keys?: KeyName | "up" | "down" | "left" | "right" | "plus" | (string & Record<never, never>);
   /**
-   * Resolves `mod`, `ctrl`, `shift` and `alt`. Pass it when the server knows the platform; without
-   * it they are detected on the client and render the `"other"` keys until hydration.
+   * Whether to show Apple keys (⌘, ⌥) or the others (Ctrl, Alt). Pass it when the server knows the
+   * user's platform; otherwise the page shows the other keys until it detects the platform.
    */
   platform?: "apple" | "other";
-  /** Spoken names of the glyph keys; falls back to the Provider's locale. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: Partial<KbdLabels>;
 }
 
@@ -66,8 +66,8 @@ function key(
 
 /**
  * Shows a keyboard shortcut, one keycap per key: `mod` is ⌘ on Apple platforms and Ctrl elsewhere.
- * It shows the key and never binds it; inside a control, pass `aria-hidden` and set
- * `aria-keyshortcuts` on the control.
+ * It only shows the keys; your app handles them. Inside a control, pass `aria-hidden` and set
+ * `aria-keyshortcuts` on the control, so the shortcut isn't read twice.
  */
 export function Kbd({ keys, platform, labels, children, className, ...props }: KbdProps) {
   const content =

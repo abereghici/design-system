@@ -19,20 +19,19 @@ const icons = {
 };
 
 export interface RootProps extends ComponentProps<"div"> {
-  /** Sets the fill and the status icon. The Title still names the situation in words. */
+  /** The kind of situation, shown by color and icon; the Title still says it in words. */
   variant?: "neutral" | "success" | "warning" | "danger";
   /**
-   * None by default: a message rendered with the page is read in order. Pass `"alert"` only for an
-   * urgent message inserted after load, which is then announced at once.
+   * Pass `"alert"` only for an urgent message inserted after the page loads, so screen readers
+   * announce it at once. A message present from the start is read in order and needs none.
    */
   role?: ComponentProps<"div">["role"];
 }
 
 /**
- * An inline message about the page or a task that stays relevant until the situation changes. It
- * has no role by default; pass `role="alert"` only for an urgent message inserted after load.
+ * An inline message about the page or a task that stays relevant until the situation changes.
  * `Alert.Close` calls your `onClick`, where the app removes the Alert and moves focus to what the
- * message was about. For brief confirmation use a Toast; for a decision that must interrupt, an
+ * message was about. For a brief confirmation use a Toast; for a decision that must interrupt, an
  * AlertDialog.
  */
 export function Root({ variant = "neutral", className, children, ...props }: RootProps) {

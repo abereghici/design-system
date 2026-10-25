@@ -19,7 +19,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/TextArea",
+  title: "Components/TextArea",
   component: TextArea,
   args: {
     label: "Message",

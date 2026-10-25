@@ -12,9 +12,12 @@ import { useModal } from "./modal.tsx";
 import iconButton from "../icon-button/icon-button.module.css";
 
 export interface CloseProps extends Omit<ComponentProps<"button">, "command" | "commandfor"> {
-  /** Renders the single child (a Button) as the Close. Without children, Close is the icon-only `x`. */
+  /**
+   * Makes its one child (a Button such as Cancel) close the dialog. Without children it is the `x`
+   * button.
+   */
   asChild?: boolean;
-  /** Overrides the Provider's locale for the icon-only button's accessible name. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: { close?: string };
 }
 

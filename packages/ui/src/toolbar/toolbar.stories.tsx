@@ -55,7 +55,7 @@ function Growing() {
 }
 
 const meta = preview.meta({
-  title: "Components/Actions/Toolbar",
+  title: "Components/Toolbar",
   component: Toolbar,
   args: { "aria-label": "Report", children: controls },
 });
@@ -156,7 +156,7 @@ Default.test(
 
 Default.test(
   "includes controls added later in the arrow path",
-  { render: () => <Growing /> },
+  { render: Growing },
   async ({ canvas, userEvent }) => {
     await userEvent.tab();
     await userEvent.keyboard("{Enter}");

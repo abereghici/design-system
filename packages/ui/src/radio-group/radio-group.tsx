@@ -24,24 +24,29 @@ interface Group {
 const GroupContext = createContext<Group | null>(null);
 
 export interface RootProps extends Omit<ComponentProps<"fieldset">, "defaultValue" | "disabled"> {
-  /** The chosen option; `null` when nothing is chosen. */
+  /** The chosen option, when your state holds it; `null` when nothing is chosen. */
   value?: string | null;
+  /** The starting value when it holds its own state. */
   defaultValue?: string | null;
-  /** Called in the click, before the change commits; `details.cancel()` keeps the old choice. */
+  /** Called before the choice changes; `details.cancel()` keeps the old one. */
   onValueChange?: (value: string, details: ChangeEventDetails) => void;
-  /** Shared by every radio, so they form one native group. Generated when omitted. */
+  /** The form field name the choice submits under. */
   name?: string;
+  /** Makes a choice necessary before the form submits. */
   required?: boolean;
-  /** Every radio gets `aria-disabled="true"`: focusable and announced, but cannot be chosen. */
+  /**
+   * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+   * nearby why it is unavailable.
+   */
   disabled?: boolean;
+  /** `horizontal` for two or three short options that fit on one line. */
   orientation?: "vertical" | "horizontal";
 }
 
 /**
- * A native fieldset of same-name radios for one choice among 2–6 options that should all stay
- * visible; its Label is the legend. Arrow keys move and choose (following the visual direction in
- * RTL), and every committed change dispatches a bubbling `ab-toggle`. With more options use Select;
- * for a binary choice, Switch or Checkbox.
+ * One choice among 2–6 options that should all stay visible, under a Label. Arrow keys move and
+ * choose (following the reading direction), and every change dispatches a bubbling `ab-toggle`. With
+ * more options use Select; for a yes/no choice, Switch or Checkbox.
  */
 export function Root({
   value,
@@ -99,7 +104,7 @@ export interface ItemProps extends Omit<
   "type" | "name" | "checked" | "value"
 > {
   value: string;
-  /** This option only: `aria-disabled="true"`, focusable but cannot be chosen. */
+  /** Keeps this option visible and reachable, but it can't be chosen. */
   disabled?: boolean;
 }
 

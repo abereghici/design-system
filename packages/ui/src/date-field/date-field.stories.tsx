@@ -35,7 +35,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/DateField",
+  title: "Components/DateField",
   component: DateField,
   args: {
     label: "Date of birth",

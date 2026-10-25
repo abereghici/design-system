@@ -1,10 +1,21 @@
 import { useSyncExternalStore } from "react";
-import { DocsContainer as BaseDocsContainer } from "@storybook/addon-docs/blocks";
+import type { ComponentProps } from "react";
+import {
+  DocsContainer as BaseDocsContainer,
+  Controls,
+  Description,
+  Primary,
+  Stories,
+  Subtitle,
+  Title,
+} from "@storybook/addon-docs/blocks";
 import { GLOBALS_UPDATED, SET_GLOBALS } from "storybook/internal/core-events";
 import { addons } from "storybook/preview-api";
 
 import type { DocsContainerProps } from "@storybook/addon-docs/blocks";
 import type { Globals } from "storybook/internal/types";
+
+import { Heading } from "@platform/ui/heading";
 
 import { themes as storybookThemes } from "./theme.ts";
 
@@ -48,5 +59,30 @@ export function DocsContainer(props: DocsContainerProps) {
       {...props}
       theme={storybookThemes[useSyncExternalStore(subscribe, scheme)]}
     />
+  );
+}
+
+const heading = (as: "h1" | "h2" | "h3") =>
+  function DocsHeading({ className, ...props }: ComponentProps<"h1">) {
+    return <Heading {...props} as={as} className={`sb-unstyled ${className ?? ""}`} />;
+  };
+
+/** MDX headings in the serif heading type; `sb-unstyled` keeps the Storybook prose CSS off them. */
+export const mdx = { components: { h1: heading("h1"), h2: heading("h2"), h3: heading("h3") } };
+
+/**
+ * Storybook's default page, except that Stories leaves out the primary story: the default counts
+ * `.test()` proofs as stories, so it would repeat Default on a page with one story.
+ */
+export function DocsPage() {
+  return (
+    <>
+      <Title />
+      <Subtitle />
+      <Description />
+      <Primary />
+      <Controls />
+      <Stories includePrimary={false} />
+    </>
   );
 }

@@ -11,18 +11,19 @@ import styles from "./breadcrumbs.module.css";
 
 export interface RootProps extends ComponentProps<"nav"> {
   /**
-   * A shipped locale (`@platform/ui/locales/*`) that translates it on the server. A Server Component
-   * can't read the Provider's `locale`, so without it the name is en-US.
+   * A shipped locale (`@platform/ui/locales/*`). This renders on the server, where the
+   * Provider's `locale` can't reach, so pass it for any language other than en-US.
    */
   locale?: Locale;
-  /** Overrides the locale's labels. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: Partial<Labels["breadcrumbs"]>;
 }
 
 /**
- * A named navigation landmark holding an ordered trail of links from the site's root to the current
- * page, which carries `aria-current="page"`. Place it before the page's main content on pages two
- * or more levels deep. For the site's main sections use a Navbar or a Sidebar.
+ * The trail of links from the site's root to the current page, so people see where they are and
+ * can step back up. Place it before the main content on pages two or more levels deep, and mark the
+ * current page's link with `aria-current="page"`. For the site's main sections, use a Navbar or a
+ * Sidebar.
  */
 export function Root({ locale, labels, children, ...props }: RootProps) {
   return (
