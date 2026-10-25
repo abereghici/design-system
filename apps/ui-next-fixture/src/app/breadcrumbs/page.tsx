@@ -5,7 +5,7 @@ import { Breadcrumbs } from "@platform/ui/breadcrumbs";
 export default function Page() {
   return (
     <main>
-      <Breadcrumbs.Root>
+      <Breadcrumbs.Root aria-label="Breadcrumb">
         <Breadcrumbs.Item>
           <Breadcrumbs.Link asChild>
             <NextLink href="/">Home</NextLink>

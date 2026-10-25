@@ -41,14 +41,6 @@ Default.test(
 );
 
 Default.test(
-  "takes a translated overflow label",
-  { args: { children: 100, labels: { overflow: (max) => `+${max}` } } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("+99")).toBeVisible();
-  },
-);
-
-Default.test(
   "renders a string as given",
   { args: { children: "!", variant: "danger" } },
   async ({ canvas }) => {

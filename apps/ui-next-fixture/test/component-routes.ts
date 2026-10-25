@@ -145,8 +145,8 @@ export const componentRoutes = [
   },
   {
     name: "pagination",
-    tokens: ["pagination", "icon", "icon-button", "spinner"],
-    client: ["icon-button/icon-button.tsx"],
+    tokens: ["pagination", "icon", "icon-button"],
+    client: [],
     html: 'href="/pagination?page=3">3</a>',
   },
   {

@@ -5,6 +5,10 @@ import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
 import { Pagination } from "./pagination.tsx";
+import type { PaginationProps } from "./pagination.tsx";
+
+// @ts-expect-error -- the landmark and the Previous and Next buttons need names
+({ page: 1, count: 2, getPageUrl: String }) satisfies PaginationProps;
 
 const controls = (canvasElement: HTMLElement) =>
   within(canvasElement)
@@ -17,7 +21,16 @@ const controls = (canvasElement: HTMLElement) =>
 const meta = preview.meta({
   title: "Components/Pagination",
   component: Pagination,
-  args: { page: 5, count: 10, getPageUrl: (page: number) => `#page-${page}`, locale: "en-US" },
+  args: {
+    "aria-label": "Pagination",
+    previousLabel: "Previous page",
+    nextLabel: "Next page",
+    getPageLabel: (page: string) => `Page ${page}`,
+    page: 5,
+    count: 10,
+    getPageUrl: (page: number) => `#page-${page}`,
+    locale: "en-US",
+  },
 });
 
 export const Default = meta.story({});
@@ -122,13 +135,13 @@ Default.test(
 );
 
 Default.test(
-  "formats page numbers in its locale, and labels override the names",
+  "formats page numbers in its locale, and names page links with getPageLabel",
   {
     args: {
       page: 1200,
       count: 1500,
       locale: "ro-RO",
-      labels: { page: (page: string) => `Pagina ${page}` },
+      getPageLabel: (page: string) => `Pagina ${page}`,
     },
   },
   async ({ canvas }) => {
