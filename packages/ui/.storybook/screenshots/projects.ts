@@ -33,16 +33,8 @@ const variants: ScreenshotVariant[] = [
 ];
 
 const screenshotProject = (variant: ScreenshotVariant): TestProjectInlineConfiguration => {
-  const variantPath =
-    (directory: "screenshotDirectory" | "attachmentsDir") => (path: ScreenshotPath) =>
-      resolve(
-        path.root,
-        path[directory],
-        variant.name,
-        path.testFileDirectory,
-        path.testFileName,
-        `${path.arg}-${path.browserName}-${path.platform}${path.ext}`,
-      );
+  const fileName = (path: ScreenshotPath) =>
+    `${path.arg}-${variant.name}-${path.browserName}-${path.platform}${path.ext}`;
   return {
     plugins: [
       storybookTest({
@@ -65,8 +57,22 @@ const screenshotProject = (variant: ScreenshotVariant): TestProjectInlineConfigu
         expect: {
           toMatchScreenshot: {
             timeout: 15_000,
-            resolveScreenshotPath: variantPath("screenshotDirectory"),
-            resolveDiffPath: variantPath("attachmentsDir"),
+            resolveScreenshotPath: (path) =>
+              resolve(
+                path.root,
+                path.testFileDirectory,
+                path.screenshotDirectory,
+                path.testFileName,
+                fileName(path),
+              ),
+            resolveDiffPath: (path) =>
+              resolve(
+                path.root,
+                path.attachmentsDir,
+                path.testFileDirectory,
+                path.testFileName,
+                fileName(path),
+              ),
           },
         },
       },
