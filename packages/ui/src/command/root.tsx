@@ -7,7 +7,7 @@ import { isComposing, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId } from "../floating/floating.ts";
 import { arrange, enabled, navigate, reveal } from "../listbox/listbox.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLocale } from "../ui-provider/locale.tsx";
 import { join } from "../slot/slot.tsx";
 
 import styles from "./command.module.css";

@@ -9,9 +9,9 @@ import * as Field from "../field/field.tsx";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { EyeOffIcon } from "../icon/icons/eye-off.tsx";
 import { EyeIcon } from "../icon/icons/eye.tsx";
-import { useLabels } from "../provider/locale.tsx";
-import type { Labels } from "../provider/locale.tsx";
-import { passwordField as passwordFieldLabels } from "../provider/locales/en-US/password-field.ts";
+import { useLabels } from "../ui-provider/locale.tsx";
+import type { Labels } from "../ui-provider/locale.tsx";
+import { passwordField as passwordFieldLabels } from "../ui-provider/locales/en-US/password-field.ts";
 import { InputGroup, TextInput } from "../text-field/text-field.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
 

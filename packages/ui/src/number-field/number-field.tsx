@@ -7,8 +7,8 @@ import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useField, useFormReset } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
-import { useLocale } from "../provider/locale.tsx";
-import type { Labels } from "../provider/locale.tsx";
+import { useLocale } from "../ui-provider/locale.tsx";
+import type { Labels } from "../ui-provider/locale.tsx";
 import { InputGroup } from "../text-field/text-field.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
 

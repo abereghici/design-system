@@ -5,9 +5,9 @@ import type { SyntheticEvent } from "react";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { MinusIcon } from "../icon/icons/minus.tsx";
 import { PlusIcon } from "../icon/icons/plus.tsx";
-import { useLabels } from "../provider/locale.tsx";
-import type { Labels } from "../provider/locale.tsx";
-import { numberField as numberFieldLabels } from "../provider/locales/en-US/number-field.ts";
+import { useLabels } from "../ui-provider/locale.tsx";
+import type { Labels } from "../ui-provider/locale.tsx";
+import { numberField as numberFieldLabels } from "../ui-provider/locales/en-US/number-field.ts";
 
 export type Direction = 1 | -1;
 

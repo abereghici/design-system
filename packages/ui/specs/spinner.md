@@ -94,7 +94,7 @@ No new tokens. The reduced-motion pulse uses semantic `motion-easing-move` direc
 | --------- | --------- | ------------------------------------------------- |
 | `loading` | "Loading" | The status's name when no `aria-label` is passed. |
 
-The en-US default is `spinner` in `src/provider/locales/en-US/spinner.ts`, which `enUS` composes. A Server Component can't read the UIProvider's locale, so a localised app passes the shipped object, `locale={roRO}`, as on Progress, Meter, Badge and Pagination; `labels` overrides single strings (decision Q19-1).
+The en-US default is `spinner` in `src/ui-provider/locales/en-US/spinner.ts`, which `enUS` composes. A Server Component can't read the UIProvider's locale, so a localised app passes the shipped object, `locale={roRO}`, as on Progress, Meter, Badge and Pagination; `labels` overrides single strings (decision Q19-1).
 
 ## Feedback events
 

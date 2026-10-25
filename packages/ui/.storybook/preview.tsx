@@ -4,7 +4,7 @@ import { definePreview } from "@storybook/react-vite";
 import addonPseudoStates from "storybook-addon-pseudo-states";
 import { useEffect } from "storybook/preview-api";
 
-import { UIProvider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/ui-provider";
 
 import { meaningfulControls } from "./docs/arg-types.ts";
 import { transform } from "./docs/source.ts";

@@ -34,14 +34,14 @@ describe("@platform/ui exports", () => {
     }
   });
 
-  test("every src/provider/locales/<tag>.ts is the subpath @platform/ui/locales/<tag>", () => {
-    const entries = globSync("src/provider/locales/*.ts", { cwd: uiDir });
+  test("every src/ui-provider/locales/<tag>.ts is the subpath @platform/ui/locales/<tag>", () => {
+    const entries = globSync("src/ui-provider/locales/*.ts", { cwd: uiDir });
     expect(entries.toSorted()).toEqual([
-      "src/provider/locales/en-US.ts",
-      "src/provider/locales/ro-RO.ts",
+      "src/ui-provider/locales/en-US.ts",
+      "src/ui-provider/locales/ro-RO.ts",
     ]);
     for (const entry of entries) {
-      const tag = entry.slice("src/provider/locales/".length, -".ts".length);
+      const tag = entry.slice("src/ui-provider/locales/".length, -".ts".length);
       expect(resolve(`@platform/ui/locales/${tag}`)).toBe(join(uiDir, entry));
     }
   });

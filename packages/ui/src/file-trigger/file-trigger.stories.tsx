@@ -7,7 +7,7 @@ import { Field } from "@platform/ui/field";
 import { Form } from "@platform/ui/form";
 import { PlusIcon } from "@platform/ui/icons/plus";
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview from "#.storybook/preview.tsx";
 

@@ -1,4 +1,4 @@
-import "./provider.css";
+import "./ui-provider.css";
 
 import { preload } from "react-dom";
 import type { ReactNode } from "react";

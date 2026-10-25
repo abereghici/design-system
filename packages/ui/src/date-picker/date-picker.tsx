@@ -10,9 +10,9 @@ import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId, useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as FloatingDetails, Floating } from "../floating/floating.ts";
-import { useLabels } from "../provider/locale.tsx";
-import type { Labels } from "../provider/locale.tsx";
-import { datePicker as datePickerLabels } from "../provider/locales/en-US/date-picker.ts";
+import { useLabels } from "../ui-provider/locale.tsx";
+import type { Labels } from "../ui-provider/locale.tsx";
+import { datePicker as datePickerLabels } from "../ui-provider/locales/en-US/date-picker.ts";
 
 import { PanelContext, Trigger } from "./panel.tsx";
 

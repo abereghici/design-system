@@ -4,8 +4,8 @@ import { expect, within } from "storybook/test";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
-import type { Locale } from "../provider/locale.tsx";
-import { roRO } from "../provider/locales/ro-RO.ts";
+import type { Locale } from "../ui-provider/locale.tsx";
+import { roRO } from "../ui-provider/locales/ro-RO.ts";
 
 import { Pagination } from "./pagination.tsx";
 

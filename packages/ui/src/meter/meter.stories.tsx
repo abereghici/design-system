@@ -2,7 +2,7 @@ import { expect } from "storybook/test";
 
 import preview from "#.storybook/preview.tsx";
 
-import { roRO } from "../provider/locales/ro-RO.ts";
+import { roRO } from "../ui-provider/locales/ro-RO.ts";
 
 import { Meter } from "./meter.tsx";
 import type { MeterProps } from "./meter.tsx";

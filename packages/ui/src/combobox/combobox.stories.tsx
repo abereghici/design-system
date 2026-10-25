@@ -4,12 +4,12 @@ import { expect, fn, screen, waitFor } from "storybook/test";
 import { Dialog } from "@platform/ui/dialog";
 import { UserIcon } from "@platform/ui/icons/user";
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
 
-import type { Locale } from "../provider/locale.tsx";
+import type { Locale } from "../ui-provider/locale.tsx";
 
 import * as Combobox from "./combobox.tsx";
 

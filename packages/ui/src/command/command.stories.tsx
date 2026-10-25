@@ -4,7 +4,7 @@ import { expect, fn, waitFor } from "storybook/test";
 import { PlusIcon } from "@platform/ui/icons/plus";
 import { Kbd } from "@platform/ui/kbd";
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";

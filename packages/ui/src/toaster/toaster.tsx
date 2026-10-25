@@ -4,8 +4,8 @@ import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } fr
 import { createPortal } from "react-dom";
 import type { ComponentProps, RefObject } from "react";
 
-import { useLabels } from "../provider/locale.tsx";
-import { toaster as toasterLabels } from "../provider/locales/en-US/toaster.ts";
+import { useLabels } from "../ui-provider/locale.tsx";
+import { toaster as toasterLabels } from "../ui-provider/locales/en-US/toaster.ts";
 import { composeRefs, join } from "../slot/slot.tsx";
 import { close, mark, snapshot, subscribe } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";

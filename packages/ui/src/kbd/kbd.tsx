@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 
-import type { Labels } from "../provider/locale.tsx";
+import type { Labels } from "../ui-provider/locale.tsx";
 import { join } from "../slot/slot.tsx";
 
 import { KbdKey } from "./kbd-key.tsx";

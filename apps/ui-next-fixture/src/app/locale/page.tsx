@@ -1,5 +1,5 @@
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/ui-provider";
 
 import { ShowLocale } from "./show-locale.tsx";
 

@@ -1,13 +1,13 @@
 import { expect } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
-import { UIProvider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview from "#.storybook/preview.tsx";
 
-import type { Locale } from "../provider/locale.tsx";
-import { enUS } from "../provider/locales/en-US.ts";
-import { roRO } from "../provider/locales/ro-RO.ts";
+import type { Locale } from "../ui-provider/locale.tsx";
+import { enUS } from "../ui-provider/locales/en-US.ts";
+import { roRO } from "../ui-provider/locales/ro-RO.ts";
 
 import { Kbd } from "./kbd.tsx";
 

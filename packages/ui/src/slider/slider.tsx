@@ -6,7 +6,7 @@ import type { ComponentProps, KeyboardEvent, PointerEvent } from "react";
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useFieldControl } from "../field/field-control.ts";
-import { useLocale } from "../provider/locale.tsx";
+import { useLocale } from "../ui-provider/locale.tsx";
 import { join } from "../slot/slot.tsx";
 
 import styles from "./slider.module.css";

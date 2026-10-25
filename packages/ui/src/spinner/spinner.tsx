@@ -1,8 +1,8 @@
 import type { ComponentProps } from "react";
 
-import { labelsOf } from "../provider/labels.ts";
-import type { Labels, Locale } from "../provider/locale.tsx";
-import { spinner as spinnerLabels } from "../provider/locales/en-US/spinner.ts";
+import { labelsOf } from "../ui-provider/labels.ts";
+import type { Labels, Locale } from "../ui-provider/locale.tsx";
+import { spinner as spinnerLabels } from "../ui-provider/locales/en-US/spinner.ts";
 import { join } from "../slot/slot.tsx";
 
 import styles from "./spinner.module.css";

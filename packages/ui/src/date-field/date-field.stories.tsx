@@ -5,12 +5,12 @@ import type { Decorator } from "@storybook/react-vite";
 
 import { Button } from "@platform/ui/button";
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview from "#.storybook/preview.tsx";
 import { confirmComposition } from "#.storybook/test/trusted.ts";
 
-import type { Locale } from "../provider/locale.tsx";
+import type { Locale } from "../ui-provider/locale.tsx";
 
 import { DateField } from "./date-field.tsx";
 import type { DateFieldChangeEventDetails } from "./date-field.tsx";

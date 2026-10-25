@@ -4,7 +4,7 @@ import { Button } from "@platform/ui/button";
 
 import preview from "#.storybook/preview.tsx";
 
-import { roRO } from "../provider/locales/ro-RO.ts";
+import { roRO } from "../ui-provider/locales/ro-RO.ts";
 
 import { SkipLink } from "./skip-link.tsx";
 

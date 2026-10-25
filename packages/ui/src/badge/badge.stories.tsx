@@ -4,7 +4,7 @@ import { Link } from "@platform/ui/link";
 
 import preview from "#.storybook/preview.tsx";
 
-import { enUS } from "../provider/locales/en-US.ts";
+import { enUS } from "../ui-provider/locales/en-US.ts";
 
 import { Badge } from "./badge.tsx";
 

@@ -140,7 +140,7 @@ Consumed as semantic tokens directly: `size-target-min` (Item minimum height, a 
 | ------ | ------------ | ----------------------- |
 | `root` | "Breadcrumb" | `aria-label` on `<nav>` |
 
-Root is a Server Component and cannot read the UIProvider, so it takes the shipped `locale` object (as Pagination does) and `labels` overrides; without either, `breadcrumbs` in `src/provider/locales/en-US/breadcrumbs.ts` is the en-US default (Q19-1).
+Root is a Server Component and cannot read the UIProvider, so it takes the shipped `locale` object (as Pagination does) and `labels` overrides; without either, `breadcrumbs` in `src/ui-provider/locales/en-US/breadcrumbs.ts` is the en-US default (Q19-1).
 
 ## Feedback events
 

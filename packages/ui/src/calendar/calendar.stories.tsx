@@ -2,11 +2,11 @@ import { expect, fn } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview from "#.storybook/preview.tsx";
 
-import type { Locale } from "../provider/locale.tsx";
+import type { Locale } from "../ui-provider/locale.tsx";
 
 import { Calendar } from "./calendar.tsx";
 import type { CalendarChangeEventDetails } from "./calendar.tsx";

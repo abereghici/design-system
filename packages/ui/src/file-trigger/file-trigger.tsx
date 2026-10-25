@@ -7,8 +7,8 @@ import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useField, useFieldControl, useFormReset } from "../field/field-control.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { useLabels } from "../provider/locale.tsx";
-import { fileTrigger as fileTriggerLabels } from "../provider/locales/en-US/file-trigger.ts";
+import { useLabels } from "../ui-provider/locale.tsx";
+import { fileTrigger as fileTriggerLabels } from "../ui-provider/locales/en-US/file-trigger.ts";
 import { Slot } from "../slot/slot.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 

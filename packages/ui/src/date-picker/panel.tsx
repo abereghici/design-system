@@ -9,7 +9,7 @@ import { rememberFocus } from "../floating/floating.ts";
 import type { Floating } from "../floating/floating.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { CalendarIcon } from "../icon/icons/calendar.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLocale } from "../ui-provider/locale.tsx";
 import { join } from "../slot/slot.tsx";
 
 import popoverStyles from "../popover/popover.module.css";

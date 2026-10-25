@@ -6,8 +6,8 @@ import type { ComponentProps } from "react";
 import { trackComposition } from "../events/events.ts";
 import { SearchIcon } from "../icon/icons/search.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
-import { useLabels } from "../provider/locale.tsx";
-import { command as commandLabels } from "../provider/locales/en-US/command.ts";
+import { useLabels } from "../ui-provider/locale.tsx";
+import { command as commandLabels } from "../ui-provider/locales/en-US/command.ts";
 import { join } from "../slot/slot.tsx";
 
 import { DialogContext, useCommand } from "./root.tsx";

@@ -2,8 +2,8 @@ import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useSt
 
 import { byId, isOpen, sourceOf } from "../floating/floating.ts";
 import { arrange, enabled, textOf } from "../listbox/listbox.tsx";
-import { useLabels, useLocale } from "../provider/locale.tsx";
-import { combobox as comboboxLabels } from "../provider/locales/en-US/combobox.ts";
+import { useLabels, useLocale } from "../ui-provider/locale.tsx";
+import { combobox as comboboxLabels } from "../ui-provider/locales/en-US/combobox.ts";
 
 import { chosenOf, dismiss, highlight, inputOf, listOf, memoryOf, part } from "./combobox-state.ts";
 import type { Combobox, Options } from "./combobox-state.ts";

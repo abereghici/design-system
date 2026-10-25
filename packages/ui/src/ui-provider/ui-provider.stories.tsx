@@ -5,7 +5,7 @@ import preview from "#.storybook/preview.tsx";
 import { useLocale } from "./locale.tsx";
 import { enUS } from "./locales/en-US.ts";
 import { roRO } from "./locales/ro-RO.ts";
-import { UIProvider } from "./provider.tsx";
+import { UIProvider } from "./ui-provider.tsx";
 
 function Tag() {
   return <output>{useLocale().tag}</output>;

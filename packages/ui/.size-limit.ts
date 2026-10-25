@@ -40,7 +40,7 @@ const budgets: Readonly<Record<string, string>> = {
   "password-field": "5.3 kB",
   popover: "4.45 kB",
   "radio-group": "2.35 kB",
-  provider: "5.4 kB",
+  "ui-provider": "5.4 kB",
   select: "4.1 kB",
   separator: "700 B",
   skeleton: "630 B",
@@ -91,8 +91,8 @@ export default [
     "680 B",
   ),
   ...checks(
-    "src/provider/locales/*.ts",
-    (path) => path.slice("src/provider/".length, -".ts".length),
+    "src/ui-provider/locales/*.ts",
+    (path) => path.slice("src/ui-provider/".length, -".ts".length),
     "730 B",
   ),
 ] satisfies SizeLimitConfig;

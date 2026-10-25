@@ -8,9 +8,9 @@ import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
-import type { Locale } from "../provider/locale.tsx";
-import { roRO } from "../provider/locales/ro-RO.ts";
-import { UIProvider } from "../provider/provider.tsx";
+import type { Locale } from "../ui-provider/locale.tsx";
+import { roRO } from "../ui-provider/locales/ro-RO.ts";
+import { UIProvider } from "../ui-provider/ui-provider.tsx";
 
 import { PasswordField } from "./password-field.tsx";
 import type { PasswordFieldVisibleChangeEventDetails } from "./password-field.tsx";

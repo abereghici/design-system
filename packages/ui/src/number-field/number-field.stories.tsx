@@ -3,14 +3,14 @@ import { expect, fn } from "storybook/test";
 import type { Decorator } from "@storybook/react-vite";
 
 import { Button } from "@platform/ui/button";
-import { UIProvider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/ui-provider";
 
 import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
-import type { Locale } from "../provider/locale.tsx";
-import { roRO } from "../provider/locales/ro-RO.ts";
+import type { Locale } from "../ui-provider/locale.tsx";
+import { roRO } from "../ui-provider/locales/ro-RO.ts";
 
 import { NumberField } from "./number-field.tsx";
 import type { NumberFieldChangeEventDetails } from "./number-field.tsx";

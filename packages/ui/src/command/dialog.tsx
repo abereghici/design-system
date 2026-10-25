@@ -5,8 +5,8 @@ import type { ComponentProps, RefObject, SyntheticEvent } from "react";
 
 import { Content, ModalRoot } from "../dialog/modal.tsx";
 import { requestChange } from "../events/events.ts";
-import { useLabels } from "../provider/locale.tsx";
-import { command as commandLabels } from "../provider/locales/en-US/command.ts";
+import { useLabels } from "../ui-provider/locale.tsx";
+import { command as commandLabels } from "../ui-provider/locales/en-US/command.ts";
 
 import { DialogContext, Root } from "./root.tsx";
 import type { Callback, RootProps } from "./root.tsx";

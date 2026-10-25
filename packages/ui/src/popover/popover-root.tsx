@@ -11,8 +11,8 @@ import type {
   FloatingOptions,
 } from "../floating/floating.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { useLabels } from "../provider/locale.tsx";
-import { popover as popoverLabels } from "../provider/locales/en-US/popover.ts";
+import { useLabels } from "../ui-provider/locale.tsx";
+import { popover as popoverLabels } from "../ui-provider/locales/en-US/popover.ts";
 import { Slot, join } from "../slot/slot.tsx";
 
 import iconButtonStyles from "../icon-button/icon-button.module.css";

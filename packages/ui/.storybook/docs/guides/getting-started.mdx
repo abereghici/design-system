@@ -26,7 +26,7 @@ Render `UIProvider` once, at the root of the app. It brings the cascade layer or
 
 ```tsx
 // app/layout.tsx
-import { UIProvider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/ui-provider";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -38,6 +38,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   );
 }
 ```
+
+`UIProvider` used to be imported from `@platform/ui/provider`. That entry is gone: change the import to `@platform/ui/ui-provider`, which matches the component's name like every other entry.
 
 ## Import components one by one
 

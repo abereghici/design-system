@@ -2,8 +2,8 @@ import { expect } from "storybook/test";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
-import type { Locale } from "../provider/locale.tsx";
-import { roRO } from "../provider/locales/ro-RO.ts";
+import type { Locale } from "../ui-provider/locale.tsx";
+import { roRO } from "../ui-provider/locales/ro-RO.ts";
 
 import * as Breadcrumbs from "./breadcrumbs.tsx";
 

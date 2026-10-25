@@ -3,9 +3,9 @@ import type { ComponentProps, ElementType, ReactElement } from "react";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { MoreIcon } from "../icon/icons/more.tsx";
-import { labelsOf } from "../provider/labels.ts";
-import type { Labels, Locale } from "../provider/locale.tsx";
-import { pagination as paginationLabels } from "../provider/locales/en-US/pagination.ts";
+import { labelsOf } from "../ui-provider/labels.ts";
+import type { Labels, Locale } from "../ui-provider/locale.tsx";
+import { pagination as paginationLabels } from "../ui-provider/locales/en-US/pagination.ts";
 
 import styles from "./pagination.module.css";
 

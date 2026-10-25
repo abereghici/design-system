@@ -2,12 +2,12 @@ import type { MouseEvent } from "react";
 import { expect, fn } from "storybook/test";
 
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
+import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
-import type { Locale } from "../provider/locale.tsx";
+import type { Locale } from "../ui-provider/locale.tsx";
 
 import * as Alert from "./alert.tsx";
 

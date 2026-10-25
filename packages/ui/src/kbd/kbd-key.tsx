@@ -2,9 +2,9 @@
 
 import { useSyncExternalStore } from "react";
 
-import { useLabels } from "../provider/locale.tsx";
-import type { Labels } from "../provider/locale.tsx";
-import { kbd as kbdLabels } from "../provider/locales/en-US/kbd.ts";
+import { useLabels } from "../ui-provider/locale.tsx";
+import type { Labels } from "../ui-provider/locale.tsx";
+import { kbd as kbdLabels } from "../ui-provider/locales/en-US/kbd.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 export interface KbdFace {

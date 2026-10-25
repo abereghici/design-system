@@ -4,9 +4,9 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { composeEventHandlers } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { useLabels } from "../provider/locale.tsx";
-import { dialog as dialogLabels } from "../provider/locales/en-US/dialog.ts";
-import { sheet as sheetLabels } from "../provider/locales/en-US/sheet.ts";
+import { useLabels } from "../ui-provider/locale.tsx";
+import { dialog as dialogLabels } from "../ui-provider/locales/en-US/dialog.ts";
+import { sheet as sheetLabels } from "../ui-provider/locales/en-US/sheet.ts";
 import { Slot, join } from "../slot/slot.tsx";
 
 import { useModal } from "./modal.tsx";

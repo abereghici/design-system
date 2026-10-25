@@ -3,9 +3,9 @@ import type { ComponentProps } from "react";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { Link as BaseLink } from "../link/link.tsx";
 import type { LinkProps as BaseLinkProps } from "../link/link.tsx";
-import { labelsOf } from "../provider/labels.ts";
-import type { Labels, Locale } from "../provider/locale.tsx";
-import { breadcrumbs as breadcrumbsLabels } from "../provider/locales/en-US/breadcrumbs.ts";
+import { labelsOf } from "../ui-provider/labels.ts";
+import type { Labels, Locale } from "../ui-provider/locale.tsx";
+import { breadcrumbs as breadcrumbsLabels } from "../ui-provider/locales/en-US/breadcrumbs.ts";
 import { join } from "../slot/slot.tsx";
 
 import styles from "./breadcrumbs.module.css";
