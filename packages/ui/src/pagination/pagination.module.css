@@ -63,6 +63,11 @@
     rotate: 180deg;
   }
 
+  /* Elided pages read as a horizontal ellipsis (MUI, shadcn MoreHorizontal, Carbon); upright, the glyph reads as "more actions". */
+  .more {
+    rotate: 90deg;
+  }
+
   @media (forced-colors: active) {
     .page[aria-current="page"] {
       background-color: Highlight;

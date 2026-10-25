@@ -29,14 +29,14 @@ const meta = preview.meta({
         </ContextMenu.Trigger>
         <ContextMenu.Content aria-label="File actions">
           <ContextMenu.Item onClick={onDuplicate} aria-keyshortcuts="Meta+D Control+D">
-            <CopyIcon data-icon="inline-start" />
+            <CopyIcon />
             Duplicate
             <Kbd keys="mod+d" aria-hidden />
           </ContextMenu.Item>
           <ContextMenu.CheckboxItem>Pinned</ContextMenu.CheckboxItem>
           <ContextMenu.Separator />
           <ContextMenu.Item variant="danger">
-            <TrashIcon data-icon="inline-start" />
+            <TrashIcon />
             Delete
           </ContextMenu.Item>
         </ContextMenu.Content>

@@ -39,7 +39,7 @@ const meta = preview.meta({
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Item onClick={onDuplicate} aria-keyshortcuts="Meta+D Control+D">
-            <CopyIcon data-icon="inline-start" />
+            <CopyIcon />
             Duplicate
             <Kbd keys="mod+d" aria-hidden />
           </DropdownMenu.Item>
@@ -55,7 +55,7 @@ const meta = preview.meta({
           </DropdownMenu.CheckboxItem>
           <DropdownMenu.Separator />
           <DropdownMenu.Item variant="danger">
-            <TrashIcon data-icon="inline-start" />
+            <TrashIcon />
             Delete
           </DropdownMenu.Item>
         </DropdownMenu.Content>

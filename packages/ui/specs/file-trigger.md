@@ -14,7 +14,7 @@ import { Field } from "@platform/ui/field";
 <Field.Root name="attachments">
   <Field.Label>Attachments</Field.Label>
   <FileTrigger multiple required>
-    <Button><PlusIcon data-icon="inline-start" /> Add files</Button>
+    <Button><PlusIcon /> Add files</Button>
   </FileTrigger>
   <Field.Description>PDF or images, up to 10 MB each.</Field.Description>
   <Field.Error />
@@ -25,12 +25,14 @@ Status: draft for brand-owner review (phase 2). No source guide: drafted from th
 
 ## Anatomy
 
-Trigger (the consumer's single child) → hidden file input.
+Root (inline row) → trigger (the consumer's single child) → hidden file input → selection (file names, Clear).
 
-- **Trigger.** The one child element, usually a Button or IconButton, rendered as is (Slot): FileTrigger adds an `onClick`, `disabled`, and inside a Field an `id`, `aria-labelledby`, `aria-describedby` and `aria-invalid`. It keeps its own look; in a Field's grid it keeps its content width (`justify-self: start`, FileTrigger's only CSS).
+- **Trigger.** The one child element, usually a Button or IconButton, rendered as is (Slot): FileTrigger adds an `onClick`, `disabled`, and inside a Field an `id`, `aria-labelledby`, `aria-describedby` and `aria-invalid`. It keeps its own look. The root is an inline flex row with `space-inline-sm` (8) between the trigger and the selection; in a Field's grid it keeps its content width (`justify-self: start`).
 - **Hidden input.** A native `<input type="file">` after the trigger, visually hidden (VisuallyHidden), `tabIndex={-1}` and `aria-hidden`. It holds `name`, `accept`, `multiple`, `required` and the selected `FileList`, and it is the Field's control (`useFieldControl`). It is not `hidden`: a blocked submit focuses the first invalid control, and a `hidden` input cannot take focus (Chromium then refuses the submit with "An invalid form control … is not focusable"). When it receives focus it moves focus on to the trigger. Inside a DropZone, FileTrigger renders no input and uses the zone's.
 
-FileTrigger draws nothing. The list of chosen files is the app's to render (from `onSelect`), because products differ (thumbnails, progress, remove buttons).
+- **Selection.** After the hidden input: an always-rendered `<output>` (implicit role `status`, so the names are announced; MDN live regions: "Establish the live region before updating its content.") with the chosen file names joined by ", " in `type-body-xs` / `color-text-default`, truncated with an ellipsis, then an IconButton `sm` named by `fileTrigger.clear` (X icon) while files are chosen. While empty it sits out of the flow (`position: absolute`), not `hidden`, so the live region stays in the accessibility tree. Clear sets `input.value = ""`, fires native `input` and `change` (so the Field revalidates) and returns focus to the trigger; it calls no callback. Precedent: HTML's File Upload state is "A label and a button" (the label shows what is chosen); React Aria's FileTrigger example renders `files.join(', ')`; Ark `FileUpload.ItemName` and `ClearTrigger`; Mantine `FileInput` `clearable` ("display a clear button … when a file is selected").
+
+Richer lists (thumbnails, progress, per-file remove) stay the app's, from `onSelect`.
 
 ## API
 
@@ -43,6 +45,7 @@ FileTrigger draws nothing. The list of chosen files is the app's to render (from
 | `onSelect`                 | `(files: File[], details: FileTriggerSelectEventDetails) => void` |         | After the user picks files. `details`: `reason` (`"none"`), `event` (the native `change`), `cancel()` (clears the selection). |
 | `name`, `required`, `form` | native                                                            |         | On the hidden input, so the files submit with the form and `valueMissing` applies.                                            |
 | `disabled`                 | `boolean`                                                         | `false` | Passed to the trigger (`aria-disabled`); the picker does not open.                                                            |
+| `labels`                   | `{ clear?: string }`                                              |         | Per-instance override of the root UI provider's locale (Built-in labels).                                                     |
 
 Names, checked against the reference libraries:
 
@@ -53,7 +56,12 @@ Names, checked against the reference libraries:
 
 ## States
 
-FileTrigger has no states of its own; the trigger shows its own (Button's). With files chosen, the hidden input matches `:valid` / `:user-invalid` as usual; the Field shows the error (Field contract).
+| State      | How it shows                               |
+| ---------- | ------------------------------------------ |
+| empty      | The trigger alone                          |
+| with files | The file names and Clear after the trigger |
+
+The trigger shows its own states (Button's). With files chosen, the hidden input matches `:valid` / `:user-invalid` as usual; the Field shows the error (Field contract).
 
 ## Behaviour
 
@@ -87,11 +95,15 @@ Nothing to mirror.
 
 ## Component tokens
 
-None. FileTrigger draws nothing.
+None. The selection uses `space-inline-sm`, `space-inline-xs`, `type-body-xs` and `color-text-default` directly.
 
 ## Built-in labels
 
-None. The trigger's text is the consumer's.
+| Key                 | en-US         | ro-RO               | Used by              |
+| ------------------- | ------------- | ------------------- | -------------------- |
+| `fileTrigger.clear` | "Clear files" | "Golește fișierele" | The Clear IconButton |
+
+The trigger's text is the consumer's. DropZone shares the key.
 
 ## Feedback events
 

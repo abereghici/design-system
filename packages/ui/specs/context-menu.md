@@ -14,13 +14,13 @@ import { TrashIcon } from "@platform/ui/icons/trash";
   </ContextMenu.Trigger>
   <ContextMenu.Content aria-label="File actions">
     <ContextMenu.Item onClick={duplicate} aria-keyshortcuts="Meta+D Control+D">
-      <CopyIcon data-icon="inline-start" />
+      <CopyIcon />
       Duplicate
       <Kbd keys="mod+d" aria-hidden />
     </ContextMenu.Item>
     <ContextMenu.Separator />
     <ContextMenu.Item variant="danger" onClick={remove}>
-      <TrashIcon data-icon="inline-start" />
+      <TrashIcon />
       Delete
     </ContextMenu.Item>
   </ContextMenu.Content>

@@ -18,7 +18,7 @@ import { Kbd } from "@platform/ui/kbd";
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="end">
     <DropdownMenu.Item onClick={duplicate} aria-keyshortcuts="Meta+D Control+D">
-      <CopyIcon data-icon="inline-start" />
+      <CopyIcon />
       Duplicate
       <Kbd keys="mod+d" aria-hidden />
     </DropdownMenu.Item>
@@ -34,7 +34,7 @@ import { Kbd } from "@platform/ui/kbd";
     </DropdownMenu.CheckboxItem>
     <DropdownMenu.Separator />
     <DropdownMenu.Item variant="danger" onClick={remove}>
-      <TrashIcon data-icon="inline-start" />
+      <TrashIcon />
       Delete
     </DropdownMenu.Item>
   </DropdownMenu.Content>
@@ -50,7 +50,7 @@ Root (no DOM) → Trigger (button) → Content (`[popover]` menu, rendered next 
 - **Root.** Holds the open state and the ids. Renders no element.
 - **Trigger.** A native `<button type="button">` with `commandfor` → Content and `command="toggle-popover"`, `aria-haspopup="menu"` and `aria-expanded`. With `asChild`, a Button or IconButton is the Trigger.
 - **Content.** A `<div popover="auto" role="menu" tabindex="-1">`, rendered right after the Trigger in the DOM (no portal), shown in the top layer. Material `dropdown-menu-background-color` (`color-material-thick`) with `backdrop-filter: blur(dropdown-menu-blur) saturate(dropdown-menu-saturate)`, `dropdown-menu-shadow` (overlay elevation: hairline ring, highlight, moss-tinted shadow), radius `dropdown-menu-border-radius` (12), padding `dropdown-menu-padding` (4), at least `dropdown-menu-min-width` (224) and at least as wide as the Trigger, `dropdown-menu-offset` (4) from it.
-- **Item.** A native `<button type="button" role="menuitem" tabindex="-1">`, a flex row `dropdown-menu-item-height` (28) tall, `dropdown-menu-item-padding-inline` (8), `dropdown-menu-item-gap` (8), radius `dropdown-menu-item-border-radius` (8: concentric, 12 − 4), text in `dropdown-menu-item-font` / `dropdown-menu-item-text-color`. Children, in order: an optional Icon with `data-icon="inline-start"` (`size="sm"`, `dropdown-menu-item-icon-color`), the label, an optional `<Kbd aria-hidden>` pushed to the inline end (`margin-inline-start: auto`). The Kbd keeps its keycap, as the zip draws it, with its text in `dropdown-menu-item-shortcut-text-color` (source: "Shortcut hints right-aligned in subtlest text."); the Item sets Kbd's own custom properties (`--ab-kbd-text-color`, and `--ab-kbd-margin-inline-start: auto`, a hook Kbd reads) rather than reaching into the child. The whole row is the hit target.
+- **Item.** A native `<button type="button" role="menuitem" tabindex="-1">`, a flex row `dropdown-menu-item-height` (28) tall, `dropdown-menu-item-padding-inline` (8), `dropdown-menu-item-gap` (8), radius `dropdown-menu-item-border-radius` (8: concentric, 12 − 4), text in `dropdown-menu-item-font` / `dropdown-menu-item-text-color`. Children, in order: an optional Icon (`size="sm"`, `dropdown-menu-item-icon-color`), the label, an optional `<Kbd aria-hidden>` pushed to the inline end (`margin-inline-start: auto`). The Kbd keeps its keycap, as the zip draws it, with its text in `dropdown-menu-item-shortcut-text-color` (source: "Shortcut hints right-aligned in subtlest text."); the Item sets Kbd's own custom properties (`--ab-kbd-text-color`, and `--ab-kbd-margin-inline-start: auto`, a hook Kbd reads) rather than reaching into the child. The whole row is the hit target.
 - **CheckboxItem / RadioItem.** The same row with `role="menuitemcheckbox"` / `role="menuitemradio"` and `aria-checked`. A 16 px indicator box sits at the inline start, where an Item's icon goes, so labels line up: the `check` Icon (CheckboxItem) or the bob diamond, a `size-indicator` (6 px) square rotated 45° (RadioItem), both in `dropdown-menu-item-icon-color-selected` and decorative; the box is empty while unchecked. Brand book: the bob is "the single-choice indicator in menus".
 - **RadioGroup.** A `<fieldset>` (implicit role `group`) labelled by its Label (`aria-labelledby`).
 - **Group.** A `<fieldset>` (implicit role `group`) labelled by its Label.
@@ -122,15 +122,15 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State               | How it shows                                                                                              | Exposed as                                             |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| closed              | Trigger only                                                                                              | `aria-expanded="false"` on the Trigger                 |
-| open                | Content shown next to the Trigger                                                                         | `:popover-open` on the Content, `aria-expanded="true"` |
-| opened by a pointer | The entry scale runs (Motion)                                                                             | `data-pointer` on the Content                          |
-| item highlighted    | Fill `dropdown-menu-item-background-color-hovered` (plus the focus ring from the keyboard), no transition | `:focus-visible` or `:hover` on the Item (zip rules)   |
-| item disabled       | Whole row at `opacity-disabled`, as the zip draws it; no hover fill                                       | `aria-disabled="true"`                                 |
-| item danger         | Text and icon in `dropdown-menu-item-danger-{text,icon}-color`                                            | `data-variant="danger"`                                |
-| checked             | Check (CheckboxItem) or diamond (RadioItem) in the indicator box                                          | `aria-checked="true"`                                  |
+| State               | How it shows                                                                                                                                    | Exposed as                                             |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| closed              | Trigger only                                                                                                                                    | `aria-expanded="false"` on the Trigger                 |
+| open                | Content shown next to the Trigger                                                                                                               | `:popover-open` on the Content, `aria-expanded="true"` |
+| opened by a pointer | The entry scale runs (Motion)                                                                                                                   | `data-pointer` on the Content                          |
+| item highlighted    | Fill `dropdown-menu-item-background-color-hovered` (plus the focus ring from the keyboard), no transition                                       | `:focus-visible` or `:hover` on the Item (zip rules)   |
+| item disabled       | Text, icon, check and shortcut in the `*-disabled` colours (Disabled look, GLOSSARY); the zip's row opacity faded the focus ring; no hover fill | `aria-disabled="true"`                                 |
+| item danger         | Text and icon in `dropdown-menu-item-danger-{text,icon}-color`                                                                                  | `data-variant="danger"`                                |
+| checked             | Check (CheckboxItem) or diamond (RadioItem) in the indicator box                                                                                | `aria-checked="true"`                                  |
 
 ## Behaviour
 
@@ -203,7 +203,7 @@ Arrow keys and Home / End call `preventDefault()` so the page does not scroll. O
 - **Items.** ARIA in HTML allows `button` to take "menuitem, menuitemcheckbox, menuitemradio"; `tabindex="-1"` follows APG ("Each item in the menu has tabindex set to -1"). Checked state is `aria-checked` ("When a menuitemcheckbox or menuitemradio is checked, aria-checked is set to true."), disabled is `aria-disabled` ("When a menu item is disabled, aria-disabled is set to true.").
 - **Groups and Separators.** WAI-ARIA allows a menu's children to be "group with accessibility child menuitem", "group with accessibility child menuitemradio", "group with accessibility child menuitemcheckbox", "menuitem", "menuitemcheckbox", "menuitemradio" and "separator". A Label outside a Group would be a child the menu role does not allow, so Label belongs inside a Group or RadioGroup and names it (Base UI GroupLabel: "automatically associated with its parent group"). APG groups with separators ("Items in a menu may be divided into groups by placing an element with a role of separator between groups."); Separators here are `role="separator"` with the default horizontal orientation, not focusable (APG: "A separator in a menu is not focusable or interactive.").
 - **Shortcuts.** The Kbd child is `aria-hidden` and the Item carries `aria-keyshortcuts` (Kbd spec), so the Item's name stays its label ("Duplicate", not "Duplicate Command D"). The consumer writes both; the component cannot set `aria-hidden` on a child.
-- **Contrast.** Item text `color-text-default`, danger text `color-text-danger`, icons `color-icon-subtle` / `color-icon-danger` / `color-icon-accent`, shortcut and Label text `color-text-subtlest`: every one is in the contrast matrix on `surface-floating` and on the highlight fill `background-neutral-subtle-hovered`. The Material is `color-material-thick`, a 90 % fill of the floating surface (archived brand book), so text over it stays close to the matrix value (inference). Disabled text is exempt (WCAG 2.2 1.4.3: text "part of an inactive user interface component … have no contrast requirement").
+- **Contrast.** Item text `color-text-default`, danger text `color-text-danger`, icons `color-icon-subtle` / `color-icon-danger` / `color-icon-accent`, shortcut and Label text `color-text-subtlest`: every one is in the contrast matrix on `surface-floating` and on the highlight fill `background-selected` (`background-neutral-subtle-hovered` equals the dark Material). The Material is `color-material-thick`, a 90 % fill of the floating surface (archived brand book), so text over it stays close to the matrix value (inference). Disabled text is exempt (WCAG 2.2 1.4.3: text "part of an inactive user interface component … have no contrast requirement").
 - **Targets.** Items are `size-control-sm` tall (28 on fine pointers, larger on coarse ones), above 24 px.
 - **More contrast:** `color-text-subtlest` steps up to `color-text-subtle` and `color-border-subtle` to `color-border-default` under `(prefers-contrast: more)` (token media overrides), so shortcuts, Labels and Separators gain contrast with no component rule; one component rule steps the item icons from `color-icon-subtle` to `color-icon-default`.
 - **Forced colors:** the Material and the shadow disappear, so the Content gets a 1 px `CanvasText` border; the highlighted Item sets `Highlight` / `HighlightText` explicitly (the fill would otherwise vanish); disabled Items use `GrayText`; icons, the check and the diamond use `currentColor`; Separators are borders and take the system colour.

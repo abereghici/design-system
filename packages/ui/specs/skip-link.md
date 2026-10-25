@@ -43,10 +43,10 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State   | How it shows                                                                                       | Exposed as     |
-| ------- | -------------------------------------------------------------------------------------------------- | -------------- |
-| rest    | Visually hidden; still focusable and announced                                                     | `:not(:focus)` |
-| focused | Chip at the top inline-start corner, with the 2 px focus ring, 3 px offset, `color-border-focused` | `:focus`       |
+| State   | How it shows                                                                                            | Exposed as |
+| ------- | ------------------------------------------------------------------------------------------------------- | ---------- |
+| rest    | Clipped to nothing (`clip-path: inset(50%)`, fixed so it takes no space); still focusable and announced | —          |
+| focused | Chip at the top inline-start corner, with the 2 px focus ring, 3 px offset, `color-border-focused`      | `:focus`   |
 
 `:focus`, not `:focus-visible`: G1 asks that the link be "either always visible or visible when it has keyboard focus", and showing it on any focus is never wrong.
 

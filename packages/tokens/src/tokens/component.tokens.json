@@ -598,7 +598,7 @@
     },
     "select-option-background-color-hovered": {
       "$type": "color",
-      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+      "$value": "{semantic.color-background-selected}"
     },
     "select-option-icon-color-selected": {
       "$type": "color",
@@ -614,7 +614,7 @@
     },
     "combobox-option-background-color-hovered": {
       "$type": "color",
-      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+      "$value": "{semantic.color-background-selected}"
     },
     "combobox-option-text-color-selected": {
       "$type": "color",
@@ -1298,11 +1298,11 @@
     },
     "dropdown-menu-item-background-color-hovered": {
       "$type": "color",
-      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+      "$value": "{semantic.color-background-selected}"
     },
     "context-menu-item-background-color-hovered": {
       "$type": "color",
-      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+      "$value": "{semantic.color-background-selected}"
     },
     "dropdown-menu-item-icon-color-selected": {
       "$type": "color",

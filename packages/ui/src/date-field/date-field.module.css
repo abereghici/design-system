@@ -56,7 +56,7 @@
     white-space: nowrap;
   }
 
-  [aria-disabled="true"] > .segment {
+  [aria-disabled="true"] > :is(.segment, .separator) {
     color: var(--ab-input-text-color-disabled);
   }
 

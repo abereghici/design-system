@@ -24,9 +24,7 @@ const controls = (
       <DownloadIcon />
     </IconButton>
     <Separator orientation="vertical" />
-    <Button variant="tertiary" size="sm">
-      Share
-    </Button>
+    <Button variant="tertiary">Share</Button>
   </>
 );
 

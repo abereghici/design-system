@@ -27,22 +27,22 @@ function placePopover(c: Combobox, list: HTMLElement) {
   else list.hidePopover();
 }
 
-function showEmpty(c: Combobox, list: HTMLElement, empty: boolean, noResults: string) {
+function showEmpty(c: Combobox, list: HTMLElement, empty: boolean, text: string) {
   list.toggleAttribute("data-empty", empty);
   const row = byId(part(c, "empty"));
   if (row !== null) row.hidden = !empty;
   const status = byId(part(c, "status"));
-  if (status !== null) status.textContent = c.open && empty ? noResults : "";
+  if (status !== null) status.textContent = c.open && empty ? text : "";
 }
 
-function sync(c: Combobox, tag: string, noResults: string) {
+function sync(c: Combobox, tag: string, emptyText: string) {
   const list = listOf(c);
   const input = inputOf(c);
   if (list === null || input === null) return;
   applyText(c, list, input);
   placePopover(c, list);
   const shown = arrange(list, c.options.filter === null ? "" : c.query, tag);
-  showEmpty(c, list, shown.length === 0, noResults);
+  showEmpty(c, list, shown.length === 0, emptyText);
   const memory = memoryOf(c);
   const key = c.open ? shown.map((option) => option.id).join(" ") : "";
   if (key === memory.shown) return;
@@ -105,13 +105,15 @@ function useListeners(c: Combobox) {
   }, []);
 }
 
-/** The Combobox's state and its "No results" text. The open list, the input's text and the highlight live in the DOM. */
+/** The Combobox's state and its empty-list text. The open list, the input's text and the highlight live in the DOM. */
 export function useCombobox(
   options: Options,
-  labels: { noResults?: string } | undefined,
+  labels: { noResults?: string; loading?: string } | undefined,
+  loading = false,
 ): [Combobox, string] {
   const locale = useLocale();
-  const { noResults } = useLabels("combobox", comboboxLabels, labels);
+  const text = useLabels("combobox", comboboxLabels, labels);
+  const empty = loading ? text.loading : text.noResults;
   const [ownValue, setValue] = useState(options.defaultValue ?? null);
   const [ownOpen, setOpen] = useState(options.defaultOpen ?? false);
   const [query, setQuery] = useState("");
@@ -126,8 +128,8 @@ export function useCombobox(
     setQuery,
   };
   useLayoutEffect(() => {
-    sync(c, locale.tag, noResults);
+    sync(c, locale.tag, empty);
   });
   useListeners(c);
-  return [c, noResults];
+  return [c, empty];
 }

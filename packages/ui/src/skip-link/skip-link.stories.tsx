@@ -1,5 +1,7 @@
 import { expect } from "storybook/test";
 
+import { Button } from "@platform/ui/button";
+
 import preview from "#.storybook/preview.tsx";
 
 import { roRO } from "../provider/locales/ro-RO.ts";
@@ -18,7 +20,7 @@ const meta = preview.meta({
           <a href="#home">Home</a>
         </nav>
         <main id="main" tabIndex={-1}>
-          <button type="button">First control</button>
+          <Button type="button">First control</Button>
         </main>
       </>
     ),
@@ -27,19 +29,25 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
+/** What a pointer finds at the link's centre: the link only while it is shown. */
+const atCentre = (element: Element) => {
+  const { x, y, width, height } = element.getBoundingClientRect();
+  return document.elementFromPoint(x + width / 2, y + height / 2);
+};
+
 Default.test("is hidden until focused", async ({ canvas }) => {
   const link = canvas.getByRole("link", { name: "Skip to main content" });
-  await expect(link.getBoundingClientRect()).toMatchObject({ width: 1, height: 1 });
+  await expect(atCentre(link)).not.toBe(link);
 });
 
 Default.test("is the first tab stop, shown while it has focus", async ({ canvas, userEvent }) => {
   await userEvent.tab();
   const link = canvas.getByRole("link", { name: "Skip to main content" });
   await expect(link).toHaveFocus();
-  await expect(link.getBoundingClientRect().width).toBeGreaterThan(1);
+  await expect(atCentre(link)).toBe(link);
   await userEvent.tab();
   await expect(canvas.getByRole("link", { name: "Home" })).toHaveFocus();
-  await expect(link.getBoundingClientRect().width).toBe(1);
+  await expect(atCentre(link)).not.toBe(link);
 });
 
 Default.test(

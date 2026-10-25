@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { ReactNode } from "react";
 import { expect, fn, screen, waitFor } from "storybook/test";
 
 import { Dialog } from "@platform/ui/dialog";
@@ -17,7 +16,6 @@ import * as Combobox from "./combobox.tsx";
 const onValueChange = fn<NonNullable<Combobox.RootProps["onValueChange"]>>();
 const onInputValueChange = fn<NonNullable<Combobox.RootProps["onInputValueChange"]>>();
 const onOpenChange = fn<NonNullable<Combobox.RootProps["onOpenChange"]>>();
-
 const reasons = (callback: { mock: { calls: [unknown, { reason: string }][] } }) =>
   callback.mock.calls.map(([value, { reason }]) => [value, reason]);
 const field = () => screen.getByRole<HTMLInputElement>("combobox", { name: "Assignee" });
@@ -34,7 +32,7 @@ const cancel = (_value: unknown, details: { cancel: () => void }) => {
 };
 const person = (value: string, name: string, keywords?: string[]) => (
   <Combobox.Item value={value} {...(keywords && { keywords })}>
-    <UserIcon data-icon="inline-start" />
+    <UserIcon />
     {name}
   </Combobox.Item>
 );
@@ -165,7 +163,7 @@ Default.test("moves past disabled, wrapping, with Home and End", async ({ canvas
   await expect(reasons(onOpenChange)).toEqual([[true, "list-navigation"]]);
 });
 
-const inADialog = (Story: () => ReactNode) => (
+const inADialog = (Story: () => React.ReactNode) => (
   <Dialog.Root defaultOpen>
     <Dialog.Content aria-label="Assign task">{Story()}</Dialog.Content>
   </Dialog.Root>
@@ -297,4 +295,9 @@ ServerSearchResults.test("shows the Items the app renders", async ({ canvas, use
   await expect(canvas.getByRole("status")).toHaveTextContent("No repositories");
   await userEvent.keyboard("{Backspace}{Enter}");
   await expect(input).toHaveValue("platform/web");
+});
+
+Default.test("announces Loading… in place of No results", { args: { loading: true } }, async () => {
+  await type("zzz");
+  await expect(screen.getByRole("status")).toHaveTextContent("Loading…");
 });

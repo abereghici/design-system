@@ -2,6 +2,7 @@ import { expect } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
 import { FilesIcon } from "@platform/ui/icons/files";
+import { Table } from "@platform/ui/table";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
@@ -54,4 +55,38 @@ Default.test(
 Default.test("leads straight to its action", async ({ canvas, userEvent }) => {
   await userEvent.tab();
   await expect(canvas.getByRole("button", { name: "New file" })).toHaveFocus();
+});
+
+export const InATable = meta.story({
+  parameters: {
+    docs: {
+      description: {
+        story: "A table with no rows: one cell spans every column, so the headers stay.",
+      },
+    },
+  },
+  render: (args) => (
+    <Table.Root>
+      <Table.Caption>Files</Table.Caption>
+      <Table.Header>
+        <Table.Row>
+          <Table.ColumnHeader>Name</Table.ColumnHeader>
+          <Table.ColumnHeader>Owner</Table.ColumnHeader>
+          <Table.ColumnHeader>Modified</Table.ColumnHeader>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        <Table.Row>
+          <Table.Cell colSpan={3}>
+            <EmptyState.Root {...args} />
+          </Table.Cell>
+        </Table.Row>
+      </Table.Body>
+    </Table.Root>
+  ),
+});
+
+InATable.test("keeps the column headers and says why it is empty", async ({ canvas }) => {
+  await expect(canvas.getAllByRole("columnheader")).toHaveLength(3);
+  await expect(canvas.getByRole("cell", { name: /No files yet/v })).toBeVisible();
 });

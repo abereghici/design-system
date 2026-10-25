@@ -24,8 +24,9 @@ export const roRO: Locale = {
     pagination: { root: "Paginare", previous: "Pagina anterioară", next: "Pagina următoare" },
     popover: { close: "Închide" },
     dialog: { close: "Închide" },
-    combobox: { noResults: "Niciun rezultat" },
+    combobox: { noResults: "Niciun rezultat", loading: "Se încarcă…" },
     sheet: { close: "Închide" },
+    fileTrigger: { clear: "Golește fișierele" },
     toaster: { region: "Notificări", close: "Închide" },
     dateField: {
       dayPlaceholder: "zz",

@@ -11,7 +11,7 @@ import { ChevronDownIcon } from "@platform/ui/icons/chevron-down";
 <Popover.Root>
   <Popover.Trigger asChild>
     <Button variant="secondary">
-      Filters <ChevronDownIcon data-icon="inline-end" />
+      Filters <ChevronDownIcon />
     </Button>
   </Popover.Trigger>
   <Popover.Content>

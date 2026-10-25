@@ -128,7 +128,7 @@ Default.test(
     args: {
       children: (
         <>
-          <PlusIcon data-icon="inline-start" /> New
+          <PlusIcon /> New
         </>
       ),
     },

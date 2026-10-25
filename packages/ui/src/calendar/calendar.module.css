@@ -70,6 +70,11 @@
     color: var(--ab-calendar-cell-text-color-selected);
   }
 
+  /* The ring is the fill's colour, so it stands off the selected fill by its own width to show. */
+  .day[aria-selected="true"]:focus-visible {
+    outline-offset: var(--ab-focus-ring-width);
+  }
+
   .day[aria-disabled="true"] {
     color: var(--ab-calendar-cell-text-color-disabled);
     cursor: not-allowed;

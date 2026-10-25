@@ -7,7 +7,7 @@ import { Tag } from "@platform/ui/tag";
 import { CheckIcon } from "@platform/ui/icons/check";
 
 <Tag>Draft</Tag>
-<Tag variant="success"><CheckIcon data-icon="inline-start" /> Live</Tag>
+<Tag variant="success"><CheckIcon /> Live</Tag>
 <Tag variant="danger">Failed</Tag>
 ```
 
@@ -18,7 +18,7 @@ Status: draft for brand-owner review (phase 1). Source guide: `components/Tag/RE
 Container → leading icon (optional) → label.
 
 - **Container.** A `<span>`, about 24 px tall: the 13 px label at line height 1.2 plus 4 px block padding. Radius 5 (`radius-xs`). Subtle fills only. The height is intrinsic and does not grow on coarse pointers, because a Tag is not a target (source: "does not grow on touch since tags are not interactive").
-- **Icon** is a child, not a prop, marked `data-icon="inline-start"` (same convention as Button). It is decorative (`aria-hidden`) and takes the label colour (`currentColor`; brand book: icons take "the color of the text around it").
+- **Icon** is a child, not a prop, spaced by the Tag's `gap` (as on Button). It is decorative (`aria-hidden`) and takes the label colour (`currentColor`; brand book: icons take "the color of the text around it").
 - **Label** is the children. The text wraps rather than truncates (see Behaviour).
 
 ## API
@@ -32,7 +32,7 @@ Names, checked against the reference libraries:
 
 - **`Tag` as a static label**: Chakra "Used for categorizing or labeling content" (https://chakra-ui.com/docs/components/tag); Mantine's Badge "Display badge, pill or tag" (https://mantine.dev/core/badge/) and Pill "Removable and non-removable tags" (https://mantine.dev/core/pill/). In React Aria a tag is interactive: "A tag group is a focusable list of labels, categories, keywords, filters, or other items" (https://react-aria.adobe.com/TagGroup), with selection, removal and links. MUI's equivalent is Chip, "Chips are compact elements that represent an input, attribute, or action.", and "If the Chip is deletable or clickable then it is a button in tab order." (https://mui.com/material-ui/react-chip/). shadcn and Radix Themes have no Tag; their static label is `Badge` (see the Badge spec). Spec #1 keeps the source's `Tag`; its meaning here is Chakra's static Tag. **Judgement call:** if an interactive tag list is ever needed it becomes `TagGroup` (React Aria's name and APG grid/listbox behaviour) and never a mode of this component.
 - **`variant`** with role values: Chakra uses `variant` for fill style ("`subtle`, `solid`, `outline`, `surface`") and `colorPalette` for hue; Radix Themes the same with `color`. The source has one fill style (subtle), so `variant` carries the Role, as on Button and Badge. The values are Dictionary Role/Variant words.
-- **Icon as a child** instead of the source's `icon="check"` prop: Chakra composes it as a Part ("`Tag.StartElement`: an optional element at the start of the tag, typically an icon"); shadcn's `data-icon="inline-start"` convention keeps Tag single-part and the icon a Server Component (as on Button).
+- **Icon as a child** instead of the source's `icon="check"` prop: Chakra composes it as a Part ("`Tag.StartElement`: an optional element at the start of the tag, typically an icon") keeps Tag single-part and the icon a Server Component (as on Button).
 - **No close button, no `size`.** Chakra's `Tag.CloseTrigger` and sizes exist for interactive tags and dense layouts; the source has neither.
 
 ## States
@@ -73,7 +73,7 @@ Not focusable; no keyboard interaction. Tab skips it.
 
 ## RTL
 
-Logical properties only (`padding-inline`, `gap`). `data-icon="inline-start"` sits on the start side in both directions. No arrow keys.
+Logical properties only (`padding-inline`, `gap`). No arrow keys.
 
 ## Component tokens
 

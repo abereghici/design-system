@@ -17,7 +17,6 @@
 
   .root:where([data-disabled]) .track {
     cursor: default;
-    opacity: var(--ab-opacity-disabled);
   }
 
   .track::before,
@@ -51,6 +50,20 @@
     transition: box-shadow var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color);
   }
 
+  .root:where([data-disabled]) .track::before {
+    background-color: var(--ab-color-background-disabled);
+  }
+
+  .root:where([data-disabled]) .range {
+    background-color: var(--ab-color-icon-disabled);
+  }
+
+  .root:where([data-disabled]) .thumb {
+    border-color: var(--ab-color-border-disabled);
+    background-color: var(--ab-color-background-disabled);
+    box-shadow: none;
+  }
+
   .thumb:has(.input:focus-visible) {
     outline: var(--ab-focus-ring-width) solid var(--ab-color-border-focused);
     outline-offset: var(--ab-focus-ring-offset);
@@ -76,6 +89,7 @@
     letter-spacing: var(--ab-type-data-sm-letter-spacing);
     font-variant-numeric: var(--ab-slider-value-font-variant-numeric);
     color: var(--ab-slider-value-text-color);
+    text-align: end;
   }
 
   @media (hover: hover) and (pointer: fine) {
