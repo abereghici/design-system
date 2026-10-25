@@ -44,7 +44,7 @@ const shown = (canvas: { getAllByRole: (role: "option") => HTMLElement[] }) =>
 const reason = (value: string): unknown => expect.objectContaining({ reason: value });
 
 const meta = preview.meta({
-  title: "Components/Overlays/Command",
+  title: "Components/Command",
   component: Command.Root,
   args: { children: palette, onInputValueChange: fn() },
 });

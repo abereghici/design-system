@@ -25,7 +25,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/TextField",
+  title: "Components/TextField",
   component: TextField,
   args: {
     label: "Email",

@@ -32,7 +32,7 @@ function reads(...texts: string[]) {
 }
 
 const meta = preview.meta({
-  title: "Components/Typography/Kbd",
+  title: "Components/Kbd",
   component: Kbd,
   args: { keys: "mod+k" },
 });

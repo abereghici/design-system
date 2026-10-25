@@ -9,7 +9,7 @@ import { TextField } from "../text-field/text-field.tsx";
 import { Form } from "./form.tsx";
 
 const meta = preview.meta({
-  title: "Components/Forms/Form",
+  title: "Components/Form",
   component: Form,
   args: {
     "aria-label": "Sign up",

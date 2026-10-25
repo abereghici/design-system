@@ -61,7 +61,7 @@ const withDialog: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Feedback/Toaster",
+  title: "Components/Toaster",
   component: Toaster,
   beforeEach: () => () => {
     for (const { id } of snapshot()) remove(id);

@@ -5,7 +5,7 @@ import preview from "#.storybook/preview.tsx";
 import { Separator } from "./separator.tsx";
 
 const meta = preview.meta({
-  title: "Components/Containers/Separator",
+  title: "Components/Separator",
   component: Separator,
   decorators: [
     (Story) => (

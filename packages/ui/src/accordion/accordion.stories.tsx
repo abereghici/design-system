@@ -9,7 +9,7 @@ const tokens = "Semantic Versioning. Renames are major; additions are minor.";
 const browsers = "The latest Chromium and Safari.";
 
 const meta = preview.meta({
-  title: "Components/Containers/Accordion",
+  title: "Components/Accordion",
   component: Accordion.Root,
   args: {
     defaultValue: ["tokens"],

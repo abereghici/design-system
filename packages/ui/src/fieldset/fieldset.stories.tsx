@@ -15,7 +15,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/Fieldset",
+  title: "Components/Fieldset",
   component: Fieldset.Root,
   args: {
     children: (

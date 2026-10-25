@@ -10,7 +10,7 @@ import { listen } from "#.storybook/test/listen.ts";
 import { SegmentedControl } from "./index.ts";
 
 const meta = preview.meta({
-  title: "Components/Actions/SegmentedControl",
+  title: "Components/SegmentedControl",
   component: SegmentedControl.Root,
   args: {
     "aria-label": "View",

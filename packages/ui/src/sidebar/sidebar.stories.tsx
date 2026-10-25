@@ -37,7 +37,7 @@ const groups = (
 );
 
 const meta = preview.meta({
-  title: "Components/Navigation/Sidebar",
+  title: "Components/Sidebar",
   component: Sidebar.Root,
   args: { "aria-label": "Workspace", children: groups },
   decorators: [

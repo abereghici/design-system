@@ -34,7 +34,7 @@ const children = (
 );
 
 const meta = preview.meta({
-  title: "Components/Overlays/AlertDialog",
+  title: "Components/AlertDialog",
   component: AlertDialog.Root,
   args: { children, onOpenChange: fn() },
 });

@@ -23,7 +23,7 @@ const sections = (
 );
 
 const meta = preview.meta({
-  title: "Components/Navigation/Tabs",
+  title: "Components/Tabs",
   component: Tabs.Root,
   args: {
     defaultValue: "overview",

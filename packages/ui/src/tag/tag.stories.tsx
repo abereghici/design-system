@@ -7,7 +7,7 @@ import preview from "#.storybook/preview.tsx";
 import { Tag } from "./tag.tsx";
 
 const meta = preview.meta({
-  title: "Components/Feedback/Tag",
+  title: "Components/Tag",
   component: Tag,
   args: { children: "Draft" },
 });

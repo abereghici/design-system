@@ -44,7 +44,7 @@ const rows = (
 );
 
 const meta = preview.meta({
-  title: "Components/Containers/Table",
+  title: "Components/Table",
   component: Table.Root,
   args: {
     children: (

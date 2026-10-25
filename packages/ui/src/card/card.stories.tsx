@@ -30,7 +30,7 @@ const center = (element: Element) => {
 };
 
 const meta = preview.meta({
-  title: "Components/Containers/Card",
+  title: "Components/Card",
   component: Card.Root,
   args: {
     children: (

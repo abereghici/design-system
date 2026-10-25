@@ -16,7 +16,7 @@ const onOpenChange = fn<NonNullable<Tooltip.RootProps["onOpenChange"]>>();
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const meta = preview.meta({
-  title: "Components/Overlays/Tooltip",
+  title: "Components/Tooltip",
   component: Tooltip.Root,
   args: {
     onOpenChange,

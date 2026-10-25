@@ -38,7 +38,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/FileTrigger",
+  title: "Components/FileTrigger",
   component: FileTrigger,
   args: {
     accept: "image/png,image/jpeg",

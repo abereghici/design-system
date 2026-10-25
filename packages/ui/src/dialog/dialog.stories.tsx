@@ -37,7 +37,7 @@ const children = (
 );
 
 const meta = preview.meta({
-  title: "Components/Overlays/Dialog",
+  title: "Components/Dialog",
   component: Dialog.Root,
   args: { children, onOpenChange: fn() },
 });

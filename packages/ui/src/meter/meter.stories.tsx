@@ -11,7 +11,7 @@ import type { MeterProps } from "./meter.tsx";
 ({ value: 92, label: "Storage", high: 90 }) satisfies MeterProps;
 
 const meta = preview.meta({
-  title: "Components/Feedback/Meter",
+  title: "Components/Meter",
   component: Meter,
   args: { value: 42, label: "Storage" },
 });

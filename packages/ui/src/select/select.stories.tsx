@@ -32,7 +32,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/Select",
+  title: "Components/Select",
   component: Select.Root,
   args: {
     label: "Region",

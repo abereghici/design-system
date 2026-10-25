@@ -22,7 +22,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/Field",
+  title: "Components/Field",
   component: Field.Root,
   args: {
     name: "handle",

@@ -31,7 +31,7 @@ const links = (
 );
 
 const meta = preview.meta({
-  title: "Components/Navigation/Navbar",
+  title: "Components/Navbar",
   component: Navbar.Root,
   args: { "aria-label": "Main", children: links },
 });

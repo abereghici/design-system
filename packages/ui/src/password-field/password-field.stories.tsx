@@ -28,7 +28,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/PasswordField",
+  title: "Components/PasswordField",
   component: PasswordField,
   args: {
     label: "Password",

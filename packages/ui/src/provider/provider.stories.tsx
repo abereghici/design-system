@@ -12,7 +12,7 @@ function Tag() {
 }
 
 const meta = preview.meta({
-  title: "Components/Utilities/Provider",
+  title: "Components/Provider",
   component: Provider,
   args: { children: <Tag /> },
 });

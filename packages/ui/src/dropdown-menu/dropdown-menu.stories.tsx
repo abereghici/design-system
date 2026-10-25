@@ -26,7 +26,7 @@ async function openWithKeyboard() {
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const meta = preview.meta({
-  title: "Components/Overlays/DropdownMenu",
+  title: "Components/DropdownMenu",
   component: DropdownMenu.Root,
   args: {
     onOpenChange,

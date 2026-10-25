@@ -5,7 +5,7 @@ import preview from "#.storybook/preview.tsx";
 import { Icon } from "./icon.tsx";
 
 const meta = preview.meta({
-  title: "Components/Images and icons/Icon",
+  title: "Components/Icon",
   component: Icon,
   args: { children: <path d="M5 12h14" /> },
 });

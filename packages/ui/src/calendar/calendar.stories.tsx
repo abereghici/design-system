@@ -17,7 +17,7 @@ import type { CalendarChangeEventDetails } from "./calendar.tsx";
 const date = (iso: string) => Temporal.PlainDate.from(iso);
 
 const meta = preview.meta({
-  title: "Components/Forms/Calendar",
+  title: "Components/Calendar",
   component: Calendar,
   args: {
     "aria-label": "Delivery date",

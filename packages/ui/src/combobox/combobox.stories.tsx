@@ -40,7 +40,7 @@ const person = (value: string, name: string, keywords?: string[]) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/Combobox",
+  title: "Components/Combobox",
   component: Combobox.Root,
   args: {
     label: "Assignee",

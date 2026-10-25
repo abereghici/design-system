@@ -5,7 +5,7 @@ import preview from "#.storybook/preview.tsx";
 import { Text } from "./text.tsx";
 
 const meta = preview.meta({
-  title: "Components/Typography/Text",
+  title: "Components/Text",
   component: Text,
   args: { children: "Invoices are sent on the first working day of the month." },
 });

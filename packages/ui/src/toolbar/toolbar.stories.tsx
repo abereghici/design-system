@@ -55,7 +55,7 @@ function Growing() {
 }
 
 const meta = preview.meta({
-  title: "Components/Actions/Toolbar",
+  title: "Components/Toolbar",
   component: Toolbar,
   args: { "aria-label": "Report", children: controls },
 });

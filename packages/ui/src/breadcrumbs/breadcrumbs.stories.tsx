@@ -27,7 +27,7 @@ const trail = (
 );
 
 const meta = preview.meta({
-  title: "Components/Navigation/Breadcrumbs",
+  title: "Components/Breadcrumbs",
   component: Breadcrumbs.Root,
   args: { children: trail },
 });

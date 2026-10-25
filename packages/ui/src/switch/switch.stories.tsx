@@ -7,7 +7,7 @@ import { Switch } from "./switch.tsx";
 import type { SwitchChangeEventDetails } from "./switch.tsx";
 
 const meta = preview.meta({
-  title: "Components/Forms/Switch",
+  title: "Components/Switch",
   component: Switch,
   args: {
     children: "Sound",

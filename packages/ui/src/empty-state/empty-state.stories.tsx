@@ -8,7 +8,7 @@ import preview from "#.storybook/preview.tsx";
 import * as EmptyState from "./empty-state.tsx";
 
 const meta = preview.meta({
-  title: "Components/Feedback/EmptyState",
+  title: "Components/EmptyState",
   component: EmptyState.Root,
   args: {
     children: (

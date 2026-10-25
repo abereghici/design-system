@@ -22,7 +22,7 @@ const person = (src: string) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Images and icons/Avatar",
+  title: "Components/Avatar",
   component: Avatar.Root,
   args: { children: person(photo) },
 });

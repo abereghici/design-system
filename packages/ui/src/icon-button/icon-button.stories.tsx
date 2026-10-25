@@ -44,7 +44,7 @@ function ControlledIconButton(props: IconButtonProps) {
 }
 
 const meta = preview.meta({
-  title: "Components/Actions/IconButton",
+  title: "Components/IconButton",
   component: IconButton,
   args: {
     "aria-label": "Pin",

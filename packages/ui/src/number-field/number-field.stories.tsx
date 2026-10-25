@@ -30,7 +30,7 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/NumberField",
+  title: "Components/NumberField",
   component: NumberField,
   args: {
     label: "Seats",

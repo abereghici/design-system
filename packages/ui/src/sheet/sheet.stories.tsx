@@ -42,7 +42,7 @@ const children = (
 );
 
 const meta = preview.meta({
-  title: "Components/Overlays/Sheet",
+  title: "Components/Sheet",
   component: Sheet.Root,
   args: { children, onOpenChange: fn() },
 });

@@ -7,7 +7,7 @@ import { Checkbox } from "./checkbox.tsx";
 import type { CheckboxChangeEventDetails } from "./checkbox.tsx";
 
 const meta = preview.meta({
-  title: "Components/Forms/Checkbox",
+  title: "Components/Checkbox",
   component: Checkbox,
   args: {
     children: "Email me updates",

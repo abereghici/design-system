@@ -20,12 +20,12 @@ const submitted = fn<(data: FormData) => void>();
 const onOpenChange = fn<NonNullable<DatePicker.RootProps["onOpenChange"]>>();
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
-const LazyCalendar = lazy(() =>
+const LoadedCalendar = lazy(() =>
   import("@platform/ui/calendar").then((module) => ({ default: module.Calendar })),
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/DatePicker",
+  title: "Components/DatePicker",
   component: DatePicker.Root,
   args: {
     label: "Due date",
@@ -254,8 +254,7 @@ InAForm.test(
   },
 );
 
-export const LazyCalendarStory = meta.story({
-  name: "Lazy calendar",
+export const LazyCalendar = meta.story({
   parameters: {
     docs: { description: { story: "The Calendar loads with `lazy()` on the first open." } },
   },
@@ -263,14 +262,14 @@ export const LazyCalendarStory = meta.story({
     children: (
       <DatePicker.Content>
         <Suspense>
-          <LazyCalendar />
+          <LoadedCalendar />
         </Suspense>
       </DatePicker.Content>
     ),
   },
 });
 
-LazyCalendarStory.test("focuses the selected day once the Calendar loads", async ({ canvas }) => {
+LazyCalendar.test("focuses the selected day once the Calendar loads", async ({ canvas }) => {
   const user = await trusted();
   await user.click(canvas.getByRole("button", { name: "Choose date" }));
   await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());

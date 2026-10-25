@@ -22,7 +22,7 @@ const message = (close: Alert.CloseProps = {}) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Feedback/Alert",
+  title: "Components/Alert",
   component: Alert.Root,
   args: { variant: "danger", children: message() },
 });

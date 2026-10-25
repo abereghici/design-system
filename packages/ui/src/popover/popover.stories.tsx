@@ -63,7 +63,7 @@ function WithInitialFocus(props: Popover.RootProps) {
 }
 
 const meta = preview.meta({
-  title: "Components/Overlays/Popover",
+  title: "Components/Popover",
   component: Popover.Root,
   args: { onOpenChange, children: filters },
   beforeEach: parkPointer,

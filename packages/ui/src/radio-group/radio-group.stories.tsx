@@ -17,7 +17,7 @@ const options = (lifetimeDisabled = false) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/RadioGroup",
+  title: "Components/RadioGroup",
   component: RadioGroup.Root,
   args: {
     name: "plan",

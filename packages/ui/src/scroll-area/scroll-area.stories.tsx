@@ -17,7 +17,7 @@ const terms = [
 ];
 
 const meta = preview.meta({
-  title: "Components/Containers/ScrollArea",
+  title: "Components/ScrollArea",
   component: ScrollArea,
   args: {
     style: { maxBlockSize: "10rem", maxInlineSize: "24rem" },

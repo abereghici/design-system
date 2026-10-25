@@ -26,7 +26,7 @@ const price = (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/Slider",
+  title: "Components/Slider",
   component: Slider.Root,
   args: {
     defaultValue: 40,

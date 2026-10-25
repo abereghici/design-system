@@ -17,7 +17,7 @@ const onDuplicate = fn<() => void>();
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const meta = preview.meta({
-  title: "Components/Overlays/ContextMenu",
+  title: "Components/ContextMenu",
   component: ContextMenu.Root,
   args: {
     onOpenChange,

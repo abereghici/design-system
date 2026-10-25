@@ -11,7 +11,7 @@ import { Spinner } from "./spinner.tsx";
 ({ tag: "fr-FR", labels: {} }) satisfies Locale;
 
 const meta = preview.meta({
-  title: "Components/Feedback/Spinner",
+  title: "Components/Spinner",
   component: Spinner,
 });
 
