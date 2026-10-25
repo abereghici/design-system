@@ -6,7 +6,7 @@ import type { ComponentProps } from "react";
 import { trackComposition } from "../events/events.ts";
 import { SearchIcon } from "../icon/icons/search.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { useLabels } from "../ui-provider/locale.tsx";
 import { command as commandLabels } from "../ui-provider/locales/en-US/command.ts";
 
@@ -24,14 +24,7 @@ export interface InputProps extends Omit<
   labels?: { search?: string; placeholder?: string };
 }
 
-export function Input({
-  labels,
-  placeholder,
-  className,
-  onChange,
-  onKeyDown,
-  ...props
-}: InputProps) {
+export function Input({ labels, placeholder, onChange, onKeyDown, ...props }: InputProps) {
   const command = useCommand();
   const inDialog = use(DialogContext) !== null;
   const text = useLabels("command", commandLabels, labels);
@@ -43,7 +36,7 @@ export function Input({
         aria-label={text.search}
         autoComplete="off"
         spellCheck={false}
-        {...props}
+        {...mergeProps({ className: styles["input"] }, props)}
         type="text"
         role="combobox"
         aria-expanded
@@ -51,7 +44,6 @@ export function Input({
         aria-autocomplete="list"
         aria-activedescendant={command.highlighted ?? undefined}
         value={command.query}
-        className={join(styles["input"], className)}
         onCompositionEnd={trackComposition(props.onCompositionEnd)}
         onChange={(event) => {
           onChange?.(event);

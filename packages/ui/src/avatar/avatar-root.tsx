@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./avatar.module.css";
 
@@ -14,6 +14,6 @@ export interface RootProps extends ComponentProps<"span"> {
  * Image's `alt` names the avatar whichever part shows. When the name is written beside it, use
  * `alt=""` and `aria-hidden` on Root so it isn't read twice. For the brand sign, use the Logo.
  */
-export function Root({ size = "md", className, ...props }: RootProps) {
-  return <span {...props} data-size={size} className={join(styles["root"], className)} />;
+export function Root({ size = "md", ...props }: RootProps) {
+  return <span {...mergeProps({ className: styles["root"] }, props)} data-size={size} />;
 }

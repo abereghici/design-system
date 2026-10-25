@@ -5,7 +5,7 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./icon-button.module.css";
@@ -56,7 +56,6 @@ export function IconButton({
   loading = false,
   disabled = false,
   asChild = false,
-  className,
   type = "button",
   onClick,
   ...props
@@ -82,14 +81,13 @@ export function IconButton({
   const Root = asChild ? Slot : "button";
   return (
     <Root
-      {...props}
+      {...mergeProps({ className: styles["root"] }, props)}
       type={asChild ? undefined : type}
       aria-pressed={current}
       aria-disabled={disabled ? true : undefined}
       aria-busy={loading ? true : undefined}
       data-loading={loading ? "" : undefined}
       data-size={size}
-      className={join(styles["root"], className)}
       onClick={handleClick}
     >
       {loading && !asChild ? <Spinner aria-hidden /> : props.children}

@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import styles from "./sidebar.module.css";
 
@@ -17,7 +17,7 @@ export type LinkProps = ComponentProps<"a"> &
   );
 
 /** Set `aria-current="page"` on the link to the page on screen. */
-export function Link({ asChild = false, className, ...props }: LinkProps) {
+export function Link({ asChild = false, ...props }: LinkProps) {
   const Anchor = asChild ? Slot : "a";
-  return <Anchor {...props} className={join(styles["link"], className)} />;
+  return <Anchor {...mergeProps({ className: styles["link"] }, props)} />;
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { expect } from "storybook/test";
+import type { KeyboardEvent } from "react";
+import { expect, fn } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
 import { IconButton } from "@platform/ui/icon-button";
@@ -164,5 +165,27 @@ Default.test(
     await userEvent.tab({ shift: true });
     await userEvent.tab();
     await expect(canvas.getByRole("button", { name: "Download" })).toHaveFocus();
+  },
+);
+
+Default.test(
+  "passes the consumer's class, style, handler and ref to the toolbar",
+  {
+    args: {
+      className: "report",
+      style: { color: "rgb(1, 2, 3)" },
+      onKeyDown: fn<(event: KeyboardEvent) => void>(),
+      ref: fn<(node: HTMLDivElement | null) => void>(),
+    },
+  },
+  async ({ canvas, userEvent, args }) => {
+    const toolbar = canvas.getByRole("toolbar", { name: "Report" });
+    await expect(toolbar).toHaveClass("report");
+    await expect(toolbar).toHaveStyle({ color: "rgb(1, 2, 3)" });
+    await expect(args.ref).toHaveBeenCalledWith(toolbar);
+    await userEvent.tab();
+    await userEvent.keyboard("{ArrowRight}");
+    await expect(args.onKeyDown).toHaveBeenCalledOnce();
+    await expect(canvas.getByRole("button", { name: "Copy link" })).toHaveFocus();
   },
 );

@@ -4,7 +4,7 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { useLabels } from "../ui-provider/locale.tsx";
 import { alert as alertLabels } from "../ui-provider/locales/en-US/alert.ts";
 
@@ -24,7 +24,6 @@ export interface CloseProps extends ComponentProps<"button"> {
 export function Close({
   labels,
   disabled = false,
-  className,
   type = "button",
   onClick,
   ...props
@@ -41,11 +40,10 @@ export function Close({
   return (
     <button
       aria-label={useLabels("alert", alertLabels, labels).close}
-      {...props}
+      {...mergeProps({ className: `${iconButton["root"]} ${styles["close"]}` }, props)}
       type={type}
       aria-disabled={disabled ? true : undefined}
       data-size="sm"
-      className={join(`${iconButton["root"]} ${styles["close"]}`, className)}
       onClick={handleClick}
     >
       <XIcon size="sm" />

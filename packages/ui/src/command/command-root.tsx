@@ -7,7 +7,7 @@ import { isComposing, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId } from "../floating/floating.ts";
 import { filterOptions, enabled, navigate, reveal } from "../listbox/listbox.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { useLocale } from "../ui-provider/locale.tsx";
 
 import styles from "./command.module.css";
@@ -127,7 +127,6 @@ export function Root({
   defaultInputValue = "",
   onInputValueChange,
   filter: filtering,
-  className,
   children,
   ...props
 }: RootProps) {
@@ -152,7 +151,7 @@ export function Root({
     empty,
   };
   return (
-    <div {...props} className={join(styles["root"], className)}>
+    <div {...mergeProps({ className: styles["root"] }, props)}>
       <Context value={context}>{children}</Context>
     </div>
   );

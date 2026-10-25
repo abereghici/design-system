@@ -3,7 +3,7 @@
 import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./button.module.css";
@@ -45,7 +45,6 @@ export function Button({
   loading = false,
   disabled = false,
   asChild = false,
-  className,
   type = "button",
   onClick,
   children,
@@ -64,14 +63,13 @@ export function Button({
   const Root = asChild ? Slot : "button";
   return (
     <Root
-      {...props}
+      {...mergeProps({ className: styles["root"] }, props)}
       type={asChild ? undefined : type}
       aria-disabled={disabled ? true : undefined}
       aria-busy={loading ? true : undefined}
       data-loading={loading ? "" : undefined}
       data-variant={variant}
       data-size={size}
-      className={join(styles["root"], className)}
       onClick={handleClick}
     >
       {loading && !asChild ? (

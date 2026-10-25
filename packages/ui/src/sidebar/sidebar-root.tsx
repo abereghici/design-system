@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./sidebar.module.css";
 
@@ -18,6 +18,6 @@ export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelle
  * `aria-current="page"`. For a few top-level destinations, use a Navbar; for the path to this page,
  * Breadcrumbs.
  */
-export function Root({ className, ...props }: RootProps) {
-  return <nav {...props} className={join(styles["root"], className)} />;
+export function Root(props: RootProps) {
+  return <nav {...mergeProps({ className: styles["root"] }, props)} />;
 }

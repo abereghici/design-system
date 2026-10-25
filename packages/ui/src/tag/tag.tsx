@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./tag.module.css";
 
@@ -14,6 +14,6 @@ export interface TagProps extends ComponentProps<"span"> {
  * filter, use SegmentedControl or Checkbox. For a count, use a Badge (other libraries call this
  * component Badge); for a state marker in a dense list, a StatusDot.
  */
-export function Tag({ variant = "neutral", className, ...props }: TagProps) {
-  return <span {...props} data-variant={variant} className={join(styles["root"], className)} />;
+export function Tag({ variant = "neutral", ...props }: TagProps) {
+  return <span {...mergeProps({ className: styles["root"] }, props)} data-variant={variant} />;
 }

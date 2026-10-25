@@ -4,7 +4,7 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { composeEventHandlers } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 import { useLabels } from "../ui-provider/locale.tsx";
 import { dialog as dialogLabels } from "../ui-provider/locales/en-US/dialog.ts";
 import { sheet as sheetLabels } from "../ui-provider/locales/en-US/sheet.ts";
@@ -22,7 +22,7 @@ export interface CloseProps extends Omit<ComponentProps<"button">, "command" | "
   labels?: { close?: string };
 }
 
-export function Close({ asChild = false, labels, className, onClick, ...props }: CloseProps) {
+export function Close({ asChild = false, labels, onClick, ...props }: CloseProps) {
   const { id, controller, styles, component } = useModal();
   const names = useLabels(
     component === "Sheet" ? "sheet" : "dialog",
@@ -45,9 +45,8 @@ export function Close({ asChild = false, labels, className, onClick, ...props }:
     <button
       type="button"
       aria-label={names.close}
-      {...props}
+      {...mergeProps({ className: `${iconButton["root"]} ${styles["close"]}` }, props)}
       data-size="sm"
-      className={join(`${iconButton["root"]} ${styles["close"]}`, className)}
       commandfor={id}
       command="request-close"
       onClick={handleClick}

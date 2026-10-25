@@ -1,9 +1,9 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./menu.module.css";
 
-export function Separator({ className, ...props }: ComponentProps<"hr">) {
-  return <hr {...props} className={join(styles["separator"], className)} />;
+export function Separator(props: ComponentProps<"hr">) {
+  return <hr {...mergeProps({ className: styles["separator"] }, props)} />;
 }

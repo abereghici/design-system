@@ -4,7 +4,7 @@ import { use } from "react";
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import { useFieldControl } from "../field/use-field.ts";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { ThumbIndex, useSlider } from "./slider-root.tsx";
 import styles from "./slider.module.css";
@@ -52,9 +52,11 @@ export function Thumb({ className, style, id, onKeyDown, onChange, ...props }: T
   }
   return (
     <div
-      className={join(styles["thumb"], className)}
+      {...mergeProps(
+        { className: styles["thumb"], style: { insetInlineStart: `${slider.percent(value)}%` } },
+        { className, style },
+      )}
       data-dragging={slider.dragging === index ? "" : undefined}
-      style={{ insetInlineStart: `${slider.percent(value)}%`, ...style }}
     >
       <input
         {...bindings}

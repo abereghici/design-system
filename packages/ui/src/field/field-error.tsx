@@ -3,7 +3,7 @@
 import { use } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { FieldContext } from "./use-field.ts";
 import styles from "./field.module.css";
@@ -17,7 +17,7 @@ export interface ErrorProps extends Omit<ComponentProps<"div">, "children"> {
 }
 
 /** The error message, announced by screen readers as soon as it appears. */
-export function Error({ children, className, ...props }: ErrorProps) {
+export function Error({ children, ...props }: ErrorProps) {
   const field = use(FieldContext);
   const content =
     typeof children === "function"
@@ -27,8 +27,7 @@ export function Error({ children, className, ...props }: ErrorProps) {
     <div
       id={field?.errorId}
       aria-live="assertive"
-      {...props}
-      className={join(styles["error"], className)}
+      {...mergeProps({ className: styles["error"] }, props)}
     >
       {field?.invalid === true ? content : null}
     </div>

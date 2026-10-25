@@ -4,7 +4,7 @@ import { use } from "react";
 import type { ComponentProps } from "react";
 
 import { Kbd } from "../kbd/kbd.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { useLabels } from "../ui-provider/locale.tsx";
 import { command as commandLabels } from "../ui-provider/locales/en-US/command.ts";
 
@@ -24,11 +24,11 @@ export interface FooterProps extends ComponentProps<"div"> {
 }
 
 /** Teaches the keys (navigate, open, close) to people who can see the palette. */
-export function Footer({ labels, className, children, ...props }: FooterProps) {
+export function Footer({ labels, children, ...props }: FooterProps) {
   const inDialog = use(DialogContext) !== null;
   const text = useLabels("command", commandLabels, labels);
   return (
-    <div aria-hidden="true" {...props} className={join(styles["footer"], className)}>
+    <div aria-hidden="true" {...mergeProps({ className: styles["footer"] }, props)}>
       {children ?? (
         <>
           {hint("up+down", text.navigate)}

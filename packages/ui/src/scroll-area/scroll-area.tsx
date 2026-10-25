@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import styles from "./scroll-area.module.css";
 
@@ -16,12 +16,7 @@ export interface ScrollAreaProps extends ComponentProps<"div"> {
  * can Tab to it and scroll. Use it only for content that must stay inside a region (a wide Table, a
  * long side-panel list, a terms text); if the page can scroll instead, let it.
  */
-export function ScrollArea({
-  asChild = false,
-  tabIndex = 0,
-  className,
-  ...props
-}: ScrollAreaProps) {
+export function ScrollArea({ asChild = false, tabIndex = 0, ...props }: ScrollAreaProps) {
   const Root = asChild ? Slot : "div";
-  return <Root {...props} tabIndex={tabIndex} className={join(styles["root"], className)} />;
+  return <Root {...mergeProps({ className: styles["root"] }, props)} tabIndex={tabIndex} />;
 }

@@ -4,7 +4,7 @@ import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import { useFieldControl } from "../field/use-field.ts";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { pointerMarker, toggleClick } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
@@ -56,8 +56,7 @@ export function Switch({
     <label
       {...pointerMarker()}
       htmlFor={bindings.id ?? fallbackId}
-      className={join(styles["root"], className)}
-      style={style}
+      {...mergeProps({ className: styles["root"] }, { className, style })}
     >
       <input
         {...bindings}

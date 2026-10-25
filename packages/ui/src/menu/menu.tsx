@@ -7,7 +7,7 @@ import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId, returnFocus } from "../floating/floating.ts";
 import type { Floating } from "../floating/floating.ts";
 import { enabled, textOf } from "../listbox/listbox.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./menu.module.css";
 
@@ -125,23 +125,26 @@ function close(menu: Menu, event: MouseEvent<HTMLElement>, always: boolean) {
 }
 
 export function useItem(
-  { closeOnClick, disabled = false, className, onKeyDown, ...props }: ItemBaseProps,
+  { closeOnClick, disabled = false, ...props }: ItemBaseProps,
   role: "menuitem" | "menuitemcheckbox" | "menuitemradio",
 ) {
   const menu = useMenu();
   return {
     menu,
     props: {
-      type: "button",
-      ...props,
+      ...mergeProps(
+        {
+          type: "button",
+          className: styles["item"],
+          onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => {
+            if (event.key === "Enter") enterPressed.add(event.currentTarget);
+          },
+        },
+        props,
+      ),
       role,
       tabIndex: -1,
       "aria-disabled": disabled ? true : undefined,
-      className: join(styles["item"], className),
-      onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => {
-        onKeyDown?.(event);
-        if (event.key === "Enter") enterPressed.add(event.currentTarget);
-      },
     } as const,
     blocked: (event: MouseEvent<HTMLButtonElement>) => {
       if (!disabled) return false;

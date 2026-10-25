@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import styles from "./card.module.css";
 
@@ -12,7 +12,7 @@ export interface TitleProps extends ComponentProps<"h3"> {
   asChild?: boolean;
 }
 
-export function Title({ asChild = false, className, ...props }: TitleProps) {
+export function Title({ asChild = false, ...props }: TitleProps) {
   const Element = asChild ? Slot : "h3";
-  return <Element {...props} className={join(styles["title"], className)} />;
+  return <Element {...mergeProps({ className: styles["title"] }, props)} />;
 }

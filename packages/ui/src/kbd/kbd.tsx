@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import type { Labels } from "../ui-provider/locale.tsx";
 
 import { KbdKey } from "./kbd-key.tsx";
@@ -69,13 +69,13 @@ function key(
  * It only shows the keys; your app handles them. Inside a control, pass `aria-hidden` and set
  * `aria-keyshortcuts` on the control, so the shortcut isn't read twice.
  */
-export function Kbd({ keys, platform, labels, children, className, ...props }: KbdProps) {
+export function Kbd({ keys, platform, labels, children, ...props }: KbdProps) {
   const content =
     keys === undefined
       ? [children]
       : keys.split("+").map((name) => key(name.trim(), { platform, labels }));
   return (
-    <kbd dir="ltr" {...props} className={join(styles["root"], className)}>
+    <kbd dir="ltr" {...mergeProps({ className: styles["root"] }, props)}>
       {content.map((node, index) => (
         <kbd key={index} className={styles["key"]}>
           {node}

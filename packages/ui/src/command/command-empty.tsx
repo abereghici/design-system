@@ -3,7 +3,7 @@
 import type { ComponentProps } from "react";
 
 import { SearchIcon } from "../icon/icons/search.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { useLabels } from "../ui-provider/locale.tsx";
 import { command as commandLabels } from "../ui-provider/locales/en-US/command.ts";
 
@@ -16,11 +16,11 @@ export interface EmptyProps extends ComponentProps<"output"> {
 }
 
 /** What to show while nothing matches; screen readers announce it. */
-export function Empty({ labels, className, children, ...props }: EmptyProps) {
+export function Empty({ labels, children, ...props }: EmptyProps) {
   const { empty } = useCommand();
   const text = useLabels("command", commandLabels, labels).empty;
   return (
-    <output {...props} className={join(styles["empty"], className)}>
+    <output {...mergeProps({ className: styles["empty"] }, props)}>
       {empty &&
         (children ?? (
           <>

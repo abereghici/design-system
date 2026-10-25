@@ -2,7 +2,7 @@
 
 import type { ComponentProps, KeyboardEvent } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { useTabs } from "./tabs-root.tsx";
 import styles from "./tabs.module.css";
@@ -36,26 +36,18 @@ export interface TriggerProps extends Omit<ComponentProps<"button">, "type" | "r
   value: string;
 }
 
-export function Trigger({
-  value,
-  className,
-  onClick,
-  onPointerDown,
-  onKeyDown,
-  ...props
-}: TriggerProps) {
+export function Trigger({ value, onClick, onPointerDown, onKeyDown, ...props }: TriggerProps) {
   const tabs = useTabs("Trigger");
   const selected = value === tabs.value;
   return (
     <button
-      {...props}
+      {...mergeProps({ className: styles["trigger"] }, props)}
       type="button"
       role="tab"
       id={`${tabs.id}-trigger-${value}`}
       aria-controls={`${tabs.id}-content-${value}`}
       aria-selected={selected}
       tabIndex={selected ? 0 : -1}
-      className={join(styles["trigger"], className)}
       onPointerDown={(event) => {
         onPointerDown?.(event);
         const list = listOf(event.currentTarget);

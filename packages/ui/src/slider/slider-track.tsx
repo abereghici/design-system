@@ -3,7 +3,7 @@
 import { Children, isValidElement } from "react";
 import type { ComponentProps, PointerEvent } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import type { Reason, Slider } from "./slider-root.tsx";
 import { ThumbIndex, useSlider } from "./slider-root.tsx";
@@ -43,13 +43,12 @@ function drag(event: PointerEvent<HTMLDivElement>, slider: Slider) {
 
 export type TrackProps = ComponentProps<"div">;
 
-export function Track({ className, children, ...props }: TrackProps) {
+export function Track({ children, ...props }: TrackProps) {
   const slider = useSlider();
   let thumb = 0;
   return (
     <div
-      {...props}
-      className={join(styles["track"], className)}
+      {...mergeProps({ className: styles["track"] }, props)}
       onPointerDown={(event) => {
         if (slider.disabled || event.button !== 0) return;
         event.preventDefault();

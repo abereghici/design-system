@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { useLocale } from "../ui-provider/locale.tsx";
 
 import styles from "./slider.module.css";
@@ -121,7 +121,6 @@ export function Root({
   format,
   name,
   disabled = false,
-  className,
   ...props
 }: RootProps) {
   const slider = useSliderState(
@@ -131,10 +130,9 @@ export function Root({
   return (
     <SliderContext value={slider}>
       <div
-        {...props}
+        {...mergeProps({ className: styles["root"] }, props)}
         data-dragging={slider.dragging === null ? undefined : ""}
         data-disabled={disabled ? "" : undefined}
-        className={join(styles["root"], className)}
       />
     </SliderContext>
   );

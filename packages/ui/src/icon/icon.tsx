@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./icon.module.css";
 
@@ -19,7 +19,7 @@ export interface IconProps extends ComponentProps<"svg"> {
  * `@platform/ui/icons/<name>`, or pass your own `<path>` children for a custom one. For the brand
  * mark, use Logo.
  */
-export function Icon({ size = "md", label, className, ...props }: IconProps) {
+export function Icon({ size = "md", label, ...props }: IconProps) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -27,10 +27,9 @@ export function Icon({ size = "md", label, className, ...props }: IconProps) {
       stroke="currentColor"
       strokeWidth={1.75}
       strokeLinecap="square"
-      {...props}
+      {...mergeProps({ className: styles["root"] }, props)}
       {...(label === undefined ? { "aria-hidden": true } : { role: "img", "aria-label": label })}
       data-size={size}
-      className={join(styles["root"], className)}
     />
   );
 }

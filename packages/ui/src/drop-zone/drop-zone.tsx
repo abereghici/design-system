@@ -6,7 +6,7 @@ import type { ComponentProps, DragEvent, RefObject } from "react";
 import { requestChange } from "../events/events.ts";
 import { useField } from "../field/use-field.ts";
 import { FileInput, PickerContext } from "../file-trigger/file-trigger.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./drop-zone.module.css";
 
@@ -161,7 +161,6 @@ export function DropZone({
   disabled = false,
   onDrop,
   labels,
-  className,
   children,
   ...props
 }: DropZoneProps) {
@@ -175,8 +174,7 @@ export function DropZone({
   return (
     <PickerContext value={picker}>
       <div
-        {...props}
-        className={join(styles["root"], className)}
+        {...mergeProps({ className: styles["root"] }, props)}
         data-drop-target={target}
         data-invalid={invalid ? "" : undefined}
         data-disabled={blocked ? "" : undefined}

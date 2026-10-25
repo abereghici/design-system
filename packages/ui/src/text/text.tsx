@@ -1,6 +1,6 @@
 import type { ComponentProps, ElementType, Ref } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./text.module.css";
 
@@ -35,17 +35,15 @@ export function Text({
   size = variant === "overline" ? "sm" : "md",
   color = "default",
   as = variant === "code" ? "code" : "p",
-  className,
   ...props
 }: TextProps) {
   const Element = as as ElementType;
   return (
     <Element
-      {...props}
+      {...mergeProps({ className: styles["root"] }, props)}
       data-variant={variant}
       data-size={size}
       data-color={color}
-      className={join(styles["root"], className)}
     />
   );
 }

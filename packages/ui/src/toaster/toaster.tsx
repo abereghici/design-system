@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } fr
 import { createPortal } from "react-dom";
 import type { ComponentProps, RefObject } from "react";
 
-import { composeRefs, join } from "../slot/slot.tsx";
+import { composeRefs, mergeProps } from "../slot/slot.tsx";
 import { close, mark, snapshot, subscribe } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
 import { useLabels } from "../ui-provider/locale.tsx";
@@ -147,7 +147,7 @@ function Announcer({ toasts, assertive }: { toasts: readonly ToastRecord[]; asse
   );
 }
 
-function Layer({ labels, className, ref, ...props }: ToasterProps) {
+function Layer({ labels, ref, ...props }: ToasterProps) {
   const toasts = useSyncExternalStore(subscribe, snapshot, () => none);
   const names = useLabels("toaster", toasterLabels, labels);
   const region = useRef<HTMLElement>(null);
@@ -167,13 +167,13 @@ function Layer({ labels, className, ref, ...props }: ToasterProps) {
       <Announcer toasts={announced} assertive={false} />
       <Announcer toasts={announced} assertive />
       <section
-        {...props}
+        {...mergeProps({ className: styles["region"] }, props)}
+        // React forbids passing a ref object through a plain function during render, so it composes here.
         ref={composeRefs(region, ref)}
         popover="manual"
         tabIndex={-1}
         aria-label={names.region}
         aria-keyshortcuts="Alt+T"
-        className={join(styles["region"], className)}
       >
         <ol className={styles["list"]}>
           {toasts.map((record, at) => (

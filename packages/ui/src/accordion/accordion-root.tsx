@@ -5,7 +5,7 @@ import type { ComponentProps, SyntheticEvent } from "react";
 
 import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./accordion.module.css";
 
@@ -48,7 +48,6 @@ export function Root({
   value,
   defaultValue = [],
   onValueChange,
-  className,
   ...props
 }: RootProps) {
   const name = useId();
@@ -75,7 +74,7 @@ export function Root({
 
   return (
     <AccordionContext value={{ name: multiple ? undefined : name, value: current, change }}>
-      <div {...props} className={join(styles["root"], className)} />
+      <div {...mergeProps({ className: styles["root"] }, props)} />
     </AccordionContext>
   );
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import type { ComponentProps, SyntheticEvent } from "react";
+import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./avatar.module.css";
 
@@ -15,16 +15,7 @@ export interface ImageProps extends ComponentProps<"img"> {
   onLoadingStatusChange?: (status: LoadingStatus) => void;
 }
 
-export function Image({
-  src,
-  alt,
-  ref,
-  className,
-  onLoad,
-  onError,
-  onLoadingStatusChange,
-  ...props
-}: ImageProps) {
+export function Image({ src, alt, onLoadingStatusChange, ...props }: ImageProps) {
   const [status, setStatus] = useState<LoadingStatus>("loading");
   const [currentSrc, setCurrentSrc] = useState(src);
   if (src !== currentSrc) {
@@ -41,27 +32,27 @@ export function Image({
   function attach(image: HTMLImageElement | null) {
     // The image may have settled before hydration attached the load and error listeners.
     if (image?.complete === true) settle(image.naturalWidth > 0 ? "loaded" : "error");
-    if (typeof ref === "function") return ref(image);
-    if (ref !== undefined && ref !== null) ref.current = image;
   }
 
   return (
     <img
-      {...props}
-      ref={attach}
+      {...mergeProps(
+        {
+          ref: attach,
+          className: styles["image"],
+          onLoad: () => {
+            settle("loaded");
+          },
+          onError: () => {
+            settle("error");
+          },
+        },
+        props,
+      )}
       src={src}
       alt={alt}
       data-loading={status === "loading" ? "" : undefined}
       data-error={status === "error" ? "" : undefined}
-      className={join(styles["image"], className)}
-      onLoad={(event: SyntheticEvent<HTMLImageElement>) => {
-        settle("loaded");
-        onLoad?.(event);
-      }}
-      onError={(event: SyntheticEvent<HTMLImageElement>) => {
-        settle("error");
-        onError?.(event);
-      }}
     />
   );
 }
