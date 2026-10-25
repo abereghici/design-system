@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 
 import { composeEventHandlers } from "../events/events.ts";
 import { useFieldControl } from "../field/use-field.ts";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { GroupContext } from "./segmented-control-root.tsx";
 import styles from "./segmented-control.module.css";
@@ -25,7 +25,7 @@ export function Item({ value, children, className, style, onClick, ...props }: I
     name: group.name,
   });
   return (
-    <label className={join(styles["item"], className)} style={style}>
+    <label {...mergeProps({ className: styles["item"] }, { className, style })}>
       <input
         {...bindings}
         type="radio"

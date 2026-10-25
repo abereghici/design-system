@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { useFieldControl } from "./use-field.ts";
 import type { ChangeEventDetails } from "./use-field.ts";
@@ -17,13 +17,12 @@ export interface ControlProps extends ComponentProps<"input"> {
 }
 
 /** The text input, named and described by its Field. */
-export function Control({ className, readOnly, ...props }: ControlProps) {
+export function Control({ readOnly, ...props }: ControlProps) {
   const bindings = useFieldControl<HTMLInputElement, typeof props>(props);
   return (
     <input
-      {...bindings}
+      {...mergeProps({ className: styles["control"] }, bindings)}
       readOnly={bindings["aria-disabled"] ?? readOnly}
-      className={join(styles["control"], className)}
     />
   );
 }

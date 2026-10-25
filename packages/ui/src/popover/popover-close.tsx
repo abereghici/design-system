@@ -4,7 +4,7 @@ import type { ComponentProps, MouseEvent, ReactElement } from "react";
 
 import { composeEventHandlers, dispatchFeedback } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import { usePopover } from "./popover-root.tsx";
 import iconButtonStyles from "../icon-button/icon-button.module.css";
@@ -26,7 +26,7 @@ type Shape =
 export type CloseProps = Omit<ComponentProps<"button">, "aria-label" | "children"> & Shape;
 
 /** Closes the Popover. Without children it is the `x` button in the corner. */
-export function Close({ asChild = false, className, ...props }: CloseProps) {
+export function Close({ asChild = false, ...props }: CloseProps) {
   const popover = usePopover();
   const shared = {
     ...props,
@@ -43,13 +43,12 @@ export function Close({ asChild = false, className, ...props }: CloseProps) {
       }
     }),
   };
-  if (asChild) return <Slot {...shared} className={className} />;
+  if (asChild) return <Slot {...shared} />;
   return (
     <button
       type="button"
-      {...shared}
+      {...mergeProps({ className: `${iconButtonStyles["root"]} ${styles["close"]}` }, shared)}
       data-size="sm"
-      className={`${iconButtonStyles["root"]} ${join(styles["close"], className)}`}
     >
       <XIcon size="sm" />
     </button>

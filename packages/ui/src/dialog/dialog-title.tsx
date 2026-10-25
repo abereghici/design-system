@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from "react";
 
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import { useModal, usePresence } from "./dialog-modal.tsx";
 
@@ -11,9 +11,9 @@ export interface TitleProps extends ComponentProps<"h2"> {
   asChild?: boolean;
 }
 
-export function Title({ asChild = false, className, ...props }: TitleProps) {
+export function Title({ asChild = false, ...props }: TitleProps) {
   const { id, setTitle, styles } = useModal();
   usePresence(setTitle);
   const Root = asChild ? Slot : "h2";
-  return <Root {...props} id={`${id}-title`} className={join(styles["title"], className)} />;
+  return <Root {...mergeProps({ className: styles["title"] }, props)} id={`${id}-title`} />;
 }

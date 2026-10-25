@@ -1,9 +1,9 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./card.module.css";
 
-export function Header({ className, ...props }: ComponentProps<"div">) {
-  return <div {...props} className={join(styles["header"], className)} />;
+export function Header(props: ComponentProps<"div">) {
+  return <div {...mergeProps({ className: styles["header"] }, props)} />;
 }

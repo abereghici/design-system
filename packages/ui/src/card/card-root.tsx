@@ -1,7 +1,7 @@
 import { cloneElement, isValidElement } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import styles from "./card.module.css";
 
@@ -22,14 +22,8 @@ export interface RootProps extends ComponentProps<"div"> {
  * clickable. Don't nest cards or use one as a page section: separate other content with space or a
  * Separator.
  */
-export function Root({
-  layout = "column",
-  asChild = false,
-  className,
-  children,
-  ...props
-}: RootProps) {
-  const root = { ...props, "data-layout": layout, className: join(styles["root"], className) };
+export function Root({ layout = "column", asChild = false, children, ...props }: RootProps) {
+  const root = { ...mergeProps({ className: styles["root"] }, props), "data-layout": layout };
   if (!asChild) return <div {...root}>{withLayout(children)}</div>;
   return (
     <Slot {...root}>

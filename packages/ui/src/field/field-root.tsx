@@ -4,7 +4,7 @@ import { use, useEffect, useId, useState } from "react";
 import type { ComponentProps, SyntheticEvent } from "react";
 
 import { FormErrorsContext } from "../form/form.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { FieldContext, setValidity } from "./use-field.ts";
 import type { FormControl } from "./use-field.ts";
@@ -127,7 +127,6 @@ export function Root({
   disabled = false,
   invalid,
   validate,
-  className,
   onChange,
   onBlur,
   onInvalidCapture,
@@ -148,8 +147,7 @@ export function Root({
       value={{ ...state, ...server, message, validity: failure?.validity, setControlId, describe }}
     >
       <div
-        {...props}
-        className={join(styles["root"], className)}
+        {...mergeProps({ className: styles["root"] }, props)}
         data-invalid={shown ? "" : undefined}
         data-disabled={disabled ? "" : undefined}
         onChange={(event) => {

@@ -1,9 +1,9 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./alert.module.css";
 
-export function Title({ className, ...props }: ComponentProps<"div">) {
-  return <div {...props} className={join(styles["title"], className)} />;
+export function Title(props: ComponentProps<"div">) {
+  return <div {...mergeProps({ className: styles["title"] }, props)} />;
 }

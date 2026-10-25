@@ -1,9 +1,9 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./card.module.css";
 
-export function Description({ className, ...props }: ComponentProps<"p">) {
-  return <p {...props} className={join(styles["description"], className)} />;
+export function Description(props: ComponentProps<"p">) {
+  return <p {...mergeProps({ className: styles["description"] }, props)} />;
 }

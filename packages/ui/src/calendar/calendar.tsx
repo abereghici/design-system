@@ -17,7 +17,7 @@ import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { useLabels } from "../ui-provider/locale.tsx";
 import type { Labels } from "../ui-provider/locale.tsx";
 import { calendar as calendarLabels } from "../ui-provider/locales/en-US/calendar.ts";
@@ -221,7 +221,6 @@ function useGrid(
 export function Calendar({
   labels,
   locale,
-  className,
   value,
   defaultValue,
   onValueChange,
@@ -239,7 +238,7 @@ export function Calendar({
   const handlers = useGrid(calendar, formats.firstDay, picker);
   const first = focused.with({ day: 1 });
   return (
-    <fieldset {...rest} className={join(styles["root"], className)}>
+    <fieldset {...mergeProps({ className: styles["root"] }, rest)}>
       <Header
         names={useLabels("calendar", calendarLabels, labels)}
         heading={formats.heading(first)}

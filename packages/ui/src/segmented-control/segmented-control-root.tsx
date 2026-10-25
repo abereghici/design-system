@@ -4,7 +4,7 @@ import { createContext, useId, useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback, requestChange } from "../events/events.ts";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
@@ -34,7 +34,6 @@ export function Root({
   value,
   defaultValue,
   onValueChange,
-  className,
   onPointerDown,
   onKeyDown,
   ...props
@@ -60,9 +59,8 @@ export function Root({
   return (
     <GroupContext value={{ name, value: current, select }}>
       <fieldset
-        {...props}
+        {...mergeProps({ className: styles["root"] }, props)}
         role="radiogroup"
-        className={join(styles["root"], className)}
         {...marker}
         onKeyDown={(event) => {
           marker.onKeyDown(event);

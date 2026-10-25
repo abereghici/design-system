@@ -4,7 +4,7 @@ import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import { useFieldControl } from "../field/use-field.ts";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { pointerMarker, toggleClick } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
@@ -42,7 +42,6 @@ export function Checkbox({
   disabled = false,
   className,
   style,
-  ref,
   id,
   onClick,
   onChange,
@@ -57,22 +56,18 @@ export function Checkbox({
   });
   const blocked = bindings["aria-disabled"] === true;
 
-  function setRef(input: HTMLInputElement | null): void | (() => void) {
+  function setIndeterminate(input: HTMLInputElement | null) {
     if (input !== null) input.indeterminate = indeterminate;
-    if (typeof ref === "function") return ref(input);
-    if (ref) ref.current = input;
   }
 
   return (
     <label
       {...pointerMarker()}
       htmlFor={bindings.id ?? fallbackId}
-      className={join(styles["root"], className)}
-      style={style}
+      {...mergeProps({ className: styles["root"] }, { className, style })}
     >
       <input
-        {...bindings}
-        ref={setRef}
+        {...mergeProps({ ref: setIndeterminate }, bindings)}
         id={bindings.id ?? fallbackId}
         type="checkbox"
         className={styles["input"]}

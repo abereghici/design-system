@@ -6,7 +6,7 @@ import type { ComponentProps } from "react";
 import { trackComposition } from "../events/events.ts";
 import { SearchIcon } from "../icon/icons/search.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { DialogContext, useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";
@@ -27,7 +27,7 @@ export type InputProps = Omit<
 > &
   Naming;
 
-export function Input({ className, onChange, onKeyDown, ...props }: InputProps) {
+export function Input({ onChange, onKeyDown, ...props }: InputProps) {
   const command = useCommand();
   const inDialog = use(DialogContext) !== null;
   return (
@@ -36,7 +36,7 @@ export function Input({ className, onChange, onKeyDown, ...props }: InputProps) 
       <input
         autoComplete="off"
         spellCheck={false}
-        {...props}
+        {...mergeProps({ className: styles["input"] }, props)}
         type="text"
         role="combobox"
         aria-expanded
@@ -44,7 +44,6 @@ export function Input({ className, onChange, onKeyDown, ...props }: InputProps) 
         aria-autocomplete="list"
         aria-activedescendant={command.highlighted ?? undefined}
         value={command.query}
-        className={join(styles["input"], className)}
         onCompositionEnd={trackComposition(props.onCompositionEnd)}
         onChange={(event) => {
           onChange?.(event);

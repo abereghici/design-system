@@ -4,7 +4,7 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./alert.module.css";
@@ -19,13 +19,7 @@ export interface CloseProps extends Omit<ComponentProps<"button">, "aria-label" 
   disabled?: boolean;
 }
 
-export function Close({
-  disabled = false,
-  className,
-  type = "button",
-  onClick,
-  ...props
-}: CloseProps) {
+export function Close({ disabled = false, type = "button", onClick, ...props }: CloseProps) {
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     if (disabled) {
       event.preventDefault();
@@ -37,11 +31,10 @@ export function Close({
 
   return (
     <button
-      {...props}
+      {...mergeProps({ className: `${iconButton["root"]} ${styles["close"]}` }, props)}
       type={type}
       aria-disabled={disabled ? true : undefined}
       data-size="sm"
-      className={join(`${iconButton["root"]} ${styles["close"]}`, className)}
       onClick={handleClick}
     >
       <XIcon size="sm" />

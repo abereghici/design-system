@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./status-dot.module.css";
 
@@ -14,13 +14,12 @@ export interface StatusDotProps extends ComponentProps<"span"> {
  * the label carries the state, and screen readers skip the dot. For a labelled status pill, use a
  * Tag; for a count, a Badge.
  */
-export function StatusDot({ variant = "neutral", className, ...props }: StatusDotProps) {
+export function StatusDot({ variant = "neutral", ...props }: StatusDotProps) {
   return (
     <span
       aria-hidden
-      {...props}
+      {...mergeProps({ className: styles["root"] }, props)}
       data-variant={variant}
-      className={join(styles["root"], className)}
     />
   );
 }

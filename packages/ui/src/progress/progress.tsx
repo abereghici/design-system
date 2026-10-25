@@ -1,7 +1,7 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./progress.module.css";
 
@@ -55,8 +55,7 @@ export function Progress({
   return (
     <div
       data-state={now === undefined ? "indeterminate" : now === max ? "complete" : "loading"}
-      className={join(styles["root"], className)}
-      style={style}
+      {...mergeProps({ className: styles["root"] }, { className, style })}
     >
       {label !== undefined && (
         <div className={styles["header"]}>

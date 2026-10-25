@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./empty-state.module.css";
 
@@ -11,6 +11,6 @@ import styles from "./empty-state.module.css";
  * own `role="status"` region. For a load still running, use Skeleton or Spinner; for an error, an
  * Alert.
  */
-export function Root({ className, ...props }: ComponentProps<"div">) {
-  return <div {...props} className={join(styles["root"], className)} />;
+export function Root(props: ComponentProps<"div">) {
+  return <div {...mergeProps({ className: styles["root"] }, props)} />;
 }

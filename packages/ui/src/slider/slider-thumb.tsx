@@ -3,7 +3,7 @@
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import { useFieldControl } from "../field/use-field.ts";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { useSlider } from "./slider-root.tsx";
 import type { Slider } from "./slider-root.tsx";
@@ -62,9 +62,11 @@ export function Thumb({
   const blocked = bindings["aria-disabled"] === true;
   return (
     <div
-      className={join(styles["thumb"], className)}
+      {...mergeProps(
+        { className: styles["thumb"], style: { insetInlineStart: `${slider.percent(value)}%` } },
+        { className, style },
+      )}
       data-dragging={slider.dragging === index ? "" : undefined}
-      style={{ insetInlineStart: `${slider.percent(value)}%`, ...style }}
     >
       <input
         {...bindings}

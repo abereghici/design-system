@@ -4,7 +4,7 @@ import type { ComponentProps, MouseEvent, ReactElement } from "react";
 
 import { composeEventHandlers } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import { useModal } from "./dialog-modal.tsx";
 import iconButton from "../icon-button/icon-button.module.css";
@@ -28,7 +28,7 @@ export type CloseProps = Omit<
 > &
   Shape;
 
-export function Close({ asChild = false, className, onClick, ...props }: CloseProps) {
+export function Close({ asChild = false, onClick, ...props }: CloseProps) {
   const { id, controller, styles } = useModal();
 
   const handleClick = composeEventHandlers(onClick, (event: MouseEvent<HTMLButtonElement>) => {
@@ -45,9 +45,8 @@ export function Close({ asChild = false, className, onClick, ...props }: ClosePr
   return (
     <button
       type="button"
-      {...props}
+      {...mergeProps({ className: `${iconButton["root"]} ${styles["close"]}` }, props)}
       data-size="sm"
-      className={join(`${iconButton["root"]} ${styles["close"]}`, className)}
       commandfor={id}
       command="request-close"
       onClick={handleClick}

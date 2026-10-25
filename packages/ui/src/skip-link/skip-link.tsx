@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { labelsOf } from "../ui-provider/labels.ts";
 import type { Labels, Locale } from "../ui-provider/locale.tsx";
 import { skipLink as skipLinkLabels } from "../ui-provider/locales/en-US/skip-link.ts";
@@ -26,9 +26,9 @@ export interface SkipLinkProps extends Omit<ComponentProps<"a">, "href"> {
  * it stays hidden until it has focus. Give the target `<main>` the matching `id` and `tabIndex={-1}`.
  * For any other navigation, use a Link.
  */
-export function SkipLink({ locale, labels, children, className, ...props }: SkipLinkProps) {
+export function SkipLink({ locale, labels, children, ...props }: SkipLinkProps) {
   return (
-    <a {...props} className={join(styles["root"], className)}>
+    <a {...mergeProps({ className: styles["root"] }, props)}>
       {children ?? labelsOf(skipLinkLabels, locale?.labels.skipLink, labels).label}
     </a>
   );

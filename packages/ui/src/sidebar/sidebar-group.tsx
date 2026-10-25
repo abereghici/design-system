@@ -1,7 +1,7 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./sidebar.module.css";
 
@@ -18,7 +18,6 @@ export function Group({
   label,
   collapsible = false,
   defaultOpen = false,
-  className,
   children,
   ...props
 }: GroupProps) {
@@ -29,8 +28,7 @@ export function Group({
     <div
       role={labelled ? "group" : undefined}
       aria-labelledby={labelled ? id : undefined}
-      {...props}
-      className={join(styles["group"], className)}
+      {...mergeProps({ className: styles["group"] }, props)}
     >
       {labelled && collapsible ? (
         <details open={defaultOpen} className={styles["collapsible"]}>

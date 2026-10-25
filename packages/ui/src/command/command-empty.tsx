@@ -3,7 +3,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
 import { SearchIcon } from "../icon/icons/search.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";
@@ -14,10 +14,10 @@ export interface EmptyProps extends Omit<ComponentProps<"output">, "children"> {
 }
 
 /** What to show while nothing matches; screen readers announce it. */
-export function Empty({ className, children, ...props }: EmptyProps) {
+export function Empty({ children, ...props }: EmptyProps) {
   const { empty } = useCommand();
   return (
-    <output {...props} className={join(styles["empty"], className)}>
+    <output {...mergeProps({ className: styles["empty"] }, props)}>
       {empty && (
         <>
           <SearchIcon size="xl" className={styles["emptyIcon"]} />

@@ -43,6 +43,23 @@ Default.test(
   },
 );
 
+Default.test(
+  "keeps a wrapped element's shape and class beside the consumer's",
+  {
+    args: {
+      children: <span className="pill" style={{ borderRadius: "999px" }} />,
+      className: "wide",
+      style: { inlineSize: "12rem" },
+    },
+  },
+  async ({ canvasElement }) => {
+    const placeholder = canvasElement.querySelector(".pill");
+    await expect(placeholder).toHaveClass("wide");
+    await expect(placeholder).not.toHaveClass("undefined");
+    await expect(placeholder).toHaveStyle({ borderRadius: "999px", inlineSize: "192px" });
+  },
+);
+
 Default.test("keeps its colour pulse under reduced motion", async ({ canvas }) => {
   await expect(canvas.getByText("Placeholder name").getAnimations()).toHaveLength(1);
 });

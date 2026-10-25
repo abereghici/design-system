@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 
 import { composeEventHandlers } from "../events/events.ts";
 import { useFieldControl } from "../field/use-field.ts";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { preventDefault } from "../toggle/toggle.ts";
 
 import { GroupContext } from "./radio-group-root.tsx";
@@ -48,8 +48,7 @@ export function Item({
   return (
     <label
       htmlFor={bindings.id ?? fallbackId}
-      className={join(styles["item"], className)}
-      style={style}
+      {...mergeProps({ className: styles["item"] }, { className, style })}
     >
       <input
         {...bindings}

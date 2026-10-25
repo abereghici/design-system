@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { labelsOf } from "../ui-provider/labels.ts";
 import type { Labels, Locale } from "../ui-provider/locale.tsx";
 import { spinner as spinnerLabels } from "../ui-provider/locales/en-US/spinner.ts";
@@ -25,7 +25,7 @@ export interface SpinnerProps extends ComponentProps<"span"> {
  * measurable progress use Progress; for content of known shape, Skeleton; inside a busy Button, its
  * `loading`.
  */
-export function Spinner({ size = "sm", locale, labels, className, ...props }: SpinnerProps) {
+export function Spinner({ size = "sm", locale, labels, ...props }: SpinnerProps) {
   const decorative = props["aria-hidden"] === true || props["aria-hidden"] === "true";
   return (
     <span
@@ -35,9 +35,8 @@ export function Spinner({ size = "sm", locale, labels, className, ...props }: Sp
             role: "status",
             "aria-label": labelsOf(spinnerLabels, locale?.labels.spinner, labels).loading,
           })}
-      {...props}
+      {...mergeProps({ className: styles["root"] }, props)}
       data-size={size}
-      className={join(styles["root"], className)}
     />
   );
 }

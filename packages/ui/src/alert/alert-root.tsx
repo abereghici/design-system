@@ -4,7 +4,7 @@ import { CheckCircleIcon } from "../icon/icons/check-circle.tsx";
 import { DangerIcon } from "../icon/icons/danger.tsx";
 import { InfoIcon } from "../icon/icons/info.tsx";
 import { WarningIcon } from "../icon/icons/warning.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./alert.module.css";
 
@@ -31,10 +31,10 @@ export interface RootProps extends ComponentProps<"div"> {
  * message was about. For a brief confirmation use a Toast; for a decision that must interrupt, an
  * AlertDialog.
  */
-export function Root({ variant = "neutral", className, children, ...props }: RootProps) {
+export function Root({ variant = "neutral", children, ...props }: RootProps) {
   const Icon = icons[variant];
   return (
-    <div {...props} data-variant={variant} className={join(styles["root"], className)}>
+    <div {...mergeProps({ className: styles["root"] }, props)} data-variant={variant}>
       <Icon size="sm" className={styles["icon"]} />
       {children}
     </div>

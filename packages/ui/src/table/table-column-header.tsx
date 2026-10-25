@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./table.module.css";
 
@@ -11,13 +11,12 @@ export interface ColumnHeaderProps extends ComponentProps<"th"> {
   sortDirection?: "ascending" | "descending" | undefined;
 }
 
-export function ColumnHeader({ sortDirection, className, ...props }: ColumnHeaderProps) {
+export function ColumnHeader({ sortDirection, ...props }: ColumnHeaderProps) {
   return (
     <th
       scope="col"
       aria-sort={sortDirection}
-      {...props}
-      className={join(styles["column-header"], className)}
+      {...mergeProps({ className: styles["column-header"] }, props)}
     />
   );
 }
