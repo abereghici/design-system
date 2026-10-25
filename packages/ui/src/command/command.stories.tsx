@@ -86,13 +86,13 @@ Default.test(
 );
 
 Default.test(
-  "matches case- and accent-insensitively, named by an external <label for> over its built-in name",
+  "matches case- and accent-insensitively, named by visible text through aria-labelledby over its built-in name",
   {
     args: {
       children: (
         <>
-          <label htmlFor="command-search">Find a page</label>
-          <Command.Input id="command-search" />
+          <span id="command-search">Find a page</span>
+          <Command.Input aria-labelledby="command-search" />
           <Command.List>
             <Command.Item>Șablon nou</Command.Item>
             <Command.Item>Größe ändern</Command.Item>

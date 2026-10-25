@@ -92,7 +92,7 @@ No Separator, Loading, Shortcut or Trigger Part (see API).
 | Prop          | Type                                                            | Default | Notes                                                                                                               |
 | ------------- | --------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
 | `placeholder` | `string`                                                        | locale  | Native attribute; defaults to `labels.placeholder`.                                                                 |
-| `labels`      | `{ search?: string; placeholder?: string }`                     | locale  | `search` is the input's accessible name (`aria-label`), unless an `id` is passed for an external `<label for>`.     |
+| `labels`      | `{ search?: string; placeholder?: string }`                     | locale  | `search` is the input's accessible name (`aria-label`); `aria-labelledby` overrides it.                             |
 | …native       | `ComponentProps<"input">` minus `value`, `defaultValue`, `type` |         | `ref`, `className`, `onKeyDown`, native attributes. The Input owns `role`, `aria-*` combobox attributes and `type`. |
 
 `Command.List`: `ComponentProps<"div">` (owns `id`, `role`). `Command.Group`: `heading: string` (required) plus `ComponentProps<"div">`. `Command.Empty`: `children` (default: the Icon and `labels.empty`), `labels: { empty?: string }`, `ComponentProps<"div">`. `Command.Footer`: `children` (default: the three hints), `labels: { navigate?: string; open?: string; close?: string }`, `ComponentProps<"div">`.

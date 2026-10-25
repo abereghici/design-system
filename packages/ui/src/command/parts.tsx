@@ -18,8 +18,7 @@ export interface InputProps extends Omit<
 > {
   /**
    * Overrides the Provider's locale: `search` is the accessible name, `placeholder` the default hint.
-   * With an `id` (for an external `<label for>`), `search` is not applied, because `aria-label`
-   * would override that label.
+   * To name it by visible text, pass `aria-labelledby`, which wins over `search`.
    */
   labels?: { search?: string; placeholder?: string };
 }
@@ -40,7 +39,7 @@ export function Input({
       <SearchIcon className={styles["searchIcon"]} />
       <input
         placeholder={placeholder ?? text.placeholder}
-        aria-label={props.id === undefined ? text.search : undefined}
+        aria-label={text.search}
         autoComplete="off"
         spellCheck={false}
         {...props}
