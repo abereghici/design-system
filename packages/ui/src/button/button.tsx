@@ -1,6 +1,7 @@
 "use client";
 
-import type { ComponentProps, MouseEvent } from "react";
+import { cloneElement, isValidElement } from "react";
+import type { ComponentProps, MouseEvent, MouseEventHandler, ReactNode } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
 import { Slot, mergeProps } from "../slot/slot.tsx";
@@ -8,7 +9,9 @@ import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./button.module.css";
 
-export interface ButtonProps extends ComponentProps<"button"> {
+export interface ButtonProps extends Omit<ComponentProps<"button">, "onClick"> {
+  /** Runs on every press, unless the Button is disabled or loading. */
+  onClick?: MouseEventHandler<HTMLElement> | undefined;
   /**
    * The weight of the action: one `primary` per view, `secondary` for the rest, `tertiary` in
    * toolbars and dense rows, `danger` only to confirm a destructive action.
@@ -50,7 +53,7 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
-  function handleClick(event: MouseEvent<HTMLButtonElement>) {
+  function handleClick(event: MouseEvent<HTMLElement>) {
     if (disabled || loading) {
       // preventDefault also stops a submit or reset button from acting on its form.
       event.preventDefault();
@@ -65,21 +68,30 @@ export function Button({
     <Root
       {...mergeProps({ className: styles["root"] }, props)}
       type={asChild ? undefined : type}
-      aria-disabled={disabled ? true : undefined}
+      aria-disabled={disabled || loading ? true : props["aria-disabled"]}
       aria-busy={loading ? true : undefined}
       data-loading={loading ? "" : undefined}
       data-variant={variant}
       data-size={size}
       onClick={handleClick}
     >
-      {loading && !asChild ? (
-        <>
-          {children}
-          <Spinner aria-hidden className={styles["spinner"]} />
-        </>
-      ) : (
-        children
-      )}
+      {loading
+        ? busy(children, asChild, <Spinner aria-hidden className={styles["spinner"]} />)
+        : children}
     </Root>
   );
+}
+
+function busy(children: ReactNode, asChild: boolean, spinner: ReactNode) {
+  if (!asChild) {
+    return (
+      <>
+        {children}
+        {spinner}
+      </>
+    );
+  }
+  return isValidElement<{ children?: ReactNode }>(children)
+    ? cloneElement(children, undefined, children.props.children, spinner)
+    : children;
 }
