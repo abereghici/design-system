@@ -14,7 +14,7 @@ import { Field } from "@platform/ui/field";
 <Field.Root name="attachments">
   <Field.Label>Attachments</Field.Label>
   <FileTrigger multiple required>
-    <Button><PlusIcon data-icon="inline-start" /> Add files</Button>
+    <Button><PlusIcon /> Add files</Button>
   </FileTrigger>
   <Field.Description>PDF or images, up to 10 MB each.</Field.Description>
   <Field.Error />

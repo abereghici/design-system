@@ -18,7 +18,7 @@ import { Kbd } from "@platform/ui/kbd";
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="end">
     <DropdownMenu.Item onClick={duplicate} aria-keyshortcuts="Meta+D Control+D">
-      <CopyIcon data-icon="inline-start" />
+      <CopyIcon />
       Duplicate
       <Kbd keys="mod+d" aria-hidden />
     </DropdownMenu.Item>
@@ -34,7 +34,7 @@ import { Kbd } from "@platform/ui/kbd";
     </DropdownMenu.CheckboxItem>
     <DropdownMenu.Separator />
     <DropdownMenu.Item variant="danger" onClick={remove}>
-      <TrashIcon data-icon="inline-start" />
+      <TrashIcon />
       Delete
     </DropdownMenu.Item>
   </DropdownMenu.Content>
@@ -50,7 +50,7 @@ Root (no DOM) → Trigger (button) → Content (`[popover]` menu, rendered next 
 - **Root.** Holds the open state and the ids. Renders no element.
 - **Trigger.** A native `<button type="button">` with `commandfor` → Content and `command="toggle-popover"`, `aria-haspopup="menu"` and `aria-expanded`. With `asChild`, a Button or IconButton is the Trigger.
 - **Content.** A `<div popover="auto" role="menu" tabindex="-1">`, rendered right after the Trigger in the DOM (no portal), shown in the top layer. Material `dropdown-menu-background-color` (`color-material-thick`) with `backdrop-filter: blur(dropdown-menu-blur) saturate(dropdown-menu-saturate)`, `dropdown-menu-shadow` (overlay elevation: hairline ring, highlight, moss-tinted shadow), radius `dropdown-menu-border-radius` (12), padding `dropdown-menu-padding` (4), at least `dropdown-menu-min-width` (224) and at least as wide as the Trigger, `dropdown-menu-offset` (4) from it.
-- **Item.** A native `<button type="button" role="menuitem" tabindex="-1">`, a flex row `dropdown-menu-item-height` (28) tall, `dropdown-menu-item-padding-inline` (8), `dropdown-menu-item-gap` (8), radius `dropdown-menu-item-border-radius` (8: concentric, 12 − 4), text in `dropdown-menu-item-font` / `dropdown-menu-item-text-color`. Children, in order: an optional Icon with `data-icon="inline-start"` (`size="sm"`, `dropdown-menu-item-icon-color`), the label, an optional `<Kbd aria-hidden>` pushed to the inline end (`margin-inline-start: auto`). The Kbd keeps its keycap, as the zip draws it, with its text in `dropdown-menu-item-shortcut-text-color` (source: "Shortcut hints right-aligned in subtlest text."); the Item sets Kbd's own custom properties (`--ab-kbd-text-color`, and `--ab-kbd-margin-inline-start: auto`, a hook Kbd reads) rather than reaching into the child. The whole row is the hit target.
+- **Item.** A native `<button type="button" role="menuitem" tabindex="-1">`, a flex row `dropdown-menu-item-height` (28) tall, `dropdown-menu-item-padding-inline` (8), `dropdown-menu-item-gap` (8), radius `dropdown-menu-item-border-radius` (8: concentric, 12 − 4), text in `dropdown-menu-item-font` / `dropdown-menu-item-text-color`. Children, in order: an optional Icon (`size="sm"`, `dropdown-menu-item-icon-color`), the label, an optional `<Kbd aria-hidden>` pushed to the inline end (`margin-inline-start: auto`). The Kbd keeps its keycap, as the zip draws it, with its text in `dropdown-menu-item-shortcut-text-color` (source: "Shortcut hints right-aligned in subtlest text."); the Item sets Kbd's own custom properties (`--ab-kbd-text-color`, and `--ab-kbd-margin-inline-start: auto`, a hook Kbd reads) rather than reaching into the child. The whole row is the hit target.
 - **CheckboxItem / RadioItem.** The same row with `role="menuitemcheckbox"` / `role="menuitemradio"` and `aria-checked`. A 16 px indicator box sits at the inline start, where an Item's icon goes, so labels line up: the `check` Icon (CheckboxItem) or the bob diamond, a `size-indicator` (6 px) square rotated 45° (RadioItem), both in `dropdown-menu-item-icon-color-selected` and decorative; the box is empty while unchecked. Brand book: the bob is "the single-choice indicator in menus".
 - **RadioGroup.** A `<fieldset>` (implicit role `group`) labelled by its Label (`aria-labelledby`).
 - **Group.** A `<fieldset>` (implicit role `group`) labelled by its Label.

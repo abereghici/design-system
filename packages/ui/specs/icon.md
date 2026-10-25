@@ -32,7 +32,7 @@ Same props on `Icon` and on every `<Name>Icon`.
 | `size`     | `"sm" \| "md" \| "lg" \| "xl"` | `"md"`  | Exposed as `data-size`. 16 / 20 / 24 / 32 px with stroke 2 / 1.75 / 1.75 / 1.5 (the stroke thins as the size grows so the optical weight stays constant). |
 | `label`    | `string`                       |         | Present: `role="img"` and `aria-label={label}`, no `aria-hidden`. Absent: `aria-hidden="true"`.                                                           |
 | `children` | `ReactNode`                    |         | `Icon` only: the glyph's SVG content on the 24-unit grid. Generated icons pass their own paths.                                                           |
-| …native    | `ComponentProps<"svg">`        |         | `ref`, `className` and every native SVG attribute pass through (`data-icon="inline-start"` for Button, for example).                                      |
+| …native    | `ComponentProps<"svg">`        |         | `ref`, `className` and every native SVG attribute pass through (`data-icon="inline-start"` for a Link, for example).                                      |
 
 Names, checked against the reference libraries:
 

@@ -20,7 +20,7 @@ const palette = (
     <Command.List>
       <Command.Group heading="Suggestions">
         <Command.Item aria-keyshortcuts="Meta+N Control+N">
-          <PlusIcon data-icon="inline-start" />
+          <PlusIcon />
           New document
           <Kbd keys="mod+n" aria-hidden />
         </Command.Item>

@@ -156,7 +156,7 @@ export const InAField = meta.story({
     accept: undefined,
     children: (
       <Button>
-        <PlusIcon data-icon="inline-start" /> Add files
+        <PlusIcon /> Add files
       </Button>
     ),
   },

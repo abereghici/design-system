@@ -19,7 +19,8 @@ export type LinkProps = ComponentProps<"a"> &
 /**
  * Goes to another page or place, always underlined so it reads as a link, in the type of the text
  * around it. Wrap a router link with `asChild`. To start an action, use a Button; to jump past
- * repeated navigation, a SkipLink.
+ * repeated navigation, a SkipLink. A link stays inline text so it can wrap, so mark an icon child
+ * with `data-icon="inline-start"` or `data-icon="inline-end"` to space it from the words.
  */
 export function Link({ asChild = false, className, ...props }: LinkProps) {
   const Root = asChild ? Slot : "a";

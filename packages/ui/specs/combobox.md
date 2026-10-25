@@ -8,11 +8,11 @@ import { UserIcon } from "@platform/ui/icons/user";
 
 <Combobox.Root label="Assignee" name="assignee" placeholder="Search people" required>
   <Combobox.Item value="ab" keywords={["alex"]}>
-    <UserIcon data-icon="inline-start" />
+    <UserIcon />
     Alexandru Bereghici
   </Combobox.Item>
   <Combobox.Item value="im">
-    <UserIcon data-icon="inline-start" />
+    <UserIcon />
     Ioana Munteanu
   </Combobox.Item>
   <Combobox.Group label="Former members">
@@ -50,7 +50,7 @@ Label → field box (search icon, input) → list (Floating layer: Groups, Items
 - **Input.** A native `<input type="text" role="combobox">` with no border or background of its own, `dir="auto"`, `autocomplete="off"` by default, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` → list id, and `aria-activedescendant` → the highlighted option while there is one. It has no `name`: its text is the query, not the value.
 - **Hidden input.** `<input type="hidden" name form value>` holding the chosen Item's `value` (empty string when none).
 - **List.** One `<div popover="manual" role="listbox" aria-labelledby={labelId}>`, rendered right after the field box (no portal) and shown in the top layer. Material `combobox-list-background-color` (`color-material-thick`) with `backdrop-filter: blur(combobox-list-blur) saturate(combobox-list-saturate)`, `combobox-list-shadow` (overlay elevation), radius `combobox-list-border-radius` (12), padding `combobox-list-padding` (4), `combobox-list-offset` (4) from the field box, at least as wide as it, at most `combobox-list-max-height` (320) tall, then scrolling (`overflow-y: auto`).
-- **Item.** A `<div role="option" id>`, a flex row `combobox-option-height` (28), `combobox-option-padding-inline` (8), `combobox-option-gap` (8), radius `combobox-option-border-radius` (8: concentric, 12 − 4), `combobox-option-font`, `combobox-option-text-color`. Children, in order: an optional Icon with `data-icon="inline-start"` (`combobox-option-icon-color`), the label, and a 16 px check box at the inline end (the `check` Icon in `combobox-option-icon-color-selected` on the chosen Item, empty otherwise), as the source's `.ab-option` > `.ab-indicator` (Q46-1). The whole row is the hit target.
+- **Item.** A `<div role="option" id>`, a flex row `combobox-option-height` (28), `combobox-option-padding-inline` (8), `combobox-option-gap` (8), radius `combobox-option-border-radius` (8: concentric, 12 − 4), `combobox-option-font`, `combobox-option-text-color`. Children, in order: an optional Icon (`combobox-option-icon-color`), the label, and a 16 px check box at the inline end (the `check` Icon in `combobox-option-icon-color-selected` on the chosen Item, empty otherwise), as the source's `.ab-option` > `.ab-indicator` (Q46-1). The whole row is the hit target.
 - **Group.** A `<fieldset aria-labelledby>` (implicit role `group`, DropdownMenu precedent) whose first child is its label, a `<div role="presentation" id>` in the overline type (`type-overline-sm`, `color-text-subtlest`, as Select's group label), padded like an Item's text.
 - **Empty row.** When no Item is shown, the list shows the built-in "No results" (`labels.noResults`) in `type-body-xs` / `color-text-subtle`, padded like an Item, `aria-hidden` (the status region announces it).
 - **Status region.** A visually hidden `<output>` (implicit role `status`) inside the field root, always rendered, empty unless the list is open and empty.

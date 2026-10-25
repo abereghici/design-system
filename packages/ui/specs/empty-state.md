@@ -15,7 +15,7 @@ import { PlusIcon } from "@platform/ui/icons/plus";
   <EmptyState.Title>No files yet</EmptyState.Title>
   <EmptyState.Description>Upload a file or create one to get started.</EmptyState.Description>
   <div>
-    <Button variant="primary"><PlusIcon data-icon="inline-start" /> New file</Button>
+    <Button variant="primary"><PlusIcon /> New file</Button>
     <Button variant="secondary">Upload</Button>
   </div>
 </EmptyState.Root>

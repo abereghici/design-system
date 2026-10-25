@@ -10,7 +10,7 @@ import { PlusIcon } from "@platform/ui/icons/plus";
 <Button variant="primary" aria-keyshortcuts="Meta+Enter Control+Enter">
   Publish <Kbd keys="mod+enter" aria-hidden />
 </Button>
-<Button variant="secondary"><PlusIcon data-icon="inline-start" /> New</Button>
+<Button variant="secondary"><PlusIcon /> New</Button>
 <Button variant="tertiary" size="sm">Sort</Button>
 <Button variant="danger" loading>Deleting</Button>
 ```
@@ -22,7 +22,7 @@ Status: draft for brand-owner review (phase 1). Source guide: `components/Button
 Container → leading icon (optional) → label → trailing icon (optional) → Kbd hint (optional).
 
 - **Container.** A native `<button>`. Radius 8 (lg: 10). Primary and danger are filled. Secondary is the floating surface with a subtle hairline and raised elevation. Tertiary has no fill at rest.
-- **Icons** are children, not props. An icon marks its side with `data-icon="inline-start"` or `data-icon="inline-end"`, so the gap and padding follow the side in either direction (shadcn's convention, see API). Icons are decorative (`aria-hidden`); the label names the button.
+- **Icons** are children, not props. Button spaces them with its `gap`, so an icon needs no marker and keeps its side in either direction. Icons are decorative (`aria-hidden`); the label names the button.
 - **Kbd hint** is an optional child Kbd, passed `aria-hidden`. The consumer sets `aria-keyshortcuts` on the button, because the Kbd text would otherwise join the accessible name (see Accessibility).
 - **Spinner** is centred over the content while `loading`, rendered `<Spinner aria-hidden />` (decorative; Spinner spec), as the artifact's `.ab-button[aria-busy]`. The label and icons are hidden but stay in the accessible name and the layout, so the width never changes (brand book: "Busy buttons keep their width").
 
@@ -44,7 +44,7 @@ Names, checked against the reference libraries:
 - **`size`**: Mantine "`Button` supports `xs` – `xl`" (https://mantine.dev/core/button/); shadcn "`"default" | "xs" | "sm" | "lg"`…". The values follow the Dictionary's size words.
 - **`loading`**: MUI "If `true`, the loading indicator is visible and the button is disabled." (https://mui.com/material-ui/api/button/); Mantine "When the `loading` prop is set, the `Button` will be disabled" (https://mantine.dev/core/button/). React Aria names it `isPending`: "This disables press and hover events while retaining focusability, and announces the pending state to screen readers." (https://react-aria.adobe.com/Button). We take MUI and Mantine's name and React Aria's behaviour (focus kept).
 - **`disabled` stays focusable**: Base UI has the opt-in "`focusableWhenDisabled` … Whether the button should be focusable when disabled." (https://base-ui.com/react/components/button). Spec #1 makes focusable-when-disabled the only behaviour, so no extra prop.
-- **Icons as children**: shadcn "Remember to add the `data-icon="inline-start"` or `data-icon="inline-end"` attribute to the icon for the correct spacing." (https://ui.shadcn.com/docs/components/button). MUI's `startIcon`/`endIcon` and Mantine's `leftSection`/`rightSection` are props; children keep the API smaller and server-safe (an icon is a Server Component).
+- **Icons as children**: MUI's `startIcon`/`endIcon` and Mantine's `leftSection`/`rightSection` are props; children keep the API smaller and server-safe (an icon is a Server Component).
 - **No `shortcut` prop.** The source Button had `shortcut="mod+enter"`. No reference library documents a shortcut prop on Button, so the hint is composed with Kbd (judgement call, see the phase review entry).
 
 ## States
@@ -98,7 +98,7 @@ APG on focus after activation: "If activating the button does not dismiss the cu
 
 ## RTL
 
-Logical properties only (`padding-inline`, `margin-inline-start`). `data-icon="inline-start"` sits on the start side in both directions. Directional icons (arrows) are mirrored by the Icon component with `:dir(rtl)`, not by Button. No arrow-key behaviour.
+Logical properties only (`padding-inline`, `margin-inline-start`). Directional icons (arrows) are mirrored by the Icon component with `:dir(rtl)`, not by Button. No arrow-key behaviour.
 
 ## Component tokens
 

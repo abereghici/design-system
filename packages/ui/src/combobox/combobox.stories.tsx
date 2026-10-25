@@ -32,7 +32,7 @@ const cancel = (_value: unknown, details: { cancel: () => void }) => {
 };
 const person = (value: string, name: string, keywords?: string[]) => (
   <Combobox.Item value={value} {...(keywords && { keywords })}>
-    <UserIcon data-icon="inline-start" />
+    <UserIcon />
     {name}
   </Combobox.Item>
 );

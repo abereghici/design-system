@@ -17,7 +17,7 @@ import { Sidebar } from "@platform/ui/sidebar";
   <Sidebar.Group label="Projects">
     <Sidebar.Item>
       <Sidebar.Link href="/projects/tokens" aria-current="page">
-        <FolderIcon data-icon="inline-start" /> Tokens
+        <FolderIcon /> Tokens
       </Sidebar.Link>
     </Sidebar.Item>
     <Sidebar.Item>
@@ -41,7 +41,7 @@ Root (nav) → Groups (group → label, optional → list) → Items (li) → Li
 - **Item.** A native `<li>`, no styles of its own.
 - **Link.** A native `<a href>` (not the Link component; Link spec: "a navigation list that wants bare text uses its own component, e.g. Navbar/Sidebar"). A full-width flex row of at least `sidebar-item-min-height`, padding-inline `sidebar-item-padding-inline`, gap `sidebar-item-gap`, radius `sidebar-item-border-radius`, text `sidebar-item-font` in `sidebar-item-text-color`, no underline.
 - **Indicator.** On the current link only: a bar of `sidebar-indicator-width` (2 px) in `sidebar-indicator-color` along the link's inline-start edge, drawn by the link's `::before` pseudo-element, inset at both block ends by the item's radius so it runs along the straight part of the fill's edge. The same bar as the Navbar's, turned to the column's axis.
-- **Icon** (optional) is a child marked `data-icon="inline-start"`, as in Button, Tag and Navbar. The Link sets `--ab-icon-size` / `--ab-icon-stroke-width` to `size-icon-sm` and `stroke-width-lg` (the values behind `icon-sm-*`). Decorative; the text names the link.
+- **Icon** (optional) is a child, as in Button, Tag and Navbar. The Link sets `--ab-icon-size` / `--ab-icon-stroke-width` to `size-icon-sm` and `stroke-width-lg` (the values behind `icon-sm-*`). Decorative; the text names the link.
 
 ## API
 
@@ -137,7 +137,7 @@ Group labels are not focusable, except a collapsible group's label: it is the na
 
 ## RTL
 
-Logical properties only (`padding-inline`, `inset-inline-start`); the radius is uniform, so nothing else flips. The indicator sits at the inline start, so it is on the left in LTR and on the right in RTL. `data-icon="inline-start"` follows the same side. Where the app places the column is its own layout's logical grid.
+Logical properties only (`padding-inline`, `inset-inline-start`); the radius is uniform, so nothing else flips. The indicator sits at the inline start, so it is on the left in LTR and on the right in RTL. Where the app places the column is its own layout's logical grid.
 
 ## Component tokens
 

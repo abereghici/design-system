@@ -13,11 +13,11 @@ Set `dir="rtl"` on `<html>` (or on a region) and every component mirrors. There 
 To derive `dir` from the locale on the server, use `getDirection(tag)` from `@platform/ui/direction` (`Intl.Locale` text info; `"ltr"` for an invalid tag).
 
 - **Logical properties throughout.** Components use `inline-start` and `inline-end`, `padding-inline` and `inset-inline`, never `left` and `right`, so layout follows the writing direction.
-- **Icons in a label** are marked by where they sit, not by side: `data-icon="inline-start"` puts the icon before the text in either direction.
+- **Icons in a label** go before or after the text in source order, and the component's `gap` spaces them, so they keep their place in either direction.
 
   ```tsx
   <Button>
-    <PlusIcon data-icon="inline-start" />
+    <PlusIcon />
     New
   </Button>
   ```

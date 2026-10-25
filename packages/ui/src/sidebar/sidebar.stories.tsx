@@ -17,19 +17,19 @@ const groups = (
     <Sidebar.Group>
       <Sidebar.Item>
         <Sidebar.Link href="#inbox">
-          <MailIcon data-icon="inline-start" /> Inbox
+          <MailIcon /> Inbox
         </Sidebar.Link>
       </Sidebar.Item>
     </Sidebar.Group>
     <Sidebar.Group label="Projects">
       <Sidebar.Item>
         <Sidebar.Link href="#tokens" aria-current="page">
-          <LayersIcon data-icon="inline-start" /> Tokens
+          <LayersIcon /> Tokens
         </Sidebar.Link>
       </Sidebar.Item>
       <Sidebar.Item>
         <Sidebar.Link href="#ui">
-          <FilesIcon data-icon="inline-start" /> UI
+          <FilesIcon /> UI
         </Sidebar.Link>
       </Sidebar.Item>
     </Sidebar.Group>

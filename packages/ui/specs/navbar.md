@@ -37,7 +37,7 @@ Root (nav → list) → Items (li) → Links (a → icon, optional).
 - **Item.** A native `<li>`, no styles of its own.
 - **Link.** A native `<a href>` (not the Link component, which is always underlined for running text; Link spec: "a navigation list that wants bare text uses its own component, e.g. Navbar/Sidebar"). An inline-flex row of at least `navbar-item-min-height`, padding-inline `navbar-item-padding-inline`, radius `navbar-item-border-radius`, text `navbar-item-font` in `navbar-item-text-color`, no underline.
 - **Indicator.** On the current link only: a bar of `navbar-indicator-height` (2 px) in `navbar-indicator-color` along the link's block-end edge, drawn by the link's `::after` pseudo-element (a `background-color` box, so the rest state has no border to force in forced colours). It is inset by the link's padding so it spans the text, as the Tabs indicator spans its tab's label, and stays clear of the rounded hover fill. The same visual language as the Tabs indicator (`tabs-indicator-*`: "A 2px moss indicator is anchored to the selected tab").
-- **Icon** (optional) is a child marked `data-icon="inline-start"`, as in Button and Tag, with gap `navbar-item-gap`. The Link sets `--ab-icon-size` / `--ab-icon-stroke-width` on itself to `size-icon-sm` and `stroke-width-lg`, the semantic values behind `icon-sm-*`, so the route ships no Icon tokens unless an icon is used. Decorative; the text names the link.
+- **Icon** (optional) is a child, as in Button and Tag, spaced by `navbar-item-gap`. The Link sets `--ab-icon-size` / `--ab-icon-stroke-width` on itself to `size-icon-sm` and `stroke-width-lg`, the semantic values behind `icon-sm-*`, so the route ships no Icon tokens unless an icon is used. Decorative; the text names the link.
 
 ## API
 
@@ -121,7 +121,7 @@ Screen readers also list the `<nav>` among the page's landmarks by its name, and
 
 ## RTL
 
-Logical properties only (`padding-inline`, `gap`, `inset-inline`): links run from the inline start and wrap in the reading direction. The indicator is inset equally on both sides, so it is symmetric. `data-icon="inline-start"` sits on the start side in both directions. No arrow-key behaviour.
+Logical properties only (`padding-inline`, `gap`, `inset-inline`): links run from the inline start and wrap in the reading direction. The indicator is inset equally on both sides, so it is symmetric. No arrow-key behaviour.
 
 ## Component tokens
 

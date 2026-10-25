@@ -45,15 +45,14 @@ export const WithIcon = meta.story({
     variant: "success",
     children: (
       <>
-        <CheckIcon data-icon="inline-start" /> Live
+        <CheckIcon /> Live
       </>
     ),
   },
   parameters: {
     docs: {
       description: {
-        story:
-          'An icon is a child marked `data-icon="inline-start"`. It is decorative and takes the label colour.',
+        story: "An icon is a child before the label. It is decorative and takes the label colour.",
       },
     },
   },

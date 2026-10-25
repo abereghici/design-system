@@ -13,7 +13,7 @@ const links = (
   <>
     <Navbar.Item>
       <Navbar.Link href="#home">
-        <HomeIcon data-icon="inline-start" /> Home
+        <HomeIcon /> Home
       </Navbar.Link>
     </Navbar.Item>
     <Navbar.Item>

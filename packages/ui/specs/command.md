@@ -15,18 +15,18 @@ import { Kbd } from "@platform/ui/kbd";
   <Command.List>
     <Command.Group heading="Suggestions">
       <Command.Item onClick={createDocument} aria-keyshortcuts="Meta+N Control+N">
-        <PlusIcon data-icon="inline-start" />
+        <PlusIcon />
         New document
         <Kbd keys="mod+n" aria-hidden />
       </Command.Item>
       <Command.Item onClick={openSearch} keywords={["find"]}>
-        <SearchIcon data-icon="inline-start" />
+        <SearchIcon />
         Search files
       </Command.Item>
     </Command.Group>
     <Command.Group heading="Navigation">
       <Command.Item onClick={() => router.push("/")}>
-        <HomeIcon data-icon="inline-start" />
+        <HomeIcon />
         Go to Home
       </Command.Item>
     </Command.Group>
@@ -58,7 +58,7 @@ Dialog (`<dialog>` + `::backdrop`, optional) → Root → Input row → Empty ·
 - **Input.** A row `command-input-height` (40) tall with `command-input-padding-inline` (16) and a `border-width-default` hairline in `command-input-border-color` at its block end: a decorative `search` Icon (`size="md"`, `command-input-icon-color`) at the inline start, then a borderless `<input>` in `command-input-font` that fills the row, and inside `Command.Dialog` an `<Kbd keys="esc" aria-hidden>` at the inline end (prototype). The row is a `<label>`, so the whole row is the input's hit target.
 - **List.** A `<div role="listbox">` that scrolls: `max-block-size: command-list-max-height` (320), `padding: command-list-padding` (8), `overflow-y: auto`, `scroll-padding-block: command-list-padding` so a scrolled-into-view Item keeps the padding (cmdk: "To scroll item into view earlier near the edges of the viewport, use scroll-padding").
 - **Group.** A `<fieldset>` (implicit role `group`) labelled by its heading: a `<div aria-hidden="true">` in `command-group-label-font` (overline) / `command-group-label-text-color`, padded like an Item's text (`command-item-padding-inline`, `space-inset-xs` on the block axis). Its Items follow as a column.
-- **Item.** A `<div role="option">` flex row `command-item-height` (32) tall, `command-item-padding-inline` (8), `command-item-gap` (12), radius `command-item-border-radius` (8: concentric, 16 − 8), text in `command-item-font` / `command-item-text-color`. Children, in order: an optional Icon with `data-icon="inline-start"` (`command-item-icon-color`), the label, an optional `<Kbd aria-hidden>` pushed to the inline end (the Item sets `--ab-kbd-margin-inline-start: auto`, which Kbd reads) and drawn as keycaps, as the artifact does. The highlighted Item is filled with `command-item-background-color-selected`.
+- **Item.** A `<div role="option">` flex row `command-item-height` (32) tall, `command-item-padding-inline` (8), `command-item-gap` (12), radius `command-item-border-radius` (8: concentric, 16 − 8), text in `command-item-font` / `command-item-text-color`. Children, in order: an optional Icon (`command-item-icon-color`), the label, an optional `<Kbd aria-hidden>` pushed to the inline end (the Item sets `--ab-kbd-margin-inline-start: auto`, which Kbd reads) and drawn as keycaps, as the artifact does. The highlighted Item is filled with `command-item-background-color-selected`.
 - **Empty.** An `<output>` (implicit role `status`), always mounted, placed before the List. While nothing matches it shows, centred with `space-stack-sm` between them and `space-stack-xl` / `space-inset-lg` around: a decorative `search` Icon (`size="xl"`, `color-icon-subtlest`) and the text (`type-body-xs`, `command-footer-text-color`), as the artifact draws it. Otherwise it is empty and takes no space. Prototype: `<div className="ab-command-empty"><Icon name="search" size="xl" /><span>{emptyText}</span></div>`.
 - **Footer.** A `<div aria-hidden="true">` row `command-footer-height` (32) tall, `command-footer-padding-inline` (16), a `border-width-default` hairline in `command-footer-border-color` at its block start, `command-footer-font` / `command-footer-text-color`, hints `space-inline-lg` apart (artifact). Default content: `↑` `↓` Navigate · `↵` Open · `Esc` Close (Close only inside `Command.Dialog`), each key a Kbd. Source: "Footer teaches the keys."; prototype: `<span><Kbd keys={['up', 'down']} />Navigate</span><span><Kbd keys="enter" />Open</span><span><Kbd keys="esc" />Close</span>`.
 
