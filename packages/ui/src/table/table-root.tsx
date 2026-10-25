@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./table.module.css";
 
@@ -11,6 +11,6 @@ import styles from "./table.module.css";
  * `selected`. Put a wide table inside a ScrollArea. For a short list of labelled values, use a
  * description list.
  */
-export function Root({ className, ...props }: ComponentProps<"table">) {
-  return <table {...props} className={join(styles["root"], className)} />;
+export function Root(props: ComponentProps<"table">) {
+  return <table {...mergeProps({ className: styles["root"] }, props)} />;
 }

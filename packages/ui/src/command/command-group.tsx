@@ -3,7 +3,7 @@
 import { useId } from "react";
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./command.module.css";
 
@@ -12,10 +12,10 @@ export interface GroupProps extends ComponentProps<"fieldset"> {
   heading: string;
 }
 
-export function Group({ heading, className, children, ...props }: GroupProps) {
+export function Group({ heading, children, ...props }: GroupProps) {
   const id = useId();
   return (
-    <fieldset aria-labelledby={id} {...props} className={join(styles["group"], className)}>
+    <fieldset aria-labelledby={id} {...mergeProps({ className: styles["group"] }, props)}>
       <div id={id} aria-hidden="true" className={styles["heading"]}>
         {heading}
       </div>

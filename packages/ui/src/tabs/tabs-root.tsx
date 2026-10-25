@@ -4,7 +4,7 @@ import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback, requestChange } from "../events/events.ts";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
 import styles from "./tabs.module.css";
@@ -34,7 +34,7 @@ export type RootProps = Omit<ComponentProps<"div">, "defaultValue"> & {
  * SegmentedControl; to move between pages, Navbar or Sidebar; for sections that open independently,
  * Accordion.
  */
-export function Root({ value, defaultValue, onValueChange, className, ...props }: RootProps) {
+export function Root({ value, defaultValue, onValueChange, ...props }: RootProps) {
   const id = useId();
   const [uncontrolled, setUncontrolled] = useState(defaultValue ?? "");
   const current = value ?? uncontrolled;
@@ -51,7 +51,7 @@ export function Root({ value, defaultValue, onValueChange, className, ...props }
 
   return (
     <TabsContext value={{ id, value: current, select }}>
-      <div {...props} className={join(styles["root"], className)} />
+      <div {...mergeProps({ className: styles["root"] }, props)} />
     </TabsContext>
   );
 }

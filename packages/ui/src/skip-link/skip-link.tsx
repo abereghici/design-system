@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./skip-link.module.css";
 
@@ -18,10 +18,6 @@ export interface SkipLinkProps extends Omit<ComponentProps<"a">, "href" | "child
  * it stays hidden until it has focus. Give the target `<main>` the matching `id` and `tabIndex={-1}`.
  * For any other navigation, use a Link.
  */
-export function SkipLink({ className, children, ...props }: SkipLinkProps) {
-  return (
-    <a {...props} className={join(styles["root"], className)}>
-      {children}
-    </a>
-  );
+export function SkipLink({ children, ...props }: SkipLinkProps) {
+  return <a {...mergeProps({ className: styles["root"] }, props)}>{children}</a>;
 }

@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import visuallyHidden from "../visually-hidden/visually-hidden.module.css";
 import styles from "./spinner.module.css";
@@ -29,13 +29,12 @@ export type SpinnerProps = Omit<ComponentProps<"span">, "children" | "aria-hidde
  * on the region it stands in. For measurable progress use Progress; for content of known shape,
  * Skeleton; inside a busy Button, its `loading`.
  */
-export function Spinner({ size = "sm", className, children, ...props }: SpinnerProps) {
+export function Spinner({ size = "sm", children, ...props }: SpinnerProps) {
   return (
     <span
       role={props["aria-hidden"] === true ? undefined : "status"}
-      {...props}
+      {...mergeProps({ className: styles["root"] }, props)}
       data-size={size}
-      className={join(styles["root"], className)}
     >
       {children !== undefined && <span className={visuallyHidden["root"]}>{children}</span>}
     </span>

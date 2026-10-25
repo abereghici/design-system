@@ -2,7 +2,7 @@
 
 import type { ComponentProps, RefObject } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { usePopover } from "./popover-root.tsx";
 import styles from "./popover.module.css";
@@ -24,14 +24,13 @@ export function Content({
   side = "bottom",
   align = "start",
   initialFocus,
-  className,
   ...props
 }: ContentProps) {
   const popover = usePopover();
   return (
     <dialog
       aria-labelledby={props["aria-label"] === undefined ? `${popover.contentId}-title` : undefined}
-      {...props}
+      {...mergeProps({ className: styles["content"] }, props)}
       {...popover.contentProps({
         onBeforeToggle: (event) => {
           initialFocus?.current?.toggleAttribute("autofocus", event.newState === "open");
@@ -39,7 +38,6 @@ export function Content({
       })}
       data-side={side}
       data-align={align}
-      className={join(styles["content"], className)}
     />
   );
 }

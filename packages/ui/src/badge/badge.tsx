@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./badge.module.css";
 
@@ -30,7 +30,6 @@ export function Badge({
   variant = "neutral",
   max = 99,
   locale,
-  className,
   children,
   ...props
 }: BadgeProps) {
@@ -38,10 +37,9 @@ export function Badge({
   const format = (count: number) => new Intl.NumberFormat(locale).format(count);
   return (
     <span
-      {...props}
+      {...mergeProps({ className: styles["root"] }, props)}
       data-variant={variant}
       data-overflow={overflow ? "" : undefined}
-      className={join(styles["root"], className)}
     >
       {typeof children === "string" ? children : overflow ? `${format(max)}+` : format(children)}
     </span>

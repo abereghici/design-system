@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } fr
 import { createPortal } from "react-dom";
 import type { ComponentProps, RefObject } from "react";
 
-import { composeRefs, join } from "../slot/slot.tsx";
+import { composeRefs, mergeProps } from "../slot/slot.tsx";
 import { close, mark, snapshot, subscribe } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
@@ -147,7 +147,7 @@ function Announcer({ toasts, assertive }: { toasts: readonly ToastRecord[]; asse
   );
 }
 
-function Layer({ closeLabel, className, ref, ...props }: ToasterProps) {
+function Layer({ closeLabel, ref, ...props }: ToasterProps) {
   const toasts = useSyncExternalStore(subscribe, snapshot, () => none);
   const region = useRef<HTMLElement>(null);
   const hidden = useSyncExternalStore(
@@ -166,12 +166,11 @@ function Layer({ closeLabel, className, ref, ...props }: ToasterProps) {
       <Announcer toasts={announced} assertive={false} />
       <Announcer toasts={announced} assertive />
       <section
-        {...props}
+        {...mergeProps({ className: styles["region"] }, props)}
         ref={composeRefs(region, ref)}
         popover="manual"
         tabIndex={-1}
         aria-keyshortcuts="Alt+T"
-        className={join(styles["region"], className)}
       >
         <ol className={styles["list"]}>
           {toasts.map((record, at) => (

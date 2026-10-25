@@ -3,7 +3,7 @@
 import { useId } from "react";
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./combobox.module.css";
 
@@ -12,10 +12,10 @@ export interface GroupProps extends ComponentProps<"fieldset"> {
 }
 
 /** Items under a label; it hides while none of its Items match. */
-export function Group({ label, className, children, ...props }: GroupProps) {
+export function Group({ label, children, ...props }: GroupProps) {
   const id = useId();
   return (
-    <fieldset {...props} aria-labelledby={id} className={join(styles["group"], className)}>
+    <fieldset {...mergeProps({ className: styles["group"] }, props)} aria-labelledby={id}>
       <div role="presentation" id={id} className={styles["label"]}>
         {label}
       </div>

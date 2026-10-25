@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useEffectEvent, useState } from "react";
-import type { ComponentProps, SyntheticEvent } from "react";
+import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./avatar.module.css";
 
@@ -29,44 +29,35 @@ function useLoadingStatus(src: ImageProps["src"], onChange: ImageProps["onLoadin
   return [status, setStatus] as const;
 }
 
-export function Image({
-  src,
-  alt,
-  ref,
-  className,
-  onLoad,
-  onError,
-  onLoadingStatusChange,
-  ...props
-}: ImageProps) {
+export function Image({ src, alt, onLoadingStatusChange, ...props }: ImageProps) {
   const [status, setStatus] = useLoadingStatus(src, onLoadingStatusChange);
   const attach = useCallback(
     (image: HTMLImageElement | null) => {
       // The image may have settled before hydration attached the load and error listeners.
       if (image?.complete === true) setStatus(image.naturalWidth > 0 ? "loaded" : "error");
-      if (typeof ref === "function") return ref(image);
-      if (ref !== undefined && ref !== null) ref.current = image;
     },
-    [ref, setStatus],
+    [setStatus],
   );
 
   return (
     <img
-      {...props}
-      ref={attach}
+      {...mergeProps(
+        {
+          ref: attach,
+          className: styles["image"],
+          onLoad: () => {
+            setStatus("loaded");
+          },
+          onError: () => {
+            setStatus("error");
+          },
+        },
+        props,
+      )}
       src={src}
       alt={alt}
       data-loading={status === "loading" ? "" : undefined}
       data-error={status === "error" ? "" : undefined}
-      className={join(styles["image"], className)}
-      onLoad={(event: SyntheticEvent<HTMLImageElement>) => {
-        setStatus("loaded");
-        onLoad?.(event);
-      }}
-      onError={(event: SyntheticEvent<HTMLImageElement>) => {
-        setStatus("error");
-        onError?.(event);
-      }}
     />
   );
 }

@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import styles from "./link.module.css";
 
@@ -22,7 +22,7 @@ export type LinkProps = ComponentProps<"a"> &
  * repeated navigation, a SkipLink. A link stays inline text so it can wrap, so mark an icon child
  * with `data-icon="inline-start"` or `data-icon="inline-end"` to space it from the words.
  */
-export function Link({ asChild = false, className, ...props }: LinkProps) {
+export function Link({ asChild = false, ...props }: LinkProps) {
   const Root = asChild ? Slot : "a";
-  return <Root {...props} className={join(styles["root"], className)} />;
+  return <Root {...mergeProps({ className: styles["root"] }, props)} />;
 }

@@ -1,9 +1,9 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./empty-state.module.css";
 
-export function Indicator({ className, ...props }: ComponentProps<"div">) {
-  return <div {...props} className={join(styles["indicator"], className)} />;
+export function Indicator(props: ComponentProps<"div">) {
+  return <div {...mergeProps({ className: styles["indicator"] }, props)} />;
 }

@@ -4,7 +4,7 @@ import { createContext, useId, useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback, requestChange } from "../events/events.ts";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 import { followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
@@ -53,7 +53,6 @@ export function Root({
   required,
   disabled = false,
   orientation = "vertical",
-  className,
   onPointerDown,
   onKeyDown,
   ...props
@@ -78,11 +77,10 @@ export function Root({
       value={{ name: name ?? fallbackName, value: current, required, disabled, select }}
     >
       <fieldset
-        {...props}
+        {...mergeProps({ className: styles["root"] }, props)}
         role="radiogroup"
         aria-orientation={orientation}
         data-orientation={orientation}
-        className={join(styles["root"], className)}
         {...marker}
         onKeyDown={(event) => {
           marker.onKeyDown(event);

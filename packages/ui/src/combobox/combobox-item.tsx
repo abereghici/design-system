@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 
 import { CheckIcon } from "../icon/icons/check.tsx";
 import { Option } from "../listbox/listbox.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { ValueContext } from "./use-combobox.ts";
 import styles from "./combobox.module.css";
@@ -19,26 +19,18 @@ export interface ItemProps extends ComponentProps<"div"> {
 }
 
 /** One choice. Its text content is its label: what the input shows once chosen and what ranks. */
-export function Item({
-  value,
-  keywords,
-  disabled = false,
-  className,
-  children,
-  ...props
-}: ItemProps) {
+export function Item({ value, keywords, disabled = false, children, ...props }: ItemProps) {
   const id = useId();
   const chosen = use(ValueContext) === value;
   return (
     <Option
-      {...props}
+      {...mergeProps({ className: styles["option"] }, props)}
       aria-selected={false}
       id={id}
       data-value={value}
       data-keywords={keywords?.join("\n")}
       data-selected={chosen ? "" : undefined}
       aria-disabled={disabled || undefined}
-      className={join(styles["option"], className)}
     >
       {children}
       <span className={styles["indicator"]}>{chosen && <CheckIcon size="sm" />}</span>

@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
 
 import { UserIcon } from "../icon/icons/user.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./avatar.module.css";
 
@@ -22,10 +22,10 @@ function initials(name: string) {
   return firstGrapheme(words[0]) + (words.length > 1 ? firstGrapheme(words.at(-1)) : "");
 }
 
-export function Fallback({ name, className, children, ...props }: FallbackProps) {
+export function Fallback({ name, children, ...props }: FallbackProps) {
   const text = name === undefined ? "" : initials(name);
   return (
-    <span dir="auto" {...props} aria-hidden className={join(styles["fallback"], className)}>
+    <span dir="auto" {...mergeProps({ className: styles["fallback"] }, props)} aria-hidden>
       {children ?? (text === "" ? <UserIcon /> : text)}
     </span>
   );

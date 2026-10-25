@@ -3,7 +3,7 @@
 import type { ComponentProps } from "react";
 
 import { menuContentProps } from "../menu/menu.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { useDropdownMenu } from "./dropdown-menu-root.tsx";
 import menuStyles from "../menu/menu.module.css";
@@ -17,16 +17,15 @@ export interface ContentProps extends Omit<ComponentProps<"div">, "id" | "role" 
 }
 
 /** The menu, named by its Trigger and at least as wide as it. */
-export function Content({ side = "bottom", align = "start", className, ...props }: ContentProps) {
+export function Content({ side = "bottom", align = "start", ...props }: ContentProps) {
   const menu = useDropdownMenu();
   return (
     <div
-      {...props}
+      {...mergeProps({ className: `${menuStyles["content"]} ${styles["content"]}` }, props)}
       {...menuContentProps(menu)}
       aria-labelledby={`${menu.floating.contentId}-trigger`}
       data-side={side}
       data-align={align}
-      className={join(`${menuStyles["content"]} ${styles["content"]}`, className)}
     />
   );
 }

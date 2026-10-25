@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./fieldset.module.css";
 
@@ -16,6 +16,6 @@ export interface RootProps extends ComponentProps<"fieldset"> {
  * Groups related controls under one caption, its Legend, which screen readers announce with each
  * control, and can turn them all off at once. For a single choice among options, use RadioGroup.
  */
-export function Root({ className, ...props }: RootProps) {
-  return <fieldset {...props} className={join(styles["root"], className)} />;
+export function Root(props: RootProps) {
+  return <fieldset {...mergeProps({ className: styles["root"] }, props)} />;
 }

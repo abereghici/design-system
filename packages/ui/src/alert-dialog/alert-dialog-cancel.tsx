@@ -1,6 +1,6 @@
 "use client";
 
-import { composeRefs, join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import type { ButtonProps } from "./alert-dialog-root.tsx";
 import { useClose } from "./alert-dialog-root.tsx";
@@ -12,15 +12,13 @@ const autofocus = (node: HTMLButtonElement | null) => {
 };
 
 /** The least destructive answer. It takes focus when the dialog opens. */
-export function Cancel({ className, onClick, ref, ...props }: ButtonProps) {
+export function Cancel({ onClick, ...props }: ButtonProps) {
   return (
     <button
-      {...props}
+      {...mergeProps({ className: button["root"], ref: autofocus }, props)}
       {...useClose(onClick, true)}
-      ref={composeRefs(ref, autofocus)}
       data-variant="secondary"
       data-size="md"
-      className={join(button["root"], className)}
     />
   );
 }

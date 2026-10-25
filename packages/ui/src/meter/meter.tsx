@@ -1,7 +1,7 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./meter.module.css";
 
@@ -67,8 +67,7 @@ export function Meter({
   return (
     <div
       data-thresholds={low === undefined && high === undefined ? undefined : ""}
-      className={join(styles["root"], className)}
-      style={style}
+      {...mergeProps({ className: styles["root"] }, { className, style })}
     >
       {label !== undefined && (
         <div className={styles["header"]}>

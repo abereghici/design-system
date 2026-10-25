@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./table.module.css";
 
@@ -12,12 +12,11 @@ export interface RowProps extends ComponentProps<"tr"> {
   selected?: boolean;
 }
 
-export function Row({ selected = false, className, ...props }: RowProps) {
+export function Row({ selected = false, ...props }: RowProps) {
   return (
     <tr
-      {...props}
+      {...mergeProps({ className: styles["row"] }, props)}
       data-selected={selected ? "" : undefined}
-      className={join(styles["row"], className)}
     />
   );
 }

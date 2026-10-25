@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./heading.module.css";
 
@@ -23,11 +23,6 @@ export interface HeadingProps extends ComponentProps<"h1"> {
  * section can sit at the right level and still look the way the design needs. For a statement that
  * isn't a section title, use Text `variant="display"`; inside a Card or Dialog, use its Title.
  */
-export function Heading({
-  as: Element,
-  size = sizeOfLevel[Element],
-  className,
-  ...props
-}: HeadingProps) {
-  return <Element {...props} data-size={size} className={join(styles["root"], className)} />;
+export function Heading({ as: Element, size = sizeOfLevel[Element], ...props }: HeadingProps) {
+  return <Element {...mergeProps({ className: styles["root"] }, props)} data-size={size} />;
 }

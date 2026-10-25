@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 
 import * as Field from "../field/field.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { Control } from "./date-field-control.tsx";
 import type { ControlProps, DateFieldOptions } from "./date-field-control.tsx";
@@ -77,8 +77,7 @@ export function DateFieldFrame({
   const options = { value, defaultValue, onValueChange, min, max, name, form, required };
   return (
     <Field.Root
-      className={join(styles["root"], className)}
-      style={style}
+      {...mergeProps({ className: styles["root"] }, { className, style })}
       data-size={size}
       name={name}
       invalid={invalid ?? (validity.invalid || undefined)}

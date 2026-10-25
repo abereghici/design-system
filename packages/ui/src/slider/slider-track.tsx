@@ -2,7 +2,7 @@
 
 import type { ComponentProps, PointerEvent } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import type { Reason, Slider } from "./slider-root.tsx";
 import { useSlider } from "./slider-root.tsx";
@@ -41,12 +41,11 @@ function drag(event: PointerEvent<HTMLDivElement>, slider: Slider) {
 
 export type TrackProps = ComponentProps<"div">;
 
-export function Track({ className, ...props }: TrackProps) {
+export function Track(props: TrackProps) {
   const slider = useSlider();
   return (
     <div
-      {...props}
-      className={join(styles["track"], className)}
+      {...mergeProps({ className: styles["track"] }, props)}
       onPointerDown={(event) => {
         if (slider.disabled || event.button !== 0) return;
         event.preventDefault();

@@ -1,9 +1,9 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
-import type { ComponentProps, RefObject } from "react";
+import type { ComponentProps, RefObject, SyntheticEvent, ToggleEvent } from "react";
 
-import { composeRefs, join } from "../slot/slot.tsx";
+import { composeRefs, mergeProps } from "../slot/slot.tsx";
 
 import type { Options } from "./dialog-controller.ts";
 import { useModal } from "./dialog-modal.tsx";
@@ -16,15 +16,7 @@ export interface ContentProps extends Omit<ComponentProps<"dialog">, "open" | "i
   initialFocus?: RefObject<HTMLElement | null>;
 }
 
-export function Content({
-  initialFocus,
-  className,
-  ref,
-  onBeforeToggle,
-  onCancel,
-  onClose,
-  ...props
-}: ContentProps) {
+export function Content({ initialFocus, ref, ...props }: ContentProps) {
   const { controller, open, onOpenChange, component, ...context } = useModal();
   const dialog = useRef<HTMLDialogElement>(null);
   const options: Options = { open, onOpenChange, component, initialFocus };
@@ -39,22 +31,24 @@ export function Content({
     <dialog
       aria-labelledby={context.titleId}
       aria-describedby={context.descriptionId}
-      {...props}
+      {...mergeProps(
+        {
+          className: context.styles["content"],
+          onBeforeToggle: (event: ToggleEvent<HTMLDialogElement>) => {
+            controller.beforeToggle(event.currentTarget, event.nativeEvent, options);
+          },
+          onCancel: (event: SyntheticEvent<HTMLDialogElement>) => {
+            controller.cancel(event.currentTarget, event.nativeEvent, options);
+          },
+          onClose: (event: SyntheticEvent<HTMLDialogElement>) => {
+            controller.close(event.currentTarget, event.nativeEvent, options);
+          },
+        },
+        props,
+      )}
+      // React forbids passing a ref object through a plain function during render, so it composes here.
       ref={composeRefs(dialog, ref)}
       id={context.id}
-      className={join(context.styles["content"], className)}
-      onBeforeToggle={(event) => {
-        onBeforeToggle?.(event);
-        controller.beforeToggle(event.currentTarget, event.nativeEvent, options);
-      }}
-      onCancel={(event) => {
-        onCancel?.(event);
-        controller.cancel(event.currentTarget, event.nativeEvent, options);
-      }}
-      onClose={(event) => {
-        onClose?.(event);
-        controller.close(event.currentTarget, event.nativeEvent, options);
-      }}
     />
   );
 }
