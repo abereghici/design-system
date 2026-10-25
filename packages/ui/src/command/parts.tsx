@@ -3,6 +3,7 @@
 import { use } from "react";
 import type { ComponentProps } from "react";
 
+import { trackComposition } from "../events/events.ts";
 import { SearchIcon } from "../icon/icons/search.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
 import { useLabels } from "../provider/locale.tsx";
@@ -51,6 +52,7 @@ export function Input({
         aria-activedescendant={command.highlighted ?? undefined}
         value={command.query}
         className={join(styles["input"], className)}
+        onCompositionEnd={trackComposition(props.onCompositionEnd)}
         onChange={(event) => {
           onChange?.(event);
           command.change(event.currentTarget.value, event.nativeEvent);

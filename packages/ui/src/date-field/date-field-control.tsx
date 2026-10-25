@@ -81,6 +81,7 @@ function Segment({ part, control, required }: SegmentProps) {
       aria-invalid={invalid}
       aria-disabled={blocked || undefined}
       className={styles["segment"]}
+      onCompositionEnd={editing.onCompositionEnd}
       onChange={(event) => {
         editing.onChange(part, event);
       }}

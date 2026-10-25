@@ -8,6 +8,7 @@ import { roRO } from "@platform/ui/locales/ro-RO";
 import { Provider } from "@platform/ui/provider";
 
 import preview from "#.storybook/preview.tsx";
+import { confirmComposition } from "#.storybook/test/trusted.ts";
 
 import type { Locale } from "../provider/locale.tsx";
 
@@ -234,6 +235,19 @@ InAForm.test(
     submitted.mockClear();
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(submitted.mock.calls[0]?.[0].get("birthDate")).toBe("2026-10-24");
+  },
+);
+
+InAForm.test(
+  "submits on Enter in a segment, not on one confirming an IME composition",
+  { args: { defaultValue: date("2026-10-24") } },
+  async ({ canvas, userEvent }) => {
+    submitted.mockClear();
+    const day = canvas.getByRole("spinbutton", { name: "day" });
+    confirmComposition(day);
+    await expect(submitted).not.toHaveBeenCalled();
+    await userEvent.type(day, "{Enter}");
+    await expect(submitted).toHaveBeenCalledOnce();
   },
 );
 

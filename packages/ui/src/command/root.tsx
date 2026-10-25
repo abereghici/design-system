@@ -3,7 +3,7 @@
 import { createContext, use, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction } from "react";
 
-import { requestChange } from "../events/events.ts";
+import { isComposing, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId } from "../floating/floating.ts";
 import { arrange, enabled, navigate, reveal } from "../listbox/listbox.tsx";
@@ -52,7 +52,7 @@ function keyDown(
 ) {
   if (event.key === "Enter") {
     const option = highlighted === null ? null : byId(highlighted);
-    if (event.nativeEvent.isComposing || option === null) return;
+    if (isComposing(event) || option === null) return;
     event.preventDefault();
     option.click();
     return;

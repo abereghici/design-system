@@ -2,7 +2,7 @@ import { useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from "re
 import type { ChangeEvent, KeyboardEvent, RefObject } from "react";
 
 import type { DatePart, dateFormats, Temporal } from "../date/date.ts";
-import { requestChange } from "../events/events.ts";
+import { isComposing, requestChange, trackComposition } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 
 import { fromDate, stepKey, toDate, typeDigit } from "./segments.ts";
@@ -182,8 +182,9 @@ function pressKey(
   const erasing = key === "Backspace" || key === "Delete";
   if (!arrow && !erasing && stepped === null && key !== "Enter") return;
   event.preventDefault();
-  if (key === "Enter") submit();
-  else if (arrow) {
+  if (key === "Enter") {
+    if (!isComposing(event)) submit();
+  } else if (arrow) {
     const rtl = event.currentTarget.matches(":dir(rtl)");
     context.focus.move(part, (key === "ArrowRight") === rtl ? -1 : 1);
   } else if (!blocked && stepped === null) erase(context, part, key, nativeEvent);
@@ -218,6 +219,7 @@ export function useSegmentEditing({ group, date, validity, blocked, formats, sub
   const context = { date, focus, change, typed, formats };
   return {
     register: focus.register,
+    onCompositionEnd: trackComposition(),
     focusFirstEmpty: () => {
       focus.firstEmpty(0);
     },
