@@ -28,6 +28,10 @@ _Avoid_: Sound event, haptic event, callback
 A state change a component asks its consumer about before committing: the `on…Change` callback receives the value and `details` (`reason`, `event`, `cancel()`), and calling `cancel()` keeps the previous state. `cancel()` is the only way to stop it: a consumer's `preventDefault()` in its own handler keeps just its native meaning (a canceled click does not check a radio or run a button's command) and stops nothing the component does itself (Base UI: `preventBaseUIHandler()`, not `preventDefault()`).
 _Avoid_: Change event, veto, controlled change
 
+**Listbox navigator**:
+The active-descendant keyboard both listbox popups share (Combobox, Command): focus stays in the input while Down and Up step through the shown, enabled options and wrap, and Home and End reach the ends while the input is empty.
+_Avoid_: Roving focus (that is Menu's), list navigation
+
 **Icon**:
 A glyph from the carved icon set on the 24-unit grid, stroked in the surrounding text colour; decorative unless it has a label. Each one is its own component (`SearchIcon`).
 _Avoid_: Glyph (as a component name), symbol, pictogram

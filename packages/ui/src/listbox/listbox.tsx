@@ -1,4 +1,4 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, KeyboardEvent } from "react";
 
 import { rank } from "../ranking/ranking.ts";
 
@@ -37,6 +37,45 @@ export function shownOf(parent: Element | null): HTMLElement[] {
       if (child.getAttribute("role") === "option") return [child];
       return child.matches("fieldset") ? shownOf(child) : [];
     });
+}
+
+/** Scrolls `option` into view, with its group's heading when it is the group's first shown option. */
+export function reveal(option: HTMLElement, shown: readonly HTMLElement[]) {
+  const group = option.parentElement;
+  const previous = shown[shown.indexOf(option) - 1];
+  if (group?.localName === "fieldset" && previous?.parentElement !== group) {
+    group.firstElementChild?.scrollIntoView({ block: "nearest" });
+  }
+  option.scrollIntoView({ block: "nearest" });
+}
+
+/**
+ * The listbox popup keys of an editable combobox, which keeps focus while `current` is the active
+ * descendant: Down and Up move through the shown, enabled options and wrap; Home and End reach the
+ * first and last while the input is empty, and otherwise stay with the caret. Returns the revealed
+ * option to highlight, `null` when there is none, `false` for any other key.
+ */
+export function navigate(
+  event: KeyboardEvent<HTMLInputElement>,
+  list: Element | null,
+  current: string | null,
+) {
+  const shown = shownOf(list);
+  const options = shown.filter((option) => enabled(option));
+  const index = options.findIndex(({ id }) => id === current);
+  const empty = event.currentTarget.value === "";
+  const steps: Record<string, number | undefined> = {
+    ArrowDown: (index + 1) % options.length,
+    ArrowUp: index <= 0 ? -1 : index - 1,
+    Home: empty ? 0 : undefined,
+    End: empty ? -1 : undefined,
+  };
+  const to = steps[event.key];
+  if (to === undefined) return false;
+  event.preventDefault();
+  const next = options.at(to) ?? null;
+  if (next !== null) reveal(next, shown);
+  return next;
 }
 
 /**

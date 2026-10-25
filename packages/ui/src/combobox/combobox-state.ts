@@ -10,7 +10,7 @@ import type {
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId } from "../floating/floating.ts";
-import { enabled, optionAt, shownOf, textOf } from "../listbox/listbox.tsx";
+import { enabled, navigate, optionAt, textOf } from "../listbox/listbox.tsx";
 
 export const chosenOf = (list: Element, value: string | null) =>
   value === null ? null : list.querySelector(`[role="option"][data-value="${CSS.escape(value)}"]`);
@@ -160,20 +160,10 @@ export function choose(c: Combobox, option: HTMLElement, event: Event) {
   changeOpen(c, false, "item-press", event);
 }
 
-function move(list: HTMLElement, input: HTMLElement, step: 1 | -1) {
-  const shown = shownOf(list).filter((option) => enabled(option));
-  const from = shown.indexOf(highlightedOf(input) ?? list);
-  const to = from < 0 ? (step === 1 ? 0 : -1) : (from + step) % shown.length;
-  highlight(list, input, shown.at(to), true);
-}
-
-function arrow(c: Combobox, list: HTMLElement, event: KeyboardEvent<HTMLInputElement>) {
+function open(c: Combobox, event: KeyboardEvent<HTMLInputElement>) {
   event.preventDefault();
-  const down = event.key === "ArrowDown";
-  if (c.open) {
-    move(list, event.currentTarget, down ? 1 : -1);
-  } else if (changeOpen(c, true, "list-navigation", event.nativeEvent)) {
-    memoryOf(c).edge = down ? "chosen" : "last";
+  if (changeOpen(c, true, "list-navigation", event.nativeEvent)) {
+    memoryOf(c).edge = event.key === "ArrowDown" ? "chosen" : "last";
     c.setQuery("");
   }
 }
@@ -185,8 +175,11 @@ export function keyDown(c: Combobox, event: KeyboardEvent<HTMLInputElement>) {
   const { nativeEvent: native, key } = event;
   if (event.defaultPrevented || native.isComposing || c.options.disabled === true) return;
   if (list === null) return;
-  if (key === "ArrowDown" || key === "ArrowUp") {
-    arrow(c, list, event);
+  const next = c.open && navigate(event, list, highlightedOf(input)?.id ?? null);
+  if (next !== false) {
+    highlight(list, input, next, false);
+  } else if (key === "ArrowDown" || key === "ArrowUp") {
+    open(c, event);
   } else if (key === "Enter" && c.open) {
     event.preventDefault();
     const option = highlightedOf(input);
