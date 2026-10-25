@@ -7,6 +7,19 @@ import { Text } from "./text.tsx";
 const meta = preview.meta({
   title: "Components/Text",
   component: Text,
+  argTypes: {
+    variant: {
+      control: "select",
+      options: ["body", "label", "data", "code", "overline", "display"],
+      description:
+        "The text style: `body` to read, `label` for controls, `data` for figures, `code`, `overline` above a heading, `display` for statements.",
+    },
+    size: {
+      control: "inline-radio",
+      options: ["xs", "sm", "md", "lg"],
+      description: "The step within the style; each style offers only some sizes.",
+    },
+  },
   args: { children: "Invoices are sent on the first working day of the month." },
 });
 

@@ -6,6 +6,7 @@ import { useEffect } from "storybook/preview-api";
 
 import { Provider } from "@platform/ui/provider";
 
+import { meaningfulControls } from "./docs/arg-types.ts";
 import { DocsPage, mdx } from "./docs-page.tsx";
 import { applyGlobals, directions, DocsContainer, themes } from "./globals.tsx";
 import { rememberStoryCanvas } from "./screenshots/canvas.ts";
@@ -14,6 +15,7 @@ export default definePreview({
   addons: [addonDocs(), addonA11y(), addonPseudoStates()],
   tags: ["autodocs", "screenshot"],
   beforeEach: rememberStoryCanvas,
+  argTypesEnhancers: [meaningfulControls],
   parameters: {
     a11y: {
       test: "error",
