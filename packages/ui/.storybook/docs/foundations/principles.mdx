@@ -6,28 +6,28 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 Eight rules decide every token and component. When two options both work, pick the one these favour.
 
-1. **Accessible by construction.** Every color pairing the roles allow meets WCAG 2.2 AA in both Themes, and the token build fails when one doesn't.
+1. **Accessible by construction.** Every color pairing the roles allow meets WCAG 2.2 AA in both Themes.
 2. **Semantic first.** Product code names an intent (`--ab-color-text-subtle`), never a raw value (`--ab-palette-sage-700`).
 3. **Predictable names.** Primitive names state their value; semantic and component names use only words from the Dictionary.
 4. **Rationed color.** Surfaces stay neutral. Color marks an action, a state, or the one highlight on a page.
 5. **Flat in flow, lifted when floating.** In-flow content separates with space, hairlines and surface steps. Only floating layers (menus, popovers, toasts, dialogs) get elevation and material.
 6. **Purposeful motion.** Fast, eased out, interruptible and optional. Springs only where the user moves something directly.
 7. **Keyboard first, pointer friendly.** Every action is reachable from the keyboard, and every control is comfortable to touch.
-8. **Platform before script.** Native elements and CSS (`popover`, `<dialog>`, anchor positioning, `:has()`, `@starting-style`) do the work; script adds only what the platform can't.
+8. **Platform before script.** Native elements and CSS do the work, so components behave the way people expect from the browser.
 
 ## Interaction
 
 How components place and behave, and the research behind each rule.
 
-| Rule                                | Basis                 | In the components                                                                                   |
-| ----------------------------------- | --------------------- | --------------------------------------------------------------------------------------------------- |
-| Shorten the way to frequent targets | Fitts's law           | Shortcut hints, whole-row hit areas, 44px targets on touch                                          |
-| Cut the choices at each step        | Hick's law            | One primary button per view; destructive menu items last, behind a separator                        |
-| Answer within 400ms                 | Doherty threshold     | Press feedback in 100ms, UI motion at most 300ms, spinners only for waits over 400ms                |
-| Stay where users already are        | Jakob's law           | Esc, arrow keys and ⌘K behave as everywhere else; native `<select>`, `<dialog>` and `<details>`     |
-| Keep the reference point still      | Apple HIG             | Busy buttons keep their width; scroll locks keep a stable gutter                                    |
-| Teach shortcuts in place            | Linear, Raycast       | Tooltips and menu items show the key; nothing needs memorising                                      |
-| Validate after intent               | NN/g error prevention | Errors show after interaction (`:user-invalid`) and replace the help text instead of stacking on it |
-| Prefer undo to confirm              | NN/g                  | Reversible actions run at once and offer Undo; dialogs are for irreversible ones                    |
-| Close one layer at a time           | The top layer         | Esc closes only the topmost layer, and focus returns to what opened it                              |
-| Honour system settings              | Apple HIG             | Reduced motion, reduced transparency, color scheme and coarse pointers all reach the tokens         |
+| Rule                                | Basis                 | In the components                                                                              |
+| ----------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------- |
+| Shorten the way to frequent targets | Fitts's law           | Shortcut hints, whole-row hit areas, larger targets on touch                                   |
+| Cut the choices at each step        | Hick's law            | One primary button per view; destructive menu items last, behind a separator                   |
+| Answer within 400ms                 | Doherty threshold     | Instant press feedback, short motion, spinners only for waits over 400ms                       |
+| Stay where users already are        | Jakob's law           | Esc, arrow keys and ⌘K behave as everywhere else; native controls wherever they fit            |
+| Keep the reference point still      | Apple HIG             | Busy buttons keep their width; scroll locks keep a stable gutter                               |
+| Teach shortcuts in place            | Linear, Raycast       | Tooltips and menu items show the key; nothing needs memorising                                 |
+| Validate after intent               | NN/g error prevention | Errors show after interaction and replace the help text instead of stacking on it              |
+| Prefer undo to confirm              | NN/g                  | Reversible actions run at once and offer Undo; dialogs are for irreversible ones               |
+| Close one layer at a time           | The top layer         | Esc closes only the topmost layer, and focus returns to what opened it                         |
+| Honour system settings              | Apple HIG             | Reduced motion, reduced transparency, color scheme and touch screens all change the components |
