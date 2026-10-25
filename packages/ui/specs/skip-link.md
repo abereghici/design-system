@@ -27,11 +27,11 @@ One part: a native `<a href="#…">` with a text label.
 
 ## API
 
-| Prop       | Type                  | Default                             | Notes                                                                 |
-| ---------- | --------------------- | ----------------------------------- | --------------------------------------------------------------------- |
-| `href`     | `` `#${string}` ``    | required                            | The fragment of the main content's `id`.                              |
-| `children` | `ReactNode` (required)  |                                     | The link text.                                                        |
-| …native    | `ComponentProps<"a">` |                                     | `ref`, `className` and every native attribute pass through unchanged. |
+| Prop       | Type                   | Default  | Notes                                                                 |
+| ---------- | ---------------------- | -------- | --------------------------------------------------------------------- |
+| `href`     | `` `#${string}` ``     | required | The fragment of the main content's `id`.                              |
+| `children` | `ReactNode` (required) |          | The link text.                                                        |
+| …native    | `ComponentProps<"a">`  |          | `ref`, `className` and every native attribute pass through unchanged. |
 
 Names, checked against the reference libraries:
 

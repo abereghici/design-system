@@ -39,17 +39,17 @@ Root (nav → list) → Previous → page items and ellipses → Next.
 
 ## API
 
-| Prop            | Type                                                                                   | Default             | Notes                                                                                                                                                         |
-| --------------- | -------------------------------------------------------------------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `page`          | `number`                                                                               | required            | The current page, 1-based, an integer in 1…`count` (as Mantine: "must be an integer in [1, total] interval"). Not corrected when out of range.                |
-| `count`         | `number`                                                                               | required            | The total number of pages, an integer ≥ 1. Pages, not items.                                                                                                  |
-| `getPageUrl`    | `(page: number) => string`                                                             | required            | The `href` of each page item and of Previous / Next.                                                                                                          |
-| `linkComponent` | `ElementType`                                                                          | `"a"`               | Renders every enabled item (pages, Previous, Next) with this component, given `href`, `aria-label`, `aria-current`, `className` and children (a router link). |
-| `locale`        | `Intl.LocalesArgument`                                                                 |                     | Passed to `Intl.NumberFormat` for the page numbers; the runtime's default without it. Pass the same one on the server and in the browser.                      |
-| `aria-label` \| `aria-labelledby` | `string` (one required) |  | The landmark's name, such as "Pagination". |
-| `previousLabel`, `nextLabel` | `string` (required) |  | Names of the icon-only Previous and Next controls. |
-| `getPageLabel` | `(page: string) => string` |  | A page link's name from its formatted number ("Page 3"); without it the number names the link. |
-| …native         | `ComponentProps<"nav">`                                                                |                     | `ref`, `className`, `aria-labelledby` and native attributes go on the `<nav>`.                                                                                |
+| Prop                              | Type                       | Default  | Notes                                                                                                                                                         |
+| --------------------------------- | -------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `page`                            | `number`                   | required | The current page, 1-based, an integer in 1…`count` (as Mantine: "must be an integer in [1, total] interval"). Not corrected when out of range.                |
+| `count`                           | `number`                   | required | The total number of pages, an integer ≥ 1. Pages, not items.                                                                                                  |
+| `getPageUrl`                      | `(page: number) => string` | required | The `href` of each page item and of Previous / Next.                                                                                                          |
+| `linkComponent`                   | `ElementType`              | `"a"`    | Renders every enabled item (pages, Previous, Next) with this component, given `href`, `aria-label`, `aria-current`, `className` and children (a router link). |
+| `locale`                          | `Intl.LocalesArgument`     |          | Passed to `Intl.NumberFormat` for the page numbers; the runtime's default without it. Pass the same one on the server and in the browser.                     |
+| `aria-label` \| `aria-labelledby` | `string` (one required)    |          | The landmark's name, such as "Pagination".                                                                                                                    |
+| `previousLabel`, `nextLabel`      | `string` (required)        |          | Names of the icon-only Previous and Next controls.                                                                                                            |
+| `getPageLabel`                    | `(page: string) => string` |          | A page link's name from its formatted number ("Page 3"); without it the number names the link.                                                                |
+| …native                           | `ComponentProps<"nav">`    |          | `ref`, `className`, `aria-labelledby` and native attributes go on the `<nav>`.                                                                                |
 
 Names, checked against the reference libraries:
 

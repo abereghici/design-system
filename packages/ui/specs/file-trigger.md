@@ -45,7 +45,7 @@ Richer lists (thumbnails, progress, per-file remove) stay the app's, from `onSel
 | `onSelect`                 | `(files: File[], details: FileTriggerSelectEventDetails) => void` |         | After the user picks files. `details`: `reason` (`"none"`), `event` (the native `change`), `cancel()` (clears the selection). |
 | `name`, `required`, `form` | native                                                            |         | On the hidden input, so the files submit with the form and `valueMissing` applies.                                            |
 | `disabled`                 | `boolean`                                                         | `false` | Passed to the trigger (`aria-disabled`); the picker does not open.                                                            |
-| `clearLabel` | `string` |  | Shows the Clear button with this name ("Clear files"); without it there is no Clear button, so no button is ever nameless. |
+| `clearLabel`               | `string`                                                          |         | Shows the Clear button with this name ("Clear files"); without it there is no Clear button, so no button is ever nameless.    |
 
 Names, checked against the reference libraries:
 

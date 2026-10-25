@@ -35,11 +35,11 @@ Toaster (no element of its own) → Announcers (two visually hidden live regions
 
 `Toaster`
 
-| Prop     | Type                                  | Default                                         | Notes                                                                                                                             |
-| -------- | ------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `aria-label` | `string` (required) |  | The region's name, such as "Notifications". |
-| `closeLabel` | `string` (required) |  | Every toast's Dismiss name, such as "Dismiss". |
-| …native  | `ComponentProps<"section">`           |                                                 | `ref`, `className` and native attributes go on the Region. `popover`, `tabIndex`, `aria-label` and `aria-keyshortcuts` are owned. |
+| Prop         | Type                        | Default | Notes                                                                                                                             |
+| ------------ | --------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `aria-label` | `string` (required)         |         | The region's name, such as "Notifications".                                                                                       |
+| `closeLabel` | `string` (required)         |         | Every toast's Dismiss name, such as "Dismiss".                                                                                    |
+| …native      | `ComponentProps<"section">` |         | `ref`, `className` and native attributes go on the Region. `popover`, `tabIndex`, `aria-label` and `aria-keyshortcuts` are owned. |
 
 `@platform/ui/toaster` exports `Toaster` and `ToasterProps` from a directive-free `index.ts`; `toaster.tsx` is a `'use client'` leaf. Toasts are added with `toast()` from `@platform/ui/toast` (`toast.md`).
 

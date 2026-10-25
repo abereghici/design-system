@@ -84,12 +84,12 @@ No Header, Body, Backdrop or Portal Part (see API).
 
 `Dialog.Close`
 
-| Prop       | Type                       | Default              | Notes                                                                                               |
-| ---------- | -------------------------- | -------------------- | --------------------------------------------------------------------------------------------------- |
-| `asChild`  | `boolean`                  | `false`              | Renders the single child (a Button) with `commandfor` and `command="request-close"` merged in.      |
-| `children` | `ReactNode`                |                      | Only with `asChild`. Without children, Close renders the icon-only `x` button.                      |
-| `aria-label` | `string` (required without `asChild`) |  | Accessible name of the icon-only button, such as "Close". |
-| …native    | `ComponentProps<"button">` |                      | `ref`, `className`, `onClick` and native attributes.                                                |
+| Prop         | Type                                  | Default | Notes                                                                                          |
+| ------------ | ------------------------------------- | ------- | ---------------------------------------------------------------------------------------------- |
+| `asChild`    | `boolean`                             | `false` | Renders the single child (a Button) with `commandfor` and `command="request-close"` merged in. |
+| `children`   | `ReactNode`                           |         | Only with `asChild`. Without children, Close renders the icon-only `x` button.                 |
+| `aria-label` | `string` (required without `asChild`) |         | Accessible name of the icon-only button, such as "Close".                                      |
+| …native      | `ComponentProps<"button">`            |         | `ref`, `className`, `onClick` and native attributes.                                           |
 
 Names, checked against the reference libraries:
 

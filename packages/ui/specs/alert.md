@@ -49,11 +49,11 @@ At least one of Title or Description is required. There is no Action Part: an ac
 
 `Alert.Close`
 
-| Prop      | Type                       | Default                | Notes                                                                     |
-| --------- | -------------------------- | ---------------------- | ------------------------------------------------------------------------- |
-| `aria-label` | `string` (required) |  | The button's accessible name, such as "Dismiss": it shows only an icon. Close takes no children. |
-| `onClick` | native                     |                        | The app removes the Alert here. Alert has no open state of its own.       |
-| …native   | `ComponentProps<"button">` |                        | `ref`, `className`, `disabled` (as `aria-disabled`, per IconButton).      |
+| Prop         | Type                       | Default | Notes                                                                                            |
+| ------------ | -------------------------- | ------- | ------------------------------------------------------------------------------------------------ |
+| `aria-label` | `string` (required)        |         | The button's accessible name, such as "Dismiss": it shows only an icon. Close takes no children. |
+| `onClick`    | native                     |         | The app removes the Alert here. Alert has no open state of its own.                              |
+| …native      | `ComponentProps<"button">` |         | `ref`, `className`, `disabled` (as `aria-disabled`, per IconButton).                             |
 
 Names, checked against the reference libraries:
 

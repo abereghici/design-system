@@ -33,15 +33,15 @@ Root → header (Previous, month heading, Next) → grid (weekday row, six week 
 
 `Calendar`
 
-| Prop                | Type                                                                        | Default | Notes                                                                                          |
-| ------------------- | --------------------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------- |
-| `value`             | `Temporal.PlainDate \| null`                                                |         | Controlled.                                                                                    |
-| `defaultValue`      | `Temporal.PlainDate \| null`                                                | `null`  | Uncontrolled.                                                                                  |
-| `onValueChange`     | `(value: Temporal.PlainDate, details: Calendar.ChangeEventDetails) => void` |         | `reason`: `"day-press"` (click, Enter or Space on a day). `cancel()` keeps the previous value. |
-| `min`, `max`        | `Temporal.PlainDate`                                                        |         | Days outside are unavailable; Previous / Next stop at their months.                            |
-| `isDateUnavailable` | `(date: Temporal.PlainDate) => boolean`                                     |         | Unavailable days stay focusable and readable, but cannot be chosen.                            |
-| `previousMonthLabel`, `nextMonthLabel` | `string` (required) |  | Names of the icon-only month buttons ("Previous month", "Next month"). |
-| …native             | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                 |         | `ref`, `className`, `aria-label`, `aria-labelledby` on Root. `role` is owned.                  |
+| Prop                                   | Type                                                                        | Default | Notes                                                                                          |
+| -------------------------------------- | --------------------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------- |
+| `value`                                | `Temporal.PlainDate \| null`                                                |         | Controlled.                                                                                    |
+| `defaultValue`                         | `Temporal.PlainDate \| null`                                                | `null`  | Uncontrolled.                                                                                  |
+| `onValueChange`                        | `(value: Temporal.PlainDate, details: Calendar.ChangeEventDetails) => void` |         | `reason`: `"day-press"` (click, Enter or Space on a day). `cancel()` keeps the previous value. |
+| `min`, `max`                           | `Temporal.PlainDate`                                                        |         | Days outside are unavailable; Previous / Next stop at their months.                            |
+| `isDateUnavailable`                    | `(date: Temporal.PlainDate) => boolean`                                     |         | Unavailable days stay focusable and readable, but cannot be chosen.                            |
+| `previousMonthLabel`, `nextMonthLabel` | `string` (required)                                                         |         | Names of the icon-only month buttons ("Previous month", "Next month").                         |
+| …native                                | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                 |         | `ref`, `className`, `aria-label`, `aria-labelledby` on Root. `role` is owned.                  |
 
 Inside `DatePicker.Content`, the Calendar takes `value`, `min`, `max` and `isDateUnavailable` from the DatePicker (DatePicker spec); set them on `DatePicker.Root`.
 
