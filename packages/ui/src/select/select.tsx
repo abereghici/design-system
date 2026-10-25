@@ -1,25 +1,6 @@
-import type { ComponentProps } from "react";
-
-import { join } from "../slot/slot.tsx";
-
-import styles from "./select.module.css";
-
+export { Item } from "./select-item.tsx";
+export type { ItemProps } from "./select-item.tsx";
+export { Group } from "./select-group.tsx";
+export type { GroupProps } from "./select-group.tsx";
 export { Root } from "./select-root.tsx";
 export type { ChangeEventDetails, RootProps } from "./select-root.tsx";
-
-export interface ItemProps extends ComponentProps<"option"> {
-  value: string;
-}
-
-/** One option: its text, optionally after a decorative icon that not every browser shows. */
-export function Item({ className, ...props }: ItemProps) {
-  return <option {...props} className={join(styles["item"], className)} />;
-}
-
-export interface GroupProps extends ComponentProps<"optgroup"> {
-  label: string;
-}
-
-export function Group({ className, ...props }: GroupProps) {
-  return <optgroup {...props} className={join(styles["group"], className)} />;
-}

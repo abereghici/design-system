@@ -4,15 +4,15 @@ import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } fr
 import { createPortal } from "react-dom";
 import type { ComponentProps, RefObject } from "react";
 
-import { useLabels } from "../ui-provider/locale.tsx";
-import { toaster as toasterLabels } from "../ui-provider/locales/en-US/toaster.ts";
 import { composeRefs, join } from "../slot/slot.tsx";
 import { close, mark, snapshot, subscribe } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
+import { useLabels } from "../ui-provider/locale.tsx";
+import { toaster as toasterLabels } from "../ui-provider/locales/en-US/toaster.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
-import { Toast } from "./toast-item.tsx";
 import { useFocusReturn } from "./toaster-keys.ts";
+import { Toast } from "./toaster-toast.tsx";
 import styles from "./toaster.module.css";
 
 export interface ToasterProps extends Omit<

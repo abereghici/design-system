@@ -4,8 +4,8 @@ import type { Decorator } from "@storybook/react-vite";
 
 import { Button } from "@platform/ui/button";
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/ui-provider";
 import { toast } from "@platform/ui/toast";
+import { UIProvider } from "@platform/ui/ui-provider";
 import type { Locale } from "@platform/ui/ui-provider";
 
 import preview from "#.storybook/preview.tsx";

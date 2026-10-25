@@ -3,7 +3,6 @@
 import { createContext, use } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId, returnFocus } from "../floating/floating.ts";
 import type { Floating } from "../floating/floating.ts";
@@ -29,8 +28,11 @@ function useMenu(): Menu {
 }
 
 export const focusLast = new WeakSet<Element>();
+
 const enterPressed = new WeakSet<Element>();
+
 const typed = new WeakMap<Element, { text: string; at: number }>();
+
 const TYPEAHEAD_WINDOW = 500;
 
 export const itemsOf = (menu: Element) => [
@@ -150,29 +152,4 @@ export function useItem(
       close(menu, event, closeOnClick ?? role === "menuitem");
     },
   };
-}
-
-export interface ItemProps extends ItemBaseProps {
-  /** `danger` for a destructive action, placed last after a Separator. */
-  variant?: "default" | "danger";
-}
-
-/** An action. The menu closes before your `onClick` runs, unless `closeOnClick` is off. */
-export function Item({ variant = "default", onClick, ...rest }: ItemProps) {
-  const { menu, props, blocked, close: closeMenu } = useItem(rest, "menuitem");
-  return (
-    <button
-      {...props}
-      data-variant={variant}
-      onClick={(event) => {
-        if (blocked(event)) return;
-        closeMenu(event);
-        onClick?.(event);
-        dispatchFeedback(event.currentTarget, "ab-press", {
-          component: menu.component,
-          reason: "user",
-        });
-      }}
-    />
-  );
 }

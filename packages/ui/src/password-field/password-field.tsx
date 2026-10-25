@@ -4,16 +4,16 @@ import { useEffect, useState } from "react";
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useField } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
+import { useField } from "../field/use-field.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { EyeOffIcon } from "../icon/icons/eye-off.tsx";
 import { EyeIcon } from "../icon/icons/eye.tsx";
+import { InputGroup, TextInput } from "../text-field/text-field.tsx";
+import type { TextFieldProps } from "../text-field/text-field.tsx";
 import { useLabels } from "../ui-provider/locale.tsx";
 import type { Labels } from "../ui-provider/locale.tsx";
 import { passwordField as passwordFieldLabels } from "../ui-provider/locales/en-US/password-field.ts";
-import { InputGroup, TextInput } from "../text-field/text-field.tsx";
-import type { TextFieldProps } from "../text-field/text-field.tsx";
 
 /** `cancel()`: keeps the current visibility. */
 export type PasswordFieldVisibleChangeEventDetails = Details<"toggle-press" | "form-submit">;

@@ -1,8 +1,8 @@
 import { useRef } from "react";
 
 import type { Temporal } from "../date/date.ts";
-import { setValidity, useField, useFormReset } from "../field/field-control.ts";
-import type { Validate } from "../field/field-control.ts";
+import { setValidity, useField, useFormReset } from "../field/use-field.ts";
+import type { Validate } from "../field/use-field.ts";
 
 import type { Segments } from "./segments.ts";
 

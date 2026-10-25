@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { ComponentProps, DragEvent, RefObject } from "react";
 
 import { requestChange } from "../events/events.ts";
-import { useField } from "../field/field-control.ts";
+import { useField } from "../field/use-field.ts";
 import { FileInput, PickerContext } from "../file-trigger/file-trigger.tsx";
 import { join } from "../slot/slot.tsx";
 

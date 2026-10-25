@@ -1,0 +1,45 @@
+"use client";
+
+import type { ComponentProps, MouseEvent } from "react";
+
+import type { Reason } from "../dialog/dialog-controller.ts";
+import { ModalRoot, useModal } from "../dialog/dialog-modal.tsx";
+import type { RootProps as ModalRootProps } from "../dialog/dialog-modal.tsx";
+import { composeEventHandlers, dispatchFeedback } from "../events/events.ts";
+
+import styles from "../dialog/dialog.module.css";
+
+export type RootProps = ModalRootProps<Exclude<Reason, "outside-press">>;
+
+/**
+ * A modal confirmation of an irreversible action, answered with Cancel or the Action (Escape counts as Cancel); a press on the backdrop does nothing. Reversible actions don't need one: run them and offer Undo in a Toast. For a task with fields, use Dialog.
+ */
+export function Root(props: RootProps) {
+  return <ModalRoot {...props} styles={styles} component="AlertDialog" />;
+}
+
+export type ButtonProps = Omit<ComponentProps<"button">, "command" | "commandfor">;
+
+export function useClose(onClick: ButtonProps["onClick"], dismiss: boolean) {
+  const { id, controller } = useModal();
+  return {
+    type: "button",
+    commandfor: id,
+    command: "request-close",
+    onClick: composeEventHandlers(
+      (event: MouseEvent<HTMLButtonElement>) => {
+        onClick?.(event);
+        if (!dismiss) dispatchFeedback(event.currentTarget, "ab-confirm", feedback);
+      },
+      (event) => {
+        controller.press({
+          reason: "close-press",
+          event: event.nativeEvent,
+          dismiss: dismiss ? event.currentTarget : null,
+        });
+      },
+    ),
+  } as const;
+}
+
+const feedback = { component: "AlertDialog", reason: "user" } as const;

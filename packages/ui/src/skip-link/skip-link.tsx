@@ -1,9 +1,9 @@
 import type { ComponentProps } from "react";
 
+import { join } from "../slot/slot.tsx";
 import { labelsOf } from "../ui-provider/labels.ts";
 import type { Labels, Locale } from "../ui-provider/locale.tsx";
 import { skipLink as skipLinkLabels } from "../ui-provider/locales/en-US/skip-link.ts";
-import { join } from "../slot/slot.tsx";
 
 import styles from "./skip-link.module.css";
 

@@ -1,8 +1,8 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import type { Locale } from "../ui-provider/locale.tsx";
 import { join } from "../slot/slot.tsx";
+import type { Locale } from "../ui-provider/locale.tsx";
 
 import styles from "./meter.module.css";
 

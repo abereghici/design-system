@@ -6,8 +6,8 @@ import type { ComponentProps, SyntheticEvent } from "react";
 import { FormErrorsContext } from "../form/form.tsx";
 import { join } from "../slot/slot.tsx";
 
-import { FieldContext, setValidity } from "./field-control.ts";
-import type { FormControl } from "./field-control.ts";
+import { FieldContext, setValidity } from "./use-field.ts";
+import type { FormControl } from "./use-field.ts";
 import styles from "./field.module.css";
 
 export interface RootProps extends ComponentProps<"div"> {

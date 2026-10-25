@@ -10,7 +10,7 @@ import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
 
-import * as Command from "./index.parts.ts";
+import * as Command from "./command.tsx";
 
 const onHome = fn<() => void>();
 const palette = (

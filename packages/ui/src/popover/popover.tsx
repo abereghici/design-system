@@ -1,20 +1,11 @@
-import type { ComponentProps } from "react";
-
-import { join } from "../slot/slot.tsx";
-
-import styles from "./popover.module.css";
-
-export { Close, Content, Root, Title, Trigger } from "./popover-root.tsx";
-export type {
-  ChangeEventDetails,
-  ChangeReason,
-  CloseProps,
-  ContentProps,
-  RootProps,
-  TitleProps,
-  TriggerProps,
-} from "./popover-root.tsx";
-
-export function Description({ className, ...props }: ComponentProps<"p">) {
-  return <p {...props} className={join(styles["description"], className)} />;
-}
+export { Description } from "./popover-description.tsx";
+export { Close } from "./popover-close.tsx";
+export { Content } from "./popover-content.tsx";
+export { Root } from "./popover-root.tsx";
+export { Title } from "./popover-title.tsx";
+export { Trigger } from "./popover-trigger.tsx";
+export type { ChangeEventDetails, ChangeReason, RootProps } from "./popover-root.tsx";
+export type { CloseProps } from "./popover-close.tsx";
+export type { ContentProps } from "./popover-content.tsx";
+export type { TitleProps } from "./popover-title.tsx";
+export type { TriggerProps } from "./popover-trigger.tsx";

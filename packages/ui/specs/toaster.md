@@ -4,8 +4,8 @@ The region that shows toasts: a "Notifications" landmark at the bottom centre of
 
 ```tsx
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/ui-provider";
 import { Toaster } from "@platform/ui/toaster";
+import { UIProvider } from "@platform/ui/ui-provider";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

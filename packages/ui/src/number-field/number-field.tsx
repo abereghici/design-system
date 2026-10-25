@@ -5,15 +5,15 @@ import type { ComponentProps, KeyboardEvent, ReactNode, SyntheticEvent } from "r
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useField, useFormReset } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
-import { useLocale } from "../ui-provider/locale.tsx";
-import type { Labels } from "../ui-provider/locale.tsx";
+import { useField, useFormReset } from "../field/use-field.ts";
 import { InputGroup } from "../text-field/text-field.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
+import { useLocale } from "../ui-provider/locale.tsx";
+import type { Labels } from "../ui-provider/locale.tsx";
 
-import { StepButtons } from "./step-buttons.tsx";
-import type { Direction } from "./step-buttons.tsx";
+import { StepButtons } from "./number-field-step-buttons.tsx";
+import type { Direction } from "./number-field-step-buttons.tsx";
 import textFieldStyles from "../text-field/text-field.module.css";
 import styles from "./number-field.module.css";
 

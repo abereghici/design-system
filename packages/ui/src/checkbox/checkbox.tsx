@@ -3,7 +3,7 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { useFieldControl } from "../field/field-control.ts";
+import { useFieldControl } from "../field/use-field.ts";
 import { join } from "../slot/slot.tsx";
 import { pointerMarker, toggleClick } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";

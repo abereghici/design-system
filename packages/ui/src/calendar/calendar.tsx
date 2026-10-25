@@ -17,10 +17,10 @@ import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
+import { join } from "../slot/slot.tsx";
 import { useLabels, useLocale } from "../ui-provider/locale.tsx";
 import type { Labels } from "../ui-provider/locale.tsx";
 import { calendar as calendarLabels } from "../ui-provider/locales/en-US/calendar.ts";
-import { join } from "../slot/slot.tsx";
 
 import { Grid, keyTarget } from "./calendar-grid.tsx";
 import styles from "./calendar.module.css";

@@ -95,7 +95,7 @@ Names, checked against the reference libraries:
 - **Body is not a ScrollArea component** but follows its rules (keyboard reachable with `tabIndex={0}`, no role, native scrollbars): WebKit bug 277290 "AX: Scrolling containers inoperable with keyboard" (ScrollArea spec) is why the default tab stop exists.
 - **Body edge fades left out.** The source has "Body scrolls with edge fades", which the brand book builds with scroll-driven animation ("`animation-timeline: scroll(self)`"); `scroll-driven-animations` is limited (webstatus.dev: no Firefox), and the ScrollArea spec left them out for the same reason. The Footer's position at the bottom and the native scrollbar show that there is more (judgement call, ScrollArea precedent).
 - **Side.** `side` sets `data-side`, which picks the inset and the slide direction in CSS; nothing else changes.
-- Client components (`'use client'`): the shared Dialog Parts (`src/dialog/modal.tsx`, `close.tsx`). `sheet.tsx` itself is a Server module: Root and Content bind Sheet's styles and `side` onto them, and Body and Footer are plain `<div>`s.
+- Client components (`'use client'`): the shared Dialog Parts (`src/dialog/dialog-modal.tsx` and the `dialog-<part>.tsx` files). `sheet.tsx` itself is a Server module: Root and Content bind Sheet's styles and `side` onto them, and Body and Footer are plain `<div>`s.
 
 ## Motion
 

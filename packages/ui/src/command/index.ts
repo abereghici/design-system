@@ -1,1 +1,1 @@
-export * as Command from "./index.parts.ts";
+export * as Command from "./command.tsx";

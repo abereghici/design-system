@@ -3,7 +3,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 import { dateFormats } from "../date/date.ts";
 import type { DatePart, Temporal } from "../date/date.ts";
-import { useField } from "../field/field-control.ts";
+import { useField } from "../field/use-field.ts";
 import { useLabels, useLocale } from "../ui-provider/locale.tsx";
 import type { Labels } from "../ui-provider/locale.tsx";
 import { dateField as dateFieldLabels } from "../ui-provider/locales/en-US/date-field.ts";
