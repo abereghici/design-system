@@ -265,6 +265,20 @@ InAForm.test(
   },
 );
 
+InAForm.test(
+  "restores its default value and clears its error when the form resets",
+  { args: { defaultValue: date("2026-10-24") } },
+  async ({ canvas, userEvent }) => {
+    const day = canvas.getByRole("spinbutton", { name: "day" });
+    await userEvent.type(day, "{Backspace}{Backspace}");
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
+    await expect(day).toBeInvalid();
+    canvas.getByRole<HTMLFormElement>("form", { name: "Profile" }).reset();
+    await waitFor(() => expect(day).toHaveValue("24"));
+    await expect(day).not.toBeInvalid();
+  },
+);
+
 InAForm.test("reports a partial date as incomplete", async ({ canvas, userEvent }) => {
   await userEvent.click(canvas.getByRole("spinbutton", { name: "month" }));
   await userEvent.keyboard("1");

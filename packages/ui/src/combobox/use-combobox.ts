@@ -1,6 +1,7 @@
 import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "react";
 
-import { byId, isOpen, sourceOf } from "../floating/floating.ts";
+import { getDocument, useEvent } from "../events/use-event.ts";
+import { isOpen, sourceOf } from "../floating/floating.ts";
 import { filterOptions, enabled, textOf } from "../listbox/listbox.tsx";
 
 import { chosenOf, dismiss, highlight, inputOf, listOf, memoryOf, part } from "./combobox-state.ts";
@@ -21,15 +22,15 @@ function applyText(c: Combobox, list: Element, input: HTMLInputElement) {
 function placePopover(c: Combobox, list: HTMLElement) {
   if (c.open === isOpen(list)) return;
   list.toggleAttribute("data-pointer", memoryOf(c).pointer);
-  if (c.open) list.showPopover(sourceOf(byId(part(c, "box"))));
+  if (c.open) list.showPopover(sourceOf(document.getElementById(part(c, "box"))));
   else list.hidePopover();
 }
 
 function showEmpty(c: Combobox, list: HTMLElement, empty: boolean, text: string) {
   list.toggleAttribute("data-empty", empty);
-  const row = byId(part(c, "empty"));
+  const row = document.getElementById(part(c, "empty"));
   if (row !== null) row.hidden = !empty;
-  const status = byId(part(c, "status"));
+  const status = document.getElementById(part(c, "status"));
   if (status !== null) status.textContent = c.open && empty ? text : "";
 }
 
@@ -54,14 +55,6 @@ function sync(c: Combobox, emptyText: string) {
   else highlight(list, input, from === "chosen" ? (chosen ?? choices[0]) : choices[0], true);
 }
 
-function listen(target: EventTarget, type: string, listener: (event: Event) => void) {
-  const controller = new AbortController();
-  target.addEventListener(type, listener, { signal: controller.signal });
-  return () => {
-    controller.abort();
-  };
-}
-
 function useListeners(c: Combobox) {
   const reread = useEffectEvent(() => {
     const memory = memoryOf(c);
@@ -75,32 +68,34 @@ function useListeners(c: Combobox) {
     reread();
   });
 
-  const outside = useEffectEvent((event: Event) => {
-    const root = byId(part(c, "root"));
-    if (event.target instanceof Node && root?.contains(event.target) !== true) {
-      dismiss(c, "outside-press", event);
-    }
-  });
-  const { open } = c;
-  useEffect(() => (open ? listen(document, "pointerdown", outside) : undefined), [open]);
+  useEvent(
+    "pointerdown",
+    (event) => {
+      const root = document.getElementById(part(c, "root"));
+      if (event.target instanceof Node && root?.contains(event.target) !== true) {
+        dismiss(c, "outside-press", event);
+      }
+    },
+    c.open ? getDocument : null,
+  );
 
-  const reset = useEffectEvent(() => {
-    const { defaultValue = null, defaultInputValue } = c.options;
-    const list = listOf(c);
-    const label = defaultInputValue ?? textOf(list === null ? null : chosenOf(list, defaultValue));
-    // The reset event fires before the form resets its controls, so the label goes in afterwards.
-    queueMicrotask(() => {
-      const input = inputOf(c);
-      if (input !== null) input.value = label;
-      memoryOf(c).text = label;
-      c.setValue(defaultValue);
-    });
-  });
-  const formOf = useEffectEvent(() => inputOf(c)?.form ?? null);
-  useEffect(() => {
-    const form = formOf();
-    return form === null ? undefined : listen(form, "reset", reset);
-  }, []);
+  useEvent(
+    "reset",
+    () => {
+      const { defaultValue = null, defaultInputValue } = c.options;
+      const list = listOf(c);
+      const label =
+        defaultInputValue ?? textOf(list === null ? null : chosenOf(list, defaultValue));
+      // The reset event fires before the form resets its controls, so the label goes in afterwards.
+      queueMicrotask(() => {
+        const input = inputOf(c);
+        if (input !== null) input.value = label;
+        memoryOf(c).text = label;
+        c.setValue(defaultValue);
+      });
+    },
+    () => inputOf(c)?.form,
+  );
 }
 
 /** The Combobox's state, given its empty-list text. The open list, the input's text and the highlight live in the DOM. */

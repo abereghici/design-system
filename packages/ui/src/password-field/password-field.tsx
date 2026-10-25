@@ -50,8 +50,10 @@ export type PasswordFieldProps = Omit<
 
 type Reason = PasswordFieldVisibleChangeEventDetails["reason"];
 
-const inputOf = (id: string | undefined) =>
-  id === undefined ? null : document.querySelector<HTMLInputElement>(`#${CSS.escape(id)}`);
+function inputOf(id: string | undefined) {
+  const node = id === undefined ? null : document.getElementById(id);
+  return node instanceof HTMLInputElement ? node : null;
+}
 
 function useVisibility(
   inputId: string | undefined,

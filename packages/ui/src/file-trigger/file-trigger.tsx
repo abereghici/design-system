@@ -1,18 +1,18 @@
 "use client";
 
-import { createContext, use, useEffect, useId, useRef, useState } from "react";
+import { createContext, use, useId, useRef, useState } from "react";
 import type { ComponentProps, MouseEvent, ReactElement, RefObject } from "react";
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useField, useFieldControl, useFormReset } from "../field/use-field.ts";
-import { XIcon } from "../icon/icons/x.tsx";
+import { useEvent } from "../events/use-event.ts";
+import { useField, useFieldControl } from "../field/use-field.ts";
 import { Slot } from "../slot/slot.tsx";
 import { useLabels } from "../ui-provider/locale.tsx";
 import { fileTrigger as fileTriggerLabels } from "../ui-provider/locales/en-US/file-trigger.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
-import iconButton from "../icon-button/icon-button.module.css";
+import { Selection } from "./file-trigger-selection.tsx";
 import styles from "./file-trigger.module.css";
 
 type NativeProps = Pick<
@@ -36,36 +36,6 @@ interface FileInputProps extends NativeProps {
   readonly labels: { clear?: string } | undefined;
 }
 
-interface SelectionProps {
-  readonly names: string[];
-  readonly label: string;
-  readonly disabled: boolean;
-  readonly onClear: () => void;
-}
-
-function Selection({ names, label, disabled, onClear }: SelectionProps) {
-  return (
-    <span className={styles["selection"]}>
-      {/* Always rendered: a live region must exist before its text changes. */}
-      <output className={styles["names"]}>{names.join(", ")}</output>
-      {names.length > 0 && (
-        <button
-          type="button"
-          aria-label={label}
-          aria-disabled={disabled || undefined}
-          data-size="sm"
-          className={iconButton["root"]}
-          onClick={() => {
-            if (!disabled) onClear();
-          }}
-        >
-          <XIcon />
-        </button>
-      )}
-    </span>
-  );
-}
-
 function clear(input: HTMLInputElement | null, trigger: HTMLElement | null) {
   if (input === null) return;
   input.value = "";
@@ -86,22 +56,21 @@ export function FileInput({
   ...props
 }: FileInputProps) {
   const bindings = useFieldControl<HTMLInputElement, NativeProps & { disabled: boolean }>(props);
-  useEffect(() => {
-    if (inputRef.current) inputRef.current.webkitdirectory = directory;
-  }, [inputRef, directory]);
   const { clear: clearLabel } = useLabels("fileTrigger", fileTriggerLabels, labels);
   const [names, setNames] = useState<string[]>([]);
-  useFormReset(
-    () => inputRef.current,
+  useEvent(
+    "reset",
     () => {
       setNames([]);
     },
+    () => inputRef.current?.form,
   );
   return (
     <>
       <VisuallyHidden asChild>
         <input
           {...bindings}
+          {...{ webkitdirectory: directory ? "" : undefined }}
           ref={inputRef}
           type="file"
           tabIndex={-1}

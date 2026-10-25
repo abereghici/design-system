@@ -4,9 +4,9 @@ import { createContext, use } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { byId, returnFocus } from "../floating/floating.ts";
+import { returnFocus } from "../floating/floating.ts";
 import type { Floating } from "../floating/floating.ts";
-import { enabled, textOf } from "../listbox/listbox.tsx";
+import { textOf } from "../listbox/listbox.tsx";
 import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./menu.module.css";
@@ -35,6 +35,8 @@ const typed = new WeakMap<Element, { text: string; at: number }>();
 
 const TYPEAHEAD_WINDOW = 500;
 
+const isDisabled = (item: Element) => item.getAttribute("aria-disabled") === "true";
+
 export const itemsOf = (menu: Element) => [
   ...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]'),
 ];
@@ -44,7 +46,7 @@ function typeahead(menu: HTMLElement, key: string, from: Element | null) {
   const now = performance.now();
   const text = last !== undefined && now - last.at < TYPEAHEAD_WINDOW ? last.text + key : key;
   typed.set(menu, { text, at: now });
-  const items = itemsOf(menu).filter((item) => enabled(item));
+  const items = itemsOf(menu).filter((item) => !isDisabled(item));
   const start = from instanceof HTMLElement ? items.indexOf(from) : -1;
   const repeat = text === key.repeat(text.length) ? key : text;
   const order = [...items.slice(start + 1), ...items.slice(0, start + 1)];
@@ -102,7 +104,7 @@ export function menuContentProps(menu: Menu) {
         event.target instanceof Element
           ? event.target.closest<HTMLElement>('[role^="menuitem"]')
           : null;
-      const target = item !== null && enabled(item) ? item : event.currentTarget;
+      const target = item !== null && !isDisabled(item) ? item : event.currentTarget;
       if (document.activeElement !== target) target.focus({ preventScroll: true });
     },
   } as const;
@@ -118,7 +120,7 @@ export interface ItemBaseProps extends ComponentProps<"button"> {
 function close(menu: Menu, event: MouseEvent<HTMLElement>, always: boolean) {
   const entered = enterPressed.delete(event.currentTarget);
   if (!always && !entered) return;
-  const content = byId(menu.floating.contentId);
+  const content = document.getElementById(menu.floating.contentId);
   if (content !== null && menu.floating.toggle(false, "item-press", event.nativeEvent)) {
     returnFocus(content);
   }

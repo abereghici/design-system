@@ -73,20 +73,6 @@ export function setValidity(
   );
 }
 
-/** Runs `onReset` when the form that owns `control()` resets. */
-export function useFormReset(
-  control: () => { readonly form: HTMLFormElement | null } | null | undefined,
-  onReset: () => void,
-) {
-  useEffect(() => {
-    const controller = new AbortController();
-    control()?.form?.addEventListener("reset", onReset, { signal: controller.signal });
-    return () => {
-      controller.abort();
-    };
-  });
-}
-
 /**
  * The Field contract for a control: spread the result on the native element. It takes the id,
  * `name`, `disabled` and describedby list from the enclosing Root, sets `aria-invalid` and

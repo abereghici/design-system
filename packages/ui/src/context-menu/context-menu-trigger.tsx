@@ -2,7 +2,7 @@
 
 import type { ComponentProps, MouseEvent, PointerEvent as ReactPointerEvent } from "react";
 
-import { byId, rememberFocus } from "../floating/floating.ts";
+import { rememberFocus } from "../floating/floating.ts";
 import type { Menu } from "../menu/menu.tsx";
 import { Slot } from "../slot/slot.tsx";
 
@@ -73,7 +73,7 @@ const isKeyboard = (event: globalThis.MouseEvent) =>
   event instanceof PointerEvent ? event.pointerType === "" : event.button !== 2;
 
 function anchorAt(contentId: string, x: number, y: number) {
-  const anchor = byId(`${contentId}-anchor`);
+  const anchor = document.getElementById(`${contentId}-anchor`);
   return anchor === null ? null : place(anchor, x, y, true);
 }
 

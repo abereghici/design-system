@@ -1,11 +1,11 @@
 "use client";
 
 import { createContext, useId, useState } from "react";
-import type { ComponentProps, MouseEvent } from "react";
+import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback, pointerMarker, requestChange } from "../events/events.ts";
+import { followVisualDirection } from "../radio-group/follow-visual-direction.ts";
 import { mergeProps } from "../slot/slot.tsx";
-import { followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
 import styles from "./segmented-control.module.css";
@@ -30,16 +30,8 @@ export type RootProps = Omit<ComponentProps<"fieldset">, "defaultValue"> & {
  * dispatches a bubbling `ab-toggle`. For sections with their own content use Tabs; for a choice in a
  * form, RadioGroup.
  */
-export function Root({
-  value,
-  defaultValue,
-  onValueChange,
-  onPointerDown,
-  onKeyDown,
-  ...props
-}: RootProps) {
+export function Root({ value, defaultValue, onValueChange, ...props }: RootProps) {
   const name = useId();
-  const marker = pointerMarker({ onPointerDown, onKeyDown });
   const [uncontrolled, setUncontrolled] = useState(defaultValue ?? "");
   const current = value ?? uncontrolled;
 
@@ -59,13 +51,18 @@ export function Root({
   return (
     <GroupContext value={{ name, value: current, select }}>
       <fieldset
-        {...mergeProps({ className: styles["root"] }, props)}
+        {...mergeProps(
+          {
+            className: styles["root"],
+            onPointerDown: pointerMarker.onPointerDown,
+            onKeyDown: (event: KeyboardEvent<HTMLFieldSetElement>) => {
+              pointerMarker.onKeyDown(event);
+              followVisualDirection(event);
+            },
+          },
+          props,
+        )}
         role="radiogroup"
-        {...marker}
-        onKeyDown={(event) => {
-          marker.onKeyDown(event);
-          followVisualDirection(event);
-        }}
       />
     </GroupContext>
   );
