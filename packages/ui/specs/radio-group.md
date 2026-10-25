@@ -24,7 +24,7 @@ Status: draft for brand-owner review (phase 2). Source guide: `components/RadioG
 
 Root (fieldset) → Label (legend) → Items (label → radio → diamond → text).
 
-- **Root.** A native `<fieldset role="radiogroup">`, UA chrome reset. Items stack with `fieldset-gap` (vertical) or sit in a wrapping row with `radio-gap` (horizontal).
+- **Root.** A native `<fieldset role="radiogroup">`, UA chrome reset. Items stack with `fieldset-gap` (vertical) or sit in a wrapping row `space-inline-lg` (20) apart (horizontal).
 - **Label.** A native `<legend>`, the group's name, in the field label type (`fieldset-legend-font`).
 - **Item.** A native `<label>` around a native `<input type="radio">` and the text; the whole row is the hit target. Gap `radio-gap` (8), text in `radio-label-font`.
 - **Radio.** The input with `appearance: none`, drawn as a 16 px circle (`radio-size`, `radio-border-radius` full), `radio-border-width` hairline in `radio-border-color`, fill `radio-background-color`.
