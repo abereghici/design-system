@@ -2,7 +2,6 @@ import type { ComponentProps, KeyboardEvent } from "react";
 
 import { rank } from "../filter/filter.ts";
 
-/* oxlint-disable jsx-a11y/prefer-tag-over-role -- HTML: <option> is used only "As a descendant of a select element. As a descendant of a datalist element. As a descendant of an optgroup element.", and rich options in a <select> need customizable select, which webstatus.dev rates "baseline":{"status":"limited"} (Chrome 135, Safari 27, no Firefox). */
 export function Listbox(props: ComponentProps<"div">) {
   return <div tabIndex={-1} {...props} role="listbox" />;
 }
@@ -13,7 +12,6 @@ export function Option({
 }: ComponentProps<"div"> & { "aria-selected": boolean | undefined }) {
   return <div {...props} role="option" aria-selected={selected} />;
 }
-/* oxlint-enable jsx-a11y/prefer-tag-over-role */
 
 export const enabled = (element: Element) => element.getAttribute("aria-disabled") !== "true";
 

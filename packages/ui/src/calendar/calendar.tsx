@@ -70,7 +70,8 @@ const clamp = (date: Temporal.PlainDate, min?: Temporal.PlainDate, max?: Tempora
 };
 
 function useToday() {
-  // The server renders UTC's date; the browser corrects it to its own time zone after hydration.
+  // The server renders UTC's date; the browser corrects it to its own time zone after hydration:
+  // https://react.dev/reference/react/useSyncExternalStore#adding-support-for-server-rendering
   const iso = useSyncExternalStore(
     onFocusIn,
     () => Temporal.Now.plainDateISO().toString(),
