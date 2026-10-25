@@ -1,10 +1,10 @@
 "use client";
 
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ComponentProps, DragEvent, RefObject } from "react";
 
 import { requestChange } from "../events/events.ts";
-import { FieldContext } from "../field/field-control.ts";
+import { useField } from "../field/field-control.ts";
 import { FileInput, PickerContext } from "../file-trigger/file-trigger.tsx";
 import { join } from "../slot/slot.tsx";
 
@@ -158,10 +158,9 @@ export function DropZone({
   children,
   ...props
 }: DropZoneProps) {
-  const field = use(FieldContext);
+  const [, blocked, invalid] = useField(disabled);
   const input = useRef<HTMLInputElement>(null);
   const trigger = useRef<HTMLElement>(null);
-  const blocked = disabled || field?.disabled === true;
   const { target, ...handlers } = useDropTarget({ accept, multiple, onDrop, blocked, input });
   const picker = { input, trigger, disabled: blocked };
   usePreventDocumentDrop();
@@ -172,7 +171,7 @@ export function DropZone({
         {...props}
         className={join(styles["root"], className)}
         data-drop-target={target}
-        data-invalid={field?.invalid === true || undefined}
+        data-invalid={invalid}
         data-disabled={blocked || undefined}
         {...handlers}
       >

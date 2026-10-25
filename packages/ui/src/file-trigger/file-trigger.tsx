@@ -5,7 +5,7 @@ import type { ComponentProps, MouseEvent, ReactElement, RefObject } from "react"
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { FieldContext, useFieldControl } from "../field/field-control.ts";
+import { useField, useFieldControl } from "../field/field-control.ts";
 import { Slot } from "../slot/slot.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
@@ -96,10 +96,9 @@ export function FileTrigger({
   ...props
 }: FileTriggerProps) {
   const zone = use(PickerContext);
-  const field = use(FieldContext);
+  const [field, blocked, invalid] = useField(disabled || zone?.disabled);
   const input = useRef<HTMLInputElement>(null);
   const trigger = useRef<HTMLElement>(null);
-  const blocked = disabled || zone?.disabled === true || field?.disabled === true;
   const inputRef = zone?.input ?? input;
   const triggerRef = zone?.trigger ?? trigger;
   useEffect(() => {
@@ -122,7 +121,7 @@ export function FileTrigger({
         id={field === undefined ? undefined : id}
         aria-labelledby={field === undefined ? undefined : `${field.labelId} ${id}`}
         aria-describedby={field?.describedBy}
-        aria-invalid={field?.invalid === true || undefined}
+        aria-invalid={invalid}
         {...{ disabled: blocked || undefined }}
         onClick={open}
       >

@@ -63,7 +63,7 @@ function useServerError(name: string | undefined, controlId: string) {
   useEffect(() => {
     const target = controlOf(controlId);
     if (server === undefined || target === null || errors === undefined) return;
-    const first = Array.from(target.form?.elements ?? []).find(
+    const first = [...(target.form?.elements ?? [])].find(
       (element) => errors[element.getAttribute("name") ?? ""] !== undefined,
     );
     if (first === target && document.activeElement !== target) target.focus();

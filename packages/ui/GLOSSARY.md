@@ -32,6 +32,10 @@ _Avoid_: Change event, veto, controlled change
 The active-descendant keyboard both listbox popups share (Combobox, Command): focus stays in the input while Down and Up step through the shown, enabled options and wrap, and Home and End reach the ends while the input is empty.
 _Avoid_: Roving focus (that is Menu's), list navigation
 
+**Field control**:
+The one seam between a Field and the control inside it: `useFieldControl` for a native input, `useField` for a composite control (DateField segments, a FileTrigger, a DropZone), giving the Field's ids, blocked state, `aria-invalid` and server error, and `useFormReset` for a form reset.
+_Avoid_: Field context (as an API), input binding
+
 **Icon**:
 A glyph from the carved icon set on the 24-unit grid, stroked in the surrounding text colour; decorative unless it has a label. Each one is its own component (`SearchIcon`).
 _Avoid_: Glyph (as a component name), symbol, pictogram

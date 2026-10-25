@@ -1,11 +1,11 @@
 "use client";
 
-import { use, useEffect, useEffectEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { ComponentProps, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { FieldContext } from "../field/field-control.ts";
+import { useField, useFormReset } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
@@ -134,19 +134,14 @@ function useNumber({
     if (next === committed) return;
     if (requestChange(onValueChange, next, reason, event)) setOwn(next);
   };
-  const reset = useEffectEvent(() => {
-    setOwn(defaultValue);
-    setText(null);
-  });
   const hidden = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    const form = hidden.current?.form;
-    const controller = new AbortController();
-    form?.addEventListener("reset", reset, { signal: controller.signal });
-    return () => {
-      controller.abort();
-    };
-  }, []);
+  useFormReset(
+    () => hidden.current,
+    () => {
+      setOwn(defaultValue);
+      setText(null);
+    },
+  );
   return { committed, text, setText, commit, hidden };
 }
 
@@ -202,7 +197,7 @@ function useNumberValue({
 }
 
 function Control({ labels, startElement, readOnly, ...options }: ControlProps) {
-  const field = use(FieldContext);
+  const [field] = useField();
   const { rest: props, hidden, ...number } = useNumberValue(options);
   const bindings = Field.useFieldControl<HTMLInputElement, typeof props>({
     ...props,

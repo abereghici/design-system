@@ -7,6 +7,8 @@ import type { ChangeEventDetails as Details } from "../events/events.ts";
 /** The native elements a Field validates. */
 export type FormControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
+export type Validate = (value: string, formData: FormData) => string | null | undefined;
+
 export interface FieldState {
   readonly controlId: string;
   readonly labelId: string;
@@ -39,6 +41,34 @@ export interface ControlBindings<Element extends FormControl> {
   onFocus?: FocusEventHandler<Element> | undefined;
   onChange?: ChangeEventHandler<Element> | undefined;
   onValueChange?: ((value: string, details: ChangeEventDetails<Element>) => void) | undefined;
+}
+
+/**
+ * The enclosing Field for any control, a composite one included (segments, a trigger, a drop
+ * area): its state, whether the control is blocked (its own `disabled` or the Field's), and its
+ * `aria-invalid`.
+ */
+export function useField(disabled?: boolean) {
+  const field = use(FieldContext);
+  return [
+    field,
+    disabled === true || field?.disabled === true,
+    field?.invalid === true || undefined,
+  ] as const;
+}
+
+/** Runs `onReset` when the form that owns `control()` resets. */
+export function useFormReset(
+  control: () => { readonly form: HTMLFormElement | null } | null | undefined,
+  onReset: () => void,
+) {
+  useEffect(() => {
+    const controller = new AbortController();
+    control()?.form?.addEventListener("reset", onReset, { signal: controller.signal });
+    return () => {
+      controller.abort();
+    };
+  });
 }
 
 /**

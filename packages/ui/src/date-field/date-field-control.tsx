@@ -1,9 +1,9 @@
-import { use, useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import { dateFormats } from "../date/date.ts";
 import type { DatePart, Temporal } from "../date/date.ts";
-import { FieldContext } from "../field/field-control.ts";
+import { useField } from "../field/field-control.ts";
 import { useLabels, useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { dateField as dateFieldLabels } from "../provider/locales/en-US/date-field.ts";
@@ -54,7 +54,7 @@ interface SegmentProps {
 }
 
 function Segment({ part, control, required }: SegmentProps) {
-  const { date, formats, names, field, blocked, editing } = control;
+  const { date, formats, names, field, blocked, invalid, editing } = control;
   const value = date.segments[part];
   const text = display(part, date.segments, date.buffer?.part === part ? date.buffer.text : "");
   const range = bounds(part, date.segments);
@@ -76,7 +76,7 @@ function Segment({ part, control, required }: SegmentProps) {
       aria-valuemax={range.max}
       aria-valuetext={value === undefined ? names.empty : spoken}
       aria-required={required === true || undefined}
-      aria-invalid={field?.invalid === true || undefined}
+      aria-invalid={invalid}
       aria-disabled={blocked || undefined}
       className={styles["segment"]}
       onChange={(event) => {
@@ -99,7 +99,7 @@ function filledAround(formats: Formats, index: number, segments: Segments) {
 }
 
 function useControl(options: ControlOptions, onValidity: (validity: Validity) => void) {
-  const field = use(FieldContext);
+  const [field, blocked, invalid] = useField(options.disabled);
   const locale = useLocale();
   const names = useLabels("dateField", dateFieldLabels, options.labels);
   const formats = dateFormats(locale.tag);
@@ -107,13 +107,11 @@ function useControl(options: ControlOptions, onValidity: (validity: Validity) =>
   const date = useDate(options);
   const name = field?.name ?? options.name;
   const validity = useValidity(options, {
-    id: field?.controlId,
     incomplete: names.incomplete,
     unavailable: names.unavailable,
     onValidity,
     reset: date.reset,
   });
-  const blocked = options.disabled === true || field?.disabled === true;
   useLayoutEffect(() => {
     validity.apply(date.segments, date.committed);
   });
@@ -125,7 +123,7 @@ function useControl(options: ControlOptions, onValidity: (validity: Validity) =>
     formats,
     submit: validity.submit,
   });
-  return { field, names, formats, group, date, name, validity, blocked, editing };
+  return { field, names, formats, group, date, name, validity, blocked, invalid, editing };
 }
 
 const isFirstInvalid = (input: HTMLInputElement) =>

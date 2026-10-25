@@ -1,10 +1,10 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { FieldContext } from "../field/field-control.ts";
+import { useField } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { InspectIcon } from "../icon/icons/inspect.tsx";
@@ -81,7 +81,7 @@ function Control({
   autoComplete = "current-password",
   ...props
 }: ControlProps) {
-  const field = use(FieldContext);
+  const [field, blocked] = useField();
   const inputId = field?.controlId;
   const [visible, change] = useVisibility(inputId, controlled, defaultVisible, onVisibleChange);
 
@@ -91,7 +91,7 @@ function Control({
       aria-label={useLabels("passwordField", passwordFieldLabels, labels).show}
       aria-controls={inputId}
       pressed={visible}
-      disabled={field?.disabled === true}
+      disabled={blocked}
       onPressedChange={(next, details) => {
         if (!change(next, "toggle-press", details.event.nativeEvent)) details.cancel();
       }}
