@@ -26,13 +26,7 @@ export interface BadgeProps extends Omit<ComponentProps<"span">, "children"> {
  * count in that control's name too ("Inbox, 1 280 unread"), since the Badge alone is easy to miss.
  * For a static word ("Draft"), use a Tag; for a state marker in a dense list, a StatusDot.
  */
-export function Badge({
-  variant = "neutral",
-  max = 99,
-  locale,
-  children,
-  ...props
-}: BadgeProps) {
+export function Badge({ variant = "neutral", max = 99, locale, children, ...props }: BadgeProps) {
   const overflow = typeof children === "number" && children > max;
   const format = (count: number) => new Intl.NumberFormat(locale).format(count);
   return (

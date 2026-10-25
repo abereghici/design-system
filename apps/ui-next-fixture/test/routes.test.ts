@@ -195,7 +195,7 @@ describe("locale, labels and direction", () => {
 
   test("a sorted Table header renders aria-sort and its button on the server", () => {
     expect(route("table").html).toMatch(
-      /<th scope="col" aria-sort="ascending" class="[^"]+"><button type="button"/v,
+      /<th scope="col" aria-sort="ascending" class="[^"]+"><button [^>]*type="button"/v,
     );
   });
 
