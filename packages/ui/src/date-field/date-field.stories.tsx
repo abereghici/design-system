@@ -39,6 +39,7 @@ const meta = preview.meta({
     name: "birthDate",
     locale: "en-US",
     incompleteMessage: "Enter a complete date",
+    placeholders: { day: "dd", month: "mm", year: "yyyy" },
     onValueChange:
       fn<(value: Temporal.PlainDate | null, details: DateFieldChangeEventDetails) => void>(),
   },
