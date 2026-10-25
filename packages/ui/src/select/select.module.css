@@ -10,9 +10,12 @@
 
   .select {
     appearance: none;
+    cursor: pointer;
+  }
+
+  .control > .select {
     padding-inline: var(--ab-input-padding-inline)
       calc(var(--ab-input-padding-inline) * 2 + var(--ab-icon-sm-size));
-    cursor: pointer;
   }
 
   .select:has(.placeholder:checked) {
@@ -96,6 +99,9 @@
       border-radius: var(--ab-select-option-border-radius);
       color: var(--ab-select-option-text-color);
       font: var(--ab-select-option-font);
+      letter-spacing: normal;
+      text-indent: 0;
+      text-transform: none;
       cursor: pointer;
       outline-offset: calc(var(--ab-focus-ring-width) * -1);
     }
@@ -121,6 +127,8 @@
       font: var(--ab-type-overline-sm);
       letter-spacing: var(--ab-type-overline-sm-letter-spacing);
       text-transform: var(--ab-type-overline-sm-text-transform);
+      /* The UA pads the optgroup label by 0.5em; this lines it up with the option text. */
+      text-indent: calc(var(--ab-select-option-padding-inline) - 0.5em);
     }
 
     @media (forced-colors: active) {

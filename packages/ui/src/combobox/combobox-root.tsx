@@ -34,8 +34,13 @@ export type RootProps = Naming &
      * nearby why it is unavailable.
      */
     disabled?: boolean;
+    /**
+     * Shows "Loading…" in place of "No results" while the app fetches Items; the Items that are
+     * already rendered stay.
+     */
+    loading?: boolean;
     /** Replaces the built-in text of the Provider's locale, for this instance only. */
-    labels?: { noResults?: string };
+    labels?: { noResults?: string; loading?: string };
     /**
      * Helper text under the field, such as a format hint; the error message takes its place while
      * invalid.
@@ -163,9 +168,11 @@ const split = ({
  */
 export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, validate, ...rest } = props;
-  const [options, { size = "md", className, style, labels, name, form, children, ...input }] =
-    split(rest);
-  const [c, noResults] = useCombobox(options, labels);
+  const [
+    options,
+    { size = "md", className, style, loading, labels, name, form, children, ...input },
+  ] = split(rest);
+  const [c, empty] = useCombobox(options, labels, loading);
   const field = { className, style, name, invalid, disabled: input.disabled, id: part(c, "root") };
   return (
     <Field.Root
@@ -183,7 +190,7 @@ export function Root(props: RootProps) {
       >
         {children}
         <div id={part(c, "empty")} aria-hidden className={styles["empty"]}>
-          {noResults}
+          {empty}
         </div>
       </List>
       {description !== undefined && <Field.Description>{description}</Field.Description>}
