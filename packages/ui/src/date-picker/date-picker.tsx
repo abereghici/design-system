@@ -13,7 +13,6 @@ import type { ChangeEventDetails as FloatingDetails, Floating } from "../floatin
 import { useLabels } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { datePicker as datePickerLabels } from "../provider/locales/en-US/date-picker.ts";
-import { pointerMarker } from "../toggle/toggle.ts";
 
 import { PanelContext, Trigger } from "./panel.tsx";
 
@@ -124,7 +123,6 @@ export function Root(props: RootProps) {
       isDateUnavailable={isDateUnavailable}
       labels={labels}
       onFormReset={date.reset}
-      {...pointerMarker(field)}
       end={<Trigger panel={panel} value={date.current} disabled={disabled === true} />}
     >
       <PanelContext value={{ ...panel, picker: pickerOf(floating, date, props) }}>

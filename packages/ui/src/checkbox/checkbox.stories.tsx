@@ -129,3 +129,19 @@ Default.test(
     void (<Checkbox />);
   },
 );
+
+Default.test(
+  "keeps its state and reports no change when its click is default-prevented",
+  async ({ canvas, userEvent, args }) => {
+    const checkbox = canvas.getByRole("checkbox", { name: "Email me updates" });
+    checkbox.addEventListener("click", (event) => {
+      event.preventDefault();
+    });
+    const toggles = listen("ab-toggle");
+    await userEvent.click(checkbox);
+    toggles.stop();
+    await expect(checkbox).not.toBeChecked();
+    await expect(args.onCheckedChange).not.toHaveBeenCalled();
+    await expect(toggles.events).toEqual([]);
+  },
+);

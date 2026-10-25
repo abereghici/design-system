@@ -162,3 +162,19 @@ Default.test(
     );
   },
 );
+
+Default.test(
+  "keeps its value and reports no change when a click is default-prevented",
+  async ({ canvas, userEvent, args }) => {
+    const yearly = canvas.getByRole("radio", { name: "Yearly" });
+    yearly.addEventListener("click", (event) => {
+      event.preventDefault();
+    });
+    const toggles = listen("ab-toggle");
+    await userEvent.click(yearly);
+    toggles.stop();
+    await expect(canvas.getByRole("radio", { name: "Monthly" })).toBeChecked();
+    await expect(args.onValueChange).not.toHaveBeenCalled();
+    await expect(toggles.events).toEqual([]);
+  },
+);

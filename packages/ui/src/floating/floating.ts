@@ -1,9 +1,8 @@
 import { useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "react";
 import type { ComponentProps, MouseEvent, ToggleEvent } from "react";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { composeEventHandlers, dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { pointerMarker } from "../toggle/toggle.ts";
 
 export type ChangeReason =
   | "trigger-press"
@@ -61,26 +60,21 @@ function triggerPropsOf<Props extends TriggerHandlers>(
   return {
     ...props,
     commandfor: layer.contentId,
-    command: "toggle-popover",
+    command: "toggle-popover" as const,
     "aria-expanded": layer.open,
-    ...pointerMarker(props),
-    onClick: (event: MouseEvent<HTMLButtonElement>) => {
-      props.onClick?.(event);
-      // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).
-      if (event.defaultPrevented) return;
-      const next = !isOpen(byId(layer.contentId));
+    onClick: composeEventHandlers(props.onClick, (event: MouseEvent<HTMLButtonElement>) => {
       if (layer.anchored) {
         event.preventDefault();
-        layer.toggle(next, "trigger-press", event.nativeEvent);
-      } else if (!layer.request(next, "trigger-press", event.nativeEvent)) {
+        layer.toggle(!layer.open, "trigger-press", event.nativeEvent);
+      } else if (!layer.request(!layer.open, "trigger-press", event.nativeEvent)) {
         event.preventDefault();
       }
-    },
+    }),
     onBlur: (event) => {
       props.onBlur?.(event);
       layer.focusOut(event.nativeEvent);
     },
-  } as const satisfies TriggerHandlers;
+  } satisfies TriggerHandlers;
 }
 
 interface Layer {
@@ -184,8 +178,8 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
     const { source } = event.nativeEvent;
     const from = component === "ContextMenu" ? (layer.returnTo ?? document.activeElement) : source;
     layer.returnTo = from instanceof HTMLElement ? from : undefined;
-    const pointer = source instanceof HTMLElement && source.dataset["pointer"] !== undefined;
-    element.toggleAttribute("data-pointer", pointer);
+    const keyboard = component === "ContextMenu" ? ":not([data-pointer])" : ":is(:focus-visible, :has(:focus-visible))";
+    element.toggleAttribute("data-pointer", source?.matches(keyboard) === false);
   } else {
     event.preventDefault();
   }

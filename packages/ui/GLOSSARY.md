@@ -25,7 +25,7 @@ A bubbling, `ab-`-prefixed DOM event (`ab-press`, `ab-toggle`, `ab-confirm`, `ab
 _Avoid_: Sound event, haptic event, callback
 
 **Change request**:
-A state change a component asks its consumer about before committing: the `on…Change` callback receives the value and `details` (`reason`, `event`, `cancel()`), and calling `cancel()` keeps the previous state. `cancel()` is the only way to stop it: a consumer's `preventDefault()` in its own handler keeps just its native meaning (a canceled click does not check a radio or run a button's command) and stops nothing the component does itself (Base UI: `preventBaseUIHandler()`, not `preventDefault()`).
+A state change a component asks its consumer about before committing: the `on…Change` callback receives the value and `details` (`reason`, `event`, `cancel()`), and calling `cancel()` keeps the previous state. A consumer's `preventDefault()` in its own handler keeps just its native meaning. Where the event's native default is the change itself (an input's checkedness, a `<summary>` toggle, a `commandfor` command), it cancels that default, so the component neither reports nor applies the change (HTML runs no activation behavior for a canceled click; `composeEventHandlers` in `events.ts`, as Radix's). Where there is no native default (a Tab's button click, a Tabs arrow key, whose default is only scrolling), it stops nothing the component does itself, and `cancel()` is the only way to stop the change (Base UI: `preventBaseUIHandler()`, not `preventDefault()`).
 _Avoid_: Change event, veto, controlled change
 
 **Listbox navigator**:

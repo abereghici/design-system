@@ -4,7 +4,7 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { Content as ModalContent, ModalRoot, useModal } from "../dialog/modal.tsx";
 import type { Reason, RootProps as ModalRootProps } from "../dialog/modal.tsx";
-import { dispatchFeedback } from "../events/events.ts";
+import { composeEventHandlers, dispatchFeedback } from "../events/events.ts";
 import { composeRefs, join } from "../slot/slot.tsx";
 
 import button from "../button/button.module.css";
@@ -36,17 +36,19 @@ function useClose(onClick: ButtonProps["onClick"], dismiss: boolean) {
     type: "button",
     commandfor: id,
     command: "request-close",
-    onClick: (event: MouseEvent<HTMLButtonElement>) => {
-      onClick?.(event);
-      if (!dismiss) dispatchFeedback(event.currentTarget, "ab-confirm", feedback);
-      // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).
-      if (event.defaultPrevented) return;
-      controller.press({
-        reason: "close-press",
-        event: event.nativeEvent,
-        dismiss: dismiss ? event.currentTarget : null,
-      });
-    },
+    onClick: composeEventHandlers(
+      (event: MouseEvent<HTMLButtonElement>) => {
+        onClick?.(event);
+        if (!dismiss) dispatchFeedback(event.currentTarget, "ab-confirm", feedback);
+      },
+      (event) => {
+        controller.press({
+          reason: "close-press",
+          event: event.nativeEvent,
+          dismiss: dismiss ? event.currentTarget : null,
+        });
+      },
+    ),
   } as const;
 }
 
