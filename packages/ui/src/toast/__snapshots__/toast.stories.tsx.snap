@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- status:
+  - paragraph: Moved to Archive
+- alert
+- region "Notifications":
+  - list:
+    - listitem:
+      - text: Moved to Archive
+      - button "Undo"
+      - button "Dismiss"
+`;

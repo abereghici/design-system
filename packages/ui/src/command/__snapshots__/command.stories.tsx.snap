@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- combobox "Search commands" [expanded]
+- status
+- listbox:
+  - group "Suggestions":
+    - option "New document" [selected]
+    - option "Search files"
+    - option "Copy link" [disabled]
+  - group "Navigation":
+    - option "Go to Home"
+    - option "Go to Release notes"
+    - option "Open settings"
+`;
+
+exports[`In A Dialog   > base story 1`] = `
+- button "Search"
+`;

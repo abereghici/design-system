@@ -1,0 +1,30 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- status
+- alert
+`;
+
+exports[`Stacked   > base story 1`] = `
+- button "Save"
+- status:
+  - paragraph: Done
+  - paragraph: Uploaded 3 files
+  - paragraph: Uploaded 2 files
+  - paragraph: Uploaded 1 file
+- alert
+- region "Notifications":
+  - list:
+    - listitem:
+      - text: Done
+      - button "Dismiss"
+    - listitem:
+      - text: Uploaded 3 files
+      - button "Dismiss"
+    - listitem:
+      - text: Uploaded 2 files
+      - button "Dismiss"
+    - listitem:
+      - text: Uploaded 1 file
+      - button "Dismiss"
+`;

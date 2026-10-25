@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- link "token guide":
+  - /url: "#token-guide"
+`;
+
+exports[`In Text 1`] = `
+- paragraph:
+  - text: Read the
+  - link "token guide":
+    - /url: "#token-guide"
+  - text: first.
+`;

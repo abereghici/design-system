@@ -1,0 +1,6 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- text: Couldn’t save changes The file is read-only. Duplicate it to edit.
+- button "Dismiss"
+`;

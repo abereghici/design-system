@@ -15,7 +15,7 @@ export { partsOf } from "./docs/arg-types.ts";
 
 export default definePreview({
   addons: [addonDocs(), addonA11y(), addonPseudoStates()],
-  tags: ["autodocs", "screenshot"],
+  tags: ["autodocs", "screenshot", "aria-snapshot"],
   beforeEach: rememberStoryCanvas,
   argTypesEnhancers: [meaningfulControls],
   parameters: {

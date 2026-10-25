@@ -9,9 +9,6 @@ declare module "vitest" {
   export interface ProvidedContext {
     screenshotVariant: ScreenshotVariant;
   }
-  export interface TestContext {
-    story?: { id: string };
-  }
 }
 
 const { emulatedMedia, defaultFontSize } = inject("screenshotVariant");

@@ -1,0 +1,8 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- text: Seats
+- textbox "Seats": "5"
+- button "Decrease"
+- button "Increase"
+`;

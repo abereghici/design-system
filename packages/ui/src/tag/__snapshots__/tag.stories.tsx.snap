@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- text: Draft
+`;
+
+exports[`With Icon   > base story 1`] = `
+- text: Live
+`;

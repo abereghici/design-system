@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Controlled Open   > base story 1`] = `
+- button "Filters"
+- status: Closed
+- button "After"
+`;
+
+exports[`Default   > base story 1`] = `
+- button "Filters"
+- button "After"
+`;
+
+exports[`Initial Focus   > base story 1`] = `
+- button "Rename"
+- button "After"
+`;

@@ -1,0 +1,8 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- text: Message
+- textbox "Message":
+  - /placeholder: Write something…
+- paragraph: Grows with your text.
+`;
