@@ -6,7 +6,8 @@ import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { FieldContext } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
 import { IconButton } from "../icon-button/icon-button.tsx";
-import { InspectIcon } from "../icon/icons/inspect.tsx";
+import { EyeOffIcon } from "../icon/icons/eye-off.tsx";
+import { EyeIcon } from "../icon/icons/eye.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { passwordField as passwordFieldLabels } from "../provider/locales/en-US/password-field.ts";
@@ -102,7 +103,7 @@ function Control({
         if (event.detail > 0) inputOf(inputId)?.focus();
       }}
     >
-      <InspectIcon size="sm" />
+      {visible ? <EyeIcon size="sm" /> : <EyeOffIcon size="sm" />}
     </IconButton>
   );
 

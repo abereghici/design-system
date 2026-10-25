@@ -24,10 +24,10 @@ describe("icon generation", () => {
     expect(Object.fromEntries(committed)).toEqual(Object.fromEntries(generated));
   });
 
-  test("there is one icon per source SVG, 42 in all", async () => {
+  test("there is one icon per source SVG, 44 in all", async () => {
     const names = await iconSourceNames();
     const generated = await generateGlyphs();
-    expect(names).toHaveLength(42);
+    expect(names).toHaveLength(44);
     expect(names.map((name) => generated.has(`src/icon/icons/${name}.tsx`))).not.toContain(false);
   });
 });
