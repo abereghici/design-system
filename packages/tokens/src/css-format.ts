@@ -14,10 +14,13 @@ const cssValue = (
   dictionary: Dictionary,
 ): string => {
   const target = isWholeReference(authored) ? dictionary.tokenMap.get(authored) : undefined;
+
   if (target) return `var(--${target.name})`;
+
   if (typeof authored === "object" && authored !== null && tierOf(token) !== "primitive") {
     return compositeCss(token.$type, authored, dictionary);
   }
+
   return String(literal);
 };
 
@@ -27,6 +30,7 @@ const declaration = (token: TransformedToken, dictionary: Dictionary): string =>
     ? cssValue(token, authoredDark(token), resolvedDark(token), dictionary)
     : light;
   const value = dark === light ? light : `light-dark(${light}, ${dark})`;
+
   return `    --${token.name}: ${value};`;
 };
 
@@ -40,6 +44,7 @@ const overrideCss = (entry: MediaEntry, dictionary: Dictionary): string => {
   const ref = (value: unknown) => cssValue(entry.token, value, value, dictionary);
   const themes = perTheme(entry.value);
   const css = themes ? `light-dark(${ref(themes.light)}, ${ref(themes.dark)})` : ref(entry.value);
+
   return `      --${entry.token.name}: ${css};`;
 };
 
@@ -48,6 +53,7 @@ const mediaBlocks = (tokens: readonly TransformedToken[], dictionary: Dictionary
     mediaOverrides(token).map(({ query, value }) => ({ token, query, value })),
   );
   const byQuery = Map.groupBy(entries, (entry: MediaEntry) => entry.query);
+
   return [...byQuery.keys()].flatMap((query) => [
     "",
     `  @media ${query} {`,
@@ -103,6 +109,7 @@ export const stylesheets = (dictionary: Dictionary) => {
     (token) =>
       tierOf(token) === "component" ? String(componentOf(token.path.slice(1).join("-"))) : "",
   );
+
   return {
     css: sharedCss(shared, dictionary),
     components: Object.fromEntries(

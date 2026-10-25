@@ -35,6 +35,7 @@ const variants: ScreenshotVariant[] = [
 const screenshotProject = (variant: ScreenshotVariant): TestProjectInlineConfiguration => {
   const fileName = (path: ScreenshotPath) =>
     `${path.arg}-${variant.name}-${path.browserName}-${path.platform}${path.ext}`;
+
   return {
     plugins: [
       storybookTest({

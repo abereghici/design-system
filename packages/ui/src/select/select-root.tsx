@@ -66,6 +66,7 @@ function Control({
 }: ControlProps) {
   const bindings = Field.useFieldControl<HTMLSelectElement, typeof props>(props);
   const disabled = bindings["aria-disabled"] === true;
+
   return (
     <div className={styles["control"]}>
       <select
@@ -74,10 +75,12 @@ function Control({
         className={`${fieldStyles["control"]} ${styles["select"]}`}
         onKeyDown={(event) => {
           if (disabled && blocked(event)) event.preventDefault();
+
           props.onKeyDown?.(event);
         }}
         onMouseDown={(event) => {
           if (disabled) event.preventDefault();
+
           props.onMouseDown?.(event);
         }}
       >

@@ -24,8 +24,10 @@ export function Close({ disabled = false, onClick, ...props }: CloseProps) {
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     if (disabled) {
       event.preventDefault();
+
       return;
     }
+
     onClick?.(event);
     dispatchFeedback(event.currentTarget, "ab-dismiss", { component: "Alert", reason: "user" });
   }

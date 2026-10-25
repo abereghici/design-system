@@ -15,6 +15,7 @@ export interface ContentProps extends ComponentProps<"div"> {
 /** The panel shown while its Trigger is selected. */
 export function Content({ value, ...props }: ContentProps) {
   const tabs = useTabs("Content");
+
   return (
     <div
       tabIndex={0}

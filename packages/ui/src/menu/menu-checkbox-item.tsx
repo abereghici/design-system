@@ -29,6 +29,7 @@ export function CheckboxItem({
   const { menu, props, blocked, close: closeMenu } = useItem(rest, "menuitemcheckbox");
   const [uncontrolled, setUncontrolled] = useState(defaultChecked);
   const current = checked ?? uncontrolled;
+
   return (
     <button
       {...props}
@@ -36,8 +37,11 @@ export function CheckboxItem({
       aria-checked={current}
       onClick={(event) => {
         if (blocked(event)) return;
+
         onClick?.(event);
+
         if (!requestChange(onCheckedChange, !current, "item-press", event.nativeEvent)) return;
+
         setUncontrolled(!current);
         dispatchFeedback(event.currentTarget, "ab-toggle", {
           component: menu.component,

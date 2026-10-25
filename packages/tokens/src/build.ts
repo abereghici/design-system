@@ -8,6 +8,7 @@ import { checkTokens, TokenCheckError } from "./checks.ts";
 import { stylesheets } from "./css-format.ts";
 
 export { TokenCheckError };
+
 export type { ArtifactTokens };
 
 const isDurationObject = (value: unknown): value is { value: unknown; unit: unknown } =>
@@ -43,6 +44,7 @@ export async function buildTokens(input: BuildInput): Promise<BuildOutput> {
           filter: (token) => token.$type === "duration" && isDurationObject(token.$value),
           transform: (token) => {
             const duration: unknown = token.$value;
+
             return isDurationObject(duration)
               ? `${String(duration.value)}${String(duration.unit)}`
               : String(duration);
@@ -66,6 +68,7 @@ export async function buildTokens(input: BuildInput): Promise<BuildOutput> {
 
   const dictionary = await sd.getPlatformTokens("web");
   const problems = checkTokens(dictionary);
+
   if (problems.length > 0) throw new TokenCheckError(problems);
 
   return {

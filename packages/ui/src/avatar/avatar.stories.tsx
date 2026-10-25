@@ -26,6 +26,7 @@ const imageRef = fn<(image: HTMLImageElement | null) => void>();
 
 function ChangingPhoto() {
   const [src, setSrc] = useState(photo);
+
   return (
     <>
       <Avatar.Root>{person(src)}</Avatar.Root>

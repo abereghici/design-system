@@ -63,12 +63,16 @@ function useValue({ value, defaultValue = null, onValueChange }: RootProps) {
     event: Event,
   ) => {
     const accepted = requestChange(onValueChange, date, reason, event);
+
     if (accepted) setUncontrolled(date);
+
     return accepted;
   };
+
   const reset = () => {
     setUncontrolled(defaultValue);
   };
+
   return { current, change, reset };
 }
 
@@ -91,6 +95,7 @@ function pickerOf(
     },
     canFocus: () => {
       const focus = document.activeElement;
+
       return (
         focus === document.body ||
         focus?.getAttribute("commandfor") === floating.contentId ||
@@ -112,6 +117,7 @@ export function Root(props: RootProps) {
   const trigger = useRef<HTMLButtonElement>(null);
   const floating = useFloating("Popover", { open, defaultOpen, onOpenChange });
   const panel = { floating, name, trigger };
+
   return (
     <DateFieldFrame
       {...field}

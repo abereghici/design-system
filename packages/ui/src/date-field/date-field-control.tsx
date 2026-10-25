@@ -67,6 +67,7 @@ function Segment({ part, control, required }: SegmentProps) {
   const text = display(part, date.segments, date.buffer?.part === part ? date.buffer.text : "");
   const range = bounds(part, date.segments);
   const spoken = part === "month" && value !== undefined ? formats.monthName(value) : undefined;
+
   return (
     <input
       ref={editing.register(part)}
@@ -118,9 +119,11 @@ function useControl(options: ControlOptions, onValidity: (validity: Validity) =>
     onValidity,
     reset: date.reset,
   });
+
   useLayoutEffect(() => {
     validity.apply(date.segments, date.committed);
   });
+
   const editing = useSegmentEditing({
     date,
     validity,
@@ -128,6 +131,7 @@ function useControl(options: ControlOptions, onValidity: (validity: Validity) =>
     formats,
     submit: validity.submit,
   });
+
   return { field, options, formats, date, name, validity, blocked, invalid, editing };
 }
 
@@ -148,6 +152,7 @@ function HiddenInput({
   options: DateFieldOptions;
 }) {
   const { field, name, date, editing, validity } = control;
+
   return (
     <input
       type="date"
@@ -166,6 +171,7 @@ function HiddenInput({
       onClick={editing.focusFirstEmpty}
       onInvalid={(event) => {
         validity.report(true);
+
         // WebKit neither focuses a visually hidden invalid control nor forwards a label click as focus
         // (https://webkit.org/b/236725, a duplicate of https://webkit.org/b/22261).
         if (isFirstInvalid(event.currentTarget)) setTimeout(editing.focusFirstEmpty);
@@ -187,6 +193,7 @@ export interface ControlProps extends Omit<
 export function Control({ options, onValidity, end, ...props }: ControlProps) {
   const control = useControl(options, onValidity);
   const { field, formats, date, blocked, editing } = control;
+
   return (
     <fieldset
       aria-labelledby={field?.labelId}

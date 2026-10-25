@@ -36,6 +36,7 @@ export type PaginationProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-l
 function range(page: number, count: number) {
   const start = Math.max(Math.min(page - 1, count - 4), 3);
   const end = Math.min(Math.max(page + 1, 5), count - 2);
+
   return [
     1,
     ...(start > 3 ? ["start-ellipsis" as const] : 2 < count - 1 ? [2] : []),
@@ -92,6 +93,7 @@ export function Pagination({
 }: PaginationProps) {
   const formatter = new Intl.NumberFormat(locale);
   const url = (target: number) => (target < 1 || target > count ? undefined : getPageUrl(target));
+
   return (
     <nav {...props}>
       <ul className={styles["list"]}>

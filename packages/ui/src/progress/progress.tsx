@@ -52,6 +52,7 @@ export function Progress({
         new Intl.NumberFormat(locale, formatOptions).format(
           formatOptions.style === "percent" ? now / max : now,
         ));
+
   return (
     <div
       data-state={now === undefined ? "indeterminate" : now === max ? "complete" : "loading"}

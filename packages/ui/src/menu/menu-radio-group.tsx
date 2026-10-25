@@ -33,11 +33,15 @@ export function RadioGroup({
 }: RadioGroupProps) {
   const [uncontrolled, setUncontrolled] = useState(defaultValue);
   const current = value === undefined ? uncontrolled : value;
+
   function select(next: string, event: MouseEvent<HTMLButtonElement>) {
     if (!requestChange(onValueChange, next, "item-press", event.nativeEvent)) return false;
+
     setUncontrolled(next);
+
     return true;
   }
+
   return (
     <RadioGroupContext value={{ value: current, select }}>
       <Group {...props} />

@@ -17,5 +17,6 @@ export interface UIProviderProps {
  */
 export function UIProvider({ children }: UIProviderProps) {
   preload(figtreeLatin, { as: "font", type: "font/woff2" });
+
   return children;
 }

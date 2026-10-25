@@ -32,6 +32,7 @@ export interface Options {
 
 function outside(dialog: HTMLDialogElement, { target, clientX, clientY }: MouseEvent): boolean {
   const box = dialog.getBoundingClientRect();
+
   return (
     target === dialog &&
     (clientX < box.left || clientX > box.right || clientY < box.top || clientY > box.bottom)
@@ -66,37 +67,49 @@ export class Controller {
     if (options.component === "AlertDialog" || !this.#pressedOutside || !outside(dialog, event)) {
       return;
     }
+
     this.#pending = { reason: "outside-press", event, dismiss: dialog };
     dialog.requestClose();
   }
 
   sync(dialog: HTMLDialogElement | null, open: boolean): void {
     if (dialog === null || open === dialog.open) return;
+
     this.#internal = true;
+
     if (open) dialog.showModal();
     else dialog.close();
   }
 
   beforeToggle(dialog: HTMLDialogElement, event: ToggleEvent, options: Options): void {
     const internal = this.#internal;
+
     this.#internal = false;
+
     if (event.newState === "closed") {
       this.#skipClose ||= internal;
+
       return;
     }
+
     if (!internal) {
       // A pointer press leaves the Trigger without :focus-visible; Safari doesn't focus it at all
       // (https://webkit.org/b/22261).
       this.#pointer = event.source !== null && !event.source.matches(":focus-visible");
       this.#opener = event.source;
     }
+
     dialog.toggleAttribute("data-pointer", this.#pointer);
     options.initialFocus?.current?.setAttribute("autofocus", "");
+
     if (internal) {
       this.#pointer = false;
+
       return;
     }
+
     const reason = event.source === null ? "none" : "trigger-press";
+
     if (!requestChange(options.onOpenChange, true, reason, event) || options.open !== undefined)
       event.preventDefault();
   }
@@ -111,10 +124,15 @@ export class Controller {
       event,
       dismiss: dialog,
     };
+
     this.#pending = null;
+
     const accepted = requestChange(options.onOpenChange, false, reason, cause);
+
     if (!accepted || options.open !== undefined) event.preventDefault();
+
     if (!event.defaultPrevented) this.#skipClose = true;
+
     if (accepted && dismiss !== null) {
       dispatchFeedback(dismiss, "ab-dismiss", { component: options.component, reason: "user" });
     }
@@ -123,8 +141,10 @@ export class Controller {
   close(dialog: HTMLDialogElement, event: Event, options: Options): void {
     options.initialFocus?.current?.removeAttribute("autofocus");
     this.#pending = null;
+
     if (this.#skipClose) this.#skipClose = false;
     else requestChange(options.onOpenChange, false, "none", event);
+
     // WebKit doesn't focus a clicked button (https://webkit.org/b/22261), so its close steps leave
     // focus on <body> or in the closed dialog.
     returnFocus(dialog, this.#opener);

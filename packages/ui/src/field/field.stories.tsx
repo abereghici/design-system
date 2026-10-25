@@ -44,6 +44,7 @@ export const Default = meta.story({});
 
 Default.test("names and describes its control", async ({ canvas }) => {
   const input = canvas.getByRole("textbox", { name: "Handle" });
+
   await expect(input).toHaveAccessibleDescription("Letters, digits and underscores.");
   await expect(input).toBeRequired();
   await expect(input).toHaveAttribute("name", "handle");
@@ -72,6 +73,7 @@ Default.test(
   { decorators: [inAForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole<HTMLInputElement>("textbox", { name: "Handle" });
+
     await userEvent.type(input, "ana");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAttribute("aria-invalid", "true");
@@ -85,6 +87,7 @@ Default.test(
   { decorators: [inAForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
     await expect(input).not.toHaveAttribute("aria-invalid");
@@ -112,6 +115,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
+
     await userEvent.type(input, "a b");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAccessibleDescription("Use only letters, digits and underscores.");
@@ -128,6 +132,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
+
     await userEvent.type(input, "@admin");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAccessibleDescription("That handle is reserved.");
@@ -141,6 +146,7 @@ Default.test(
   { args: { disabled: true } },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
+
     await userEvent.tab();
     await expect(input).toHaveFocus();
     await expect(input).toHaveAttribute("aria-disabled", "true");
@@ -165,6 +171,7 @@ Default.test(
   },
   async ({ canvas }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
+
     await expect(input).toHaveAttribute("aria-invalid", "true");
     await expect(input).toHaveAccessibleDescription("That handle is taken.");
   },
@@ -187,6 +194,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const box = canvas.getByRole("checkbox", { name: "I accept the terms" });
+
     await expect(box).toHaveAccessibleDescription("You can read them in Settings.");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(box).toHaveAttribute("aria-invalid", "true");

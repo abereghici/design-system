@@ -37,9 +37,12 @@ let modals: readonly HTMLDialogElement[] = [];
 function subscribeModals(listener: () => void) {
   if (modals.length === 0)
     modals = [...document.querySelectorAll<HTMLDialogElement>("dialog:modal")];
+
   return onToggle(({ target }) => {
     if (!(target instanceof HTMLDialogElement)) return;
+
     const rest = modals.filter((dialog) => dialog !== target);
+
     modals = target.matches(":modal") ? [...rest, target] : rest;
     listener();
   });
@@ -54,18 +57,22 @@ const useTopmostModal = () =>
 
 function useAnnounced(toasts: readonly ToastRecord[]) {
   const [heard, setHeard] = useState<ReadonlySet<string>>(new Set());
+
   useEffect(() => {
     const fresh = toasts.filter(({ id }) => progressOf(id).announced !== true).map(({ id }) => id);
     // A live region announces changes, not content it was inserted with: fill it a task later:
     // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions
     const timer = setTimeout(() => {
       for (const id of fresh) mark(id, { announced: true });
+
       if (fresh.length > 0) setHeard((ids) => ids.union(new Set(fresh)));
     });
+
     return () => {
       clearTimeout(timer);
     };
   }, [toasts]);
+
   return heard;
 }
 
@@ -74,6 +81,7 @@ function tokenDuration(node: Element, danger: boolean) {
     danger ? "--ab-toast-danger-duration" : "--ab-toast-duration",
   );
   const time = /(?<amount>[\d.]+)(?<unit>m?s)/v.exec(value)?.groups;
+
   return Number(time?.["amount"] ?? 0) * (time?.["unit"] === "s" ? 1000 : 1);
 }
 
@@ -92,9 +100,12 @@ function startTimers(node: Element, toasts: readonly ToastRecord[]) {
       close(id);
     }, remaining),
   );
+
   return () => {
     const elapsed = performance.now() - start;
+
     for (const timer of timers) clearTimeout(timer);
+
     for (const { id, remaining } of running) {
       mark(id, { remaining: Math.max(0, remaining - elapsed) });
     }
@@ -108,6 +119,7 @@ function useTimers(
 ) {
   useEffect(() => {
     const node = region.current;
+
     return node === null || paused ? undefined : startTimers(node, toasts);
   }, [region, toasts, paused]);
 }
@@ -115,8 +127,10 @@ function useTimers(
 function stack(node: HTMLElement) {
   let index = 0;
   let offset = 0;
+
   for (const item of node.querySelectorAll<HTMLElement>(`.${styles["toast"]}`)) {
     if (item.dataset["exiting"] !== undefined) continue;
+
     item.style.setProperty("--index", String(index));
     item.style.setProperty("--offset", `${offset}px`);
     index += 1;
@@ -128,8 +142,11 @@ function observeStack(node: HTMLElement) {
   const resized = new ResizeObserver(() => {
     stack(node);
   });
+
   for (const item of node.querySelectorAll(`.${styles["toast"]}`)) resized.observe(item);
+
   stack(node);
+
   return () => {
     resized.disconnect();
   };
@@ -137,11 +154,14 @@ function observeStack(node: HTMLElement) {
 
 function useRegion(region: RefObject<HTMLElement | null>, toasts: readonly ToastRecord[]) {
   const newest = useRef<string>(undefined);
+
   useLayoutEffect(() => {
     const node = region.current;
     const id = toasts[0]?.id;
     const raise = id !== newest.current && node?.contains(document.activeElement) === false;
+
     newest.current = id;
+
     return node === null ? undefined : place(node, id, raise);
   }, [region, toasts]);
 }
@@ -150,7 +170,9 @@ function place(node: HTMLElement, newest: string | undefined, raise: boolean) {
   // Re-showing appends the Region to the top layer again, above layers opened since:
   // https://developer.mozilla.org/en-US/docs/Glossary/Top_layer
   if (node.matches(":popover-open") && (newest === undefined || raise)) node.hidePopover();
+
   if (newest !== undefined && !node.matches(":popover-open")) node.showPopover();
+
   return observeStack(node);
 }
 
@@ -178,10 +200,13 @@ function Layer({ closeLabel, ref, ...props }: ToasterProps) {
   );
   const heard = useAnnounced(toasts);
   const { restore, interacting, handlers } = useFocusReturn(region);
+
   useTimers(region, toasts, interacting || hidden);
   useRegion(region, toasts);
+
   const announced = toasts.filter(({ id }) => heard.has(id));
   const position = (at: number) => toasts.slice(0, at).filter(({ exiting }) => !exiting).length;
+
   return (
     <>
       <Announcer toasts={announced} assertive={false} />
@@ -216,5 +241,6 @@ function Layer({ closeLabel, ref, ...props }: ToasterProps) {
  */
 export function Toaster(props: ToasterProps) {
   const modal = useTopmostModal();
+
   return modal === null ? <Layer {...props} /> : createPortal(<Layer {...props} />, modal);
 }

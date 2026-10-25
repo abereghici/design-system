@@ -41,28 +41,37 @@ export function useDate({ value, defaultValue = null, onValueChange, onFormReset
   const [segments, setSegments] = useState(() => fromDate(committed));
   const [seen, setSeen] = useState(committed);
   const [buffer, setBuffer] = useState<Buffer>(null);
+
   if (!same(seen, committed)) {
     setSeen(committed);
     setSegments(fromDate(committed));
   }
+
   const edit = (next: Segments, text: Buffer, reason: Reason, event: Event) => {
     const date = toDate(next);
+
     if (!same(date, committed)) {
       if (!requestChange(onValueChange, date, reason, event)) return null;
+
       setUncontrolled(date);
       setSeen(date);
     }
+
     const shown = date === null ? next : fromDate(date);
+
     setSegments(shown);
     setBuffer(text);
+
     return { segments: shown, date };
   };
+
   const reset = () => {
     setUncontrolled(defaultValue);
     setSegments(fromDate(defaultValue));
     setBuffer(null);
     onFormReset?.();
   };
+
   return { committed, segments, buffer, setBuffer, edit, reset };
 }
 
@@ -86,6 +95,7 @@ function useFocus(formats: Formats, segments: Segments) {
   const focus = (part: DatePart | undefined) => {
     if (part !== undefined) elements.current.get(part)?.focus();
   };
+
   return {
     register: (part: DatePart) => (node: HTMLElement | null) => {
       if (node === null) elements.current.delete(part);
@@ -119,13 +129,18 @@ function typeChar(
   if (/\d/v.test(char)) {
     const next = typeDigit(part, date.segments, typed(part), char);
     const buffer = next.done ? null : { part, text: next.buffer };
+
     if (change(next.segments, buffer, "input-change", event) && next.done) focus.move(part, 1);
+
     return;
   }
+
   const literal =
     SEPARATORS.has(char) ||
     formats.layout.some((item) => "literal" in item && item.literal.trim() === char);
+
   if (!literal) return;
+
   date.setBuffer(null);
   focus.move(part, 1);
 }
@@ -134,11 +149,15 @@ function erase({ date, focus, change, typed }: Context, part: DatePart, key: str
   const value = date.segments[part];
   const text = typed(part) || (value === undefined ? "" : String(value));
   const rest = key === "Delete" ? "" : text.slice(0, -1);
+
   if (text === "" && key === "Backspace") {
     focus.move(part, -1);
+
     return;
   }
+
   const segments = { ...date.segments, [part]: Number(rest) || undefined };
+
   change(segments, rest === "" ? null : { part, text: rest }, "input-change", event);
 }
 
@@ -150,16 +169,22 @@ function pressKey(
   submit: () => void,
 ) {
   const { key, nativeEvent } = event;
+
   if (event.altKey || event.ctrlKey || event.metaKey) return;
+
   const arrow = key === "ArrowLeft" || key === "ArrowRight";
   const stepped = stepKey(part, context.date.segments, key);
   const erasing = key === "Backspace" || key === "Delete";
+
   if (!arrow && !erasing && stepped === null && key !== "Enter") return;
+
   event.preventDefault();
+
   if (key === "Enter") {
     if (!isComposing(event)) submit();
   } else if (arrow) {
     const rtl = event.currentTarget.matches(":dir(rtl)");
+
     context.focus.move(part, (key === "ArrowRight") === rtl ? -1 : 1);
   } else if (!blocked && stepped === null) erase(context, part, key, nativeEvent);
   else if (!blocked && stepped !== null) context.change(stepped, null, "keyboard", nativeEvent);
@@ -172,12 +197,15 @@ function useEdited(committed: string | undefined, validity: Editing["validity"])
   const report = useEffectEvent(() => {
     validity.report();
   });
+
   useLayoutEffect(() => {
     if (last.current === committed) return;
+
     last.current = committed;
     edited.current = true;
     report();
   }, [committed]);
+
   return {
     edited,
     markEdited: () => {
@@ -198,13 +226,17 @@ function useGroupProps(
         className,
         onPointerDown: (event: PointerEvent<HTMLElement>) => {
           if (focus.isSegment(event.target)) return;
+
           if (event.target instanceof Element && event.target.closest("button") !== null) return;
+
           event.preventDefault();
           focus.firstEmpty(-1);
         },
         onBlur: (event: FocusEvent<HTMLElement>) => {
           const into = event.relatedTarget;
+
           if (into instanceof Node && event.currentTarget.contains(into)) return;
+
           if (edited.current) validity.report(true);
         },
       },
@@ -218,15 +250,20 @@ export function useSegmentEditing({ date, validity, blocked, formats, submit }: 
   const { edited, markEdited } = useEdited(date.committed?.toString(), validity);
   const change = (next: Segments, text: Buffer, reason: Reason, event: Event) => {
     const result = date.edit(next, text, reason, event);
+
     if (result === null) return false;
+
     markEdited();
     validity.clearServerError?.();
     validity.apply(result.segments, result.date);
     validity.report();
+
     return true;
   };
+
   const typed = (part: DatePart) => (date.buffer?.part === part ? date.buffer.text : "");
   const context = { date, focus, change, typed, formats };
+
   return {
     groupProps: useGroupProps(focus, edited, validity),
     register: focus.register,
@@ -236,7 +273,9 @@ export function useSegmentEditing({ date, validity, blocked, formats, submit }: 
     },
     onChange: (part: DatePart, { nativeEvent }: ChangeEvent<HTMLInputElement>) => {
       if (blocked || !(nativeEvent instanceof InputEvent) || nativeEvent.isComposing) return;
+
       const char = nativeEvent.data ?? "";
+
       if (char.length === 1) typeChar(context, part, char, nativeEvent);
     },
     onKeyDown: (part: DatePart, event: KeyboardEvent<HTMLInputElement>) => {

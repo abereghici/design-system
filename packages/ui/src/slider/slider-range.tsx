@@ -14,6 +14,7 @@ export function Range({ style, ...props }: RangeProps) {
   const { values, percent } = useSlider();
   const first = values.length > 1 ? percent(values[0] ?? 0) : 0;
   const last = percent(values.at(-1) ?? 0);
+
   return (
     <div
       {...mergeProps({ className: styles["range"] }, props)}

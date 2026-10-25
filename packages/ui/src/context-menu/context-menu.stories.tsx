@@ -57,6 +57,7 @@ export const Default = meta.story({});
 
 Default.test("opens on a right click at its first item", async ({ canvas }) => {
   const user = await trusted();
+
   await user.click(canvas.getByRole("button", { name: "Report.pdf" }), { button: "right" });
   await waitFor(() => expect(canvas.getByRole("menu", { name: "File actions" })).toBeVisible());
   await waitFor(() => expect(canvas.getByRole("menuitem", { name: "Duplicate" })).toHaveFocus());
@@ -68,11 +69,14 @@ Default.test(
   async ({ canvas }) => {
     const user = await trusted();
     const file = canvas.getByRole("button", { name: "Report.pdf" });
+
     await user.keyboard("{Tab}");
     await expect(file).toHaveFocus();
     await user.click(file, { button: "right" });
     await waitFor(() => expect(canvas.getByRole("menuitem", { name: "Duplicate" })).toHaveFocus());
+
     const dismissals = listen("ab-dismiss");
+
     await user.keyboard("{Escape}");
     await waitFor(() => expect(file).toHaveFocus());
     dismissals.stop();
@@ -84,9 +88,12 @@ Default.test(
 
 Default.test("runs an item and closes, dispatching ab-press", async ({ canvas }) => {
   const user = await trusted();
+
   await user.click(canvas.getByRole("button", { name: "Report.pdf" }), { button: "right" });
   await waitFor(() => expect(canvas.getByRole("menuitem", { name: "Duplicate" })).toHaveFocus());
+
   const presses = listen("ab-press");
+
   await user.keyboard("{Enter}");
   presses.stop();
   await expect(onDuplicate).toHaveBeenCalledOnce();
@@ -116,6 +123,7 @@ Default.test(
   async ({ canvas }) => {
     const button = canvas.getByRole("button", { name: "Report.pdf" });
     const event = new MouseEvent("contextmenu", { bubbles: true, cancelable: true, button: 2 });
+
     button.dispatchEvent(event);
     await expect(event.defaultPrevented).toBe(false);
     await expect(canvas.queryByRole("menu")).toBeNull();
@@ -127,6 +135,7 @@ Default.test(
   async ({ canvas }) => {
     const user = await trusted();
     const file = canvas.getByRole("button", { name: "Report.pdf" });
+
     await user.keyboard("{Tab}");
     await expect(file).toHaveFocus();
     // Shift+F10 and the context-menu key reach the page through the OS, which Playwright's keys bypass, so the proof dispatches the contextmenu event they produce: no pointer button.
@@ -143,6 +152,7 @@ Default.test(
   "opens on a long touch press once released, not on a tap",
   async ({ canvas, userEvent }) => {
     const file = canvas.getByRole("button", { name: "Report.pdf" });
+
     await userEvent.pointer({ keys: "[TouchA]", target: file });
     await expect(canvas.queryByRole("menu")).toBeNull();
     await userEvent.pointer({ keys: "[TouchA>]", target: file });

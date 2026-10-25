@@ -18,12 +18,14 @@ export interface SkeletonProps extends ComponentProps<"span"> {
  */
 export function Skeleton({ loading = true, children, ...props }: SkeletonProps) {
   if (!loading) return children;
+
   const placeholder = mergeProps(props, {
     "aria-hidden": true,
     inert: true,
     tabIndex: -1,
     "data-loading": "",
   });
+
   return isValidElement<ComponentProps<"span">>(children) ? (
     cloneElement(
       children,

@@ -23,7 +23,9 @@ export const MenuContext = createContext<Menu | null>(null);
 
 function useMenu(): Menu {
   const menu = use(MenuContext);
+
   if (menu === null) throw new Error("Menu parts must be inside their menu's Root");
+
   return menu;
 }
 
@@ -45,11 +47,14 @@ function typeahead(menu: HTMLElement, key: string, from: Element | null) {
   const last = typed.get(menu);
   const now = performance.now();
   const text = last !== undefined && now - last.at < TYPEAHEAD_WINDOW ? last.text + key : key;
+
   typed.set(menu, { text, at: now });
+
   const items = itemsOf(menu).filter((item) => !isDisabled(item));
   const start = from instanceof HTMLElement ? items.indexOf(from) : -1;
   const repeat = text === key.repeat(text.length) ? key : text;
   const order = [...items.slice(start + 1), ...items.slice(0, start + 1)];
+
   order.find((item) => textOf(item).toLowerCase().startsWith(repeat.toLowerCase()))?.focus();
 }
 
@@ -63,8 +68,11 @@ function navigate(event: KeyboardEvent<HTMLElement>) {
     End: -1,
   };
   const to = steps[event.key];
+
   if (to === undefined) return false;
+
   items.at(to % items.length)?.focus();
+
   return true;
 }
 
@@ -77,7 +85,9 @@ export function menuContentProps(menu: Menu) {
     ...menu.floating.contentProps({
       onToggle: (event) => {
         if (event.newState !== "open") return;
+
         const items = itemsOf(event.currentTarget);
+
         (focusLast.delete(event.currentTarget) ? items.at(-1) : items[0])?.focus();
       },
     }),
@@ -100,11 +110,13 @@ export function menuContentProps(menu: Menu) {
     },
     onPointerMove: (event: PointerEvent<HTMLElement>) => {
       if (event.pointerType === "touch") return;
+
       const item =
         event.target instanceof Element
           ? event.target.closest<HTMLElement>('[role^="menuitem"]')
           : null;
       const target = item !== null && !isDisabled(item) ? item : event.currentTarget;
+
       if (document.activeElement !== target) target.focus({ preventScroll: true });
     },
   } as const;
@@ -119,8 +131,11 @@ export interface ItemBaseProps extends ComponentProps<"button"> {
 
 function close(menu: Menu, event: MouseEvent<HTMLElement>, always: boolean) {
   const entered = enterPressed.delete(event.currentTarget);
+
   if (!always && !entered) return;
+
   const content = document.getElementById(menu.floating.contentId);
+
   if (content !== null && menu.floating.toggle(false, "item-press", event.nativeEvent)) {
     returnFocus(content);
   }
@@ -131,6 +146,7 @@ export function useItem(
   role: "menuitem" | "menuitemcheckbox" | "menuitemradio",
 ) {
   const menu = useMenu();
+
   return {
     menu,
     props: {
@@ -150,7 +166,9 @@ export function useItem(
     } as const,
     blocked: (event: MouseEvent<HTMLButtonElement>) => {
       if (!disabled) return false;
+
       event.preventDefault();
+
       return true;
     },
     close: (event: MouseEvent<HTMLButtonElement>) => {

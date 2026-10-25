@@ -82,6 +82,7 @@ export default definePreview({
       useEffect(() => {
         applyGlobals(globals);
       }, [globals]);
+
       return (
         <UIProvider>
           <Story />

@@ -44,6 +44,7 @@ export function Close({ asChild = false, onClick, ...props }: CloseProps) {
   if (asChild) {
     return <Slot {...props} commandfor={id} command="request-close" onClick={handleClick} />;
   }
+
   return (
     <button
       type="button"

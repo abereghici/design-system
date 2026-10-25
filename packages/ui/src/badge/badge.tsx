@@ -29,6 +29,7 @@ export interface BadgeProps extends Omit<ComponentProps<"span">, "children"> {
 export function Badge({ variant = "neutral", max = 99, locale, children, ...props }: BadgeProps) {
   const overflow = typeof children === "number" && children > max;
   const format = (count: number) => new Intl.NumberFormat(locale).format(count);
+
   return (
     <span
       {...mergeProps({ className: styles["root"] }, props)}

@@ -24,7 +24,9 @@ export interface RootProps extends ComponentProps<"div"> {
  */
 export function Root({ layout = "column", asChild = false, children, ...props }: RootProps) {
   const root = { ...mergeProps({ className: styles["root"] }, props), "data-layout": layout };
+
   if (!asChild) return <div {...root}>{withLayout(children)}</div>;
+
   return (
     <Slot {...root}>
       {isValidElement<{ children?: ReactNode }>(children)

@@ -92,16 +92,22 @@ function buildNumberFormat(
   const digits = Array.from({ length: 10 }, (_, digit) => digitFormat.format(digit));
   const parse = (text: string) => {
     let raw = "";
+
     for (const char of text) {
       const digit = digits.indexOf(char);
+
       if (digit !== -1) raw += String(digit);
       else if (char === symbol("decimal")) raw += ".";
       else if (char === "-" || char === symbol("minusSign")) raw += "-";
     }
+
     if (raw === "") return text.trim() === "" ? null : Number.NaN;
+
     const value = Number(raw);
+
     return options?.style === "percent" ? value / 100 : value;
   };
+
   return { format: (value: number) => format.format(value), parse };
 }
 
@@ -110,7 +116,9 @@ const numberFormats = new Map<string, ReturnType<typeof buildNumberFormat>>();
 function numberFormat(locale: Intl.LocalesArgument, options: Intl.NumberFormatOptions | undefined) {
   const key = `${String(locale)} ${JSON.stringify(options)}`;
   const cached = numberFormats.get(key) ?? buildNumberFormat(locale, options);
+
   numberFormats.set(key, cached);
+
   return cached;
 }
 
@@ -120,6 +128,7 @@ function fit(value: number, { min, max, step }: Bounds) {
   const base = min ?? 0;
   const snapped = base + Math.round((value - base) / step) * step;
   const rounded = Number(snapped.toFixed(Math.max(decimals(step), decimals(base))));
+
   return Math.min(max ?? Infinity, Math.max(min ?? -Infinity, rounded));
 }
 
@@ -131,9 +140,13 @@ function stepKey(event: KeyboardEvent, step: number, largeStep: number, { min, m
     PageUp: largeStep,
     PageDown: -largeStep,
   };
+
   if (event.key in deltas) return (value: number) => value + (deltas[event.key] ?? 0);
+
   if (event.key === "Home" && min !== undefined) return () => min;
+
   if (event.key === "End" && max !== undefined) return () => max;
+
   return null;
 }
 
@@ -152,10 +165,14 @@ function useNumber({
   const committed = value === undefined ? uncontrolled : value;
   const commit = (next: number | null, reason: Reason, event: SyntheticEvent) => {
     setText(null);
+
     if (next === committed) return;
+
     if (requestChange(onValueChange, next, reason, event)) setUncontrolled(next);
   };
+
   const hidden = useRef<HTMLInputElement>(null);
+
   useEvent(
     "reset",
     () => {
@@ -164,6 +181,7 @@ function useNumber({
     },
     () => hidden.current?.form,
   );
+
   return { committed, text, setText, commit, hidden };
 }
 
@@ -187,11 +205,14 @@ function useNumberValue({
   });
   const current = () => {
     const parsed = text === null ? committed : parse(text);
+
     return parsed !== null && Number.isNaN(parsed) ? committed : parsed;
   };
+
   const settle = (next: number | null, reason: Reason, event: SyntheticEvent) => {
     commit(next === null ? null : fit(next, { min, max, step }), reason, event);
   };
+
   return {
     rest,
     hidden,
@@ -203,6 +224,7 @@ function useNumberValue({
       committed !== null && committed === (direction === 1 ? max : min),
     step: (direction: Direction, event: SyntheticEvent) => {
       const reason = direction === 1 ? "increment-press" : "decrement-press";
+
       settle((current() ?? min ?? 0) + direction * step, reason, event);
     },
     commitTyped: (event: SyntheticEvent, reason: "input-blur" | "keyboard") => {
@@ -210,7 +232,9 @@ function useNumberValue({
     },
     keyStep: (event: KeyboardEvent) => {
       const to = stepKey(event, step, largeStep, { min, max, step });
+
       if (to === null) return;
+
       event.preventDefault();
       settle(to(current() ?? min ?? 0), "keyboard", event);
     },
@@ -237,6 +261,7 @@ function Control({ startElement, incrementLabel, decrementLabel, ...options }: C
       onStep={number.step}
     />
   );
+
   return (
     <InputGroup start={startElement} end={steppers}>
       <input
@@ -255,7 +280,9 @@ function Control({ startElement, incrementLabel, decrementLabel, ...options }: C
         }}
         onKeyDown={(event) => {
           props.onKeyDown?.(event);
+
           if (event.key === "Enter") number.commitTyped(event, "keyboard");
+
           if (!blocked) number.keyStep(event);
         }}
       />

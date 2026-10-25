@@ -39,5 +39,6 @@ Default.test("turns only when motion is allowed", async ({ canvas }) => {
         effect instanceof KeyframeEffect &&
         effect.getKeyframes().some((frame) => "rotate" in frame),
     );
+
   await expect(turning).toBe(!matchMedia("(prefers-reduced-motion: reduce)").matches);
 });

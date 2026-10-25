@@ -28,6 +28,7 @@ function optimise(svg: string, file: string): XastElement {
     plugins: ["preset-default", "convertStyleToAttrs", "removeDimensions", "removeXMLNS"],
   });
   let element: XastElement | undefined;
+
   optimize(data, {
     plugins: [
       {
@@ -38,7 +39,9 @@ function optimise(svg: string, file: string): XastElement {
       },
     ],
   });
+
   if (element?.name !== "svg") throw new Error(`${file}: no <svg> root`);
+
   return element;
 }
 
@@ -47,6 +50,7 @@ function paths(svg: XastElement, file: string) {
     if (node.type !== "element" || node.name !== "path" || node.children.length > 0) {
       throw new Error(`${file}: only <path> children are supported`);
     }
+
     return node.attributes;
   });
 }
@@ -75,14 +79,20 @@ export async function iconSourceNames() {
 async function iconModule(name: string) {
   const file = `assets/icons/${name}.svg`;
   const svg = optimise(await readFile(new URL(`${name}.svg`, iconSources), "utf8"), file);
+
   expectAttributes(svg.attributes, iconRoot, file);
+
   const children = paths(svg, file).map((attributes) => {
     const unknown = Object.keys(attributes).filter((key) => !iconPathAttributes.has(key));
+
     if (unknown.length > 0) throw new Error(`${file}: unsupported attributes ${unknown.join()}`);
+
     const jsx = Object.entries(attributes).map(([key, value]) => `${key}="${value}"`);
+
     return `<path ${jsx.join(" ")} />`;
   });
   const component = componentName(name);
+
   return `import { Icon } from "../icon.tsx";
 import type { IconProps } from "../icon.tsx";
 
@@ -94,13 +104,18 @@ export function ${component}(props: IconProps) {
 
 export async function generateGlyphs() {
   const modules = new Map<string, string>();
+
   for (const name of await iconSourceNames()) {
     modules.set(`src/icon/icons/${name}.tsx`, await iconModule(name));
   }
+
   for (const [path, text] of modules) {
     const result = await format(path, text, formatConfig);
+
     if (result.errors.length > 0) throw new Error(`${path}: ${JSON.stringify(result.errors)}`);
+
     modules.set(path, result.code);
   }
+
   return modules;
 }

@@ -59,13 +59,16 @@ export function Button({
     if (disabled || loading) {
       // preventDefault also stops a submit or reset button from acting on its form.
       event.preventDefault();
+
       return;
     }
+
     onClick?.(event);
     dispatchFeedback(event.currentTarget, "ab-press", { component: "Button", reason: "user" });
   }
 
   const Root = asChild ? Slot : "button";
+
   return (
     <Root
       {...mergeProps({ className: styles["root"] }, props)}
@@ -93,6 +96,7 @@ function busy(children: ReactNode, asChild: boolean, spinner: ReactNode) {
       </>
     );
   }
+
   return isValidElement<{ children?: ReactNode }>(children)
     ? cloneElement(children, undefined, children.props.children, spinner)
     : children;

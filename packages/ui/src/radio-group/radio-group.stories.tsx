@@ -32,6 +32,7 @@ export const Default = meta.story({});
 
 Default.test("is a radio group named by its label", async ({ canvas }) => {
   const group = canvas.getByRole("radiogroup", { name: "Plan" });
+
   await expect(group).toHaveAttribute("aria-orientation", "vertical");
   await expect(canvas.getByRole("radio", { name: "Monthly" })).toBeChecked();
 });
@@ -41,6 +42,7 @@ Default.test(
   async ({ canvas, userEvent, args }) => {
     const yearly = canvas.getByRole("radio", { name: "Yearly" });
     const toggles = listen("ab-toggle");
+
     await userEvent.click(canvas.getByText("Yearly"));
     await userEvent.click(yearly);
     toggles.stop();
@@ -65,7 +67,9 @@ Default.test(
     await userEvent.keyboard("{ArrowDown}");
     await expect(canvas.getByRole("radio", { name: "Yearly" })).toBeChecked();
     await userEvent.keyboard("{ArrowUp}{ArrowUp}");
+
     const lifetime = canvas.getByRole("radio", { name: "Lifetime" });
+
     await expect(lifetime).toHaveFocus();
     await expect(lifetime).toBeChecked();
     await expect(args.onValueChange).toHaveBeenLastCalledWith("lifetime", expect.anything());
@@ -80,7 +84,9 @@ Default.test(
     await userEvent.keyboard("{ArrowLeft}");
     await expect(canvas.getByRole("radio", { name: "Yearly" })).toBeChecked();
     await userEvent.keyboard("{ArrowRight}{ArrowRight}");
+
     const lifetime = canvas.getByRole("radio", { name: "Lifetime" });
+
     await expect(lifetime).toHaveFocus();
     await expect(lifetime).toBeChecked();
   },
@@ -97,6 +103,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const toggles = listen("ab-toggle");
+
     await userEvent.click(canvas.getByRole("radio", { name: "Yearly" }));
     toggles.stop();
     await expect(canvas.getByRole("radio", { name: "Monthly" })).toBeChecked();
@@ -111,6 +118,7 @@ Default.test(
   async ({ canvas, userEvent, args }) => {
     await userEvent.click(canvas.getByRole("radio", { name: "Yearly" }));
     await expect(args.onValueChange).toHaveBeenCalledWith("yearly", expect.anything());
+
     for (const radio of canvas.getAllByRole("radio")) await expect(radio).not.toBeChecked();
   },
 );
@@ -122,6 +130,7 @@ Default.test(
     for (const radio of canvas.getAllByRole("radio")) {
       await expect(radio).toHaveAttribute("aria-disabled", "true");
     }
+
     await userEvent.tab();
     await expect(canvas.getByRole("radio", { name: "Monthly" })).toHaveFocus();
     await userEvent.click(canvas.getByText("Yearly"));
@@ -148,6 +157,7 @@ Default.test(
   { decorators: [(Story) => <form aria-label="Billing">{Story()}</form>] },
   async ({ canvas }) => {
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Billing" });
+
     await expect([...new FormData(form)]).toEqual([["plan", "monthly"]]);
   },
 );
@@ -167,10 +177,13 @@ Default.test(
   "keeps its value and reports no change when a click is default-prevented",
   async ({ canvas, userEvent, args }) => {
     const yearly = canvas.getByRole("radio", { name: "Yearly" });
+
     yearly.addEventListener("click", (event) => {
       event.preventDefault();
     });
+
     const toggles = listen("ab-toggle");
+
     await userEvent.click(yearly);
     toggles.stop();
     await expect(canvas.getByRole("radio", { name: "Monthly" })).toBeChecked();

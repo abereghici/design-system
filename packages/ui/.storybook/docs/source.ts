@@ -5,6 +5,7 @@ const kebab = (name: string) => name.replaceAll(/(?<!^)[A-Z]/gv, "-$&").toLowerC
 function importOf(name: string) {
   const icon = /^(?<glyph>\w+)Icon$/v.exec(name)?.groups?.["glyph"];
   const path = icon === undefined ? kebab(name) : `icons/${kebab(icon)}`;
+
   return `import { ${name} } from "@platform/ui/${path}";`;
 }
 
@@ -29,13 +30,17 @@ export function transform(code: string, { title, subcomponents }: StoryContext) 
       if (/^\s*<React\.Fragment key=".*">$/v.test(line)) depth += 1;
       else if (depth > 0 && /^\s*<\/React\.Fragment>$/v.test(line)) depth -= 1;
       else return [line.slice(depth * 2)];
+
       return [];
     })
     .join("\n");
   const names = new Set(body.matchAll(/<(?<name>[A-Z]\w*)/gv).map((match) => match[1] ?? ""));
   const imports = [...names].map((name) => importOf(name)).toSorted();
   const ref = body.includes("={ref}");
+
   if (body.includes("Temporal.")) imports.unshift('import { Temporal } from "temporal-polyfill";');
+
   if (ref) imports.unshift('import { useRef } from "react";');
+
   return `${imports.join("\n")}\n\n${ref ? "const ref = useRef(null);\n\n" : ""}${body}`;
 }

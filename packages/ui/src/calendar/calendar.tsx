@@ -58,7 +58,9 @@ const onFocusIn = sharedListener("focusin", () => document);
 
 const clamp = (date: Temporal.PlainDate, min?: Temporal.PlainDate, max?: Temporal.PlainDate) => {
   if (min !== undefined && Temporal.PlainDate.compare(date, min) < 0) return min;
+
   if (max !== undefined && Temporal.PlainDate.compare(date, max) > 0) return max;
+
   return date;
 };
 
@@ -70,6 +72,7 @@ function useToday() {
     () => Temporal.Now.plainDateISO().toString(),
     () => Temporal.Now.plainDateISO("UTC").toString(),
   );
+
   return Temporal.PlainDate.from(iso);
 }
 
@@ -94,29 +97,39 @@ function useCalendar(
   const [userFocus, setFocused] = useState<Temporal.PlainDate | null>(null);
   const open = picker?.open === true;
   const [wasOpen, setWasOpen] = useState(open);
+
   if (open !== wasOpen) {
     setWasOpen(open);
+
     if (open) setFocused(null);
   }
+
   const focused = userFocus === null ? start : clamp(userFocus, min, max);
   const outside = (date: Temporal.PlainDate) => !clamp(date, min, max).equals(date);
   const unavailable = (date: Temporal.PlainDate) =>
     outside(date) || isDateUnavailable?.(date) === true;
   const choose = (date: Temporal.PlainDate, event: Event) => {
     setFocused(date);
+
     if (unavailable(date)) return;
+
     if (picker !== null) {
       picker.choose(date, event);
+
       return;
     }
+
     if (selected?.equals(date) === true) return;
+
     if (requestChange(onValueChange, date, "day-press", event)) setUncontrolled(date);
   };
+
   return { today, selected, start, focused, setFocused, outside, unavailable, choose };
 }
 
 const dayOf = (target: EventTarget) => {
   const iso = target instanceof HTMLElement ? target.dataset["date"] : undefined;
+
   return iso === undefined ? null : Temporal.PlainDate.from(iso);
 };
 
@@ -135,21 +148,29 @@ function useGrid(
   const focusOnOpen = useEffectEvent(() => {
     if (picker?.canFocus() === true) focusDay(grid.current, focused);
   });
+
   useEffect(() => {
     if (open) focusOnOpen();
   }, [open]);
+
   return {
     grid,
     onKeyDown: (event: KeyboardEvent<HTMLTableElement>) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         choose(focused, event.nativeEvent);
+
         return;
       }
+
       const target = keyTarget(event, focused, firstDay);
+
       if (target === null) return;
+
       event.preventDefault();
+
       if (outside(target)) return;
+
       // The day may be in a month that isn't drawn yet.
       flushSync(() => {
         setFocused(target);
@@ -158,10 +179,12 @@ function useGrid(
     },
     onClick: (event: MouseEvent<HTMLTableElement>) => {
       const day = dayOf(event.target);
+
       if (day !== null) choose(day, event.nativeEvent);
     },
     onFocus: (event: FocusEvent<HTMLTableElement>) => {
       const day = dayOf(event.target);
+
       if (day !== null && !day.equals(focused)) setFocused(day);
     },
   };
@@ -191,6 +214,7 @@ export function Calendar({
   const headingId = useId();
   const handlers = useGrid(calendar, formats.firstDay, picker);
   const first = focused.with({ day: 1 });
+
   return (
     <fieldset {...mergeProps({ className: styles["root"] }, rest)}>
       <Header

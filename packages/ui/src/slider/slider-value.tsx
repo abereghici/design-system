@@ -13,6 +13,7 @@ export type ValueProps = ComponentProps<"output">;
 export function Value({ style, children, ...props }: ValueProps) {
   const { id, values, format, min, max } = useSlider();
   const widest = Math.max(format(min).length, format(max).length);
+
   return (
     <output
       htmlFor={values.map((_, index) => `${id}-${index}`).join(" ")}

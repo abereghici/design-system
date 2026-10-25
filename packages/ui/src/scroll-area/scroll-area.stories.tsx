@@ -31,7 +31,9 @@ Default.test(
   "is a tab stop with no role of its own",
   async ({ canvas, canvasElement, userEvent }) => {
     await userEvent.tab();
+
     const area = canvasElement.querySelector(":focus");
+
     await expect(area).toContainElement(canvas.getByText(first));
     await expect(area).not.toHaveAttribute("role");
   },
@@ -53,6 +55,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const region = canvas.getByRole("region", { name: "Terms" });
+
     await userEvent.tab();
     await expect(region).toHaveFocus();
   },

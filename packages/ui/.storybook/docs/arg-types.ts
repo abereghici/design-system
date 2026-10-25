@@ -33,8 +33,10 @@ const names: Record<string, string> = {
 export const meaningfulControls: ArgTypesEnhancer = Object.assign(
   ({ argTypes, initialArgs }: Parameters<ArgTypesEnhancer>[0]) => {
     const enhanced = { ...argTypes };
+
     for (const [name, argType] of Object.entries(argTypes)) {
       if (argType.control !== undefined) continue;
+
       const { type } = argType;
       const members =
         type?.name === "union"
@@ -44,6 +46,7 @@ export const meaningfulControls: ArgTypesEnhancer = Object.assign(
           : [type];
       const [only] = members.length === 1 ? members : [];
       const control = controls.get(only?.name ?? "");
+
       if (only?.name === "enum" && !plumbing.test(name)) {
         if (only.value.length <= 5)
           enhanced[name] = { ...argType, control: { type: "inline-radio" } };
@@ -53,15 +56,19 @@ export const meaningfulControls: ArgTypesEnhancer = Object.assign(
         enhanced[name] = { ...argType, control: { type: control } };
       }
     }
+
     for (const [name, value] of Object.entries(initialArgs)) {
       const description = names[name];
+
       if (description !== undefined && (enhanced[name]?.description ?? "") === "") {
         enhanced[name] = { name, ...enhanced[name], description };
       }
+
       if ((typeof value === "object" && value !== null) || plumbing.test(name)) {
         enhanced[name] = { name, ...enhanced[name], control: false };
       }
     }
+
     return enhanced;
   },
   { secondPass: true },

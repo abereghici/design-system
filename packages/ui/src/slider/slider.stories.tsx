@@ -52,6 +52,7 @@ export const Default = meta.story({});
 
 Default.test("is a slider with its formatted value", async ({ canvas }) => {
   const slider = canvas.getByRole("slider", { name: "Volume" });
+
   await expect(slider).toHaveValue("40");
   await expect(slider).toHaveAttribute("aria-valuetext", "40");
   await expect(canvas.getByRole("status")).toHaveTextContent("40");
@@ -61,6 +62,7 @@ Default.test(
   "steps with the arrow keys and commits each step",
   async ({ canvas, userEvent, args }) => {
     const slider = canvas.getByRole("slider", { name: "Volume" });
+
     await userEvent.tab();
     await expect(slider).toHaveFocus();
     await userEvent.keyboard("{ArrowRight}{ArrowUp}{ArrowDown}");
@@ -79,6 +81,7 @@ Default.test(
   "takes large steps with Page Up, Page Down and Shift, and jumps with Home and End",
   async ({ canvas, userEvent }) => {
     const slider = canvas.getByRole("slider", { name: "Volume" });
+
     await userEvent.tab();
     await userEvent.keyboard("{PageUp}");
     await expect(slider).toHaveValue("50");
@@ -96,6 +99,7 @@ Default.test(
   { globals: { dir: "rtl" } },
   async ({ canvas, userEvent }) => {
     const slider = canvas.getByRole("slider", { name: "Volume" });
+
     await userEvent.tab();
     await userEvent.keyboard("{ArrowLeft}");
     await expect(slider).toHaveValue("41");
@@ -110,6 +114,7 @@ Default.test(
     const slider = canvas.getByRole("slider", { name: "Volume" });
     const track = canvas.getByTestId("track");
     const rect = track.getBoundingClientRect();
+
     await userEvent.pointer({
       keys: "[MouseLeft]",
       target: track,
@@ -133,6 +138,7 @@ Default.test("follows a drag and commits once", async ({ canvas, userEvent, args
     clientX: rect.left + rect.width * fraction,
     clientY: rect.top + rect.height / 2,
   });
+
   await userEvent.pointer([
     { keys: "[MouseLeft>]", target: track, coords: at(0.25) },
     { target: track, coords: at(0.6) },
@@ -161,6 +167,7 @@ Default.test(
   },
   async ({ canvas, userEvent, args }) => {
     const slider = canvas.getByRole("slider", { name: "Volume" });
+
     await userEvent.tab();
     await userEvent.keyboard("{ArrowRight}");
     await expect(slider).toHaveValue("40");
@@ -173,6 +180,7 @@ Default.test(
   { args: { disabled: true } },
   async ({ canvas, userEvent, args }) => {
     const slider = canvas.getByRole("slider", { name: "Volume" });
+
     await expect(slider).toHaveAttribute("aria-disabled", "true");
     await userEvent.tab();
     await expect(slider).toHaveFocus();
@@ -207,6 +215,7 @@ Default.test(
   },
   async ({ canvas, userEvent, args }) => {
     const low = canvas.getByRole("slider", { name: "Minimum price" });
+
     await expect(low).toHaveAttribute("aria-valuetext", "€20.00");
     await expect(canvas.getByRole("status")).toHaveTextContent("€20.00–€80.00");
     await userEvent.tab();
@@ -245,6 +254,7 @@ Default.test(
   },
   async ({ canvas }) => {
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Filters" });
+
     await expect([...new FormData(form)]).toEqual([
       ["price", "20"],
       ["price", "80"],

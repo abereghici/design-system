@@ -24,7 +24,9 @@ const PopoverContext = createContext<Floating | null>(null);
 
 export function usePopover(): Floating {
   const popover = use(PopoverContext);
+
   if (popover === null) throw new Error("Popover parts must be inside Popover.Root");
+
   return popover;
 }
 

@@ -56,11 +56,15 @@ function key(
   const id = name.toLowerCase();
   const modifier = modifiers[id];
   const glyph = glyphs[id];
+
   if (modifier !== undefined && platform === undefined) {
     return <KbdKey apple={modifier.apple} other={modifier.other} keyLabels={keyLabels} />;
   }
+
   const face = modifier?.[platform ?? "other"] ?? glyph;
+
   if (face?.label !== undefined) return <KbdKey apple={face} other={face} keyLabels={keyLabels} />;
+
   return face?.text ?? words[id] ?? (name.length === 1 ? name.toUpperCase() : name);
 }
 
@@ -74,6 +78,7 @@ export function Kbd({ keys, platform, keyLabels, children, ...props }: KbdProps)
     keys === undefined
       ? [children]
       : keys.split("+").map((name) => key(name.trim(), { platform, keyLabels }));
+
   return (
     <kbd dir="ltr" {...mergeProps({ className: styles["root"] }, props)}>
       {content.map((node, index) => (

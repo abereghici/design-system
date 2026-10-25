@@ -19,5 +19,6 @@ export type LinkProps = LinkBase & ({ href: string; asChild?: false } | { asChil
 /** Set `aria-current="page"` on the link to the page on screen. */
 export function Link({ asChild = false, ...props }: LinkProps) {
   const Anchor = asChild ? Slot : "a";
+
   return <Anchor {...mergeProps({ className: styles["link"] }, props)} />;
 }

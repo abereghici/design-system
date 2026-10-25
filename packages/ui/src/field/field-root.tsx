@@ -42,13 +42,17 @@ function useServerError(name: string | undefined, control: FormControl | null) {
   const errors = use(FormErrorsContext);
   const [cleared, setCleared] = useState<typeof errors>();
   const server = errors === cleared || name === undefined ? undefined : errors?.[name];
+
   useEffect(() => {
     if (server === undefined || control === null || errors === undefined) return;
+
     const first = [...(control.form?.elements ?? [])].find(
       (element) => errors[element.getAttribute("name") ?? ""] !== undefined,
     );
+
     if (first === control && document.activeElement !== control) control.focus();
   }, [errors, server, control]);
+
   return {
     server,
     clear: () => {
@@ -84,17 +88,21 @@ function useValidity(
   useEvent("reset", clearServerError, control?.form ?? null);
 
   const own = (event: SyntheticEvent) => (event.target === control ? control : null);
+
   return {
     failure,
     serverError: server,
     clearServerError,
     sync: (event: SyntheticEvent) => {
       const target = own(event);
+
       if (target !== null) setFailure(failureOf(target));
     },
     edit: (event: SyntheticEvent) => {
       const target = own(event);
+
       if (target === null) return;
+
       clear();
       setValidity(target, undefined, undefined, validate);
       setFailure(failureOf(target));
@@ -113,6 +121,7 @@ export function Root({ name, disabled = false, invalid, validate, ...props }: Ro
   const [control, setControl] = useState<FormControl | null>(null);
   const [register] = useState(() => (node: FormControl | null) => {
     setControl(node);
+
     return () => {
       setControl((current) => (current === node ? null : current));
     };

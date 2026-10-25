@@ -27,6 +27,7 @@ export function Content({
   ...props
 }: ContentProps) {
   const popover = usePopover();
+
   return (
     <dialog
       aria-labelledby={props["aria-label"] === undefined ? `${popover.contentId}-title` : undefined}

@@ -6,7 +6,9 @@ const schemes = ["light", "dark"] as const;
 
 function hex(name: string, scheme: (typeof schemes)[number]): string {
   const value = colors.get(`ab-color-${name}`);
+
   if (value === undefined) throw new Error(`No color token ab-color-${name}`);
+
   return typeof value === "string" ? value : value[scheme];
 }
 
@@ -21,6 +23,7 @@ const rows = Object.entries(
       ),
     ).toFixed(2),
   );
+
   return { foreground, minimum, backgrounds: pairs.length, lowest };
 });
 

@@ -38,6 +38,7 @@ catalog:
   next: 16.4.3
   oxfmt: 0.74.0
   oxlint: 1.89.0
+  oxlint-plugin-eslint: 1.89.0
   oxlint-tsgolint: 7.0.2004
   playwright: 1.64.1
   react: 19.3.1

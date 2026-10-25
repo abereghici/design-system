@@ -49,7 +49,9 @@ Default.test(
     await expect(canvas.getByRole("textbox", { name: "Street" })).toBeDisabled();
     await userEvent.tab();
     await expect(document.body).toHaveFocus();
+
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Billing" });
+
     await expect(new FormData(form).has("street")).toBe(false);
   },
 );

@@ -14,6 +14,7 @@ export const Default = meta.story({});
 
 Default.test("is a progressbar named by its label, with its value", async ({ canvas }) => {
   const bar = canvas.getByRole("progressbar", { name: "Uploading 3 files" });
+
   await expect(bar).toHaveProperty("value", 40);
   await expect(bar).toHaveProperty("max", 100);
   await expect(canvas.getByText("40%")).toBeVisible();
@@ -24,6 +25,7 @@ Default.test(
   { args: { value: 3, max: 4, label: "Setup", valueLabel: "Step 3 of 4" } },
   async ({ canvas }) => {
     const bar = canvas.getByRole("progressbar", { name: "Setup" });
+
     await expect(bar).toHaveAttribute("aria-valuetext", "Step 3 of 4");
     await expect(canvas.getByText("Step 3 of 4")).toBeVisible();
   },
@@ -51,6 +53,7 @@ Default.test(
           effect instanceof KeyframeEffect &&
           effect.getKeyframes().some((frame) => "translate" in frame),
       );
+
     await expect(sweeping).toBe(!matchMedia("(prefers-reduced-motion: reduce)").matches);
   },
 );

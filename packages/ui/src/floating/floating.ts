@@ -90,7 +90,9 @@ const layers = new WeakMap<Element, Layer>();
 
 function layerOf(element: Element): Layer {
   const layer = layers.get(element) ?? {};
+
   layers.set(element, layer);
+
   return layer;
 }
 
@@ -106,11 +108,15 @@ const invokerOf = (contentId: string) =>
 function settle(element: HTMLElement, component: Component) {
   const layer = layerOf(element);
   const { closing, focusInside } = layer;
+
   layer.closing = undefined;
+
   if (closing === "escape-key" || closing === "outside-press") {
     dispatchFeedback(element, "ab-dismiss", { component, reason: "user" });
   }
+
   if (focusInside === true && closing !== "outside-press") returnFocus(element);
+
   layer.returnTo = undefined;
 }
 
@@ -119,6 +125,7 @@ function settle(element: HTMLElement, component: Component) {
  */
 export function rememberFocus(contentId: string, focus = document.activeElement) {
   const element = document.getElementById(contentId);
+
   if (element !== null)
     layerOf(element).returnTo = focus instanceof HTMLElement ? focus : undefined;
 }
@@ -129,12 +136,15 @@ export function returnFocus(
   to: Element | null | undefined = layerOf(element).returnTo,
 ) {
   const focus = document.activeElement;
+
   if (focus !== document.body && !element.contains(focus)) return;
+
   if (to instanceof HTMLElement) to.focus({ preventScroll: true });
 }
 
 function leaves(contentId: string, next: EventTarget | null) {
   if (!(next instanceof Node)) return false;
+
   return (
     document.getElementById(contentId)?.contains(next) !== true &&
     invokerOf(contentId)?.contains(next) !== true
@@ -145,13 +155,20 @@ function leaves(contentId: string, next: EventTarget | null) {
 function useInputRecord(contentId: string, open: boolean) {
   const record = (event: Event) => {
     const element = document.getElementById(contentId);
+
     if (element === null) return;
+
     if (event instanceof KeyboardEvent && event.key !== "Escape") return;
+
     const inside = event.target instanceof Node && element.contains(event.target);
+
     if (event instanceof PointerEvent && inside) return;
+
     layerOf(element).input = event;
   };
+
   const target = open ? getDocument : null;
+
   useEvent("keydown", record, target, true);
   useEvent("pointerdown", record, target, true);
   useEvent("pointerup", record, target, true);
@@ -165,11 +182,14 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
   const { input } = opening ? {} : layer;
   const native = input instanceof PointerEvent ? "outside-press" : "none";
   const reason = reported ?? (input instanceof KeyboardEvent ? "escape-key" : native);
+
   layer.pending = undefined;
   layer.input = undefined;
+
   const accepted =
     reported !== undefined ||
     requestChange(options.onOpenChange, opening, reason, event.nativeEvent);
+
   if (!opening) {
     layer.closing = reason;
     layer.focusInside =
@@ -177,11 +197,14 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
   } else if (accepted) {
     const { source } = event.nativeEvent;
     const from = component === "ContextMenu" ? (layer.returnTo ?? document.activeElement) : source;
+
     layer.returnTo = from instanceof HTMLElement ? from : undefined;
+
     const keyboard =
       component === "ContextMenu"
         ? ":not([data-pointer])"
         : ":is(:focus-visible, :has(:focus-visible))";
+
     element.toggleAttribute("data-pointer", source?.matches(keyboard) === false);
   } else {
     event.preventDefault();
@@ -190,13 +213,18 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
 
 function reconcile(contentId: string, open: boolean, findSource: (id: string) => Element | null) {
   const element = document.getElementById(contentId);
+
   if (element === null) return;
+
   const layer = layerOf(element);
+
   // `closing` lasts until the async `toggle` event (https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/toggle_event), so a render in
   // between (a value set on the closing press) does not reopen the layer.
   if (layer.pending !== undefined || layer.closing !== undefined || open === isOpen(element))
     return;
+
   layer.pending = "none";
+
   if (open) element.showPopover(sourceOf(findSource(contentId)));
   else element.hidePopover();
 }
@@ -221,7 +249,9 @@ function contentPropsOf(
     },
     onToggle: (event: ToggleEvent<HTMLElement>) => {
       setOpen(event.newState === "open");
+
       if (event.newState === "closed") settle(event.currentTarget, component);
+
       hooks.onToggle?.(event);
     },
   } as const;
@@ -235,27 +265,38 @@ function controlsOf(
 ) {
   const request = (next: boolean, reason: ChangeReason, event?: Event) => {
     const element = document.getElementById(contentId);
+
     if (element === null || !requestChange(options.onOpenChange, next, reason, event)) return false;
+
     const layer = layerOf(element);
+
     layer.pending = reason;
     setTimeout(() => {
       if (layer.pending === reason) layer.pending = undefined;
     });
+
     return true;
   };
+
   const toggle = (next: boolean, reason: ChangeReason, event?: Event, source?: Element | null) => {
     const element = document.getElementById(contentId);
+
     if (element === null || isOpen(element) === next || !request(next, reason, event)) return false;
+
     if (next) element.showPopover(sourceOf(source ?? findSource(contentId)));
     else element.hidePopover();
+
     return true;
   };
+
   const focusOut = (event: globalThis.FocusEvent) => {
     if (!leaves(contentId, event.relatedTarget)) return;
+
     setTimeout(() => {
       toggle(false, "focus-out", event);
     });
   };
+
   return { contentId, request, toggle, focusOut };
 }
 
@@ -276,6 +317,7 @@ export function useFloating(
   const contentId = useId();
 
   const controls = controlsOf(contentId, options, findSource);
+
   useInputRecord(contentId, current);
 
   useLayoutEffect(() => {

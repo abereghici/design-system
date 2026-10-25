@@ -64,6 +64,7 @@ export function Meter({
     new Intl.NumberFormat(locale, formatOptions).format(
       formatOptions.style === "percent" ? (now - min) / (max - min) : now,
     );
+
   return (
     <div
       data-thresholds={low === undefined && high === undefined ? undefined : ""}

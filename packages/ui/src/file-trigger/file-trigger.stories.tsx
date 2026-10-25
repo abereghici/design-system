@@ -17,9 +17,13 @@ const photo = new File(["png"], "photo.png", { type: "image/png" });
 /** Stands in for the system picker, which no test can reach: sets the files on the native input. */
 const pick = (root: HTMLElement, ...files: File[]) => {
   const input = root.querySelector<HTMLInputElement>("input[type=file]");
+
   if (input === null) throw new Error("No file input");
+
   const transfer = new DataTransfer();
+
   for (const file of files) transfer.items.add(file);
+
   input.files = transfer.files;
   input.dispatchEvent(new Event("input", { bubbles: true }));
   input.dispatchEvent(new Event("change", { bubbles: true }));
@@ -74,7 +78,9 @@ Default.test(
     await userEvent.click(canvas.getByRole("button", { name: "Clear files" }));
     await expect(canvas.getByRole("status")).toBeEmptyDOMElement();
     await expect(canvas.getByRole("button", { name: "Choose image" })).toHaveFocus();
+
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect(new FormData(form).get("avatar")).toHaveProperty("size", 0);
   },
 );
@@ -116,7 +122,9 @@ Default.test(
   async ({ canvas, canvasElement, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Choose image" }));
     pick(canvasElement, photo);
+
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect(new FormData(form).get("avatar")).toHaveProperty("name", "photo.png");
   },
 );
@@ -135,7 +143,9 @@ Default.test(
   async ({ canvas, canvasElement, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Choose image" }));
     pick(canvasElement, photo);
+
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect(new FormData(form).get("avatar")).toHaveProperty("name", "");
   },
 );
@@ -145,6 +155,7 @@ Default.test(
   { args: { disabled: true } },
   async ({ canvas, canvasElement, userEvent, args }) => {
     const trigger = canvas.getByRole("button", { name: "Choose image" });
+
     await expect(trigger).toHaveAttribute("aria-disabled", "true");
     await userEvent.tab();
     await expect(trigger).toHaveFocus();
@@ -203,6 +214,7 @@ InAField.test(
   "takes focus and shows the error after a blocked submit",
   async ({ canvas, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Attachments Add files" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(trigger).toHaveFocus();
     await expect(trigger).toHaveAttribute("aria-invalid", "true");
@@ -214,6 +226,7 @@ InAField.test(
   "clears the error once files are picked",
   async ({ canvas, canvasElement, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Attachments Add files" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await userEvent.click(trigger);
     pick(canvasElement, photo);

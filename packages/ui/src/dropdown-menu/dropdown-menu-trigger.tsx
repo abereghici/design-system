@@ -17,6 +17,7 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
   const { floating } = useDropdownMenu();
   const Element = asChild ? Slot : "button";
   const trigger = floating.triggerProps(props);
+
   return (
     <Element
       type={asChild ? undefined : "button"}
@@ -25,18 +26,27 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
       aria-haspopup="menu"
       onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
         props.onKeyDown?.(event);
+
         const arrow = event.key === "ArrowDown" || event.key === "ArrowUp";
+
         if (!arrow || event.currentTarget.getAttribute("aria-disabled") === "true") return;
+
         event.preventDefault();
+
         const content = document.getElementById(floating.contentId);
+
         if (content === null) return;
+
         if (floating.open) {
           itemsOf(content)
             .at(event.key === "ArrowUp" ? -1 : 0)
             ?.focus();
+
           return;
         }
+
         if (event.key === "ArrowUp") focusLast.add(content);
+
         floating.toggle(true, "trigger-press", event.nativeEvent);
       }}
     />

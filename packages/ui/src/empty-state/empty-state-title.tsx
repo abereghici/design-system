@@ -12,5 +12,6 @@ export interface TitleProps extends ComponentProps<"h3"> {
 /** Says what is empty and why. */
 export function Title({ asChild = false, ...props }: TitleProps) {
   const Element = asChild ? Slot : "h3";
+
   return <Element {...mergeProps({ className: styles["title"] }, props)} />;
 }

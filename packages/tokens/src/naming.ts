@@ -221,17 +221,24 @@ export const componentOf = (name: string): string | undefined =>
 
 const checkComponentName = (name: string): string | undefined => {
   const component = componentOf(name);
+
   if (component === undefined) {
     return `names no component in the Dictionary (${COMPONENTS.join(", ")})`;
   }
+
   let rest = name.slice(component.length + 1);
   const state = STATES.find((s) => rest.endsWith(`-${s}`));
+
   if (state !== undefined) rest = rest.slice(0, -state.length - 1);
+
   const property = PROPERTIES.find((p) => rest === p || rest.endsWith(`-${p}`));
+
   if (property === undefined) {
     return "does not match the component grammar ({component}-{variant}-{element}-{property}-{state}): no known property";
   }
+
   const modifiers = rest === property ? [] : rest.slice(0, -property.length - 1).split("-");
+
   return outsideDictionary(modifiers.filter((m) => !MODIFIERS.has(m)));
 };
 
@@ -244,8 +251,11 @@ const checkSemanticName = (name: string): string | undefined => {
   if (!SEMANTIC.some((pattern) => pattern.test(name))) {
     return "does not match the semantic grammar (e.g. color-{property}-{role}-{emphasis}-{state})";
   }
+
   if (!name.startsWith("color-")) return undefined;
+
   const words = name.split("-").slice(2);
+
   return outsideDictionary(words.filter((word) => !COLOR_WORDS.has(word)));
 };
 

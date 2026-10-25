@@ -20,7 +20,9 @@ export type ChangeEventDetails = Details<ChangeReason>;
 
 export function useDropdownMenu(): Menu {
   const menu = use(MenuContext);
+
   if (menu === null) throw new Error("DropdownMenu parts must be inside DropdownMenu.Root");
+
   return menu;
 }
 
@@ -37,5 +39,6 @@ export interface RootProps extends FloatingOptions<ChangeReason> {
  */
 export function Root({ children, ...options }: RootProps) {
   const floating = useFloating("DropdownMenu", options);
+
   return <MenuContext value={{ floating, component: "DropdownMenu" }}>{children}</MenuContext>;
 }

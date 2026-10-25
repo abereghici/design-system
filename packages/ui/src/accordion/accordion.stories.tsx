@@ -42,6 +42,7 @@ Default.test(
   async ({ canvas, userEvent, args }) => {
     const trigger = canvas.getByText("Which browsers are supported?");
     const toggles = listen("ab-toggle");
+
     await userEvent.click(trigger);
     toggles.stop();
     await waitFor(() => expect(canvas.getByText(browsers)).toBeVisible());
@@ -101,6 +102,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const toggles = listen("ab-toggle");
+
     await userEvent.click(canvas.getByText("How are tokens versioned?"));
     toggles.stop();
     await expect(canvas.getByText(tokens)).toBeVisible();
@@ -112,10 +114,13 @@ Default.test(
   "stays closed and reports no change when its click is default-prevented",
   async ({ canvas, userEvent, args }) => {
     const trigger = canvas.getByText("Which browsers are supported?");
+
     trigger.addEventListener("click", (event) => {
       event.preventDefault();
     });
+
     const toggles = listen("ab-toggle");
+
     await userEvent.click(trigger);
     toggles.stop();
     await expect(canvas.getByText(browsers)).not.toBeVisible();

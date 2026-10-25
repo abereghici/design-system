@@ -15,6 +15,7 @@ export interface TitleProps extends ComponentProps<"h2"> {
 export function Title({ asChild = false, ...props }: TitleProps) {
   const { id, setTitle, styles } = useModal();
   const Root = asChild ? Slot : "h2";
+
   return (
     <Root
       {...mergeProps({ className: styles["title"], ref: presenceRef(setTitle) }, props)}

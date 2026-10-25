@@ -19,6 +19,7 @@ const onValueChange = fn<NonNullable<DatePicker.RootProps["onValueChange"]>>();
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const months = { previousMonthLabel: "Previous month", nextMonthLabel: "Next month" };
+
 // @ts-expect-error -- the calendar button shows only an icon, so it needs a name
 ({ label: "Due date", incompleteMessage: "Enter a complete date" }) satisfies DatePicker.RootProps;
 
@@ -66,7 +67,9 @@ export const Default = meta.story({});
 
 Default.test("has a trigger named Choose date that describes the value", async ({ canvas }) => {
   await expect(canvas.getByRole("group", { name: "Due date" })).toBeVisible();
+
   const trigger = canvas.getByRole("button", { name: "Choose date" });
+
   await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
   await expect(trigger).toHaveAccessibleDescription("Wednesday, March 12, 2025");
 });
@@ -77,6 +80,7 @@ Default.test(
   async ({ canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Choose date" });
+
     await expect(trigger).toHaveAccessibleDescription("miercuri, 12 martie 2025");
     await user.click(trigger);
     await waitFor(() => expect(canvas.getByRole("grid", { name: "martie 2025" })).toBeVisible());
@@ -86,6 +90,7 @@ Default.test(
 Default.test("opens from the keyboard with focus on the selected day", async ({ canvas }) => {
   const user = await trusted();
   const trigger = canvas.getByRole("button", { name: "Choose date" });
+
   trigger.focus();
   await user.keyboard("{Enter}");
   await waitFor(() => expect(canvas.getByRole("dialog", { name: "Choose date" })).toBeVisible());
@@ -99,6 +104,7 @@ Default.test(
   async ({ args, canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Choose date" });
+
     await user.click(trigger);
     await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
     onValueChange.mockImplementationOnce((_value, details) => {
@@ -124,7 +130,9 @@ Default.test(
 Default.test("chooses with Enter and with Space", async ({ canvas }) => {
   const user = await trusted();
   const trigger = canvas.getByRole("button", { name: "Choose date" });
+
   trigger.focus();
+
   for (const [key, day] of [
     ["{Enter}", "Thursday, March 13, 2025"],
     [" ", "Friday, March 14, 2025"],
@@ -147,6 +155,7 @@ Default.test(
     const user = await trusted();
     const dismissed = listen("ab-dismiss");
     const trigger = canvas.getByRole("button", { name: "Choose date" });
+
     await user.click(trigger);
     await waitFor(() => expect(canvas.getByRole("dialog")).toBeVisible());
     await user.keyboard("{ArrowRight}{Escape}");
@@ -161,6 +170,7 @@ Default.test(
 
 Default.test("closes on a press outside", async ({ canvas }) => {
   const user = await trusted();
+
   await user.click(canvas.getByRole("button", { name: "Choose date" }));
   await waitFor(() => expect(canvas.getByRole("dialog")).toBeVisible());
   await user.click(document.body, { position: { x: 600, y: 20 } });
@@ -171,6 +181,7 @@ Default.test("closes on a press outside", async ({ canvas }) => {
 
 Default.test("closes when Tab leaves the panel, on to the next control", async ({ canvas }) => {
   const user = await trusted();
+
   await user.click(canvas.getByRole("button", { name: "Choose date" }));
   await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
   await user.keyboard("{Tab}");
@@ -182,6 +193,7 @@ Default.test("closes when Tab leaves the panel, on to the next control", async (
 Default.test("closes when its trigger is pressed again", async ({ canvas }) => {
   const user = await trusted();
   const trigger = canvas.getByRole("button", { name: "Choose date" });
+
   await user.click(trigger);
   await waitFor(() => expect(canvas.getByRole("dialog")).toBeVisible());
   await user.click(trigger);
@@ -194,6 +206,7 @@ Default.test(
   { args: { defaultValue: null } },
   async ({ canvas }) => {
     const user = await trusted();
+
     await user.click(canvas.getByRole("button", { name: "Choose date" }));
     await waitFor(() => expect(document.activeElement).toHaveAttribute("aria-current", "date"));
   },
@@ -202,6 +215,7 @@ Default.test(
 Default.test("does not open while disabled", { args: { disabled: true } }, async ({ canvas }) => {
   const user = await trusted();
   const trigger = canvas.getByRole("button", { name: "Choose date" });
+
   await expect(trigger).toHaveAttribute("aria-disabled", "true");
   trigger.focus();
   await user.keyboard("{Enter}");
@@ -228,6 +242,7 @@ export const InAForm = meta.story({
 
 InAForm.test("submits the chosen day", async ({ canvas }) => {
   const user = await trusted();
+
   submitted.mockClear();
   await user.click(canvas.getByRole("button", { name: "Choose date" }));
   await user.click(await canvas.findByLabelText("Thursday, March 20, 2025"));
@@ -246,6 +261,7 @@ InAForm.test(
   },
   async ({ canvas }) => {
     const user = await trusted();
+
     await user.click(canvas.getByRole("spinbutton", { name: "day" }));
     await user.keyboard("15");
     await expect(canvas.queryByText("This date is not available")).toBeNull();
@@ -295,6 +311,7 @@ const Calendar = lazy(() =>
 
 LazyCalendar.test("focuses the selected day once the Calendar loads", async ({ canvas }) => {
   const user = await trusted();
+
   await user.click(canvas.getByRole("button", { name: "Choose date" }));
   await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
 });

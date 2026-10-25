@@ -40,9 +40,11 @@ function handleClose(
   { onClose, onInputValueChange, finalFocus }: DialogProps,
 ) {
   onClose?.(event);
+
   if ((event.currentTarget.querySelector("input")?.value ?? "") !== "") {
     requestChange(onInputValueChange, "", "input-clear", event.nativeEvent);
   }
+
   if (document.activeElement === document.body && finalFocus?.current?.isConnected === true) {
     finalFocus.current.focus();
   }
@@ -57,9 +59,12 @@ export function Dialog(props: DialogProps) {
   const [closes, setCloses] = useState(0);
   const close = (reason: Exclude<Reason, "none">, event: Event) => {
     const accepted = requestChange(onOpenChange, false, reason, event);
+
     if (accepted) setUncontrolled(false);
+
     return accepted;
   };
+
   return (
     <ModalRoot
       open={open ?? uncontrolled}
@@ -67,6 +72,7 @@ export function Dialog(props: DialogProps) {
       component="Dialog"
       onOpenChange={(_open, details) => {
         const { reason, event } = details;
+
         if ((reason === "outside-press" || reason === "escape-key") && !close(reason, event))
           details.cancel();
       }}

@@ -15,6 +15,7 @@ export interface GroupProps extends ComponentProps<"fieldset"> {
 /** Items under a label; it hides while none of its Items match. */
 export function Group({ label, children, ...props }: GroupProps) {
   const id = useId();
+
   return (
     <fieldset {...mergeProps({ className: styles["group"] }, props)} aria-labelledby={id}>
       <div role="presentation" id={id} className={styles["label"]}>

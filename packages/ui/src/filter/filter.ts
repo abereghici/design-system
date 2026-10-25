@@ -8,6 +8,7 @@ const searches = new Map<string, Search>();
 
 function search(locale: Intl.LocalesArgument): Search {
   let found = searches.get(String(locale));
+
   if (found === undefined) {
     found = {
       collator: new Intl.Collator(locale, { usage: "search", sensitivity: "base" }),
@@ -16,6 +17,7 @@ function search(locale: Intl.LocalesArgument): Search {
     };
     searches.set(String(locale), found);
   }
+
   return found;
 }
 
@@ -29,6 +31,7 @@ export function rank(
   locale: Intl.LocalesArgument,
 ): number | undefined {
   if (query === "") return 0;
+
   const { collator, graphemes, words } = search(locale);
   const needle = query.normalize("NFC");
   const characters = [...graphemes.segment(needle)].map(({ segment }) => segment);
@@ -36,16 +39,22 @@ export function rank(
     const text = raw.normalize("NFC");
     const at = (index: number) =>
       collator.compare(text.slice(index, index + needle.length), needle) === 0;
+
     if (at(0)) return 0;
+
     if ([...words.segment(text)].some(({ index, isWordLike }) => isWordLike === true && at(index)))
       return 1;
+
     let next = 0;
+
     for (const { segment } of graphemes.segment(text)) {
       if (next < characters.length && collator.compare(segment, characters[next] ?? "") === 0)
         next += 1;
     }
+
     return next === characters.length ? 2 : undefined;
   });
   const found = tiers.filter((tier) => tier !== undefined);
+
   return found.length === 0 ? undefined : Math.min(...found);
 }

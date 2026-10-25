@@ -17,6 +17,7 @@ export const Default = meta.story({});
 
 Default.test("keeps its text for assistive technology but draws nothing", async ({ canvas }) => {
   const text = canvas.getByText("(opens in a new tab)");
+
   await expect(text.getBoundingClientRect()).toMatchObject({ width: 1, height: 1 });
 });
 
@@ -25,6 +26,7 @@ Default.test(
   { args: { asChild: true, children: <h2>Filters</h2> } },
   async ({ canvas }) => {
     const heading = canvas.getByRole("heading", { name: "Filters", level: 2 });
+
     await expect(heading.getBoundingClientRect()).toMatchObject({ width: 1, height: 1 });
   },
 );

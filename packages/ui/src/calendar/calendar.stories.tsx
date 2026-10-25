@@ -20,6 +20,7 @@ const date = (iso: string) => Temporal.PlainDate.from(iso);
 
 function NarrowingMax(args: CalendarProps) {
   const [max, setMax] = useState<Temporal.PlainDate>();
+
   return (
     <>
       <Calendar {...args} max={max} />
@@ -51,7 +52,9 @@ export const Default = meta.story({});
 
 Default.test("names the grid by its month and selects the value", async ({ canvas }) => {
   await expect(canvas.getByRole("group", { name: "Delivery date" })).toBeVisible();
+
   const grid = canvas.getByRole("grid", { name: "October 2026" });
+
   await expect(grid).toBeVisible();
   await expect(canvas.getAllByRole("columnheader").map((header) => header.textContent)).toEqual([
     "Sun",
@@ -81,6 +84,7 @@ Default.test(
   "moves the focused day with the arrow, Home, End and Page keys",
   async ({ canvas, userEvent }) => {
     const cell = (name: string) => canvas.getByLabelText(name);
+
     cell("Saturday, October 24, 2026").focus();
     await userEvent.keyboard("{ArrowLeft}");
     await expect(cell("Friday, October 23, 2026")).toHaveFocus();
@@ -138,6 +142,7 @@ Default.test(
   "pages months with Previous and Next, keeping focus on the button",
   async ({ canvas, userEvent }) => {
     const next = canvas.getByRole("button", { name: "Next month" });
+
     await userEvent.click(next);
     await expect(canvas.getByRole("grid", { name: "November 2026" })).toBeVisible();
     await expect(next).toHaveFocus();
@@ -161,7 +166,9 @@ Default.test(
       "aria-disabled",
       "true",
     );
+
     const sunday = canvas.getByLabelText("Sunday, October 4, 2026");
+
     await expect(sunday).toHaveAttribute("aria-disabled", "true");
     canvas.getByLabelText("Monday, October 5, 2026").focus();
     await userEvent.keyboard("{ArrowLeft}");
@@ -203,6 +210,7 @@ Default.test(
 
 Default.test("marks today", { args: { defaultValue: null } }, async ({ canvas }) => {
   const name = new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(new Date());
+
   await expect(canvas.getByLabelText(name)).toHaveAttribute("aria-current", "date");
 });
 

@@ -64,6 +64,7 @@ Default.test(
   "ranks prefix over word start over subsequence within groups, hiding empty groups, and announces no results",
   async ({ args, canvas, userEvent }) => {
     const input = canvas.getByRole("combobox");
+
     await userEvent.type(input, "se");
     await expect(args.onInputValueChange).toHaveBeenLastCalledWith("se", reason("input-change"));
     await waitFor(() =>
@@ -73,11 +74,14 @@ Default.test(
       "aria-posinset",
       "1",
     );
+
     const order = [];
+
     for (const key of ["{ArrowDown}", "{ArrowDown}", "{ArrowDown}"]) {
       order.push(highlighted(input)?.textContent);
       await userEvent.keyboard(key);
     }
+
     await expect(order).toEqual(["Search files", "Open settings", "Go to Release notes"]);
     await expect(highlighted(input)).toHaveTextContent("Search files");
     await userEvent.clear(input);
@@ -112,7 +116,9 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("combobox", { name: "Find a page" });
+
     await expect(canvas.getByRole("listbox", { name: "Find a page" })).toBeInTheDocument();
+
     for (const [query, match] of [
       ["sab", "Șablon nou"],
       ["AND", "Größe ändern"],
@@ -129,6 +135,7 @@ Default.test(
   "is a combobox that highlights the first command and moves with the arrows, wrapping past disabled commands, and with Home and End while empty",
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("combobox", { name: "Search commands" });
+
     await expect(input).toHaveAttribute("aria-expanded", "true");
     await expect(input).toHaveAttribute("aria-controls", canvas.getByRole("listbox").id);
     await waitFor(() => expect(highlighted(input)).toHaveAttribute("aria-selected", "true"));
@@ -150,9 +157,12 @@ Default.test(
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("combobox");
     const confirmations = listen("ab-confirm");
+
     confirmComposition(input);
     await userEvent.type(input, "{ArrowDown}{Enter}");
+
     const home = canvas.getByRole("option", { name: "Go to Home" });
+
     await userEvent.hover(home);
     await expect(highlighted(input)).toBe(home);
     await userEvent.click(home);
@@ -179,9 +189,11 @@ Default.test(
 );
 
 const onOpenChange = fn();
+
 function Palette(props: Command.RootProps) {
   const [open, setOpen] = useState(false);
   const opener = useRef<HTMLButtonElement>(null);
+
   return (
     <>
       <button
@@ -221,11 +233,14 @@ InADialog.test(
   "opens as a modal named Command palette, focusing the input, and closes on Escape",
   async ({ canvas, userEvent }) => {
     const opener = canvas.getByRole("button", { name: "Search" });
+
     await userEvent.click(opener);
     await waitFor(() =>
       expect(canvas.getByRole("dialog", { name: "Command palette" })).toBeVisible(),
     );
+
     const input = canvas.getByRole("combobox", { name: "Search commands" });
+
     await waitFor(() => expect(input).toHaveFocus());
     await expect(highlighted(input)).toHaveTextContent("New document");
     await (await trusted()).keyboard("{Escape}");
@@ -239,11 +254,14 @@ InADialog.test(
   "closes before a command runs, returning focus to the opener, and confirms after it ran",
   async ({ canvas, userEvent }) => {
     const opener = canvas.getByRole("button", { name: "Search" });
+
     await userEvent.click(opener);
+
     const focused: [Element | null, number][] = [];
     const record = () => {
       focused.push([document.activeElement, onHome.mock.calls.length]);
     };
+
     document.addEventListener("ab-confirm", record, { once: true });
     await userEvent.type(canvas.getByRole("combobox"), "home{Enter}");
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
@@ -269,6 +287,7 @@ InADialog.test(
   },
   async ({ canvas, userEvent }) => {
     const dismissals = listen("ab-dismiss");
+
     await userEvent.type(canvas.getByRole("combobox"), "{Enter}");
     await userEvent.pointer({ ...outside, target: canvas.getByRole("dialog") });
     await waitFor(() => expect(canvas.getByRole("dialog")).toBeVisible());
@@ -280,9 +299,12 @@ InADialog.test(
   "closes on an outside press, dispatching ab-dismiss, and clears the query",
   async ({ args, canvas, userEvent }) => {
     const opener = canvas.getByRole("button", { name: "Search" });
+
     await userEvent.click(opener);
     await userEvent.type(canvas.getByRole("combobox"), "set");
+
     const dismissals = listen("ab-dismiss");
+
     await userEvent.pointer({ ...outside, target: canvas.getByRole("dialog") });
     dismissals.stop();
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
@@ -292,7 +314,9 @@ InADialog.test(
     ]);
     await expect(args.onInputValueChange).toHaveBeenLastCalledWith("", reason("input-clear"));
     await userEvent.click(opener);
+
     const input = canvas.getByRole("combobox");
+
     await expect(input).toHaveValue("");
     await waitFor(() => expect(highlighted(input)).toHaveTextContent("New document"));
   },

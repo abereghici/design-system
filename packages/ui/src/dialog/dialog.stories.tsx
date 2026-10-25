@@ -50,7 +50,9 @@ Default.test(
   "opens as a modal named by its Title and described by its Description, focusing the first field",
   async ({ args, canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Rename…" }));
+
     const dialog = canvas.getByRole("dialog", { name: "Rename project?" });
+
     await expect(dialog).toHaveAccessibleDescription("Links to the old name keep working.");
     await expect(canvas.getByRole("textbox", { name: "Name" })).toHaveFocus();
     await expect(args.onOpenChange).toHaveBeenCalledWith(
@@ -64,9 +66,12 @@ Default.test(
   "closes with the Close button, returns focus to the Trigger and dispatches ab-dismiss",
   async ({ args, canvas, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Rename…" });
+
     await userEvent.click(trigger);
+
     const close = canvas.getByRole("button", { name: "Close" });
     const dismissals = listen("ab-dismiss");
+
     await userEvent.click(close);
     dismissals.stop();
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
@@ -85,7 +90,9 @@ Default.test(
   "closes with a Cancel button without dispatching ab-dismiss",
   async ({ args, canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Rename…" }));
+
     const dismissals = listen("ab-dismiss");
+
     await userEvent.click(canvas.getByRole("button", { name: "Cancel" }));
     dismissals.stop();
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
@@ -101,10 +108,14 @@ Default.test(
   "closes on a press on the backdrop but not inside the dialog",
   async ({ args, canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Rename…" }));
+
     const dialog = canvas.getByRole("dialog");
+
     await userEvent.click(canvas.getByText("Links to the old name keep working."));
     await waitFor(() => expect(dialog).toBeVisible());
+
     const dismissals = listen("ab-dismiss");
+
     await userEvent.pointer({
       keys: "[MouseLeft]",
       target: dialog,
@@ -140,6 +151,7 @@ Default.test(
   {
     render: function InitialFocus(args) {
       const rename = useRef<HTMLButtonElement>(null);
+
       return (
         <Dialog.Root {...args}>
           <Dialog.Trigger>Rename…</Dialog.Trigger>
@@ -160,6 +172,7 @@ Default.test(
 
 function ControlledDialog(props: Dialog.RootProps) {
   const [open, setOpen] = useState(props.open ?? false);
+
   return (
     <>
       <Button
@@ -194,6 +207,7 @@ Default.test(
   "closes on Escape and returns focus to the Trigger",
   async ({ args, canvas, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Rename…" });
+
     await userEvent.click(trigger);
     await expect(canvas.getByRole("textbox", { name: "Name" })).toHaveFocus();
     await (await trusted()).keyboard("{Escape}");
@@ -208,6 +222,7 @@ Default.test(
 
 Controlled.test("opens and closes through open", async ({ args, canvas, userEvent }) => {
   const opener = canvas.getByRole("button", { name: "Rename…" });
+
   await userEvent.click(opener);
   await waitFor(() =>
     expect(canvas.getByRole("dialog", { name: "Rename project?" })).toBeVisible(),

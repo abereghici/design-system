@@ -15,6 +15,7 @@ export interface TriggerProps extends Omit<ComponentProps<"button">, "command" |
 export function Trigger({ asChild = false, ...props }: TriggerProps) {
   const { id } = useModal();
   const Root = asChild ? Slot : "button";
+
   return (
     <Root type={asChild ? undefined : "button"} {...props} commandfor={id} command="show-modal" />
   );

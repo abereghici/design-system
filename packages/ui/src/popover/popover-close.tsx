@@ -45,7 +45,9 @@ export function Close({ asChild = false, ...props }: CloseProps) {
       }
     }),
   };
+
   if (asChild) return <Slot {...shared} />;
+
   return (
     <button
       type="button"

@@ -55,9 +55,12 @@ function useVisibility(
   const current = visible ?? uncontrolled;
   const change = (next: boolean, reason: Reason, event: Event) => {
     const accepted = requestChange(onVisibleChange, next, reason, event);
+
     if (accepted) setUncontrolled(next);
+
     return accepted;
   };
+
   useEvent(
     "submit",
     (event) => {
@@ -67,6 +70,7 @@ function useVisibility(
     },
     input?.form ?? null,
   );
+
   return [current, change] as const;
 }
 

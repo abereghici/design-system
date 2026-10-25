@@ -20,6 +20,7 @@ interface TriggerProps {
 export function Trigger({ panel, value, locale, disabled }: TriggerProps) {
   const { floating, name, trigger } = panel;
   const descriptionId = useId();
+
   return (
     <>
       <IconButton

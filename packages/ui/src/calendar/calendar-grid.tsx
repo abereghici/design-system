@@ -24,6 +24,7 @@ export function keyTarget(event: KeyboardEvent, date: Temporal.PlainDate, firstD
     ["PageDown", () => date.add({ [unit]: 1 })],
     ["PageUp", () => date.subtract({ [unit]: 1 })],
   ]);
+
   return moves.get(event.key)?.() ?? null;
 }
 
@@ -42,6 +43,7 @@ interface GridProps {
 
 function Day({ date, grid }: { date: Temporal.PlainDate; grid: GridProps }) {
   const { formats, focused, selected, today, unavailable } = grid;
+
   return (
     <td
       tabIndex={date.equals(focused) ? 0 : -1}
@@ -63,6 +65,7 @@ export function Grid(props: GridProps) {
   const first = focused.with({ day: 1 });
   const start = startOfWeek(first, formats.firstDay);
   const days = Array.from({ length: 42 }, (_, index) => start.add({ days: index }));
+
   return (
     <table
       ref={grid}

@@ -36,6 +36,7 @@ interface FileInputProps extends NativeProps {
 
 function clear(input: HTMLInputElement | null, trigger: HTMLElement | null) {
   if (input === null) return;
+
   input.value = "";
   input.dispatchEvent(new Event("input", { bubbles: true }));
   input.dispatchEvent(new Event("change", { bubbles: true }));
@@ -55,6 +56,7 @@ export function FileInput({
 }: FileInputProps) {
   const bindings = useFieldControl<HTMLInputElement, NativeProps & { disabled: boolean }>(props);
   const [names, setNames] = useState<string[]>([]);
+
   useEvent(
     "reset",
     () => {
@@ -62,6 +64,7 @@ export function FileInput({
     },
     () => inputRef.current?.form,
   );
+
   return (
     <>
       <VisuallyHidden asChild>
@@ -123,11 +126,13 @@ function selectOnce(input: HTMLInputElement, onSelect: FileTriggerProps["onSelec
   const stop = () => {
     listening.abort();
   };
+
   input.addEventListener("cancel", stop, { signal });
   input.addEventListener(
     "change",
     (event) => {
       stop();
+
       if (!requestChange(onSelect, [...(input.files ?? [])], "none", event)) input.value = "";
     },
     { signal },
@@ -156,7 +161,9 @@ export function FileTrigger({
 
   function open(event: MouseEvent) {
     const target = inputRef.current;
+
     if (blocked || event.defaultPrevented || target === null) return;
+
     selectOnce(target, onSelect);
     target.click();
   }
@@ -174,7 +181,9 @@ export function FileTrigger({
       {children}
     </Slot>
   );
+
   if (zone !== undefined) return button;
+
   return (
     <span className={styles["root"]}>
       {button}

@@ -68,19 +68,26 @@ export function IconButton({
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     if (disabled || loading) {
       event.preventDefault();
+
       return;
     }
+
     onClick?.(event);
+
     if (current === undefined) {
       dispatchFeedback(event.currentTarget, "ab-press", feedback);
+
       return;
     }
+
     if (!requestChange(onPressedChange, !current, "none", event)) return;
+
     setUncontrolled(!current);
     dispatchFeedback(event.currentTarget, "ab-toggle", feedback);
   }
 
   const Root = asChild ? Slot : "button";
+
   return (
     <Root
       {...mergeProps({ className: styles["root"] }, props)}

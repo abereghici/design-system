@@ -17,6 +17,7 @@ async function isNamed({ canvas }: Context) {
 async function blocksActivation({ canvas, userEvent, args }: Context) {
   const button = canvas.getByRole("button", { name: "Save changes" });
   const presses = listen("ab-press");
+
   await userEvent.tab();
   await expect(button).toHaveFocus();
   await userEvent.keyboard("{Enter}");
@@ -51,6 +52,7 @@ Default.test("activates with Enter and Space", async ({ canvas, userEvent, args 
 Default.test("dispatches a bubbling ab-press after a press", async ({ canvas, userEvent }) => {
   const button = canvas.getByRole("button", { name: "Save changes" });
   const presses = listen("ab-press");
+
   await userEvent.click(button);
   presses.stop();
   await expect(
@@ -92,6 +94,7 @@ Default.test(
   { args: { loading: true } },
   async ({ canvas }) => {
     const button = canvas.getByRole("button", { name: "Save changes" });
+
     await expect(button).toHaveAttribute("aria-busy", "true");
     await expect(button).toHaveAttribute("aria-disabled", "true");
   },
@@ -126,6 +129,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const submits = listen("submit");
+
     await userEvent.click(canvas.getByRole("button", { name: "Save changes" }));
     submits.stop();
     await expect(submits.events).toEqual([]);
@@ -189,6 +193,7 @@ Default.test(
   async ({ canvas, userEvent, args }) => {
     const link = canvas.getByRole("link", { name: "Settings" });
     const presses = listen("ab-press");
+
     await userEvent.click(link);
     await expect(childClick).toHaveBeenCalledOnce();
     await expect(args.onClick).toHaveBeenCalledOnce();
@@ -201,11 +206,14 @@ Default.test(
 
 function backgroundUnder(css: string, button: HTMLElement) {
   const appStyles = document.createElement("style");
+
   appStyles.textContent = css;
   document.head.prepend(appStyles);
+
   try {
     // Finishing jumps to the settled colour; awaiting `finished` rejects when a busy engine cancels the transition.
     for (const animation of button.getAnimations()) animation.finish();
+
     return getComputedStyle(button).backgroundColor;
   } finally {
     appStyles.remove();
@@ -214,6 +222,7 @@ function backgroundUnder(css: string, button: HTMLElement) {
 
 Default.test("yields to unlayered app CSS", async ({ canvas }) => {
   const button = canvas.getByRole("button", { name: "Save changes" });
+
   await expect(backgroundUnder("button { background-color: rgb(1, 2, 3); }", button)).toBe(
     "rgb(1, 2, 3)",
   );
@@ -224,6 +233,7 @@ Default.test(
   { args: { variant: "primary" } },
   async ({ canvas }) => {
     const button = canvas.getByRole("button", { name: "Save changes" });
+
     await expect(
       backgroundUnder(":root { --ab-button-primary-background-color: rgb(1, 2, 3); }", button),
     ).toBe("rgb(1, 2, 3)");
@@ -247,6 +257,7 @@ export const Loading = meta.story({
 
 Loading.test("keeps its child busy and named with asChild", async ({ canvas, userEvent, args }) => {
   const link = canvas.getByRole("link", { name: "Open report" });
+
   await expect(link).toHaveAttribute("aria-busy", "true");
   await userEvent.click(link);
   await expect(args.onClick).not.toHaveBeenCalled();

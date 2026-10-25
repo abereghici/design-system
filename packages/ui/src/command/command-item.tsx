@@ -22,6 +22,7 @@ export interface ItemProps extends ComponentProps<"div"> {
 export function Item({ value, keywords = [], disabled = false, ...props }: ItemProps) {
   const { highlighted } = useCommand();
   const id = useId();
+
   return (
     <Option
       {...mergeProps({ className: styles["item"] }, props)}

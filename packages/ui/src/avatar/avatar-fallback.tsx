@@ -19,12 +19,14 @@ const firstGrapheme = (word = "") => graphemes.segment(word).containing(0)?.segm
 
 function initials(name: string) {
   const words = name.split(/\s+/v).filter(Boolean);
+
   return firstGrapheme(words[0]) + (words.length > 1 ? firstGrapheme(words.at(-1)) : "");
 }
 
 /** Initials from `name`, or its children, shown while there is no photo. */
 export function Fallback({ name, children, ...props }: FallbackProps) {
   const text = name === undefined ? "" : initials(name);
+
   return (
     <span dir="auto" {...mergeProps({ className: styles["fallback"] }, props)} aria-hidden>
       {children ?? (text === "" ? <UserIcon /> : text)}

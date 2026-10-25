@@ -19,6 +19,7 @@ export const Default = meta.story({});
 
 Default.test("turns on when its label is clicked", async ({ canvas, userEvent, args }) => {
   const control = canvas.getByRole("switch", { name: "Sound" });
+
   await userEvent.click(canvas.getByText("Sound"));
   await expect(control).toBeChecked();
   await expect(args.onCheckedChange).toHaveBeenCalledOnce();
@@ -30,6 +31,7 @@ Default.test("turns on when its label is clicked", async ({ canvas, userEvent, a
 
 Default.test("toggles with Space and keeps its name", async ({ canvas, userEvent }) => {
   const control = canvas.getByRole("switch", { name: "Sound" });
+
   await userEvent.tab();
   await expect(control).toHaveFocus();
   await userEvent.keyboard(" ");
@@ -41,6 +43,7 @@ Default.test("toggles with Space and keeps its name", async ({ canvas, userEvent
 Default.test("dispatches a bubbling ab-toggle after a change", async ({ canvas, userEvent }) => {
   const control = canvas.getByRole("switch", { name: "Sound" });
   const toggles = listen("ab-toggle");
+
   await userEvent.click(control);
   toggles.stop();
   await expect(
@@ -61,6 +64,7 @@ Default.test(
   async ({ canvas, userEvent }) => {
     const control = canvas.getByRole("switch", { name: "Sound" });
     const toggles = listen("ab-toggle");
+
     await userEvent.click(control);
     toggles.stop();
     await expect(control).toBeChecked();
@@ -73,6 +77,7 @@ Default.test(
   { args: { checked: false } },
   async ({ canvas, userEvent, args }) => {
     const control = canvas.getByRole("switch", { name: "Sound" });
+
     await userEvent.click(control);
     await expect(args.onCheckedChange).toHaveBeenCalledWith(true, expect.anything());
     await expect(control).not.toBeChecked();
@@ -84,8 +89,11 @@ Default.test(
   { args: { disabled: true } },
   async ({ canvas, userEvent, args }) => {
     const control = canvas.getByRole("switch", { name: "Sound" });
+
     await expect(control).toHaveAttribute("aria-disabled", "true");
+
     const toggles = listen("ab-toggle");
+
     await userEvent.tab();
     await expect(control).toHaveFocus();
     await userEvent.keyboard(" ");

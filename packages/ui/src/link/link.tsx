@@ -24,5 +24,6 @@ export type LinkProps = LinkBase & ({ href: string; asChild?: false } | { asChil
  */
 export function Link({ asChild = false, ...props }: LinkProps) {
   const Root = asChild ? Slot : "a";
+
   return <Root {...mergeProps({ className: styles["root"] }, props)} />;
 }

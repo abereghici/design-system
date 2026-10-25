@@ -7,11 +7,14 @@ const dist = new URL("../dist/", import.meta.url);
 
 try {
   const { css, components, artifact } = await buildTokens({ source: [SOURCE_GLOB] });
+
   await mkdir(new URL("components/", dist), { recursive: true });
   await writeFile(new URL("tokens.css", dist), css);
+
   for (const [name, sheet] of Object.entries(components)) {
     await writeFile(new URL(`components/${name}.css`, dist), sheet);
   }
+
   await writeFile(new URL("tokens.json", dist), `${JSON.stringify(artifact, undefined, 2)}\n`);
   await writeFile(new URL("fonts.css", dist), fontFaceCss());
   console.log(
@@ -19,6 +22,7 @@ try {
   );
 } catch (error) {
   if (!(error instanceof TokenCheckError)) throw error;
+
   console.error(error.message);
   process.exitCode = 1;
 }

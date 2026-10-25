@@ -34,12 +34,14 @@ export const Default = meta.story({});
 
 Default.test("is a navigation landmark named Breadcrumb", async ({ canvas }) => {
   const nav = canvas.getByRole("navigation", { name: "Breadcrumb" });
+
   await expect(nav).toBeVisible();
   await expect(canvas.getAllByRole("listitem")).toHaveLength(3);
 });
 
 Default.test("marks the current page and orders the trail root first", async ({ canvas }) => {
   const links = canvas.getAllByRole("link");
+
   await expect(links.map((link) => link.textContent)).toEqual(["Home", "Projects", "Atlas"]);
   await expect(canvas.getByRole("link", { name: "Atlas" })).toHaveAttribute("aria-current", "page");
 });

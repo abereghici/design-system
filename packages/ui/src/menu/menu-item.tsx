@@ -13,12 +13,14 @@ export interface ItemProps extends ItemBaseProps {
 /** An action. The menu closes before your `onClick` runs, unless `closeOnClick` is off. */
 export function Item({ variant = "default", onClick, ...rest }: ItemProps) {
   const { menu, props, blocked, close: closeMenu } = useItem(rest, "menuitem");
+
   return (
     <button
       {...props}
       data-variant={variant}
       onClick={(event) => {
         if (blocked(event)) return;
+
         closeMenu(event);
         onClick?.(event);
         dispatchFeedback(event.currentTarget, "ab-press", {

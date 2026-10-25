@@ -62,6 +62,7 @@ export interface ControlBindings<Element extends FormControl> {
  */
 export function useField(disabled?: boolean) {
   const field = use(FieldContext);
+
   return {
     field,
     blocked: disabled === true || field?.disabled === true,
@@ -97,6 +98,7 @@ export function useFieldControl<
 >({ id, name, disabled, ref, onFocus, onChange, onValueChange, ...props }: Props) {
   const { field, blocked, invalid } = useField(disabled);
   const previous = useRef("");
+
   return {
     ...props,
     ref: composeRefs<Element>(field?.register ?? null, ref),
@@ -111,14 +113,19 @@ export function useFieldControl<
     },
     onChange: (event: ChangeEvent<Element>) => {
       const target = event.currentTarget;
+
       if (blocked) {
         target.value = previous.current;
+
         return;
       }
+
       onChange?.(event);
+
       if (!requestChange(onValueChange, target.value, "none", event)) {
         target.value = previous.current;
       }
+
       previous.current = target.value;
     },
   };

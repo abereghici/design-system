@@ -34,7 +34,9 @@ export function Item({
   ...props
 }: ItemProps) {
   const group = use(GroupContext);
+
   if (group === null) throw new Error("RadioGroup.Item must be inside RadioGroup.Root");
+
   const fallbackId = useId();
   const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>({
     ...props,
@@ -47,6 +49,7 @@ export function Item({
   const handleClick = composeEventHandlers(blocked ? preventDefault : onClick, (event) => {
     group.select(value, event);
   });
+
   return (
     <label
       htmlFor={bindings.id ?? fallbackId}

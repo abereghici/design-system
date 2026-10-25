@@ -64,8 +64,11 @@ Default.test(
   async ({ args, canvas, userEvent }) => {
     const toggle = canvas.getByRole("button", { name: "Show password" });
     const toggled = listen("ab-toggle");
+
     await userEvent.click(toggle);
+
     const input = canvas.getByRole("textbox", { name: "Password" });
+
     await expect(toggle).toHaveAttribute("aria-pressed", "true");
     await expect(input).toHaveFocus();
     await expect(args.onVisibleChange).toHaveBeenCalledWith(
@@ -98,6 +101,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const toggle = canvas.getByRole("button", { name: "Show password" });
+
     await userEvent.click(toggle);
     await expect(toggle).toHaveAttribute("aria-pressed", "false");
     await expect(canvas.queryByRole("textbox", { name: "Password" })).toBeNull();

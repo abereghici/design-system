@@ -20,6 +20,7 @@ export interface ControlProps extends ComponentProps<"input"> {
 /** The text input, named and described by its Field. */
 export function Control({ readOnly, ...props }: ControlProps) {
   const bindings = useFieldControl<HTMLInputElement, typeof props>(props);
+
   return (
     <input
       {...mergeProps({ className: styles["control"] }, bindings)}

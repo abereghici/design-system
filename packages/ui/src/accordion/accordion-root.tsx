@@ -62,8 +62,11 @@ export function Root({
       : current.filter((v) => v !== item);
     const reason = event.type === "click" ? "trigger-press" : "none";
     const accepted = requestChange(onValueChange, next, reason, event.nativeEvent);
+
     if (!accepted && reason === "trigger-press") return;
+
     setUncontrolled(next);
+
     if (reason === "trigger-press") {
       dispatchFeedback(event.currentTarget, "ab-toggle", {
         component: "Accordion",
@@ -81,6 +84,8 @@ export function Root({
 
 export function useAccordion(part: string) {
   const accordion = use(AccordionContext);
+
   if (accordion === null) throw new Error(`Accordion.${part} must be inside Accordion.Root`);
+
   return accordion;
 }

@@ -40,6 +40,7 @@ const typeMatches = (token: string, type: string) =>
 /** During a drag only MIME types are known, so an extension token can't reject anything yet. */
 function matcher(accept: string | undefined) {
   const tokens = accept?.split(",").flatMap((token) => token.trim().toLowerCase() || []) ?? [];
+
   return {
     couldAccept: (items: DataTransferItemList) =>
       tokens.length === 0 ||
@@ -59,6 +60,7 @@ function matcher(accept: string | undefined) {
 
 const preventDragOver = (event: globalThis.DragEvent) => {
   if (!hasFiles(event) || event.defaultPrevented || event.dataTransfer === null) return;
+
   event.preventDefault();
   event.dataTransfer.dropEffect = "none";
 };
@@ -80,6 +82,7 @@ function usePreventDocumentDrop() {
     const stopDrop = windowDrop((event) => {
       if (event instanceof DragEvent) preventDrop(event);
     });
+
     return () => {
       stopDragOver();
       stopDrop();
@@ -89,7 +92,9 @@ function usePreventDocumentDrop() {
 
 function setFiles(input: HTMLInputElement, files: File[]) {
   const transfer = new DataTransfer();
+
   for (const file of files) transfer.items.add(file);
+
   input.files = transfer.files;
   input.dispatchEvent(new Event("input", { bubbles: true }));
   input.dispatchEvent(new Event("change", { bubbles: true }));
@@ -111,34 +116,44 @@ function useDropTarget({ accept, multiple, onDrop, blocked, input }: DropTargetO
   const depth = useRef(0);
   const [target, setTarget] = useState<"" | "rejected">();
   const { couldAccept, accepts } = matcher(accept);
+
   return {
     target,
     onDragEnter: (event: DragEvent<HTMLDivElement>) => {
       if (!hasFiles(event) || blocked) return;
+
       depth.current += 1;
       setTarget(couldAccept(event.dataTransfer.items) ? "" : "rejected");
     },
     onDragOver: (event: DragEvent<HTMLDivElement>) => {
       if (!hasFiles(event)) return;
+
       event.preventDefault();
       event.dataTransfer.dropEffect = blocked || target === "rejected" ? "none" : "copy";
     },
     onDragLeave: (event: DragEvent<HTMLDivElement>) => {
       if (!hasFiles(event) || blocked) return;
+
       depth.current -= 1;
+
       if (depth.current === 0) setTarget(undefined);
     },
     onDrop: (event: DragEvent<HTMLDivElement>) => {
       if (!hasFiles(event)) return;
+
       event.preventDefault();
       depth.current = 0;
       setTarget(undefined);
+
       const files = [...event.dataTransfer.files];
+
       if (blocked || input.current === null) return;
+
       const accepted = files.filter((file) => accepts(file)).slice(0, multiple ? undefined : 1);
       const rejected = files.filter((file) => !accepts(file));
       const report = (value: File[], details: Omit<DropZoneDropEventDetails, "rejected">) =>
         onDrop?.(value, { ...details, rejected });
+
       if (requestChange(report, accepted, "none", event) && accepted.length > 0) {
         setFiles(input.current, accepted);
       }
@@ -170,6 +185,7 @@ export function DropZone({
   const trigger = useRef<HTMLElement>(null);
   const { target, ...handlers } = useDropTarget({ accept, multiple, onDrop, blocked, input });
   const picker = { input, trigger, disabled: blocked };
+
   usePreventDocumentDrop();
 
   return (

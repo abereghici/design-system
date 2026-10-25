@@ -16,6 +16,7 @@ export interface ItemProps extends Omit<ComponentProps<"details">, "open" | "nam
 export function Item({ value, onToggle, ...props }: ItemProps) {
   const accordion = useAccordion("Item");
   const open = accordion.value.includes(value);
+
   return (
     <ItemContext value={value}>
       <details
@@ -24,6 +25,7 @@ export function Item({ value, onToggle, ...props }: ItemProps) {
         name={accordion.name}
         onToggle={(event) => {
           onToggle?.(event);
+
           if (event.currentTarget.open !== open) accordion.change(value, !open, event);
         }}
       />

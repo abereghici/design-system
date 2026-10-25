@@ -34,6 +34,7 @@ Default.test(
   },
   async ({ canvas }) => {
     const tag = canvas.getByText("Awaitingsecondreviewerapproval");
+
     await expect(tag.getBoundingClientRect().width).toBeLessThanOrEqual(
       tag.parentElement?.getBoundingClientRect().width ?? 0,
     );

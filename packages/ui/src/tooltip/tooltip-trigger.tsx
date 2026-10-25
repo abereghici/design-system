@@ -24,18 +24,22 @@ function handlers({ contentId, change }: ReturnType<typeof useTooltip>) {
     pressed.add(event.currentTarget);
     change(false, "trigger-press", event);
   };
+
   return {
     onPointerEnter: (event: PointerEvent<HTMLElement>) => {
       if (event.pointerType === "touch" || pressed.has(event.currentTarget)) return;
+
       change(true, "trigger-hover", event, "pointer");
     },
     onPointerLeave: (event: PointerEvent<HTMLElement>) => {
       pressed.delete(event.currentTarget);
+
       if (outside(event, document.getElementById(contentId))) change(false, "trigger-hover", event);
     },
     onFocus: (event: FocusEvent<HTMLElement>) => {
       if (pressed.has(event.currentTarget) || !event.currentTarget.matches(":focus-visible"))
         return;
+
       change(true, "trigger-focus", event, "focus");
     },
     onBlur: (event: FocusEvent<HTMLElement>) => {
@@ -58,8 +62,11 @@ export function Trigger({
   const tooltip = useTooltip();
   const Element = asChild ? Slot : "button";
   const type = asChild ? undefined : "button";
+
   if (tooltip.disabled) return <Element type={type} {...props} aria-describedby={describedBy} />;
+
   const { contentId } = tooltip;
+
   return (
     <Element
       type={type}

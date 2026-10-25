@@ -12,6 +12,7 @@ const uiDir = join(import.meta.dirname, "..", "..", "..", "packages", "ui");
 // import.meta.resolve applies `exports` but doesn't check that the target exists.
 function resolve(specifier: string): string | undefined {
   const path = fileURLToPath(import.meta.resolve(specifier));
+
   return existsSync(path) ? realpathSync(path) : undefined;
 }
 
@@ -23,6 +24,7 @@ describe("@platform/ui exports", () => {
   test("every src/<name>/index.ts is the subpath @platform/ui/<name>", () => {
     for (const entry of globSync("src/*/index.ts", { cwd: uiDir })) {
       const name = basename(dirname(entry));
+
       expect(resolve(`@platform/ui/${name}`)).toBe(join(uiDir, entry));
     }
   });
@@ -30,6 +32,7 @@ describe("@platform/ui exports", () => {
   test("every src/icon/icons/<name>.tsx is the subpath @platform/ui/icons/<name>", () => {
     for (const entry of globSync("src/icon/icons/*.tsx", { cwd: uiDir })) {
       const name = entry.slice("src/icon/icons/".length, -".tsx".length);
+
       expect(resolve(`@platform/ui/icons/${name}`)).toBe(join(uiDir, entry));
     }
   });
@@ -42,6 +45,7 @@ describe("@platform/ui exports", () => {
 
   test("the package root is not importable (Vite, through Vitest)", async () => {
     const root = "@platform/ui";
+
     await expect(import(root)).rejects.toThrow(/"\." is not exported/v);
   });
 

@@ -14,9 +14,12 @@ const radius = Number(
 function theme(scheme: Scheme) {
   const color = (name: string) => {
     const value = colors.get(`ab-${name}`);
+
     if (value === undefined) throw new Error(`No color token ab-${name}`);
+
     return typeof value === "string" ? value : value[scheme];
   };
+
   return create({
     base: scheme,
     colorPrimary: color("color-background-accent-bold"),

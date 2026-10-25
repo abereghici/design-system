@@ -47,6 +47,7 @@ Default.test("is a textbox named by its label", async ({ canvas }) => {
 
 Default.test("calls onValueChange with each new value", async ({ args, canvas, userEvent }) => {
   const input = canvas.getByRole("textbox", { name: "Email" });
+
   await userEvent.type(input, "ab");
   await expect(input).toHaveValue("ab");
   await expect(args.onValueChange).toHaveBeenLastCalledWith(
@@ -67,6 +68,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await userEvent.type(input, "x");
     await expect(input).toHaveValue("ana@example.com");
   },
@@ -93,6 +95,7 @@ Default.test(
   async ({ canvas }) => {
     const user = await trusted();
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await user.click(input);
     await user.keyboard("ana");
     await expect(input).not.toHaveAttribute("aria-invalid");
@@ -107,6 +110,7 @@ Default.test(
   { args: { disabled: true, defaultValue: "ana@example.com" } },
   async ({ args, canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await userEvent.tab();
     await expect(input).toHaveFocus();
     await expect(input).toHaveAttribute("aria-disabled", "true");
@@ -121,6 +125,7 @@ Default.test(
   { args: { required: true, description: "Used for sign-in only." } },
   async ({ canvas }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await expect(input).not.toHaveAttribute("aria-invalid");
     await expect(input).toHaveAccessibleDescription("Used for sign-in only.");
   },
@@ -131,6 +136,7 @@ Default.test(
   { args: { errorMessage: "Enter a valid email address." }, decorators: [inAForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await userEvent.type(input, "ana");
     await expect(input).not.toHaveAttribute("aria-invalid");
   },
@@ -144,6 +150,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await userEvent.type(input, "ana");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAttribute("aria-invalid", "true");
@@ -157,6 +164,7 @@ Default.test(
   { args: { errorMessage: "Enter a valid email address." }, decorators: [inAForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await userEvent.type(input, "ana");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await userEvent.type(input, "@example.com");
@@ -170,6 +178,7 @@ Default.test(
   { args: { required: true }, decorators: [inAForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole<HTMLInputElement>("textbox", { name: "Email" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAttribute("aria-invalid", "true");
     await expect(input.validationMessage).not.toBe("");
@@ -207,6 +216,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
+
     await userEvent.type(input, "ana");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAccessibleDescription("Start with @");
@@ -218,6 +228,7 @@ Default.test(
   { args: { invalid: true, errorMessage: "That name is taken." } },
   async ({ canvas }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await expect(input).toHaveAttribute("aria-invalid", "true");
     await expect(input).toHaveAccessibleDescription("That name is taken.");
   },
@@ -228,6 +239,7 @@ Default.test(
   { args: { defaultValue: "ana@example.com" }, decorators: [inAForm] },
   async ({ canvas }) => {
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect(new FormData(form).get("email")).toBe("ana@example.com");
   },
 );
@@ -255,6 +267,7 @@ WithIconAndShortcut.test(
   "is a searchbox that announces its shortcut, not the hint",
   async ({ canvas }) => {
     const input = canvas.getByRole("searchbox", { name: "Search" });
+
     await expect(input).toHaveAttribute("aria-keyshortcuts", "/");
     await expect(input).toHaveAccessibleDescription("");
   },
@@ -262,6 +275,7 @@ WithIconAndShortcut.test(
 
 function ControlledTextField(args: TextFieldProps) {
   const [value, setValue] = useState(typeof args.value === "string" ? args.value : "Ana");
+
   return (
     <>
       <TextField

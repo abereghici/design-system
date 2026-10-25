@@ -54,6 +54,7 @@ Default.test(
   },
   async ({ canvasElement }) => {
     const placeholder = canvasElement.querySelector(".pill");
+
     await expect(placeholder).toHaveClass("wide");
     await expect(placeholder).not.toHaveClass("undefined");
     await expect(placeholder).toHaveStyle({ borderRadius: "999px", inlineSize: "192px" });

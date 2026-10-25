@@ -57,6 +57,7 @@ export type TextAreaProps = Naming &
 
 function Control({ minRows = 3, maxRows = 12, readOnly, ...props }: ControlProps) {
   const bindings = Field.useFieldControl<HTMLTextAreaElement, typeof props>(props);
+
   return (
     <textarea
       dir="auto"

@@ -16,7 +16,9 @@ export type TriggerProps = ComponentProps<"summary">;
 export function Trigger({ children, onClick, ...props }: TriggerProps) {
   const accordion = useAccordion("Trigger");
   const item = use(ItemContext);
+
   if (item === null) throw new Error("Accordion.Trigger must be inside Accordion.Item");
+
   return (
     <summary
       {...mergeProps({ className: styles["trigger"], ...pointerMarker }, props)}

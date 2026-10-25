@@ -71,6 +71,7 @@ export type RootProps = Naming &
 
 function Input({ readOnly, ...props }: Field.ControlProps) {
   const bindings = Field.useFieldControl<HTMLInputElement, typeof props>(props);
+
   return (
     <input
       dir="auto"
@@ -179,6 +180,7 @@ export function Root(props: RootProps) {
   const empty = (loading === true ? loadingText : undefined) ?? noOptionsText;
   const c = useCombobox(options, empty);
   const field = { className, style, name, invalid, disabled: input.disabled, id: part(c, "root") };
+
   return (
     <Field.Root
       {...field}

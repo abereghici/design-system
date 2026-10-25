@@ -24,6 +24,7 @@ const isRef = (value: unknown): value is Ref<unknown> => isHandler(value) || isO
 
 function assign<T>(ref: Ref<T> | undefined, node: T | null): ReturnType<RefCallback<T>> {
   if (typeof ref === "function") return ref(node);
+
   if (ref) ref.current = node;
 }
 
@@ -32,12 +33,18 @@ const composed = new WeakMap<object, WeakMap<object, RefCallback<never>>>();
 
 export function composeRefs<T>(own: Ref<T>, consumer: Ref<T> | undefined): Ref<T> | undefined {
   if (!own || !consumer) return own ?? consumer ?? undefined;
+
   const pairs = composed.get(own) ?? new WeakMap<object, RefCallback<T>>();
+
   composed.set(own, pairs);
+
   const cached = pairs.get(consumer);
+
   if (cached) return cached;
+
   const ref: RefCallback<T> = (node) => {
     const cleanups = [assign(own, node), assign(consumer, node)];
+
     return () => {
       for (const [index, cleanup] of cleanups.entries()) {
         if (typeof cleanup === "function") cleanup();
@@ -45,7 +52,9 @@ export function composeRefs<T>(own: Ref<T>, consumer: Ref<T> | undefined): Ref<T
       }
     };
   };
+
   pairs.set(consumer, ref);
+
   return ref;
 }
 
@@ -54,11 +63,15 @@ const presences = new WeakMap<(present: boolean) => void, RefCallback<Element>>(
 /** A ref that tells `set` whether its element is mounted, so a part can announce itself to its Root. */
 export function presenceRef(set: (present: boolean) => void): RefCallback<Element> {
   const cached = presences.get(set);
+
   if (cached) return cached;
+
   const ref: RefCallback<Element> = (node) => {
     set(node !== null);
   };
+
   presences.set(set, ref);
+
   return ref;
 }
 
@@ -71,11 +84,15 @@ export function mergeProps<Own extends object, Consumer extends object>(
   own: Own,
   consumer: Consumer,
 ): Own & Consumer;
+
 export function mergeProps(own: object, consumer: object): object {
   const merged: Record<string, unknown> = { ...own };
+
   for (const [key, value] of Object.entries(consumer)) {
     const mine = merged[key];
+
     if (value === undefined) continue;
+
     if (mine === undefined) merged[key] = value;
     else if (key === "className")
       merged[key] = [mine, value].filter(Boolean).join(" ") || undefined;
@@ -90,6 +107,7 @@ export function mergeProps(own: object, consumer: object): object {
       };
     } else merged[key] = value;
   }
+
   return merged;
 }
 
@@ -98,5 +116,6 @@ export function Slot({ children, ...slot }: Props) {
   if (!isValidElement<Props>(children)) {
     throw new TypeError("asChild expects exactly one element child");
   }
+
   return cloneElement(children, mergeProps(slot, children.props));
 }

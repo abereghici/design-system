@@ -26,6 +26,7 @@ const withWidth = (inlineSize: string): Decorator =>
 
 const center = (element: Element) => {
   const { x, y, width, height } = element.getBoundingClientRect();
+
   return document.elementFromPoint(x + width / 2, y + height / 2);
 };
 
@@ -93,6 +94,7 @@ Default.test(
   async ({ canvas }) => {
     const title = canvas.getByRole("heading", { name: "API keys" }).getBoundingClientRect();
     const action = canvas.getByRole("button", { name: "Manage" }).getBoundingClientRect();
+
     await expect(action.left).toBeGreaterThan(title.right);
   },
 );
@@ -103,6 +105,7 @@ Default.test(
   async ({ canvas }) => {
     const title = canvas.getByRole("heading", { name: "API keys" }).getBoundingClientRect();
     const action = canvas.getByRole("button", { name: "Manage" }).getBoundingClientRect();
+
     await expect(action.top).toBeGreaterThan(title.bottom);
   },
 );
@@ -158,6 +161,7 @@ Linked.test(
     const { right, y, height } = canvas
       .getByRole("button", { name: "Share" })
       .getBoundingClientRect();
+
     await expect(document.elementFromPoint(right + 40, y + height / 2)).toBe(
       canvas.getByRole("link", { name: "Quarterly report" }),
     );
@@ -166,5 +170,6 @@ Linked.test(
 
 Linked.test("keeps its footer actions clickable", async ({ canvas }) => {
   const share = canvas.getByRole("button", { name: "Share" });
+
   await expect(center(share)).toBe(share);
 });

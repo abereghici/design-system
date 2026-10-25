@@ -25,6 +25,7 @@ export function Group({
   const id = useId();
   const labelled = label !== undefined;
   const list = <ul className={styles["list"]}>{children}</ul>;
+
   return (
     <div
       role={labelled ? "group" : undefined}

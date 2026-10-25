@@ -1,10 +1,19 @@
 export { Root } from "./slider-root.tsx";
+
 export type { ChangeEventDetails, CommitEventDetails, RootProps } from "./slider-root.tsx";
+
 export { Track } from "./slider-track.tsx";
+
 export type { TrackProps } from "./slider-track.tsx";
+
 export { Range } from "./slider-range.tsx";
+
 export type { RangeProps } from "./slider-range.tsx";
+
 export { Thumb } from "./slider-thumb.tsx";
+
 export type { ThumbProps } from "./slider-thumb.tsx";
+
 export { Value } from "./slider-value.tsx";
+
 export type { ValueProps } from "./slider-value.tsx";

@@ -13,8 +13,11 @@ const listOf = (trigger: HTMLElement) => trigger.closest<HTMLElement>('[role="ta
 
 function moveSelection(event: KeyboardEvent<HTMLButtonElement>) {
   const list = listOf(event.currentTarget);
+
   if (list === null) return;
+
   delete list.dataset["pointer"];
+
   const tabs = [...list.querySelectorAll<HTMLButtonElement>('[role="tab"]:enabled')];
   const from = tabs.indexOf(event.currentTarget);
   const step = (steps[event.key] ?? 0) * (list.matches(":dir(rtl)") ? -1 : 1);
@@ -26,7 +29,9 @@ function moveSelection(event: KeyboardEvent<HTMLButtonElement>) {
         : step === 0
           ? undefined
           : tabs.at((from + step) % tabs.length);
+
   if (next === undefined) return;
+
   event.preventDefault();
   next.click();
 }
@@ -40,6 +45,7 @@ export interface TriggerProps extends Omit<ComponentProps<"button">, "type" | "r
 export function Trigger({ value, onClick, onPointerDown, onKeyDown, ...props }: TriggerProps) {
   const tabs = useTabs("Trigger");
   const selected = value === tabs.value;
+
   return (
     <button
       {...mergeProps({ className: styles["trigger"] }, props)}
@@ -51,7 +57,9 @@ export function Trigger({ value, onClick, onPointerDown, onKeyDown, ...props }: 
       tabIndex={selected ? 0 : -1}
       onPointerDown={(event) => {
         onPointerDown?.(event);
+
         const list = listOf(event.currentTarget);
+
         if (list !== null) list.dataset["pointer"] = "";
       }}
       onKeyDown={(event) => {

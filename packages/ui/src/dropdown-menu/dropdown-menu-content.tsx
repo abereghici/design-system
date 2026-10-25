@@ -19,6 +19,7 @@ export interface ContentProps extends Omit<ComponentProps<"div">, "id" | "role" 
 /** The menu, named by its Trigger and at least as wide as it. */
 export function Content({ side = "bottom", align = "start", ...props }: ContentProps) {
   const menu = useDropdownMenu();
+
   return (
     <div
       {...mergeProps(

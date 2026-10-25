@@ -40,7 +40,9 @@ Default.test(
   async ({ args, canvas, userEvent }) => {
     await userEvent.type(canvas.getByRole("textbox", { name: "Name" }), "Ana");
     await userEvent.click(canvas.getByRole("button", { name: "Create account" }));
+
     const email = canvas.getByRole("textbox", { name: "Email" });
+
     await expect(email).toHaveFocus();
     await expect(email).toHaveAttribute("aria-invalid", "true");
     await expect(canvas.getByRole("textbox", { name: "Name" })).not.toHaveAttribute("aria-invalid");
@@ -60,6 +62,7 @@ Default.test(
   { args: { errors: { name: "Names can't contain digits." } } },
   async ({ canvas }) => {
     const name = canvas.getByRole("textbox", { name: "Name" });
+
     await expect(name).toHaveFocus();
     await expect(name).toHaveAttribute("aria-invalid", "true");
     await expect(name).toHaveAccessibleDescription("Names can't contain digits.");
@@ -71,6 +74,7 @@ Default.test(
   { args: { errors: { name: "Names can't contain digits." } } },
   async ({ canvas, userEvent }) => {
     const name = canvas.getByRole("textbox", { name: "Name" });
+
     await userEvent.type(name, "Ana");
     await expect(name).not.toHaveAttribute("aria-invalid");
     await expect(canvas.queryByText("Names can't contain digits.")).toBeNull();
@@ -93,6 +97,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const month = canvas.getByRole("spinbutton", { name: "month" });
+
     await expect(month).toBeInvalid();
     await expect(canvas.getByText("You must be 18 or older.")).toBeVisible();
     await userEvent.click(month);

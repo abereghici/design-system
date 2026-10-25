@@ -19,11 +19,16 @@ export type ContentProps = Omit<
 /** The panel holding the Calendar. Its children load on the first open, so they can be lazy. */
 export function Content({ children, ...props }: ContentProps) {
   const panel = use(PanelContext);
+
   if (panel === null) throw new Error("DatePicker.Content must be inside DatePicker.Root");
+
   const { floating, picker, name, trigger } = panel;
   const [mounted, setMounted] = useState(false);
+
   if (floating.open && !mounted) setMounted(true);
+
   const base = `${popoverStyles["content"]} ${styles["content"]}`;
+
   return (
     <dialog
       {...mergeProps(

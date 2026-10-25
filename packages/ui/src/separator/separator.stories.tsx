@@ -85,6 +85,7 @@ export const BetweenGroups = meta.story({
 
 BetweenGroups.test("announces its vertical orientation", async ({ canvas }) => {
   const separator = canvas.getByRole("separator");
+
   await expect(separator).toHaveAttribute("aria-orientation", "vertical");
   await expect(separator).toBeVisible();
 });

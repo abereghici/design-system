@@ -15,6 +15,7 @@ export interface TriggerProps extends ComponentProps<"button"> {
 export function Trigger({ asChild = false, ...props }: TriggerProps) {
   const popover = usePopover();
   const Element = asChild ? Slot : "button";
+
   return (
     <Element
       type={asChild ? undefined : "button"}

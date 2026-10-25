@@ -37,10 +37,15 @@ function step(
     Home: -Infinity,
     End: Infinity,
   }[event.key];
+
   if (target === undefined) return;
+
   event.preventDefault();
+
   if (blocked) return;
+
   const next = slider.change(index, target, "keyboard", event.nativeEvent);
+
   slider.commit(slider.values, next, { reason: "keyboard", event: event.nativeEvent });
 }
 
@@ -61,6 +66,7 @@ export function Thumb({
   const own = { id: index === 0 ? ownId : undefined, name: slider.name, disabled: slider.disabled };
   const bindings = useFieldControl<HTMLInputElement, ThumbProps>({ ...props, ...own });
   const blocked = bindings["aria-disabled"] === true;
+
   return (
     <div
       {...mergeProps(
@@ -81,11 +87,14 @@ export function Thumb({
         className={styles["input"]}
         onKeyDown={(event) => {
           onKeyDown?.(event);
+
           if (!event.defaultPrevented) step(event, slider, index, blocked);
         }}
         onChange={(event) => {
           onChange?.(event);
+
           if (blocked) return;
+
           slider.change(index, event.currentTarget.valueAsNumber, "keyboard", event.nativeEvent);
         }}
       />

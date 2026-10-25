@@ -21,11 +21,14 @@ export interface ItemProps extends Omit<
 /** One segment; its children are the visible label. */
 export function Item({ value, children, className, style, onClick, ...props }: ItemProps) {
   const group = use(GroupContext);
+
   if (group === null) throw new Error("SegmentedControl.Item must be inside SegmentedControl.Root");
+
   const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>({
     ...props,
     name: group.name,
   });
+
   return (
     <label {...mergeProps({ className: styles["item"] }, { className, style })}>
       <input

@@ -49,6 +49,7 @@ export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
 
 function snap(raw: number, min: number, step: number) {
   const decimals = String(step).split(".")[1]?.length ?? 0;
+
   return Number((Math.round((raw - min) / step) * step + min).toFixed(decimals));
 }
 
@@ -80,19 +81,26 @@ function useSliderState(options: Options, scale: Scale) {
     typeof current === "number" ? (next[0] ?? min) : [...next];
   const bounds = (index: number, from = values) =>
     [(from[index - 1] ?? min - gap) + gap, (from[index + 1] ?? max + gap) - gap] as const;
+
   function change(index: number, raw: number, reason: Reason, event: Event, from = values) {
     const [lo, hi] = bounds(index, from);
     const next = from.with(index, Math.min(Math.max(snap(raw, min, step), lo), hi));
+
     if (next[index] === from[index]) return from;
+
     if (!requestChange(options.onValueChange, output(next), reason, event)) return from;
+
     setUncontrolled(output(next));
+
     return next;
   }
+
   function commit(from: readonly number[], to: readonly number[], details: CommitEventDetails) {
     if (to.some((entry, index) => entry !== from[index])) {
       options.onValueCommitted?.(output(to), details);
     }
   }
+
   return {
     ...scale,
     id: useId(),
@@ -114,7 +122,9 @@ const SliderContext = createContext<Slider | null>(null);
 
 export function useSlider() {
   const slider = use(SliderContext);
+
   if (slider === null) throw new Error("Slider parts must be inside Slider.Root");
+
   return slider;
 }
 
@@ -139,6 +149,7 @@ export function Root({
     { value, defaultValue, onValueChange, onValueCommitted, format, locale, name },
     { min, max, step, largeStep, gap: minStepsBetweenValues * step, disabled },
   );
+
   return (
     <SliderContext value={slider}>
       <div

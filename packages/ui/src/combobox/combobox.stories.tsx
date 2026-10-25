@@ -31,6 +31,7 @@ const type = async (keys: string, name?: string) => {
 const cancel = (_value: unknown, details: { cancel: () => void }) => {
   details.cancel();
 };
+
 const person = (value: string, name: string, keywords?: string[]) => (
   <Combobox.Item value={value} {...(keywords && { keywords })}>
     <UserIcon />
@@ -102,7 +103,9 @@ Default.test("opens on a press, first option highlighted", async ({ canvas, user
 Default.test("ranks prefix, word start, then subsequence", async ({ canvas, userEvent }) => {
   await type("mu");
   await expect(highlighted()).toHaveAccessibleName("Mugur Ionescu");
+
   const ioana = canvas.getByRole("option", { name: "Ioana Munteanu" });
+
   await expect(ioana).toHaveAttribute("aria-posinset", "2");
   await expect(canvas.queryByRole("option", { name: "Alexandru Bereghici" })).toBeNull();
   await expect(canvas.queryByRole("group")).toBeNull();
@@ -176,6 +179,7 @@ Default.test(
   { args: { defaultValue: "ab" }, decorators: [inADialog] },
   async ({ canvas }) => {
     const dialog = canvas.getByRole("dialog", { name: "Assign task" });
+
     await waitFor(() => expect(dialog).toBeVisible());
     await expect(field()).toHaveValue("Alexandru Bereghici");
     await type("x{Escape}");
@@ -247,6 +251,7 @@ Default.test(
 
 function ServerSearch(args: Combobox.RootProps) {
   const [query, setQuery] = useState("");
+
   return (
     <Combobox.Root
       {...args}

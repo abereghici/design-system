@@ -73,6 +73,7 @@ Default.test(
   "types a date segment by segment and reports it",
   async ({ args, canvas, userEvent }) => {
     const month = canvas.getByRole("spinbutton", { name: "month" });
+
     await userEvent.click(month);
     await userEvent.keyboard("1");
     await expect(month).toHaveFocus();
@@ -115,6 +116,7 @@ Default.test(
   { args: { defaultValue: date("2026-12-24") } },
   async ({ args, canvas, userEvent }) => {
     const month = canvas.getByRole("spinbutton", { name: "month" });
+
     await userEvent.click(month);
     await userEvent.keyboard("{ArrowUp}");
     await expect(month).toHaveAttribute("aria-valuenow", "1");
@@ -136,6 +138,7 @@ Default.test(
 
 Default.test("starts an empty segment at today's part", async ({ canvas, userEvent }) => {
   const year = canvas.getByRole("spinbutton", { name: "year" });
+
   await userEvent.click(year);
   await userEvent.keyboard("{ArrowUp}");
   await expect(year).toHaveAttribute("aria-valuenow", String(new Date().getFullYear()));
@@ -146,6 +149,7 @@ Default.test(
   { args: { defaultValue: date("2026-10-24") } },
   async ({ args, canvas, userEvent }) => {
     const day = canvas.getByRole("spinbutton", { name: "day" });
+
     await userEvent.click(day);
     await userEvent.keyboard("{Backspace}");
     await expect(day).toHaveValue("2");
@@ -190,6 +194,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const day = canvas.getByRole("spinbutton", { name: "day" });
+
     await userEvent.click(day);
     await userEvent.keyboard("{ArrowUp}");
     await expect(day).toHaveValue("24");
@@ -201,6 +206,7 @@ Default.test(
   { args: { disabled: true, defaultValue: date("2026-10-24") } },
   async ({ canvas, userEvent }) => {
     const day = canvas.getByRole("spinbutton", { name: "day" });
+
     await expect(day).toHaveAttribute("aria-disabled", "true");
     await userEvent.click(day);
     await userEvent.keyboard("{ArrowUp}5");
@@ -231,7 +237,9 @@ InAForm.test(
   { args: { defaultValue: date("2026-10-24") } },
   async ({ canvas, userEvent }) => {
     submitted.mockClear();
+
     const day = canvas.getByRole("spinbutton", { name: "day" });
+
     confirmComposition(day);
     await expect(submitted).not.toHaveBeenCalled();
     await userEvent.type(day, "{Enter}");
@@ -243,6 +251,7 @@ InAForm.test(
   "shows the error after a failed submit and focuses the first segment",
   async ({ canvas, userEvent }) => {
     const month = canvas.getByRole("spinbutton", { name: "month" });
+
     await expect(month).not.toBeInvalid();
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await waitFor(() => expect(month).toHaveFocus());
@@ -254,6 +263,7 @@ InAForm.test(
   "shows the error after leaving an edited empty field, not before",
   async ({ canvas, userEvent }) => {
     const month = canvas.getByRole("spinbutton", { name: "month" });
+
     await userEvent.click(month);
     await userEvent.keyboard("1{Backspace}");
     await userEvent.tab();
@@ -270,6 +280,7 @@ InAForm.test(
   { args: { defaultValue: date("2026-10-24") } },
   async ({ canvas, userEvent }) => {
     const day = canvas.getByRole("spinbutton", { name: "day" });
+
     await userEvent.type(day, "{Backspace}{Backspace}");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(day).toBeInvalid();

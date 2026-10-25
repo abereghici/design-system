@@ -15,12 +15,15 @@ const modifiers = new Map([
 export const keyNames = (shortcut: string) =>
   shortcut.split("+").map((name) => {
     const id = name.trim().toLowerCase();
+
     if (id === "mod") return platform() === "apple" ? "Meta" : "Control";
+
     return modifiers.get(id) ?? id.toUpperCase();
   });
 
 function matches(event: globalThis.KeyboardEvent, shortcut: string) {
   const names = keyNames(shortcut);
+
   return (
     event.key.toUpperCase() === names.at(-1) &&
     event.metaKey === names.includes("Meta") &&
@@ -50,7 +53,9 @@ export function useShortcut(
     "keydown",
     (event) => {
       if (shortcut === undefined || event.defaultPrevented || editing(event.target)) return;
+
       if (!matches(event, shortcut)) return;
+
       event.preventDefault();
       action.current?.click();
     },
@@ -60,7 +65,9 @@ export function useShortcut(
 
 function restoreFrom(before: RefObject<Element | null>) {
   const target = before.current;
+
   before.current = null;
+
   if (target instanceof HTMLElement && target.isConnected) target.focus();
 }
 
@@ -78,17 +85,23 @@ export function useFocusReturn(region: RefObject<HTMLElement | null>) {
   const restore = () => {
     restoreFrom(before);
   };
+
   useEvent(
     "keydown",
     (event) => {
       const node = region.current;
+
       if (node === null || !hotkey(event) || snapshot().length === 0) return;
+
       event.preventDefault();
+
       if (!inside(node, document.activeElement)) before.current = document.activeElement;
+
       node.focus({ preventScroll: true });
     },
     getDocument,
   );
+
   return {
     restore,
     interacting: hovered || focused,
@@ -101,7 +114,9 @@ export function useFocusReturn(region: RefObject<HTMLElement | null>) {
       },
       onFocus: (event: FocusEvent<HTMLElement>) => {
         const from = event.relatedTarget;
+
         if (from instanceof Element && !inside(event.currentTarget, from)) before.current = from;
+
         setFocused(true);
       },
       onBlur: (event: FocusEvent<HTMLElement>) => {
@@ -109,6 +124,7 @@ export function useFocusReturn(region: RefObject<HTMLElement | null>) {
       },
       onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
         if (event.key !== "Escape" || event.target !== event.currentTarget) return;
+
         event.preventDefault();
         restore();
       },

@@ -12,6 +12,7 @@ export const GroupContext = createContext<string | null>(null);
 /** Groups related items under a Label. */
 export function Group(props: ComponentProps<"fieldset">) {
   const labelId = useId();
+
   return (
     <GroupContext value={labelId}>
       <fieldset aria-labelledby={labelId} {...mergeProps({ className: styles["group"] }, props)} />

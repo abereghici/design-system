@@ -58,10 +58,14 @@ const out = new URL("../fonts/", import.meta.url);
 
 async function download({ url, sha256 }: Download): Promise<Uint8Array> {
   const response = await fetch(url);
+
   if (!response.ok) throw new Error(`${url}: HTTP ${String(response.status)}`);
+
   const bytes = new Uint8Array(await response.arrayBuffer());
   const actual = createHash("sha256").update(bytes).digest("hex");
+
   if (actual !== sha256) throw new Error(`${url}: sha256 ${actual}, expected ${sha256}`);
+
   return bytes;
 }
 
@@ -77,6 +81,7 @@ async function sources(
       licence: await download(upstream.licence),
     };
   }
+
   const wanted = new Set([upstream.fonts.normal, upstream.fonts.italic, upstream.licence]);
   const files = unzipSync(await download(upstream.zip), { filter: ({ name }) => wanted.has(name) });
   const {
@@ -84,21 +89,27 @@ async function sources(
     [upstream.fonts.italic]: italic,
     [upstream.licence]: licence,
   } = files;
+
   if (normal === undefined || italic === undefined || licence === undefined) {
     throw new Error(`${upstream.zip.url}: missing ${[...wanted].join(" or ")}`);
   }
+
   return { fonts: { normal, italic }, licence };
 }
 
 await mkdir(out, { recursive: true });
+
 for (const family of FONT_FAMILIES) {
   const { fonts, licence } = await sources(UPSTREAM[family.stem]);
+
   await writeFile(new URL(`${family.stem}-OFL.txt`, out), licence);
+
   for (const style of FONT_STYLES) {
     for (const subset of FONT_SUBSETS) {
       const text = String.fromCodePoint(...codePointsIn(subset.unicodeRange));
       const woff2 = await subsetFont(Buffer.from(fonts[style]), text, { targetFormat: "woff2" });
       const file = fontFileName(family, subset, style);
+
       await writeFile(new URL(file, out), woff2);
       console.log(`fonts/${file}: ${String(woff2.byteLength)} bytes`);
     }

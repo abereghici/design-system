@@ -1,11 +1,21 @@
 export { Description } from "./popover-description.tsx";
+
 export { Close } from "./popover-close.tsx";
+
 export { Content } from "./popover-content.tsx";
+
 export { Root } from "./popover-root.tsx";
+
 export { Title } from "./popover-title.tsx";
+
 export { Trigger } from "./popover-trigger.tsx";
+
 export type { ChangeEventDetails, ChangeReason, RootProps } from "./popover-root.tsx";
+
 export type { CloseProps } from "./popover-close.tsx";
+
 export type { ContentProps } from "./popover-content.tsx";
+
 export type { TitleProps } from "./popover-title.tsx";
+
 export type { TriggerProps } from "./popover-trigger.tsx";

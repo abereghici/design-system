@@ -33,6 +33,7 @@ const toolbarRef = fn<(toolbar: HTMLDivElement | null) => void>();
 
 function Growing() {
   const [extra, setExtra] = useState(false);
+
   return (
     <Toolbar aria-label="Report" ref={toolbarRef}>
       <IconButton
@@ -147,7 +148,9 @@ Default.test(
   async ({ canvas, userEvent }) => {
     await userEvent.tab();
     await userEvent.keyboard("{ArrowRight}{ArrowRight}");
+
     const board = canvas.getByRole("radio", { name: "Board" });
+
     await expect(board).toHaveFocus();
     await expect(canvas.getByRole("radio", { name: "List" })).toBeChecked();
     await userEvent.keyboard(" ");
@@ -161,7 +164,9 @@ Default.test(
   async ({ canvas, userEvent }) => {
     await userEvent.tab();
     await userEvent.keyboard("{Enter}");
+
     const download = await canvas.findByRole("button", { name: "Download" });
+
     await userEvent.keyboard("{End}");
     await expect(download).toHaveFocus();
     await userEvent.tab({ shift: true });
@@ -192,6 +197,7 @@ Default.test(
   },
   async ({ canvas, userEvent, args }) => {
     const toolbar = canvas.getByRole("toolbar", { name: "Report" });
+
     await expect(toolbar).toHaveClass("report");
     await expect(toolbar).toHaveStyle({ color: "rgb(1, 2, 3)" });
     await expect(args.ref).toHaveBeenCalledWith(toolbar);

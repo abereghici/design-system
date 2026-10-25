@@ -19,7 +19,9 @@ const TabsContext = createContext<TabsState | null>(null);
 
 export function useTabs(part: string) {
   const tabs = use(TabsContext);
+
   if (tabs === null) throw new Error(`Tabs.${part} must be inside Tabs.Root`);
+
   return tabs;
 }
 
@@ -45,9 +47,13 @@ export function Root({ value, defaultValue, onValueChange, ...props }: RootProps
 
   function select(next: string, event: MouseEvent<HTMLButtonElement>) {
     if (next === current) return;
+
     if (!requestChange(onValueChange, next, "none", event.nativeEvent)) return;
+
     setUncontrolled(next);
+
     const trigger = event.currentTarget;
+
     trigger.focus();
     trigger.scrollIntoView({ block: "nearest", inline: "nearest" });
     dispatchFeedback(trigger, "ab-toggle", { component: "Tabs", reason: "user" });

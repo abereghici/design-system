@@ -5,12 +5,15 @@ export type Segments = Readonly<Partial<Record<DatePart, number>>>;
 
 export function bounds(part: DatePart, segments: Segments) {
   if (part === "year") return { min: 1, max: 9999 };
+
   if (part === "month") return { min: 1, max: 12 };
+
   const { year, month } = segments;
   const max =
     year === undefined || month === undefined
       ? 31
       : Temporal.PlainYearMonth.from({ year, month }).daysInMonth;
+
   return { min: 1, max };
 }
 
@@ -32,6 +35,7 @@ export function typeDigit(part: DatePart, segments: Segments, buffer: string, di
   const text = Number(joined) > max ? digit : joined;
   const value = Number(text);
   const done = part === "year" ? text.length === 4 : text.length === 2 || value * 10 > max;
+
   return {
     segments: { ...segments, [part]: value === 0 ? undefined : value },
     buffer: done ? "" : text,
@@ -53,12 +57,16 @@ export function stepKey(part: DatePart, segments: Segments, key: string) {
     ["Home", () => min],
     ["End", () => max],
   ]).get(key);
+
   return next === undefined ? null : { ...segments, [part]: next() };
 }
 
 export function display(part: DatePart, segments: Segments, buffer: string) {
   if (buffer !== "") return buffer;
+
   const value = segments[part];
+
   if (value === undefined) return null;
+
   return part === "year" ? String(value) : String(value).padStart(2, "0");
 }

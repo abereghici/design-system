@@ -32,7 +32,9 @@ const Context = createContext<ModalContext | null>(null);
 
 export function useModal(): ModalContext {
   const context = use(Context);
+
   if (context === null) throw new Error("Dialog parts must be inside their Root");
+
   return context;
 }
 
@@ -65,5 +67,6 @@ export function ModalRoot(props: ModalRootProps) {
     component,
     controller,
   };
+
   return <Context value={context}>{children}</Context>;
 }

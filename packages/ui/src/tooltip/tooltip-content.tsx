@@ -17,6 +17,7 @@ export interface ContentProps extends Omit<ComponentProps<"div">, "id" | "role" 
 /** The short label, optionally followed by an `aria-hidden` Kbd. */
 export function Content({ side = "top", align = "center", ...props }: ContentProps) {
   const { contentId, change } = useTooltip();
+
   return (
     <div
       {...mergeProps({ className: styles["content"] }, props)}
@@ -31,6 +32,7 @@ export function Content({ side = "top", align = "center", ...props }: ContentPro
       }}
       onPointerLeave={(event) => {
         props.onPointerLeave?.(event);
+
         if (outside(event, triggerOf(contentId))) change(false, "trigger-hover", event);
       }}
     />

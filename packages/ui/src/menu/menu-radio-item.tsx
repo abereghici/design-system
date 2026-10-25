@@ -18,8 +18,11 @@ export interface RadioItemProps extends ItemBaseProps {
 export function RadioItem({ value, onClick, children, ...rest }: RadioItemProps) {
   const { menu, props, blocked, close: closeMenu } = useItem(rest, "menuitemradio");
   const group = use(RadioGroupContext);
+
   if (group === null) throw new Error("RadioItem must be inside a RadioGroup");
+
   const checked = group.value === value;
+
   return (
     <button
       {...props}
@@ -27,14 +30,18 @@ export function RadioItem({ value, onClick, children, ...rest }: RadioItemProps)
       aria-checked={checked}
       onClick={(event) => {
         if (blocked(event)) return;
+
         onClick?.(event);
+
         if (!checked) {
           if (!group.select(value, event)) return;
+
           dispatchFeedback(event.currentTarget, "ab-toggle", {
             component: menu.component,
             reason: "user",
           });
         }
+
         closeMenu(event);
       }}
     >

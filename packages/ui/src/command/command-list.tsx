@@ -27,6 +27,7 @@ export type ListProps = Omit<ComponentProps<"div">, "aria-label" | "aria-labelle
 export function List(props: ListProps) {
   const command = useCommand();
   const press = use(DialogContext);
+
   return (
     <Listbox
       {...mergeProps(
@@ -40,21 +41,27 @@ export function List(props: ListProps) {
           },
           onPointerMove: (event: PointerEvent) => {
             const option = optionAt(event.target);
+
             if (event.pointerType !== "touch" && option !== null && enabled(option))
               command.highlight(option.id);
           },
           onClickCapture: (event: MouseEvent) => {
             const option = optionAt(event.target);
+
             if (option === null) return;
+
             if (!enabled(option)) {
               event.preventDefault();
               event.stopPropagation();
+
               return;
             }
+
             press?.(event.nativeEvent, option);
           },
           onClick: (event: MouseEvent) => {
             const option = optionAt(event.target);
+
             if (option !== null) {
               dispatchFeedback(option, "ab-confirm", { component: "Command", reason: "user" });
             }

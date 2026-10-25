@@ -34,6 +34,7 @@ export interface RootProps extends ComponentProps<"div"> {
  */
 export function Root({ variant = "neutral", children, ...props }: RootProps) {
   const Icon = icons[variant];
+
   return (
     <div {...mergeProps({ className: styles["root"] }, props)} data-variant={variant}>
       <Icon size="sm" className={styles["icon"]} />

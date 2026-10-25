@@ -39,6 +39,7 @@ export function Text({
   ...props
 }: TextProps) {
   const Element = as as ElementType;
+
   return (
     <Element
       {...mergeProps({ className: styles["root"] }, props)}

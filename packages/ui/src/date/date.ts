@@ -20,6 +20,7 @@ function build(locale: Intl.LocalesArgument) {
   const heading = format({ month: "long", year: "numeric" });
   const full = format({ dateStyle: "full" });
   const weekday = { short: format({ weekday: "short" }), long: format({ weekday: "long" }) };
+
   return {
     /** Segments and separator texts in the locale's order. */
     layout: numeric
@@ -42,7 +43,9 @@ const cache = new Map<string, ReturnType<typeof build>>();
 export function dateFormats(locale: Intl.LocalesArgument) {
   const key = String(locale);
   const cached = cache.get(key) ?? build(locale);
+
   cache.set(key, cached);
+
   return cached;
 }
 

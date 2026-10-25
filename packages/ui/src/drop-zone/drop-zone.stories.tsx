@@ -20,7 +20,9 @@ const photo = new File(["png"], "photo.png", { type: "image/png" });
 /** Drags files from the desktop over `target` and drops them, as the browser reports it. */
 const drop = (target: Element, ...files: File[]) => {
   const dataTransfer = new DataTransfer();
+
   for (const file of files) dataTransfer.items.add(file);
+
   for (const type of ["dragenter", "dragover", "drop"]) {
     target.dispatchEvent(new DragEvent(type, { bubbles: true, cancelable: true, dataTransfer }));
   }
@@ -127,6 +129,7 @@ Default.test(
   },
   async ({ canvas }) => {
     const zone = canvas.getByText("Drop CSV files here, or");
+
     drop(zone, january);
     drop(zone, february);
     await expect(submitted(canvas.getByRole("form", { name: "Import" }))).toEqual(["january.csv"]);
@@ -138,13 +141,17 @@ Default.test(
   { decorators: [inAForm] },
   async ({ canvas, canvasElement, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Choose files" }));
+
     const input = canvasElement.querySelector<HTMLInputElement>("input[type=file]");
     const transfer = new DataTransfer();
+
     transfer.items.add(january);
+
     if (input !== null) {
       input.files = transfer.files;
       input.dispatchEvent(new Event("change", { bubbles: true }));
     }
+
     await expect(submitted(canvas.getByRole("form", { name: "Import" }))).toEqual(["january.csv"]);
   },
 );
@@ -164,14 +171,19 @@ Default.test(
 
 const dropBeside = () => {
   const dataTransfer = new DataTransfer();
+
   dataTransfer.items.add(january);
+
   const missed = new DragEvent("drop", { bubbles: true, cancelable: true, dataTransfer });
+
   document.body.dispatchEvent(missed);
+
   return missed.defaultPrevented;
 };
 
 function TwoZones(props: DropZoneProps) {
   const [both, setBoth] = useState(true);
+
   return (
     <>
       <DropZone {...props} />
@@ -217,7 +229,9 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Import" }));
+
     const trigger = canvas.getByRole("button", { name: "Statements Choose files" });
+
     await expect(trigger).toHaveFocus();
     await expect(trigger).toHaveAttribute("aria-invalid", "true");
   },

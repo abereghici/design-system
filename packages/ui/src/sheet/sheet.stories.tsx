@@ -53,7 +53,9 @@ Default.test(
   "opens as a modal named by its Title, focusing the scrollable Body",
   async ({ args, canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Open details" }));
+
     const sheet = canvas.getByRole("dialog", { name: "Invoice 0142" });
+
     await expect(sheet).toHaveAccessibleDescription("Issued 3 October to Moss & Co.");
     await expect(document.activeElement).toHaveTextContent(/^Line 1 ·/v);
     await expect(args.onOpenChange).toHaveBeenCalledWith(
@@ -67,9 +69,12 @@ Default.test(
   "closes with the Close button, returns focus to the Trigger and dispatches ab-dismiss",
   async ({ canvas, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Open details" });
+
     await userEvent.click(trigger);
+
     const close = canvas.getByRole("button", { name: "Close" });
     const dismissals = listen("ab-dismiss");
+
     await userEvent.click(close);
     dismissals.stop();
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
@@ -84,8 +89,11 @@ Default.test(
   "closes on Escape, returns focus to the Trigger and dispatches ab-dismiss",
   async ({ args, canvas, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Open details" });
+
     await userEvent.click(trigger);
+
     const dismissals = listen("ab-dismiss");
+
     await (await trusted()).keyboard("{Escape}");
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     dismissals.stop();
@@ -105,6 +113,7 @@ Default.test(
   { args: { children: content({ side: "start" }), defaultOpen: true } },
   async ({ args, canvas, userEvent }) => {
     const sheet = canvas.getByRole("dialog");
+
     await userEvent.pointer({
       keys: "[MouseLeft]",
       target: sheet,

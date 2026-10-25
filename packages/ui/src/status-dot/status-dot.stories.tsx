@@ -37,5 +37,6 @@ for (const variant of ["neutral", "warning", "danger"] as const) {
 
 Default.test("leaves the label beside it as the only announced state", async ({ canvas }) => {
   const cell = canvas.getByRole("cell", { name: "Operational" });
+
   await expect(cell.firstElementChild).toHaveAttribute("aria-hidden", "true");
 });

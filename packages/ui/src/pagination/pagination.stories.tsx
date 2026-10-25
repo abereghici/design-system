@@ -15,6 +15,7 @@ const controls = (canvasElement: HTMLElement) =>
     .getAllByRole("listitem")
     .map((item) => {
       const control = within(item).queryByRole("link") ?? within(item).getByRole("button");
+
       return control.getAttribute("aria-label");
     });
 
@@ -51,7 +52,9 @@ Default.test(
       "Page 10",
       "Next page",
     ]);
+
     const current = canvas.getByRole("link", { name: "Page 5" });
+
     await expect(current).toHaveAttribute("aria-current", "page");
     await expect(current).toHaveTextContent("5");
     await expect(canvas.getByRole("link", { name: "Next page" })).toHaveAttribute(
@@ -88,11 +91,15 @@ Default.test(
       "Page 10",
       "Next page",
     ]);
+
     const previous = canvas.getByRole("button", { name: "Previous page" });
+
     await expect(previous).toHaveAttribute("aria-disabled", "true");
     await userEvent.tab();
     await expect(previous).toHaveFocus();
+
     const presses = listen("ab-press");
+
     await userEvent.keyboard("{Enter}");
     await userEvent.click(previous);
     presses.stop();

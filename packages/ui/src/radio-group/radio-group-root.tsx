@@ -61,10 +61,13 @@ export function Root({
 
   function select(next: string, event: MouseEvent<HTMLInputElement>) {
     if (next === current) return;
+
     if (!requestChange(onValueChange, next, "none", event.nativeEvent)) {
       event.preventDefault();
+
       return;
     }
+
     setUncontrolled(next);
     dispatchFeedback(event.currentTarget, "ab-toggle", { component: "RadioGroup", reason: "user" });
   }

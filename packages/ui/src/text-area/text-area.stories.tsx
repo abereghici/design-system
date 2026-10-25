@@ -36,6 +36,7 @@ export const Default = meta.story({});
 
 Default.test("is a textbox named by its label", async ({ canvas }) => {
   const textarea = canvas.getByRole("textbox", { name: "Message" });
+
   await expect(textarea).toHaveAccessibleDescription("Grows with your text.");
 });
 
@@ -44,6 +45,7 @@ Default.test(
   { decorators: [inAForm] },
   async ({ args, canvas, userEvent }) => {
     const textarea = canvas.getByRole("textbox", { name: "Message" });
+
     await userEvent.type(textarea, "Hi{Enter}there");
     await expect(textarea).toHaveValue("Hi\nthere");
     await expect(args.onValueChange).toHaveBeenLastCalledWith(
@@ -58,6 +60,7 @@ Default.test(
   { args: { required: true, errorMessage: "Write a message." }, decorators: [inAForm] },
   async ({ canvas, userEvent }) => {
     const textarea = canvas.getByRole("textbox", { name: "Message" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Send" }));
     await expect(textarea).toHaveAttribute("aria-invalid", "true");
     await expect(textarea).toHaveAccessibleDescription("Write a message.");
@@ -69,6 +72,7 @@ Default.test(
   { args: { disabled: true, defaultValue: "Draft" } },
   async ({ args, canvas, userEvent }) => {
     const textarea = canvas.getByRole("textbox", { name: "Message" });
+
     await userEvent.tab();
     await expect(textarea).toHaveFocus();
     await expect(textarea).toHaveAttribute("aria-disabled", "true");

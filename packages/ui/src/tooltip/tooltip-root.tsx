@@ -38,7 +38,9 @@ const TooltipContext = createContext<Tooltip | null>(null);
 
 export function useTooltip(): Tooltip {
   const tooltip = use(TooltipContext);
+
   if (tooltip === null) throw new Error("Tooltip parts must be inside Tooltip.Root");
+
   return tooltip;
 }
 
@@ -55,25 +57,34 @@ export const triggerOf = (contentId: string) =>
 
 function show(element: HTMLElement, mode: Mode | undefined) {
   const warm = performance.now() - warmth.closedAt < WARM_WINDOW;
+
   element.toggleAttribute("data-pointer", mode === "pointer");
   element.toggleAttribute("data-instant", warm || mode === undefined);
+
   if (mode !== "pointer" || warm) seen.add(element);
+
   element.showPopover(sourceOf(triggerOf(element.id)));
 }
 
 function hide(element: HTMLElement) {
   if (seen.delete(element)) warmth.closedAt = performance.now();
+
   element.hidePopover();
 }
 
 function sync(contentId: string, open: boolean, mode: Mode | undefined, closeOther: () => void) {
   requested.delete(contentId);
+
   const element = document.getElementById(contentId);
+
   if (element === null || open === isOpen(element)) return;
+
   if (!open) {
     hide(element);
+
     return;
   }
+
   warmth.closeOpen();
   show(element, mode);
   warmth.closeOpen = closeOther;
@@ -112,7 +123,9 @@ export function Root({
   function change(next: boolean, reason: ChangeReason, event?: SyntheticEvent, nextMode?: Mode) {
     // The DOM, not `current`: delays, Escape and blur show or hide it between renders.
     if (next === (requested.get(contentId) ?? isOpen(document.getElementById(contentId)))) return;
+
     if (!requestChange(onOpenChange, next, reason, event?.nativeEvent)) return;
+
     requested.set(contentId, next);
     setMode(nextMode);
     setUncontrolled(next);
@@ -122,10 +135,12 @@ export function Root({
     document.getElementById(contentId)?.toggleAttribute("data-instant", true);
     change(false, "none");
   });
+
   useEvent(
     "keydown",
     (event) => {
       if (event.key !== "Escape") return;
+
       event.preventDefault();
       change(false, "escape-key");
     },

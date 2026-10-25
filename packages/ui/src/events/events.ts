@@ -21,6 +21,7 @@ export function requestChange<Value, Reason extends string, Cause>(
   event: Cause,
 ): boolean {
   let accepted = true;
+
   onChange?.(value, {
     reason,
     event,
@@ -28,6 +29,7 @@ export function requestChange<Value, Reason extends string, Cause>(
       accepted = false;
     },
   });
+
   return accepted;
 }
 
@@ -43,6 +45,7 @@ export function composeEventHandlers<Cause extends { defaultPrevented: boolean }
 ): (event: Cause) => void {
   return (event) => {
     consumer?.(event);
+
     if (!event.defaultPrevented) own(event);
   };
 }
@@ -67,7 +70,9 @@ const justComposed = new WeakSet<EventTarget>();
 export function trackComposition<Cause extends Targeted>(handler?: (event: Cause) => void) {
   return (event: Cause) => {
     handler?.(event);
+
     const input = event.currentTarget;
+
     justComposed.add(input);
     setTimeout(() => {
       justComposed.delete(input);
@@ -166,14 +171,19 @@ export function sharedListener(type: string, target: () => EventTarget, capture 
   const notify = (event: Event) => {
     for (const listener of listeners) listener(event);
   };
+
   return (listener: (event: Event) => void) => {
     const entry = (event: Event) => {
       listener(event);
     };
+
     if (listeners.size === 0) target().addEventListener(type, notify, capture);
+
     listeners.add(entry);
+
     return () => {
       listeners.delete(entry);
+
       if (listeners.size === 0) target().removeEventListener(type, notify, capture);
     };
   };

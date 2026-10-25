@@ -11,6 +11,7 @@ type Context = Parameters<Parameters<typeof Default.test>[2]>[0];
 function onPlatform(platform: string) {
   return () => {
     Object.defineProperty(navigator, "platform", { value: platform, configurable: true });
+
     return () => {
       Reflect.deleteProperty(navigator, "platform");
     };

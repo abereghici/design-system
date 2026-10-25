@@ -16,5 +16,6 @@ export interface VisuallyHiddenProps extends ComponentProps<"span"> {
  */
 export function VisuallyHidden({ asChild = false, ...props }: VisuallyHiddenProps) {
   const Root = asChild ? Slot : "span";
+
   return <Root {...mergeProps({ className: styles["root"] }, props)} />;
 }

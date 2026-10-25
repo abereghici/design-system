@@ -33,8 +33,10 @@ export function useEvent<Type extends keyof EventMap>(
   const listener = useEffectEvent(handler);
   const find = useEffectEvent(() => (typeof target === "function" ? target() : target));
   const fixed = typeof target === "function" ? undefined : target;
+
   useEffect(() => {
     const controller = new AbortController();
+
     (fixed ?? find())?.addEventListener(
       type,
       (event) => {
@@ -42,6 +44,7 @@ export function useEvent<Type extends keyof EventMap>(
       },
       { capture, signal: controller.signal },
     );
+
     return () => {
       controller.abort();
     };

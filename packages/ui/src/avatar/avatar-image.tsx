@@ -19,14 +19,18 @@ export interface ImageProps extends ComponentProps<"img"> {
 function useLoadingStatus(src: ImageProps["src"], onChange: ImageProps["onLoadingStatusChange"]) {
   const [status, setStatus] = useState<LoadingStatus>("loading");
   const [currentSrc, setCurrentSrc] = useState(src);
+
   if (src !== currentSrc) {
     setCurrentSrc(src);
     setStatus("loading");
   }
+
   const report = useEffectEvent((next: LoadingStatus) => onChange?.(next));
+
   useEffect(() => {
     report(status);
   }, [status]);
+
   return [status, setStatus] as const;
 }
 

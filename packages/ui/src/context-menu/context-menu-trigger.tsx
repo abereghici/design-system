@@ -33,6 +33,7 @@ function onceThisPress(type: "click" | "pointerup", listener: (event: Event) => 
   const controller = new AbortController();
   const { signal } = controller;
   const options = { capture: true, signal };
+
   document.addEventListener(
     type,
     (event) => {
@@ -59,6 +60,7 @@ function startPress(event: ReactPointerEvent<HTMLDivElement>) {
       press.long = true;
     }, LONG_PRESS),
   };
+
   presses.set(event.currentTarget, press);
 }
 
@@ -68,12 +70,18 @@ function endPress(
   openAt: (x: number, y: number) => void,
 ) {
   const press = presses.get(event.currentTarget);
+
   if (press === undefined) return;
+
   const moved = Math.hypot(event.clientX - press.x, event.clientY - press.y) > SLOP;
+
   if (event.type === "pointermove" && !moved) return;
+
   clearTimeout(press.timer);
   presses.delete(event.currentTarget);
+
   if (!press.long || event.type !== "pointerup") return;
+
   onceThisPress("click", (click) => {
     click.preventDefault();
     click.stopPropagation();
@@ -88,6 +96,7 @@ const isKeyboard = (event: globalThis.MouseEvent) =>
 
 function anchorAt(contentId: string, x: number, y: number) {
   const anchor = document.getElementById(`${contentId}-anchor`);
+
   return anchor === null ? null : place(anchor, x, y, true);
 }
 
@@ -95,16 +104,21 @@ function anchorAt(contentId: string, x: number, y: number) {
 function openFromContextMenu(event: MouseEvent<HTMLDivElement>, floating: Menu["floating"]) {
   const native = event.nativeEvent;
   const keyboard = isKeyboard(native);
+
   if (keyboard) rememberFocus(floating.contentId);
+
   const target = event.target instanceof Element ? event.target : null;
   const source = keyboard ? target : anchorAt(floating.contentId, event.clientX, event.clientY);
   const show = () => {
     floating.toggle(true, "trigger-press", native, source);
   };
+
   if (event.buttons === 0) {
     show();
+
     return;
   }
+
   onceThisPress("pointerup", () => {
     setTimeout(show);
   });
@@ -119,19 +133,24 @@ export function Trigger({ disabled = false, asChild = false, ...props }: Trigger
       floating.toggle(true, "trigger-press", event.nativeEvent, anchorAt(floating.contentId, x, y));
     });
   };
+
   return (
     <Area
       {...mergeProps(
         {
           onContextMenu: (event: MouseEvent<HTMLDivElement>) => {
             if (disabled || event.defaultPrevented) return;
+
             event.preventDefault();
+
             if (presses.get(event.currentTarget)?.long !== true)
               openFromContextMenu(event, floating);
           },
           onPointerDown: (event: ReactPointerEvent<HTMLDivElement>) => {
             if (disabled) return;
+
             if (!floating.open) rememberFocus(floating.contentId);
+
             if (event.pointerType !== "mouse") startPress(event);
           },
           onPointerMove: end,

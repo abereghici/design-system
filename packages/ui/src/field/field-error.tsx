@@ -23,6 +23,7 @@ export function Error({ children, ...props }: ErrorProps) {
     typeof children === "function"
       ? field?.validity !== undefined && children(field.validity)
       : (children ?? field?.message);
+
   return (
     <div
       id={field?.errorId}

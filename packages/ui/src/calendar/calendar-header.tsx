@@ -16,6 +16,7 @@ interface HeaderProps {
 /** The month heading between the previous and next month buttons. */
 export function Header(props: HeaderProps) {
   const { previousMonthLabel, nextMonthLabel, heading, headingId, before, after, page } = props;
+
   return (
     <div className={styles["header"]}>
       <IconButton

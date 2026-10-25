@@ -23,6 +23,7 @@ export interface ItemProps extends ComponentProps<"div"> {
 export function Item({ value, keywords, disabled = false, children, ...props }: ItemProps) {
   const id = useId();
   const chosen = use(ValueContext) === value;
+
   return (
     <Option
       {...mergeProps({ className: styles["option"] }, props)}

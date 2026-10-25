@@ -41,10 +41,13 @@ export function Root({ value, defaultValue, onValueChange, ...props }: RootProps
 
   function select(next: string, event: MouseEvent<HTMLInputElement>) {
     if (next === current) return;
+
     if (!requestChange(onValueChange, next, "none", event.nativeEvent)) {
       event.preventDefault();
+
       return;
     }
+
     setUncontrolled(next);
     dispatchFeedback(event.currentTarget, "ab-toggle", {
       component: "SegmentedControl",

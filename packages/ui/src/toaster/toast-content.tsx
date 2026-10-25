@@ -37,6 +37,7 @@ export function ToastContent({
 }: ContentProps) {
   const Icon = icons[record.variant ?? "neutral"];
   const shortcut = record.action?.shortcut;
+
   return (
     <>
       <Icon size="sm" className={styles["icon"]} />

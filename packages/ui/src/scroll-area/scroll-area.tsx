@@ -20,5 +20,6 @@ export interface ScrollAreaProps extends ComponentProps<"div"> {
  */
 export function ScrollArea({ asChild = false, tabIndex = 0, ...props }: ScrollAreaProps) {
   const Root = asChild ? Slot : "div";
+
   return <Root {...mergeProps({ className: styles["root"] }, props)} tabIndex={tabIndex} />;
 }

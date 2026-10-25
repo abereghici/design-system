@@ -16,6 +16,7 @@ export type ContentProps = Omit<ComponentProps<"div">, "id" | "role" | "popover"
 /** The menu, opened at the pointer and kept inside the window. */
 export function Content(props: ContentProps) {
   const menu = useContextMenu();
+
   return (
     <>
       <span id={`${menu.floating.contentId}-anchor`} aria-hidden className={styles["anchor"]} />

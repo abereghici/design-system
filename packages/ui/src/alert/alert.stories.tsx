@@ -54,6 +54,7 @@ Default.test(
   async ({ canvas, userEvent }) => {
     const close = canvas.getByRole("button", { name: "Dismiss" });
     const dismissals = listen("ab-dismiss");
+
     await userEvent.click(close);
     dismissals.stop();
     await expect(onClose).toHaveBeenCalledOnce();
@@ -69,6 +70,7 @@ Default.test(
   async ({ canvas, userEvent }) => {
     const close = canvas.getByRole("button", { name: "Dismiss" });
     const dismissals = listen("ab-dismiss");
+
     await userEvent.tab();
     await expect(close).toHaveFocus();
     await expect(close).toHaveAttribute("aria-disabled", "true");

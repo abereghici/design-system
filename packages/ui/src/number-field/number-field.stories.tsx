@@ -56,6 +56,7 @@ Default.test(
   "steps with the arrow, page, home and end keys",
   async ({ args, canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
+
     await userEvent.click(input);
     await userEvent.keyboard("{ArrowUp}");
     await expect(input).toHaveValue("6");
@@ -81,6 +82,7 @@ Default.test(
     const input = canvas.getByRole("textbox", { name: "Seats" });
     const increase = canvas.getByRole("button", { name: "Increase" });
     const presses = listen("ab-press");
+
     await userEvent.click(input);
     await userEvent.click(increase);
     await expect(input).toHaveValue("50");
@@ -103,6 +105,7 @@ Default.test("keeps the step buttons out of the tab order", async ({ canvas, use
 
 Default.test("clamps a typed value when it commits", async ({ args, canvas, userEvent }) => {
   const input = canvas.getByRole("textbox", { name: "Seats" });
+
   await userEvent.clear(input);
   await userEvent.type(input, "120{Enter}");
   await expect(input).toHaveValue("50");
@@ -124,6 +127,7 @@ Default.test(
   "keeps the last number when the typed text is not one",
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
+
     await userEvent.tripleClick(input);
     await userEvent.keyboard("abc");
     await userEvent.tab();
@@ -162,7 +166,9 @@ Default.test(
   },
   async ({ canvas }) => {
     await expect(canvas.getByRole("textbox", { name: "Price" })).toHaveValue("€1,234.50");
+
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Order" });
+
     await expect(new FormData(form).getAll("price")).toEqual(["1234.5"]);
   },
 );
@@ -182,6 +188,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Preț" });
+
     await expect(input).toHaveValue("1.234,5");
     await userEvent.clear(input);
     await userEvent.type(input, "2.000,7{Enter}");
@@ -197,6 +204,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Order" }));
     await expect(input).toHaveAttribute("aria-invalid", "true");
     await expect(input).toHaveAccessibleDescription("Enter a number of seats.");
@@ -208,6 +216,7 @@ Default.test(
   { args: { disabled: true } },
   async ({ args, canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
+
     await userEvent.tab();
     await expect(input).toHaveFocus();
     await userEvent.keyboard("{ArrowUp}7");
@@ -225,12 +234,15 @@ Default.test(
   { decorators: [inAForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
+
     await userEvent.clear(input);
     await userEvent.type(input, "12{Enter}");
     await expect(input).toHaveValue("12");
     await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
     await expect(input).toHaveValue("5");
+
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Order" });
+
     await expect(new FormData(form).getAll("seats")).toEqual(["5"]);
   },
 );

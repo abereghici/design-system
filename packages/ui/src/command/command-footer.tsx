@@ -28,6 +28,7 @@ export interface FooterProps extends ComponentProps<"div"> {
 /** Teaches the keys (navigate, open, close) to people who can see the palette; each key shows with its words. */
 export function Footer({ navigateLabel, openLabel, closeLabel, children, ...props }: FooterProps) {
   const inDialog = use(DialogContext) !== null;
+
   return (
     <div aria-hidden="true" {...mergeProps({ className: styles["footer"] }, props)}>
       {children ?? (

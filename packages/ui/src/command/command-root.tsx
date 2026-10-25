@@ -37,8 +37,10 @@ export const DialogContext = createContext<((event: Event, option: HTMLElement) 
 
 export function useCommand(): CommandContext {
   const context = use(Context);
+
   if (context === null)
     throw new Error("Command parts must be inside Command.Root or Command.Dialog");
+
   return context;
 }
 
@@ -50,12 +52,17 @@ function keyDown(
 ) {
   if (event.key === "Enter") {
     const option = highlighted === null ? null : document.getElementById(highlighted);
+
     if (isComposing(event) || option === null) return;
+
     event.preventDefault();
     option.click();
+
     return;
   }
+
   const next = navigate(event, list, highlighted);
+
   if (next !== null) highlight(next.id);
 }
 
@@ -71,24 +78,32 @@ function useFilter(
 ) {
   const [empty, setEmpty] = useState(false);
   const searched = useRef(query);
+
   useLayoutEffect(() => {
     const node = list.current;
     const run = (fresh: boolean) => {
       const shown = filterOptions(node, query, locale);
+
       setEmpty(shown.length === 0);
+
       const [first] = shown.filter((option) => enabled(option));
+
       setHighlighted((current) =>
         !fresh && shown.some((option) => option.id === current && enabled(option))
           ? current
           : (first?.id ?? null),
       );
+
       if (fresh && first !== undefined) reveal(first, shown);
     };
+
     run(searched.current !== query);
     searched.current = query;
+
     const observer = new MutationObserver(() => {
       run(false);
     });
+
     if (node !== null)
       observer.observe(node, {
         subtree: true,
@@ -96,10 +111,12 @@ function useFilter(
         characterData: true,
         attributeFilter: ["aria-disabled", "data-label", "data-keywords"],
       });
+
     return () => {
       observer.disconnect();
     };
   }, [list, query, locale, setHighlighted]);
+
   return empty;
 }
 
@@ -153,6 +170,7 @@ export function Root({
     listId: useId(),
     empty,
   };
+
   return (
     <div {...mergeProps({ className: styles["root"] }, props)}>
       <Context value={context}>{children}</Context>

@@ -31,6 +31,7 @@ export type InputProps = Omit<
 export function Input({ onChange, onKeyDown, ...props }: InputProps) {
   const command = useCommand();
   const inDialog = use(DialogContext) !== null;
+
   return (
     <label className={styles["search"]}>
       <SearchIcon className={styles["searchIcon"]} />
@@ -52,6 +53,7 @@ export function Input({ onChange, onKeyDown, ...props }: InputProps) {
         }}
         onKeyDown={(event) => {
           onKeyDown?.(event);
+
           if (!event.defaultPrevented) command.keyDown(event);
         }}
       />

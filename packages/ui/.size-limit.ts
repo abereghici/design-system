@@ -73,7 +73,9 @@ const checks = (pattern: string, subpath: (path: string) => string, limit?: stri
   globSync(pattern, { cwd: import.meta.dirname }).map((path) => {
     const name = subpath(path);
     const budget = limit ?? budgets[name];
+
     if (budget === undefined) throw new Error(`No size budget for @platform/ui/${name}`);
+
     return {
       name: `@platform/ui/${name}`,
       path,

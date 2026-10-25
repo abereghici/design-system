@@ -65,6 +65,7 @@ Default.test("is a table named by its caption", async ({ canvas }) => {
 
 Default.test("exposes column headers, row headers and cells", async ({ canvas }) => {
   const names = (role: string) => canvas.getAllByRole(role).map((cell) => cell.textContent);
+
   await expect(names("columnheader")).toEqual(["Invoice", "Status", "Issued", "Amount"]);
   await expect(names("rowheader")).toEqual(["INV-001", "INV-002", "INV-003"]);
   await expect(canvas.getAllByRole("row", { name: /INV-002/v })[0]).toHaveTextContent(
@@ -155,6 +156,7 @@ function SortableInvoices() {
   const [sort, setSort] = useState<Sort>({ column: "id", direction: "ascending" });
   const sorted = invoices.toSorted((a, b) => {
     const order = sort.column === "id" ? a.id.localeCompare(b.id) : amountOf(a) - amountOf(b);
+
     return sort.direction === "ascending" ? order : -order;
   });
   const header = (column: typeof sort.column, label: string, style?: CSSProperties) => (
@@ -165,6 +167,7 @@ function SortableInvoices() {
       <Table.SortLabel
         onClick={() => {
           const flip = sort.column === column && sort.direction === "ascending";
+
           setSort({ column, direction: flip ? "descending" : "ascending" });
         }}
       >
@@ -172,6 +175,7 @@ function SortableInvoices() {
       </Table.SortLabel>
     </Table.ColumnHeader>
   );
+
   return (
     <Table.Root>
       <Table.Caption>Invoices, 2026</Table.Caption>
@@ -213,6 +217,7 @@ Sortable.test(
     const sortOf = (name: string) =>
       canvas.getByRole("columnheader", { name }).getAttribute("aria-sort");
     const order = () => canvas.getAllByRole("rowheader").map((cell) => cell.textContent);
+
     await expect([sortOf("Invoice"), sortOf("Amount")]).toEqual(["ascending", null]);
     await userEvent.click(canvas.getByRole("button", { name: "Amount" }));
     await expect([sortOf("Invoice"), sortOf("Amount")]).toEqual([null, "ascending"]);
@@ -226,6 +231,7 @@ Sortable.test(
 function SelectableInvoices() {
   const [selected, setSelected] = useState<ReadonlySet<string>>(new Set(["INV-002"]));
   const all = selected.size === invoices.length;
+
   return (
     <Table.Root aria-label="Invoices">
       <Table.Header>
@@ -253,6 +259,7 @@ function SelectableInvoices() {
                 checked={selected.has(invoice.id)}
                 onCheckedChange={(checked) => {
                   const one = new Set([invoice.id]);
+
                   setSelected((current) =>
                     checked ? current.union(one) : current.difference(one),
                   );
@@ -282,6 +289,7 @@ export const Selectable = meta.story({
 
 Selectable.test("selects rows with their checkboxes", async ({ canvas, userEvent }) => {
   const selectAll = canvas.getByRole("checkbox", { name: "Select all invoices" });
+
   await expect(selectAll).toBePartiallyChecked();
   await userEvent.click(canvas.getByRole("checkbox", { name: "Select INV-001" }));
   await expect(canvas.getByRole("checkbox", { name: "Select INV-001" })).toBeChecked();
@@ -291,7 +299,9 @@ Selectable.test("selects rows with their checkboxes", async ({ canvas, userEvent
 
 Selectable.test("selects and clears every row from the header", async ({ canvas, userEvent }) => {
   const selectAll = canvas.getByRole("checkbox", { name: "Select all invoices" });
+
   await userEvent.click(selectAll);
   await userEvent.click(selectAll);
+
   for (const box of canvas.getAllByRole("checkbox")) await expect(box).not.toBeChecked();
 });

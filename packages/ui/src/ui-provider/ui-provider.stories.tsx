@@ -14,10 +14,13 @@ export const Default = meta.story({});
 
 Default.test("its base stylesheet yields to unlayered app CSS", async ({ canvas, userEvent }) => {
   const appStyles = document.createElement("style");
+
   appStyles.textContent = "button { outline-color: rgb(1, 2, 3); }";
   document.head.append(appStyles);
+
   try {
     const button = canvas.getByRole("button", { name: "Save changes" });
+
     await userEvent.tab();
     await expect(button).toHaveFocus();
     await expect(getComputedStyle(button).outlineColor).toBe("rgb(1, 2, 3)");

@@ -22,6 +22,7 @@ export type ButtonProps = Omit<ComponentProps<"button">, "command" | "commandfor
 
 export function useClose(onClick: ButtonProps["onClick"], dismiss: boolean) {
   const { id, controller } = useModal();
+
   return {
     type: "button",
     commandfor: id,
@@ -29,6 +30,7 @@ export function useClose(onClick: ButtonProps["onClick"], dismiss: boolean) {
     onClick: composeEventHandlers(
       (event: MouseEvent<HTMLButtonElement>) => {
         onClick?.(event);
+
         if (!dismiss) dispatchFeedback(event.currentTarget, "ab-confirm", feedback);
       },
       (event) => {

@@ -11,7 +11,9 @@ export type ThemeId = (typeof THEMES)[number]["id"];
 
 const darkOf = (extensions: unknown): unknown => {
   if (typeof extensions !== "object" || extensions === null) return undefined;
+
   const entry: unknown = Reflect.get(extensions, THEME_EXTENSION);
+
   return typeof entry === "object" && entry !== null ? Reflect.get(entry, "dark") : undefined;
 };
 
@@ -35,6 +37,8 @@ export const valueIn = (
   const ownDark = theme === "dark" && isThemed(token);
   const authored: unknown = ownDark ? authoredDark(token) : token.original.$value;
   const target = isWholeReference(authored) ? dictionary.tokenMap.get(authored) : undefined;
+
   if (target !== undefined) return valueIn(target, theme, dictionary);
+
   return ownDark ? resolvedDark(token) : token.$value;
 };

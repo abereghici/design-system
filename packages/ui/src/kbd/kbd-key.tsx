@@ -22,8 +22,10 @@ export interface KbdFace {
 }
 
 const subscribe = () => () => {};
+
 export const platform = () =>
   /^(?:Mac|iPhone|iPad)/v.test(navigator.platform) ? ("apple" as const) : ("other" as const);
+
 const serverPlatform = () => "other" as const;
 
 export function KbdKey({
@@ -38,7 +40,9 @@ export function KbdKey({
   const face =
     useSyncExternalStore(subscribe, platform, serverPlatform) === "apple" ? apple : other;
   const name = face.label === undefined ? undefined : keyLabels?.[face.label];
+
   if (name === undefined) return face.text;
+
   return (
     <>
       <span aria-hidden="true">{face.text}</span>

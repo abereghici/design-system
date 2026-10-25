@@ -38,18 +38,27 @@ export function useValidity(
   const touched = useRef(false);
   const apply = (segments: Segments, date: Temporal.PlainDate | null) => {
     const node = field?.control ?? null;
+
     if (node === null) return;
+
     write(node, date?.toString() ?? "");
+
     const partial = date === null && Object.values(segments).some((part) => part !== undefined);
     const rejected = date !== null && isDateUnavailable?.(date) === true;
+
     setValidity(node, partial ? incomplete : rejected ? unavailable : undefined, server, validate);
   };
+
   const report = (commit = false) => {
     const node = field?.control ?? null;
+
     if (commit) touched.current = true;
+
     if (node === null || !touched.current) return;
+
     onValidity({ invalid: !node.validity.valid, message: node.validationMessage });
   };
+
   useEvent(
     "reset",
     () => {
@@ -59,8 +68,10 @@ export function useValidity(
     },
     field?.control?.form ?? null,
   );
+
   const submit = () => {
     field?.control?.form?.requestSubmit();
   };
+
   return { apply, report, submit, clearServerError: field?.clearServerError };
 }
