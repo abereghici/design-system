@@ -25,10 +25,8 @@ Status (`<span role="status">`), painted with eight staves.
 | Prop          | Type                         | Default          | Notes                                                             |
 | ------------- | ---------------------------- | ---------------- | ----------------------------------------------------------------- |
 | `size`        | `"sm" \| "lg"`               | `"sm"`           | Exposed as `data-size`. 16 / 24 px.                               |
-| `aria-label`  | `string`                     | `labels.loading` | The status's name. Overrides the built-in label for one instance. |
+| `children`    | `ReactNode` (required unless `aria-hidden`) |  | The status message ("Loading"), visually hidden inside the status, so it is announced as content. |
 | `aria-hidden` | `boolean`                    |                  | When true, the Spinner is decorative: no `role`, no name.         |
-| `locale`      | `Locale`                     | en-US            | A shipped locale; translates the name on the server.              |
-| `labels`      | `Partial<Labels["spinner"]>` | English          | See Built-in labels.                                              |
 | …native       | `ComponentProps<"span">`     |                  | `ref`, `className` and every native attribute pass through.       |
 
 Names, checked against the reference libraries:
@@ -88,13 +86,9 @@ All exist (ported from the source): `spinner-size` (→ `size-icon-sm`), `spinne
 
 No new tokens. The reduced-motion pulse uses semantic `motion-easing-move` directly. `spinner-stroke-width` was deleted: the staves are a mask.
 
-## Built-in labels
+## Author-written text
 
-| Label     | Default   | Used for                                          |
-| --------- | --------- | ------------------------------------------------- |
-| `loading` | "Loading" | The status's name when no `aria-label` is passed. |
-
-The en-US default is `spinner` in `src/ui-provider/locales/en-US/spinner.ts`, which `enUS` composes. A Server Component can't read the UIProvider's locale, so a localised app passes the shipped object, `locale={roRO}`, as on Progress, Meter, Badge and Pagination; `labels` overrides single strings (decision Q19-1).
+None. The message is the author's `children`, required by type unless the Spinner is `aria-hidden` inside a busy control; it renders as visually hidden text inside the `status`, so the live region carries its message as content (WAI-ARIA `aria-relevant`: "Text content or a text alternative is added to any descendant").
 
 ## Feedback events
 

@@ -1,7 +1,6 @@
 @import "@platform/tokens/components/spinner.css";
 
 @layer ab.components {
-  /* Eight staves: the conic ramp fades the tail, the repeating mask cuts it into 18° staves. */
   .root {
     display: inline-block;
     flex-shrink: 0;

@@ -1,38 +1,37 @@
 import type { ComponentProps, ElementType, ReactElement } from "react";
 
-import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { MoreIcon } from "../icon/icons/more.tsx";
-import { labelsOf } from "../ui-provider/labels.ts";
-import type { Labels } from "../ui-provider/locale.tsx";
-import { pagination as paginationLabels } from "../ui-provider/locales/en-US/pagination.ts";
 
+import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./pagination.module.css";
 
-export interface PaginationLabels extends Partial<Labels["pagination"]> {
-  /** The name of a page link, given the formatted number ("Page 3"). */
-  page?: (page: string) => string;
-}
+type AccessibleName =
+  | { "aria-label": string; "aria-labelledby"?: string }
+  | { "aria-label"?: string; "aria-labelledby": string };
 
-export interface PaginationProps extends ComponentProps<"nav"> {
-  /** The current page, 1-based, in 1…`count`. */
-  page: number;
-  /** The total number of pages (not items), at least 1. */
-  count: number;
-  /** The `href` of each page link and of Previous / Next. */
-  getPageUrl: (page: number) => string;
-  /** Your router's link component, used for every link so navigation stays client-side. */
-  linkComponent?: ElementType;
-  /**
-   * The language page numbers are formatted in, such as "ro-RO". Pass the same one on the server and in
-   * the browser; without it, the runtime's default language is used.
-   */
-  locale?: Intl.LocalesArgument;
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: PaginationLabels;
-}
-
-const pageLabel = (page: string) => `Page ${page}`;
+export type PaginationProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelledby"> &
+  AccessibleName & {
+    /** The current page, 1-based, in 1…`count`. */
+    page: number;
+    /** The total number of pages (not items), at least 1. */
+    count: number;
+    /** The `href` of each page link and of Previous / Next. */
+    getPageUrl: (page: number) => string;
+    /** Your router's link component, used for every link so navigation stays client-side. */
+    linkComponent?: ElementType;
+    /**
+     * The language page numbers are formatted in, such as "ro-RO". Pass the same one on the server
+     * and in the browser; without it, the runtime's default language is used.
+     */
+    locale?: Intl.LocalesArgument;
+    /** The name of the Previous button, such as "Previous page": it shows only an icon. */
+    previousLabel: string;
+    /** The name of the Next button, such as "Next page": it shows only an icon. */
+    nextLabel: string;
+    /** A page link's name, given its formatted number ("Page 3"); without it the number names it. */
+    getPageLabel?: (page: string) => string;
+  };
 
 function range(page: number, count: number) {
   const start = Math.max(Math.min(page - 1, count - 4), 3);
@@ -57,13 +56,19 @@ function Step({ href, label, Anchor, children }: StepProps) {
   return (
     <li>
       {href === undefined ? (
-        <IconButton disabled aria-label={label}>
+        <button
+          type="button"
+          aria-label={label}
+          aria-disabled
+          data-size="md"
+          className={iconButton["root"]}
+        >
           {children}
-        </IconButton>
+        </button>
       ) : (
-        <IconButton asChild aria-label={label}>
-          <Anchor href={href}>{children}</Anchor>
-        </IconButton>
+        <Anchor href={href} aria-label={label} data-size="md" className={iconButton["root"]}>
+          {children}
+        </Anchor>
       )}
     </li>
   );
@@ -80,16 +85,17 @@ export function Pagination({
   getPageUrl,
   linkComponent: Anchor = "a",
   locale,
-  labels,
+  previousLabel,
+  nextLabel,
+  getPageLabel,
   ...props
 }: PaginationProps) {
-  const text = labelsOf({ ...paginationLabels, page: pageLabel }, undefined, labels);
   const formatter = new Intl.NumberFormat(locale);
   const url = (target: number) => (target < 1 || target > count ? undefined : getPageUrl(target));
   return (
-    <nav aria-label={text.root} {...props}>
+    <nav {...props}>
       <ul className={styles["list"]}>
-        <Step href={url(page - 1)} label={text.previous} Anchor={Anchor}>
+        <Step href={url(page - 1)} label={previousLabel} Anchor={Anchor}>
           <ChevronRightIcon className={styles["previous"]} />
         </Step>
         {range(page, count).map((item) =>
@@ -101,7 +107,7 @@ export function Pagination({
             <li key={item}>
               <Anchor
                 href={getPageUrl(item)}
-                aria-label={text.page(formatter.format(item))}
+                aria-label={getPageLabel?.(formatter.format(item))}
                 aria-current={item === page ? "page" : undefined}
                 className={styles["page"]}
               >
@@ -110,7 +116,7 @@ export function Pagination({
             </li>
           ),
         )}
-        <Step href={url(page + 1)} label={text.next} Anchor={Anchor}>
+        <Step href={url(page + 1)} label={nextLabel} Anchor={Anchor}>
           <ChevronRightIcon />
         </Step>
       </ul>
