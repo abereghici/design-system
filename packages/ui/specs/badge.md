@@ -24,13 +24,13 @@ Container → content.
 
 ## API
 
-| Prop       | Type                                     | Default                              | Notes                                                                                                                  |
-| ---------- | ---------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| `variant`  | `"neutral" \| "accent" \| "danger"`      | `"neutral"`                          | Exposed as `data-variant`. The three the source tokens define.                                                         |
-| `max`      | `number`                                 | `99`                                 | Applies only when `children` is a number. A count above `max` renders `max` formatted plus the overflow label ("99+"). |
-| `locale`   | `Intl.LocalesArgument`                   | the runtime's default                | Passed to `Intl.NumberFormat` for the count and `max`. Pass the same one on the server and in the browser. |
-| `children` | `number \| string`                       |                                      | A number is formatted with `Intl.NumberFormat` in `locale`.                                                            |
-| …native    | `ComponentProps<"span">`                 |                                      | `ref`, `className` and every native attribute pass through.                                                            |
+| Prop       | Type                                | Default               | Notes                                                                                                                  |
+| ---------- | ----------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `variant`  | `"neutral" \| "accent" \| "danger"` | `"neutral"`           | Exposed as `data-variant`. The three the source tokens define.                                                         |
+| `max`      | `number`                            | `99`                  | Applies only when `children` is a number. A count above `max` renders `max` formatted plus the overflow label ("99+"). |
+| `locale`   | `Intl.LocalesArgument`              | the runtime's default | Passed to `Intl.NumberFormat` for the count and `max`. Pass the same one on the server and in the browser.             |
+| `children` | `number \| string`                  |                       | A number is formatted with `Intl.NumberFormat` in `locale`.                                                            |
+| …native    | `ComponentProps<"span">`            |                       | `ref`, `className` and every native attribute pass through.                                                            |
 
 Names, checked against the reference libraries:
 
@@ -77,7 +77,7 @@ Not focusable; no keyboard interaction. Tab skips it; focus lands on the owning 
 - Not colour alone: the count or glyph carries the meaning; the fill only adds emphasis (WCAG 1.4.1: "Color is not used as the only visual means of conveying information").
 - Contrast: `on-accent` / `on-danger` on their bold fills and `text-subtle` on `surface-nested` are in the AA matrix (`packages/tokens/src/contrast.ts`).
 - **More contrast:** text tokens already pass 4.5:1; no change. The pill shape is decorative.
-- **Forced colors:** as the artifact's adaptive.css, Badge sets `forced-color-adjust: none` (it keeps its own fill and ink, an AA pair) and draws a 1 px inset `CanvasText` outline so the pill edge shows on any `Canvas`.
+- **Forced colors:** as the artifact's adaptive.css, Badge takes the user's palette (its fill only adds emphasis, so colour is not essential and `forced-color-adjust: none` would only keep looks) and draws a 1 px inset `CanvasText` outline so the pill edge shows on any `Canvas`.
 - **Reduced transparency:** not affected (no Material).
 
 ## RTL

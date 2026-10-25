@@ -115,8 +115,17 @@
       background-color: HighlightText;
     }
 
+    .root:has(.input:is([aria-disabled="true"], :disabled)) {
+      color: GrayText;
+    }
+
     .input:is([aria-disabled="true"], :disabled) {
       border-color: GrayText;
+      background-color: Canvas;
+    }
+
+    .input:is([aria-disabled="true"], :disabled)::before {
+      background-color: GrayText;
     }
   }
 }

@@ -214,6 +214,13 @@ Default.test(
   },
 );
 
+export const Editing = meta.story({
+  parameters: { docs: { description: { story: "Month typed, focus moved on to the day." } } },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.type(canvas.getByRole("spinbutton", { name: "month" }), "4");
+  },
+});
+
 export const InAForm = meta.story({ decorators: [inAForm], args: { required: true } });
 
 InAForm.test(

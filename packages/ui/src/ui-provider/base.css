@@ -70,6 +70,19 @@
     outline-offset: var(--ab-focus-ring-offset);
   }
 
+  /* The item a listbox's input points at with aria-activedescendant has no DOM focus, so it takes the
+     focus ring here, inset so the list's scroll box doesn't clip it. */
+  [data-highlighted] {
+    outline: var(--ab-focus-ring-width) solid var(--ab-color-border-focused);
+    outline-offset: calc(var(--ab-focus-ring-width) * -1);
+  }
+
+  @media (forced-colors: active) {
+    [data-highlighted] {
+      outline-color: currentColor;
+    }
+  }
+
   ::selection {
     background-color: var(--ab-color-background-highlight);
     color: var(--ab-color-text-on-highlight);

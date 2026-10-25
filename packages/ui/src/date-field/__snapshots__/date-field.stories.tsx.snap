@@ -8,6 +8,14 @@ exports[`Default   > base story 1`] = `
   - spinbutton "year"
 `;
 
+exports[`Editing 1`] = `
+- text: Date of birth
+- group "Date of birth":
+  - spinbutton "month": "04"
+  - spinbutton "day"
+  - spinbutton "year"
+`;
+
 exports[`In A Form   > base story 1`] = `
 - form "Profile":
   - text: Date of birth *" / "
