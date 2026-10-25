@@ -47,6 +47,16 @@ export function composeEventHandlers<Cause extends { defaultPrevented: boolean }
   };
 }
 
+/** Marks pointer-initiated changes with `data-pointer`, so keyboard changes skip the motion. */
+export const pointerMarker = {
+  onPointerDown: (event: { readonly currentTarget: HTMLElement }) => {
+    event.currentTarget.dataset["pointer"] = "";
+  },
+  onKeyDown: (event: { readonly currentTarget: HTMLElement }) => {
+    delete event.currentTarget.dataset["pointer"];
+  },
+};
+
 interface Targeted {
   readonly currentTarget: EventTarget;
 }

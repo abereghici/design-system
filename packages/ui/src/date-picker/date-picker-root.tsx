@@ -8,11 +8,8 @@ import type { DateFieldChangeEventDetails, DateFieldProps } from "../date-field/
 import type { DatePickerContextValue, Temporal } from "../date/date.ts";
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { byId, useFloating } from "../floating/floating.ts";
+import { useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as FloatingDetails, Floating } from "../floating/floating.ts";
-import { useLabels } from "../ui-provider/locale.tsx";
-import type { Labels } from "../ui-provider/locale.tsx";
-import { datePicker as datePickerLabels } from "../ui-provider/locales/en-US/date-picker.ts";
 
 import { PanelContext } from "./date-picker-panel.tsx";
 import { Trigger } from "./date-picker-trigger.tsx";
@@ -24,34 +21,39 @@ export type OpenChangeEventDetails = FloatingDetails<
   "trigger-press" | "outside-press" | "escape-key" | "focus-out" | "day-press" | "none"
 >;
 
-export interface RootProps extends Omit<
-  DateFieldProps,
-  "value" | "defaultValue" | "onValueChange" | "labels"
-> {
-  /** The chosen date, when your state holds it; `null` is no date. */
-  value?: Temporal.PlainDate | null | undefined;
-  /** The starting value when it holds its own state. */
-  defaultValue?: Temporal.PlainDate | null | undefined;
-  /** Called before the date changes; `details.cancel()` keeps the previous one. */
-  onValueChange?:
-    | ((value: Temporal.PlainDate | null, details: ChangeEventDetails) => void)
-    | undefined;
-  /**
-   * Days that can't be chosen, such as weekends or booked dates; typing one marks the field
-   * invalid.
-   */
-  isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
-  /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
-  open?: boolean | undefined;
-  /** Opens it on the first render when it holds its own state. */
-  defaultOpen?: boolean | undefined;
-  /** Called before it opens or closes; `details.cancel()` keeps it as it is. */
-  onOpenChange?: ((open: boolean, details: OpenChangeEventDetails) => void) | undefined;
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: Partial<Labels["datePicker"] & Labels["dateField"]> | undefined;
-  /** The `DatePicker.Content`. */
-  children?: ReactNode;
-}
+type Unavailable =
+  | { isDateUnavailable?: undefined; unavailableMessage?: undefined }
+  | {
+      /**
+       * Days that can't be chosen, such as weekends or booked dates; typing one marks the field
+       * invalid.
+       */
+      isDateUnavailable: (date: Temporal.PlainDate) => boolean;
+      /** The error for a typed day that can't be chosen, such as "This date is not available". */
+      unavailableMessage: string;
+    };
+
+export type RootProps = Omit<DateFieldProps, "value" | "defaultValue" | "onValueChange"> &
+  Unavailable & {
+    /** The chosen date, when your state holds it; `null` is no date. */
+    value?: Temporal.PlainDate | null | undefined;
+    /** The starting value when it holds its own state. */
+    defaultValue?: Temporal.PlainDate | null | undefined;
+    /** Called before the date changes; `details.cancel()` keeps the previous one. */
+    onValueChange?:
+      | ((value: Temporal.PlainDate | null, details: ChangeEventDetails) => void)
+      | undefined;
+    /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
+    open?: boolean | undefined;
+    /** Opens it on the first render when it holds its own state. */
+    defaultOpen?: boolean | undefined;
+    /** Called before it opens or closes; `details.cancel()` keeps it as it is. */
+    onOpenChange?: ((open: boolean, details: OpenChangeEventDetails) => void) | undefined;
+    /** The name of the calendar button and of the panel it opens, such as "Choose date". */
+    triggerLabel: string;
+    /** The `DatePicker.Content`. */
+    children?: ReactNode;
+  };
 
 function useValue({ value, defaultValue = null, onValueChange }: RootProps) {
   const [uncontrolled, setUncontrolled] = useState(defaultValue);
@@ -93,7 +95,7 @@ function pickerOf(
       return (
         focus === document.body ||
         focus?.getAttribute("commandfor") === floating.contentId ||
-        byId(floating.contentId)?.contains(focus) === true
+        document.getElementById(floating.contentId)?.contains(focus) === true
       );
     },
   };
@@ -106,8 +108,7 @@ function pickerOf(
  */
 export function Root(props: RootProps) {
   const { defaultValue, open, defaultOpen, onOpenChange, isDateUnavailable, ...rest } = props;
-  const { labels, disabled, children, ...field } = rest;
-  const name = useLabels("datePicker", datePickerLabels, labels).chooseDate;
+  const { triggerLabel: name, disabled, children, ...field } = rest;
   const date = useValue(props);
   const trigger = useRef<HTMLButtonElement>(null);
   const floating = useFloating("Popover", { open, defaultOpen, onOpenChange });
@@ -122,7 +123,6 @@ export function Root(props: RootProps) {
         if (!date.change(next, details.reason, details.event)) details.cancel();
       }}
       isDateUnavailable={isDateUnavailable}
-      labels={labels}
       onFormReset={date.reset}
       end={
         <Trigger

@@ -51,7 +51,8 @@ Root (DateField with a trigger in its field box) + Content (Floating layer holdi
 | `open`                                                                                                              | `boolean`                                                                                  |         | Controlled.                                                                                                             |
 | `defaultOpen`                                                                                                       | `boolean`                                                                                  | `false` | Uncontrolled.                                                                                                           |
 | `onOpenChange`                                                                                                      | `(open: boolean, details: DatePicker.Root.OpenChangeEventDetails) => void`                 |         | `reason`: Popover's (`"trigger-press"`, `"outside-press"`, `"escape-key"`, `"focus-out"`, `"none"`) plus `"day-press"`. |
-| `labels`                                                                                                            | `Partial<Locale["labels"]["datePicker"] & Locale["labels"]["dateField"]>`                  |         | Per-instance override (Built-in labels).                                                                                |
+| `triggerLabel` | `string` (required) |  | The calendar button's and panel's name ("Choose date"). |
+| `unavailableMessage` | `string` (required with `isDateUnavailable`) |  | The error for a typed day that can't be chosen. |
 | …native                                                                                                             | as DateField                                                                               |         | `className`, `style` on the Field root, the rest on the field box (`onPointerEnter`, `onFocus`: the warm-up recipe).    |
 
 `DatePicker.Content`: `ComponentProps<"dialog">` (`ref`, `className`, `children`), a `<dialog>` as `Popover.Content`. `id`, `open`, `popover`, `aria-label` are owned.
@@ -76,7 +77,7 @@ The field box's states are DateField's. Added:
 
 ## Behaviour
 
-- **Field.** Exactly DateField's (Field contract with the hidden date input). Adds one rule: with `isDateUnavailable`, a complete typed date it rejects sets `setCustomValidity(labels.unavailable)` (after DateField's incomplete check, before `validate`). Choosing in the Calendar commits like typing: the hidden input's value changes, the Field re-reads validity, and the choice counts as an edit for the error timing.
+- **Field.** Exactly DateField's (Field contract with the hidden date input). Adds one rule: with `isDateUnavailable`, a complete typed date it rejects sets `setCustomValidity(unavailableMessage)` (after DateField's incomplete check, before `validate`). Choosing in the Calendar commits like typing: the hidden input's value changes, the Field re-reads validity, and the choice counts as an edit for the error timing.
 - **One value.** The Root owns the value. Typing a complete date moves the Calendar's month to it when the panel next opens. The Calendar inside `DatePicker.Content` reads `value`, `min`, `max`, `isDateUnavailable` and its choose handler from the DatePicker context (the context lives in the private module the three date components share, so the DatePicker does not import the Calendar's code); props set on that Calendar for those four are ignored.
 - **Panel.** Composes Popover (Popover spec): light dismiss, Escape, focus return to the trigger including the WebKit handler, `"focus-out"` closing on Tab out, anchoring, flipping and reasons. The anchor is the field box: DateField names it `--ab-date-field-box` (`anchor-name`, scoped to each field with `anchor-scope`) and the panel sets `position-anchor` to it. The trigger stays the popover's source (its `toggle-popover` command), and so its trigger for focus navigation (HTML focus navigation scope owner: "has a popover trigger set, then return element's popover trigger"): Tab from the trigger enters the panel and Tab out of the panel goes on to the control after the trigger; focus return goes to the trigger, which the panel records as its return target on every open (Popover's focus return; checked in three engines). A press on the trigger while the panel is open closes it with `"trigger-press"`: the trigger is the panel's invoker, so light dismiss leaves the panel to the trigger's `click` (checked in three engines).
 - **Focus on open.** Moves to the Calendar's tab-stop day: the value, else today, clamped into `min` / `max`. APG: "Move focus to selected date, i.e., the date displayed in the date input text field. If no date has been selected, places focus on the current date." This departs from Popover's default (focus stays on the Trigger): the panel is operated with the keyboard map, and APG asks for it (judgement call). Mechanism: one path for eager and lazy Calendars: after each open (or on mounting into an open panel), the Calendar moves its tab stop to that day and focuses it, if focus is still on the trigger, in the panel or nowhere (WebKit does not focus a pressed button). Checked for keyboard and pointer opens with an eager and a lazy Calendar in three engines.
@@ -144,7 +145,7 @@ Escape inside the panel is the Popover's close request; a DatePicker inside a Di
 
 ## Accessibility
 
-- **Trigger.** APG: "The initial value of accessible name is "Choose Date"." Here `labels.chooseDate`, with the value in `aria-describedby` (Behaviour). `aria-haspopup="dialog"` and `aria-expanded` (Popover).
+- **Trigger.** APG: "The initial value of accessible name is "Choose Date"." Here the author's `triggerLabel`, with the value in `aria-describedby` (Behaviour). `aria-haspopup="dialog"` and `aria-expanded` (Popover).
 - **Panel.** `role="dialog"` named by `aria-label` (APG: `aria-label` "Defines the accessible name for the dialog."). Not `aria-modal` (non-modal Popover).
 - **Field and grid.** DateField's and Calendar's Accessibility sections apply unchanged. APG's "The description of the date format is associated with the text input via aria-describedby" is met by the named segments (DateField spec).
 - **Targets.** The trigger is IconButton `sm` (28, growing on coarse pointers) inside a 32 / 40 field box.
@@ -158,13 +159,9 @@ Logical properties only. The trigger at the inline end of the field box; the pan
 
 None new. The field box uses `input-*` and `date-field-*`, the trigger `icon-button-*`, the panel `popover-*` (except `popover-max-width`, Anatomy), the grid `calendar-*`. No `date-picker` Dictionary word is needed.
 
-## Built-in labels
+## Author-written text
 
-| Key                     | en-US         | ro-RO          | Used by                     |
-| ----------------------- | ------------- | -------------- | --------------------------- |
-| `datePicker.chooseDate` | "Choose date" | "Alegeți data" | Trigger name and panel name |
-
-Plus DateField's labels for the field (including `dateField.unavailable`) and Calendar's for the grid. DatePicker adds `datePicker: { chooseDate }` to the locale type and every shipped locale. APG uses "Choose Date" for both the button and the dialog.
+None. `triggerLabel` is required, `unavailableMessage` is required with `isDateUnavailable`, DateField's `incompleteMessage` applies, and the Calendar inside takes its own month-button names.
 
 ## Feedback events
 

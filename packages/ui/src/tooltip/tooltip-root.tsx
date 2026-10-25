@@ -5,7 +5,7 @@ import type { ReactNode, SyntheticEvent } from "react";
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { byId, isOpen, sourceOf } from "../floating/floating.ts";
+import { isOpen, sourceOf } from "../floating/floating.ts";
 
 export type ChangeReason =
   | "trigger-hover"
@@ -112,7 +112,7 @@ export function Root({
 
   function change(next: boolean, reason: ChangeReason, event?: SyntheticEvent, nextMode?: Mode) {
     // The DOM, not `current`: delays, Escape and blur show or hide it between renders (Firefox and WebKit proofs fail on `current`).
-    if (next === (requested.get(contentId) ?? isOpen(byId(contentId)))) return;
+    if (next === (requested.get(contentId) ?? isOpen(document.getElementById(contentId)))) return;
     if (!requestChange(onOpenChange, next, reason, event?.nativeEvent)) return;
     requested.set(contentId, next);
     setMode(nextMode);
@@ -120,7 +120,7 @@ export function Root({
   }
 
   const closeOther = useEffectEvent(() => {
-    byId(contentId)?.toggleAttribute("data-instant", true);
+    document.getElementById(contentId)?.toggleAttribute("data-instant", true);
     change(false, "none");
   });
   const escape = useEffectEvent((event: KeyboardEvent) => {
@@ -131,7 +131,7 @@ export function Root({
 
   useLayoutEffect(() => {
     requested.delete(contentId);
-    const element = byId(contentId);
+    const element = document.getElementById(contentId);
     if (element !== null && !current && isOpen(element)) hide(element);
     const opening = element !== null && current && !isOpen(element);
     return opening ? present(element, mode, closeOther, escape) : undefined;

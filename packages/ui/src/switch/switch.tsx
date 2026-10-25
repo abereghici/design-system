@@ -3,9 +3,10 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
+import { pointerMarker } from "../events/events.ts";
 import { useFieldControl } from "../field/use-field.ts";
 import { mergeProps } from "../slot/slot.tsx";
-import { pointerMarker, toggleClick } from "../toggle/toggle.ts";
+import { toggleClick } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
 import styles from "./switch.module.css";
@@ -54,7 +55,7 @@ export function Switch({
 
   return (
     <label
-      {...pointerMarker()}
+      {...pointerMarker}
       htmlFor={bindings.id ?? fallbackId}
       {...mergeProps({ className: styles["root"] }, { className, style })}
     >

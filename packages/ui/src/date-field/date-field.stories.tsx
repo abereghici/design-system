@@ -4,18 +4,15 @@ import { Temporal } from "temporal-polyfill";
 import type { Decorator } from "@storybook/react-vite";
 
 import { Button } from "@platform/ui/button";
-import { roRO } from "@platform/ui/locales/ro-RO";
 
 import preview from "#.storybook/preview.tsx";
 import { confirmComposition } from "#.storybook/test/trusted.ts";
 
-import type { Locale } from "../ui-provider/locale.tsx";
-
 import { DateField } from "./date-field.tsx";
-import type { DateFieldChangeEventDetails } from "./date-field.tsx";
+import type { DateFieldChangeEventDetails, DateFieldProps } from "./date-field.tsx";
 
-// @ts-expect-error -- a locale must give the DateField placeholders and messages
-({ tag: "fr-FR", labels: { ...roRO.labels, dateField: {} } }) satisfies Locale;
+// @ts-expect-error -- a date typed in part is invalid, so it needs its error
+({ label: "Date of birth" }) satisfies DateFieldProps;
 
 const submitted = fn<(data: FormData) => void>();
 const date = (iso: string) => Temporal.PlainDate.from(iso);
@@ -41,6 +38,8 @@ const meta = preview.meta({
     label: "Date of birth",
     name: "birthDate",
     locale: "en-US",
+    incompleteMessage: "Enter a complete date",
+    placeholders: { day: "dd", month: "mm", year: "yyyy" },
     onValueChange:
       fn<(value: Temporal.PlainDate | null, details: DateFieldChangeEventDetails) => void>(),
   },
@@ -57,21 +56,21 @@ Default.test(
       .getAllByRole("spinbutton")
       .map((segment) => segment.getAttribute("aria-label"));
     await expect(names).toEqual(["month", "day", "year"]);
-    await expect(canvas.getByRole("spinbutton", { name: "month" })).toHaveAttribute(
-      "aria-valuetext",
-      "Empty",
-    );
   },
 );
 
 Default.test(
-  "orders and names the segments for ro-RO",
-  { args: { locale: "ro-RO" } },
+  "orders and names the segments for ro-RO, with the author's placeholders",
+  { args: { locale: "ro-RO", placeholders: { day: "zz", month: "ll", year: "aaaa" } } },
   async ({ canvas }) => {
     const names = canvas
       .getAllByRole("spinbutton")
       .map((segment) => segment.getAttribute("aria-label"));
     await expect(names).toEqual(["zi", "lună", "an"]);
+    await expect(canvas.getByRole("spinbutton", { name: "zi" })).toHaveAttribute(
+      "placeholder",
+      "zz",
+    );
   },
 );
 
@@ -160,7 +159,7 @@ Default.test(
       expect.anything(),
     );
     await userEvent.keyboard("{Delete}");
-    await expect(day).toHaveAttribute("aria-valuetext", "Empty");
+    await expect(day).toHaveValue("");
     await expect(args.onValueChange).toHaveBeenLastCalledWith(null, expect.anything());
     await userEvent.keyboard("{Backspace}");
     await expect(canvas.getByRole("spinbutton", { name: "month" })).toHaveFocus();
@@ -269,6 +268,20 @@ InAForm.test(
     await userEvent.tab();
     await expect(canvas.getByRole("button", { name: "Save" })).toHaveFocus();
     await expect(month).toBeInvalid();
+  },
+);
+
+InAForm.test(
+  "restores its default value and clears its error when the form resets",
+  { args: { defaultValue: date("2026-10-24") } },
+  async ({ canvas, userEvent }) => {
+    const day = canvas.getByRole("spinbutton", { name: "day" });
+    await userEvent.type(day, "{Backspace}{Backspace}");
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
+    await expect(day).toBeInvalid();
+    canvas.getByRole<HTMLFormElement>("form", { name: "Profile" }).reset();
+    await waitFor(() => expect(day).toHaveValue("24"));
+    await expect(day).not.toBeInvalid();
   },
 );
 

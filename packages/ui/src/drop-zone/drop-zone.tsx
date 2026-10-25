@@ -27,8 +27,8 @@ export interface DropZoneProps
   onDrop?: (files: File[], details: DropZoneDropEventDetails) => void;
   /** Refuses drops and turns off the FileTrigger inside, such as while an upload runs. */
   disabled?: boolean;
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: { clear?: string };
+  /** Shows a button that clears the chosen files, with this name, such as "Clear files". */
+  clearLabel?: string | undefined;
 }
 
 const hasFiles = (event: { dataTransfer: DataTransfer | null }) =>
@@ -160,7 +160,7 @@ export function DropZone({
   form,
   disabled = false,
   onDrop,
-  labels,
+  clearLabel,
   children,
   ...props
 }: DropZoneProps) {
@@ -186,7 +186,7 @@ export function DropZone({
           inputRef={input}
           triggerRef={trigger}
           disabled={blocked}
-          labels={labels}
+          clearLabel={clearLabel}
         />
       </div>
     </PickerContext>

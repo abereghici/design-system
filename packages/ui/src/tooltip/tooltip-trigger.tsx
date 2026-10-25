@@ -1,9 +1,14 @@
 "use client";
 
-import type { ComponentProps, SyntheticEvent } from "react";
+import type {
+  ComponentProps,
+  FocusEvent,
+  KeyboardEvent,
+  PointerEvent,
+  SyntheticEvent,
+} from "react";
 
-import { byId } from "../floating/floating.ts";
-import { Slot } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import { outside, useTooltip } from "./tooltip-root.tsx";
 
@@ -14,54 +19,52 @@ export interface TriggerProps extends ComponentProps<"button"> {
   asChild?: boolean;
 }
 
+function handlers({ contentId, change }: ReturnType<typeof useTooltip>) {
+  const press = (event: SyntheticEvent<HTMLElement>) => {
+    pressed.add(event.currentTarget);
+    change(false, "trigger-press", event);
+  };
+  return {
+    onPointerEnter: (event: PointerEvent<HTMLElement>) => {
+      if (event.pointerType === "touch" || pressed.has(event.currentTarget)) return;
+      change(true, "trigger-hover", event, "pointer");
+    },
+    onPointerLeave: (event: PointerEvent<HTMLElement>) => {
+      pressed.delete(event.currentTarget);
+      if (outside(event, document.getElementById(contentId))) change(false, "trigger-hover", event);
+    },
+    onFocus: (event: FocusEvent<HTMLElement>) => {
+      if (pressed.has(event.currentTarget) || !event.currentTarget.matches(":focus-visible"))
+        return;
+      change(true, "trigger-focus", event, "focus");
+    },
+    onBlur: (event: FocusEvent<HTMLElement>) => {
+      pressed.delete(event.currentTarget);
+      change(false, "trigger-focus", event);
+    },
+    onPointerDown: press,
+    onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
+      if (event.key === "Enter" || event.key === " ") press(event);
+    },
+  };
+}
+
 /** The control the Tooltip describes. It keeps its own name. */
 export function Trigger({
   asChild = false,
   "aria-describedby": describedBy,
   ...props
 }: TriggerProps) {
-  const { disabled, contentId, change } = useTooltip();
+  const tooltip = useTooltip();
   const Element = asChild ? Slot : "button";
   const type = asChild ? undefined : "button";
-  if (disabled) return <Element type={type} {...props} aria-describedby={describedBy} />;
-  const press = (event: SyntheticEvent<HTMLElement>) => {
-    pressed.add(event.currentTarget);
-    change(false, "trigger-press", event);
-  };
+  if (tooltip.disabled) return <Element type={type} {...props} aria-describedby={describedBy} />;
+  const { contentId } = tooltip;
   return (
     <Element
       type={type}
-      {...props}
+      {...mergeProps(handlers(tooltip), props)}
       aria-describedby={describedBy === undefined ? contentId : `${describedBy} ${contentId}`}
-      onPointerEnter={(event) => {
-        props.onPointerEnter?.(event);
-        if (event.pointerType === "touch" || pressed.has(event.currentTarget)) return;
-        change(true, "trigger-hover", event, "pointer");
-      }}
-      onPointerLeave={(event) => {
-        props.onPointerLeave?.(event);
-        pressed.delete(event.currentTarget);
-        if (outside(event, byId(contentId))) change(false, "trigger-hover", event);
-      }}
-      onFocus={(event) => {
-        props.onFocus?.(event);
-        if (pressed.has(event.currentTarget) || !event.currentTarget.matches(":focus-visible"))
-          return;
-        change(true, "trigger-focus", event, "focus");
-      }}
-      onBlur={(event) => {
-        props.onBlur?.(event);
-        pressed.delete(event.currentTarget);
-        change(false, "trigger-focus", event);
-      }}
-      onPointerDown={(event) => {
-        props.onPointerDown?.(event);
-        press(event);
-      }}
-      onKeyDown={(event) => {
-        props.onKeyDown?.(event);
-        if (event.key === "Enter" || event.key === " ") press(event);
-      }}
     />
   );
 }

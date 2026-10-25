@@ -5,11 +5,11 @@ import type { ComponentProps, KeyboardEvent, ReactNode, SyntheticEvent } from "r
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useEvent } from "../events/use-event.ts";
 import * as Field from "../field/field.tsx";
-import { useField, useFormReset } from "../field/use-field.ts";
+import { useField } from "../field/use-field.ts";
 import { InputGroup } from "../text-field/text-field.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
-import type { Labels } from "../ui-provider/locale.tsx";
 
 import { StepButtons } from "./number-field-step-buttons.tsx";
 import type { Direction } from "./number-field-step-buttons.tsx";
@@ -63,8 +63,10 @@ type ControlProps = Omit<
    * server and in the browser; without it, the runtime's default language is used.
    */
   locale?: Intl.LocalesArgument;
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: Partial<Labels["numberField"]>;
+  /** The name of the step-up button, such as "Increase": it shows only an icon. */
+  incrementLabel: string;
+  /** The name of the step-down button, such as "Decrease": it shows only an icon. */
+  decrementLabel: string;
   /** Content before the number, such as a currency sign. */
   startElement?: ReactNode;
   /**
@@ -154,12 +156,13 @@ function useNumber({
     if (requestChange(onValueChange, next, reason, event)) setUncontrolled(next);
   };
   const hidden = useRef<HTMLInputElement>(null);
-  useFormReset(
-    () => hidden.current,
+  useEvent(
+    "reset",
     () => {
       setUncontrolled(defaultValue);
       setText(null);
     },
+    () => hidden.current?.form,
   );
   return { committed, text, setText, commit, hidden };
 }
@@ -175,7 +178,7 @@ function useNumberValue({
   step = 1,
   largeStep = step * 10,
   ...rest
-}: Omit<ControlProps, "labels" | "startElement" | "readOnly">) {
+}: Omit<ControlProps, "startElement" | "incrementLabel" | "decrementLabel">) {
   const { format, parse } = numberFormat(locale, formatOptions);
   const { committed, text, setText, commit, hidden } = useNumber({
     value,
@@ -214,7 +217,7 @@ function useNumberValue({
   };
 }
 
-function Control({ labels, startElement, readOnly, ...options }: ControlProps) {
+function Control({ startElement, incrementLabel, decrementLabel, ...options }: ControlProps) {
   const { field } = useField();
   const { rest: props, hidden, ...number } = useNumberValue(options);
   const bindings = Field.useFieldControl<HTMLInputElement, typeof props>({
@@ -227,7 +230,8 @@ function Control({ labels, startElement, readOnly, ...options }: ControlProps) {
   const blocked = bindings["aria-disabled"] === true;
   const steppers = (
     <StepButtons
-      labels={labels}
+      incrementLabel={incrementLabel}
+      decrementLabel={decrementLabel}
       controls={field?.controlId}
       disabled={(direction) => blocked || number.atBound(direction)}
       onStep={number.step}
@@ -243,7 +247,7 @@ function Control({ labels, startElement, readOnly, ...options }: ControlProps) {
         name={undefined}
         type="text"
         value={number.display}
-        readOnly={blocked || readOnly}
+        readOnly={blocked || props.readOnly}
         className={`${textFieldStyles["input"]} ${styles["input"]}`}
         onBlur={(event) => {
           props.onBlur?.(event);

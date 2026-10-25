@@ -1,4 +1,4 @@
-import { expect, fn } from "storybook/test";
+import { expect, fn, waitFor } from "storybook/test";
 
 import type { Decorator } from "@storybook/react-vite";
 
@@ -6,8 +6,6 @@ import { Button } from "@platform/ui/button";
 import { Field } from "@platform/ui/field";
 import { Form } from "@platform/ui/form";
 import { PlusIcon } from "@platform/ui/icons/plus";
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview from "#.storybook/preview.tsx";
 
@@ -45,6 +43,7 @@ const meta = preview.meta({
   args: {
     accept: "image/png,image/jpeg",
     children: <Button>Choose image</Button>,
+    clearLabel: "Clear files",
     onSelect: fn<(files: File[], details: FileTriggerSelectEventDetails) => void>(),
   },
 });
@@ -81,13 +80,26 @@ Default.test(
 );
 
 Default.test(
-  "names Clear in the UIProvider's locale",
-  { decorators: [(Story) => <UIProvider locale={roRO}>{Story()}</UIProvider>] },
+  "drops the chosen file names when its form resets",
+  { decorators: [inAForm] },
   async ({ canvas, canvasElement }) => {
     pick(canvasElement, photo);
-    await expect(canvas.getByRole("button", { name: "Golește fișierele" })).toBeVisible();
-    // @ts-expect-error -- a locale must carry the FileTrigger labels
-    void ({ tag: "fr-FR", labels: { ...roRO.labels, fileTrigger: {} } } satisfies typeof roRO);
+    await expect(canvas.getByRole("status")).toHaveTextContent("photo.png");
+    canvas.getByRole<HTMLFormElement>("form", { name: "Profile" }).reset();
+    await waitFor(() => expect(canvas.getByRole("status")).toBeEmptyDOMElement());
+    await expect(canvas.queryByRole("button", { name: "Clear files" })).toBeNull();
+  },
+);
+
+Default.test(
+  "shows the names without a Clear button when it has no clearLabel",
+  { args: { clearLabel: undefined } },
+  async ({ canvas, canvasElement }) => {
+    pick(canvasElement, photo);
+    await expect(canvas.getByRole("status")).toHaveTextContent("photo.png");
+    await expect(canvas.getAllByRole("button")).toEqual([
+      canvas.getByRole("button", { name: "Choose image" }),
+    ]);
   },
 );
 
