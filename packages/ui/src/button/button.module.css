@@ -14,7 +14,9 @@
     align-items: center;
     justify-content: center;
     gap: var(--ab-button-gap);
-    block-size: var(--ab-button-md-height);
+    min-block-size: var(--ab-button-md-height);
+    max-inline-size: 100%;
+    padding-block: var(--ab-space-inset-xs);
     padding-inline: var(--ab-button-md-padding-inline);
     border: var(--ab-button-border-width) solid var(--ab-button-secondary-border-color);
     border-radius: var(--ab-button-border-radius);
@@ -23,7 +25,7 @@
     color: var(--ab-button-secondary-text-color);
     font: var(--ab-button-font);
     text-decoration: none;
-    white-space: nowrap;
+    text-wrap: balance;
     user-select: none;
     cursor: pointer;
     touch-action: manipulation;
@@ -42,12 +44,12 @@
   }
 
   .root:where([data-size="sm"]) {
-    block-size: var(--ab-button-sm-height);
+    min-block-size: var(--ab-button-sm-height);
     padding-inline: var(--ab-button-sm-padding-inline);
   }
 
   .root:where([data-size="lg"]) {
-    block-size: var(--ab-button-lg-height);
+    min-block-size: var(--ab-button-lg-height);
     padding-inline: var(--ab-button-lg-padding-inline);
     border-radius: var(--ab-button-lg-border-radius);
     font: var(--ab-button-lg-font);
@@ -79,68 +81,52 @@
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .root:where(:not([aria-disabled="true"], [aria-busy="true"])):hover {
+    .root:where(:not([aria-disabled="true"], :disabled)):hover {
       transition-duration:
         var(--ab-motion-duration-hover-in), var(--ab-motion-duration-hover-in),
         var(--ab-motion-duration-hover-in), var(--ab-motion-duration-press);
     }
 
-    .root:where([data-variant="primary"]):where(
-        :not([aria-disabled="true"], [aria-busy="true"])
-      ):hover {
+    .root:where([data-variant="primary"]):where(:not([aria-disabled="true"], :disabled)):hover {
       background-color: var(--ab-button-primary-background-color-hovered);
     }
 
-    .root:where([data-variant="secondary"]):where(
-        :not([aria-disabled="true"], [aria-busy="true"])
-      ):hover {
+    .root:where([data-variant="secondary"]):where(:not([aria-disabled="true"], :disabled)):hover {
       border-color: var(--ab-button-secondary-border-color-hovered);
       background-color: var(--ab-button-secondary-background-color-hovered);
     }
 
-    .root:where([data-variant="tertiary"]):where(
-        :not([aria-disabled="true"], [aria-busy="true"])
-      ):hover {
+    .root:where([data-variant="tertiary"]):where(:not([aria-disabled="true"], :disabled)):hover {
       background-color: var(--ab-button-tertiary-background-color-hovered);
       color: var(--ab-button-tertiary-text-color-hovered);
     }
 
-    .root:where([data-variant="danger"]):where(
-        :not([aria-disabled="true"], [aria-busy="true"])
-      ):hover {
+    .root:where([data-variant="danger"]):where(:not([aria-disabled="true"], :disabled)):hover {
       background-color: var(--ab-button-danger-background-color-hovered);
     }
   }
 
-  .root:where(:not([aria-disabled="true"], [aria-busy="true"])):active {
+  .root:where(:not([aria-disabled="true"], :disabled)):active {
     scale: var(--ab-button-scale-pressed);
   }
 
-  .root:where([data-variant="primary"]):where(
-      :not([aria-disabled="true"], [aria-busy="true"])
-    ):active {
+  .root:where([data-variant="primary"]):where(:not([aria-disabled="true"], :disabled)):active {
     background-color: var(--ab-button-primary-background-color-pressed);
   }
 
-  .root:where([data-variant="secondary"]):where(
-      :not([aria-disabled="true"], [aria-busy="true"])
-    ):active {
+  .root:where([data-variant="secondary"]):where(:not([aria-disabled="true"], :disabled)):active {
     background-color: var(--ab-button-secondary-background-color-pressed);
   }
 
-  .root:where([data-variant="tertiary"]):where(
-      :not([aria-disabled="true"], [aria-busy="true"])
-    ):active {
+  .root:where([data-variant="tertiary"]):where(:not([aria-disabled="true"], :disabled)):active {
     background-color: var(--ab-button-tertiary-background-color-pressed);
   }
 
-  .root:where([data-variant="danger"]):where(
-      :not([aria-disabled="true"], [aria-busy="true"])
-    ):active {
+  .root:where([data-variant="danger"]):where(:not([aria-disabled="true"], :disabled)):active {
     background-color: var(--ab-button-danger-background-color-pressed);
   }
 
-  .root:where([aria-disabled="true"]) {
+  .root:where([aria-disabled="true"], :disabled):where(:not([aria-busy="true"])) {
     --ab-icon-ink: currentColor;
 
     border-color: var(--ab-button-border-color-disabled);
@@ -172,9 +158,17 @@
       border-color: ButtonText;
     }
 
-    .root:where([aria-disabled="true"]) {
+    .root:where([aria-disabled="true"], :disabled):where(:not([aria-busy="true"])) {
       border-color: GrayText;
       color: GrayText;
+    }
+
+    /* Forced colors repaint the text fill that hides the busy label, so the busy Button keeps its own system colours. */
+    .root:where([aria-busy="true"]) {
+      forced-color-adjust: none;
+      border-color: ButtonText;
+      background-color: ButtonFace;
+      color: ButtonText;
     }
   }
 }

@@ -88,11 +88,21 @@ Default.test("is announced as disabled", { args: { disabled: true } }, async ({ 
 });
 
 Default.test(
-  "is announced as busy while loading",
+  "is announced as busy and unavailable while loading",
   { args: { loading: true } },
   async ({ canvas }) => {
+    const button = canvas.getByRole("button", { name: "Save changes" });
+    await expect(button).toHaveAttribute("aria-busy", "true");
+    await expect(button).toHaveAttribute("aria-disabled", "true");
+  },
+);
+
+Default.test(
+  "keeps a consumer's aria-disabled",
+  { args: { "aria-disabled": true } },
+  async ({ canvas }) => {
     await expect(canvas.getByRole("button", { name: "Save changes" })).toHaveAttribute(
-      "aria-busy",
+      "aria-disabled",
       "true",
     );
   },
@@ -219,3 +229,50 @@ Default.test(
     ).toBe("rgb(1, 2, 3)");
   },
 );
+
+export const Loading = meta.story({
+  args: { loading: true, variant: "primary" },
+  parameters: {
+    docs: { description: { story: "Busy: a spinner covers the label, also through `asChild`." } },
+  },
+  render: (args) => (
+    <div style={{ display: "flex", gap: "0.5rem" }}>
+      <Button {...args} />
+      <Button {...args} asChild>
+        <a href="#report">Open report</a>
+      </Button>
+    </div>
+  ),
+});
+
+Loading.test("keeps its child busy and named with asChild", async ({ canvas, userEvent, args }) => {
+  const link = canvas.getByRole("link", { name: "Open report" });
+  await expect(link).toHaveAttribute("aria-busy", "true");
+  await userEvent.click(link);
+  await expect(args.onClick).not.toHaveBeenCalled();
+});
+
+export const InADisabledFieldset = meta.story({
+  parameters: {
+    docs: { description: { story: "A disabled fieldset disables the Button and its look." } },
+  },
+  decorators: [
+    (Story) => (
+      <fieldset disabled>
+        <legend>Billing</legend>
+        <Story />
+      </fieldset>
+    ),
+  ],
+});
+
+InADisabledFieldset.test("is disabled", async ({ canvas }) => {
+  await expect(canvas.getByRole("button", { name: "Save changes" })).toBeDisabled();
+});
+
+export const LongLabel = meta.story({
+  args: { children: "Save changes and notify everyone who follows this project" },
+  parameters: {
+    docs: { description: { story: "A long or translated label wraps on narrow screens." } },
+  },
+});
