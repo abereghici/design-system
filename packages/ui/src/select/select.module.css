@@ -131,7 +131,8 @@
       font: var(--ab-type-overline-sm);
       letter-spacing: var(--ab-type-overline-sm-letter-spacing);
       text-transform: var(--ab-type-overline-sm-text-transform);
-      /* The UA pads the optgroup label by 0.5em; this lines it up with the option text. */
+      /* The base appearance pads the optgroup label by 0.5em ("select optgroup legend"); this lines it
+         up with the option text: https://html.spec.whatwg.org/multipage/rendering.html */
       text-indent: calc(var(--ab-select-option-padding-inline) - 0.5em);
     }
 

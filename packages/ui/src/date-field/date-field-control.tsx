@@ -172,8 +172,7 @@ function HiddenInput({
       onInvalid={(event) => {
         validity.report(true);
 
-        // WebKit neither focuses a visually hidden invalid control nor forwards a label click as focus
-        // (https://webkit.org/b/236725, a duplicate of https://webkit.org/b/22261).
+        // The control is visually hidden, so the user lands on the first segment they can fill in.
         if (isFirstInvalid(event.currentTarget)) setTimeout(editing.focusFirstEmpty);
       }}
     />

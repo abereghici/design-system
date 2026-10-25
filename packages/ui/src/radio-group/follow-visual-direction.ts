@@ -1,6 +1,8 @@
 import type { KeyboardEvent } from "react";
 
-// WebKit doesn't swap Left and Right for native radios in RTL (Chromium and Firefox do). Inside a Toolbar the Toolbar owns the arrow keys.
+// WebKit keeps Left as the previous radio even in RTL ("Seems strange, but we'll match it"):
+// https://github.com/WebKit/WebKit/blob/main/Source/WebCore/html/RadioInputType.cpp
+// Inside a Toolbar the Toolbar owns the arrow keys.
 export function followVisualDirection(event: KeyboardEvent<HTMLElement>) {
   const step = event.key === "ArrowLeft" ? 1 : event.key === "ArrowRight" ? -1 : 0;
   const group = event.currentTarget;
