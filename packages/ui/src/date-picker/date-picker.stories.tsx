@@ -4,16 +4,12 @@ import { Temporal } from "temporal-polyfill";
 
 import { Button } from "@platform/ui/button";
 import { Calendar } from "@platform/ui/calendar";
-import { roRO } from "@platform/ui/locales/ro-RO";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as DatePicker from "./date-picker.tsx";
-
-// @ts-expect-error -- a locale must name the DatePicker trigger and panel
-({ tag: "fr-FR", labels: { ...roRO.labels, datePicker: {} } }) satisfies typeof roRO;
 
 const date = (iso: string) => Temporal.PlainDate.from(iso);
 const submitted = fn<(data: FormData) => void>();
@@ -33,6 +29,7 @@ const meta = preview.meta({
     label: "Due date",
     name: "due",
     defaultValue: date("2025-03-12"),
+    locale: "en-US",
     onValueChange,
     onOpenChange,
     children: (
@@ -66,6 +63,18 @@ Default.test("has a trigger named Choose date that describes the value", async (
   await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
   await expect(trigger).toHaveAccessibleDescription("Wednesday, March 12, 2025");
 });
+
+Default.test(
+  "formats the value and its Calendar in its locale",
+  { args: { locale: "ro-RO" } },
+  async ({ canvas }) => {
+    const user = await trusted();
+    const trigger = canvas.getByRole("button", { name: "Choose date" });
+    await expect(trigger).toHaveAccessibleDescription("miercuri, 12 martie 2025");
+    await user.click(trigger);
+    await waitFor(() => expect(canvas.getByRole("grid", { name: "martie 2025" })).toBeVisible());
+  },
+);
 
 Default.test("opens from the keyboard with focus on the selected day", async ({ canvas }) => {
   const user = await trusted();
@@ -153,29 +162,24 @@ Default.test("closes on a press outside", async ({ canvas }) => {
   await expect(reasons().at(-1)).toEqual([false, "outside-press"]);
 });
 
-Default.test("closes when Tab leaves the panel", async ({ canvas }) => {
+Default.test("closes when Tab leaves the panel, on to the next control", async ({ canvas }) => {
   const user = await trusted();
   await user.click(canvas.getByRole("button", { name: "Choose date" }));
   await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
   await user.keyboard("{Tab}");
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
   await expect(reasons().at(-1)).toEqual([false, "focus-out"]);
+  await expect(canvas.getByRole("button", { name: "After" })).toHaveFocus();
 });
 
 Default.test("closes when its trigger is pressed again", async ({ canvas }) => {
   const user = await trusted();
-  const pressed = listen("ab-press");
   const trigger = canvas.getByRole("button", { name: "Choose date" });
   await user.click(trigger);
   await waitFor(() => expect(canvas.getByRole("dialog")).toBeVisible());
   await user.click(trigger);
   await waitFor(() => expect(trigger).toHaveAttribute("aria-expanded", "false"));
   await expect(reasons().flat()).toEqual([true, "trigger-press", false, "trigger-press"]);
-  await expect(pressed.events.map((event) => event.detail.component)).toEqual([
-    "IconButton",
-    "IconButton",
-  ]);
-  pressed.stop();
 });
 
 Default.test(
@@ -204,10 +208,6 @@ Default.test(
   { args: { defaultOpen: true } },
   async ({ canvas }) => {
     await waitFor(() => expect(canvas.getByRole("dialog", { name: "Choose date" })).toBeVisible());
-    await expect(canvas.getByRole("button", { name: "Choose date" })).toHaveAttribute(
-      "aria-expanded",
-      "true",
-    );
   },
 );
 

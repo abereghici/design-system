@@ -1,13 +1,11 @@
 "use client";
 
-import { Children, isValidElement } from "react";
 import type { ComponentProps, PointerEvent } from "react";
 
 import { mergeProps } from "../slot/slot.tsx";
 
 import type { Reason, Slider } from "./slider-root.tsx";
-import { ThumbIndex, useSlider } from "./slider-root.tsx";
-import { Thumb } from "./slider-thumb.tsx";
+import { useSlider } from "./slider-root.tsx";
 import styles from "./slider.module.css";
 
 function drag(event: PointerEvent<HTMLDivElement>, slider: Slider) {
@@ -43,9 +41,8 @@ function drag(event: PointerEvent<HTMLDivElement>, slider: Slider) {
 
 export type TrackProps = ComponentProps<"div">;
 
-export function Track({ children, ...props }: TrackProps) {
+export function Track(props: TrackProps) {
   const slider = useSlider();
-  let thumb = 0;
   return (
     <div
       {...mergeProps({ className: styles["track"] }, props)}
@@ -54,14 +51,6 @@ export function Track({ children, ...props }: TrackProps) {
         event.preventDefault();
         drag(event, slider);
       }}
-    >
-      {Children.map(children, (child) =>
-        isValidElement(child) && child.type === Thumb ? (
-          <ThumbIndex value={thumb++}>{child}</ThumbIndex>
-        ) : (
-          child
-        ),
-      )}
-    </div>
+    />
   );
 }

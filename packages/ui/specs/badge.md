@@ -28,7 +28,7 @@ Container → content.
 | ---------- | ---------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
 | `variant`  | `"neutral" \| "accent" \| "danger"`      | `"neutral"`                          | Exposed as `data-variant`. The three the source tokens define.                                                         |
 | `max`      | `number`                                 | `99`                                 | Applies only when `children` is a number. A count above `max` renders `max` formatted plus the overflow label ("99+"). |
-| `locale`   | `Locale`                                 | English                              | A shipped locale (`@platform/ui/locales/*`) whose `tag` formats the count. Badge doesn't read the UIProvider's locale. |
+| `locale`   | `Intl.LocalesArgument`                   | the runtime's default                | Passed to `Intl.NumberFormat` for the count and `max`. Pass the same one on the server and in the browser. |
 | `labels`   | `{ overflow?: (max: string) => string }` | `{ overflow: (max) => \`${max}+\` }` | The only built-in string. `max` arrives already formatted. A prop only: it isn't in the UIProvider's locale objects.   |
 | `children` | `number \| string`                       |                                      | A number is formatted with `Intl.NumberFormat` in `locale`.                                                            |
 | …native    | `ComponentProps<"span">`                 |                                      | `ref`, `className` and every native attribute pass through.                                                            |
@@ -52,8 +52,8 @@ Badge is not interactive: no hover, press, focus or disabled state.
 
 ## Behaviour
 
-- Number formatting: `new Intl.NumberFormat(locale?.tag ?? "en").format(n)`. MDN: "The `Intl.NumberFormat` object enables language-sensitive number formatting." (Baseline widely available, "since September 2017"). So 1 280 in `de` reads "1.280" and `max` 1000 overflows to "1.000+".
-- **Locale on the server.** Badge is a Server Component with no client code (spec #1 user story 4). A Server Component can't read the UIProvider's locale context or `document.documentElement.lang`, so Badge formats with its own `locale` prop (the same locale object the UIProvider takes) and falls back to `"en"`. The output is deterministic, so the server and client renders never differ. Progress and Meter work the same way.
+- Number formatting: `new Intl.NumberFormat(locale).format(n)`, built only for a number child. MDN: "The `Intl.NumberFormat` object enables language-sensitive number formatting." (Baseline widely available, "since September 2017"). So 1 280 in `de` reads "1.280" and `max` 1000 overflows to "1.000+".
+- **Locale on the server.** Badge is a Server Component with no client code (spec #1 user story 4). It formats with its own `locale` prop, a BCP 47 tag; without it `Intl` uses the runtime's default, as in Base UI, so a server-rendered app passes the same `locale` on the server and in the browser. Progress and Meter work the same way.
 - Negative numbers and non-integers are rendered as formatted; `max` caps only from above.
 - Content stays short: one to four characters. A word belongs in a Tag.
 

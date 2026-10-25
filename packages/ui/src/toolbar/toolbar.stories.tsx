@@ -29,10 +29,12 @@ const controls = (
   </>
 );
 
+const toolbarRef = fn<(toolbar: HTMLDivElement | null) => void>();
+
 function Growing() {
   const [extra, setExtra] = useState(false);
   return (
-    <Toolbar aria-label="Report">
+    <Toolbar aria-label="Report" ref={toolbarRef}>
       <IconButton
         aria-label="Copy link"
         onClick={() => {
@@ -165,6 +167,16 @@ Default.test(
     await userEvent.tab({ shift: true });
     await userEvent.tab();
     await expect(canvas.getByRole("button", { name: "Download" })).toHaveFocus();
+  },
+);
+
+Default.test(
+  "hands a callback ref its element once across re-renders",
+  { render: Growing },
+  async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: "Copy link" }));
+    await canvas.findByRole("button", { name: "Download" });
+    await expect(toolbarRef.mock.calls).toEqual([[canvas.getByRole("toolbar")]]);
   },
 );
 

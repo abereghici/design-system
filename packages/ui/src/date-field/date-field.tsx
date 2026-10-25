@@ -4,10 +4,12 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 
 import * as Field from "../field/field.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { Control } from "./date-field-control.tsx";
 import type { ControlProps, DateFieldOptions } from "./date-field-control.tsx";
 import type { Validity } from "./date-field-validity.ts";
+import styles from "./date-field.module.css";
 
 export type { DateFieldChangeEventDetails } from "./date-field-editing.ts";
 
@@ -64,6 +66,7 @@ export function DateFieldFrame({
   disabled,
   validate,
   labels,
+  locale,
   isDateUnavailable,
   onFormReset,
   end,
@@ -74,8 +77,7 @@ export function DateFieldFrame({
   const options = { value, defaultValue, onValueChange, min, max, name, form, required };
   return (
     <Field.Root
-      className={className}
-      style={style}
+      {...mergeProps({ className: styles["root"] }, { className, style })}
       data-size={size}
       name={name}
       invalid={invalid ?? (validity.invalid || undefined)}
@@ -84,7 +86,7 @@ export function DateFieldFrame({
       {label !== undefined && <Field.Label>{label}</Field.Label>}
       <Control
         {...props}
-        options={{ ...options, disabled, validate, labels, isDateUnavailable, onFormReset }}
+        options={{ ...options, disabled, validate, labels, locale, isDateUnavailable, onFormReset }}
         onValidity={setValidity}
         end={end}
       />

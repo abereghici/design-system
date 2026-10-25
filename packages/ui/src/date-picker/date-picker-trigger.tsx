@@ -6,7 +6,6 @@ import { dateFormats } from "../date/date.ts";
 import type { Temporal } from "../date/date.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { CalendarIcon } from "../icon/icons/calendar.tsx";
-import { useLocale } from "../ui-provider/locale.tsx";
 
 import type { Panel } from "./date-picker-panel.tsx";
 import styles from "./date-picker.module.css";
@@ -14,12 +13,12 @@ import styles from "./date-picker.module.css";
 interface TriggerProps {
   readonly panel: Omit<Panel, "picker">;
   readonly value: Temporal.PlainDate | null;
+  readonly locale: Intl.LocalesArgument;
   readonly disabled: boolean;
 }
 
-export function Trigger({ panel, value, disabled }: TriggerProps) {
+export function Trigger({ panel, value, locale, disabled }: TriggerProps) {
   const { floating, name, trigger } = panel;
-  const locale = useLocale();
   const descriptionId = useId();
   return (
     <>
@@ -38,7 +37,7 @@ export function Trigger({ panel, value, disabled }: TriggerProps) {
       </IconButton>
       {value !== null && (
         <span id={descriptionId} hidden>
-          {dateFormats(locale.tag).full(value)}
+          {dateFormats(locale).full(value)}
         </span>
       )}
     </>

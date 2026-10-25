@@ -4,7 +4,7 @@ import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { MoreIcon } from "../icon/icons/more.tsx";
 import { labelsOf } from "../ui-provider/labels.ts";
-import type { Labels, Locale } from "../ui-provider/locale.tsx";
+import type { Labels } from "../ui-provider/locale.tsx";
 import { pagination as paginationLabels } from "../ui-provider/locales/en-US/pagination.ts";
 
 import styles from "./pagination.module.css";
@@ -24,10 +24,10 @@ export interface PaginationProps extends ComponentProps<"nav"> {
   /** Your router's link component, used for every link so navigation stays client-side. */
   linkComponent?: ElementType;
   /**
-   * A shipped locale (`@platform/ui/locales/*`). This renders on the server, where the
-   * UIProvider's `locale` can't reach, so pass it for any language other than en-US.
+   * The language page numbers are formatted in, such as "ro-RO". Pass the same one on the server and in
+   * the browser; without it, the runtime's default language is used.
    */
-  locale?: Locale;
+  locale?: Intl.LocalesArgument;
   /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: PaginationLabels;
 }
@@ -83,12 +83,8 @@ export function Pagination({
   labels,
   ...props
 }: PaginationProps) {
-  const text = labelsOf(
-    { ...paginationLabels, page: pageLabel },
-    locale?.labels.pagination,
-    labels,
-  );
-  const formatter = new Intl.NumberFormat(locale?.tag ?? "en-US");
+  const text = labelsOf({ ...paginationLabels, page: pageLabel }, undefined, labels);
+  const formatter = new Intl.NumberFormat(locale);
   const url = (target: number) => (target < 1 || target > count ? undefined : getPageUrl(target));
   return (
     <nav aria-label={text.root} {...props}>

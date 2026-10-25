@@ -18,7 +18,7 @@ import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { mergeProps } from "../slot/slot.tsx";
-import { useLabels, useLocale } from "../ui-provider/locale.tsx";
+import { useLabels } from "../ui-provider/locale.tsx";
 import type { Labels } from "../ui-provider/locale.tsx";
 import { calendar as calendarLabels } from "../ui-provider/locales/en-US/calendar.ts";
 
@@ -29,7 +29,7 @@ export type CalendarChangeEventDetails = Details<"day-press">;
 
 export interface CalendarProps extends Omit<
   ComponentProps<"fieldset">,
-  "defaultValue" | "onChange" | "role" | "children"
+  "defaultValue" | "onChange" | "role" | "children" | "disabled" | "name" | "form"
 > {
   /** The chosen date, when your state holds it; `null` is no date. */
   value?: Temporal.PlainDate | null | undefined;
@@ -45,6 +45,12 @@ export interface CalendarProps extends Omit<
   max?: Temporal.PlainDate | undefined;
   /** Days that can't be chosen, such as weekends or booked dates. They stay readable. */
   isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
+  /**
+   * The language of the month, weekday and day names, and the first day of the week, such as
+   * "ro-RO". Pass the same one on the server and in the browser; without it, the runtime's default
+   * language is used. Inside a DatePicker, the DatePicker's `locale` is used.
+   */
+  locale?: Intl.LocalesArgument;
   /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: Partial<Labels["calendar"]> | undefined;
 }
@@ -64,7 +70,8 @@ const clamp = (date: Temporal.PlainDate, min?: Temporal.PlainDate, max?: Tempora
 };
 
 function useToday() {
-  // The server renders UTC's date; the browser corrects it to its own time zone after hydration.
+  // The server renders UTC's date; the browser corrects it to its own time zone after hydration:
+  // https://react.dev/reference/react/useSyncExternalStore#adding-support-for-server-rendering
   const iso = useSyncExternalStore(
     onFocusIn,
     () => Temporal.Now.plainDateISO().toString(),
@@ -81,7 +88,8 @@ function useCalendar(
   const [uncontrolled, setUncontrolled] = useState(defaultValue);
   const selected = value === undefined ? uncontrolled : value;
   const start = clamp(selected ?? today, min, max);
-  const [focused, setFocused] = useState(start);
+  const [userFocus, setFocused] = useState<Temporal.PlainDate | null>(null);
+  const focused = userFocus === null ? start : clamp(userFocus, min, max);
   const outside = (date: Temporal.PlainDate) => clamp(date, min, max) !== date;
   const unavailable = (date: Temporal.PlainDate) =>
     outside(date) || isDateUnavailable?.(date) === true;
@@ -212,6 +220,7 @@ function useGrid(
  */
 export function Calendar({
   labels,
+  locale,
   value,
   defaultValue,
   onValueChange,
@@ -220,9 +229,8 @@ export function Calendar({
   isDateUnavailable,
   ...rest
 }: CalendarProps) {
-  const locale = useLocale();
-  const formats = dateFormats(locale.tag);
   const picker = use(DatePickerContext);
+  const formats = dateFormats(picker === null ? locale : picker.locale);
   const limits = picker ?? { value, min, max, isDateUnavailable };
   const calendar = useCalendar({ defaultValue, onValueChange, ...limits }, picker);
   const { focused, setFocused, outside } = calendar;

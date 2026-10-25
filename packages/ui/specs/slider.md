@@ -20,8 +20,8 @@ import { Field } from "@platform/ui/field";
 <Slider.Root name="price" defaultValue={[20, 80]} min={0} max={200} step={5} format={{ style: "currency", currency: "EUR" }}>
   <Slider.Track>
     <Slider.Range />
-    <Slider.Thumb aria-label="Minimum price" />
-    <Slider.Thumb aria-label="Maximum price" />
+    <Slider.Thumb index={0} aria-label="Minimum price" />
+    <Slider.Thumb index={1} aria-label="Maximum price" />
   </Slider.Track>
   <Slider.Value />
 </Slider.Root>
@@ -58,7 +58,7 @@ Root → Track → Range → Thumb(s); Value (optional).
 | `disabled`              | `boolean`                                                                 | `false`     | `aria-disabled="true"` on every input; focusable; no change.                                                                    |
 | …native                 | `ComponentProps<"div">`                                                   |             |                                                                                                                                 |
 
-`Slider.Track`, `Slider.Range`: `ComponentProps<"div">`. `Slider.Thumb`: `ComponentProps<"input">` (the hidden range input) minus `type`, `value`, `min`, `max`, `step`; `className`/`style` go on the visual thumb; `aria-label` / `aria-labelledby` name it. `Slider.Value`: `ComponentProps<"output">`; it shows the formatted values, joined by an en dash for a range.
+`Slider.Track`, `Slider.Range`: `ComponentProps<"div">`. `Slider.Thumb`: `ComponentProps<"input">` (the hidden range input) minus `type`, `value`, `min`, `max`, `step`, plus `index` (default `0`), the entry of a range value it sets (Base UI Slider.Thumb `index`: "The index of the thumb which corresponds to the index of its value in the `value` or `defaultValue` array"; counting Thumbs among the Track children missed wrapped ones); `className`/`style` go on the visual thumb; `aria-label` / `aria-labelledby` name it. `Slider.Value`: `ComponentProps<"output">`; it shows the formatted values, joined by an en dash for a range.
 
 Names, checked against the reference libraries:
 
@@ -66,7 +66,7 @@ Names, checked against the reference libraries:
 - **`Slider.Value` as `<output>`**: Base UI "Value `<output>`"; React Aria `SliderOutput` (an `HTMLOutputElement`); Ark `Slider.ValueText`. Base UI's render-function `children` is left out until a product needs custom value text.
 - **`value: number | number[]`**: Base UI "`value` / `defaultValue` `number | number[]`"; MUI `Array<number> | number`; React Aria number or number[]. Radix and Ark always take arrays. Three to two, and one thumb is the common case.
 - **`onValueChange` / `onValueCommitted`**: Base UI `onValueChange`, `onValueCommitted` ("Does not fire if the value did not change"); Radix `onValueCommit`, Ark `onValueChangeEnd`, React Aria `onChangeEnd`. Base UI's pair, as spec #1 follows its `eventDetails`.
-- **`largeStep`, `minStepsBetweenValues`, `format`, `locale`**: Base UI "`largeStep` … `10`, …when using Page Up/Page Down or Shift + Arrow Up/Arrow Down.", `minStepsBetweenValues`, `format` (`Intl.NumberFormatOptions`), `locale`. Radix and Ark say `minStepsBetweenThumbs`; Base UI's name is kept with its siblings. Base UI's `locale` prop is not taken: as every client component, Slider formats in the UIProvider's locale (`useLocale()`, then the document `lang`).
+- **`largeStep`, `minStepsBetweenValues`, `format`, `locale`**: Base UI "`largeStep` … `10`, …when using Page Up/Page Down or Shift + Arrow Up/Arrow Down.", `minStepsBetweenValues`, `format` (`Intl.NumberFormatOptions`), `locale`. Radix and Ark say `minStepsBetweenThumbs`; Base UI's name is kept with its siblings. Base UI's `locale` prop is taken too: the value is formatted in it, else in the runtime's default.
 - **A native `<input type="range">` inside each thumb**: Base UI "Thumb: Renders a `<div>` element and a nested `<input type="range">`."; Radix "By default, `Slider.Thumb` renders a visually hidden `input` for form submission."; React Aria SliderThumb `inputRef` "A ref for the HTML input element."; MUI and Mantine render a hidden input for `name`.
 - **Not built: vertical `orientation`, marks/ticks, a value tooltip, `inverted`.** Radix, Base UI and Ark `orientation`; MUI `marks`, `valueLabelDisplay`; Mantine `marks`, `label`; Radix `inverted`. Deferred (YAGNI): no product or source guide needs them yet. Native `list`/`<datalist>` ticks are not used (webstatus.dev `datalist`: limited).
 

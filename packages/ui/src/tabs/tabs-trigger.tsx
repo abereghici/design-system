@@ -15,7 +15,7 @@ function moveSelection(event: KeyboardEvent<HTMLButtonElement>) {
   const list = listOf(event.currentTarget);
   if (list === null) return;
   delete list.dataset["pointer"];
-  const tabs = [...list.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+  const tabs = [...list.querySelectorAll<HTMLButtonElement>('[role="tab"]:enabled')];
   const from = tabs.indexOf(event.currentTarget);
   const step = (steps[event.key] ?? 0) * (list.matches(":dir(rtl)") ? -1 : 1);
   const next =

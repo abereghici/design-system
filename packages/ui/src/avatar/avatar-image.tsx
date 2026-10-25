@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useEffectEvent, useState } from "react";
 import type { ComponentProps } from "react";
 
 import { mergeProps } from "../slot/slot.tsx";
@@ -15,24 +15,29 @@ export interface ImageProps extends ComponentProps<"img"> {
   onLoadingStatusChange?: (status: LoadingStatus) => void;
 }
 
-export function Image({ src, alt, onLoadingStatusChange, ...props }: ImageProps) {
+function useLoadingStatus(src: ImageProps["src"], onChange: ImageProps["onLoadingStatusChange"]) {
   const [status, setStatus] = useState<LoadingStatus>("loading");
   const [currentSrc, setCurrentSrc] = useState(src);
   if (src !== currentSrc) {
     setCurrentSrc(src);
     setStatus("loading");
   }
+  const report = useEffectEvent((next: LoadingStatus) => onChange?.(next));
+  useEffect(() => {
+    report(status);
+  }, [status]);
+  return [status, setStatus] as const;
+}
 
-  function settle(next: LoadingStatus) {
-    if (next === status) return;
-    setStatus(next);
-    onLoadingStatusChange?.(next);
-  }
-
-  function attach(image: HTMLImageElement | null) {
-    // The image may have settled before hydration attached the load and error listeners.
-    if (image?.complete === true) settle(image.naturalWidth > 0 ? "loaded" : "error");
-  }
+export function Image({ src, alt, onLoadingStatusChange, ...props }: ImageProps) {
+  const [status, setStatus] = useLoadingStatus(src, onLoadingStatusChange);
+  const attach = useCallback(
+    (image: HTMLImageElement | null) => {
+      // The image may have settled before hydration attached the load and error listeners.
+      if (image?.complete === true) setStatus(image.naturalWidth > 0 ? "loaded" : "error");
+    },
+    [setStatus],
+  );
 
   return (
     <img
@@ -41,10 +46,10 @@ export function Image({ src, alt, onLoadingStatusChange, ...props }: ImageProps)
           ref: attach,
           className: styles["image"],
           onLoad: () => {
-            settle("loaded");
+            setStatus("loaded");
           },
           onError: () => {
-            settle("error");
+            setStatus("error");
           },
         },
         props,

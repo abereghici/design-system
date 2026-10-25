@@ -3,7 +3,6 @@ import { expect, fn } from "storybook/test";
 import type { Decorator } from "@storybook/react-vite";
 
 import { Button } from "@platform/ui/button";
-import { UIProvider } from "@platform/ui/ui-provider";
 
 import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
@@ -41,6 +40,7 @@ const meta = preview.meta({
     defaultValue: 5,
     min: 1,
     max: 50,
+    locale: "en-US",
     onValueChange: fn(),
   },
 });
@@ -169,21 +169,21 @@ Default.test(
 );
 
 Default.test(
-  "formats and parses in the UIProvider's locale",
+  "formats and parses in its locale",
   {
-    args: { label: "Preț", name: "price", defaultValue: 1234.5, min: 0, max: 1e6, step: 0.1 },
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
+    args: {
+      label: "Preț",
+      name: "price",
+      defaultValue: 1234.5,
+      min: 0,
+      max: 1e6,
+      step: 0.1,
+      locale: "ro-RO",
+    },
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Preț" });
     await expect(input).toHaveValue("1.234,5");
-    await expect(canvas.getByRole("button", { name: "Mărește" })).toBeVisible();
     await userEvent.clear(input);
     await userEvent.type(input, "2.000,7{Enter}");
     await expect(input).toHaveValue("2.000,7");

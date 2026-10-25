@@ -9,7 +9,7 @@ export type FormControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaEle
 
 export type Validate = (value: string, formData: FormData) => string | null | undefined;
 
-export interface FieldState {
+interface FieldState {
   readonly controlId: string;
   readonly labelId: string;
   readonly descriptionId: string;

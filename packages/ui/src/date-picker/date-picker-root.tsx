@@ -74,10 +74,11 @@ function useValue({ value, defaultValue = null, onValueChange }: RootProps) {
 function pickerOf(
   floating: Floating,
   date: ReturnType<typeof useValue>,
-  { min, max, isDateUnavailable }: RootProps,
+  { min, max, isDateUnavailable, locale }: RootProps,
 ): DatePickerContextValue {
   return {
     open: floating.open,
+    locale,
     value: date.current,
     min,
     max,
@@ -109,8 +110,7 @@ export function Root(props: RootProps) {
   const name = useLabels("datePicker", datePickerLabels, labels).chooseDate;
   const date = useValue(props);
   const trigger = useRef<HTMLButtonElement>(null);
-  const fieldBox = () => trigger.current?.closest("fieldset") ?? null;
-  const floating = useFloating("Popover", { open, defaultOpen, onOpenChange }, fieldBox);
+  const floating = useFloating("Popover", { open, defaultOpen, onOpenChange });
   const panel = { floating, name, trigger };
   return (
     <DateFieldFrame
@@ -124,7 +124,14 @@ export function Root(props: RootProps) {
       isDateUnavailable={isDateUnavailable}
       labels={labels}
       onFormReset={date.reset}
-      end={<Trigger panel={panel} value={date.current} disabled={disabled === true} />}
+      end={
+        <Trigger
+          panel={panel}
+          value={date.current}
+          locale={field.locale}
+          disabled={disabled === true}
+        />
+      }
     >
       <PanelContext value={{ ...panel, picker: pickerOf(floating, date, props) }}>
         {children}

@@ -8,7 +8,6 @@ import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId } from "../floating/floating.ts";
 import { filterOptions, enabled, navigate, reveal } from "../listbox/listbox.tsx";
 import { mergeProps } from "../slot/slot.tsx";
-import { useLocale } from "../ui-provider/locale.tsx";
 
 import styles from "./command.module.css";
 
@@ -68,7 +67,7 @@ function keyDown(
 function useFilter(
   list: RefObject<HTMLDivElement | null>,
   query: string,
-  locale: string | null,
+  locale: Intl.LocalesArgument | null,
   setHighlighted: Dispatch<SetStateAction<string | null>>,
 ) {
   const [empty, setEmpty] = useState(false);
@@ -117,6 +116,11 @@ export interface RootProps extends ComponentProps<"div"> {
    * results.
    */
   filter?: null | undefined;
+  /**
+   * The language that matching typed text follows, such as "ro-RO"; without it, the runtime's
+   * default language is used.
+   */
+  locale?: Intl.LocalesArgument;
 }
 
 /**
@@ -127,6 +131,7 @@ export function Root({
   defaultInputValue = "",
   onInputValueChange,
   filter: filtering,
+  locale,
   children,
   ...props
 }: RootProps) {
@@ -134,8 +139,7 @@ export function Root({
   const query = inputValue ?? uncontrolled;
   const [highlighted, setHighlighted] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
-  const { tag } = useLocale();
-  const empty = useFilter(list, query, filtering === null ? null : tag, setHighlighted);
+  const empty = useFilter(list, query, filtering === null ? null : locale, setHighlighted);
   const context: CommandContext = {
     query,
     change: (next, event) => {

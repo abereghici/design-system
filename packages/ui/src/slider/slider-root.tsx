@@ -6,7 +6,6 @@ import type { ComponentProps } from "react";
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { mergeProps } from "../slot/slot.tsx";
-import { useLocale } from "../ui-provider/locale.tsx";
 
 import styles from "./slider.module.css";
 
@@ -35,6 +34,11 @@ export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
   minStepsBetweenValues?: number;
   /** How the value reads, shown and spoken, such as a currency or a percent. */
   format?: Intl.NumberFormatOptions;
+  /**
+   * The language the value is formatted in, such as "ro-RO". Pass the same one on the server and
+   * in the browser; without it, the runtime's default language is used.
+   */
+  locale?: Intl.LocalesArgument;
   /** The form field name; a range submits one entry per thumb, in order. */
   name?: string;
   /** Blocks changes but keeps it focusable and announced; say nearby why it is unavailable. */
@@ -48,7 +52,14 @@ function snap(raw: number, min: number, step: number) {
 
 type Options = {
   readonly [
-    Key in "value" | "defaultValue" | "onValueChange" | "onValueCommitted" | "format" | "name"
+    Key in
+      | "value"
+      | "defaultValue"
+      | "onValueChange"
+      | "onValueCommitted"
+      | "format"
+      | "locale"
+      | "name"
   ]: RootProps[Key];
 };
 
@@ -60,7 +71,7 @@ function useSliderState(options: Options, scale: Scale) {
   const { min, max, step, gap } = scale;
   const [uncontrolled, setUncontrolled] = useState(options.defaultValue ?? min);
   const [dragging, setDragging] = useState<number | null>(null);
-  const formatter = new Intl.NumberFormat(useLocale().tag, options.format);
+  const formatter = new Intl.NumberFormat(options.locale, options.format);
   const current = options.value ?? uncontrolled;
   const values = typeof current === "number" ? [current] : current;
   const output = (next: readonly number[]) =>
@@ -99,8 +110,6 @@ export type Slider = ReturnType<typeof useSliderState>;
 
 const SliderContext = createContext<Slider | null>(null);
 
-export const ThumbIndex = createContext(0);
-
 export function useSlider() {
   const slider = use(SliderContext);
   if (slider === null) throw new Error("Slider parts must be inside Slider.Root");
@@ -119,12 +128,13 @@ export function Root({
   largeStep = 10 * step,
   minStepsBetweenValues = 0,
   format,
+  locale,
   name,
   disabled = false,
   ...props
 }: RootProps) {
   const slider = useSliderState(
-    { value, defaultValue, onValueChange, onValueCommitted, format, name },
+    { value, defaultValue, onValueChange, onValueCommitted, format, locale, name },
     { min, max, step, largeStep, gap: minStepsBetweenValues * step, disabled },
   );
   return (

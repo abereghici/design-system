@@ -18,12 +18,21 @@ const price = (
   <>
     <Slider.Track>
       <Slider.Range />
-      <Slider.Thumb aria-label="Minimum price" />
-      <Slider.Thumb aria-label="Maximum price" />
+      <Slider.Thumb index={0} aria-label="Minimum price" />
+      <Slider.Thumb index={1} aria-label="Maximum price" />
     </Slider.Track>
     <Slider.Value />
   </>
 );
+
+function PriceThumbs() {
+  return (
+    <>
+      <Slider.Thumb index={0} aria-label="Minimum price" />
+      <Slider.Thumb index={1} aria-label="Maximum price" />
+    </>
+  );
+}
 
 const meta = preview.meta({
   title: "Components/Slider",
@@ -32,6 +41,7 @@ const meta = preview.meta({
   args: {
     defaultValue: 40,
     children: volume,
+    locale: "en-US",
     onValueChange: fn<(value: number | number[], details: Slider.ChangeEventDetails) => void>(),
     onValueCommitted: fn<(value: number | number[], details: Slider.CommitEventDetails) => void>(),
   },
@@ -173,6 +183,17 @@ Default.test(
 );
 
 Default.test(
+  "formats its value in its locale",
+  { args: { locale: "ro-RO", defaultValue: 0.5, max: 1, step: 0.1, format: { style: "percent" } } },
+  async ({ canvas }) => {
+    await expect(canvas.getByRole("slider", { name: "Volume" })).toHaveAttribute(
+      "aria-valuetext",
+      "50\u00A0%",
+    );
+  },
+);
+
+Default.test(
   "gives a range two named thumbs that can't cross, formatted in the value",
   {
     args: {
@@ -194,6 +215,24 @@ Default.test(
     await expect(args.onValueChange).toHaveBeenLastCalledWith([70, 80], expect.anything());
     await userEvent.tab();
     await userEvent.keyboard("{Home}");
+    await expect(canvas.getByRole("slider", { name: "Maximum price" })).toHaveValue("80");
+  },
+);
+
+Default.test(
+  "keeps each thumb's value when the thumbs are wrapped in a component",
+  {
+    args: {
+      defaultValue: [20, 80],
+      children: (
+        <Slider.Track>
+          <PriceThumbs />
+        </Slider.Track>
+      ),
+    },
+  },
+  async ({ canvas }) => {
+    await expect(canvas.getByRole("slider", { name: "Minimum price" })).toHaveValue("20");
     await expect(canvas.getByRole("slider", { name: "Maximum price" })).toHaveValue("80");
   },
 );

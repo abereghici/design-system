@@ -97,6 +97,35 @@ Default.test(
 );
 
 Default.test(
+  "skips a disabled tab with the arrow keys",
+  {
+    args: {
+      children: (
+        <>
+          <Tabs.List aria-label="Project">
+            <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+            <Tabs.Trigger value="activity" disabled>
+              Activity
+            </Tabs.Trigger>
+            <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="overview">Selection glides on a spring.</Tabs.Content>
+          <Tabs.Content value="activity">Three new comments.</Tabs.Content>
+          <Tabs.Content value="settings">Project settings.</Tabs.Content>
+        </>
+      ),
+    },
+  },
+  async ({ canvas, userEvent }) => {
+    await userEvent.tab();
+    await userEvent.keyboard("{ArrowRight}");
+    await expect(canvas.getByRole("tab", { name: "Settings" })).toHaveFocus();
+    await userEvent.keyboard("{ArrowLeft}");
+    await expect(canvas.getByRole("tab", { name: "Overview" })).toHaveFocus();
+  },
+);
+
+Default.test(
   "follows the visual direction with Left and Right in RTL",
   { globals: { dir: "rtl" } },
   async ({ canvas, userEvent }) => {

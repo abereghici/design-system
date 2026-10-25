@@ -65,6 +65,18 @@ Default.test("puts every trigger in the tab sequence", async ({ canvas, userEven
 });
 
 Default.test(
+  "opens only the first of several values without multiple",
+  { args: { value: ["tokens", "browsers"] } },
+  async ({ args, canvas, userEvent }) => {
+    await expect(canvas.getByText(tokens)).toBeVisible();
+    await expect(canvas.getByText(browsers)).not.toBeVisible();
+    await userEvent.click(canvas.getByText("How are tokens versioned?"));
+    await expect(args.onValueChange).toHaveBeenLastCalledWith([], expect.anything());
+    await expect(canvas.getByText(browsers)).not.toBeVisible();
+  },
+);
+
+Default.test(
   "keeps several items open when multiple",
   { args: { multiple: true } },
   async ({ canvas, userEvent, args }) => {

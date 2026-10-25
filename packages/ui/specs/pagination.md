@@ -5,7 +5,6 @@ Moves between the pages of a long, ordered result set (invoices, search results,
 ```tsx
 import { Pagination } from "@platform/ui/pagination";
 import NextLink from "next/link";
-import { roRO } from "@platform/ui/locales/ro-RO";
 
 <Pagination
   page={page}
@@ -18,7 +17,7 @@ import { roRO } from "@platform/ui/locales/ro-RO";
   page={2}
   count={40}
   getPageUrl={(page) => `?page=${page}`}
-  locale={roRO}
+  locale="ro-RO"
   labels={{ page: (page) => `Pagina ${page}` }}
 />
 ```
@@ -43,7 +42,7 @@ Root (nav → list) → Previous → page items and ellipses → Next.
 | `count`         | `number`                                                                               | required            | The total number of pages, an integer ≥ 1. Pages, not items.                                                                                                  |
 | `getPageUrl`    | `(page: number) => string`                                                             | required            | The `href` of each page item and of Previous / Next.                                                                                                          |
 | `linkComponent` | `ElementType`                                                                          | `"a"`               | Renders every enabled item (pages, Previous, Next) with this component, given `href`, `aria-label`, `aria-current`, `className` and children (a router link). |
-| `locale`        | `Locale`                                                                               |                     | A shipped locale object: its `tag` formats the numbers (`"en"` without it) and its `labels.pagination` translate the names (Q15-2, Badge precedent).          |
+| `locale`        | `Intl.LocalesArgument`                                                                 |                     | Passed to `Intl.NumberFormat` for the page numbers; the runtime's default without it. Pass the same one on the server and in the browser.                      |
 | `labels`        | `{ root?: string; previous?: string; next?: string; page?: (page: string) => string }` | see Built-in labels | Each key overrides the locale's, then the English default. `page` receives the formatted number and lives only here (locale labels are strings).              |
 | …native         | `ComponentProps<"nav">`                                                                |                     | `ref`, `className`, `aria-labelledby` and native attributes go on the `<nav>`.                                                                                |
 
@@ -80,7 +79,7 @@ Names, checked against the reference libraries:
   - Examples with `count = 10`: page 1 → `1 2 3 4 5 … 10`; page 5 → `1 … 4 5 6 … 10`; page 10 → `1 … 6 7 8 9 10`. With `count ≤ 7` every page shows; `count = 1` → `1`. An ellipsis therefore always stands for at least two pages (MUI fills a one-page gap with the page).
 - **Previous / Next** link to `getPageUrl(page − 1)` / `getPageUrl(page + 1)` through IconButton `asChild`. On the first (last) page, Previous (Next) has no target, so it renders a plain IconButton `<button>` with `aria-disabled="true"`: focusable (spec #1: "disabled controls stay focusable"), announced as dimmed, and its click is blocked by IconButton. A link without `href` (ARIA in HTML: "remove the href attribute", "`<a role=link aria-disabled=true>`") was the draft; lint rejects both `<a role="link">` (redundant role, missing `href`) and `<span role="link">` (prefer the tag), and MUI renders its disabled Previous / Next as disabled buttons too, so the button is the lint-clean equivalent (Q35-1).
 - **The current page is a link** to its own URL with `aria-current="page"`, as shadcn's `PaginationLink isActive` and the APG breadcrumb example. Following it reloads the same page (harmless; judgement call).
-- **Numbers:** `new Intl.NumberFormat(locale ?? "en").format(n)` for the visible text and `labels.page`. Server Component: it cannot read LocaleProvider or `document.documentElement.lang`, so `locale` is a prop with an `"en"` fallback (Q15-2). The digits are tabular (`pagination-item-font`), so the row's width changes only with the digit count.
+- **Numbers:** `new Intl.NumberFormat(locale).format(n)` for the visible text and `labels.page`, in the runtime's default without `locale` (Base UI). The digits are tabular (`pagination-item-font`), so the row's width changes only with the digit count.
 - **Server Component.** No state and no handlers, no `'use client'`. Passing `getPageUrl` (a function) and `linkComponent` (a client component reference) works when the caller is a Server Component, because props between Server Components are not serialised (inference; tested in `apps/ui-next-fixture`). Called from a client component, Pagination renders on the client like any component.
 - **One row.** The list does not wrap; with 7 slots plus Previous / Next at md size it needs about 9 × 32 px + gaps (≈ 320 px at fine pointers, more on coarse pointers where `size-control-md` grows to 44). At w320 with coarse pointers it can overflow; the Root sets `overflow-x: auto` on the list as the fallback (inference: checked in the w320 screenshot variant; a compact layout is left out under YAGNI).
 

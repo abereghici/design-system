@@ -5,7 +5,6 @@ import type { Decorator } from "@storybook/react-vite";
 
 import { Button } from "@platform/ui/button";
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview from "#.storybook/preview.tsx";
 import { confirmComposition } from "#.storybook/test/trusted.ts";
@@ -41,6 +40,7 @@ const meta = preview.meta({
   args: {
     label: "Date of birth",
     name: "birthDate",
+    locale: "en-US",
     onValueChange:
       fn<(value: Temporal.PlainDate | null, details: DateFieldChangeEventDetails) => void>(),
   },
@@ -65,25 +65,13 @@ Default.test(
 );
 
 Default.test(
-  "orders the segments for ro-RO",
-  {
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
+  "orders and names the segments for ro-RO",
+  { args: { locale: "ro-RO" } },
   async ({ canvas }) => {
     const names = canvas
       .getAllByRole("spinbutton")
       .map((segment) => segment.getAttribute("aria-label"));
     await expect(names).toEqual(["zi", "lună", "an"]);
-    await expect(canvas.getByRole("spinbutton", { name: "zi" })).toHaveAttribute(
-      "placeholder",
-      "zz",
-    );
   },
 );
 
