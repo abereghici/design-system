@@ -2,7 +2,7 @@ import { expect } from "storybook/test";
 
 import type { Decorator } from "@storybook/react-vite";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import { TextField } from "../text-field/text-field.tsx";
 
@@ -17,6 +17,7 @@ const inAForm: Decorator = (Story) => (
 const meta = preview.meta({
   title: "Components/Fieldset",
   component: Fieldset.Root,
+  subcomponents: partsOf(Fieldset),
   args: {
     children: (
       <>

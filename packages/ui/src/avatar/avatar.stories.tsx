@@ -1,6 +1,6 @@
 import { expect, fn, waitFor } from "storybook/test";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Avatar from "./avatar.tsx";
 
@@ -24,6 +24,7 @@ const person = (src: string) => (
 const meta = preview.meta({
   title: "Components/Avatar",
   component: Avatar.Root,
+  subcomponents: partsOf(Avatar),
   args: { children: person(photo) },
 });
 

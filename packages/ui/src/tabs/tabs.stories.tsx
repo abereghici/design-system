@@ -2,7 +2,7 @@ import { expect, fn } from "storybook/test";
 
 import { Badge } from "@platform/ui/badge";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
 import { Tabs } from "./index.ts";
@@ -25,6 +25,7 @@ const sections = (
 const meta = preview.meta({
   title: "Components/Tabs",
   component: Tabs.Root,
+  subcomponents: partsOf(Tabs),
   args: {
     defaultValue: "overview",
     children: sections,

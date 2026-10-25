@@ -6,7 +6,7 @@ import { Button } from "@platform/ui/button";
 import { Calendar } from "@platform/ui/calendar";
 import { roRO } from "@platform/ui/locales/ro-RO";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
@@ -27,6 +27,7 @@ const LoadedCalendar = lazy(() =>
 const meta = preview.meta({
   title: "Components/DatePicker",
   component: DatePicker.Root,
+  subcomponents: partsOf(DatePicker),
   args: {
     label: "Due date",
     name: "due",
@@ -256,7 +257,25 @@ InAForm.test(
 
 export const LazyCalendar = meta.story({
   parameters: {
-    docs: { description: { story: "The Calendar loads with `lazy()` on the first open." } },
+    docs: {
+      description: { story: "The Calendar loads with `lazy()` on the first open." },
+      source: {
+        code: `import { lazy, Suspense } from "react";
+import { DatePicker } from "@platform/ui/date-picker";
+
+const Calendar = lazy(() =>
+  import("@platform/ui/calendar").then((module) => ({ default: module.Calendar })),
+);
+
+<DatePicker.Root label="Due date" name="due">
+  <DatePicker.Content>
+    <Suspense>
+      <Calendar />
+    </Suspense>
+  </DatePicker.Content>
+</DatePicker.Root>`,
+      },
+    },
   },
   args: {
     children: (

@@ -7,9 +7,11 @@ import { useEffect } from "storybook/preview-api";
 import { Provider } from "@platform/ui/provider";
 
 import { meaningfulControls } from "./docs/arg-types.ts";
-import { DocsPage, mdx } from "./docs-page.tsx";
-import { applyGlobals, directions, DocsContainer, themes } from "./globals.tsx";
+import { transform } from "./docs/source.ts";
+import { applyGlobals, directions, DocsContainer, DocsPage, mdx, themes } from "./globals.tsx";
 import { rememberStoryCanvas } from "./screenshots/canvas.ts";
+
+export { partsOf } from "./docs/arg-types.ts";
 
 export default definePreview({
   addons: [addonDocs(), addonA11y(), addonPseudoStates()],
@@ -26,9 +28,9 @@ export default definePreview({
       },
     },
     docs: {
-      page: DocsPage,
       container: DocsContainer,
-      source: { type: "dynamic" },
+      page: DocsPage,
+      source: { type: "dynamic", transform },
       toc: true,
       ...mdx,
     },

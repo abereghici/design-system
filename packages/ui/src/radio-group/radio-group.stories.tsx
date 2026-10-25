@@ -1,6 +1,6 @@
 import { expect, fn } from "storybook/test";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
 import * as RadioGroup from "./radio-group.tsx";
@@ -19,6 +19,7 @@ const options = (lifetimeDisabled = false) => (
 const meta = preview.meta({
   title: "Components/RadioGroup",
   component: RadioGroup.Root,
+  subcomponents: partsOf(RadioGroup),
   args: {
     name: "plan",
     defaultValue: "monthly",

@@ -2,7 +2,7 @@ import { expect } from "storybook/test";
 
 import { HomeIcon } from "@platform/ui/icons/home";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Navbar from "./navbar.tsx";
 
@@ -33,6 +33,7 @@ const links = (
 const meta = preview.meta({
   title: "Components/Navbar",
   component: Navbar.Root,
+  subcomponents: partsOf(Navbar),
   args: { "aria-label": "Main", children: links },
 });
 

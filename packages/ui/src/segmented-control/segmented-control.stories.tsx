@@ -4,7 +4,7 @@ import { MoonIcon } from "@platform/ui/icons/moon";
 import { SunIcon } from "@platform/ui/icons/sun";
 import { Toolbar } from "@platform/ui/toolbar";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
 import { SegmentedControl } from "./index.ts";
@@ -12,6 +12,7 @@ import { SegmentedControl } from "./index.ts";
 const meta = preview.meta({
   title: "Components/SegmentedControl",
   component: SegmentedControl.Root,
+  subcomponents: partsOf(SegmentedControl),
   args: {
     "aria-label": "View",
     defaultValue: "list",

@@ -4,7 +4,7 @@ import { expect, fn } from "storybook/test";
 import { roRO } from "@platform/ui/locales/ro-RO";
 import { Provider } from "@platform/ui/provider";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
 import type { Locale } from "../provider/locale.tsx";
@@ -24,6 +24,7 @@ const message = (close: Alert.CloseProps = {}) => (
 const meta = preview.meta({
   title: "Components/Alert",
   component: Alert.Root,
+  subcomponents: partsOf(Alert),
   args: { variant: "danger", children: message() },
 });
 

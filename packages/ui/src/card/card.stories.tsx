@@ -4,7 +4,7 @@ import type { Decorator } from "@storybook/react-vite";
 
 import { Button } from "@platform/ui/button";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Card from "./card.tsx";
 
@@ -32,6 +32,7 @@ const center = (element: Element) => {
 const meta = preview.meta({
   title: "Components/Card",
   component: Card.Root,
+  subcomponents: partsOf(Card),
   args: {
     children: (
       <>

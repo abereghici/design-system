@@ -217,7 +217,7 @@ Default.test(
 
 export const Controlled = meta.story({
   args: { pressed: true },
-  render: (args) => <ControlledIconButton {...args} />,
+  render: ControlledIconButton,
   parameters: {
     docs: { description: { story: "The parent holds `pressed` and updates it on change." } },
   },

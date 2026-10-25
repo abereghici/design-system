@@ -3,7 +3,7 @@ import { expect, fn, waitFor } from "storybook/test";
 
 import type { Decorator } from "@storybook/react-vite";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Select from "./select.tsx";
@@ -34,6 +34,7 @@ const inAForm: Decorator = (Story) => (
 const meta = preview.meta({
   title: "Components/Select",
   component: Select.Root,
+  subcomponents: partsOf(Select),
   args: {
     label: "Region",
     name: "region",

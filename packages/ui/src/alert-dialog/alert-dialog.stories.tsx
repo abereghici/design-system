@@ -2,7 +2,7 @@ import { expect, fn, waitFor } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
@@ -36,6 +36,7 @@ const children = (
 const meta = preview.meta({
   title: "Components/AlertDialog",
   component: AlertDialog.Root,
+  subcomponents: partsOf(AlertDialog),
   args: { children, onOpenChange: fn() },
 });
 

@@ -5,7 +5,7 @@ import { Button } from "@platform/ui/button";
 import { roRO } from "@platform/ui/locales/ro-RO";
 import { Provider } from "@platform/ui/provider";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
@@ -65,6 +65,7 @@ function WithInitialFocus(props: Popover.RootProps) {
 const meta = preview.meta({
   title: "Components/Popover",
   component: Popover.Root,
+  subcomponents: partsOf(Popover),
   args: { onOpenChange, children: filters },
   beforeEach: parkPointer,
   decorators: [
@@ -197,7 +198,7 @@ export const ControlledOpen = meta.story({
   parameters: {
     docs: { description: { story: "The app holds `open` and hears every change." } },
   },
-  render: (args) => <Controlled {...args} />,
+  render: Controlled,
 });
 
 ControlledOpen.test("follows the state its parent holds", async ({ canvas }) => {
@@ -215,7 +216,7 @@ export const InitialFocus = meta.story({
       description: { story: "`initialFocus` moves focus to a field when the Popover opens." },
     },
   },
-  render: (args) => <WithInitialFocus {...args} />,
+  render: WithInitialFocus,
 });
 
 InitialFocus.test("focuses the field it names", async ({ canvas }) => {

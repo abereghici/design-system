@@ -1,6 +1,6 @@
 import { expect } from "storybook/test";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import type { Locale } from "../provider/locale.tsx";
 import { roRO } from "../provider/locales/ro-RO.ts";
@@ -29,6 +29,7 @@ const trail = (
 const meta = preview.meta({
   title: "Components/Breadcrumbs",
   component: Breadcrumbs.Root,
+  subcomponents: partsOf(Breadcrumbs),
   args: { children: trail },
 });
 
