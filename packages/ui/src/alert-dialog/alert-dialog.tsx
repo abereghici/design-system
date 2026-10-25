@@ -39,6 +39,7 @@ function useClose(onClick: ButtonProps["onClick"], dismiss: boolean) {
     onClick: (event: MouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
       if (!dismiss) dispatchFeedback(event.currentTarget, "ab-confirm", feedback);
+      // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).
       if (event.defaultPrevented) return;
       controller.press({
         reason: "close-press",

@@ -25,7 +25,7 @@ A bubbling, `ab-`-prefixed DOM event (`ab-press`, `ab-toggle`, `ab-confirm`, `ab
 _Avoid_: Sound event, haptic event, callback
 
 **Change request**:
-A state change a component asks its consumer about before committing: the `on…Change` callback receives the value and `details` (`reason`, `event`, `cancel()`), and calling `cancel()` keeps the previous state.
+A state change a component asks its consumer about before committing: the `on…Change` callback receives the value and `details` (`reason`, `event`, `cancel()`), and calling `cancel()` keeps the previous state. `cancel()` is the only way to stop it: a consumer's `preventDefault()` in its own handler keeps just its native meaning (a canceled click does not check a radio or run a button's command) and stops nothing the component does itself (Base UI: `preventBaseUIHandler()`, not `preventDefault()`).
 _Avoid_: Change event, veto, controlled change
 
 **Icon**:

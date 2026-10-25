@@ -62,6 +62,7 @@ export function Root({
   function select(next: string, event: MouseEvent<HTMLInputElement>) {
     if (next === current) return;
     if (!requestChange(onValueChange, next, "none", event.nativeEvent)) event.preventDefault();
+    // A canceled click restores the input's checkedness (HTML legacy-canceled-activation behavior).
     if (event.defaultPrevented) return;
     setUncontrolled(next);
     dispatchFeedback(event.currentTarget, "ab-toggle", { component: "RadioGroup", reason: "user" });

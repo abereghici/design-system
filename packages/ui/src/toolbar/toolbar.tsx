@@ -71,6 +71,7 @@ function destination(event: KeyboardEvent<HTMLDivElement>) {
 export function Toolbar({ ref, className, onKeyDown, onFocus, ...props }: ToolbarProps) {
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     onKeyDown?.(event);
+    // A control inside (a SegmentedControl, a Slider) already handled the arrow key.
     if (event.defaultPrevented) return;
     const target = destination(event);
     if (target === null) return;

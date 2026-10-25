@@ -43,8 +43,7 @@ export function Root({ value, defaultValue, onValueChange, className, ...props }
 
   function select(next: string, event: MouseEvent<HTMLButtonElement>) {
     if (next === current) return;
-    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) event.preventDefault();
-    if (event.defaultPrevented) return;
+    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) return;
     setUncontrolled(next);
     const trigger = event.currentTarget;
     trigger.focus();
@@ -122,7 +121,7 @@ export function Trigger({
       }}
       onKeyDown={(event) => {
         onKeyDown?.(event);
-        if (!event.defaultPrevented) moveSelection(event);
+        moveSelection(event);
       }}
       onClick={(event) => {
         onClick?.(event);

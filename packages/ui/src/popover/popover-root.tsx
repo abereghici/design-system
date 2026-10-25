@@ -79,6 +79,7 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
       }}
       onClick={(event: MouseEvent<HTMLButtonElement>) => {
         props.onClick?.(event);
+        // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).
         if (event.defaultPrevented) return;
         const open = isOpen(byId(popover.contentId));
         if (!popover.request(!open, "trigger-press", event.nativeEvent)) event.preventDefault();
@@ -162,6 +163,7 @@ export function Close({ asChild = false, labels, className, ...props }: ClosePro
     command: "hide-popover" as const,
     onClick: (event: MouseEvent<HTMLButtonElement>) => {
       props.onClick?.(event);
+      // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).
       if (event.defaultPrevented) return;
       if (!popover.request(false, "close-press", event.nativeEvent)) {
         event.preventDefault();

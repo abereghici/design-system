@@ -131,7 +131,6 @@ export function Trigger({
       }}
       onClick={(event: MouseEvent<HTMLElement>) => {
         onClick?.(event);
-        if (event.defaultPrevented) return;
         event.preventDefault();
         accordion.change(item, !accordion.value.includes(item), event);
       }}

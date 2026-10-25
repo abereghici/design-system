@@ -25,6 +25,7 @@ export function toggleClick(
     if (!requestChange(onCheckedChange, event.currentTarget.checked, "none", event.nativeEvent)) {
       event.preventDefault();
     }
+    // A canceled click restores the input's checkedness (HTML legacy-canceled-activation behavior).
     if (!event.defaultPrevented) {
       dispatchFeedback(event.currentTarget, "ab-toggle", { component, reason: "user" });
     }

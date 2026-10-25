@@ -85,6 +85,7 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
       }}
       onClick={(event: MouseEvent<HTMLButtonElement>) => {
         props.onClick?.(event);
+        // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).
         if (event.defaultPrevented) return;
         const open = isOpen(byId(floating.contentId));
         if (!floating.request(!open, "trigger-press", event.nativeEvent)) event.preventDefault();

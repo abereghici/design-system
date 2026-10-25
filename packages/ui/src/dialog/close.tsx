@@ -24,6 +24,7 @@ export function Close({ asChild = false, labels, className, onClick, ...props }:
 
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     onClick?.(event);
+    // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).
     if (event.defaultPrevented) return;
     controller.press({
       reason: "close-press",
