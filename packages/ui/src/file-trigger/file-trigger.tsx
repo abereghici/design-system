@@ -32,16 +32,64 @@ interface FileInputProps extends NativeProps {
   readonly inputRef: Picker["input"];
   readonly triggerRef: Picker["trigger"];
   readonly disabled: boolean;
+  readonly directory?: boolean;
   readonly labels: { clear?: string } | undefined;
+}
+
+interface SelectionProps {
+  readonly names: string[];
+  readonly label: string;
+  readonly disabled: boolean;
+  readonly onClear: () => void;
+}
+
+function Selection({ names, label, disabled, onClear }: SelectionProps) {
+  return (
+    <span className={styles["selection"]}>
+      {/* Always rendered: a live region must exist before its text changes. */}
+      <output className={styles["names"]}>{names.join(", ")}</output>
+      {names.length > 0 && (
+        <button
+          type="button"
+          aria-label={label}
+          aria-disabled={disabled || undefined}
+          data-size="sm"
+          className={iconButton["root"]}
+          onClick={() => {
+            if (!disabled) onClear();
+          }}
+        >
+          <XIcon />
+        </button>
+      )}
+    </span>
+  );
+}
+
+function clear(input: HTMLInputElement | null, trigger: HTMLElement | null) {
+  if (input === null) return;
+  input.value = "";
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+  input.dispatchEvent(new Event("change", { bubbles: true }));
+  trigger?.focus();
 }
 
 /**
  * The native file input that holds the selection for the form and joins the Field, followed by the
  * chosen file names and a Clear button.
  */
-export function FileInput({ inputRef, triggerRef, labels, ...props }: FileInputProps) {
+export function FileInput({
+  inputRef,
+  triggerRef,
+  directory = false,
+  labels,
+  ...props
+}: FileInputProps) {
   const bindings = useFieldControl<HTMLInputElement, NativeProps & { disabled: boolean }>(props);
-  const { clear } = useLabels("fileTrigger", fileTriggerLabels, labels);
+  useEffect(() => {
+    if (inputRef.current) inputRef.current.webkitdirectory = directory;
+  }, [inputRef, directory]);
+  const { clear: clearLabel } = useLabels("fileTrigger", fileTriggerLabels, labels);
   const [names, setNames] = useState<string[]>([]);
   useFormReset(
     () => inputRef.current,
@@ -69,29 +117,14 @@ export function FileInput({ inputRef, triggerRef, labels, ...props }: FileInputP
           }}
         />
       </VisuallyHidden>
-      <span className={styles["selection"]}>
-        {/* Always rendered: a live region must exist before its text changes. */}
-        <output className={styles["names"]}>{names.join(", ")}</output>
-        {names.length > 0 && (
-          <button
-            type="button"
-            aria-label={clear}
-            aria-disabled={props.disabled || undefined}
-            data-size="sm"
-            className={iconButton["root"]}
-            onClick={() => {
-              const input = inputRef.current;
-              if (input === null || props.disabled) return;
-              input.value = "";
-              input.dispatchEvent(new Event("input", { bubbles: true }));
-              input.dispatchEvent(new Event("change", { bubbles: true }));
-              triggerRef.current?.focus();
-            }}
-          >
-            <XIcon />
-          </button>
-        )}
-      </span>
+      <Selection
+        names={names}
+        label={clearLabel}
+        disabled={props.disabled}
+        onClear={() => {
+          clear(inputRef.current, triggerRef.current);
+        }}
+      />
     </>
   );
 }
@@ -142,7 +175,6 @@ function selectOnce(input: HTMLInputElement, onSelect: FileTriggerProps["onSelec
  */
 export function FileTrigger({
   children,
-  directory = false,
   disabled = false,
   onSelect,
   labels,
@@ -154,9 +186,6 @@ export function FileTrigger({
   const trigger = useRef<HTMLElement>(null);
   const inputRef = zone?.input ?? input;
   const triggerRef = zone?.trigger ?? trigger;
-  useEffect(() => {
-    if (input.current) input.current.webkitdirectory = directory;
-  }, [directory]);
   const id = useId();
 
   function open(event: MouseEvent) {

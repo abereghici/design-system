@@ -11,8 +11,6 @@ import { Provider } from "@platform/ui/provider";
 
 import preview from "#.storybook/preview.tsx";
 
-import type { Locale } from "../provider/locale.tsx";
-
 import { FileTrigger } from "./file-trigger.tsx";
 import type { FileTriggerSelectEventDetails } from "./file-trigger.tsx";
 
@@ -37,7 +35,7 @@ const inAForm: Decorator = (Story) => (
     }}
   >
     <Story />
-    <button type="submit">Save</button>
+    <Button type="submit">Save</Button>
   </Form>
 );
 
@@ -89,7 +87,7 @@ Default.test(
     pick(canvasElement, photo);
     await expect(canvas.getByRole("button", { name: "Golește fișierele" })).toBeVisible();
     // @ts-expect-error -- a locale must carry the FileTrigger labels
-    void ({ tag: "fr-FR", labels: { ...roRO.labels, fileTrigger: {} } } satisfies Locale);
+    void ({ tag: "fr-FR", labels: { ...roRO.labels, fileTrigger: {} } } satisfies typeof roRO);
   },
 );
 

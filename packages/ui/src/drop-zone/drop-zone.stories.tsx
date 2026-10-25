@@ -209,7 +209,7 @@ Default.test(
             <Story />
             <Field.Error />
           </Field.Root>
-          <button type="submit">Import</button>
+          <Button type="submit">Import</Button>
         </Form>
       ),
     ],

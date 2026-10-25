@@ -1,5 +1,7 @@
 import { expect } from "storybook/test";
 
+import { Button } from "@platform/ui/button";
+
 import preview from "#.storybook/preview.tsx";
 
 import { roRO } from "../provider/locales/ro-RO.ts";
@@ -18,7 +20,7 @@ const meta = preview.meta({
           <a href="#home">Home</a>
         </nav>
         <main id="main" tabIndex={-1}>
-          <button type="button">First control</button>
+          <Button type="button">First control</Button>
         </main>
       </>
     ),
