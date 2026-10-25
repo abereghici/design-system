@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Collapsible   > base story 1`] = `
+- navigation "Workspace":
+  - list:
+    - listitem:
+      - link "Inbox":
+        - /url: "#inbox"
+  - group "Projects":
+    - text: Projects
+    - list:
+      - listitem:
+        - link "Tokens":
+          - /url: "#tokens"
+      - listitem:
+        - link "UI":
+          - /url: "#ui"
+  - group "Settings":
+    - group: Settings
+`;
+
+exports[`Default   > base story 1`] = `
+- navigation "Workspace":
+  - list:
+    - listitem:
+      - link "Inbox":
+        - /url: "#inbox"
+  - group "Projects":
+    - text: Projects
+    - list:
+      - listitem:
+        - link "Tokens":
+          - /url: "#tokens"
+      - listitem:
+        - link "UI":
+          - /url: "#ui"
+`;

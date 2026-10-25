@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- form "Task":
+  - text: Assignee
+  - combobox "Assignee"
+  - status
+  - button "Save"
+`;
+
+exports[`Server Search Results   > base story 1`] = `
+- form "Task":
+  - text: Repository
+  - combobox "Repository"
+  - status
+  - button "Save"
+`;

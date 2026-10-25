@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Between Groups   > base story 1`] = `
+- paragraph: Billing
+- text: Bold
+- separator
+- text: Undo
+- paragraph: Security
+`;
+
+exports[`Default   > base story 1`] = `
+- paragraph: Billing
+- separator
+- paragraph: Security
+`;

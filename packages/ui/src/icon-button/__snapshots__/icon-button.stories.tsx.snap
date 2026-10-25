@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Controlled   > base story 1`] = `
+- button "Pin" [pressed]
+`;
+
+exports[`Default   > base story 1`] = `
+- button "Pin"
+`;

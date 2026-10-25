@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- form "Sign up":
+  - text: Email *" / "
+  - textbox "Email *\\" / \\""
+  - text: Name *" / "
+  - textbox "Name *\\" / \\""
+  - button "Create account"
+`;

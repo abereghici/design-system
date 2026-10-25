@@ -1,0 +1,21 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- button "Choose image"
+- status
+`;
+
+exports[`In A Field   > base story 1`] = `
+- form "Profile":
+  - text: Attachments *" / "
+  - button "Attachments *\\" / \\" Add files": Add files
+  - status
+  - paragraph: PDF or images, up to 10 MB each.
+  - button "Save"
+`;
+
+exports[`With Files 1`] = `
+- button "Choose image"
+- status: photo.png
+- button "Clear files"
+`;

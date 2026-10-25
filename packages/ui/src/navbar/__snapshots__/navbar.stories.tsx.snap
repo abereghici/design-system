@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- navigation "Main":
+  - list:
+    - listitem:
+      - link "Home":
+        - /url: "#home"
+    - listitem:
+      - link "Work":
+        - /url: "#work"
+    - listitem:
+      - link "Writing":
+        - /url: "#writing"
+    - listitem:
+      - link "About":
+        - /url: "#about"
+`;

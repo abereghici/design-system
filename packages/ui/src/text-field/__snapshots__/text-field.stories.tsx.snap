@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Controlled   > base story 1`] = `
+- text: Name
+- textbox "Name": Ana
+- status: Hello, Ana
+`;
+
+exports[`Default   > base story 1`] = `
+- text: Email
+- textbox "Email":
+  - /placeholder: name@domain.com
+`;
+
+exports[`With Icon And Shortcut   > base story 1`] = `
+- searchbox "Search"
+`;

@@ -14,6 +14,8 @@ const meta = preview.meta({
   title: "Components/Skeleton",
   component: Skeleton,
   args: { children: "Placeholder name" },
+  // Hidden from assistive technology, so its tree is empty, and an empty aria snapshot matches anything.
+  tags: ["!aria-snapshot"],
 });
 
 export const Default = meta.story({});

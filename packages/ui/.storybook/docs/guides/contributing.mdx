@@ -15,7 +15,7 @@ Tokens are DTCG JSON in `packages/tokens/src/tokens/`, one file per tier, compil
 
 ## Components
 
-Each component starts as a spec in `packages/ui/specs/<name>.md` (anatomy, states, keyboard, accessibility), then a folder in `packages/ui/src/<name>/` with the component, its CSS Module and its stories. Stories double as tests: every story renders in Chromium, with and without reduced motion, with an accessibility check, and the screenshot projects compare it in light, dark and right-to-left. A component's docs page is generated from its TSDoc and its stories; the spec stays the internal design record.
+Each component starts as a spec in `packages/ui/specs/<name>.md` (anatomy, states, keyboard, accessibility), then a folder in `packages/ui/src/<name>/` with the component, its CSS Module and its stories. Stories double as tests: every story renders in Chromium, with and without reduced motion, with an accessibility check, and the screenshot projects compare it in light, dark and right-to-left. Chromium also matches each story's accessibility tree against the aria snapshot committed in its component's `__snapshots__/` folder; after an intended change, review and rewrite them with `pnpm --filter @platform/ui test -u`. A component's docs page is generated from its TSDoc and its stories; the spec stays the internal design record.
 
 ## Releases
 

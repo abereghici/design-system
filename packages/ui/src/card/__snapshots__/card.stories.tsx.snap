@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- heading "API keys" [level=3]
+- paragraph: 2 active
+- button "Manage"
+`;
+
+exports[`Linked   > base story 1`] = `
+- heading "Quarterly report" [level=3]:
+  - link "Quarterly report":
+    - /url: "#quarterly-report"
+- paragraph: Updated 2 hours ago
+- button "Share"
+`;

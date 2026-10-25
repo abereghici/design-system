@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- toolbar "Report":
+  - button "Pin"
+  - button "Copy link"
+  - button "Download" [disabled]
+  - separator
+  - button "Share"
+`;

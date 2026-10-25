@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- radiogroup "View":
+  - radio "List" [checked]
+  - text: List
+  - radio "Board"
+  - text: Board
+  - radio "Calendar"
+  - text: Calendar
+`;
+
+exports[`Icon Only   > base story 1`] = `
+- radiogroup "Theme":
+  - radio "Light" [checked]
+  - radio "Dark"
+`;

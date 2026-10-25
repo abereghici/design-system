@@ -54,8 +54,9 @@ A story file has three readers: the docs page, the Vitest run (every story is a 
 | ----------------------------------------- | ----------------- |
 | docs story                                | none              |
 | a story the screenshot projects must skip | `["!screenshot"]` |
+| a story whose accessibility tree is empty | `["!aria-snapshot"]` |
 
-Write tags inline where the story is declared. Preview gives every story `autodocs` and `screenshot`. `.test()` proofs are hidden from the sidebar by `main.ts` `tags._test` (exclude); never tag a proof `!dev`.
+Write tags inline where the story is declared. Preview gives every story `autodocs`, `screenshot` and `aria-snapshot`; an empty aria snapshot matches any tree, so it proves nothing. `.test()` proofs are hidden from the sidebar by `main.ts` `tags._test` (exclude); never tag a proof `!dev`.
 
 ## Theming, direction and lint
 
