@@ -165,7 +165,7 @@ Proposed new (the DropdownMenu pair, so the two menus stay overridable one by on
 
 As in DropdownMenu, the diamond size, the Label's block padding and the Separator width use semantic tokens directly. The pointer anchor needs no token.
 
-## Built-in labels
+## Author-written text
 
 None. The menu's name is the consumer's `aria-label` (required).
 

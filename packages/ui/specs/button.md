@@ -106,7 +106,7 @@ All exist (ported from the source, `packages/tokens/src/tokens/component.tokens.
 
 No new tokens. The focus ring uses semantic `focus-ring-width`, `focus-ring-offset` and `color-border-focused` directly (R6: focus is a pattern, not a component).
 
-## Built-in labels
+## Author-written text
 
 None. Every string in a Button comes from its children.
 

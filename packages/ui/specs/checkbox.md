@@ -122,7 +122,7 @@ Contrast matrix additions (`packages/tokens/src/contrast.ts`, non-text 3:1): `ba
 
 The label text colour is `color-text-default` (semantic, directly; no source token).
 
-## Built-in labels
+## Author-written text
 
 None.
 

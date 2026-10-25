@@ -135,7 +135,7 @@ Proposed new:
 
 The Label reuses Fieldset's `fieldset-legend-font` and `fieldset-legend-text-color`; the vertical gap reuses `fieldset-gap`.
 
-## Built-in labels
+## Author-written text
 
 None.
 

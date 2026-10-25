@@ -102,7 +102,7 @@ The browser places the vertical scrollbar and the initial horizontal scroll posi
 
 None. The fade height is the semantic `space-stack-lg`, as in the artifact. The thumb and track come from the base stylesheet (`scrollbar-color: var(--ab-color-border-default) transparent`, inherited), and the focus ring from `focus-ring-*` and `color-border-focused`. A `scroll-area` component word is not needed until a ScrollArea needs its own override.
 
-## Built-in labels
+## Author-written text
 
 None. A name, when wanted, comes from `aria-label`/`aria-labelledby` on a `<section>` rendered through `asChild` (Behaviour).
 

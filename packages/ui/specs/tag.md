@@ -87,7 +87,7 @@ Proposed new:
 
 The forced-colors outline is a 1 px system-colour literal, as in the artifact.
 
-## Built-in labels
+## Author-written text
 
 None. Every string in a Tag comes from its children.
 

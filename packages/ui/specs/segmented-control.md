@@ -118,7 +118,7 @@ Existing (ported from the source): `segmented-control-height`, `segmented-contro
 
 No new tokens. The indicator reuses `segmented-control-item-border-radius`; an icon-only Item sizes its icon with `size-icon-sm`; the focus ring uses `focus-ring-width`, `focus-ring-offset` and `color-border-focused`.
 
-## Built-in labels
+## Author-written text
 
 None. The group name and every Item label come from the consumer.
 

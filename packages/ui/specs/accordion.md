@@ -145,7 +145,7 @@ Proposed new:
 
 The chevron size comes from the Icon's own `size="sm"` (16 px); the more-contrast hairline uses `color-border-default` directly.
 
-## Built-in labels
+## Author-written text
 
 None. The Trigger's text is its name.
 

@@ -11,8 +11,7 @@
   },
   "exports": {
     "./*": "./src/*/index.ts",
-    "./icons/*": "./src/icon/icons/*.tsx",
-    "./locales/*": "./src/ui-provider/locales/*.ts"
+    "./icons/*": "./src/icon/icons/*.tsx"
   },
   "scripts": {
     "storybook": "storybook dev --port 6006",

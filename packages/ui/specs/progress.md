@@ -120,7 +120,7 @@ Letter spacing reads the semantic `type-*-letter-spacing` tokens directly, becau
 
 Dictionary changes: the component word **`progress`**, and the element word **`value`** (the value text; Base UI's Part name is `Progress.Value`). `track` and `indicator` already exist.
 
-## Built-in labels
+## Author-written text
 
 None. The name comes from `label`, `aria-label` or `aria-labelledby`, and the only generated text is the number, formatted with `Intl.NumberFormat`. Locale: the `locale` prop, else the runtime's default (Base UI). Only the value text depends on the locale: `aria-valuenow` is a plain number, and assistive technology presents it as a percentage itself (WAI-ARIA 1.2, see Behaviour).
 

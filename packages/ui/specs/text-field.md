@@ -134,7 +134,7 @@ Proposed new:
 
 The focus ring uses `focus-ring-width` and `color-border-focused` directly (R6), with `outline-offset: 0` (the source's "no offset").
 
-## Built-in labels
+## Author-written text
 
 None. Error messages default to the browser's localised `validationMessage`.
 
