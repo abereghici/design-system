@@ -18,12 +18,12 @@ const onInputValueChange = fn<NonNullable<Combobox.RootProps["onInputValueChange
 const onOpenChange = fn<NonNullable<Combobox.RootProps["onOpenChange"]>>();
 const reasons = (callback: { mock: { calls: [unknown, { reason: string }][] } }) =>
   callback.mock.calls.map(([value, { reason }]) => [value, reason]);
-const field = () => screen.getByRole<HTMLInputElement>("combobox", { name: "Assignee" });
+const field = (name = "Assignee") => screen.getByRole<HTMLInputElement>("combobox", { name });
 const highlighted = () => document.querySelector('[role="option"][aria-selected="true"]');
 const names = () => screen.queryAllByRole("option").map((option) => option.textContent);
 const submitted = () => new FormData(screen.getByRole<HTMLFormElement>("form")).get("assignee");
-const type = async (keys: string) => {
-  field().focus();
+const type = async (keys: string, name?: string) => {
+  field(name).focus();
   await (await trusted()).keyboard(keys);
 };
 
@@ -173,7 +173,8 @@ Default.test(
   "restores on Escape, then clears, keeping its Dialog open",
   { args: { defaultValue: "ab" }, decorators: [inADialog] },
   async ({ canvas }) => {
-    const dialog = await canvas.findByRole("dialog", { name: "Assign task" });
+    const dialog = canvas.getByRole("dialog", { name: "Assign task" });
+    await waitFor(() => expect(dialog).toBeVisible());
     await expect(field()).toHaveValue("Alexandru Bereghici");
     await type("x{Escape}");
     await expect(field()).toHaveValue("Alexandru Bereghici");
@@ -255,8 +256,6 @@ Default.test(
   },
 );
 
-const repositories = ["platform/ui", "platform/tokens", "platform/web"];
-
 function ServerSearch(args: Combobox.RootProps) {
   const [query, setQuery] = useState("");
   return (
@@ -269,7 +268,7 @@ function ServerSearch(args: Combobox.RootProps) {
         args.onInputValueChange?.(next, details);
       }}
     >
-      {repositories
+      {["platform/ui", "platform/tokens", "platform/web"]
         .filter((name) => name.endsWith(query.trim()))
         .map((name) => (
           <Combobox.Item key={name} value={name}>
@@ -287,14 +286,12 @@ export const ServerSearchResults = meta.story({
 });
 
 ServerSearchResults.test("shows the Items the app renders", async ({ canvas, userEvent }) => {
-  const input = canvas.getByRole("combobox", { name: "Repository" });
-  input.focus();
-  await userEvent.keyboard("eb");
+  await type("eb", "Repository");
   await expect(names()).toEqual(["platform/web"]);
   await userEvent.keyboard("x");
   await expect(canvas.getByRole("status")).toHaveTextContent("No repositories");
   await userEvent.keyboard("{Backspace}{Enter}");
-  await expect(input).toHaveValue("platform/web");
+  await expect(field("Repository")).toHaveValue("platform/web");
 });
 
 Default.test("announces Loading… in place of No results", { args: { loading: true } }, async () => {
