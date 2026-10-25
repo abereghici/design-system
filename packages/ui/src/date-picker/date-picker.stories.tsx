@@ -162,13 +162,14 @@ Default.test("closes on a press outside", async ({ canvas }) => {
   await expect(reasons().at(-1)).toEqual([false, "outside-press"]);
 });
 
-Default.test("closes when Tab leaves the panel", async ({ canvas }) => {
+Default.test("closes when Tab leaves the panel, on to the next control", async ({ canvas }) => {
   const user = await trusted();
   await user.click(canvas.getByRole("button", { name: "Choose date" }));
   await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
   await user.keyboard("{Tab}");
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
   await expect(reasons().at(-1)).toEqual([false, "focus-out"]);
+  await expect(canvas.getByRole("button", { name: "After" })).toHaveFocus();
 });
 
 Default.test("closes when its trigger is pressed again", async ({ canvas }) => {

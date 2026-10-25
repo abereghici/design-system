@@ -17,7 +17,7 @@
     justify-content: space-between;
   }
 
-  /* Rotating the chevron composes with Icon's RTL mirror, so Previous points back in both directions. */
+  /* Rotating the chevron composes with Icon's RTL mirror (`[data-mirror]` in icon.module.css), so Previous points back in both directions. */
   .previous {
     rotate: 180deg;
   }
@@ -70,7 +70,7 @@
     color: var(--ab-calendar-cell-text-color-selected);
   }
 
-  /* The ring is the fill's colour, so it stands off the selected fill by its own width to show. */
+  /* The ring is the fill's colour, so it stands off the selected fill by its own width to keep 3:1 against what it touches: https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html */
   .day[aria-selected="true"]:focus-visible {
     outline-offset: var(--ab-focus-ring-width);
   }

@@ -110,8 +110,6 @@ export type Slider = ReturnType<typeof useSliderState>;
 
 const SliderContext = createContext<Slider | null>(null);
 
-export const ThumbIndex = createContext(0);
-
 export function useSlider() {
   const slider = use(SliderContext);
   if (slider === null) throw new Error("Slider parts must be inside Slider.Root");

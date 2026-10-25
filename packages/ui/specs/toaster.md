@@ -28,7 +28,7 @@ Status: draft for brand-owner review (phase 5). No source guide of its own: the 
 Toaster (no element of its own) → Announcers (two visually hidden live regions) + Region (`<section popover="manual">`) → List (`<ol>`) → toasts (`<li>`, `toast.md`).
 
 - **Announcers.** Two visually hidden `<div>`s, always rendered while the Toaster is mounted: `<div role="status" aria-atomic="false">` for polite announcements and `<div role="alert" aria-atomic="false">` for danger. They hold one short `<p>` per toast (Behaviour, Announcements). They sit next to the Region, not inside it, so they exist before the first toast shows.
-- **Region.** A `<section aria-label={labels.region} aria-keyshortcuts="Alt+T" tabindex="-1" popover="manual">`. Shown (`showPopover()`) while at least one toast exists, hidden when the last one has left, so the landmark is in the page only while it has content. It overrides the UA popover box: no border, padding or background, `overflow: visible`, `inset: auto`, `inset-block-end: toast-offset` (24), centred with `inset-inline: 0; margin-inline: auto`, `inline-size: min(toast-width, 100% - 2 × space-inset-lg)`, and `pointer-events: none` (each toast sets `auto`), so the empty area around the stack never blocks the page (prototype: "bottom-centre stack", `inset-block-end:var(--ab-toast-offset)`, `pointer-events:none`).
+- **Region.** A `<section aria-label={ariaLabel} aria-keyshortcuts="Alt+T" tabindex="-1" popover="manual">`. Shown (`showPopover()`) while at least one toast exists, hidden when the last one has left, so the landmark is in the page only while it has content. It overrides the UA popover box: no border, padding or background, `overflow: visible`, `inset: auto`, `inset-block-end: toast-offset` (24), centred with `inset-inline: 0; margin-inline: auto`, `inline-size: min(toast-width, 100% - 2 × space-inset-lg)`, and `pointer-events: none` (each toast sets `auto`), so the empty area around the stack never blocks the page (prototype: "bottom-centre stack", `inset-block-end:var(--ab-toast-offset)`, `pointer-events:none`).
 - **List.** An `<ol>` holding the toasts newest first, stacked in one grid cell aligned to the block end, so tucked toasts sit behind the front one (prototype `grid-area:1/1;align-self:end`).
 
 ## API
@@ -37,7 +37,8 @@ Toaster (no element of its own) → Announcers (two visually hidden live regions
 
 | Prop     | Type                                  | Default                                         | Notes                                                                                                                             |
 | -------- | ------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `labels` | `{ region?: string; close?: string }` | `{ region: "Notifications", close: "Dismiss" }` | Region name and every toast's Dismiss name. Falls back to the root UI provider's locale, then English.                            |
+| `aria-label` | `string` (required) |  | The region's name, such as "Notifications". |
+| `closeLabel` | `string` (required) |  | Every toast's Dismiss name, such as "Dismiss". |
 | …native  | `ComponentProps<"section">`           |                                                 | `ref`, `className` and native attributes go on the Region. `popover`, `tabIndex`, `aria-label` and `aria-keyshortcuts` are owned. |
 
 `@platform/ui/toaster` exports `Toaster` and `ToasterProps` from a directive-free `index.ts`; `toaster.tsx` is a `'use client'` leaf. Toasts are added with `toast()` from `@platform/ui/toast` (`toast.md`).
@@ -45,8 +46,8 @@ Toaster (no element of its own) → Announcers (two visually hidden live regions
 Names, checked against the reference libraries:
 
 - **`Toaster`**: Sonner "Toaster: This component renders all the toasts, you can place it anywhere in your app." (https://sonner.emilkowal.ski/toaster); Ark "`<Toaster toaster={toaster}>`" (https://ark-ui.com/react/docs/components/toast); shadcn "Add the Toaster component." with `<Toaster />` in `app/layout.tsx` (https://ui.shadcn.com/docs/components/sonner); the source "`<Toaster />   // once, near the root`" and the brand book "**Toaster:** hosts the toast stack." Radix and Base UI call the area `Toast.Viewport` (Radix "The fixed area where toasts appear."; Base UI "A container viewport for toasts."), React Aria `ToastRegion` ("A ToastRegion displays one or more toast notifications."), Mantine `Notifications`. Toaster is the name of the libraries that, like this one, pair an app-level component with a `toast()` call, and the source's.
-- **`labels.region` = "Notifications"**: the source "Region landmark "Notifications" (Alt+T to focus)"; Radix Provider `label` default "Notification" and Viewport `label` default "Notifications ({hotkey})"; Sonner "`containerAriaLabel = 'Notifications'`"; Base UI Viewport "`'aria-label': 'Notifications'`" (`ToastViewport.tsx`). Radix and Sonner append the hotkey to the name ("`${containerAriaLabel} ${hotkeyLabel}`"); here it is `aria-keyshortcuts="Alt+T"` instead, which ARIA defines for exactly this: "Indicates keyboard shortcuts that an author has implemented to activate or give focus to an element." (judgement call: the name stays the source's word and the key is exposed as a property).
-- **`labels.close`**: the Toaster renders every toast, so the per-instance override of `toast.close` lives here (`toast.md`, Built-in labels).
+- **`aria-label`** (required, for example "Notifications"): the source "Region landmark "Notifications" (Alt+T to focus)"; Radix Provider `label` default "Notification" and Viewport `label` default "Notifications ({hotkey})"; Sonner "`containerAriaLabel = 'Notifications'`"; Base UI Viewport "`'aria-label': 'Notifications'`" (`ToastViewport.tsx`). Radix and Sonner append the hotkey to the name ("`${containerAriaLabel} ${hotkeyLabel}`"); here it is `aria-keyshortcuts="Alt+T"` instead, which ARIA defines for exactly this: "Indicates keyboard shortcuts that an author has implemented to activate or give focus to an element." (judgement call: the name stays the source's word and the key is exposed as a property).
+- **`closeLabel`** (required): the Toaster renders every toast's icon-only Dismiss button, so its name is a Toaster prop (MUI `closeText` precedent for a named close-text prop).
 - Left out (YAGNI): `position` / `placement` (Sonner "Changes the place where all toasts will be rendered." with six positions; Ark `placement`; Mantine `position`): the source places one bottom-centre stack. `offset` / `mobileOffset` (Sonner), `gap` (Sonner, Ark) and `duration` (Sonner `toastOptions`, Radix Provider, Base UI Provider `timeout`): tokens. `expand` / `visibleToasts` (Sonner), `limit` (Base UI "The maximum number of toasts that can be displayed at once."), `max` (Ark): fixed at 3 by the source. `hotkey` (Sonner, Ark, Radix Viewport): fixed to the source's Alt+T. `swipeDirections` / `swipeDirection` (Sonner, Radix, Base UI): fixed to down and sideways. `theme`, `dir`, `richColors`, `invert`, `icons`, `closeButton`, `toastOptions` (Sonner): inherited from the UIProvider or fixed. Multiple toasters (Sonner `id` + `toasterId`), Base UI anchored toasts and `Portal`, Radix `announcerContainer`, Ark `pauseOnPageIdle` (always on), safe-area insets (`env(safe-area-inset-bottom)`; no source need yet).
 
 ## States
@@ -78,7 +79,7 @@ Names, checked against the reference libraries:
 - **Escape on the Region** (focus on the `<section>` itself, after Alt+T): returns focus to the remembered element and calls `preventDefault()` (Base UI: "Pressing <kbd>F6</kbd> again returns focus to where it was."; Sonner collapses the stack on Escape). Escape inside a toast dismisses that toast (`toast.md`).
 - **Focus after a dismissal.** When the focused toast closes, focus moves to the same control in the next toast (older), or to its Dismiss when it has no Action; when no toast is left, to the element focused before focus entered the Region (remembered on `focusin` from `relatedTarget`, or by Alt+T), or nowhere if that element is gone. React Aria: "When a toast is closed, focus moves to the next toast if any. When the last toast is closed, focus is restored to where it was before."
 - **Action shortcut** (⌘Z / Ctrl+Z for Undo): bound by the Toaster for the newest toast only (`toast.md`, Behaviour).
-- **Client component.** `toaster.tsx` is `'use client'` (state, effects, document listeners). It reads its labels with `useLocale().labels.toaster` and `.toast`.
+- **Client component.** `toaster.tsx` is `'use client'` (state, effects, document listeners).
 
 ## Motion
 
@@ -119,13 +120,9 @@ Logical properties only (`inset-block-end`, `inset-inline`, `margin-inline: auto
 
 No `toaster` Dictionary word: the Toaster uses the toast tokens (`toast-offset`, `toast-width`, `toast-stack-gap`, `toast-stack-scale`, `toast-stack-duration`, `toast-stack-easing`; `toast.md`) and `space-inset-lg` directly for the side margin. No new tokens. `z-index-toast` is not used (Behaviour: the top layer decides the order).
 
-## Built-in labels
+## Author-written text
 
-| Key              | en-US           | ro-RO        | Used by                   |
-| ---------------- | --------------- | ------------ | ------------------------- |
-| `toaster.region` | "Notifications" | "Notificări" | The Region's `aria-label` |
-
-`toaster` in `src/ui-provider/locales/en-US/toaster.ts` (`{ region: "Notifications", close: "Dismiss" }`) are the en-US defaults; `enUS` composes them and `ro-RO.ts` translates them. The `labels` prop (`region`, `close`) wins over the UIProvider's locale, which wins over the defaults.
+None. The region's `aria-label` and each toast's `closeLabel` are required by type; toast titles, descriptions and action labels are the author's.
 
 ## Feedback events
 

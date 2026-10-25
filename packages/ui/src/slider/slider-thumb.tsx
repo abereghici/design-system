@@ -1,25 +1,33 @@
 "use client";
 
-import { use } from "react";
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import { useFieldControl } from "../field/use-field.ts";
 import { join } from "../slot/slot.tsx";
 
-import { ThumbIndex, useSlider } from "./slider-root.tsx";
+import { useSlider } from "./slider-root.tsx";
+import type { Slider } from "./slider-root.tsx";
 import styles from "./slider.module.css";
 
-export type ThumbProps = Omit<ComponentProps<"input">, "type" | "value" | "min" | "max" | "step">;
+export interface ThumbProps extends Omit<
+  ComponentProps<"input">,
+  "type" | "value" | "min" | "max" | "step"
+> {
+  /** Which entry of a range's value this thumb sets, counting from 0. */
+  index?: number;
+}
 
-function keyTarget(
+function step(
   event: KeyboardEvent<HTMLInputElement>,
-  value: number,
-  step: number,
-  large: number,
+  slider: Slider,
+  index: number,
+  blocked: boolean,
 ) {
+  const value = slider.values[index] ?? slider.min;
+  const large = slider.largeStep;
   const sign = event.currentTarget.matches(":dir(rtl)") ? -1 : 1;
-  const amount = event.shiftKey ? large : step;
-  const targets: Partial<Record<string, number>> = {
+  const amount = event.shiftKey ? large : slider.step;
+  const target = {
     ArrowRight: value + sign * amount,
     ArrowLeft: value - sign * amount,
     ArrowUp: value + amount,
@@ -28,28 +36,30 @@ function keyTarget(
     PageDown: value - large,
     Home: -Infinity,
     End: Infinity,
-  };
-  return targets[event.key];
+  }[event.key];
+  if (target === undefined) return;
+  event.preventDefault();
+  if (blocked) return;
+  const next = slider.change(index, target, "keyboard", event.nativeEvent);
+  slider.commit(slider.values, next, { reason: "keyboard", event: event.nativeEvent });
 }
 
-export function Thumb({ className, style, id, onKeyDown, onChange, ...props }: ThumbProps) {
+export function Thumb({
+  index = 0,
+  className,
+  style,
+  id,
+  onKeyDown,
+  onChange,
+  ...props
+}: ThumbProps) {
   const slider = useSlider();
-  const index = use(ThumbIndex);
   const value = slider.values[index] ?? slider.min;
   const [lo, hi] = slider.bounds(index);
   const ownId = id ?? `${slider.id}-${index}`;
   const own = { id: index === 0 ? ownId : undefined, name: slider.name, disabled: slider.disabled };
   const bindings = useFieldControl<HTMLInputElement, ThumbProps>({ ...props, ...own });
   const blocked = bindings["aria-disabled"] === true;
-  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-    onKeyDown?.(event);
-    const target = keyTarget(event, value, slider.step, slider.largeStep);
-    if (target === undefined || event.defaultPrevented) return;
-    event.preventDefault();
-    if (blocked) return;
-    const next = slider.change(index, target, "keyboard", event.nativeEvent);
-    slider.commit(slider.values, next, { reason: "keyboard", event: event.nativeEvent });
-  }
   return (
     <div
       className={join(styles["thumb"], className)}
@@ -66,7 +76,10 @@ export function Thumb({ className, style, id, onKeyDown, onChange, ...props }: T
         value={value}
         aria-valuetext={slider.format(value)}
         className={styles["input"]}
-        onKeyDown={handleKeyDown}
+        onKeyDown={(event) => {
+          onKeyDown?.(event);
+          if (!event.defaultPrevented) step(event, slider, index, blocked);
+        }}
         onChange={(event) => {
           onChange?.(event);
           if (blocked) return;

@@ -29,7 +29,7 @@ export type CalendarChangeEventDetails = Details<"day-press">;
 
 export interface CalendarProps extends Omit<
   ComponentProps<"fieldset">,
-  "defaultValue" | "onChange" | "role" | "children"
+  "defaultValue" | "onChange" | "role" | "children" | "disabled" | "name" | "form"
 > {
   /** The chosen date, when your state holds it; `null` is no date. */
   value?: Temporal.PlainDate | null | undefined;
@@ -70,7 +70,8 @@ const clamp = (date: Temporal.PlainDate, min?: Temporal.PlainDate, max?: Tempora
 };
 
 function useToday() {
-  // The server renders UTC's date; the browser corrects it to its own time zone after hydration.
+  // The server renders UTC's date; the browser corrects it to its own time zone after hydration:
+  // https://react.dev/reference/react/useSyncExternalStore#adding-support-for-server-rendering
   const iso = useSyncExternalStore(
     onFocusIn,
     () => Temporal.Now.plainDateISO().toString(),
@@ -88,7 +89,7 @@ function useCalendar(
   const selected = value === undefined ? uncontrolled : value;
   const start = clamp(selected ?? today, min, max);
   const [userFocus, setFocused] = useState<Temporal.PlainDate | null>(null);
-  const focused = userFocus ?? start;
+  const focused = userFocus === null ? start : clamp(userFocus, min, max);
   const outside = (date: Temporal.PlainDate) => clamp(date, min, max) !== date;
   const unavailable = (date: Temporal.PlainDate) =>
     outside(date) || isDateUnavailable?.(date) === true;

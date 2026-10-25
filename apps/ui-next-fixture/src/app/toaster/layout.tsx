@@ -6,7 +6,7 @@ export default function Layout({ children }: Readonly<{ children: ReactNode }>) 
   return (
     <>
       {children}
-      <Toaster />
+      <Toaster aria-label="Notifications" closeLabel="Dismiss" />
     </>
   );
 }

@@ -8,7 +8,7 @@ export default function Page() {
         <Sheet.Content>
           <Sheet.Title>Invoice 0142</Sheet.Title>
           <Sheet.Body>Two lines</Sheet.Body>
-          <Sheet.Close />
+          <Sheet.Close aria-label="Close" />
         </Sheet.Content>
       </Sheet.Root>
     </main>

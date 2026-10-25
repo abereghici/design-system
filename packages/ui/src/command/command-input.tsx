@@ -7,40 +7,33 @@ import { trackComposition } from "../events/events.ts";
 import { SearchIcon } from "../icon/icons/search.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
 import { join } from "../slot/slot.tsx";
-import { useLabels } from "../ui-provider/locale.tsx";
-import { command as commandLabels } from "../ui-provider/locales/en-US/command.ts";
 
 import { DialogContext, useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";
 
-export interface InputProps extends Omit<
-  ComponentProps<"input">,
-  "value" | "defaultValue" | "type"
-> {
-  /**
-   * Overrides the UIProvider's locale: `search` is the accessible name, `placeholder` the default hint.
-   * To name it by visible text, pass `aria-labelledby`, which wins over `search`.
-   */
-  labels?: { search?: string; placeholder?: string };
-}
+type Naming =
+  | {
+      /** The search field's name, such as "Search commands". */
+      "aria-label": string;
+    }
+  | {
+      /** The `id` of visible text that names the search field. */
+      "aria-labelledby": string;
+    };
 
-export function Input({
-  labels,
-  placeholder,
-  className,
-  onChange,
-  onKeyDown,
-  ...props
-}: InputProps) {
+export type InputProps = Omit<
+  ComponentProps<"input">,
+  "value" | "defaultValue" | "type" | "aria-label" | "aria-labelledby"
+> &
+  Naming;
+
+export function Input({ className, onChange, onKeyDown, ...props }: InputProps) {
   const command = useCommand();
   const inDialog = use(DialogContext) !== null;
-  const text = useLabels("command", commandLabels, labels);
   return (
     <label className={styles["search"]}>
       <SearchIcon className={styles["searchIcon"]} />
       <input
-        placeholder={placeholder ?? text.placeholder}
-        aria-label={text.search}
         autoComplete="off"
         spellCheck={false}
         {...props}

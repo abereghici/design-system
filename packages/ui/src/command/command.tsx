@@ -5,6 +5,7 @@ export type { DialogProps } from "./command-dialog.tsx";
 export { Input } from "./command-input.tsx";
 export type { InputProps } from "./command-input.tsx";
 export { List } from "./command-list.tsx";
+export type { ListProps } from "./command-list.tsx";
 export { Group } from "./command-group.tsx";
 export type { GroupProps } from "./command-group.tsx";
 export { Item } from "./command-item.tsx";

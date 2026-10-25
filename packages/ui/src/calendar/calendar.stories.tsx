@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { expect, fn } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
@@ -8,12 +9,34 @@ import preview from "#.storybook/preview.tsx";
 import type { Locale } from "../ui-provider/locale.tsx";
 
 import { Calendar } from "./calendar.tsx";
-import type { CalendarChangeEventDetails } from "./calendar.tsx";
+import type { CalendarChangeEventDetails, CalendarProps } from "./calendar.tsx";
 
 // @ts-expect-error -- a locale must name the Previous and Next month buttons
 ({ tag: "fr-FR", labels: { ...roRO.labels, calendar: {} } }) satisfies Locale;
 
+// @ts-expect-error -- a Calendar has nothing to disable or submit
+({ disabled: true }) satisfies CalendarProps;
+// @ts-expect-error -- a Calendar has nothing to disable or submit
+({ name: "day", form: "booking" }) satisfies CalendarProps;
+
 const date = (iso: string) => Temporal.PlainDate.from(iso);
+
+function NarrowingMax(args: CalendarProps) {
+  const [max, setMax] = useState<Temporal.PlainDate>();
+  return (
+    <>
+      <Calendar {...args} max={max} />
+      <button
+        type="button"
+        onClick={() => {
+          setMax(date("2026-09-15"));
+        }}
+      >
+        Book by September 15
+      </button>
+    </>
+  );
+}
 
 const meta = preview.meta({
   title: "Components/Calendar",
@@ -147,6 +170,18 @@ Default.test(
     await expect(canvas.getByLabelText("Monday, October 5, 2026")).toHaveFocus();
     await userEvent.click(canvas.getByLabelText("Saturday, October 10, 2026"));
     await expect(args.onValueChange).not.toHaveBeenCalled();
+  },
+);
+
+Default.test(
+  "moves into the range when max changes to before the shown month",
+  { render: NarrowingMax },
+  async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: "Book by September 15" }));
+    await expect(canvas.getByRole("grid", { name: "September 2026" })).toBeVisible();
+    await expect(canvas.getByRole("button", { name: "Previous month" })).not.toHaveAttribute(
+      "aria-disabled",
+    );
   },
 );
 

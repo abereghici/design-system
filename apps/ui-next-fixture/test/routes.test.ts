@@ -203,10 +203,10 @@ describe("locale, labels and direction", () => {
     expect(button.js).not.toContain('"ro-RO"');
   });
 
-  test("a client component ships its own default labels and no other component's", () => {
+  test("a client component ships no interface text of its own; the author's reaches the HTML", () => {
     const alert = route("alert");
-    expect(alert.js).toContain('"Dismiss"');
-    expect(alert.js).not.toContain("Command palette");
+    expect(alert.html).toContain('aria-label="Dismiss"');
+    expect(alert.js).not.toContain('"Dismiss"');
     expect(alert.js).not.toContain("Skip to main content");
   });
 });

@@ -3,7 +3,6 @@ import type { Locale } from "../locale.tsx";
 export const roRO: Locale = {
   tag: "ro-RO",
   labels: {
-    alert: { close: "Închide" },
     spinner: { loading: "Se încarcă" },
     kbd: {
       command: "Comandă",
@@ -22,12 +21,7 @@ export const roRO: Locale = {
     numberField: { increment: "Mărește", decrement: "Micșorează" },
     breadcrumbs: { root: "Cale de navigare" },
     pagination: { root: "Paginare", previous: "Pagina anterioară", next: "Pagina următoare" },
-    popover: { close: "Închide" },
-    dialog: { close: "Închide" },
-    combobox: { noResults: "Niciun rezultat", loading: "Se încarcă…" },
-    sheet: { close: "Închide" },
     fileTrigger: { clear: "Golește fișierele" },
-    toaster: { region: "Notificări", close: "Închide" },
     dateField: {
       dayPlaceholder: "zz",
       monthPlaceholder: "ll",
@@ -38,14 +32,5 @@ export const roRO: Locale = {
     },
     calendar: { previousMonth: "Luna anterioară", nextMonth: "Luna următoare" },
     datePicker: { chooseDate: "Alegeți data" },
-    command: {
-      dialog: "Paletă de comenzi",
-      search: "Caută comenzi",
-      placeholder: "Tastează o comandă sau caută…",
-      empty: "Niciun rezultat",
-      navigate: "Navighează",
-      open: "Deschide",
-      close: "Închide",
-    },
   },
 };

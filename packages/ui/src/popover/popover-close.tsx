@@ -1,28 +1,33 @@
 "use client";
 
-import type { ComponentProps, MouseEvent } from "react";
+import type { ComponentProps, MouseEvent, ReactElement } from "react";
 
 import { composeEventHandlers, dispatchFeedback } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { Slot, join } from "../slot/slot.tsx";
-import { useLabels } from "../ui-provider/locale.tsx";
-import { popover as popoverLabels } from "../ui-provider/locales/en-US/popover.ts";
 
 import { usePopover } from "./popover-root.tsx";
 import iconButtonStyles from "../icon-button/icon-button.module.css";
 import styles from "./popover.module.css";
 
-export interface CloseProps extends ComponentProps<"button"> {
-  /** Makes its one child (a Button such as Done) close the Popover. */
-  asChild?: boolean;
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: { close?: string };
-}
+type Shape =
+  | {
+      /** Makes its one child (a Button such as Done) close the Popover. */
+      asChild: true;
+      children: ReactElement;
+    }
+  | {
+      asChild?: false;
+      /** The name of the `x` button, such as "Close": it shows only an icon. */
+      "aria-label": string;
+      children?: never;
+    };
+
+export type CloseProps = Omit<ComponentProps<"button">, "aria-label" | "children"> & Shape;
 
 /** Closes the Popover. Without children it is the `x` button in the corner. */
-export function Close({ asChild = false, labels, className, ...props }: CloseProps) {
+export function Close({ asChild = false, className, ...props }: CloseProps) {
   const popover = usePopover();
-  const { close } = useLabels("popover", popoverLabels, labels);
   const shared = {
     ...props,
     commandfor: popover.contentId,
@@ -42,7 +47,6 @@ export function Close({ asChild = false, labels, className, ...props }: ClosePro
   return (
     <button
       type="button"
-      aria-label={close}
       {...shared}
       data-size="sm"
       className={`${iconButtonStyles["root"]} ${join(styles["close"], className)}`}

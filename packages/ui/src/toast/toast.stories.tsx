@@ -48,6 +48,7 @@ const withTextField: Decorator = (Story) => (
 const meta = preview.meta({
   title: "Components/Toast",
   component: Toaster,
+  args: { "aria-label": "Notifications", closeLabel: "Dismiss" },
   beforeEach: () => clear,
 });
 
