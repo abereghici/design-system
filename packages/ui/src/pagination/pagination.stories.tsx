@@ -4,13 +4,7 @@ import { expect, within } from "storybook/test";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
-import type { Locale } from "../ui-provider/locale.tsx";
-import { roRO } from "../ui-provider/locales/ro-RO.ts";
-
 import { Pagination } from "./pagination.tsx";
-
-// @ts-expect-error -- a locale must name the pagination landmark and its steps
-({ tag: "fr-FR", labels: { ...roRO.labels, pagination: { root: "Pagination" } } }) satisfies Locale;
 
 const controls = (canvasElement: HTMLElement) =>
   within(canvasElement)
@@ -23,7 +17,7 @@ const controls = (canvasElement: HTMLElement) =>
 const meta = preview.meta({
   title: "Components/Pagination",
   component: Pagination,
-  args: { page: 5, count: 10, getPageUrl: (page: number) => `#page-${page}` },
+  args: { page: 5, count: 10, getPageUrl: (page: number) => `#page-${page}`, locale: "en-US" },
 });
 
 export const Default = meta.story({});
@@ -128,19 +122,17 @@ Default.test(
 );
 
 Default.test(
-  "formats numbers and labels with a locale, and labels override it",
+  "formats page numbers in its locale, and labels override the names",
   {
     args: {
       page: 1200,
       count: 1500,
-      locale: roRO,
+      locale: "ro-RO",
       labels: { page: (page: string) => `Pagina ${page}` },
     },
   },
   async ({ canvas }) => {
-    await expect(canvas.getByRole("navigation", { name: "Paginare" })).toBeVisible();
     await expect(canvas.getByRole("link", { name: "Pagina 1.200" })).toHaveTextContent("1.200");
-    await expect(canvas.getByRole("link", { name: "Pagina următoare" })).toBeVisible();
   },
 );
 

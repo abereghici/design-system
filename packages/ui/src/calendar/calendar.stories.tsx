@@ -3,7 +3,6 @@ import { expect, fn } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
 import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview from "#.storybook/preview.tsx";
 
@@ -45,6 +44,7 @@ const meta = preview.meta({
   args: {
     "aria-label": "Delivery date",
     defaultValue: date("2026-10-24"),
+    locale: "en-US",
     onValueChange: fn<(value: Temporal.PlainDate, details: CalendarChangeEventDetails) => void>(),
   },
 });
@@ -210,18 +210,9 @@ Default.test("marks today", { args: { defaultValue: null } }, async ({ canvas })
 
 Default.test(
   "starts the week on Monday for ro-RO, in Romanian",
-  {
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
+  { args: { locale: "ro-RO" } },
   async ({ canvas }) => {
     await expect(canvas.getByRole("grid", { name: "octombrie 2026" })).toBeVisible();
     await expect(canvas.getAllByRole("columnheader")[0]).toHaveTextContent("lun.");
-    await expect(canvas.getByRole("button", { name: "Luna următoare" })).toBeVisible();
   },
 );

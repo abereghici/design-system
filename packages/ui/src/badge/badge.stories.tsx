@@ -4,14 +4,12 @@ import { Link } from "@platform/ui/link";
 
 import preview from "#.storybook/preview.tsx";
 
-import { enUS } from "../ui-provider/locales/en-US.ts";
-
 import { Badge } from "./badge.tsx";
 
 const meta = preview.meta({
   title: "Components/Badge",
   component: Badge,
-  args: { children: 3 },
+  args: { children: 3, locale: "en-US" },
 });
 
 export const Default = meta.story({});
@@ -28,14 +26,14 @@ Default.test("caps a count above max", { args: { children: 1280 } }, async ({ ca
 
 Default.test(
   "formats the count and the cap in its locale",
-  { args: { children: 1280, max: 1000, locale: { ...enUS, tag: "de" } } },
+  { args: { children: 1280, max: 1000, locale: "ro-RO" } },
   async ({ canvas }) => {
     await expect(canvas.getByText("1.000+")).toBeVisible();
   },
 );
 
 Default.test(
-  "formats a count in English without a locale",
+  "formats a count in its locale",
   { args: { children: 1280, max: 9999 } },
   async ({ canvas }) => {
     await expect(canvas.getByText("1,280")).toBeVisible();

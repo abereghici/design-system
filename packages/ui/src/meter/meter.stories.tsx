@@ -2,8 +2,6 @@ import { expect } from "storybook/test";
 
 import preview from "#.storybook/preview.tsx";
 
-import { roRO } from "../ui-provider/locales/ro-RO.ts";
-
 import { Meter } from "./meter.tsx";
 import type { MeterProps } from "./meter.tsx";
 
@@ -13,7 +11,7 @@ import type { MeterProps } from "./meter.tsx";
 const meta = preview.meta({
   title: "Components/Meter",
   component: Meter,
-  args: { value: 42, label: "Storage" },
+  args: { value: 42, label: "Storage", locale: "en-US" },
 });
 
 export const Default = meta.story({});
@@ -85,7 +83,7 @@ Default.test(
 
 Default.test(
   "formats its value in the given locale",
-  { args: { locale: roRO, label: "Spațiu" } },
+  { args: { locale: "ro-RO", label: "Spațiu" } },
   async ({ canvas }) => {
     await expect(canvas.getByText("42 %")).toBeVisible();
   },

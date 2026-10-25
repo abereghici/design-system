@@ -1,7 +1,6 @@
 import type { ComponentProps } from "react";
 
 import { join } from "../slot/slot.tsx";
-import type { Locale } from "../ui-provider/locale.tsx";
 
 import styles from "./badge.module.css";
 
@@ -19,10 +18,10 @@ export interface BadgeProps extends Omit<ComponentProps<"span">, "children"> {
   /** The highest count shown in full; above it the Badge shows "99+", keeping it short. */
   max?: number;
   /**
-   * A shipped locale (`@platform/ui/locales/*`). This renders on the server, where the
-   * UIProvider's `locale` can't reach, so pass it for any language other than en-US.
+   * The language a count is formatted in, such as "ro-RO". Pass the same one on the server and in
+   * the browser; without it, the runtime's default language is used.
    */
-  locale?: Locale;
+  locale?: Intl.LocalesArgument;
   /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: BadgeLabels;
   /** A number is formatted and capped; a string (one to four characters) renders as given. */
@@ -46,7 +45,7 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const overflow = typeof children === "number" && children > max;
-  const formatter = new Intl.NumberFormat(locale?.tag ?? "en-US");
+  const format = (count: number) => new Intl.NumberFormat(locale).format(count);
   return (
     <span
       {...props}
@@ -57,8 +56,8 @@ export function Badge({
       {typeof children === "string"
         ? children
         : overflow
-          ? (labels?.overflow ?? overflowLabel)(formatter.format(max))
-          : formatter.format(children)}
+          ? (labels?.overflow ?? overflowLabel)(format(max))
+          : format(children)}
     </span>
   );
 }

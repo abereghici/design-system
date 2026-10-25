@@ -66,6 +66,7 @@ export function DateFieldFrame({
   disabled,
   validate,
   labels,
+  locale,
   isDateUnavailable,
   onFormReset,
   end,
@@ -86,7 +87,7 @@ export function DateFieldFrame({
       {label !== undefined && <Field.Label>{label}</Field.Label>}
       <Control
         {...props}
-        options={{ ...options, disabled, validate, labels, isDateUnavailable, onFormReset }}
+        options={{ ...options, disabled, validate, labels, locale, isDateUnavailable, onFormReset }}
         onValidity={setValidity}
         end={end}
       />

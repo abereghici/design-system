@@ -80,13 +80,17 @@ export function navigate(
 
 /**
  * Ranks every option's `data-label` (else its text) and `data-keywords` against `query`; a `null`
- * tag or an empty query shows all. Hides non-matches and empty groups, and numbers the shown options.
+ * locale or an empty query shows all. Hides non-matches and empty groups, and numbers the shown options.
  */
-export function filterOptions(list: Element | null, query: string, tag: string | null) {
+export function filterOptions(
+  list: Element | null,
+  query: string,
+  locale: Intl.LocalesArgument | null,
+) {
   for (const option of list?.querySelectorAll<HTMLElement>('[role="option"]') ?? []) {
     const keywords = option.dataset["keywords"]?.split("\n") ?? [];
     const label = option.dataset["label"] ?? textOf(option);
-    const tier = tag === null || query === "" ? 0 : rank([label, ...keywords], query, tag);
+    const tier = locale === null || query === "" ? 0 : rank([label, ...keywords], query, locale);
     if (option.hidden !== (tier === undefined)) option.hidden = tier === undefined;
     const order = tier === undefined || tier === 0 ? "" : String(tier);
     if (option.style.order !== order) option.style.order = order;

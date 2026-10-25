@@ -41,6 +41,7 @@ const meta = preview.meta({
   args: {
     defaultValue: 40,
     children: volume,
+    locale: "en-US",
     onValueChange: fn<(value: number | number[], details: Slider.ChangeEventDetails) => void>(),
     onValueCommitted: fn<(value: number | number[], details: Slider.CommitEventDetails) => void>(),
   },
@@ -178,6 +179,17 @@ Default.test(
     await userEvent.keyboard("{ArrowRight}{End}");
     await expect(slider).toHaveValue("40");
     await expect(args.onValueChange).not.toHaveBeenCalled();
+  },
+);
+
+Default.test(
+  "formats its value in its locale",
+  { args: { locale: "ro-RO", defaultValue: 0.5, max: 1, step: 0.1, format: { style: "percent" } } },
+  async ({ canvas }) => {
+    await expect(canvas.getByRole("slider", { name: "Volume" })).toHaveAttribute(
+      "aria-valuetext",
+      "50\u00A0%",
+    );
   },
 );
 
