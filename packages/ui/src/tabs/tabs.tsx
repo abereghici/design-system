@@ -3,9 +3,8 @@
 import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../events/events.ts";
 import { join } from "../slot/slot.tsx";
-import { changeDetails } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
 import styles from "./tabs.module.css";
@@ -44,8 +43,7 @@ export function Root({ value, defaultValue, onValueChange, className, ...props }
 
   function select(next: string, event: MouseEvent<HTMLButtonElement>) {
     if (next === current) return;
-    onValueChange?.(next, changeDetails(event));
-    if (event.defaultPrevented) return;
+    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) return;
     setUncontrolled(next);
     const trigger = event.currentTarget;
     trigger.focus();
@@ -123,7 +121,7 @@ export function Trigger({
       }}
       onKeyDown={(event) => {
         onKeyDown?.(event);
-        if (!event.defaultPrevented) moveSelection(event);
+        moveSelection(event);
       }}
       onClick={(event) => {
         onClick?.(event);

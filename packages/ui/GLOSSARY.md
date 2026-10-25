@@ -21,8 +21,20 @@ UI that renders above the page flow: menus, popovers, tooltips, toasts, dialogs 
 _Avoid_: Overlay (as a generic term), portal, modal (unless it blocks the page)
 
 **Feedback event**:
-A bubbling, `ab-`-prefixed DOM event (`ab-press`, `ab-toggle`, `ab-confirm`, `ab-dismiss`, `ab-appear`) a component dispatches at a moment an app may want to answer with sound or haptics. Carries the component name and a `reason`.
+A bubbling, `ab-`-prefixed DOM event (`ab-press`, `ab-toggle`, `ab-confirm`, `ab-dismiss`, `ab-appear`) a component dispatches at a moment an app may want to answer with sound or haptics. Carries the component name and a `reason`. It fires after the consumer's handler for that moment has run, and only once a change request is accepted.
 _Avoid_: Sound event, haptic event, callback
+
+**Change request**:
+A state change a component asks its consumer about before committing: the `on…Change` callback receives the value and `details` (`reason`, `event`, `cancel()`), and calling `cancel()` keeps the previous state. `cancel()` is the only way to stop it: a consumer's `preventDefault()` in its own handler keeps just its native meaning (a canceled click does not check a radio or run a button's command) and stops nothing the component does itself (Base UI: `preventBaseUIHandler()`, not `preventDefault()`).
+_Avoid_: Change event, veto, controlled change
+
+**Listbox navigator**:
+The active-descendant keyboard both listbox popups share (Combobox, Command): focus stays in the input while Down and Up step through the shown, enabled options and wrap, and Home and End reach the ends while the input is empty.
+_Avoid_: Roving focus (that is Menu's), list navigation
+
+**Field control**:
+The one seam between a Field and the control inside it: `useFieldControl` for a native input, `useField` for a composite control (DateField segments, a FileTrigger, a DropZone), giving the Field's ids, blocked state, `aria-invalid` and server error, and `useFormReset` for a form reset.
+_Avoid_: Field context (as an API), input binding
 
 **Icon**:
 A glyph from the carved icon set on the 24-unit grid, stroked in the surrounding text colour; decorative unless it has a label. Each one is its own component (`SearchIcon`).
@@ -45,5 +57,5 @@ A typed object holding a BCP 47 tag and every built-in label in that language (`
 _Avoid_: Translations, messages, i18n bundle
 
 **Built-in label**:
-A string a component supplies by default, from its namespace in the Locale. It names only elements the component owns (a Close button, the steppers), and it gives way to any name the consumer gives (`aria-label`, `aria-labelledby`, or a `<label for>` through `id`).
+A string a component supplies by default, from its namespace in the Locale. It names only elements the component owns (a Close button, the steppers), and it gives way to any name the consumer gives (`aria-label`, `aria-labelledby`, or a `<label for>` through `id`). Precedence: the consumer's `labels`, then the Provider's Locale, then the component's own en-US namespace.
 _Avoid_: Default text, i18n key

@@ -131,6 +131,15 @@ Default.test(
   },
 );
 
+Default.test("still changes when its click is default-prevented", async ({ canvas, userEvent }) => {
+  const tab = canvas.getByRole("tab", { name: "Settings" });
+  tab.addEventListener("click", (event) => {
+    event.preventDefault();
+  });
+  await userEvent.click(tab);
+  await expect(tab).toHaveAttribute("aria-selected", "true");
+});
+
 Default.test(
   "follows a controlled value",
   { args: { value: "settings" } },

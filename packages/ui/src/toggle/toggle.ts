@@ -1,20 +1,10 @@
-import type { KeyboardEvent, MouseEvent, MouseEventHandler, PointerEvent } from "react";
+import type { DOMAttributes, KeyboardEvent, MouseEventHandler, PointerEvent } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 
 /** `cancel()`: keeps the previous state: the browser restores it once the click is cancelled. */
 export type ChangeEventDetails = Details<"none">;
-
-export function changeDetails(event: MouseEvent): ChangeEventDetails {
-  return {
-    reason: "none",
-    event: event.nativeEvent,
-    cancel: () => {
-      event.preventDefault();
-    },
-  };
-}
 
 /**
  * The input's `click` handler. The browser has already flipped the checkedness when it runs, and
@@ -32,22 +22,31 @@ export function toggleClick(
       return;
     }
     onClick?.(event);
-    onCheckedChange?.(event.currentTarget.checked, changeDetails(event));
+    if (!requestChange(onCheckedChange, event.currentTarget.checked, "none", event.nativeEvent)) {
+      event.preventDefault();
+    }
+    // A canceled click restores the input's checkedness (HTML legacy-canceled-activation behavior).
     if (!event.defaultPrevented) {
       dispatchFeedback(event.currentTarget, "ab-toggle", { component, reason: "user" });
     }
   };
 }
 
-/** Marks pointer-initiated changes with `data-pointer`, so keyboard changes skip the motion. */
-export const pointerMarker = {
-  onPointerDown: (event: PointerEvent<HTMLElement>) => {
-    event.currentTarget.dataset["pointer"] = "";
-  },
-  onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
-    delete event.currentTarget.dataset["pointer"];
-  },
-};
+/** Marks pointer-initiated changes with `data-pointer`, so keyboard changes skip the motion; `props`' own handlers run first. */
+export function pointerMarker<Element extends HTMLElement>(
+  props: Pick<DOMAttributes<Element>, "onPointerDown" | "onKeyDown"> = {},
+) {
+  return {
+    onPointerDown: (event: PointerEvent<Element>) => {
+      props.onPointerDown?.(event);
+      event.currentTarget.dataset["pointer"] = "";
+    },
+    onKeyDown: (event: KeyboardEvent<Element>) => {
+      props.onKeyDown?.(event);
+      delete event.currentTarget.dataset["pointer"];
+    },
+  };
+}
 
 // WebKit doesn't swap Left and Right for native radios in RTL (Chromium and Firefox do). Inside a Toolbar the Toolbar owns the arrow keys.
 export function followVisualDirection(event: KeyboardEvent<HTMLElement>) {

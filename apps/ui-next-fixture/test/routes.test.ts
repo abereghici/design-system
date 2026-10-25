@@ -106,6 +106,17 @@ describe("per-component CSS", () => {
   });
 });
 
+const built = readdirSync(join(next, "static"), { recursive: true, encoding: "utf8" })
+  .filter((file) => /\.(?:css|js)$/v.test(file))
+  .map((file) => readFileSync(join(next, "static", file), "utf8"))
+  .join("\n");
+const readInBuild = (name: string) => built.includes(`var(${name})`) || built.includes(`"${name}"`);
+
+test("every component token is read by a component rule or script in the build", () => {
+  const names = componentTokens.map((token) => token.slice(0, -1));
+  expect(names.filter((name) => !readInBuild(name))).toEqual([]);
+});
+
 describe("each component route ships only its own CSS, tokens and client code", () => {
   test.each(componentRoutes)("$name", ({ name, tokens, client, html }) => {
     const r = route(name);

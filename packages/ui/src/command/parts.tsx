@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 
 import { SearchIcon } from "../icon/icons/search.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import { command as commandLabels } from "../provider/locales/en-US/command.ts";
 import { join } from "../slot/slot.tsx";
 
@@ -33,7 +33,7 @@ export function Input({
 }: InputProps) {
   const command = useCommand();
   const inDialog = use(DialogContext) !== null;
-  const text = { ...commandLabels, ...useLocale().labels.command, ...labels };
+  const text = useLabels("command", commandLabels, labels);
   return (
     <label className={styles["search"]}>
       <SearchIcon className={styles["searchIcon"]} />
@@ -73,8 +73,7 @@ export interface EmptyProps extends ComponentProps<"output"> {
 /** What to show while nothing matches; screen readers announce it. */
 export function Empty({ labels, className, children, ...props }: EmptyProps) {
   const { empty } = useCommand();
-  const locale = useLocale();
-  const text = labels?.empty ?? locale.labels.command?.empty ?? commandLabels.empty;
+  const text = useLabels("command", commandLabels, labels).empty;
   return (
     <output {...props} className={join(styles["empty"], className)}>
       {empty &&
@@ -103,7 +102,7 @@ export interface FooterProps extends ComponentProps<"div"> {
 /** Teaches the keys (navigate, open, close) to people who can see the palette. */
 export function Footer({ labels, className, children, ...props }: FooterProps) {
   const inDialog = use(DialogContext) !== null;
-  const text = { ...commandLabels, ...useLocale().labels.command, ...labels };
+  const text = useLabels("command", commandLabels, labels);
   return (
     <div aria-hidden="true" {...props} className={join(styles["footer"], className)}>
       {children ?? (

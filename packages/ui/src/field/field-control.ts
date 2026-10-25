@@ -1,10 +1,13 @@
 import { createContext, use, useEffect, useRef } from "react";
 import type { ChangeEvent, ChangeEventHandler, FocusEvent, FocusEventHandler } from "react";
 
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 
 /** The native elements a Field validates. */
 export type FormControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+
+export type Validate = (value: string, formData: FormData) => string | null | undefined;
 
 export interface FieldState {
   readonly controlId: string;
@@ -40,14 +43,32 @@ export interface ControlBindings<Element extends FormControl> {
   onValueChange?: ((value: string, details: ChangeEventDetails<Element>) => void) | undefined;
 }
 
-function changeEventDetails<Element extends FormControl>(
-  event: ChangeEvent<Element>,
-): [ChangeEventDetails<Element>, () => boolean] {
-  let cancelled = false;
-  const cancel = () => {
-    cancelled = true;
-  };
-  return [{ reason: "none", event, cancel }, () => cancelled];
+/**
+ * The enclosing Field for any control, a composite one included (segments, a trigger, a drop
+ * area): its state, whether the control is blocked (its own `disabled` or the Field's), and its
+ * `aria-invalid`.
+ */
+export function useField(disabled?: boolean) {
+  const field = use(FieldContext);
+  return [
+    field,
+    disabled === true || field?.disabled === true,
+    field?.invalid === true || undefined,
+  ] as const;
+}
+
+/** Runs `onReset` when the form that owns `control()` resets. */
+export function useFormReset(
+  control: () => { readonly form: HTMLFormElement | null } | null | undefined,
+  onReset: () => void,
+) {
+  useEffect(() => {
+    const controller = new AbortController();
+    control()?.form?.addEventListener("reset", onReset, { signal: controller.signal });
+    return () => {
+      controller.abort();
+    };
+  });
 }
 
 /**
@@ -85,9 +106,9 @@ export function useFieldControl<
         return;
       }
       onChange?.(event);
-      const [details, cancelled] = changeEventDetails(event);
-      onValueChange?.(target.value, details);
-      if (cancelled()) target.value = previous.current;
+      if (!requestChange(onValueChange, target.value, "none", event)) {
+        target.value = previous.current;
+      }
       previous.current = target.value;
     },
   };

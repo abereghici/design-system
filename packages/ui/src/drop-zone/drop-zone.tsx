@@ -1,9 +1,10 @@
 "use client";
 
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ComponentProps, DragEvent, RefObject } from "react";
 
-import { FieldContext } from "../field/field-control.ts";
+import { requestChange } from "../events/events.ts";
+import { useField } from "../field/field-control.ts";
 import { FileInput, PickerContext } from "../file-trigger/file-trigger.tsx";
 import { join } from "../slot/slot.tsx";
 
@@ -54,22 +55,31 @@ function matcher(accept: string | undefined) {
   };
 }
 
-/** Stops a file dropped outside every zone from opening in the page (MDN, file drag and drop). */
+const preventDragOver = (event: globalThis.DragEvent) => {
+  if (!hasFiles(event) || event.defaultPrevented || event.dataTransfer === null) return;
+  event.preventDefault();
+  event.dataTransfer.dropEffect = "none";
+};
+
+const preventDrop = (event: globalThis.DragEvent) => {
+  if (hasFiles(event)) event.preventDefault();
+};
+
+let zones = 0;
+let listening = new AbortController();
+
+/** Stops a file dropped outside every zone from opening in the page (MDN, file drag and drop), with one pair of window listeners however many zones are mounted. */
 function usePreventDocumentDrop() {
   useEffect(() => {
-    const dragover = (event: globalThis.DragEvent) => {
-      if (!hasFiles(event) || event.defaultPrevented || event.dataTransfer === null) return;
-      event.preventDefault();
-      event.dataTransfer.dropEffect = "none";
-    };
-    const drop = (event: globalThis.DragEvent) => {
-      if (hasFiles(event)) event.preventDefault();
-    };
-    window.addEventListener("dragover", dragover);
-    window.addEventListener("drop", drop);
+    zones += 1;
+    if (zones === 1) {
+      listening = new AbortController();
+      window.addEventListener("dragover", preventDragOver, { signal: listening.signal });
+      window.addEventListener("drop", preventDrop, { signal: listening.signal });
+    }
     return () => {
-      window.removeEventListener("dragover", dragover);
-      window.removeEventListener("drop", drop);
+      zones -= 1;
+      if (zones === 0) listening.abort();
     };
   }, []);
 }
@@ -123,13 +133,12 @@ function useDropTarget({ accept, multiple, onDrop, blocked, input }: DropTargetO
       const files = [...event.dataTransfer.files];
       if (blocked || input.current === null) return;
       const accepted = files.filter((file) => accepts(file)).slice(0, multiple ? undefined : 1);
-      let cancelled = false;
-      const cancel = () => {
-        cancelled = true;
-      };
       const rejected = files.filter((file) => !accepts(file));
-      onDrop?.(accepted, { reason: "none", event, rejected, cancel });
-      if (!cancelled && accepted.length > 0) setFiles(input.current, accepted);
+      const report = (value: File[], details: Omit<DropZoneDropEventDetails, "rejected">) =>
+        onDrop?.(value, { ...details, rejected });
+      if (requestChange(report, accepted, "none", event) && accepted.length > 0) {
+        setFiles(input.current, accepted);
+      }
     },
   };
 }
@@ -152,10 +161,9 @@ export function DropZone({
   children,
   ...props
 }: DropZoneProps) {
-  const field = use(FieldContext);
+  const [, blocked, invalid] = useField(disabled);
   const input = useRef<HTMLInputElement>(null);
   const trigger = useRef<HTMLElement>(null);
-  const blocked = disabled || field?.disabled === true;
   const { target, ...handlers } = useDropTarget({ accept, multiple, onDrop, blocked, input });
   const picker = { input, trigger, disabled: blocked };
   usePreventDocumentDrop();
@@ -166,7 +174,7 @@ export function DropZone({
         {...props}
         className={join(styles["root"], className)}
         data-drop-target={target}
-        data-invalid={field?.invalid === true || undefined}
+        data-invalid={invalid}
         data-disabled={blocked || undefined}
         {...handlers}
       >

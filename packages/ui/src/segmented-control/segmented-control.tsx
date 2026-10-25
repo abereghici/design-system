@@ -3,10 +3,10 @@
 import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../events/events.ts";
 import { useFieldControl } from "../field/field-control.ts";
 import { join } from "../slot/slot.tsx";
-import { changeDetails, followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
+import { followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
 import styles from "./segmented-control.module.css";
@@ -43,12 +43,14 @@ export function Root({
   ...props
 }: RootProps) {
   const name = useId();
+  const marker = pointerMarker({ onPointerDown, onKeyDown });
   const [uncontrolled, setUncontrolled] = useState(defaultValue ?? "");
   const current = value ?? uncontrolled;
 
   function select(next: string, event: MouseEvent<HTMLInputElement>) {
     if (next === current) return;
-    onValueChange?.(next, changeDetails(event));
+    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) event.preventDefault();
+    // A canceled click restores the input's checkedness (HTML legacy-canceled-activation behavior).
     if (event.defaultPrevented) return;
     setUncontrolled(next);
     dispatchFeedback(event.currentTarget, "ab-toggle", {
@@ -63,13 +65,9 @@ export function Root({
         {...props}
         role="radiogroup"
         className={join(styles["root"], className)}
-        onPointerDown={(event) => {
-          pointerMarker.onPointerDown(event);
-          onPointerDown?.(event);
-        }}
+        {...marker}
         onKeyDown={(event) => {
-          pointerMarker.onKeyDown(event);
-          onKeyDown?.(event);
+          marker.onKeyDown(event);
           followVisualDirection(event);
         }}
       />

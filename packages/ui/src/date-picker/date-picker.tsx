@@ -6,10 +6,11 @@ import type { ReactNode } from "react";
 import { DateFieldFrame } from "../date-field/date-field.tsx";
 import type { DateFieldChangeEventDetails, DateFieldProps } from "../date-field/date-field.tsx";
 import type { DatePickerContextValue, Temporal } from "../date/date.ts";
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId, useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as FloatingDetails, Floating } from "../floating/floating.ts";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { datePicker as datePickerLabels } from "../provider/locales/en-US/date-picker.ts";
 import { pointerMarker } from "../toggle/toggle.ts";
@@ -59,16 +60,10 @@ function useValue({ value, defaultValue = null, onValueChange }: RootProps) {
     date: Temporal.PlainDate | null,
     reason: ChangeEventDetails["reason"],
     event: Event,
-    onCancel?: () => void,
   ) => {
-    let cancelled = false;
-    const cancel = () => {
-      cancelled = true;
-      onCancel?.();
-    };
-    onValueChange?.(date, { reason, event, cancel });
-    if (!cancelled) setOwn(date);
-    return !cancelled;
+    const accepted = requestChange(onValueChange, date, reason, event);
+    if (accepted) setOwn(date);
+    return accepted;
   };
   const reset = () => {
     setOwn(defaultValue);
@@ -96,7 +91,7 @@ function pickerOf(
       const focus = document.activeElement;
       return (
         focus === document.body ||
-        focus?.getAttribute("aria-controls") === floating.contentId ||
+        focus?.getAttribute("commandfor") === floating.contentId ||
         byId(floating.contentId)?.contains(focus) === true
       );
     },
@@ -111,9 +106,7 @@ function pickerOf(
 export function Root(props: RootProps) {
   const { defaultValue, open, defaultOpen, onOpenChange, isDateUnavailable, ...rest } = props;
   const { labels, disabled, children, ...field } = rest;
-  const locale = useLocale();
-  const name =
-    labels?.chooseDate ?? locale.labels.datePicker?.chooseDate ?? datePickerLabels.chooseDate;
+  const name = useLabels("datePicker", datePickerLabels, labels).chooseDate;
   const date = useValue(props);
   const trigger = useRef<HTMLButtonElement>(null);
   const fieldBox = () => trigger.current?.closest("fieldset") ?? null;
@@ -126,27 +119,13 @@ export function Root(props: RootProps) {
       value={date.current}
       defaultValue={defaultValue}
       onValueChange={(next, details) => {
-        date.change(next, details.reason, details.event, details.cancel);
+        if (!date.change(next, details.reason, details.event)) details.cancel();
       }}
       isDateUnavailable={isDateUnavailable}
       labels={labels}
       onFormReset={date.reset}
-      onPointerDown={(event) => {
-        field.onPointerDown?.(event);
-        pointerMarker.onPointerDown(event);
-      }}
-      onKeyDown={(event) => {
-        field.onKeyDown?.(event);
-        pointerMarker.onKeyDown(event);
-      }}
-      end={
-        <Trigger
-          panel={panel}
-          value={date.current}
-          disabled={disabled === true}
-          fieldBox={fieldBox}
-        />
-      }
+      {...pointerMarker(field)}
+      end={<Trigger panel={panel} value={date.current} disabled={disabled === true} />}
     >
       <PanelContext value={{ ...panel, picker: pickerOf(floating, date, props) }}>
         {children}

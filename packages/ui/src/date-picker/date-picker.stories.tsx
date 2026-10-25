@@ -18,6 +18,7 @@ import * as DatePicker from "./date-picker.tsx";
 const date = (iso: string) => Temporal.PlainDate.from(iso);
 const submitted = fn<(data: FormData) => void>();
 const onOpenChange = fn<NonNullable<DatePicker.RootProps["onOpenChange"]>>();
+const onValueChange = fn<NonNullable<DatePicker.RootProps["onValueChange"]>>();
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const LoadedCalendar = lazy(() =>
@@ -32,7 +33,7 @@ const meta = preview.meta({
     label: "Due date",
     name: "due",
     defaultValue: date("2025-03-12"),
-    onValueChange: fn<NonNullable<DatePicker.RootProps["onValueChange"]>>(),
+    onValueChange,
     onOpenChange,
     children: (
       <DatePicker.Content>
@@ -77,12 +78,16 @@ Default.test("opens from the keyboard with focus on the selected day", async ({ 
 });
 
 Default.test(
-  "chooses a clicked day, closes and returns focus to the trigger",
+  "keeps the panel on a cancelled day press, then chooses the day, closes and returns focus",
   async ({ args, canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Choose date" });
     await user.click(trigger);
     await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
+    onValueChange.mockImplementationOnce((_value, details) => {
+      details.cancel();
+    });
+    await user.click(canvas.getByLabelText("Thursday, March 20, 2025"));
     await user.click(canvas.getByLabelText("Thursday, March 20, 2025"));
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     await expect(trigger).toHaveFocus();
@@ -166,7 +171,7 @@ Default.test("closes when its trigger is pressed again", async ({ canvas }) => {
   await user.click(trigger);
   await waitFor(() => expect(canvas.getByRole("dialog")).toBeVisible());
   await user.click(trigger);
-  await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
+  await waitFor(() => expect(reasons().at(-1)).toEqual([false, "trigger-press"]));
   await expect(trigger).toHaveAttribute("aria-expanded", "false");
   await expect(pressed.events.map((event) => event.detail.component)).toEqual([
     "IconButton",

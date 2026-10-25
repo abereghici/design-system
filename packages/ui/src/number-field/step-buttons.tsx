@@ -5,7 +5,7 @@ import type { SyntheticEvent } from "react";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { MinusIcon } from "../icon/icons/minus.tsx";
 import { PlusIcon } from "../icon/icons/plus.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { numberField as numberFieldLabels } from "../provider/locales/en-US/number-field.ts";
 
@@ -22,7 +22,7 @@ export function StepButtons({
   disabled: (direction: Direction) => boolean;
   onStep: (direction: Direction, event: SyntheticEvent) => void;
 }) {
-  const names = { ...numberFieldLabels, ...useLocale().labels.numberField, ...labels };
+  const names = useLabels("numberField", numberFieldLabels, labels);
   return ([-1, 1] as const).map((direction) => (
     <IconButton
       key={direction}

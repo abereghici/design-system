@@ -63,7 +63,7 @@ function useServerError(name: string | undefined, controlId: string) {
   useEffect(() => {
     const target = controlOf(controlId);
     if (server === undefined || target === null || errors === undefined) return;
-    const first = Array.from(target.form?.elements ?? []).find(
+    const first = [...(target.form?.elements ?? [])].find(
       (element) => errors[element.getAttribute("name") ?? ""] !== undefined,
     );
     if (first === target && document.activeElement !== target) target.focus();
@@ -96,11 +96,11 @@ function useValidity({ name, validate }: Pick<RootProps, "name" | "validate">, c
       setFailure(target === null ? null : failureOf(target));
     };
     // React's onChange on a text input is the input event; user validity turns on at the native change.
-    target?.addEventListener("change", commit);
-    form?.addEventListener("reset", clearServerError);
+    const controller = new AbortController();
+    target?.addEventListener("change", commit, { signal: controller.signal });
+    form?.addEventListener("reset", clearServerError, { signal: controller.signal });
     return () => {
-      target?.removeEventListener("change", commit);
-      form?.removeEventListener("reset", clearServerError);
+      controller.abort();
     };
   });
 

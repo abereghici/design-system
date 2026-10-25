@@ -1,14 +1,15 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { FieldContext } from "../field/field-control.ts";
+import { useField } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { EyeOffIcon } from "../icon/icons/eye-off.tsx";
 import { EyeIcon } from "../icon/icons/eye.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { passwordField as passwordFieldLabels } from "../provider/locales/en-US/password-field.ts";
 import { InputGroup, TextInput } from "../text-field/text-field.tsx";
@@ -61,13 +62,9 @@ function useVisibility(
   const [own, setOwn] = useState(defaultVisible ?? false);
   const current = visible ?? own;
   const change = (next: boolean, reason: Reason, event: Event) => {
-    let cancelled = false;
-    const cancel = () => {
-      cancelled = true;
-    };
-    onVisibleChange?.(next, { reason, event, cancel });
-    if (!cancelled) setOwn(next);
-    return !cancelled;
+    const accepted = requestChange(onVisibleChange, next, reason, event);
+    if (accepted) setOwn(next);
+    return accepted;
   };
   useEffect(() => {
     const input = inputOf(inputId);
@@ -76,9 +73,10 @@ function useVisibility(
       // The type must switch before the submission reads the form, not on React's next render.
       if (current && change(false, "form-submit", event) && input !== null) input.type = "password";
     };
-    form?.addEventListener("submit", hide);
+    const controller = new AbortController();
+    form?.addEventListener("submit", hide, { signal: controller.signal });
     return () => {
-      form?.removeEventListener("submit", hide);
+      controller.abort();
     };
   });
   return [current, change] as const;
@@ -93,18 +91,17 @@ function Control({
   autoComplete = "current-password",
   ...props
 }: ControlProps) {
-  const field = use(FieldContext);
-  const locale = useLocale();
+  const [field, blocked] = useField();
   const inputId = field?.controlId;
   const [visible, change] = useVisibility(inputId, controlled, defaultVisible, onVisibleChange);
 
   const toggle = (
     <IconButton
       size="sm"
-      aria-label={labels?.show ?? locale.labels.passwordField?.show ?? passwordFieldLabels.show}
+      aria-label={useLabels("passwordField", passwordFieldLabels, labels).show}
       aria-controls={inputId}
       pressed={visible}
-      disabled={field?.disabled === true}
+      disabled={blocked}
       onPressedChange={(next, details) => {
         if (!change(next, "toggle-press", details.event.nativeEvent)) details.cancel();
       }}

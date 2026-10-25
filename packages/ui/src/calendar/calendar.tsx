@@ -13,10 +13,11 @@ import type { ComponentProps, FocusEvent, KeyboardEvent, MouseEvent } from "reac
 
 import { DatePickerContext, dateFormats, Temporal } from "../date/date.ts";
 import type { DatePickerContextValue } from "../date/date.ts";
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels, useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { calendar as calendarLabels } from "../provider/locales/en-US/calendar.ts";
 import { join } from "../slot/slot.tsx";
@@ -49,9 +50,10 @@ export interface CalendarProps extends Omit<
 }
 
 const onFocusIn = (listener: () => void) => {
-  document.addEventListener("focusin", listener);
+  const controller = new AbortController();
+  document.addEventListener("focusin", listener, { signal: controller.signal });
   return () => {
-    document.removeEventListener("focusin", listener);
+    controller.abort();
   };
 };
 
@@ -91,12 +93,7 @@ function useCalendar(
       return;
     }
     if (selected?.equals(date) === true) return;
-    let cancelled = false;
-    const cancel = () => {
-      cancelled = true;
-    };
-    onValueChange?.(date, { reason: "day-press", event, cancel });
-    if (!cancelled) setOwn(date);
+    if (requestChange(onValueChange, date, "day-press", event)) setOwn(date);
   };
   return { today, selected, start, focused, setFocused, outside, unavailable, choose };
 }
@@ -236,7 +233,7 @@ export function Calendar({
   return (
     <fieldset {...rest} className={join(styles["root"], className)}>
       <Header
-        names={{ ...calendarLabels, ...locale.labels.calendar, ...labels }}
+        names={useLabels("calendar", calendarLabels, labels)}
         heading={formats.heading(first)}
         headingId={headingId}
         before={!outside(first.subtract({ days: 1 }))}

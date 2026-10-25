@@ -1,8 +1,9 @@
 import { useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "react";
-import type { ToggleEvent } from "react";
+import type { ComponentProps, MouseEvent, ToggleEvent } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { pointerMarker } from "../toggle/toggle.ts";
 
 export type ChangeReason =
   | "trigger-press"
@@ -42,6 +43,46 @@ interface Options {
 
 type Component = "Popover" | "DropdownMenu" | "ContextMenu";
 
+/** What a Content part adds to the layer's own `beforetoggle` and `toggle` handling, which runs first. */
+export type ContentHooks = Partial<
+  Record<"onBeforeToggle" | "onToggle", (event: ToggleEvent<HTMLElement>) => void>
+>;
+
+type TriggerHandlers = Pick<
+  ComponentProps<"button">,
+  "onPointerDown" | "onKeyDown" | "onClick" | "onBlur"
+>;
+
+/** The Trigger: an invoker of the layer, so pressing it never light-dismisses the layer. */
+function triggerPropsOf<Props extends TriggerHandlers>(
+  props: Props,
+  layer: ReturnType<typeof controlsOf> & { open: boolean; anchored: boolean },
+) {
+  return {
+    ...props,
+    commandfor: layer.contentId,
+    command: "toggle-popover",
+    "aria-expanded": layer.open,
+    ...pointerMarker(props),
+    onClick: (event: MouseEvent<HTMLButtonElement>) => {
+      props.onClick?.(event);
+      // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).
+      if (event.defaultPrevented) return;
+      const next = !isOpen(byId(layer.contentId));
+      if (layer.anchored) {
+        event.preventDefault();
+        layer.toggle(next, "trigger-press", event.nativeEvent);
+      } else if (!layer.request(next, "trigger-press", event.nativeEvent)) {
+        event.preventDefault();
+      }
+    },
+    onBlur: (event) => {
+      props.onBlur?.(event);
+      layer.focusOut(event.nativeEvent);
+    },
+  } as const satisfies TriggerHandlers;
+}
+
 interface Layer {
   pending?: ChangeReason | undefined;
   closing?: ChangeReason | undefined;
@@ -68,24 +109,6 @@ const invokerOf = (contentId: string) =>
   document.querySelector(`[commandfor="${CSS.escape(contentId)}"]`);
 
 export const byId = (id: string) => document.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
-
-function report(options: Options, open: boolean, reason: ChangeReason, event?: Event): boolean {
-  let cancelled = false;
-  options.onOpenChange?.(open, {
-    reason,
-    event,
-    cancel: () => {
-      cancelled = true;
-    },
-  });
-  return !cancelled;
-}
-
-function nativeReason(layer: Layer): ChangeReason {
-  if (layer.input instanceof KeyboardEvent) return "escape-key";
-  if (layer.input instanceof PointerEvent) return "outside-press";
-  return "none";
-}
 
 function settle(element: HTMLElement, component: Component) {
   const layer = layerOf(element);
@@ -129,12 +152,14 @@ function recordInput(element: HTMLElement, focusOut: (event: FocusEvent) => void
     if (event instanceof PointerEvent && inside) return;
     layerOf(element).input = event;
   };
-  const types = ["keydown", "pointerdown", "pointerup"] as const;
-  for (const type of types) document.addEventListener(type, record, true);
-  element.addEventListener("focusout", focusOut);
+  const controller = new AbortController();
+  const { signal } = controller;
+  for (const type of ["keydown", "pointerdown", "pointerup"] as const) {
+    document.addEventListener(type, record, { capture: true, signal });
+  }
+  element.addEventListener("focusout", focusOut, { signal });
   return () => {
-    for (const type of types) document.removeEventListener(type, record, true);
-    element.removeEventListener("focusout", focusOut);
+    controller.abort();
   };
 }
 
@@ -143,10 +168,14 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
   const layer = layerOf(element);
   const opening = event.newState === "open";
   const reported = layer.pending;
-  const reason = reported ?? (opening ? "none" : nativeReason(layer));
+  const { input } = opening ? {} : layer;
+  const native = input instanceof PointerEvent ? "outside-press" : "none";
+  const reason = reported ?? (input instanceof KeyboardEvent ? "escape-key" : native);
   layer.pending = undefined;
   layer.input = undefined;
-  const accepted = reported !== undefined || report(options, opening, reason, event.nativeEvent);
+  const accepted =
+    reported !== undefined ||
+    requestChange(options.onOpenChange, opening, reason, event.nativeEvent);
   if (!opening) {
     layer.closing = reason;
     layer.focusInside =
@@ -179,72 +208,73 @@ function contentPropsOf(
   component: Component,
   options: Options,
   setOpen: (open: boolean) => void,
+  hooks: ContentHooks = {},
 ) {
   return {
     id,
     popover: "auto",
     onBeforeToggle: (event: ToggleEvent<HTMLElement>) => {
       beforeToggle(options, event, component);
+      hooks.onBeforeToggle?.(event);
     },
     onToggle: (event: ToggleEvent<HTMLElement>) => {
       setOpen(event.newState === "open");
       if (event.newState === "closed") settle(event.currentTarget, component);
+      hooks.onToggle?.(event);
     },
   } as const;
 }
 
-function claim(
+/** The layer's changes: each one reaches `onOpenChange` before the browser acts on it. */
+function controlsOf(
+  contentId: string,
   options: Options,
-  element: Element,
-  next: boolean,
-  reason: ChangeReason,
-  event?: Event,
+  findSource: (id: string) => Element | null,
 ) {
-  if (!report(options, next, reason, event)) return false;
-  const layer = layerOf(element);
-  layer.pending = reason;
-  setTimeout(() => {
-    if (layer.pending === reason) layer.pending = undefined;
-  });
-  return true;
-}
-
-/**
- * The open state of one `popover="auto"` layer, kept in step with the browser's own opens and
- * closes (commands, light dismiss, Escape) so each change reaches `onOpenChange` once.
- */
-export function useFloating(
-  component: Component,
-  options: Options,
-  findSource: (contentId: string) => Element | null = invokerOf,
-) {
-  const [uncontrolled, setUncontrolled] = useState(options.defaultOpen ?? false);
-  const current = options.open ?? uncontrolled;
-  const contentId = useId();
-
-  /** Reports a change the component is about to make; `false` when `onOpenChange` cancelled it. */
   const request = (next: boolean, reason: ChangeReason, event?: Event) => {
     const element = byId(contentId);
-    return element !== null && claim(options, element, next, reason, event);
+    if (element === null || !requestChange(options.onOpenChange, next, reason, event)) return false;
+    const layer = layerOf(element);
+    layer.pending = reason;
+    setTimeout(() => {
+      if (layer.pending === reason) layer.pending = undefined;
+    });
+    return true;
   };
-
-  function toggle(next: boolean, reason: ChangeReason, event?: Event, source?: Element | null) {
+  const toggle = (next: boolean, reason: ChangeReason, event?: Event, source?: Element | null) => {
     const element = byId(contentId);
     if (element === null || isOpen(element) === next || !request(next, reason, event)) return false;
     if (next) element.showPopover(sourceOf(source ?? findSource(contentId)));
     else element.hidePopover();
     return true;
-  }
-
-  /** Closes with `"focus-out"` once focus has landed outside the layer and its Trigger. */
-  function focusOut(event: FocusEvent) {
+  };
+  const focusOut = (event: FocusEvent) => {
     if (!leaves(contentId, event.relatedTarget)) return;
     setTimeout(() => {
       toggle(false, "focus-out", event);
     });
-  }
+  };
+  return { contentId, request, toggle, focusOut };
+}
 
-  const onFocusOut = useEffectEvent(focusOut);
+/**
+ * The open state of one `popover="auto"` layer, kept in step with the browser's own opens and
+ * closes (commands, light dismiss, Escape) so each change reaches `onOpenChange` once. Its Trigger
+ * and Content spread `triggerProps()` and `contentProps()`. A layer anchored to something other
+ * than its Trigger passes `anchor`; the Trigger then shows it with that element as the source.
+ */
+export function useFloating(
+  component: Component,
+  options: Options,
+  anchor?: (contentId: string) => Element | null,
+) {
+  const findSource = anchor ?? invokerOf;
+  const [uncontrolled, setUncontrolled] = useState(options.defaultOpen ?? false);
+  const current = options.open ?? uncontrolled;
+  const contentId = useId();
+
+  const controls = controlsOf(contentId, options, findSource);
+  const onFocusOut = useEffectEvent(controls.focusOut);
   useEffect(() => {
     const element = byId(contentId);
     return current && element !== null ? recordInput(element, onFocusOut) : undefined;
@@ -254,8 +284,16 @@ export function useFloating(
     reconcile(contentId, current, findSource);
   });
 
-  const contentProps = contentPropsOf(contentId, component, options, setUncontrolled);
-  return { open: current, contentId, request, toggle, focusOut, contentProps };
+  return {
+    open: current,
+    contentId,
+    request: controls.request,
+    toggle: controls.toggle,
+    contentProps: (hooks?: ContentHooks) =>
+      contentPropsOf(contentId, component, options, setUncontrolled, hooks),
+    triggerProps: <Props extends TriggerHandlers>(props: Props) =>
+      triggerPropsOf(props, { ...controls, open: current, anchored: anchor !== undefined }),
+  };
 }
 
 export type Floating = ReturnType<typeof useFloating>;

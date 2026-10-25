@@ -148,12 +148,14 @@ Default.test("chooses by Enter or click, keeping focus", async ({ canvas, userEv
   await expect(highlighted()).toHaveAccessibleName("Mugur Ionescu");
 });
 
-Default.test("moves with the arrows, wrapping past disabled", async ({ canvas, userEvent }) => {
+Default.test("moves past disabled, wrapping, with Home and End", async ({ canvas, userEvent }) => {
   await type("{ArrowUp}");
   await expect(highlighted()).toHaveAccessibleName("Ștefan Țurcanu");
   await userEvent.keyboard("{ArrowUp}");
   await expect(highlighted()).toHaveAccessibleName("Mugur Ionescu");
-  await userEvent.keyboard("{ArrowDown}{ArrowDown}");
+  await userEvent.keyboard("{End}{ArrowDown}");
+  await expect(highlighted()).toHaveAccessibleName("Alexandru Bereghici");
+  await userEvent.keyboard("{ArrowDown}{Home}");
   await expect(highlighted()).toHaveAccessibleName("Alexandru Bereghici");
   await userEvent.click(canvas.getByRole("option", { name: "Erik Halvorsen" }));
   await expect(onValueChange).not.toHaveBeenCalled();
@@ -198,15 +200,11 @@ Default.test(
   },
 );
 
-Default.test(
-  "keeps text and list on a cancelled choice",
-  { args: { onValueChange: cancel } },
-  async () => {
-    await type("mu{Enter}");
-    await expect(field()).toHaveValue("mu");
-    await expect(field()).toHaveAttribute("aria-expanded", "true");
-  },
-);
+Default.test("keeps text and list on cancel", { args: { onValueChange: cancel } }, async () => {
+  await type("mu{Enter}");
+  await expect(field()).toHaveValue("mu");
+  await expect(field()).toHaveAttribute("aria-expanded", "true");
+});
 
 Default.test(
   "validates the chosen value and resets to the default",

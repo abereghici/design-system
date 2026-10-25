@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { kbd as kbdLabels } from "../provider/locales/en-US/kbd.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
@@ -28,12 +28,12 @@ export function KbdKey({
 }) {
   const face =
     useSyncExternalStore(subscribe, platform, serverPlatform) === "apple" ? apple : other;
-  const locale = useLocale().labels.kbd ?? kbdLabels;
+  const names = useLabels("kbd", kbdLabels, labels);
   if (face.label === undefined) return face.text;
   return (
     <>
       <span aria-hidden="true">{face.text}</span>
-      <VisuallyHidden>{labels?.[face.label] ?? locale[face.label]}</VisuallyHidden>
+      <VisuallyHidden>{names[face.label]}</VisuallyHidden>
     </>
   );
 }

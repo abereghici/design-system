@@ -28,7 +28,7 @@ export interface SkipLinkProps extends Omit<ComponentProps<"a">, "href"> {
 export function SkipLink({ locale, labels, children, className, ...props }: SkipLinkProps) {
   return (
     <a {...props} className={join(styles["root"], className)}>
-      {children ?? labels?.label ?? locale?.labels.skipLink.label ?? skipLinkLabels.label}
+      {children ?? { ...skipLinkLabels, ...locale?.labels.skipLink, ...labels }.label}
     </a>
   );
 }

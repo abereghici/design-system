@@ -3,10 +3,10 @@
 import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../events/events.ts";
 import { useFieldControl } from "../field/field-control.ts";
 import { join } from "../slot/slot.tsx";
-import { changeDetails, followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
+import { followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
 import styles from "./radio-group.module.css";
@@ -57,16 +57,19 @@ export function Root({
   disabled = false,
   orientation = "vertical",
   className,
+  onPointerDown,
   onKeyDown,
   ...props
 }: RootProps) {
   const fallbackName = useId();
+  const marker = pointerMarker({ onPointerDown, onKeyDown });
   const [uncontrolled, setUncontrolled] = useState(defaultValue);
   const current = value === undefined ? uncontrolled : value;
 
   function select(next: string, event: MouseEvent<HTMLInputElement>) {
     if (next === current) return;
-    onValueChange?.(next, changeDetails(event));
+    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) event.preventDefault();
+    // A canceled click restores the input's checkedness (HTML legacy-canceled-activation behavior).
     if (event.defaultPrevented) return;
     setUncontrolled(next);
     dispatchFeedback(event.currentTarget, "ab-toggle", { component: "RadioGroup", reason: "user" });
@@ -78,14 +81,13 @@ export function Root({
     >
       <fieldset
         {...props}
-        onPointerDown={pointerMarker.onPointerDown}
         role="radiogroup"
         aria-orientation={orientation}
         data-orientation={orientation}
         className={join(styles["root"], className)}
+        {...marker}
         onKeyDown={(event) => {
-          pointerMarker.onKeyDown(event);
-          onKeyDown?.(event);
+          marker.onKeyDown(event);
           followVisualDirection(event);
         }}
       />

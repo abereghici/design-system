@@ -3,8 +3,9 @@
 import { createContext, use, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction } from "react";
 
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { arrange, enabled, shownOf } from "../listbox/listbox.tsx";
+import { arrange, enabled, navigate, reveal } from "../listbox/listbox.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import { join } from "../slot/slot.tsx";
 
@@ -16,23 +17,6 @@ export type Callback<Value, Reason extends string> = (
   value: Value,
   details: ChangeEventDetails<Reason>,
 ) => void;
-
-export function report<Value, Reason extends string>(
-  callback: Callback<Value, Reason> | undefined,
-  value: Value,
-  reason: Reason,
-  event: Event,
-): boolean {
-  let cancelled = false;
-  callback?.(value, {
-    reason,
-    event,
-    cancel: () => {
-      cancelled = true;
-    },
-  });
-  return cancelled;
-}
 
 interface CommandContext {
   readonly query: string;
@@ -59,51 +43,21 @@ export function useCommand(): CommandContext {
   return context;
 }
 
-function reveal(option: HTMLElement, shown: readonly HTMLElement[]) {
-  const group = option.parentElement;
-  const previous = shown[shown.indexOf(option) - 1];
-  if (group?.localName === "fieldset" && previous?.parentElement !== group) {
-    group.firstElementChild?.scrollIntoView({ block: "nearest" });
-  }
-  option.scrollIntoView({ block: "nearest" });
-}
-
-function step(key: string, options: readonly HTMLElement[], index: number, query: string) {
-  switch (key) {
-    case "ArrowDown":
-      return options[(index + 1) % options.length];
-    case "ArrowUp":
-      return options.at(index <= 0 ? -1 : index - 1);
-    case "Home":
-      return query === "" && options.at(0);
-    case "End":
-      return query === "" && options.at(-1);
-    default:
-      return false;
-  }
-}
-
-function navigate(
+function keyDown(
   event: KeyboardEvent<HTMLInputElement>,
   list: HTMLElement | null,
-  { highlighted, query }: Pick<CommandContext, "highlighted" | "query">,
+  highlighted: string | null,
   highlight: (id: string) => void,
 ) {
-  const shown = shownOf(list);
-  const options = shown.filter((option) => enabled(option));
-  const index = options.findIndex(({ id }) => id === highlighted);
   if (event.key === "Enter") {
-    if (event.nativeEvent.isComposing || index === -1) return;
+    const option = list?.querySelector<HTMLElement>(`[id="${highlighted ?? ""}"]`);
+    if (event.nativeEvent.isComposing || option === null || option === undefined) return;
     event.preventDefault();
-    options[index]?.click();
+    option.click();
     return;
   }
-  const next = step(event.key, options, index, query);
-  if (next === false) return;
-  event.preventDefault();
-  if (next === undefined) return;
-  highlight(next.id);
-  reveal(next, shown);
+  const next = navigate(event, list, highlighted);
+  if (next instanceof HTMLElement) highlight(next.id);
 }
 
 /**
@@ -185,12 +139,12 @@ export function Root({
   const context: CommandContext = {
     query,
     change: (next, event) => {
-      if (!report(onInputValueChange, next, "input-change", event)) setOwn(next);
+      if (requestChange(onInputValueChange, next, "input-change", event)) setOwn(next);
     },
     highlighted,
     highlight: setHighlighted,
     keyDown: (event) => {
-      navigate(event, list.current, { highlighted, query }, setHighlighted);
+      keyDown(event, list.current, highlighted, setHighlighted);
     },
     list,
     listId: useId(),

@@ -1,7 +1,8 @@
-import { use, useEffect, useEffectEvent, useRef } from "react";
+import { useRef } from "react";
 
 import type { Temporal } from "../date/date.ts";
-import { FieldContext } from "../field/field-control.ts";
+import { useField, useFormReset } from "../field/field-control.ts";
+import type { Validate } from "../field/field-control.ts";
 
 import type { Segments } from "./segments.ts";
 
@@ -11,14 +12,11 @@ export interface Validity {
 }
 
 interface Options {
-  readonly validate?:
-    | ((value: string, formData: FormData) => string | null | undefined)
-    | undefined;
+  readonly validate?: Validate | undefined;
   readonly isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
 }
 
 interface Wiring {
-  readonly id: string | undefined;
   readonly incomplete: string;
   readonly unavailable: string;
   readonly onValidity: (validity: Validity) => void;
@@ -33,9 +31,10 @@ const hiddenInput = (id: string | undefined) => {
 /** Writes the value and custom validity to the hidden date input and reports its validity. */
 export function useValidity(
   { validate, isDateUnavailable }: Options,
-  { id, incomplete, unavailable, onValidity, reset }: Wiring,
+  { incomplete, unavailable, onValidity, reset }: Wiring,
 ) {
-  const field = use(FieldContext);
+  const [field] = useField();
+  const id = field?.controlId;
   const server = field?.serverError;
   const touched = useRef(false);
   const apply = (segments: Segments, date: Temporal.PlainDate | null) => {
@@ -53,18 +52,14 @@ export function useValidity(
     if (node === null || !touched.current) return;
     onValidity({ invalid: !node.validity.valid, message: node.validationMessage });
   };
-  const onReset = useEffectEvent(() => {
-    reset();
-    touched.current = false;
-    onValidity({ invalid: false, message: "" });
-  });
-  useEffect(() => {
-    const owner = hiddenInput(id)?.form;
-    owner?.addEventListener("reset", onReset);
-    return () => {
-      owner?.removeEventListener("reset", onReset);
-    };
-  }, [id]);
+  useFormReset(
+    () => hiddenInput(id),
+    () => {
+      reset();
+      touched.current = false;
+      onValidity({ invalid: false, message: "" });
+    },
+  );
   const submit = () => {
     hiddenInput(id)?.form?.requestSubmit();
   };

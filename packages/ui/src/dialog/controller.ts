@@ -1,6 +1,6 @@
 import type { RefObject } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { returnFocus } from "../floating/floating.ts";
 
@@ -27,18 +27,6 @@ export interface Options {
   readonly onOpenChange: ((open: boolean, details: ChangeEventDetails) => void) | undefined;
   readonly component: "Dialog" | "AlertDialog" | "Sheet";
   readonly initialFocus: RefObject<HTMLElement | null> | undefined;
-}
-
-function change(options: Options, open: boolean, reason: Reason, event: Event): boolean {
-  let cancelled = false;
-  options.onOpenChange?.(open, {
-    reason,
-    event,
-    cancel: () => {
-      cancelled = true;
-    },
-  });
-  return cancelled;
 }
 
 function outside(dialog: HTMLDialogElement, { target, clientX, clientY }: MouseEvent): boolean {
@@ -123,7 +111,8 @@ export class Controller {
       return;
     }
     const reason = event.source === null ? "none" : "trigger-press";
-    if (change(options, true, reason, event) || options.open !== undefined) event.preventDefault();
+    if (!requestChange(options.onOpenChange, true, reason, event) || options.open !== undefined)
+      event.preventDefault();
   }
 
   cancel(dialog: HTMLDialogElement, event: Event, options: Options): void {
@@ -137,10 +126,10 @@ export class Controller {
       dismiss: dialog,
     };
     this.#pending = null;
-    const cancelled = change(options, false, reason, cause);
-    if (cancelled || options.open !== undefined) event.preventDefault();
+    const accepted = requestChange(options.onOpenChange, false, reason, cause);
+    if (!accepted || options.open !== undefined) event.preventDefault();
     if (!event.defaultPrevented) this.#skipClose = true;
-    if (!cancelled && dismiss !== null) {
+    if (accepted && dismiss !== null) {
       dispatchFeedback(dismiss, "ab-dismiss", { component: options.component, reason: "user" });
     }
   }
@@ -149,7 +138,7 @@ export class Controller {
     options.initialFocus?.current?.removeAttribute("autofocus");
     this.#pending = null;
     if (this.#skipClose) this.#skipClose = false;
-    else change(options, false, "none", event);
+    else requestChange(options.onOpenChange, false, "none", event);
     // WebKit doesn't focus a clicked button, so its close steps leave focus on <body> or in the closed dialog.
     returnFocus(dialog, this.#opener);
     this.#opener = null;

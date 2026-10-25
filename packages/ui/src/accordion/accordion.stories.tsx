@@ -96,6 +96,15 @@ Default.test(
   },
 );
 
+Default.test("still opens when its click is default-prevented", async ({ canvas, userEvent }) => {
+  const trigger = canvas.getByText("Which browsers are supported?");
+  trigger.addEventListener("click", (event) => {
+    event.preventDefault();
+  });
+  await userEvent.click(trigger);
+  await waitFor(() => expect(canvas.getByText(browsers)).toBeVisible());
+});
+
 Default.test(
   "follows a controlled value",
   { args: { value: [] } },

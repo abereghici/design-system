@@ -1,20 +1,19 @@
 "use client";
 
 import { createContext, use } from "react";
-import type { ComponentProps, FocusEvent, MouseEvent, ReactNode, RefObject } from "react";
+import type { ComponentProps, MouseEvent, ReactNode, RefObject } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
-import { byId, isOpen, useFloating } from "../floating/floating.ts";
+import { useFloating } from "../floating/floating.ts";
 import type {
   ChangeEventDetails as Details,
   Floating,
   FloatingOptions,
 } from "../floating/floating.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels } from "../provider/locale.tsx";
 import { popover as popoverLabels } from "../provider/locales/en-US/popover.ts";
 import { Slot, join } from "../slot/slot.tsx";
-import { pointerMarker } from "../toggle/toggle.ts";
 
 import iconButtonStyles from "../icon-button/icon-button.module.css";
 import styles from "./popover.module.css";
@@ -60,32 +59,11 @@ export interface TriggerProps extends ComponentProps<"button"> {
 export function Trigger({ asChild = false, ...props }: TriggerProps) {
   const popover = usePopover();
   const Element = asChild ? Slot : "button";
-  const invoker = { commandfor: popover.contentId, command: "toggle-popover" } as const;
   return (
     <Element
       type={asChild ? undefined : "button"}
-      {...props}
-      {...invoker}
-      aria-expanded={popover.open}
+      {...popover.triggerProps(props)}
       aria-haspopup="dialog"
-      onPointerDown={(event) => {
-        props.onPointerDown?.(event);
-        pointerMarker.onPointerDown(event);
-      }}
-      onKeyDown={(event) => {
-        props.onKeyDown?.(event);
-        pointerMarker.onKeyDown(event);
-      }}
-      onClick={(event: MouseEvent<HTMLButtonElement>) => {
-        props.onClick?.(event);
-        if (event.defaultPrevented) return;
-        const open = isOpen(byId(popover.contentId));
-        if (!popover.request(!open, "trigger-press", event.nativeEvent)) event.preventDefault();
-      }}
-      onBlur={(event: FocusEvent<HTMLButtonElement>) => {
-        props.onBlur?.(event);
-        popover.focusOut(event.nativeEvent);
-      }}
     />
   );
 }
@@ -111,20 +89,18 @@ export function Content({
   ...props
 }: ContentProps) {
   const popover = usePopover();
-  const { onBeforeToggle, onToggle, ...native } = popover.contentProps;
   return (
     <dialog
       aria-labelledby={props["aria-label"] === undefined ? `${popover.contentId}-title` : undefined}
       {...props}
-      {...native}
+      {...popover.contentProps({
+        onBeforeToggle: (event) => {
+          initialFocus?.current?.toggleAttribute("autofocus", event.newState === "open");
+        },
+      })}
       data-side={side}
       data-align={align}
       className={join(styles["content"], className)}
-      onBeforeToggle={(event) => {
-        onBeforeToggle(event);
-        initialFocus?.current?.toggleAttribute("autofocus", event.newState === "open");
-      }}
-      onToggle={onToggle}
     />
   );
 }
@@ -157,13 +133,14 @@ export interface CloseProps extends ComponentProps<"button"> {
 /** Closes the Popover. Without children it is the `x` button in the corner. */
 export function Close({ asChild = false, labels, className, ...props }: CloseProps) {
   const popover = usePopover();
-  const locale = useLocale();
+  const { close } = useLabels("popover", popoverLabels, labels);
   const shared = {
     ...props,
     commandfor: popover.contentId,
     command: "hide-popover" as const,
     onClick: (event: MouseEvent<HTMLButtonElement>) => {
       props.onClick?.(event);
+      // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).
       if (event.defaultPrevented) return;
       if (!popover.request(false, "close-press", event.nativeEvent)) {
         event.preventDefault();
@@ -179,7 +156,7 @@ export function Close({ asChild = false, labels, className, ...props }: ClosePro
   return (
     <button
       type="button"
-      aria-label={labels?.close ?? locale.labels.popover?.close ?? popoverLabels.close}
+      aria-label={close}
       {...shared}
       data-size="sm"
       className={`${iconButtonStyles["root"]} ${join(styles["close"], className)}`}

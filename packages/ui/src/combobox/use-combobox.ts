@@ -2,7 +2,7 @@ import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useSt
 
 import { byId, isOpen, sourceOf } from "../floating/floating.ts";
 import { arrange, enabled, textOf } from "../listbox/listbox.tsx";
-import { useLocale } from "../provider/locale.tsx";
+import { useLabels, useLocale } from "../provider/locale.tsx";
 import { combobox as comboboxLabels } from "../provider/locales/en-US/combobox.ts";
 
 import { chosenOf, dismiss, highlight, inputOf, listOf, memoryOf, part } from "./combobox-state.ts";
@@ -57,9 +57,10 @@ function sync(c: Combobox, tag: string, noResults: string) {
 }
 
 function listen(target: EventTarget, type: string, listener: (event: Event) => void) {
-  target.addEventListener(type, listener);
+  const controller = new AbortController();
+  target.addEventListener(type, listener, { signal: controller.signal });
   return () => {
-    target.removeEventListener(type, listener);
+    controller.abort();
   };
 }
 
@@ -110,8 +111,7 @@ export function useCombobox(
   labels: { noResults?: string } | undefined,
 ): [Combobox, string] {
   const locale = useLocale();
-  const noResults =
-    labels?.noResults ?? locale.labels.combobox?.noResults ?? comboboxLabels.noResults;
+  const { noResults } = useLabels("combobox", comboboxLabels, labels);
   const [ownValue, setValue] = useState(options.defaultValue ?? null);
   const [ownOpen, setOpen] = useState(options.defaultOpen ?? false);
   const [query, setQuery] = useState("");

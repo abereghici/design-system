@@ -15,6 +15,7 @@ import * as DropdownMenu from "./dropdown-menu.tsx";
 const onOpenChange = fn<NonNullable<DropdownMenu.RootProps["onOpenChange"]>>();
 const onDuplicate = fn<() => void>();
 const onSortChange = fn<NonNullable<DropdownMenu.RadioGroupProps["onValueChange"]>>();
+const onArchivedChange = fn<NonNullable<DropdownMenu.CheckboxItemProps["onCheckedChange"]>>();
 
 async function openWithKeyboard() {
   const user = await trusted();
@@ -49,7 +50,9 @@ const meta = preview.meta({
             <DropdownMenu.RadioItem value="newest">Newest</DropdownMenu.RadioItem>
             <DropdownMenu.RadioItem value="oldest">Oldest</DropdownMenu.RadioItem>
           </DropdownMenu.RadioGroup>
-          <DropdownMenu.CheckboxItem>Show archived</DropdownMenu.CheckboxItem>
+          <DropdownMenu.CheckboxItem onCheckedChange={onArchivedChange}>
+            Show archived
+          </DropdownMenu.CheckboxItem>
           <DropdownMenu.Separator />
           <DropdownMenu.Item variant="danger">
             <TrashIcon data-icon="inline-start" />
@@ -200,6 +203,31 @@ Default.test("chooses a RadioItem and closes on Enter", async ({ canvas }) => {
     "true",
   );
   await waitFor(() => expect(canvas.getByRole("group", { name: "Sort by" })).toBeVisible());
+});
+
+Default.test("keeps the choices and stays open when a change is cancelled", async ({ canvas }) => {
+  onSortChange.mockImplementationOnce((_value, details) => {
+    details.cancel();
+  });
+  onArchivedChange.mockImplementationOnce((_checked, details) => {
+    details.cancel();
+  });
+  const user = await trusted();
+  await openWithKeyboard();
+  await user.keyboard("o{Enter}{End}{ArrowUp} ");
+  await expect(canvas.getByRole("menuitemradio", { name: "Oldest" })).toHaveAttribute(
+    "aria-checked",
+    "false",
+  );
+  await expect(canvas.getByRole("menuitemcheckbox", { name: "Show archived" })).toHaveAttribute(
+    "aria-checked",
+    "false",
+  );
+  await expect(canvas.getByRole("button", { name: "Actions" })).toHaveAttribute(
+    "aria-expanded",
+    "true",
+  );
+  await expect(reasons()).toEqual([[true, "trigger-press"]]);
 });
 
 Default.test("closes when Tab moves focus on", async ({ canvas }) => {

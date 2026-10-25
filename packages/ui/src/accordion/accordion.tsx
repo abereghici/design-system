@@ -3,7 +3,7 @@
 import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, MouseEvent, SyntheticEvent } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
 import { join } from "../slot/slot.tsx";
@@ -63,15 +63,8 @@ export function Root({
         : [item]
       : current.filter((v) => v !== item);
     const reason = event.type === "click" ? "trigger-press" : "none";
-    let cancelled = false;
-    onValueChange?.(next, {
-      reason,
-      event: event.nativeEvent,
-      cancel: () => {
-        cancelled = true;
-      },
-    });
-    if (cancelled && reason === "trigger-press") return;
+    const accepted = requestChange(onValueChange, next, reason, event.nativeEvent);
+    if (!accepted && reason === "trigger-press") return;
     setUncontrolled(next);
     if (reason === "trigger-press") {
       dispatchFeedback(event.currentTarget, "ab-toggle", {
@@ -134,17 +127,9 @@ export function Trigger({
     <summary
       {...props}
       className={join(styles["trigger"], className)}
-      onPointerDown={(event) => {
-        pointerMarker.onPointerDown(event);
-        onPointerDown?.(event);
-      }}
-      onKeyDown={(event) => {
-        pointerMarker.onKeyDown(event);
-        onKeyDown?.(event);
-      }}
+      {...pointerMarker({ onPointerDown, onKeyDown })}
       onClick={(event: MouseEvent<HTMLElement>) => {
         onClick?.(event);
-        if (event.defaultPrevented) return;
         event.preventDefault();
         accordion.change(item, !accordion.value.includes(item), event);
       }}
