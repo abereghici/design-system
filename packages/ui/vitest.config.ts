@@ -12,6 +12,7 @@ export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
+      maxWorkers: "50%",
       projects: [
         { test: { name: "node", include: ["scripts/**/*.test.ts"] } },
         {
