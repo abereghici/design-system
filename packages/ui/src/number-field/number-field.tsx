@@ -194,7 +194,7 @@ function useNumberValue({
   min,
   max,
   step = 1,
-  largeStep = step * 10,
+  largeStep,
   ...rest
 }: Omit<ControlProps, "startElement" | "incrementLabel" | "decrementLabel">) {
   const { format, parse } = numberFormat(locale, formatOptions);
@@ -231,7 +231,7 @@ function useNumberValue({
       settle(current(), reason, event);
     },
     keyStep: (event: KeyboardEvent) => {
-      const to = stepKey(event, step, largeStep, { min, max, step });
+      const to = stepKey(event, step, largeStep ?? step * 10, { min, max, step });
 
       if (to === null) return;
 

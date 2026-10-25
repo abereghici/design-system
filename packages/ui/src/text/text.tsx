@@ -31,20 +31,14 @@ export type TextProps = Omit<ComponentProps<"p">, "color" | "ref"> &
  * same across the product. A paragraph by default. For a section title use Heading, for a keyboard
  * key Kbd, and for a link Link.
  */
-export function Text({
-  variant = "body",
-  size = variant === "overline" ? "sm" : "md",
-  color = "default",
-  as = variant === "code" ? "code" : "p",
-  ...props
-}: TextProps) {
-  const Element = as as ElementType;
+export function Text({ variant = "body", size, color = "default", as, ...props }: TextProps) {
+  const Element = (as ?? (variant === "code" ? "code" : "p")) as ElementType;
 
   return (
     <Element
       {...mergeProps({ className: styles["root"] }, props)}
       data-variant={variant}
-      data-size={size}
+      data-size={size ?? (variant === "overline" ? "sm" : "md")}
       data-color={color}
     />
   );

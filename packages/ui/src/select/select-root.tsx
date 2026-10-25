@@ -58,12 +58,7 @@ const blocked = (event: KeyboardEvent) =>
   /^(?:Arrow|Page|Home|End|Enter)/v.test(event.key) ||
   (event.key.length === 1 && !event.ctrlKey && !event.metaKey);
 
-function Control({
-  placeholder,
-  defaultValue = placeholder === undefined ? undefined : "",
-  children,
-  ...props
-}: ControlProps) {
+function Control({ placeholder, defaultValue, children, ...props }: ControlProps) {
   const bindings = Field.useFieldControl<HTMLSelectElement, typeof props>(props);
   const disabled = bindings["aria-disabled"] === true;
 
@@ -71,7 +66,11 @@ function Control({
     <div className={styles["control"]}>
       <select
         {...bindings}
-        defaultValue={props.value === undefined ? defaultValue : undefined}
+        defaultValue={
+          props.value === undefined
+            ? (defaultValue ?? (placeholder === undefined ? undefined : ""))
+            : undefined
+        }
         className={`${fieldStyles["control"]} ${styles["select"]}`}
         onKeyDown={(event) => {
           if (disabled && blocked(event)) event.preventDefault();

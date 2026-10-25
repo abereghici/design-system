@@ -137,7 +137,7 @@ export function Root({
   min = 0,
   max = 100,
   step = 1,
-  largeStep = 10 * step,
+  largeStep,
   minStepsBetweenValues = 0,
   format,
   locale,
@@ -147,7 +147,14 @@ export function Root({
 }: RootProps) {
   const slider = useSliderState(
     { value, defaultValue, onValueChange, onValueCommitted, format, locale, name },
-    { min, max, step, largeStep, gap: minStepsBetweenValues * step, disabled },
+    {
+      min,
+      max,
+      step,
+      largeStep: largeStep ?? 10 * step,
+      gap: minStepsBetweenValues * step,
+      disabled,
+    },
   );
 
   return (
