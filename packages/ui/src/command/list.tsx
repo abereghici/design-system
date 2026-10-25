@@ -16,6 +16,7 @@ export function List({
   onMouseDown,
   onPointerMove,
   onClickCapture,
+  onClick,
   ...props
 }: ComponentProps<"div">) {
   const command = useCommand();
@@ -47,7 +48,13 @@ export function List({
           return;
         }
         press?.(event.nativeEvent, option);
-        dispatchFeedback(option, "ab-confirm", { component: "Command", reason: "user" });
+      }}
+      onClick={(event) => {
+        onClick?.(event);
+        const option = optionAt(event.target);
+        if (option !== null) {
+          dispatchFeedback(option, "ab-confirm", { component: "Command", reason: "user" });
+        }
       }}
     />
   );

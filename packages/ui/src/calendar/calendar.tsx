@@ -47,9 +47,10 @@ export interface CalendarProps extends Omit<
 }
 
 const onFocusIn = (listener: () => void) => {
-  document.addEventListener("focusin", listener);
+  const controller = new AbortController();
+  document.addEventListener("focusin", listener, { signal: controller.signal });
   return () => {
-    document.removeEventListener("focusin", listener);
+    controller.abort();
   };
 };
 

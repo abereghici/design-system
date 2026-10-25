@@ -141,9 +141,10 @@ function useNumber({
   const hidden = useRef<HTMLInputElement>(null);
   useEffect(() => {
     const form = hidden.current?.form;
-    form?.addEventListener("reset", reset);
+    const controller = new AbortController();
+    form?.addEventListener("reset", reset, { signal: controller.signal });
     return () => {
-      form?.removeEventListener("reset", reset);
+      controller.abort();
     };
   }, []);
   return { committed, text, setText, commit, hidden };

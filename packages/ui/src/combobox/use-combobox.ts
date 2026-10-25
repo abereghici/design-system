@@ -57,9 +57,10 @@ function sync(c: Combobox, tag: string, noResults: string) {
 }
 
 function listen(target: EventTarget, type: string, listener: (event: Event) => void) {
-  target.addEventListener(type, listener);
+  const controller = new AbortController();
+  target.addEventListener(type, listener, { signal: controller.signal });
   return () => {
-    target.removeEventListener(type, listener);
+    controller.abort();
   };
 }
 

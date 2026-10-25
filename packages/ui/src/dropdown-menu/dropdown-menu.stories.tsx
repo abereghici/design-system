@@ -213,17 +213,20 @@ Default.test("keeps the choices and stays open when a change is cancelled", asyn
   });
   const user = await trusted();
   await openWithKeyboard();
-  await user.keyboard("o{Enter}");
+  await user.keyboard("o{Enter}{End}{ArrowUp} ");
   await expect(canvas.getByRole("menuitemradio", { name: "Oldest" })).toHaveAttribute(
     "aria-checked",
     "false",
   );
-  await user.keyboard("{End}{ArrowUp} ");
   await expect(canvas.getByRole("menuitemcheckbox", { name: "Show archived" })).toHaveAttribute(
     "aria-checked",
     "false",
   );
-  await expect(canvas.getByRole("menu")).toBeVisible();
+  await expect(canvas.getByRole("button", { name: "Actions" })).toHaveAttribute(
+    "aria-expanded",
+    "true",
+  );
+  await expect(reasons()).toEqual([[true, "trigger-press"]]);
 });
 
 Default.test("closes when Tab moves focus on", async ({ canvas }) => {

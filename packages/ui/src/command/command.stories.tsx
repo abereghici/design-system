@@ -12,6 +12,7 @@ import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Command from "./index.parts.ts";
 
+const onHome = fn<() => void>();
 const palette = (
   <>
     <Command.Input />
@@ -27,7 +28,7 @@ const palette = (
         <Command.Item disabled>Copy link</Command.Item>
       </Command.Group>
       <Command.Group heading="Navigation">
-        <Command.Item>Go to Home</Command.Item>
+        <Command.Item onClick={onHome}>Go to Home</Command.Item>
         <Command.Item>Go to Release notes</Command.Item>
         <Command.Item>Open settings</Command.Item>
       </Command.Group>
@@ -236,20 +237,20 @@ InADialog.test(
 );
 
 InADialog.test(
-  "closes before a command runs, returning focus to the opener",
+  "closes before a command runs, returning focus to the opener, and confirms after it ran",
   async ({ canvas, userEvent }) => {
     const opener = canvas.getByRole("button", { name: "Search" });
     await userEvent.click(opener);
-    const focused: (Element | null)[] = [];
+    const focused: [Element | null, number][] = [];
     const record = () => {
-      focused.push(document.activeElement);
+      focused.push([document.activeElement, onHome.mock.calls.length]);
     };
     document.addEventListener("ab-confirm", record);
     await userEvent.type(canvas.getByRole("combobox"), "home{Enter}");
     document.removeEventListener("ab-confirm", record);
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     await expect(onOpenChange).toHaveBeenCalledWith(false, reason("item-press"));
-    await expect(focused).toEqual([opener]);
+    await expect(focused).toEqual([[opener, 1]]);
   },
 );
 

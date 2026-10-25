@@ -63,9 +63,10 @@ function useVisibility(
       // The type must switch before the submission reads the form, not on React's next render.
       if (current && change(false, "form-submit", event) && input !== null) input.type = "password";
     };
-    form?.addEventListener("submit", hide);
+    const controller = new AbortController();
+    form?.addEventListener("submit", hide, { signal: controller.signal });
     return () => {
-      form?.removeEventListener("submit", hide);
+      controller.abort();
     };
   });
   return [current, change] as const;

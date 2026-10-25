@@ -26,9 +26,10 @@ export interface ToasterProps extends Omit<
 const none: readonly ToastRecord[] = [];
 
 const onVisibility = (listener: () => void) => {
-  document.addEventListener("visibilitychange", listener);
+  const controller = new AbortController();
+  document.addEventListener("visibilitychange", listener, { signal: controller.signal });
   return () => {
-    document.removeEventListener("visibilitychange", listener);
+    controller.abort();
   };
 };
 

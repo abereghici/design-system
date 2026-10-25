@@ -21,7 +21,7 @@ UI that renders above the page flow: menus, popovers, tooltips, toasts, dialogs 
 _Avoid_: Overlay (as a generic term), portal, modal (unless it blocks the page)
 
 **Feedback event**:
-A bubbling, `ab-`-prefixed DOM event (`ab-press`, `ab-toggle`, `ab-confirm`, `ab-dismiss`, `ab-appear`) a component dispatches at a moment an app may want to answer with sound or haptics. Carries the component name and a `reason`.
+A bubbling, `ab-`-prefixed DOM event (`ab-press`, `ab-toggle`, `ab-confirm`, `ab-dismiss`, `ab-appear`) a component dispatches at a moment an app may want to answer with sound or haptics. Carries the component name and a `reason`. It fires after the consumer's handler for that moment has run, and only once a change request is accepted.
 _Avoid_: Sound event, haptic event, callback
 
 **Change request**:

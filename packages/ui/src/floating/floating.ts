@@ -109,12 +109,14 @@ function recordInput(element: HTMLElement, focusOut: (event: FocusEvent) => void
     if (event instanceof PointerEvent && inside) return;
     layerOf(element).input = event;
   };
-  const types = ["keydown", "pointerdown", "pointerup"] as const;
-  for (const type of types) document.addEventListener(type, record, true);
-  element.addEventListener("focusout", focusOut);
+  const controller = new AbortController();
+  const { signal } = controller;
+  for (const type of ["keydown", "pointerdown", "pointerup"] as const) {
+    document.addEventListener(type, record, { capture: true, signal });
+  }
+  element.addEventListener("focusout", focusOut, { signal });
   return () => {
-    for (const type of types) document.removeEventListener(type, record, true);
-    element.removeEventListener("focusout", focusOut);
+    controller.abort();
   };
 }
 

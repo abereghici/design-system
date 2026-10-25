@@ -72,9 +72,10 @@ function present(
   warmth.closeOpen();
   show(element, mode);
   warmth.closeOpen = closeOther;
-  document.addEventListener("keydown", escape, true);
+  const controller = new AbortController();
+  document.addEventListener("keydown", escape, { capture: true, signal: controller.signal });
   return () => {
-    document.removeEventListener("keydown", escape, true);
+    controller.abort();
   };
 }
 

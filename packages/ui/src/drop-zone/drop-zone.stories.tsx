@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { expect, fn } from "storybook/test";
 
 import type { Decorator } from "@storybook/react-vite";
@@ -10,7 +11,7 @@ import { Form } from "@platform/ui/form";
 import preview from "#.storybook/preview.tsx";
 
 import { DropZone } from "./drop-zone.tsx";
-import type { DropZoneDropEventDetails } from "./drop-zone.tsx";
+import type { DropZoneDropEventDetails, DropZoneProps } from "./drop-zone.tsx";
 
 const january = new File(["a,b"], "january.csv", { type: "text/csv" });
 const february = new File(["a,b"], "february.csv", { type: "text/csv" });
@@ -143,6 +144,37 @@ Default.test("stops a file dropped beside it from opening in the page", async ()
   document.body.dispatchEvent(missed);
   await expect(missed.defaultPrevented).toBe(true);
 });
+
+function Zones(props: DropZoneProps) {
+  const [both, setBoth] = useState(true);
+  return (
+    <>
+      <DropZone {...props} />
+      {both && <DropZone {...props} />}
+      <button
+        type="button"
+        onClick={() => {
+          setBoth(false);
+        }}
+      >
+        Remove one
+      </button>
+    </>
+  );
+}
+
+Default.test(
+  "still stops a file dropped beside the zones after one of two is removed",
+  { render: (args) => <Zones {...args} /> },
+  async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: "Remove one" }));
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(january);
+    const missed = new DragEvent("drop", { bubbles: true, cancelable: true, dataTransfer });
+    document.body.dispatchEvent(missed);
+    await expect(missed.defaultPrevented).toBe(true);
+  },
+);
 
 Default.test(
   "focuses its trigger and marks it invalid after a blocked submit when required",

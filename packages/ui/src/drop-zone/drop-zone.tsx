@@ -55,22 +55,31 @@ function matcher(accept: string | undefined) {
   };
 }
 
-/** Stops a file dropped outside every zone from opening in the page (MDN, file drag and drop). */
+const preventDragOver = (event: globalThis.DragEvent) => {
+  if (!hasFiles(event) || event.defaultPrevented || event.dataTransfer === null) return;
+  event.preventDefault();
+  event.dataTransfer.dropEffect = "none";
+};
+
+const preventDrop = (event: globalThis.DragEvent) => {
+  if (hasFiles(event)) event.preventDefault();
+};
+
+let zones = 0;
+let listening = new AbortController();
+
+/** Stops a file dropped outside every zone from opening in the page (MDN, file drag and drop), with one pair of window listeners however many zones are mounted. */
 function usePreventDocumentDrop() {
   useEffect(() => {
-    const dragover = (event: globalThis.DragEvent) => {
-      if (!hasFiles(event) || event.defaultPrevented || event.dataTransfer === null) return;
-      event.preventDefault();
-      event.dataTransfer.dropEffect = "none";
-    };
-    const drop = (event: globalThis.DragEvent) => {
-      if (hasFiles(event)) event.preventDefault();
-    };
-    window.addEventListener("dragover", dragover);
-    window.addEventListener("drop", drop);
+    zones += 1;
+    if (zones === 1) {
+      listening = new AbortController();
+      window.addEventListener("dragover", preventDragOver, { signal: listening.signal });
+      window.addEventListener("drop", preventDrop, { signal: listening.signal });
+    }
     return () => {
-      window.removeEventListener("dragover", dragover);
-      window.removeEventListener("drop", drop);
+      zones -= 1;
+      if (zones === 0) listening.abort();
     };
   }, []);
 }

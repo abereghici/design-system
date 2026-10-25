@@ -60,9 +60,10 @@ export function useValidity(
   });
   useEffect(() => {
     const owner = hiddenInput(id)?.form;
-    owner?.addEventListener("reset", onReset);
+    const controller = new AbortController();
+    owner?.addEventListener("reset", onReset, { signal: controller.signal });
     return () => {
-      owner?.removeEventListener("reset", onReset);
+      controller.abort();
     };
   }, [id]);
   const submit = () => {
