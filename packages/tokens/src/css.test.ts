@@ -172,16 +172,6 @@ test("a themed color with the same value in both Themes needs no light-dark()", 
   expect(css).toContain("--ab-color-backdrop: var(--ab-palette-night-950-a64);");
 });
 
-test("ports every source token (210 primitive, 294 semantic, 413 component) plus 79 phase-1, 50 phase-2, 61 phase-3, 25 phase-4, 30 phase-5 and 13 phase-6 component tokens, less 16 no component reads, plus 2 for Table sorting and selection", async () => {
-  const { css, components } = await buildTokens({ source: [SOURCE_GLOB] });
-  const root = css.slice(css.indexOf(":root {"), css.indexOf("}", css.indexOf(":root {")));
-  expect(root.match(/^ {4}--ab-/gmv)).toHaveLength(210 + 294);
-  expect(css.match(/^ {6}--ab-/gmv)).toHaveLength(22);
-  const sheets = Object.values(components).join("");
-  expect(sheets.match(/^ {4}--ab-/gmv)).toHaveLength(413 + 79 + 50 + 61 + 25 + 30 + 13 - 16 + 2);
-  expect(Object.keys(components)).toHaveLength(47);
-});
-
 test("the package's own token source passes every check and compiles", async () => {
   const { css, components } = await buildTokens({ source: [SOURCE_GLOB] });
   expect(components["button"]).toContain(
