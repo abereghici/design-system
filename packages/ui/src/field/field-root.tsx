@@ -6,7 +6,7 @@ import type { ComponentProps, SyntheticEvent } from "react";
 import { FormErrorsContext } from "../form/form.tsx";
 import { join } from "../slot/slot.tsx";
 
-import { FieldContext } from "./field-control.ts";
+import { FieldContext, setValidity } from "./field-control.ts";
 import type { FormControl } from "./field-control.ts";
 import styles from "./field.module.css";
 
@@ -46,16 +46,6 @@ const controlOf = (id: string) => {
     : null;
 };
 
-const applyRule = (
-  target: FormControl,
-  message: string | undefined,
-  rule: RootProps["validate"],
-) => {
-  target.setCustomValidity(
-    message ?? rule?.(target.value, new FormData(target.form ?? undefined)) ?? "",
-  );
-};
-
 function useServerError(name: string | undefined, controlId: string) {
   const errors = use(FormErrorsContext);
   const [cleared, setCleared] = useState<typeof errors>();
@@ -86,7 +76,7 @@ function useValidity({ name, validate }: Pick<RootProps, "name" | "validate">, c
 
   useEffect(() => {
     const target = controlOf(controlId);
-    if (target !== null) applyRule(target, server, validate);
+    if (target !== null) setValidity(target, undefined, server, validate);
   }, [controlId, server, validate]);
 
   useEffect(() => {
@@ -120,7 +110,7 @@ function useValidity({ name, validate }: Pick<RootProps, "name" | "validate">, c
       const target = own(event);
       if (target === null) return;
       clear();
-      applyRule(target, undefined, validate);
+      setValidity(target, undefined, undefined, validate);
       setFailure(failureOf(target));
     },
   };

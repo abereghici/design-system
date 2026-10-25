@@ -53,7 +53,7 @@ export function reveal(option: HTMLElement, shown: readonly HTMLElement[]) {
  * The listbox popup keys of an editable combobox, which keeps focus while `current` is the active
  * descendant: Down and Up move through the shown, enabled options and wrap; Home and End reach the
  * first and last while the input is empty, and otherwise stay with the caret. Returns the revealed
- * option to highlight, `null` when there is none, `false` for any other key.
+ * option to highlight, or `null` when the key moves nothing.
  */
 export function navigate(
   event: KeyboardEvent<HTMLInputElement>,
@@ -71,7 +71,7 @@ export function navigate(
     End: empty ? -1 : undefined,
   };
   const to = steps[event.key];
-  if (to === undefined) return false;
+  if (to === undefined) return null;
   event.preventDefault();
   const next = options.at(to) ?? null;
   if (next !== null) reveal(next, shown);

@@ -1,5 +1,6 @@
 import type { ComponentProps } from "react";
 
+import { labelsOf } from "../provider/labels.ts";
 import type { Labels, Locale } from "../provider/locale.tsx";
 import { spinner as spinnerLabels } from "../provider/locales/en-US/spinner.ts";
 import { join } from "../slot/slot.tsx";
@@ -32,7 +33,7 @@ export function Spinner({ size = "sm", locale, labels, className, ...props }: Sp
         ? {}
         : {
             role: "status",
-            "aria-label": { ...spinnerLabels, ...locale?.labels.spinner, ...labels }.loading,
+            "aria-label": labelsOf(spinnerLabels, locale?.labels.spinner, labels).loading,
           })}
       {...props}
       data-size={size}

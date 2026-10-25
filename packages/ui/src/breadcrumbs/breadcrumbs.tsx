@@ -3,6 +3,7 @@ import type { ComponentProps } from "react";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { Link as BaseLink } from "../link/link.tsx";
 import type { LinkProps as BaseLinkProps } from "../link/link.tsx";
+import { labelsOf } from "../provider/labels.ts";
 import type { Labels, Locale } from "../provider/locale.tsx";
 import { breadcrumbs as breadcrumbsLabels } from "../provider/locales/en-US/breadcrumbs.ts";
 import { join } from "../slot/slot.tsx";
@@ -28,7 +29,7 @@ export interface RootProps extends ComponentProps<"nav"> {
 export function Root({ locale, labels, children, ...props }: RootProps) {
   return (
     <nav
-      aria-label={{ ...breadcrumbsLabels, ...locale?.labels.breadcrumbs, ...labels }.root}
+      aria-label={labelsOf(breadcrumbsLabels, locale?.labels.breadcrumbs, labels).root}
       {...props}
     >
       <ol className={styles["list"]}>{children}</ol>

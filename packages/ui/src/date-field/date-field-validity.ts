@@ -1,7 +1,7 @@
 import { useRef } from "react";
 
 import type { Temporal } from "../date/date.ts";
-import { useField, useFormReset } from "../field/field-control.ts";
+import { setValidity, useField, useFormReset } from "../field/field-control.ts";
 import type { Validate } from "../field/field-control.ts";
 
 import type { Segments } from "./segments.ts";
@@ -33,7 +33,7 @@ export function useValidity(
   { validate, isDateUnavailable }: Options,
   { incomplete, unavailable, onValidity, reset }: Wiring,
 ) {
-  const [field] = useField();
+  const { field } = useField();
   const id = field?.controlId;
   const server = field?.serverError;
   const touched = useRef(false);
@@ -42,9 +42,8 @@ export function useValidity(
     if (node === null) return;
     node.value = date?.toString() ?? "";
     const partial = date === null && Object.values(segments).some((part) => part !== undefined);
-    const rule = validate?.(node.value, new FormData(node.form ?? undefined));
     const rejected = date !== null && isDateUnavailable?.(date) === true;
-    node.setCustomValidity(partial ? incomplete : rejected ? unavailable : (rule ?? server ?? ""));
+    setValidity(node, partial ? incomplete : rejected ? unavailable : undefined, server, validate);
   };
   const report = (commit = false) => {
     const node = hiddenInput(id);

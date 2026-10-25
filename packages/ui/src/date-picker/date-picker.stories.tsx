@@ -74,6 +74,7 @@ Default.test("opens from the keyboard with focus on the selected day", async ({ 
   await user.keyboard("{Enter}");
   await waitFor(() => expect(canvas.getByRole("dialog", { name: "Choose date" })).toBeVisible());
   await expect(trigger).toHaveAttribute("aria-expanded", "true");
+  await expect(trigger).toHaveAttribute("aria-controls", canvas.getByRole("dialog").id);
   await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
 });
 
@@ -138,10 +139,7 @@ Default.test(
     await expect(args.onValueChange).not.toHaveBeenCalled();
     await expect(dismissed.events.map((event) => event.detail.component)).toEqual(["Popover"]);
     dismissed.stop();
-    await expect(reasons()).toEqual([
-      [true, "trigger-press"],
-      [false, "escape-key"],
-    ]);
+    await expect(reasons().flat()).toEqual([true, "trigger-press", false, "escape-key"]);
   },
 );
 
@@ -171,8 +169,8 @@ Default.test("closes when its trigger is pressed again", async ({ canvas }) => {
   await user.click(trigger);
   await waitFor(() => expect(canvas.getByRole("dialog")).toBeVisible());
   await user.click(trigger);
-  await waitFor(() => expect(reasons().at(-1)).toEqual([false, "trigger-press"]));
-  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await waitFor(() => expect(trigger).toHaveAttribute("aria-expanded", "false"));
+  await expect(reasons().flat()).toEqual([true, "trigger-press", false, "trigger-press"]);
   await expect(pressed.events.map((event) => event.detail.component)).toEqual([
     "IconButton",
     "IconButton",

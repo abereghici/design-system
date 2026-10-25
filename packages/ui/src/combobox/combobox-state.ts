@@ -175,8 +175,8 @@ export function keyDown(c: Combobox, event: KeyboardEvent<HTMLInputElement>) {
   const { nativeEvent: native, key } = event;
   if (event.defaultPrevented || native.isComposing || c.options.disabled === true) return;
   if (list === null) return;
-  const next = c.open && navigate(event, list, highlightedOf(input)?.id ?? null);
-  if (next !== false) {
+  const next = c.open ? navigate(event, list, highlightedOf(input)?.id ?? null) : null;
+  if (next !== null) {
     highlight(list, input, next, false);
   } else if (key === "ArrowDown" || key === "ArrowUp") {
     open(c, event);

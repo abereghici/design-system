@@ -203,7 +203,7 @@ function useNumberValue({
 }
 
 function Control({ labels, startElement, readOnly, ...options }: ControlProps) {
-  const [field] = useField();
+  const { field } = useField();
   const { rest: props, hidden, ...number } = useNumberValue(options);
   const bindings = Field.useFieldControl<HTMLInputElement, typeof props>({
     ...props,

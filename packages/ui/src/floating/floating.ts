@@ -178,7 +178,10 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
     const { source } = event.nativeEvent;
     const from = component === "ContextMenu" ? (layer.returnTo ?? document.activeElement) : source;
     layer.returnTo = from instanceof HTMLElement ? from : undefined;
-    const keyboard = component === "ContextMenu" ? ":not([data-pointer])" : ":is(:focus-visible, :has(:focus-visible))";
+    const keyboard =
+      component === "ContextMenu"
+        ? ":not([data-pointer])"
+        : ":is(:focus-visible, :has(:focus-visible))";
     element.toggleAttribute("data-pointer", source?.matches(keyboard) === false);
   } else {
     event.preventDefault();
