@@ -45,7 +45,7 @@ Richer lists (thumbnails, progress, per-file remove) stay the app's, from `onSel
 | `onSelect`                 | `(files: File[], details: FileTriggerSelectEventDetails) => void` |         | After the user picks files. `details`: `reason` (`"none"`), `event` (the native `change`), `cancel()` (clears the selection). |
 | `name`, `required`, `form` | native                                                            |         | On the hidden input, so the files submit with the form and `valueMissing` applies.                                            |
 | `disabled`                 | `boolean`                                                         | `false` | Passed to the trigger (`aria-disabled`); the picker does not open.                                                            |
-| `labels`                   | `{ clear?: string }`                                              |         | Per-instance override of the root UI provider's locale (Built-in labels).                                                     |
+| `clearLabel` | `string` |  | Shows the Clear button with this name ("Clear files"); without it there is no Clear button, so no button is ever nameless. |
 
 Names, checked against the reference libraries:
 
@@ -97,13 +97,9 @@ Nothing to mirror.
 
 None. The selection uses `space-inline-sm`, `space-inline-xs`, `type-body-xs` and `color-text-default` directly.
 
-## Built-in labels
+## Author-written text
 
-| Key                 | en-US         | ro-RO               | Used by              |
-| ------------------- | ------------- | ------------------- | -------------------- |
-| `fileTrigger.clear` | "Clear files" | "Golește fișierele" | The Clear IconButton |
-
-The trigger's text is the consumer's. DropZone shares the key.
+None. The Clear button appears only with the author's `clearLabel`; the trigger's text is the author's child.
 
 ## Feedback events
 

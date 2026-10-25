@@ -140,7 +140,7 @@ Existing (ported from the source): `tabs-height`, `tabs-gap`, `tabs-item-font`, 
 
 No new tokens. The panel entry uses the semantic swap tokens directly (`motion-duration-swap`, `motion-distance-swap`, `motion-blur-swap`, `motion-easing-enter`), the Root's stack gap `space-stack-md`, and the focus ring `focus-ring-width`, `focus-ring-offset`, `color-border-focused`.
 
-## Built-in labels
+## Author-written text
 
 None. The tab labels and the tablist name come from the consumer.
 

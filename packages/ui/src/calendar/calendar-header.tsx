@@ -1,11 +1,11 @@
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
-import type { Labels } from "../ui-provider/locale.tsx";
 
 import styles from "./calendar.module.css";
 
 interface HeaderProps {
-  readonly names: Labels["calendar"];
+  readonly previousMonthLabel: string;
+  readonly nextMonthLabel: string;
   readonly heading: string;
   readonly headingId: string;
   readonly before: boolean;
@@ -14,12 +14,13 @@ interface HeaderProps {
 }
 
 /** The month heading between the previous and next month buttons. */
-export function Header({ names, heading, headingId, before, after, page }: HeaderProps) {
+export function Header(props: HeaderProps) {
+  const { previousMonthLabel, nextMonthLabel, heading, headingId, before, after, page } = props;
   return (
     <div className={styles["header"]}>
       <IconButton
         size="sm"
-        aria-label={names.previousMonth}
+        aria-label={previousMonthLabel}
         disabled={!before}
         onClick={() => {
           page(-1);
@@ -32,7 +33,7 @@ export function Header({ names, heading, headingId, before, after, page }: Heade
       </h2>
       <IconButton
         size="sm"
-        aria-label={names.nextMonth}
+        aria-label={nextMonthLabel}
         disabled={!after}
         onClick={() => {
           page(1);

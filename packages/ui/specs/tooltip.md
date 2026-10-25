@@ -160,7 +160,7 @@ Proposed new:
 
 No Kbd override token. To match the source (`.ab-tooltip .ab-kbd{background:transparent;color:inherit;border-color:currentColor;opacity:.72}`) the Content sets Kbd's own custom properties on itself (transparent fill, text and border at 72 % of `currentColor`), as Button does. The forced-colors border uses `border-width-default` directly.
 
-## Built-in labels
+## Author-written text
 
 None. The Content's text is the consumer's.
 

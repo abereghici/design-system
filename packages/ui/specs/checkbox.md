@@ -101,7 +101,7 @@ Native; no key handler is added. Enter is not bound (APG lists Space only; Enter
 - **Contrast.** The checked state is the accent fill plus the check (shape, not colour alone). `background-accent-bold` against every surface is added to the contrast matrix at 3:1 (lowest measured 12.19:1 light, 14.25:1 dark). The unchecked box edge is `color-border-default`, already in the matrix (3:1).
 - Targets: the whole row is the label, at least 24 px tall through the line height plus padding (the box alone is 16 px; because the label activates the input, the row is the target for WCAG 2.5.8; inference).
 - **More contrast:** no change needed (the border is already `border-default`).
-- **Forced colors:** the fill disappears, so the checked box sets `background-color: Highlight` and the check `HighlightText`; the border is `CanvasText`. Disabled uses `GrayText`.
+- **Forced colors:** the fill disappears, so the checked box sets `background-color: Highlight` and the check `HighlightText`; the border is `CanvasText`. Disabled uses `GrayText` for the border, the check and the label, on a `Canvas` box, as native disabled checkboxes do.
 - **Reduced transparency:** not affected.
 
 ## RTL
@@ -122,7 +122,7 @@ Contrast matrix additions (`packages/tokens/src/contrast.ts`, non-text 3:1): `ba
 
 The label text colour is `color-text-default` (semantic, directly; no source token).
 
-## Built-in labels
+## Author-written text
 
 None.
 

@@ -84,7 +84,7 @@ Proposed new:
 | ------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `status-dot-border-width` | `border-width-default` (1 px) | The ring thickness of the neutral dot is a visual decision an app may tune; no existing token holds it. |
 
-## Built-in labels
+## Author-written text
 
 None. StatusDot has no text.
 

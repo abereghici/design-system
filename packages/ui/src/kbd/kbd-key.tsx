@@ -2,14 +2,23 @@
 
 import { useSyncExternalStore } from "react";
 
-import { useLabels } from "../ui-provider/locale.tsx";
-import type { Labels } from "../ui-provider/locale.tsx";
-import { kbd as kbdLabels } from "../ui-provider/locales/en-US/kbd.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
+
+export type KeyLabel =
+  | "command"
+  | "control"
+  | "shift"
+  | "option"
+  | "enter"
+  | "backspace"
+  | "arrowUp"
+  | "arrowDown"
+  | "arrowLeft"
+  | "arrowRight";
 
 export interface KbdFace {
   readonly text: string;
-  readonly label?: keyof Labels["kbd"];
+  readonly label?: KeyLabel;
 }
 
 const subscribe = () => () => {};
@@ -20,20 +29,20 @@ const serverPlatform = () => "other" as const;
 export function KbdKey({
   apple,
   other,
-  labels,
+  keyLabels,
 }: {
   apple: KbdFace;
   other: KbdFace;
-  labels: Partial<Labels["kbd"]> | undefined;
+  keyLabels: Partial<Record<KeyLabel, string>> | undefined;
 }) {
   const face =
     useSyncExternalStore(subscribe, platform, serverPlatform) === "apple" ? apple : other;
-  const names = useLabels("kbd", kbdLabels, labels);
-  if (face.label === undefined) return face.text;
+  const name = face.label === undefined ? undefined : keyLabels?.[face.label];
+  if (name === undefined) return face.text;
   return (
     <>
       <span aria-hidden="true">{face.text}</span>
-      <VisuallyHidden>{names[face.label]}</VisuallyHidden>
+      <VisuallyHidden>{name}</VisuallyHidden>
     </>
   );
 }

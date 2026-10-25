@@ -8,8 +8,6 @@ import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useEvent } from "../events/use-event.ts";
 import { useField, useFieldControl } from "../field/use-field.ts";
 import { Slot, composeRefs } from "../slot/slot.tsx";
-import { useLabels } from "../ui-provider/locale.tsx";
-import { fileTrigger as fileTriggerLabels } from "../ui-provider/locales/en-US/file-trigger.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import { Selection } from "./file-trigger-selection.tsx";
@@ -33,7 +31,7 @@ interface FileInputProps extends NativeProps {
   readonly triggerRef: Picker["trigger"];
   readonly disabled: boolean;
   readonly directory?: boolean;
-  readonly labels: { clear?: string } | undefined;
+  readonly clearLabel: string | undefined;
 }
 
 function clear(input: HTMLInputElement | null, trigger: HTMLElement | null) {
@@ -52,11 +50,10 @@ export function FileInput({
   inputRef,
   triggerRef,
   directory = false,
-  labels,
+  clearLabel,
   ...props
 }: FileInputProps) {
   const bindings = useFieldControl<HTMLInputElement, NativeProps & { disabled: boolean }>(props);
-  const { clear: clearLabel } = useLabels("fileTrigger", fileTriggerLabels, labels);
   const [names, setNames] = useState<string[]>([]);
   useEvent(
     "reset",
@@ -88,7 +85,7 @@ export function FileInput({
       </VisuallyHidden>
       <Selection
         names={names}
-        label={clearLabel}
+        clearLabel={clearLabel}
         disabled={props.disabled}
         onClear={() => {
           clear(inputRef.current, triggerRef.current);
@@ -116,8 +113,8 @@ export interface FileTriggerProps extends NativeProps {
    * nothing.
    */
   onSelect?: (files: File[], details: FileTriggerSelectEventDetails) => void;
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: { clear?: string };
+  /** Shows a button that clears the chosen files, with this name, such as "Clear files". */
+  clearLabel?: string | undefined;
 }
 
 function selectOnce(input: HTMLInputElement, onSelect: FileTriggerProps["onSelect"]) {
@@ -146,7 +143,7 @@ export function FileTrigger({
   children,
   disabled = false,
   onSelect,
-  labels,
+  clearLabel,
   ...props
 }: FileTriggerProps) {
   const zone = use(PickerContext);
@@ -186,7 +183,7 @@ export function FileTrigger({
         inputRef={input}
         triggerRef={trigger}
         disabled={blocked}
-        labels={labels}
+        clearLabel={clearLabel}
       />
     </span>
   );

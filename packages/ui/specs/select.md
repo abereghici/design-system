@@ -156,7 +156,7 @@ Proposed new (mirroring the ported `dropdown-menu-*` Floating-layer tokens):
 
 The group label uses `dropdown-menu-group-label-*`'s semantic values directly (`type-overline-sm`, `color-text-subtlest`).
 
-## Built-in labels
+## Author-written text
 
 None. `placeholder` is the consumer's text.
 

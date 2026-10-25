@@ -87,7 +87,7 @@ All exist (ported from the source `mark-*`, renamed): `logo-color` (→ `color-i
 
 No new tokens.
 
-## Built-in labels
+## Author-written text
 
 None. The name, when needed, comes from `label`; the design system does not hard-code the brand owner's name.
 

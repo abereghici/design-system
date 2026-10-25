@@ -8,14 +8,11 @@ import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
-import type { Locale } from "../ui-provider/locale.tsx";
-import { roRO } from "../ui-provider/locales/ro-RO.ts";
-
 import { NumberField } from "./number-field.tsx";
-import type { NumberFieldChangeEventDetails } from "./number-field.tsx";
+import type { NumberFieldChangeEventDetails, NumberFieldProps } from "./number-field.tsx";
 
-// @ts-expect-error -- a locale must name the step buttons
-({ tag: "fr-FR", labels: { ...roRO.labels, numberField: {} } }) satisfies Locale;
+// @ts-expect-error -- the step buttons show only icons, so they need names
+({ label: "Seats" }) satisfies NumberFieldProps;
 
 const inAForm: Decorator = (Story) => (
   <form
@@ -40,6 +37,8 @@ const meta = preview.meta({
     defaultValue: 5,
     min: 1,
     max: 50,
+    incrementLabel: "Increase",
+    decrementLabel: "Decrease",
     locale: "en-US",
     onValueChange: fn(),
   },

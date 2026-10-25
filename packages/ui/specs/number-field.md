@@ -39,7 +39,7 @@ Label → container (input, decrement, increment) → description or error.
 | `largeStep`                                                                                                   | `number`                                                                                                   | `10 × step`                                        | Page Up / Page Down and Shift+Arrow.                                                                                                                                                                        |
 | `formatOptions`                                                                                               | `Intl.NumberFormatOptions`                                                                                 |                                                    | How the value is displayed and parsed.                                                                                                                                                                      |
 | `locale`                                                                                                      | `Intl.LocalesArgument`                                                                                     | the runtime's default                             | Passed to `Intl.NumberFormat` (Base UI's prop).                                                                                                                                                                 |
-| `labels`                                                                                                      | `{ increment?: string; decrement?: string }`                                                               | `{ increment: "Increase", decrement: "Decrease" }` | Step button names.                                                                                                                                                                                          |
+| `incrementLabel`, `decrementLabel` | `string` (required) |  | Names of the icon-only step buttons ("Increase", "Decrease"). |
 | `name`                                                                                                        | `string`                                                                                                   |                                                    | Goes on the hidden value input.                                                                                                                                                                             |
 | `required`, `disabled`, `label`, `description`, `errorMessage`, `invalid`, `validate`, `size`, `startElement` | as TextField                                                                                               |                                                    | `required` goes on the visible input (empty fails `valueMissing`). `disabled`: `aria-disabled` plus `readOnly`, and the step buttons disabled.                                                              |
 | …native                                                                                                       | `Omit<ComponentProps<"input">, "type" \| "value" \| "defaultValue" \| "size" \| "min" \| "max" \| "step">` |                                                    | `ref`, `id`, `placeholder`, `onBlur`… go on the visible input.                                                                                                                                              |
@@ -95,7 +95,7 @@ Home and End move the caret (native) when there is no `min` / `max`. Up and Down
 
 - **Role: `textbox`, not `spinbutton`.** APG asks for "role spinbutton". React Aria removes it on purpose: "override the spinbutton role, we can't focus a spin button with VO" (source, `useNumberField.ts`), and Base UI sets no spinbutton role either. We follow the two libraries, because a control VoiceOver cannot focus fails WCAG for its users, while the arrow-key behaviour stays available (judgement call, review item). The input gets no `aria-roledescription` (Base UI adds "Number field"; React Aria adds one except on iOS). The label already says what the value is, and a role description would be one more built-in string to localise (judgement call).
 - The formatted text is the value read by screen readers ("€19.50"), so no `aria-valuetext` is needed.
-- Step buttons: names from `labels` ("Increase", "Decrease"), each `aria-controls` the input.
+- Step buttons: names from `incrementLabel` and `decrementLabel` ("Increase", "Decrease"), each `aria-controls` the input.
 - **More contrast, forced colors, reduced transparency:** TextField's and IconButton's.
 
 ## RTL
@@ -106,12 +106,9 @@ Logical properties only: step buttons at the inline end. The formatted number fo
 
 None new. TextField's `input-*` set and IconButton's `icon-button-*` set. The input keeps `input-font` (not the `type-data-*` role) so it lines up with the other fields, and adds only `font-variant-numeric: tabular-nums` so digits don't shift while stepping (judgement call).
 
-## Built-in labels
+## Author-written text
 
-| Key         | Default    | Used by               |
-| ----------- | ---------- | --------------------- |
-| `increment` | "Increase" | Increment button name |
-| `decrement` | "Decrease" | Decrement button name |
+None. The step buttons' names are required by type; numbers are formatted by `Intl.NumberFormat` in `locale`.
 
 ## Feedback events
 

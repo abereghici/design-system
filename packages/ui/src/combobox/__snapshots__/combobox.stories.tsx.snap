@@ -8,6 +8,22 @@ exports[`Default   > base story 1`] = `
   - button "Save"
 `;
 
+exports[`Open 1`] = `
+- form "Task":
+  - text: Assignee
+  - combobox "Assignee" [expanded]
+  - listbox "Assignee":
+    - option "Alexandru Bereghici" [selected]
+    - option "Ioana Munteanu"
+    - option "Mugur Ionescu"
+    - group "Former members":
+      - text: Former members
+      - option "Erik Halvorsen" [disabled]
+      - option "Ștefan Țurcanu"
+  - status
+  - button "Save"
+`;
+
 exports[`Server Search Results   > base story 1`] = `
 - form "Task":
   - text: Repository

@@ -2,22 +2,19 @@ import { useState } from "react";
 import { expect, fn } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
-import { roRO } from "@platform/ui/locales/ro-RO";
-
 import preview from "#.storybook/preview.tsx";
-
-import type { Locale } from "../ui-provider/locale.tsx";
 
 import { Calendar } from "./calendar.tsx";
 import type { CalendarChangeEventDetails, CalendarProps } from "./calendar.tsx";
 
-// @ts-expect-error -- a locale must name the Previous and Next month buttons
-({ tag: "fr-FR", labels: { ...roRO.labels, calendar: {} } }) satisfies Locale;
+const names = { previousMonthLabel: "Previous month", nextMonthLabel: "Next month" };
 
+// @ts-expect-error -- the month buttons show only icons, so they need names
+({}) satisfies CalendarProps;
 // @ts-expect-error -- a Calendar has nothing to disable or submit
-({ disabled: true }) satisfies CalendarProps;
+({ ...names, disabled: true }) satisfies CalendarProps;
 // @ts-expect-error -- a Calendar has nothing to disable or submit
-({ name: "day", form: "booking" }) satisfies CalendarProps;
+({ ...names, name: "day", form: "booking" }) satisfies CalendarProps;
 
 const date = (iso: string) => Temporal.PlainDate.from(iso);
 
@@ -43,6 +40,7 @@ const meta = preview.meta({
   component: Calendar,
   args: {
     "aria-label": "Delivery date",
+    ...names,
     defaultValue: date("2026-10-24"),
     locale: "en-US",
     onValueChange: fn<(value: Temporal.PlainDate, details: CalendarChangeEventDetails) => void>(),

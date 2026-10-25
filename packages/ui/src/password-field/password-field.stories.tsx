@@ -8,15 +8,14 @@ import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
-import type { Locale } from "../ui-provider/locale.tsx";
-import { roRO } from "../ui-provider/locales/ro-RO.ts";
-import { UIProvider } from "../ui-provider/ui-provider.tsx";
-
 import { PasswordField } from "./password-field.tsx";
-import type { PasswordFieldVisibleChangeEventDetails } from "./password-field.tsx";
+import type {
+  PasswordFieldProps,
+  PasswordFieldVisibleChangeEventDetails,
+} from "./password-field.tsx";
 
-// @ts-expect-error -- a locale must name the password toggle
-({ tag: "fr-FR", labels: { ...roRO.labels, passwordField: {} } }) satisfies Locale;
+// @ts-expect-error -- the show-password toggle shows only an icon, so it needs a name
+({ label: "Password" }) satisfies PasswordFieldProps;
 
 const inAForm: Decorator = (Story) => (
   <form
@@ -37,6 +36,7 @@ const meta = preview.meta({
   args: {
     label: "Password",
     name: "password",
+    toggleLabel: "Show password",
     onVisibleChange: fn(),
     onValueChange: fn(),
   },
@@ -111,30 +111,6 @@ Default.test(
       false,
       expect.objectContaining({ reason: "form-submit" }),
     );
-  },
-);
-
-Default.test(
-  "names the toggle from the locale",
-  {
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("button", { name: "Afișează parola" })).toBeVisible();
-  },
-);
-
-Default.test(
-  "takes a per-instance label over the locale",
-  { args: { labels: { show: "Reveal PIN" } } },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("button", { name: "Reveal PIN" })).toBeVisible();
   },
 );
 

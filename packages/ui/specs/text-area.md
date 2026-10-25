@@ -80,7 +80,7 @@ Logical properties only. Text direction per paragraph from `dir="auto"`. The res
 
 None new. The `input-*` set, as TextField: container chrome, `input-padding-block`, `input-font`, label, helper, error, placeholder, border states and disabled colours.
 
-## Built-in labels
+## Author-written text
 
 None.
 

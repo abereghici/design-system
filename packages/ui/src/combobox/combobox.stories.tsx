@@ -268,6 +268,13 @@ function ServerSearch(args: Combobox.RootProps) {
   );
 }
 
+export const Open = meta.story({
+  parameters: { docs: { description: { story: "Open, with the first option highlighted." } } },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("combobox", { name: "Assignee" }));
+  },
+});
+
 export const ServerSearchResults = meta.story({
   args: { label: "Repository", name: "repo", noOptionsText: "No repositories" },
   render: ServerSearch,

@@ -122,7 +122,7 @@ Native `<a href>` provides Enter, so no key handler is added.
 - Targets: the whole card is the link target; Footer buttons keep their own sizes from `size-control-*`.
 - Contrast: `text-default` and `text-subtle` on `surface-default` are in the AA matrix. The `border-subtle` hairline is decorative (brand book: "The subtle hairline border is decorative and is never the only boundary of a control"); the linked card's boundary on hover/focus is `border-default` and the focus ring.
 - **More contrast:** `color-border-subtle` steps up to `color-border-default` under `(prefers-contrast: more)` (token media override), so the card edge strengthens.
-- **Forced colors:** the border stays (border colours become a system colour), the hover shadow disappears ("`box-shadow` is forced to 'none'", MDN forced-colors), so hover adds nothing there; the focus ring uses `outline` and takes the system highlight. The link text takes `LinkText`.
+- **Forced colors:** the border stays (border colours become a system colour), the hover shadow disappears ("`box-shadow` is forced to 'none'", MDN forced-colors), so hover adds nothing there; the focus ring uses `outline`, which forced colors paint in the system text colour (`CanvasText`). The link text takes `LinkText`.
 - **Reduced transparency:** not affected (no Material).
 
 ## RTL
@@ -141,7 +141,7 @@ Proposed new:
 
 The row-layout gap is semantic `space-inline-lg`; the column gap reuses `card-gap`. Focus ring: semantic `focus-ring-width`, `focus-ring-offset`, `color-border-focused` (R6).
 
-## Built-in labels
+## Author-written text
 
 None. Every string comes from the consumer's Parts.
 

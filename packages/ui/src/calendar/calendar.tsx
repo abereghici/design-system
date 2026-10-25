@@ -17,9 +17,6 @@ import type { DatePickerContextValue } from "../date/date.ts";
 import { requestChange, sharedListener } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { mergeProps } from "../slot/slot.tsx";
-import { useLabels } from "../ui-provider/locale.tsx";
-import type { Labels } from "../ui-provider/locale.tsx";
-import { calendar as calendarLabels } from "../ui-provider/locales/en-US/calendar.ts";
 
 import { Grid, keyTarget } from "./calendar-grid.tsx";
 import { Header } from "./calendar-header.tsx";
@@ -51,8 +48,10 @@ export interface CalendarProps extends Omit<
    * language is used. Inside a DatePicker, the DatePicker's `locale` is used.
    */
   locale?: Intl.LocalesArgument;
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: Partial<Labels["calendar"]> | undefined;
+  /** The name of the previous-month button, such as "Previous month": it shows only an icon. */
+  previousMonthLabel: string;
+  /** The name of the next-month button, such as "Next month": it shows only an icon. */
+  nextMonthLabel: string;
 }
 
 const onFocusIn = sharedListener("focusin", () => document);
@@ -75,7 +74,17 @@ function useToday() {
 }
 
 function useCalendar(
-  { value, defaultValue = null, onValueChange, min, max, isDateUnavailable }: CalendarProps,
+  {
+    value,
+    defaultValue = null,
+    onValueChange,
+    min,
+    max,
+    isDateUnavailable,
+  }: Pick<
+    CalendarProps,
+    "value" | "defaultValue" | "onValueChange" | "min" | "max" | "isDateUnavailable"
+  >,
   picker: DatePickerContextValue | null,
 ) {
   const today = useToday();
@@ -163,7 +172,8 @@ function useGrid(
  * DateField; for a field with a calendar on demand, DatePicker.
  */
 export function Calendar({
-  labels,
+  previousMonthLabel,
+  nextMonthLabel,
   locale,
   value,
   defaultValue,
@@ -184,7 +194,8 @@ export function Calendar({
   return (
     <fieldset {...mergeProps({ className: styles["root"] }, rest)}>
       <Header
-        names={useLabels("calendar", calendarLabels, labels)}
+        previousMonthLabel={previousMonthLabel}
+        nextMonthLabel={nextMonthLabel}
         heading={formats.heading(first)}
         headingId={headingId}
         before={!outside(first.subtract({ days: 1 }))}

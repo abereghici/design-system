@@ -158,7 +158,7 @@ New component word `slider` and element word `range` (Dictionary change).
 
 The hovered shadow uses `elevation-overlay`, and invalid uses `color-border-danger`, directly (semantic).
 
-## Built-in labels
+## Author-written text
 
 None. Thumb names are the consumer's (`aria-label`), because only the product knows what each end means.
 

@@ -42,7 +42,6 @@ function route(name: string): Route {
 
 const button = route("index");
 const logo = route("logo");
-const locale = route("locale");
 const iconButton = route("icon-button");
 
 const uiClientModules = (r: Route) =>
@@ -125,7 +124,7 @@ describe("each component route ships only its own CSS, tokens and client code", 
     const owner = (token: string) => tokens.find((word) => word === ownerOf(token));
     expect(shipped.filter((token) => owner(token) === undefined)).toEqual([]);
     expect(new Set(shipped.map((token) => owner(token)))).toEqual(new Set(tokens));
-    expect(uiClientModules(r)).toEqual([...client, "ui-provider/locale.tsx"].toSorted());
+    expect(uiClientModules(r)).toEqual(client.toSorted());
   });
 });
 
@@ -145,13 +144,12 @@ describe("DatePicker and Calendar", () => {
 
 describe("per-component JS", () => {
   test("only the Button route loads Button's client code", () => {
-    expect(uiClientModules(button)).toEqual(["button/button.tsx", "ui-provider/locale.tsx"]);
+    expect(uiClientModules(button)).toEqual(["button/button.tsx"]);
     expect(button.js).toContain("ab-press");
-    expect(uiClientModules(logo)).toEqual(["ui-provider/locale.tsx"]);
+    expect(uiClientModules(logo)).toEqual([]);
     expect(logo.js).not.toContain("ab-press");
     expect(uiClientModules(iconButton)).toEqual([
       "icon-button/icon-button.tsx",
-      "ui-provider/locale.tsx",
     ]);
   });
 
@@ -170,7 +168,7 @@ describe("per-component JS", () => {
     "the %s route renders on the server and ships its CSS and tokens only",
     (name, rule, count) => {
       const r = route(name);
-      expect(uiClientModules(r)).toEqual(["ui-provider/locale.tsx"]);
+      expect(uiClientModules(r)).toEqual([]);
       expect(r.css).toContain(rule);
       const tokens = shippedComponentTokens(r.css);
       expect(tokens).toHaveLength(count);
@@ -188,7 +186,7 @@ describe("per-component JS", () => {
   });
 });
 
-describe("locale, labels and direction", () => {
+describe("interface text and direction", () => {
   test("the root layout sets dir from getDirection on the server", () => {
     expect(button.html).toContain('<html lang="en" dir="ltr"');
   });
@@ -197,11 +195,6 @@ describe("locale, labels and direction", () => {
     expect(route("table").html).toMatch(
       /<th scope="col" aria-sort="ascending" class="[^"]+"><button [^>]*type="button"/v,
     );
-  });
-
-  test("a locale reaches client components, and ships only on the route that imports it", () => {
-    expect(locale.html).toContain("<output>ro-RO</output>");
-    expect(button.js).not.toContain('"ro-RO"');
   });
 
   test("a client component ships no interface text of its own; the author's reaches the HTML", () => {
@@ -231,7 +224,7 @@ describe("a lazily loaded component", () => {
 describe("a client leaf inside a Server Component", () => {
   test("Kbd renders its platform keys as Ctrl on the server and resolves them on the client", () => {
     const kbd = route("kbd");
-    expect(uiClientModules(kbd)).toEqual(["kbd/kbd-key.tsx", "ui-provider/locale.tsx"]);
+    expect(uiClientModules(kbd)).toEqual(["kbd/kbd-key.tsx"]);
     expect(kbd.html).toContain("Ctrl");
     expect(kbd.html).toContain("Enter");
     const tokens = shippedComponentTokens(kbd.css);

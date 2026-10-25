@@ -123,7 +123,7 @@ All exist (the source's `input-*` set, shared by every field): `input-gap`, `inp
 
 No new tokens. Field reuses the `input` component word instead of adding `field`, because the source designed label, helper and error once for all its form controls (judgement call).
 
-## Built-in labels
+## Author-written text
 
 None. The default error text is the browser's `validationMessage`, already in the user's language.
 

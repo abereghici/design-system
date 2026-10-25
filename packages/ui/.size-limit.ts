@@ -27,7 +27,7 @@ const budgets: Readonly<Record<string, string>> = {
   fieldset: "670 B",
   form: "250 B",
   heading: "650 B",
-  icon: "840 B",
+  icon: "860 B",
   kbd: "1.75 kB",
   link: "820 B",
   logo: "770 B",
@@ -88,11 +88,6 @@ export default [
   ...checks(
     "src/icon/icons/*.tsx",
     (path) => path.slice("src/icon/".length, -".tsx".length),
-    "980 B",
-  ),
-  ...checks(
-    "src/ui-provider/locales/*.ts",
-    (path) => path.slice("src/ui-provider/".length, -".ts".length),
-    "730 B",
+    "1.05 kB",
   ),
 ] satisfies SizeLimitConfig;

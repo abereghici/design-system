@@ -99,7 +99,7 @@ All exist (ported from the source): `icon-{sm,md,lg,xl}-size` (→ `size-icon-sm
 
 No new tokens.
 
-## Built-in labels
+## Author-written text
 
 None. A meaningful icon's name comes from `label`.
 

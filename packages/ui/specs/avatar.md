@@ -131,7 +131,7 @@ Sizes come from `size-icon-*`, not `size-control-*`, because control sizes grow 
 
 The image fade uses semantic `motion-duration-swap` and `motion-easing-enter` directly.
 
-## Built-in labels
+## Author-written text
 
 None. The accessible name is the consumer's `alt` and `name`.
 
