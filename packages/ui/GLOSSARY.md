@@ -40,6 +40,14 @@ _Avoid_: Field context (as an API), input binding
 The one treatment every disabled control gets: its parts swap to the `*-disabled` colour roles (`text-disabled` ink, `icon-disabled` glyphs and marks, `background-disabled` fill, `border-disabled` edge), the label next to it takes `text-disabled`, and the description that says why stays readable. Never `opacity`: a disabled control stays focusable (`aria-disabled`), and opacity on it fades its focus ring below WCAG 1.4.11's 3:1, then fades again in any disabled ancestor. Button, Field, Command and Calendar set the precedent; Primer (`fgColor-disabled`, `bgColor-disabled`), Carbon (`$text-disabled`, `$icon-disabled`) and Atlassian (`color.text.disabled`) do the same.
 _Avoid_: Dimmed, greyed out, faded, inactive
 
+**State attribute**:
+A `data-*` attribute a component sets on its own element so CSS can style a state. A yes/no state is present with the empty string while it holds and absent otherwise (`data-selected=""`), as HTML boolean attributes are; an enumerated one carries its value (`data-variant="danger"`, `data-side="top"`). Never `"true"` or `"false"`.
+_Avoid_: Data flag, state class
+
+**Uncontrolled state**:
+The state a component holds itself when the consumer passes only the `default…` prop, named `uncontrolled` in the code (`const [uncontrolled, setUncontrolled] = useState(defaultValue)`); the controlled prop wins whenever it is defined. React's controlled and uncontrolled components, Radix's `useControllableState`.
+_Avoid_: Own state, internal state, local value
+
 **Icon**:
 A glyph from the carved icon set on the 24-unit grid, stroked in the surrounding text colour; decorative unless it has a label. Each one is its own component (`SearchIcon`).
 _Avoid_: Glyph (as a component name), symbol, pictogram

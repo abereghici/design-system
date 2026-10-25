@@ -1,7 +1,7 @@
 import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "react";
 
 import { byId, isOpen, sourceOf } from "../floating/floating.ts";
-import { arrange, enabled, textOf } from "../listbox/listbox.tsx";
+import { filterOptions, enabled, textOf } from "../listbox/listbox.tsx";
 import { useLabels, useLocale } from "../ui-provider/locale.tsx";
 import { combobox as comboboxLabels } from "../ui-provider/locales/en-US/combobox.ts";
 
@@ -41,7 +41,7 @@ function sync(c: Combobox, tag: string, emptyText: string) {
   if (list === null || input === null) return;
   applyText(c, list, input);
   placePopover(c, list);
-  const shown = arrange(list, c.options.filter === null ? "" : c.query, tag);
+  const shown = filterOptions(list, c.options.filter === null ? "" : c.query, tag);
   showEmpty(c, list, shown.length === 0, emptyText);
   const memory = memoryOf(c);
   const key = c.open ? shown.map((option) => option.id).join(" ") : "";

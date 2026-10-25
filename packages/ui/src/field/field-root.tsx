@@ -150,8 +150,8 @@ export function Root({
       <div
         {...props}
         className={join(styles["root"], className)}
-        data-invalid={shown || undefined}
-        data-disabled={disabled || undefined}
+        data-invalid={shown ? "" : undefined}
+        data-disabled={disabled ? "" : undefined}
         onChange={(event) => {
           onChange?.(event);
           edit(event);

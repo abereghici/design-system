@@ -51,7 +51,7 @@ export function Badge({
     <span
       {...props}
       data-variant={variant}
-      data-overflow={overflow || undefined}
+      data-overflow={overflow ? "" : undefined}
       className={join(styles["root"], className)}
     >
       {typeof children === "string"

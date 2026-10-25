@@ -6,7 +6,7 @@ import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction
 import { isComposing, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId } from "../floating/floating.ts";
-import { arrange, enabled, navigate, reveal } from "../listbox/listbox.tsx";
+import { filterOptions, enabled, navigate, reveal } from "../listbox/listbox.tsx";
 import { useLocale } from "../ui-provider/locale.tsx";
 import { join } from "../slot/slot.tsx";
 
@@ -65,7 +65,7 @@ function keyDown(
  * Ranks the Items, then keeps the highlight on a shown, enabled Item: the first one after a new
  * query.
  */
-function useRanking(
+function useFilter(
   list: RefObject<HTMLDivElement | null>,
   query: string,
   locale: string | null,
@@ -76,7 +76,7 @@ function useRanking(
   useLayoutEffect(() => {
     const node = list.current;
     const run = (fresh: boolean) => {
-      const shown = arrange(node, query, locale);
+      const shown = filterOptions(node, query, locale);
       setEmpty(shown.length === 0);
       const [first] = shown.filter((option) => enabled(option));
       setHighlighted((current) =>
@@ -113,7 +113,7 @@ export interface RootProps extends ComponentProps<"div"> {
   /** Called before the query changes; `details.cancel()` keeps the current one. */
   onInputValueChange?: Callback<string, "input-change" | "input-clear"> | undefined;
   /**
-   * `null` turns the built-in ranking off, when you search yourself (on a server) and render the
+   * `null` turns the built-in filtering off, when you search yourself (on a server) and render the
    * results.
    */
   filter?: null | undefined;
@@ -126,21 +126,21 @@ export function Root({
   inputValue,
   defaultInputValue = "",
   onInputValueChange,
-  filter: ranking,
+  filter: filtering,
   className,
   children,
   ...props
 }: RootProps) {
-  const [own, setOwn] = useState(defaultInputValue);
-  const query = inputValue ?? own;
+  const [uncontrolled, setUncontrolled] = useState(defaultInputValue);
+  const query = inputValue ?? uncontrolled;
   const [highlighted, setHighlighted] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
   const { tag } = useLocale();
-  const empty = useRanking(list, query, ranking === null ? null : tag, setHighlighted);
+  const empty = useFilter(list, query, filtering === null ? null : tag, setHighlighted);
   const context: CommandContext = {
     query,
     change: (next, event) => {
-      if (requestChange(onInputValueChange, next, "input-change", event)) setOwn(next);
+      if (requestChange(onInputValueChange, next, "input-change", event)) setUncontrolled(next);
     },
     highlighted,
     highlight: setHighlighted,

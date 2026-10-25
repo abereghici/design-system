@@ -39,7 +39,7 @@ export function Row({ selected = false, className, ...props }: RowProps) {
   return (
     <tr
       {...props}
-      data-selected={selected || undefined}
+      data-selected={selected ? "" : undefined}
       className={join(styles["row"], className)}
     />
   );

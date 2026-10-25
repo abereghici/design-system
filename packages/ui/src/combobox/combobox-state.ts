@@ -64,7 +64,7 @@ export interface Options {
   open?: boolean | undefined;
   defaultOpen?: boolean | undefined;
   onOpenChange?: Callback<boolean, OpenReason> | undefined;
-  /** `null` turns the built-in ranking off: every Item shows, in your order (server search). */
+  /** `null` turns the built-in filtering off: every Item shows, in your order (server search). */
   filter?: null | undefined;
   disabled?: boolean | undefined;
 }

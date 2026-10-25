@@ -50,16 +50,16 @@ function handleClose(
 export function Dialog(props: DialogProps) {
   const { open, defaultOpen = false, onOpenChange, finalFocus: _, labels, ...rest } = props;
   const { inputValue, defaultInputValue, onInputValueChange, filter, children, ...native } = rest;
-  const [own, setOwn] = useState(defaultOpen);
+  const [uncontrolled, setUncontrolled] = useState(defaultOpen);
   const [closes, setCloses] = useState(0);
   const close = (reason: Exclude<Reason, "none">, event: Event) => {
     const accepted = requestChange(onOpenChange, false, reason, event);
-    if (accepted) setOwn(false);
+    if (accepted) setUncontrolled(false);
     return accepted;
   };
   return (
     <ModalRoot
-      open={open ?? own}
+      open={open ?? uncontrolled}
       styles={styles}
       component="Dialog"
       onOpenChange={(_open, details) => {

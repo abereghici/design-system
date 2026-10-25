@@ -78,8 +78,8 @@ function useCalendar(
   picker: DatePickerContextValue | null,
 ) {
   const today = useToday();
-  const [own, setOwn] = useState(defaultValue);
-  const selected = value === undefined ? own : value;
+  const [uncontrolled, setUncontrolled] = useState(defaultValue);
+  const selected = value === undefined ? uncontrolled : value;
   const start = clamp(selected ?? today, min, max);
   const [focused, setFocused] = useState(start);
   const outside = (date: Temporal.PlainDate) => clamp(date, min, max) !== date;
@@ -93,7 +93,7 @@ function useCalendar(
       return;
     }
     if (selected?.equals(date) === true) return;
-    if (requestChange(onValueChange, date, "day-press", event)) setOwn(date);
+    if (requestChange(onValueChange, date, "day-press", event)) setUncontrolled(date);
   };
   return { today, selected, start, focused, setFocused, outside, unavailable, choose };
 }

@@ -59,11 +59,11 @@ function useVisibility(
   defaultVisible: boolean | undefined,
   onVisibleChange: ControlProps["onVisibleChange"],
 ) {
-  const [own, setOwn] = useState(defaultVisible ?? false);
-  const current = visible ?? own;
+  const [uncontrolled, setUncontrolled] = useState(defaultVisible ?? false);
+  const current = visible ?? uncontrolled;
   const change = (next: boolean, reason: Reason, event: Event) => {
     const accepted = requestChange(onVisibleChange, next, reason, event);
-    if (accepted) setOwn(next);
+    if (accepted) setUncontrolled(next);
     return accepted;
   };
   useEffect(() => {

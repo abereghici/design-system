@@ -36,7 +36,7 @@ export function Item({
       id={id}
       data-value={value}
       data-keywords={keywords?.join("\n")}
-      data-selected={chosen || undefined}
+      data-selected={chosen ? "" : undefined}
       aria-disabled={disabled || undefined}
       className={join(styles["option"], className)}
     >

@@ -200,7 +200,7 @@ export function Control({ options, onValidity, end, ...props }: ControlProps) {
             key={index}
             aria-hidden="true"
             className={styles["separator"]}
-            data-filled={filledAround(formats, index, date.segments) || undefined}
+            data-filled={filledAround(formats, index, date.segments) ? "" : undefined}
           >
             {item.literal}
           </span>

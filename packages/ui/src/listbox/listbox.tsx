@@ -1,6 +1,6 @@
 import type { ComponentProps, KeyboardEvent } from "react";
 
-import { rank } from "../ranking/ranking.ts";
+import { rank } from "../filter/filter.ts";
 
 /* oxlint-disable jsx-a11y/prefer-tag-over-role -- HTML: <option> is used only "As a descendant of a select element. As a descendant of a datalist element. As a descendant of an optgroup element.", and rich options in a <select> need customizable select, which webstatus.dev rates "baseline":{"status":"limited"} (Chrome 135, Safari 27, no Firefox). */
 export function Listbox(props: ComponentProps<"div">) {
@@ -82,7 +82,7 @@ export function navigate(
  * Ranks every option's `data-label` (else its text) and `data-keywords` against `query`; a `null`
  * tag or an empty query shows all. Hides non-matches and empty groups, and numbers the shown options.
  */
-export function arrange(list: Element | null, query: string, tag: string | null) {
+export function filterOptions(list: Element | null, query: string, tag: string | null) {
   for (const option of list?.querySelectorAll<HTMLElement>('[role="option"]') ?? []) {
     const keywords = option.dataset["keywords"]?.split("\n") ?? [];
     const label = option.dataset["label"] ?? textOf(option);

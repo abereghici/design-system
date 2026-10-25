@@ -51,8 +51,8 @@ export function Image({
       ref={attach}
       src={src}
       alt={alt}
-      data-loading={status === "loading" || undefined}
-      data-error={status === "error" || undefined}
+      data-loading={status === "loading" ? "" : undefined}
+      data-error={status === "error" ? "" : undefined}
       className={join(styles["image"], className)}
       onLoad={(event: SyntheticEvent<HTMLImageElement>) => {
         settle("loaded");

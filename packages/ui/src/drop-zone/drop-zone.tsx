@@ -178,8 +178,8 @@ export function DropZone({
         {...props}
         className={join(styles["root"], className)}
         data-drop-target={target}
-        data-invalid={invalid}
-        data-disabled={blocked || undefined}
+        data-invalid={invalid ? "" : undefined}
+        data-disabled={blocked ? "" : undefined}
         {...handlers}
       >
         {children}

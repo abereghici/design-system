@@ -109,7 +109,15 @@ Default.test("clamps a typed value when it commits", async ({ args, canvas, user
   await expect(input).toHaveValue("50");
   await expect(args.onValueChange).toHaveBeenCalledWith(
     50,
-    expect.objectContaining({ reason: "input-commit" }),
+    expect.objectContaining({ reason: "keyboard" }),
+  );
+  await userEvent.clear(input);
+  await userEvent.type(input, "0");
+  await userEvent.tab();
+  await expect(input).toHaveValue("1");
+  await expect(args.onValueChange).toHaveBeenLastCalledWith(
+    1,
+    expect.objectContaining({ reason: "input-blur" }),
   );
 });
 

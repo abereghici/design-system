@@ -53,19 +53,19 @@ export interface RootProps extends Omit<
 }
 
 function useValue({ value, defaultValue = null, onValueChange }: RootProps) {
-  const [own, setOwn] = useState(defaultValue);
-  const current = value === undefined ? own : value;
+  const [uncontrolled, setUncontrolled] = useState(defaultValue);
+  const current = value === undefined ? uncontrolled : value;
   const change = (
     date: Temporal.PlainDate | null,
     reason: ChangeEventDetails["reason"],
     event: Event,
   ) => {
     const accepted = requestChange(onValueChange, date, reason, event);
-    if (accepted) setOwn(date);
+    if (accepted) setUncontrolled(date);
     return accepted;
   };
   const reset = () => {
-    setOwn(defaultValue);
+    setUncontrolled(defaultValue);
   };
   return { current, change, reset };
 }

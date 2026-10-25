@@ -5,7 +5,7 @@ import { Slot, join } from "../slot/slot.tsx";
 
 import styles from "./card.module.css";
 
-const body = (content: ReactNode) => <div className={styles["layout"]}>{content}</div>;
+const withLayout = (content: ReactNode) => <div className={styles["layout"]}>{content}</div>;
 
 export interface RootProps extends ComponentProps<"div"> {
   /**
@@ -30,11 +30,11 @@ export function Root({
   ...props
 }: RootProps) {
   const root = { ...props, "data-layout": layout, className: join(styles["root"], className) };
-  if (!asChild) return <div {...root}>{body(children)}</div>;
+  if (!asChild) return <div {...root}>{withLayout(children)}</div>;
   return (
     <Slot {...root}>
       {isValidElement<{ children?: ReactNode }>(children)
-        ? cloneElement(children, undefined, body(children.props.children))
+        ? cloneElement(children, undefined, withLayout(children.props.children))
         : children}
     </Slot>
   );

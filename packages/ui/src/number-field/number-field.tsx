@@ -18,7 +18,7 @@ import textFieldStyles from "../text-field/text-field.module.css";
 import styles from "./number-field.module.css";
 
 export type NumberFieldChangeEventDetails = Details<
-  "input-commit" | "increment-press" | "decrement-press" | "keyboard",
+  "input-blur" | "increment-press" | "decrement-press" | "keyboard",
   SyntheticEvent
 >;
 
@@ -132,19 +132,19 @@ function useNumber({
   defaultValue = null,
   onValueChange,
 }: Pick<ControlProps, "value" | "defaultValue" | "onValueChange">) {
-  const [own, setOwn] = useState(defaultValue);
+  const [uncontrolled, setUncontrolled] = useState(defaultValue);
   const [text, setText] = useState<string | null>(null);
-  const committed = value === undefined ? own : value;
+  const committed = value === undefined ? uncontrolled : value;
   const commit = (next: number | null, reason: Reason, event: SyntheticEvent) => {
     setText(null);
     if (next === committed) return;
-    if (requestChange(onValueChange, next, reason, event)) setOwn(next);
+    if (requestChange(onValueChange, next, reason, event)) setUncontrolled(next);
   };
   const hidden = useRef<HTMLInputElement>(null);
   useFormReset(
     () => hidden.current,
     () => {
-      setOwn(defaultValue);
+      setUncontrolled(defaultValue);
       setText(null);
     },
   );
@@ -190,8 +190,8 @@ function useNumberValue({
       const reason = direction === 1 ? "increment-press" : "decrement-press";
       settle((current() ?? min ?? 0) + direction * step, reason, event);
     },
-    commitTyped: (event: SyntheticEvent) => {
-      settle(current(), "input-commit", event);
+    commitTyped: (event: SyntheticEvent, reason: "input-blur" | "keyboard") => {
+      settle(current(), reason, event);
     },
     keyStep: (event: KeyboardEvent) => {
       const to = stepKey(event, step, largeStep, { min, max, step });
@@ -235,11 +235,11 @@ function Control({ labels, startElement, readOnly, ...options }: ControlProps) {
         className={`${textFieldStyles["input"]} ${styles["input"]}`}
         onBlur={(event) => {
           props.onBlur?.(event);
-          number.commitTyped(event);
+          number.commitTyped(event, "input-blur");
         }}
         onKeyDown={(event) => {
           props.onKeyDown?.(event);
-          if (event.key === "Enter") number.commitTyped(event);
+          if (event.key === "Enter") number.commitTyped(event, "keyboard");
           if (!blocked) number.keyStep(event);
         }}
       />

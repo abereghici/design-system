@@ -35,8 +35,8 @@ const same = (a: Temporal.PlainDate | null, b: Temporal.PlainDate | null) =>
 
 /** The committed date and the segments being edited; an edit that changes the date is a change request. */
 export function useDate({ value, defaultValue = null, onValueChange, onFormReset }: DateOptions) {
-  const [own, setOwn] = useState(defaultValue);
-  const committed = value === undefined ? own : value;
+  const [uncontrolled, setUncontrolled] = useState(defaultValue);
+  const committed = value === undefined ? uncontrolled : value;
   const [segments, setSegments] = useState(() => fromDate(committed));
   const [seen, setSeen] = useState(committed);
   const [buffer, setBuffer] = useState<Buffer>(null);
@@ -48,7 +48,7 @@ export function useDate({ value, defaultValue = null, onValueChange, onFormReset
     const date = toDate(next);
     if (!same(date, committed)) {
       if (!requestChange(onValueChange, date, reason, event)) return null;
-      setOwn(date);
+      setUncontrolled(date);
       setSeen(date);
     }
     const shown = date === null ? next : fromDate(date);
@@ -57,7 +57,7 @@ export function useDate({ value, defaultValue = null, onValueChange, onFormReset
     return { segments: shown, date };
   };
   const reset = () => {
-    setOwn(defaultValue);
+    setUncontrolled(defaultValue);
     setSegments(fromDate(defaultValue));
     setBuffer(null);
     onFormReset?.();

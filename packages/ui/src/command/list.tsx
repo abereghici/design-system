@@ -95,7 +95,7 @@ export function Item({ value, keywords = [], disabled = false, className, ...pro
       id={id}
       aria-selected={highlighted === id || undefined}
       aria-disabled={disabled || undefined}
-      data-highlighted={highlighted === id || undefined}
+      data-highlighted={highlighted === id ? "" : undefined}
       data-label={value}
       data-keywords={keywords.length === 0 ? undefined : keywords.join("\n")}
       className={join(styles["item"], className)}
