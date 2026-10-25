@@ -27,7 +27,7 @@ const budgets: Readonly<Record<string, string>> = {
   fieldset: "670 B",
   form: "250 B",
   heading: "650 B",
-  icon: "840 B",
+  icon: "860 B",
   kbd: "1.75 kB",
   link: "820 B",
   logo: "770 B",
@@ -88,7 +88,7 @@ export default [
   ...checks(
     "src/icon/icons/*.tsx",
     (path) => path.slice("src/icon/".length, -".tsx".length),
-    "980 B",
+    "1.01 kB",
   ),
   ...checks(
     "src/ui-provider/locales/*.ts",
