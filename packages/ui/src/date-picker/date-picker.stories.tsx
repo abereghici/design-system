@@ -187,6 +187,7 @@ Default.test("closes when its trigger is pressed again", async ({ canvas }) => {
   await user.click(trigger);
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
   await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await expect(reasons().at(-1)).toEqual([false, "trigger-press"]);
   await expect(pressed.events.map((event) => event.detail.component)).toEqual([
     "IconButton",
     "IconButton",

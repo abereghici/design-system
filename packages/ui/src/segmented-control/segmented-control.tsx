@@ -65,12 +65,12 @@ export function Root({
         role="radiogroup"
         className={join(styles["root"], className)}
         onPointerDown={(event) => {
-          pointerMarker.onPointerDown(event);
           onPointerDown?.(event);
+          pointerMarker.onPointerDown(event);
         }}
         onKeyDown={(event) => {
-          pointerMarker.onKeyDown(event);
           onKeyDown?.(event);
+          pointerMarker.onKeyDown(event);
           followVisualDirection(event);
         }}
       />

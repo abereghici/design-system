@@ -1,11 +1,11 @@
 "use client";
 
-import { createContext, use, useId, useRef, useState } from "react";
+import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, RefObject } from "react";
 
 import { DatePickerContext, dateFormats } from "../date/date.ts";
 import type { DatePickerContextValue, Temporal } from "../date/date.ts";
-import { byId, isOpen, rememberFocus } from "../floating/floating.ts";
+import { rememberFocus } from "../floating/floating.ts";
 import type { Floating } from "../floating/floating.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { CalendarIcon } from "../icon/icons/calendar.tsx";
@@ -28,13 +28,11 @@ interface TriggerProps {
   readonly panel: Omit<Panel, "picker">;
   readonly value: Temporal.PlainDate | null;
   readonly disabled: boolean;
-  readonly fieldBox: () => Element | null;
 }
 
-export function Trigger({ panel, value, disabled, fieldBox }: TriggerProps) {
+export function Trigger({ panel, value, disabled }: TriggerProps) {
   const { floating, name, trigger } = panel;
   const locale = useLocale();
-  const wasOpen = useRef(false);
   const descriptionId = useId();
   return (
     <>
@@ -42,20 +40,11 @@ export function Trigger({ panel, value, disabled, fieldBox }: TriggerProps) {
         ref={trigger}
         size="sm"
         aria-label={name}
-        aria-controls={floating.contentId}
-        aria-expanded={floating.open}
+        {...floating.triggerProps({})}
         aria-haspopup="dialog"
         aria-describedby={value === null ? undefined : descriptionId}
         disabled={disabled}
         className={styles["trigger"]}
-        onPointerDown={() => {
-          wasOpen.current = isOpen(byId(floating.contentId));
-        }}
-        onClick={(event) => {
-          // A pointer press on the trigger light-dismisses the open panel before `click`.
-          const shown = event.detail > 0 ? wasOpen.current : isOpen(byId(floating.contentId));
-          floating.toggle(!shown, "trigger-press", event.nativeEvent, fieldBox());
-        }}
       >
         <CalendarIcon size="sm" />
       </IconButton>
@@ -78,20 +67,19 @@ export function Content({ className, children, ...props }: ContentProps) {
   const panel = use(PanelContext);
   if (panel === null) throw new Error("DatePicker.Content must be inside DatePicker.Root");
   const { floating, picker, name, trigger } = panel;
-  const { onBeforeToggle, ...native } = floating.contentProps;
   const [mounted, setMounted] = useState(false);
   if (floating.open && !mounted) setMounted(true);
   const base = `${popoverStyles["content"]} ${styles["content"]}`;
   return (
     <dialog
       {...props}
-      {...native}
+      {...floating.contentProps({
+        onBeforeToggle: (event) => {
+          if (event.newState === "open") rememberFocus(floating.contentId, trigger.current);
+        },
+      })}
       aria-label={name}
       className={join(base, className)}
-      onBeforeToggle={(event) => {
-        onBeforeToggle(event);
-        if (event.newState === "open") rememberFocus(floating.contentId, trigger.current);
-      }}
     >
       {mounted && <DatePickerContext value={picker}>{children}</DatePickerContext>}
     </dialog>

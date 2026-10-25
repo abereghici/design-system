@@ -80,8 +80,8 @@ export function Root({
         data-orientation={orientation}
         className={join(styles["root"], className)}
         onKeyDown={(event) => {
-          pointerMarker.onKeyDown(event);
           onKeyDown?.(event);
+          pointerMarker.onKeyDown(event);
           followVisualDirection(event);
         }}
       />

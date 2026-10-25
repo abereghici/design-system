@@ -1,14 +1,13 @@
 "use client";
 
 import { use } from "react";
-import type { ComponentProps, KeyboardEvent, MouseEvent, ReactNode } from "react";
+import type { ComponentProps, KeyboardEvent, ReactNode } from "react";
 
-import { byId, isOpen, useFloating } from "../floating/floating.ts";
+import { byId, useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as Details, FloatingOptions } from "../floating/floating.ts";
 import { focusLast, itemsOf, MenuContext, menuContentProps } from "../menu/menu.tsx";
 import type { Menu } from "../menu/menu.tsx";
 import { join, Slot } from "../slot/slot.tsx";
-import { pointerMarker } from "../toggle/toggle.ts";
 
 import menuStyles from "../menu/menu.module.css";
 import styles from "./dropdown-menu.module.css";
@@ -53,28 +52,21 @@ export interface TriggerProps extends ComponentProps<"button"> {
 export function Trigger({ asChild = false, ...props }: TriggerProps) {
   const { floating } = useDropdownMenu();
   const Element = asChild ? Slot : "button";
-  const invoker = { commandfor: floating.contentId, command: "toggle-popover" } as const;
+  const trigger = floating.triggerProps(props);
   return (
     <Element
       type={asChild ? undefined : "button"}
-      {...props}
-      {...invoker}
+      {...trigger}
       id={`${floating.contentId}-trigger`}
       aria-haspopup="menu"
-      aria-expanded={floating.open}
-      onPointerDown={(event) => {
-        props.onPointerDown?.(event);
-        pointerMarker.onPointerDown(event);
-      }}
       onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
-        props.onKeyDown?.(event);
-        pointerMarker.onKeyDown(event);
+        trigger.onKeyDown(event);
         const arrow = event.key === "ArrowDown" || event.key === "ArrowUp";
         if (!arrow || event.currentTarget.getAttribute("aria-disabled") === "true") return;
         event.preventDefault();
         const content = byId(floating.contentId);
         if (content === null) return;
-        if (isOpen(content)) {
+        if (floating.open) {
           itemsOf(content)
             .at(event.key === "ArrowUp" ? -1 : 0)
             ?.focus();
@@ -82,17 +74,6 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
         }
         if (event.key === "ArrowUp") focusLast.add(content);
         floating.toggle(true, "trigger-press", event.nativeEvent);
-      }}
-      onClick={(event: MouseEvent<HTMLButtonElement>) => {
-        props.onClick?.(event);
-        // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).
-        if (event.defaultPrevented) return;
-        const open = isOpen(byId(floating.contentId));
-        if (!floating.request(!open, "trigger-press", event.nativeEvent)) event.preventDefault();
-      }}
-      onBlur={(event) => {
-        props.onBlur?.(event);
-        floating.focusOut(event.nativeEvent);
       }}
     />
   );

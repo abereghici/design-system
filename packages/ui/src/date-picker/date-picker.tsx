@@ -83,7 +83,7 @@ function pickerOf(
       const focus = document.activeElement;
       return (
         focus === document.body ||
-        focus?.getAttribute("aria-controls") === floating.contentId ||
+        focus?.getAttribute("commandfor") === floating.contentId ||
         byId(floating.contentId)?.contains(focus) === true
       );
     },
@@ -127,14 +127,7 @@ export function Root(props: RootProps) {
         field.onKeyDown?.(event);
         pointerMarker.onKeyDown(event);
       }}
-      end={
-        <Trigger
-          panel={panel}
-          value={date.current}
-          disabled={disabled === true}
-          fieldBox={fieldBox}
-        />
-      }
+      end={<Trigger panel={panel} value={date.current} disabled={disabled === true} />}
     >
       <PanelContext value={{ ...panel, picker: pickerOf(floating, date, props) }}>
         {children}

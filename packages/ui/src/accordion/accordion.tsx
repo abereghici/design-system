@@ -122,12 +122,12 @@ export function Trigger({
       {...props}
       className={join(styles["trigger"], className)}
       onPointerDown={(event) => {
-        pointerMarker.onPointerDown(event);
         onPointerDown?.(event);
+        pointerMarker.onPointerDown(event);
       }}
       onKeyDown={(event) => {
-        pointerMarker.onKeyDown(event);
         onKeyDown?.(event);
+        pointerMarker.onKeyDown(event);
       }}
       onClick={(event: MouseEvent<HTMLElement>) => {
         onClick?.(event);

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, use } from "react";
-import type { ComponentProps, KeyboardEvent, MouseEvent, PointerEvent, ToggleEvent } from "react";
+import type { ComponentProps, KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
@@ -66,18 +66,16 @@ function navigate(event: KeyboardEvent<HTMLElement>) {
 
 /** The menu's keyboard, pointer highlight and initial focus; DropdownMenu and ContextMenu add placement. */
 export function menuContentProps(menu: Menu) {
-  const { onBeforeToggle, onToggle, ...native } = menu.floating.contentProps;
   return {
-    ...native,
+    ...menu.floating.contentProps({
+      onToggle: (event) => {
+        if (event.newState !== "open") return;
+        const items = itemsOf(event.currentTarget);
+        (focusLast.delete(event.currentTarget) ? items.at(-1) : items[0])?.focus();
+      },
+    }),
     role: "menu",
     tabIndex: -1,
-    onBeforeToggle,
-    onToggle: (event: ToggleEvent<HTMLElement>) => {
-      onToggle(event);
-      if (event.newState !== "open") return;
-      const items = itemsOf(event.currentTarget);
-      (focusLast.delete(event.currentTarget) ? items.at(-1) : items[0])?.focus();
-    },
     onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
       if (navigate(event)) {
         event.preventDefault();
