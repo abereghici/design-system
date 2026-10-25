@@ -32,7 +32,7 @@ const withSave: Decorator = (Story) => (
   </>
 );
 
-const withDialog: Decorator = (Story) => (
+const withModalAndPopover: Decorator = (Story) => (
   <>
     <button
       type="button"
@@ -60,11 +60,14 @@ const meta = preview.meta({
   title: "Components/Toaster",
   component: Toaster,
   args: { "aria-label": "Notifications", closeLabel: "Dismiss" },
+  // Test cleanup from the store itself: no public call clears every toast, and toast.dismiss
+  // leaves each one exiting into the next proof.
   beforeEach: () => () => {
     for (const { id } of snapshot()) remove(id);
   },
 });
 
+// Shows nothing until a toast arrives, so its screenshot would be blank; Stacked shows toasts.
 export const Default = meta.story({ tags: ["!screenshot"] });
 
 Default.test("is a landmark only while toasts show", async () => {
@@ -134,7 +137,7 @@ Default.test(
 
 Default.test(
   "stays on top of an open popover and inside an open modal dialog",
-  { decorators: [withDialog] },
+  { decorators: [withModalAndPopover] },
   async ({ canvas, userEvent }) => {
     const undo = fn<() => void>();
     const menu = canvas.getByRole("menu", { hidden: true });

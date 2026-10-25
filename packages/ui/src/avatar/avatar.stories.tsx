@@ -120,6 +120,7 @@ Default.test(
 );
 
 export const Initials = meta.story({
+  // The Fallback is decorative, so its tree is empty, and an empty aria snapshot matches anything.
   tags: ["!aria-snapshot"],
   args: { children: <Avatar.Fallback name="Ana Maria Popescu" /> },
   parameters: {
@@ -150,6 +151,7 @@ Initials.test("is not announced", async ({ canvas }) => {
 
 export const Anonymous = meta.story({
   args: { children: <Avatar.Fallback /> },
+  // The Fallback is decorative, so its tree is empty, and an empty aria snapshot matches anything.
   tags: ["!aria-snapshot"],
   parameters: {
     docs: { description: { story: "Without a name, the Fallback shows a generic person glyph." } },

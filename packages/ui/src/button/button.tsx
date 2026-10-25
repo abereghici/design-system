@@ -55,8 +55,11 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
+  const blocked = disabled || loading;
+  const spinner = loading ? <Spinner aria-hidden className={styles["spinner"]} /> : null;
+
   function handleClick(event: MouseEvent<HTMLElement>) {
-    if (disabled || loading) {
+    if (blocked) {
       // preventDefault also stops a submit or reset button from acting on its form.
       event.preventDefault();
 
@@ -73,31 +76,30 @@ export function Button({
     <Root
       {...mergeProps({ className: styles["root"] }, props)}
       type={asChild ? undefined : type}
-      aria-disabled={disabled || loading ? true : props["aria-disabled"]}
+      aria-disabled={blocked ? true : props["aria-disabled"]}
       aria-busy={loading ? true : undefined}
       data-loading={loading ? "" : undefined}
       data-variant={variant}
       data-size={size}
       onClick={handleClick}
     >
-      {loading
-        ? busy(children, asChild, <Spinner aria-hidden className={styles["spinner"]} />)
-        : children}
+      {asChild ? (
+        child(children, blocked, spinner)
+      ) : (
+        <>
+          {children}
+          {spinner}
+        </>
+      )}
     </Root>
   );
 }
 
-function busy(children: ReactNode, asChild: boolean, spinner: ReactNode) {
-  if (!asChild) {
-    return (
-      <>
-        {children}
-        {spinner}
-      </>
-    );
+function child(children: ReactNode, blocked: boolean, spinner: ReactNode) {
+  if (!blocked || !isValidElement<{ children?: ReactNode; onClick?: unknown }>(children)) {
+    return children;
   }
 
-  return isValidElement<{ children?: ReactNode }>(children)
-    ? cloneElement(children, undefined, children.props.children, spinner)
-    : children;
+  // Slot runs the child's own onClick before handleClick, so a blocked Button drops it here.
+  return cloneElement(children, { onClick: undefined }, children.props.children, spinner);
 }

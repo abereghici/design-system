@@ -150,7 +150,8 @@ const split = ({
       onOpenChange,
       filter,
       locale,
-      disabled: rest.disabled,
+      // Read-only blocks the same presses and keys as disabled; only the look and announcement differ.
+      disabled: rest.disabled === true || rest.readOnly === true,
     },
     { ...rest, defaultValue: inputValue ?? defaultInputValue },
   ] as const;

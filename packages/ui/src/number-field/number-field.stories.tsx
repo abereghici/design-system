@@ -208,6 +208,24 @@ Default.test(
 );
 
 Default.test(
+  "lets a read-only value be focused but not changed, and submits it",
+  { args: { readOnly: true }, decorators: [withForm] },
+  async ({ args, canvas, userEvent }) => {
+    const input = canvas.getByRole("textbox", { name: "Seats" });
+
+    await userEvent.tab();
+    await expect(input).toHaveFocus();
+    await userEvent.keyboard("{ArrowUp}7");
+    await expect(input).toHaveValue("5");
+    await expect(args.onValueChange).not.toHaveBeenCalled();
+
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    await expect(new FormData(form).getAll("seats")).toEqual(["5"]);
+  },
+);
+
+Default.test(
   "restores the default value on form reset",
   { decorators: [withForm] },
   async ({ canvas, userEvent }) => {

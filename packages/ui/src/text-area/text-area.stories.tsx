@@ -60,3 +60,21 @@ Default.test(
     await expect(args.onValueChange).not.toHaveBeenCalled();
   },
 );
+
+Default.test(
+  "lets a read-only value be focused but not changed, and submits it",
+  { args: { readOnly: true, defaultValue: "Draft" }, decorators: [withForm] },
+  async ({ args, canvas, userEvent }) => {
+    const textarea = canvas.getByRole("textbox", { name: "Message" });
+
+    await userEvent.tab();
+    await expect(textarea).toHaveFocus();
+    await userEvent.keyboard("x");
+    await expect(textarea).toHaveValue("Draft");
+    await expect(args.onValueChange).not.toHaveBeenCalled();
+
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    await expect(new FormData(form).get("message")).toBe("Draft");
+  },
+);

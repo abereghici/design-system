@@ -16,8 +16,7 @@
     clip-path: inset(50%);
   }
 
-  /* Fixed, so the clipped link takes no space; no :not(:focus), which the pseudo-states addon
-     rewrites into a rule that always matches: https://github.com/chromaui/storybook-addon-pseudo-states */
+  /* Fixed, so the clipped link takes no space. */
   .root:focus {
     clip-path: none;
   }

@@ -251,7 +251,7 @@ function Control({ startElement, incrementLabel, decrementLabel, ...options }: C
       props.onChange?.(event);
     },
   });
-  const blocked = bindings["aria-disabled"] === true;
+  const blocked = bindings["aria-disabled"] === true || props.readOnly === true;
   const steppers = (
     <StepButtons
       incrementLabel={incrementLabel}
@@ -272,7 +272,7 @@ function Control({ startElement, incrementLabel, decrementLabel, ...options }: C
         name={undefined}
         type="text"
         value={number.display}
-        readOnly={blocked || props.readOnly}
+        readOnly={blocked}
         className={`${textFieldStyles["input"]} ${styles["input"]}`}
         onBlur={(event) => {
           props.onBlur?.(event);

@@ -1,7 +1,6 @@
 import addonA11y from "@storybook/addon-a11y";
 import addonDocs from "@storybook/addon-docs";
 import { definePreview } from "@storybook/react-vite";
-import addonPseudoStates from "storybook-addon-pseudo-states";
 
 import { withGlobals } from "./decorators/with-globals.tsx";
 import { meaningfulControls } from "./docs/arg-types.ts";
@@ -12,7 +11,7 @@ import { rememberStoryCanvas } from "./screenshots/canvas.ts";
 export { partsOf } from "./docs/arg-types.ts";
 
 export default definePreview({
-  addons: [addonDocs(), addonA11y(), addonPseudoStates()],
+  addons: [addonDocs(), addonA11y()],
   tags: ["autodocs", "screenshot", "aria-snapshot"],
   beforeEach: rememberStoryCanvas,
   argTypesEnhancers: [meaningfulControls],

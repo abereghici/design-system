@@ -257,9 +257,6 @@ catalogs:
     storybook:
       specifier: 10.6.3
       version: 10.6.3
-    storybook-addon-pseudo-states:
-      specifier: 10.6.1
-      version: 10.6.1
     style-dictionary:
       specifier: 5.7.0
       version: 5.7.0
@@ -516,9 +513,6 @@ importers:
       storybook:
         specifier: 'catalog:'
         version: 10.6.3(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1)
-      storybook-addon-pseudo-states:
-        specifier: 'catalog:'
-        version: 10.6.1(storybook@10.6.3(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1))
       svgo:
         specifier: 'catalog:'
         version: 4.1.0
@@ -3459,11 +3453,6 @@ packages:
 
   std-env@4.3.0:
     resolution: {integrity: sha512-OtU/EgQ1kIm5KwqQpBC6ZEMXrZRui11w8zgfTWp8cdO9B8OaPsbA8bTHO2P+HNo1VlUTGMVBwPhydu6poeXiag==}
-
-  storybook-addon-pseudo-states@10.6.1:
-    resolution: {integrity: sha512-gOAGOJqhpj+S+nJzeaTq5HXQ9SkafJwWqoqlnhqIG+9iw3VoyY7jushOj1ybEMTP2LtKFt8fU90gLVxiFEXYPA==}
-    peerDependencies:
-      storybook: ^10.6.1
 
   storybook@10.6.3:
     resolution: {integrity: sha512-lNBvcZFG44C98KvQHYzfq1O46m+sl94zY1+na5/9E3ihtNMbvpOgYyMFMIcWYUvOMo3OM4q9jzvB73KU20bU8w==}
@@ -6442,10 +6431,6 @@ snapshots:
   sqids@0.3.0: {}
 
   std-env@4.3.0: {}
-
-  storybook-addon-pseudo-states@10.6.1(storybook@10.6.3(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1)):
-    dependencies:
-      storybook: 10.6.3(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1)
 
   storybook@10.6.3(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1):
     dependencies:

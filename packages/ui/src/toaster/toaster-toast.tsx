@@ -7,8 +7,8 @@ import { composeRefs } from "../slot/slot.tsx";
 import { close, mark, progressOf, remove } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
 
-import { ToastContent } from "./toast-content.tsx";
 import { useShortcut } from "./toaster-keys.ts";
+import { ToastContent } from "./toaster-toast-content.tsx";
 import styles from "./toaster.module.css";
 
 const VISIBLE = 3;

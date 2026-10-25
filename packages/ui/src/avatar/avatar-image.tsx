@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useEffectEvent, useState } from "react";
+import { useCallback, useState } from "react";
 import type { ComponentProps } from "react";
 
 import { mergeProps } from "../slot/slot.tsx";
@@ -16,34 +16,32 @@ export interface ImageProps extends ComponentProps<"img"> {
   onLoadingStatusChange?: (status: LoadingStatus) => void;
 }
 
-function useLoadingStatus(src: ImageProps["src"], onChange: ImageProps["onLoadingStatusChange"]) {
-  const [status, setStatus] = useState<LoadingStatus>("loading");
-  const [currentSrc, setCurrentSrc] = useState(src);
-
-  if (src !== currentSrc) {
-    setCurrentSrc(src);
-    setStatus("loading");
-  }
-
-  const report = useEffectEvent((next: LoadingStatus) => onChange?.(next));
-
-  useEffect(() => {
-    report(status);
-  }, [status]);
-
-  return [status, setStatus] as const;
-}
-
 /** The photo; the Fallback shows until it loads or if it fails. */
 export function Image({ src, alt, onLoadingStatusChange, ...props }: ImageProps) {
-  const [status, setStatus] = useLoadingStatus(src, onLoadingStatusChange);
+  const [status, setStatus] = useState<LoadingStatus>("loading");
+
+  // The parent hears of each status where it is set, not from an Effect:
+  // https://react.dev/learn/you-might-not-need-an-effect#notifying-parent-components-about-state-changes
+  const settle = useCallback(
+    (next: LoadingStatus) => {
+      setStatus(next);
+      onLoadingStatusChange?.(next);
+    },
+    [onLoadingStatusChange],
+  );
+  // A new src makes a new ref, so each photo reports from "loading" again, before paint.
   const attach = useCallback(
     (image: HTMLImageElement | null) => {
+      if (!image) return;
+
+      // Without a src there is nothing to load, as in Radix Avatar.
+      if (src === undefined || src === "") settle("error");
       // The image may have settled before hydration attached the load and error listeners:
       // https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/complete
-      if (image?.complete === true) setStatus(image.naturalWidth > 0 ? "loaded" : "error");
+      else if (image.complete) settle(image.naturalWidth > 0 ? "loaded" : "error");
+      else settle("loading");
     },
-    [setStatus],
+    [src, settle],
   );
 
   return (
@@ -53,10 +51,10 @@ export function Image({ src, alt, onLoadingStatusChange, ...props }: ImageProps)
           ref: attach,
           className: styles["image"],
           onLoad: () => {
-            setStatus("loaded");
+            settle("loaded");
           },
           onError: () => {
-            setStatus("error");
+            settle("error");
           },
         },
         props,

@@ -199,6 +199,28 @@ Default.test(
   },
 );
 
+const busyChildClick = fn<(event: MouseEvent) => void>();
+
+Default.test(
+  "ignores presses on its child's own click handler while loading with asChild",
+  {
+    args: {
+      asChild: true,
+      loading: true,
+      children: (
+        <a href="#settings" onClick={busyChildClick}>
+          Settings
+        </a>
+      ),
+    },
+  },
+  async ({ canvas, userEvent, args }) => {
+    await userEvent.click(canvas.getByRole("link", { name: "Settings" }));
+    await expect(busyChildClick).not.toHaveBeenCalled();
+    await expect(args.onClick).not.toHaveBeenCalled();
+  },
+);
+
 function backgroundUnder(css: string, button: HTMLElement) {
   const appStyles = document.createElement("style");
 

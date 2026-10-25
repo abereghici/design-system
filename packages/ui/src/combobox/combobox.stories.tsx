@@ -238,6 +238,19 @@ Default.test(
   },
 );
 
+Default.test(
+  "lets a read-only value be focused but not changed, and submits it",
+  { args: { readOnly: true, defaultValue: "ab" } },
+  async ({ userEvent }) => {
+    await userEvent.click(field());
+    await expect(field()).toHaveFocus();
+    await userEvent.keyboard("{ArrowDown}x{Enter}{Escape}");
+    await expect(field()).toHaveValue("Alexandru Bereghici");
+    await expect(submitted()).toBe("ab");
+    await expect(onValueChange).not.toHaveBeenCalled();
+  },
+);
+
 function ServerSearch(args: Combobox.RootProps) {
   const [query, setQuery] = useState("");
 
