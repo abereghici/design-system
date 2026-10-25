@@ -3,7 +3,7 @@ set -eu
 ui=$(cd "$(dirname "$0")/.." && pwd)
 cd "$ui/../.."
 version=$(sed -n 's/^  playwright: //p' pnpm-workspace.yaml)
-git ls-files --cached --others --exclude-standard | tar -cf - -T - | docker run --rm -i --init --ipc=host \
+git ls-files --cached --others --exclude-standard | tar -cf - -T - | docker run --rm -i --init --ipc=host --platform linux/amd64 \
   -e CI=true -e pnpm_config_store_dir=/pnpm-store -v platform-screenshots-pnpm-store:/pnpm-store -v "$ui:/out" \
   "mcr.microsoft.com/playwright:v$version-noble" sh -euc '
     mkdir /work && tar -xf - -C /work --exclude="._*" && cd /work
