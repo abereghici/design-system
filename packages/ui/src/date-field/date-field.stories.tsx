@@ -1,4 +1,4 @@
-import { expect, fn, waitFor } from "storybook/test";
+import { expect, fn, screen, waitFor } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
 import type { Decorator } from "@storybook/react-vite";
@@ -16,6 +16,8 @@ import type { DateFieldChangeEventDetails, DateFieldProps } from "./date-field.t
 
 const submitted = fn<(data: FormData) => void>();
 const date = (iso: string) => Temporal.PlainDate.from(iso);
+const names = () =>
+  screen.getAllByRole("spinbutton").map((segment) => segment.getAttribute("aria-label"));
 
 const inAForm: Decorator = (Story) => (
   <form
@@ -50,12 +52,8 @@ export const Default = meta.story({});
 Default.test(
   "is a group named by its label with month, day and year spinbuttons in en-US order",
   async ({ canvas }) => {
-    const group = canvas.getByRole("group", { name: "Date of birth" });
-    await expect(group).toBeVisible();
-    const names = canvas
-      .getAllByRole("spinbutton")
-      .map((segment) => segment.getAttribute("aria-label"));
-    await expect(names).toEqual(["month", "day", "year"]);
+    await expect(canvas.getByRole("group", { name: "Date of birth" })).toBeVisible();
+    await expect(names()).toEqual(["month", "day", "year"]);
   },
 );
 
@@ -63,10 +61,7 @@ Default.test(
   "orders and names the segments for ro-RO, with the author's placeholders",
   { args: { locale: "ro-RO", placeholders: { day: "zz", month: "ll", year: "aaaa" } } },
   async ({ canvas }) => {
-    const names = canvas
-      .getAllByRole("spinbutton")
-      .map((segment) => segment.getAttribute("aria-label"));
-    await expect(names).toEqual(["zi", "lună", "an"]);
+    await expect(names()).toEqual(["zi", "lună", "an"]);
     await expect(canvas.getByRole("spinbutton", { name: "zi" })).toHaveAttribute(
       "placeholder",
       "zz",
@@ -212,6 +207,12 @@ Default.test(
     await expect(day).toHaveValue("24");
   },
 );
+
+export const Editing = meta.story({
+  parameters: { docs: { description: { story: "Month typed, focus moved on to the day." } } },
+  play: ({ canvas, userEvent }) =>
+    userEvent.type(canvas.getByRole("spinbutton", { name: "month" }), "4"),
+});
 
 export const InAForm = meta.story({ decorators: [inAForm], args: { required: true } });
 

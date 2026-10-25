@@ -41,8 +41,8 @@ Label → field box (segments and separators) → description or error. A visual
 | `onValueChange`                                                                           | `(value: Temporal.PlainDate \| null, details: DateField.ChangeEventDetails) => void` |         | Called when the complete date changes, or becomes incomplete (`null`). `reason`: `"input-change"` (typing, Backspace, Delete), `"keyboard"` (arrow keys, Home, End). `cancel()` keeps the previous segments. |
 | `min`, `max`                                                                              | `Temporal.PlainDate`                                                                 |         | Written to the hidden input as ISO strings, so `rangeUnderflow` / `rangeOverflow` and the browser's message apply.                                                                                           |
 | `disabled`                                                                                | `boolean`                                                                            | `false` | `aria-disabled="true"` on the group and every segment: focusable, nothing changes, the value still submits.                                                                                                  |
-| `incompleteMessage` | `string` (required) |  | The error for a date typed only in part ("Enter a complete date"). |
-| `placeholders` | `Partial<Record<"day" \| "month" \| "year", string>>` |  | Hints in the empty segments. |
+| `incompleteMessage`                                                                       | `string` (required)                                                                  |         | The error for a date typed only in part ("Enter a complete date").                                                                                                                                           |
+| `placeholders`                                                                            | `Partial<Record<"day" \| "month" \| "year", string>>`                                |         | Hints in the empty segments.                                                                                                                                                                                 |
 | `className`, `style`                                                                      |                                                                                      |         | On the Field root.                                                                                                                                                                                           |
 | …native                                                                                   | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                          |         | `ref`, `id`, `aria-*` go on the group; `form` goes on the hidden input.                                                                                                                                      |
 
@@ -61,15 +61,15 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State            | How it shows                                                                                            | Exposed as                                                                            |
-| ---------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| empty            | Every segment shows its placeholder; separators in the placeholder colour                               | no `aria-valuenow` or `aria-valuetext` on an empty segment                                     |
-| hovered          | Border `input-border-color-hovered`; fine pointers only                                                 | `:hover` under `@media (hover: hover)`                                                |
-| focused          | Border `input-border-color-focused` and the 2 px focus ring on the field box; the focused segment fills | `:focus-within` on the group, `:focus-visible` on the segment                         |
-| partially filled | The filled segments show digits; the empty ones their placeholder                                       | `aria-valuenow` on filled segments only                                               |
-| complete         | Every segment shows digits                                                                              | hidden input `value`                                                                  |
-| invalid          | Border `input-border-color-invalid`; error replaces the description                                     | `aria-invalid="true"` on every segment, `data-invalid` (Field contract)               |
-| disabled         | TextField's disabled colours; no hover                                                                  | `aria-disabled="true"`, or `:disabled` on the hidden input inside a disabled Fieldset |
+| State            | How it shows                                                                                                                             | Exposed as                                                                            |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| empty            | Every segment shows its placeholder; separators in the placeholder colour                                                                | no `aria-valuenow` or `aria-valuetext` on an empty segment                            |
+| hovered          | Border `input-border-color-hovered`; fine pointers only                                                                                  | `:hover` under `@media (hover: hover)`                                                |
+| focused          | Border `input-border-color-focused` and the 2 px focus ring on the field box; the focused segment fills and carries the inset focus ring | `:focus-within` on the group, `:focus-visible` on the segment                         |
+| partially filled | The filled segments show digits; the empty ones their placeholder                                                                        | `aria-valuenow` on filled segments only                                               |
+| complete         | Every segment shows digits                                                                                                               | hidden input `value`                                                                  |
+| invalid          | Border `input-border-color-invalid`; error replaces the description                                                                      | `aria-invalid="true"` on every segment, `data-invalid` (Field contract)               |
+| disabled         | TextField's disabled colours; no hover                                                                                                   | `aria-disabled="true"`, or `:disabled` on the hidden input inside a disabled Fieldset |
 
 ## Behaviour
 
@@ -128,7 +128,7 @@ Page Up / Page Down ("(Optional): Increases the value by a larger step than Up A
 - **Hidden input.** `aria-hidden="true"` with `tabindex="-1"`: out of the Tab order and the tree, focused only by the browser's validation, which forwards focus to a segment.
 - **Targets.** Segments are at least 24 px wide including padding (`size-target-min`).
 - **More contrast:** the field box is TextField's; the focused-segment fill is `color-background-selected` with `color-text-selected`, both in the contrast matrix.
-- **Forced colors:** the field box draws TextField's 1 px `CanvasText` border; the focused segment sets `Highlight` / `HighlightText`; placeholders use `GrayText`.
+- **Forced colors:** the field box draws TextField's 1 px `CanvasText` border; the focused segment sets `Highlight` / `HighlightText` inside its ring; placeholders use `GrayText`.
 - **Reduced transparency:** not affected.
 
 ## RTL

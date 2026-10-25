@@ -33,7 +33,7 @@
   }
 
   .segment:focus {
-    outline: none;
+    outline-offset: calc(var(--ab-focus-ring-width) * -1);
     background-color: var(--ab-date-field-segment-background-color-focused);
     color: var(--ab-date-field-segment-text-color-focused);
   }
