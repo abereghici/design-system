@@ -17,25 +17,27 @@ export type ChangeEventDetails = Details<Reason>;
 export type CommitEventDetails = Omit<ChangeEventDetails, "cancel">;
 
 export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
-  /** Controlled. An array gives one thumb per entry. */
+  /** The value, when your state holds it. An array gives one thumb per entry, for a range. */
   value?: number | readonly number[];
+  /** The starting value when it holds its own state; an array for a range. */
   defaultValue?: number | readonly number[];
-  /** On every change while dragging or stepping; `details.cancel()` keeps the previous value. */
+  /** Called while dragging or stepping; `details.cancel()` keeps the previous value. */
   onValueChange?: (value: number | number[], details: ChangeEventDetails) => void;
-  /** Once per gesture: on pointer release or after a key step. Not called if nothing changed. */
+  /** Called once per gesture, when the user lets go or after a key step: the moment to save. */
   onValueCommitted?: (value: number | number[], details: CommitEventDetails) => void;
   min?: number;
   max?: number;
+  /** The smallest change, for the arrow keys and dragging alike. */
   step?: number;
-  /** Page Up / Page Down and Shift+Arrow. Defaults to 10 steps. */
+  /** The bigger jump for Page Up, Page Down and Shift with an arrow. Defaults to 10 steps. */
   largeStep?: number;
-  /** Range sliders: the thumbs can't get closer than this many steps. */
+  /** For a range: the fewest steps the thumbs keep between them. */
   minStepsBetweenValues?: number;
-  /** Formats `aria-valuetext` and Value, in the Provider's locale. */
+  /** How the value reads, shown and spoken, such as a currency or a percent. */
   format?: Intl.NumberFormatOptions;
-  /** Carried by every thumb's input, so a range submits one entry per thumb, in order. */
+  /** The form field name; a range submits one entry per thumb, in order. */
   name?: string;
-  /** Every input gets `aria-disabled="true"`: focusable and announced, but the value can't change. */
+  /** Blocks changes but keeps it focusable and announced; say nearby why it is unavailable. */
   disabled?: boolean;
 }
 

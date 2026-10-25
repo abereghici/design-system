@@ -27,15 +27,15 @@ function useTabs(part: string) {
 }
 
 export type RootProps = Omit<ComponentProps<"div">, "defaultValue"> & {
-  /** Called before the change commits; `details.cancel()` keeps the current tab. */
+  /** Called before another tab opens; `details.cancel()` keeps the current one. */
   onValueChange?: (value: string, details: ChangeEventDetails) => void;
 } & ({ value: string; defaultValue?: never } | { defaultValue: string; value?: never });
 
 /**
- * Peer sections that share one context, one panel at a time. Arrow keys move and activate
- * (following the visual direction in RTL), and every committed change dispatches a bubbling
- * `ab-toggle`. For modes of the same content use SegmentedControl; to move between pages, Navbar or
- * Sidebar; for sections that open independently, Accordion.
+ * Peer sections of one place, one shown at a time. Arrow keys move and open (following the reading
+ * direction), and every change dispatches a bubbling `ab-toggle`. For modes of the same content use
+ * SegmentedControl; to move between pages, Navbar or Sidebar; for sections that open independently,
+ * Accordion.
  */
 export function Root({ value, defaultValue, onValueChange, className, ...props }: RootProps) {
   const id = useId();
@@ -92,7 +92,7 @@ export function List({ className, ...props }: ListProps) {
 }
 
 export interface TriggerProps extends Omit<ComponentProps<"button">, "type" | "role"> {
-  /** No whitespace: it becomes part of the element ids. */
+  /** Pairs the Trigger with its Content; use one word with no spaces. */
   value: string;
 }
 

@@ -11,11 +11,13 @@ import type { ChangeEventDetails, Options, Reason } from "./controller.ts";
 export type { ChangeEventDetails, Reason } from "./controller.ts";
 
 export interface RootProps<R extends Reason = Reason> {
-  /** Controlled open state. */
+  /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
   open?: boolean;
+  /** Opens it on the first render when it holds its own state. */
   defaultOpen?: boolean;
-  /** Called before the change commits; `details.cancel()` keeps the current state. */
+  /** Called before it opens or closes; `details.cancel()` keeps it as it is. */
   onOpenChange?(open: boolean, details: ChangeEventDetails<R>): void;
+  /** The Trigger and Content. */
   children?: ReactNode;
 }
 
@@ -64,7 +66,7 @@ export function ModalRoot(props: RootProps & Pick<ModalContext, "styles" | "comp
 }
 
 export interface TriggerProps extends Omit<ComponentProps<"button">, "command" | "commandfor"> {
-  /** Renders the single child (a Button or IconButton: it must render a `<button>`) as the Trigger. */
+  /** Makes its one child (a Button or IconButton) the Trigger. */
   asChild?: boolean;
 }
 
@@ -76,8 +78,8 @@ export function Trigger({ asChild = false, type = "button", ...props }: TriggerP
 
 export interface ContentProps extends Omit<ComponentProps<"dialog">, "open" | "id"> {
   /**
-   * The element focused on open instead of the first tabbable one. Use it instead of `autoFocus`,
-   * which React applies at mount, while the dialog is still closed.
+   * The element to focus on open instead of the first field, such as the safest button. Use it
+   * instead of `autoFocus`, which runs while the dialog is still closed.
    */
   initialFocus?: RefObject<HTMLElement | null>;
 }
@@ -135,7 +137,7 @@ function usePresence(set: (present: boolean) => void) {
 }
 
 export interface TitleProps extends ComponentProps<"h2"> {
-  /** Renders the single child (another heading level) as the Title. */
+  /** Makes its one child heading the Title, so the level fits the page outline. */
   asChild?: boolean;
 }
 

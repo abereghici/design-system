@@ -38,22 +38,21 @@ function usePopover(): Floating {
 }
 
 export interface RootProps extends FloatingOptions<ChangeReason> {
+  /** The Trigger and Content. */
   children?: ReactNode;
 }
 
 /**
- * A non-modal panel of interactive content (filters, a short form) anchored to its Trigger. A
- * press outside, Escape or Close dismisses it, and the page stays usable behind it. Focus stays on
- * the Trigger unless `initialFocus` names a field. For a list of actions use DropdownMenu, for a
- * one-line hint Tooltip, for a blocking task Dialog. Root holds the open state and renders no
- * element.
+ * A panel of interactive content (filters, a short form) next to the control that opens it, while
+ * the page stays usable. A press outside, Escape or Close dismisses it. For a list of actions use
+ * DropdownMenu, for a one-line hint Tooltip, for a blocking task Dialog.
  */
 export function Root({ children, ...options }: RootProps) {
   return <PopoverContext value={useFloating("Popover", options)}>{children}</PopoverContext>;
 }
 
 export interface TriggerProps extends ComponentProps<"button"> {
-  /** Renders the single child (a Button or IconButton) as the Trigger. */
+  /** Makes its one child (a Button or IconButton) the Trigger. */
   asChild?: boolean;
 }
 
@@ -92,15 +91,18 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
 }
 
 export interface ContentProps extends Omit<ComponentProps<"dialog">, "id" | "open" | "popover"> {
-  /** Preferred side; flips to the other one when there is no room. */
+  /** The side it prefers; it moves to the other one when there is no room. */
   side?: "top" | "bottom";
-  /** Alignment against the Trigger; `start` and `end` are logical. */
+  /** Lines it up with the Trigger's start, center or end, following the reading direction. */
   align?: "start" | "center" | "end";
-  /** Focused when the Popover opens. Without it, focus stays on the Trigger. */
+  /**
+   * A field to focus when it opens, such as the first filter. Without it, focus stays on the
+   * Trigger.
+   */
   initialFocus?: RefObject<HTMLElement | null>;
 }
 
-/** A non-modal dialog, named by its Title or, without one, by `aria-label`. */
+/** The panel. Give it a Title, or an `aria-label` when it has none. */
 export function Content({
   side = "bottom",
   align = "start",
@@ -128,7 +130,7 @@ export function Content({
 }
 
 export interface TitleProps extends ComponentProps<"h2"> {
-  /** Renders the single child (another heading level) as the Title. */
+  /** Makes its one child heading the Title, so the level fits the page outline. */
   asChild?: boolean;
 }
 
@@ -146,13 +148,13 @@ export function Title({ asChild = false, className, ...props }: TitleProps) {
 }
 
 export interface CloseProps extends ComponentProps<"button"> {
-  /** Renders the single child (a Button) as the Close, in the flow. */
+  /** Makes its one child (a Button such as Done) close the Popover. */
   asChild?: boolean;
-  /** Overrides the Provider's locale for the icon Close's accessible name. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: { close?: string };
 }
 
-/** Closes the Popover. Without `asChild` it is an icon button in the top inline-end corner. */
+/** Closes the Popover. Without children it is the `x` button in the corner. */
 export function Close({ asChild = false, labels, className, ...props }: CloseProps) {
   const popover = usePopover();
   const locale = useLocale();

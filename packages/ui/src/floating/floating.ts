@@ -14,15 +14,21 @@ export type ChangeReason =
   | "focus-out"
   | "none";
 
-/** `cancel()`: keeps the current state. It has no effect on Escape and outside presses: the browser closes the popover itself and its closing `beforetoggle` cannot be cancelled. */
+/**
+ * `cancel()`: keeps the current state. It has no effect on Escape and outside presses: the browser
+ * closes the popover itself and its closing `beforetoggle` cannot be cancelled.
+ */
 export type ChangeEventDetails<Reason extends ChangeReason = ChangeReason> = Details<
   Reason,
   Event | undefined
 >;
 
 export interface FloatingOptions<Reason extends ChangeReason> {
+  /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
   open?: boolean | undefined;
+  /** Opens it on the first render when it holds its own state. */
   defaultOpen?: boolean | undefined;
+  /** Called before it opens or closes; `details.cancel()` keeps it as it is. */
   onOpenChange?: ((open: boolean, details: ChangeEventDetails<Reason>) => void) | undefined;
 }
 
@@ -92,7 +98,9 @@ function settle(element: HTMLElement, component: Component) {
   layer.returnTo = undefined;
 }
 
-/** Records where focus was before a press that may open the layer moved it (WebKit blurs on press). */
+/**
+ * Records where focus was before a press that may open the layer moved it (WebKit blurs on press).
+ */
 export function rememberFocus(contentId: string, focus = document.activeElement) {
   const element = byId(contentId);
   if (element !== null)

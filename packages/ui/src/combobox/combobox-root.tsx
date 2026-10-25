@@ -27,19 +27,33 @@ type InputProps = Omit<
 export type RootProps = Naming &
   InputProps &
   Options & {
+    /** The Items and Groups to choose from. */
     children?: ReactNode;
-    /** Renders `aria-disabled="true"` and `readOnly`: focusable, never opens, keeps its value. */
+    /**
+     * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+     * nearby why it is unavailable.
+     */
     disabled?: boolean;
+    /** Replaces the built-in text of the Provider's locale, for this instance only. */
     labels?: { noResults?: string };
-    /** Helper text below the field, replaced by the error while invalid. */
+    /**
+     * Helper text under the field, such as a format hint; the error message takes its place while
+     * invalid.
+     */
     description?: ReactNode;
-    /** Shown only after interaction while invalid. Defaults to the browser's `validationMessage`. */
+    /**
+     * What to fix, shown once the user has interacted and the value is invalid. Without it the
+     * browser's own message is shown.
+     */
     errorMessage?: ReactNode | ((validity: ValidityState) => ReactNode);
-    /** Forces the invalid state, e.g. from an external validation library. */
+    /** Marks the value invalid from outside, such as a server or validation library result. */
     invalid?: boolean;
-    /** Receives the chosen Item's `value` (`""` when none). */
+    /**
+     * Your own rule, given the chosen Item's `value` (`""` when none): return a message when
+     * invalid.
+     */
     validate?: Field.RootProps["validate"];
-    /** Heights 32 / 40, growing on coarse pointers. */
+    /** `lg` for prominent or spacious forms. Touch screens get larger targets on their own. */
     size?: "md" | "lg";
   };
 

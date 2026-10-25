@@ -5,7 +5,7 @@ import { Slot, join } from "../slot/slot.tsx";
 import styles from "./visually-hidden.module.css";
 
 export interface VisuallyHiddenProps extends ComponentProps<"span"> {
-  /** Hides the single child element (a heading) instead of rendering a `<span>`. */
+  /** Hides its one child, such as a heading, instead of wrapping it. */
   asChild?: boolean;
 }
 

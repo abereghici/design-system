@@ -84,7 +84,9 @@ const RadioGroupContext = createContext<RadioGroupState | null>(null);
 const GroupContext = createContext<string | null>(null);
 
 export interface RadioGroupProps extends Omit<ComponentProps<"fieldset">, "defaultValue"> {
+  /** The chosen RadioItem's `value`, when your state holds it. */
   value?: string | null;
+  /** The starting value when it holds its own state. */
   defaultValue?: string | null;
   /** Called before the change commits; `details.cancel()` keeps the current choice. */
   onValueChange?: (value: string, details: ItemChangeEventDetails) => void;

@@ -20,7 +20,7 @@ export function Root(props: RootProps) {
 }
 
 export interface ContentProps extends ModalContentProps {
-  /** The inline edge it attaches to; `"end"` is the right edge in left-to-right text. */
+  /** The edge it slides from, following the reading direction: `"end"` is the right in English. */
   side?: "start" | "end";
 }
 
@@ -28,12 +28,15 @@ export function Content({ side = "end", ...props }: ContentProps) {
   return <ModalContent {...props} data-side={side} />;
 }
 
-/** The scrolling region between the Title and the Footer. `tabIndex={-1}` lets a field inside take initial focus. */
+/**
+ * The scrolling content between the Title and the Footer. Pass `tabIndex={-1}` to let a field
+ * inside take focus first.
+ */
 export function Body({ tabIndex = 0, className, ...props }: ComponentProps<"div">) {
   return <div {...props} tabIndex={tabIndex} className={join(styles["body"], className)} />;
 }
 
-/** Lays out the buttons with the primary one at the inline end; it stays put while the Body scrolls. */
+/** Holds the buttons, the primary one last; it stays in view while the Body scrolls. */
 export function Footer({ className, ...props }: ComponentProps<"div">) {
   return <div {...props} className={join(styles["footer"], className)} />;
 }

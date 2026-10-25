@@ -16,7 +16,10 @@ export type ChangeReason =
   | "escape-key"
   | "none";
 
-/** `cancel()`: skips the show or hide; the Tooltip runs every change itself, so each one can be cancelled. */
+/**
+ * `cancel()`: skips the show or hide; the Tooltip runs every change itself, so each one can be
+ * cancelled.
+ */
 export type ChangeEventDetails = Details<ChangeReason, Event | undefined>;
 
 type Mode = "pointer" | "focus";
@@ -78,19 +81,21 @@ function present(
 }
 
 export interface RootProps {
+  /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
   open?: boolean;
   defaultOpen?: boolean;
+  /** Called before it opens or closes; `details.cancel()` keeps it as it is. */
   onOpenChange?: (open: boolean, details: ChangeEventDetails) => void;
-  /** No Tooltip at all: no listeners and no `aria-describedby`; an open one closes. */
+  /** Turns the Tooltip off, such as when the Trigger already shows the same text. */
   disabled?: boolean;
+  /** The Trigger and Content. */
   children?: ReactNode;
 }
 
 /**
- * A short label for an icon-only control, often with its shortcut, shown after a short delay on
- * hover and at once on keyboard focus. It describes the Trigger (`aria-describedby`) and never
- * holds interactive or essential content: touch never opens it. For interactive content anchored
- * to a control use Popover. Root holds the open state and renders no element.
+ * A short label for an icon-only control, often with its shortcut, shown on hover after a short
+ * delay and at once on keyboard focus. Screen readers hear it as the control's description. Touch
+ * never opens it, so never put essential or interactive content in it; for that, use a Popover.
  */
 export function Root({
   open,
@@ -142,14 +147,14 @@ export function Root({
 }
 
 export interface TriggerProps extends ComponentProps<"button"> {
-  /** Renders the single child (a Button, IconButton or Link) as the Trigger. */
+  /** Makes its one child (a Button, IconButton or Link) the Trigger. */
   asChild?: boolean;
 }
 
 const outside = (event: { relatedTarget: EventTarget | null }, element: Element | null) =>
   !(event.relatedTarget instanceof Node && element?.contains(event.relatedTarget) === true);
 
-/** The control the Tooltip describes. Its own name stays; the Tooltip becomes its description. */
+/** The control the Tooltip describes. It keeps its own name. */
 export function Trigger({
   asChild = false,
   "aria-describedby": describedBy,
@@ -202,13 +207,13 @@ export function Trigger({
 }
 
 export interface ContentProps extends Omit<ComponentProps<"div">, "id" | "role" | "popover"> {
-  /** Preferred side; flips to the other one when there is no room. */
+  /** The side it prefers; it moves to the other one when there is no room. */
   side?: "top" | "bottom";
-  /** Alignment against the Trigger; `start` and `end` are logical. */
+  /** Lines it up with the Trigger's start, center or end, following the reading direction. */
   align?: "start" | "center" | "end";
 }
 
-/** A short label, optionally followed by an `aria-hidden` Kbd. Never interactive content. */
+/** The short label, optionally followed by an `aria-hidden` Kbd. */
 export function Content({ side = "top", align = "center", className, ...props }: ContentProps) {
   const { contentId, change } = useTooltip();
   return (

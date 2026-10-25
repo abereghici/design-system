@@ -9,17 +9,17 @@ import type { Locale } from "./locale.tsx";
 
 export interface ProviderProps {
   /**
-   * The language tag and built-in labels, from `@platform/ui/locales/*`. Without it, client
-   * components use en-US, as Server Components do without their own `locale`.
+   * The app's language, from `@platform/ui/locales/*`, for every built-in label and number format.
+   * Without it components use en-US.
    */
   locale?: Locale;
+  /** Your app. */
   children?: ReactNode;
 }
 
 /**
- * The app root: mount it once in the root layout. It brings the layer order, the shared tokens, the
- * fonts (preloading Figtree latin) and the base stylesheet, so apps import no CSS, and it passes
- * the `locale` to client components.
+ * Mount it once around your app, in the root layout. It brings the styles and fonts every component
+ * needs, so you import no CSS, and the `locale` for built-in labels.
  */
 export function Provider({ locale, children }: ProviderProps) {
   preload(figtreeLatin, { as: "font", type: "font/woff2" });

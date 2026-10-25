@@ -16,27 +16,38 @@ type Naming =
 
 export type TextFieldProps = Naming &
   Omit<ComponentProps<"input">, "size"> & {
-    /** Helper text below the field, replaced by the error while invalid. */
+    /**
+     * Helper text under the field, such as a format hint; the error message takes its place while
+     * invalid.
+     */
     description?: ReactNode;
-    /** Shown only after interaction while invalid. Defaults to the browser's `validationMessage`. */
+    /**
+     * What to fix, shown once the user has interacted and the value is invalid. Without it the
+     * browser's own message is shown.
+     */
     errorMessage?: ReactNode | ((validity: ValidityState) => ReactNode);
-    /** Forces the invalid state, e.g. from an external validation library. */
+    /** Marks the value invalid from outside, such as a server or validation library result. */
     invalid?: boolean;
+    /** Your own rule: return a message to mark the value invalid, or nothing when it is valid. */
     validate?: Field.RootProps["validate"];
-    /** Heights 32 / 40, growing on coarse pointers. Replaces the native character-width `size`. */
+    /** `lg` for prominent or spacious forms. Touch screens get larger targets on their own. */
     size?: "md" | "lg";
-    /** Content at the inline start, such as a decorative icon. */
+    /** Content before the input, such as a decorative search icon. */
     startElement?: ReactNode;
-    /** Content at the inline end, such as an `aria-hidden` Kbd or an IconButton. */
+    /** Content after the input, such as a Clear IconButton or a shortcut hint. */
     endElement?: ReactNode;
+    /** Called as the user types, with the new text. */
     onValueChange?: (value: string, details: TextFieldChangeEventDetails) => void;
-    /** Renders `aria-disabled="true"` and `readOnly`: focusable and selectable, not editable. */
+    /**
+     * Stops editing but keeps the text focusable and selectable, so it can still be read and
+     * copied.
+     */
     disabled?: boolean;
   };
 
 /**
- * Single-line text entry with a visible label, an optional description and an inline error that
- * appears only after interaction. Use TextArea for more than one line, PasswordField for secrets,
+ * One line of text, with a visible label, an optional description and an error that appears only
+ * after the user has interacted. Use TextArea for more than one line, PasswordField for secrets,
  * NumberField for numbers and Select to choose from a short known list.
  */
 export function TextField({
@@ -72,7 +83,7 @@ export function TextField({
   );
 }
 
-/** The bordered container that draws the field around an input and its start and end content. */
+/** The field's box, around an input and the content before and after it. */
 export function InputGroup({
   start,
   end,

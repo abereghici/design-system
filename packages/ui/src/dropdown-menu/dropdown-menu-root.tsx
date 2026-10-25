@@ -30,14 +30,15 @@ function useDropdownMenu(): Menu {
 }
 
 export interface RootProps extends FloatingOptions<ChangeReason> {
+  /** The Trigger and Content. */
   children?: ReactNode;
 }
 
 /**
  * A list of actions or options revealed from a button: "Duplicate", "Rename…", "Delete". Arrow
  * keys, Home, End and typing move through the items; Escape, a press outside or Tab closes it. To
- * choose a form value use Select; for the same actions on a right click use ContextMenu; for
- * arbitrary content use Popover. Root holds the open state and renders no element.
+ * choose a form value use Select; for the same actions on a right click, ContextMenu; for other
+ * content, Popover.
  */
 export function Root({ children, ...options }: RootProps) {
   const floating = useFloating("DropdownMenu", options);
@@ -45,7 +46,7 @@ export function Root({ children, ...options }: RootProps) {
 }
 
 export interface TriggerProps extends ComponentProps<"button"> {
-  /** Renders the single child (a Button or IconButton) as the Trigger. */
+  /** Makes its one child (a Button or IconButton) the Trigger. */
   asChild?: boolean;
 }
 
@@ -98,9 +99,9 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
 }
 
 export interface ContentProps extends Omit<ComponentProps<"div">, "id" | "role" | "popover"> {
-  /** Preferred side; flips to the other one when there is no room. */
+  /** The side it prefers; it moves to the other one when there is no room. */
   side?: "top" | "bottom";
-  /** Logical: `start` lines the menu up with the Trigger's inline-start edge. */
+  /** Lines the menu up with the Trigger's start or end edge, following the reading direction. */
   align?: "start" | "end";
 }
 

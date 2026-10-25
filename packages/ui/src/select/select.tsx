@@ -11,7 +11,7 @@ export interface ItemProps extends ComponentProps<"option"> {
   value: string;
 }
 
-/** Text, optionally after a decorative Icon, which only engines with customizable select show. */
+/** One option: its text, optionally after a decorative icon that not every browser shows. */
 export function Item({ className, ...props }: ItemProps) {
   return <option {...props} className={join(styles["item"], className)} />;
 }

@@ -15,23 +15,36 @@ type Naming =
   | { label?: undefined; "aria-labelledby": string };
 
 type ControlProps = Omit<ComponentProps<"textarea">, "rows" | "cols"> & {
-  /** Height floor in lines. */
+  /** The height, in lines, it starts at. */
   minRows?: number;
-  /** Height ceiling in lines; beyond it the text scrolls. Equal to `minRows` for a fixed height. */
+  /**
+   * The height, in lines, it grows to before the text scrolls. Equal to `minRows` for a fixed
+   * height.
+   */
   maxRows?: number;
+  /** Called as the user types, with the new text. */
   onValueChange?: (value: string, details: TextAreaChangeEventDetails) => void;
-  /** Renders `aria-disabled="true"` and `readOnly`: focusable and selectable, not editable. */
+  /**
+   * Stops editing but keeps the text focusable and selectable, so it can still be read and copied.
+   */
   disabled?: boolean;
 };
 
 export type TextAreaProps = Naming &
   ControlProps & {
-    /** Helper text below the field, replaced by the error while invalid. */
+    /**
+     * Helper text under the field, such as a format hint; the error message takes its place while
+     * invalid.
+     */
     description?: ReactNode;
-    /** Shown only after interaction while invalid. Defaults to the browser's `validationMessage`. */
+    /**
+     * What to fix, shown once the user has interacted and the value is invalid. Without it the
+     * browser's own message is shown.
+     */
     errorMessage?: ReactNode | ((validity: ValidityState) => ReactNode);
-    /** Forces the invalid state, e.g. from an external validation library. */
+    /** Marks the value invalid from outside, such as a server or validation library result. */
     invalid?: boolean;
+    /** Your own rule: return a message to mark the value invalid, or nothing when it is valid. */
     validate?: Field.RootProps["validate"];
   };
 
@@ -52,7 +65,7 @@ function Control({ minRows = 3, maxRows = 12, readOnly, ...props }: ControlProps
 }
 
 /**
- * Multi-line text entry that grows with its content, from 3 to 12 lines by default, then scrolls.
+ * Text that may run over several lines, such as a comment. It grows with its content, then scrolls.
  * Use TextField for a single line.
  */
 export function TextArea({

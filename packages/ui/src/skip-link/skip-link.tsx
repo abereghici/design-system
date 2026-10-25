@@ -7,20 +7,23 @@ import { join } from "../slot/slot.tsx";
 import styles from "./skip-link.module.css";
 
 export interface SkipLinkProps extends Omit<ComponentProps<"a">, "href"> {
-  /** The fragment of the main content's `id`. Give that element `tabIndex={-1}` so it takes focus. */
+  /**
+   * `#` and the main content's `id`. Give that element `tabIndex={-1}` so focus moves there too.
+   */
   href: `#${string}`;
   /**
-   * A shipped locale (`@platform/ui/locales/*`) that translates it on the server. A Server Component
-   * can't read the Provider's `locale`, so without it the text is en-US.
+   * A shipped locale (`@platform/ui/locales/*`). This renders on the server, where the
+   * Provider's `locale` can't reach, so pass it for any language other than en-US.
    */
   locale?: Locale;
-  /** Overrides the locale's labels. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: Partial<Labels["skipLink"]>;
 }
 
 /**
- * The first element of a page layout: a link to the main content, hidden until it has focus. Give
- * the target `<main>` the matching `id` and `tabIndex={-1}`. For any other navigation, use a Link.
+ * Lets keyboard users jump past the navigation to the main content. Put it first in the page layout;
+ * it stays hidden until it has focus. Give the target `<main>` the matching `id` and `tabIndex={-1}`.
+ * For any other navigation, use a Link.
  */
 export function SkipLink({ locale, labels, children, className, ...props }: SkipLinkProps) {
   return (

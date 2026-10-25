@@ -9,15 +9,14 @@ export { Image } from "./avatar-image.tsx";
 export type { ImageProps, LoadingStatus } from "./avatar-image.tsx";
 
 export interface RootProps extends ComponentProps<"span"> {
-  /** sm 24 · md 32 px. */
+  /** `sm` beside a line of text, `md` in lists and headers. */
   size?: "sm" | "md";
 }
 
 /**
  * A person's picture, with their initials (or a generic glyph) while it loads or when it fails. The
- * Image's `alt` is the avatar's one accessible name, whichever Part shows; the Fallback is never
- * announced. When the name is written beside it, use `alt=""` and `aria-hidden` on Root. For the
- * brand sign, use the Logo.
+ * Image's `alt` names the avatar whichever part shows. When the name is written beside it, use
+ * `alt=""` and `aria-hidden` on Root so it isn't read twice. For the brand sign, use the Logo.
  */
 export function Root({ size = "md", className, ...props }: RootProps) {
   return <span {...props} data-size={size} className={join(styles["root"], className)} />;
@@ -25,8 +24,8 @@ export function Root({ size = "md", className, ...props }: RootProps) {
 
 export interface FallbackProps extends ComponentProps<"span"> {
   /**
-   * The person's name, for the initials (first and last word). Never an accessible name: the
-   * Fallback is hidden from assistive technology, so name the avatar through the Image's `alt`.
+   * The person's name, shown as initials while the picture loads or when it fails. Screen readers
+   * never hear it, so name the avatar with the Image's `alt`.
    */
   name?: string;
 }
