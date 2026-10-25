@@ -7,4 +7,9 @@
   .content {
     --ab-popover-max-width: none;
   }
+
+  /* Popover's margin nudges the panel inward on every side; the spec lines the panel up with the field. */
+  .content[popover] {
+    margin-inline: 0;
+  }
 }
