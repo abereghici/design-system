@@ -75,6 +75,7 @@ Every option the old config set was the default (https://oxc.rs/docs/guide/usage
 
 - `packages/ui/tsconfig.json` includes `".storybook/**/*"`. With the bare entry `".storybook"`, `tsc --listFilesOnly` listed only the 6 `.storybook` files reachable by import, and the type-aware lint reported `error`-typed CSS Module members in the rest. With the glob it lists 33.
 - `typescript-config/node-library.json` had no user after packages/design-sync was deleted.
+- `react.json` adds `esnext.intl` to `lib`: TypeScript 7.0.2 declares `Intl.Locale` `getTextInfo(): TextInfo` and `getWeekInfo(): WeekInfo` only there (`lib/lib.esnext.intl.d.ts`), and web-features 3.44.0 has `intl-locale-info` at Baseline low since 2026-07-21, so `date.ts` and `direction.ts` call them without guards. The lib also references `esnext.temporal`; runtime Temporal still comes from the ponyfill (ADR-0004). A `declare global { namespace Intl }` augmentation instead fails oxlint `typescript/no-namespace`.
 
 ## Style Dictionary 5.7.0
 

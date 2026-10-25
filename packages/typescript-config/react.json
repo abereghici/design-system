@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./base.json",
   "compilerOptions": {
-    "lib": ["es2025", "dom"],
+    "lib": ["es2025", "esnext.intl", "dom"],
     "module": "preserve",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
