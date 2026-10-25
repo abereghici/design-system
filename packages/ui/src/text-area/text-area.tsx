@@ -7,6 +7,13 @@ import * as Field from "../field/field.tsx";
 import fieldStyles from "../field/field.module.css";
 import styles from "./text-area.module.css";
 
+declare module "react" {
+  interface CSSProperties {
+    "--min-rows"?: number;
+    "--max-rows"?: number;
+  }
+}
+
 export type TextAreaChangeEventDetails = Field.ChangeEventDetails<HTMLTextAreaElement>;
 
 type Naming =
@@ -48,9 +55,6 @@ export type TextAreaProps = Naming &
     validate?: Field.RootProps["validate"];
   };
 
-const lines = (rows: number) =>
-  `calc(${rows}lh + 2 * var(--ab-input-padding-block) + 2 * var(--ab-input-border-width))`;
-
 function Control({ minRows = 3, maxRows = 12, readOnly, ...props }: ControlProps) {
   const bindings = Field.useFieldControl<HTMLTextAreaElement, typeof props>(props);
   return (
@@ -59,7 +63,7 @@ function Control({ minRows = 3, maxRows = 12, readOnly, ...props }: ControlProps
       {...bindings}
       readOnly={bindings["aria-disabled"] ?? readOnly}
       className={`${fieldStyles["control"]} ${styles["textarea"]}`}
-      style={{ minBlockSize: lines(minRows), maxBlockSize: lines(maxRows) }}
+      style={{ "--min-rows": minRows, "--max-rows": maxRows }}
     />
   );
 }

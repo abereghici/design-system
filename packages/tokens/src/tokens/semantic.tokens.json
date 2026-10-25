@@ -748,6 +748,16 @@
       "$type": "number",
       "$value": "{primitive.opacity-40}"
     },
+    "opacity-subtle": {
+      "$type": "number",
+      "$description": "A faint trace of the current colour, such as a keycap border on a coloured host or a pulse's low point.",
+      "$value": "{primitive.opacity-40}"
+    },
+    "opacity-bold": {
+      "$type": "number",
+      "$description": "A slightly softened current colour, such as keycap text on a coloured host.",
+      "$value": "{primitive.opacity-80}"
+    },
     "elevation-ring": {
       "$type": "shadow",
       "$value": {

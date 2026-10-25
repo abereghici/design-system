@@ -103,7 +103,7 @@ Not focusable; no keyboard interaction. When the avatar is inside a Link or Butt
 - No `alt` text flash: the Image is transparent while loading and on error, so the browser's broken-image box or alt text never paints (MDN: "Alt text is also displayed on the page if the image can't be loaded").
 - Contrast: `text-subtle` and `icon-subtle` on `surface-nested` are in the AA matrix.
 - **More contrast:** text and icon tokens already pass; no change.
-- **Forced colors:** the Fallback disc fill is removed (`background-color` is forced, MDN forced-colors). Root draws a 1 px transparent border at all times, which forced colors turns into a system colour (CSS Color Adjust 1, https://www.w3.org/TR/css-color-adjust-1/), so the circle stays visible. Initials take `CanvasText`. Photos are unaffected.
+- **Forced colors:** the Fallback disc fill is removed (`background-color` is forced, MDN forced-colors). Root draws a `border-width-default` inset `CanvasText` outline in forced colors only, so the circle stays visible. Initials take `CanvasText`. Photos are unaffected.
 - **Reduced transparency:** not affected (no Material).
 
 ## RTL

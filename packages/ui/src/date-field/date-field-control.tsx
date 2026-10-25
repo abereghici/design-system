@@ -12,6 +12,7 @@ import type { Validity } from "./date-field-validity.ts";
 import { bounds, display } from "./segments.ts";
 import type { Segments } from "./segments.ts";
 import fieldStyles from "../field/field.module.css";
+import visuallyHidden from "../visually-hidden/visually-hidden.module.css";
 import styles from "./date-field.module.css";
 
 export interface DateFieldOptions extends DateValueOptions {
@@ -161,7 +162,7 @@ function HiddenInput({
       min={options.min?.toString()}
       max={options.max?.toString()}
       defaultValue={date.committed?.toString() ?? ""}
-      className={styles["input"]}
+      className={visuallyHidden["root"]}
       onFocus={editing.focusFirstEmpty}
       onClick={editing.focusFirstEmpty}
       onInvalid={(event) => {

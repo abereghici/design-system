@@ -100,6 +100,7 @@ Native; no key handler is added. Enter is not bound (APG lists Space only; Enter
 - **No interactive content in the label.** MDN: "don't place additional interactive elements such as anchors or buttons inside a `<label>`." A link to the terms goes in a `Field.Description`.
 - **Contrast.** The checked state is the accent fill plus the check (shape, not colour alone). `background-accent-bold` against every surface is added to the contrast matrix at 3:1 (lowest measured 12.19:1 light, 14.25:1 dark). The unchecked box edge is `color-border-default`, already in the matrix (3:1).
 - Targets: the whole row is the label, at least 24 px tall through the line height plus padding (the box alone is 16 px; because the label activates the input, the row is the target for WCAG 2.5.8; inference).
+- Reflow: the box sits on the label's first line (`1lh` centring), and a long or unbroken label wraps anywhere, so nothing overflows at 320 px.
 - **More contrast:** no change needed (the border is already `border-default`).
 - **Forced colors:** the fill disappears, so the checked box sets `background-color: Highlight` and the check `HighlightText`; the border is `CanvasText`. Disabled uses `GrayText` for the border, the check and the label, on a `Canvas` box, as native disabled checkboxes do.
 - **Reduced transparency:** not affected.

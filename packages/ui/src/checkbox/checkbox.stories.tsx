@@ -145,3 +145,12 @@ Default.test(
     await expect(toggles.events).toEqual([]);
   },
 );
+
+export const LongLabel = meta.story({
+  args: {
+    children: "Send a copy of every report to reports-archive@platform-production.example.com",
+  },
+  parameters: {
+    docs: { description: { story: "A long label wraps, with the box on its first line." } },
+  },
+});

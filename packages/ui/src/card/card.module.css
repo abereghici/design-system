@@ -69,7 +69,9 @@
     position: relative;
   }
 
+  /* Content-sized, so the raised box covers only the actions and the rest of the row still hits the link. */
   .footer {
+    inline-size: fit-content;
     display: flex;
     flex-wrap: wrap;
     align-items: center;

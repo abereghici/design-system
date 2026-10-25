@@ -43,7 +43,7 @@
 
   @keyframes pulse {
     to {
-      opacity: 0.4;
+      opacity: var(--ab-opacity-subtle);
     }
   }
 }

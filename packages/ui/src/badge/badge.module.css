@@ -5,7 +5,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    block-size: var(--ab-badge-height);
+    min-block-size: var(--ab-badge-height);
     min-inline-size: var(--ab-badge-min-width);
     padding-inline: var(--ab-badge-padding-inline);
     border-radius: var(--ab-badge-border-radius);
@@ -28,8 +28,8 @@
 
   @media (forced-colors: active) {
     .root {
-      outline: 1px solid CanvasText;
-      outline-offset: -1px;
+      outline: var(--ab-border-width-default) solid CanvasText;
+      outline-offset: calc(var(--ab-border-width-default) * -1);
     }
   }
 }

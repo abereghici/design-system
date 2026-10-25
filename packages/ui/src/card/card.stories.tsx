@@ -152,6 +152,18 @@ Linked.test(
   },
 );
 
+Linked.test(
+  "takes a click beside its footer actions as a click on its title link",
+  async ({ canvas }) => {
+    const { right, y, height } = canvas
+      .getByRole("button", { name: "Share" })
+      .getBoundingClientRect();
+    await expect(document.elementFromPoint(right + 40, y + height / 2)).toBe(
+      canvas.getByRole("link", { name: "Quarterly report" }),
+    );
+  },
+);
+
 Linked.test("keeps its footer actions clickable", async ({ canvas }) => {
   const share = canvas.getByRole("button", { name: "Share" });
   await expect(center(share)).toBe(share);

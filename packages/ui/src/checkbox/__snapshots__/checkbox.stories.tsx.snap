@@ -4,3 +4,8 @@ exports[`Default   > base story 1`] = `
 - checkbox "Email me updates"
 - text: Email me updates
 `;
+
+exports[`Long Label 1`] = `
+- checkbox "Send a copy of every report to reports-archive@platform-production.example.com"
+- text: Send a copy of every report to reports-archive@platform-production.example.com
+`;

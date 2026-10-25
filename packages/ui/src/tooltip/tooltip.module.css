@@ -3,8 +3,16 @@
 @layer ab.components {
   .content {
     --ab-kbd-background-color: transparent;
-    --ab-kbd-text-color: color-mix(in oklch, currentColor 72%, transparent);
-    --ab-kbd-border-color: color-mix(in oklch, currentColor 72%, transparent);
+    --ab-kbd-text-color: color-mix(
+      in oklch,
+      currentColor calc(var(--ab-opacity-bold) * 100%),
+      transparent
+    );
+    --ab-kbd-border-color: color-mix(
+      in oklch,
+      currentColor calc(var(--ab-opacity-subtle) * 100%),
+      transparent
+    );
 
     position-anchor: auto;
     inset: auto;

@@ -5,6 +5,12 @@
     block-size: auto;
     padding-block: var(--ab-input-padding-block);
     line-height: var(--ab-type-body-xs-line-height);
+    min-block-size: calc(
+      var(--min-rows) * 1lh + 2 * var(--ab-input-padding-block) + 2 * var(--ab-input-border-width)
+    );
+    max-block-size: calc(
+      var(--max-rows) * 1lh + 2 * var(--ab-input-padding-block) + 2 * var(--ab-input-border-width)
+    );
     field-sizing: content;
     resize: vertical;
   }

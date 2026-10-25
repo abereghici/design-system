@@ -38,10 +38,10 @@ Root (nav → ordered list) → Items (separator → link).
 
 `Breadcrumbs.Root`
 
-| Prop     | Type                    | Default                  | Notes                                                                                                     |
-| -------- | ----------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------- |
-| `aria-label` \| `aria-labelledby` | `string` (one required) |  | The landmark's name, such as "Breadcrumb". |
-| …native  | `ComponentProps<"nav">` |                          | `ref`, `className`, `aria-labelledby` and native attributes go on the `<nav>`. The `<ol>` takes no props. |
+| Prop                              | Type                    | Default | Notes                                                                                                     |
+| --------------------------------- | ----------------------- | ------- | --------------------------------------------------------------------------------------------------------- |
+| `aria-label` \| `aria-labelledby` | `string` (one required) |         | The landmark's name, such as "Breadcrumb".                                                                |
+| …native                           | `ComponentProps<"nav">` |         | `ref`, `className`, `aria-labelledby` and native attributes go on the `<nav>`. The `<ol>` takes no props. |
 
 `Breadcrumbs.Item`: `ComponentProps<"li">`.
 
@@ -107,7 +107,7 @@ No arrow keys: it is a list of links, not a composite. No key handler is added.
 - An ordered list (`<ol>`), as APG's example and MUI: "The set of links is structured using an ordered list (`<ol>` element)." Screen readers announce the item count.
 - **Separators are decorative.** APG's example draws them "via CSS" "To prevent screen reader announcement of the visual separators between links". We draw an icon element instead and hide it with `aria-hidden` (Icon's default when it has no `label`), as MUI: "they are hidden with `aria-hidden`." (judgement call: one glyph source, and the Icon component's RTL mirror).
 - **Landmark names:** a second Breadcrumbs on the same page needs a different `aria-label` (APG landmarks: "If a page includes more than one `navigation` landmark, each should have a unique label.", https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/examples/navigation.html).
-- **Targets:** links are at least 24 px tall (Item `min-block-size`), and items are separated by the chevron and two gaps, so WCAG 2.5.8 holds on wrapped rows too (inference; measured in the build).
+- **Targets:** links are at least 24 px tall (`size-target-min` on the link itself), and items are separated by the chevron and two gaps, so WCAG 2.5.8 holds on wrapped rows too (inference; measured in the build).
 - **Contrast:** ancestor text `color-text-subtle` and current `color-text-default` are matrix text roles (4.5:1 on every surface). The underline uses `color-border-default` (3:1). The separator is decorative and needs no contrast.
 - **Not colour alone:** ancestors are underlined and the current page is not, so the current page differs by shape as well as colour.
 - **More contrast:** no change needed (text roles already pass; the underline already uses `color-border-default`).

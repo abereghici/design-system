@@ -158,7 +158,7 @@ Proposed new:
 | `tooltip-exit-duration` | `motion-duration-exit` | duration    | Exit fade (150 ms); flagged in Motion, longer than the 125 ms entry |
 | `tooltip-easing`        | `motion-easing-enter`  | cubicBezier | Ease-out for entry and exit                                         |
 
-No Kbd override token. To match the source (`.ab-tooltip .ab-kbd{background:transparent;color:inherit;border-color:currentColor;opacity:.72}`) the Content sets Kbd's own custom properties on itself (transparent fill, text and border at 72 % of `currentColor`), as Button does. The forced-colors border uses `border-width-default` directly.
+No Kbd override token. To match the source (`.ab-tooltip .ab-kbd{background:transparent;color:inherit;border-color:currentColor;opacity:.72}`) the Content sets Kbd's own custom properties on itself (transparent fill, text at `opacity-bold` and border at `opacity-subtle` of `currentColor`), as Button does. The forced-colors border uses `border-width-default` directly.
 
 ## Author-written text
 

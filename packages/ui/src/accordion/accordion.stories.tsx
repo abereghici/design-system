@@ -133,3 +133,20 @@ Default.test(
     await expect(canvas.getByText(browsers)).not.toBeVisible();
   },
 );
+
+export const LongTrigger = meta.story({
+  args: {
+    defaultValue: ["limits"],
+    children: (
+      <Accordion.Item value="limits">
+        <Accordion.Trigger>
+          Why does https://platform.example.com/settings/organization/billing/limits say 0?
+        </Accordion.Trigger>
+        <Accordion.Content>{browsers}</Accordion.Content>
+      </Accordion.Item>
+    ),
+  },
+  parameters: {
+    docs: { description: { story: "A long trigger wraps, with the chevron kept in view." } },
+  },
+});

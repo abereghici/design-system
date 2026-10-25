@@ -33,7 +33,6 @@
       )
       0 0 1 / 0 0 var(--ab-tabs-list-border-width);
     overflow-x: auto;
-    scrollbar-width: none;
     anchor-scope: --ab-tabs-selected;
   }
 
@@ -104,6 +103,7 @@
   /* The edges fade only when there is more to scroll (brand book), like ScrollArea, but inline. */
   @supports (animation-timeline: scroll()) {
     .list {
+      scrollbar-width: none;
       mask-image: linear-gradient(
         to var(--to, right),
         transparent,

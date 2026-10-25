@@ -12,7 +12,7 @@ const SEMANTIC = [
   /^elevation-ring$/v,
   /^elevation-highlight$/v,
   /^material-(blur|saturate)-(thin|regular|thick)$/v,
-  /^opacity-(disabled|scrim)$/v,
+  /^opacity-(disabled|scrim|subtle|bold)$/v,
   /^type-(heading|display|body|label|data|code|overline|kbd)-(xs|sm|md|lg)(-(font-family|font-size|font-weight|line-height|letter-spacing|font-variant-numeric|text-transform))?$/v,
   /^space-(inline|inset|stack)-(2xs|xs|sm|md|lg|xl|2xl)$/v,
   /^space-section$/v,
