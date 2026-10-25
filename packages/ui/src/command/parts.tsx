@@ -6,9 +6,9 @@ import type { ComponentProps } from "react";
 import { SearchIcon } from "../icon/icons/search.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
 import { useLocale } from "../provider/locale.tsx";
+import { command as commandLabels } from "../provider/locales/en-US/command.ts";
 import { join } from "../slot/slot.tsx";
 
-import { commandLabels } from "./labels.ts";
 import { DialogContext, useCommand } from "./root.tsx";
 import styles from "./command.module.css";
 
@@ -16,7 +16,10 @@ export interface InputProps extends Omit<
   ComponentProps<"input">,
   "value" | "defaultValue" | "type"
 > {
-  /** Overrides the Provider's locale: `search` is the accessible name, `placeholder` the default hint. */
+  /**
+   * Overrides the Provider's locale: `search` is the accessible name, `placeholder` the default hint.
+   * To name it by visible text, pass `aria-labelledby`, which wins over `search`.
+   */
   labels?: { search?: string; placeholder?: string };
 }
 

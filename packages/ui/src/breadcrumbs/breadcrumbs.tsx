@@ -4,9 +4,9 @@ import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { Link as BaseLink } from "../link/link.tsx";
 import type { LinkProps as BaseLinkProps } from "../link/link.tsx";
 import type { Labels, Locale } from "../provider/locale.tsx";
+import { breadcrumbs as breadcrumbsLabels } from "../provider/locales/en-US/breadcrumbs.ts";
 import { join } from "../slot/slot.tsx";
 
-import { breadcrumbsLabels } from "./labels.ts";
 import styles from "./breadcrumbs.module.css";
 
 export interface RootProps extends ComponentProps<"nav"> {

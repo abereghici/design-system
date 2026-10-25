@@ -43,3 +43,7 @@ _Avoid_: Root, app shell, LocaleProvider, ThemeProvider
 **Locale**:
 A typed object holding a BCP 47 tag and every built-in label in that language (`enUS`, `roRO`), passed to the Provider.
 _Avoid_: Translations, messages, i18n bundle
+
+**Built-in label**:
+A string a component supplies by default, from its namespace in the Locale. It names only elements the component owns (a Close button, the steppers), and it gives way to any name the consumer gives (`aria-label`, `aria-labelledby`, or a `<label for>` through `id`).
+_Avoid_: Default text, i18n key

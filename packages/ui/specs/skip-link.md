@@ -114,7 +114,7 @@ Consumed as semantic tokens directly: `z-index-tooltip` (a stacking decision, no
 | ------- | ---------------------- | ----------------------------------------- |
 | `label` | "Skip to main content" | The link text when no children are given. |
 
-The default is `skipLinkLabels` in `src/skip-link/labels.ts`, which `enUS` composes, so importing SkipLink ships only its own string.
+The default is `skipLink` in `src/provider/locales/en-US/skip-link.ts`, one module per namespace that `enUS` composes, so importing SkipLink ships only its own string.
 
 ## Feedback events
 

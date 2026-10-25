@@ -7,8 +7,7 @@ import { MinusIcon } from "../icon/icons/minus.tsx";
 import { PlusIcon } from "../icon/icons/plus.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
-
-import { numberFieldLabels } from "./labels.ts";
+import { numberField as numberFieldLabels } from "../provider/locales/en-US/number-field.ts";
 
 export type Direction = 1 | -1;
 

@@ -9,10 +9,9 @@ import { IconButton } from "../icon-button/icon-button.tsx";
 import { InspectIcon } from "../icon/icons/inspect.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
+import { passwordField as passwordFieldLabels } from "../provider/locales/en-US/password-field.ts";
 import { InputGroup, TextInput } from "../text-field/text-field.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
-
-import { passwordFieldLabels } from "./labels.ts";
 
 /** `cancel()`: keeps the current visibility. */
 export type PasswordFieldVisibleChangeEventDetails = Details<"toggle-press" | "form-submit">;

@@ -5,9 +5,9 @@ import type { ComponentProps, MouseEvent } from "react";
 import { dispatchFeedback } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { useLocale } from "../provider/locale.tsx";
+import { alert as alertLabels } from "../provider/locales/en-US/alert.ts";
 import { join } from "../slot/slot.tsx";
 
-import { alertLabels } from "./labels.ts";
 import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./alert.module.css";
 

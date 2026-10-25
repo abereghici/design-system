@@ -4,10 +4,10 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { XIcon } from "../icon/icons/x.tsx";
 import { useLocale } from "../provider/locale.tsx";
-import { sheetLabels } from "../sheet/labels.ts";
+import { dialog as dialogLabels } from "../provider/locales/en-US/dialog.ts";
+import { sheet as sheetLabels } from "../provider/locales/en-US/sheet.ts";
 import { Slot, join } from "../slot/slot.tsx";
 
-import { dialogLabels } from "./labels.ts";
 import { useModal } from "./modal.tsx";
 import iconButton from "../icon-button/icon-button.module.css";
 

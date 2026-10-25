@@ -1,4 +1,4 @@
-export const dateFieldLabels = {
+export const dateField = {
   dayPlaceholder: "dd",
   monthPlaceholder: "mm",
   yearPlaceholder: "yyyy",

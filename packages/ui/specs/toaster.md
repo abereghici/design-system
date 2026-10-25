@@ -125,7 +125,7 @@ No `toaster` Dictionary word: the Toaster uses the toast tokens (`toast-offset`,
 | ---------------- | --------------- | ------------ | ------------------------- |
 | `toaster.region` | "Notifications" | "Notificări" | The Region's `aria-label` |
 
-`toasterLabels` in `src/toaster/labels.ts` (`{ region: "Notifications", close: "Dismiss" }`) are the en-US defaults; `enUS` composes them and `ro-RO.ts` translates them. The `labels` prop (`region`, `close`) wins over the Provider's locale, which wins over the defaults.
+`toaster` in `src/provider/locales/en-US/toaster.ts` (`{ region: "Notifications", close: "Dismiss" }`) are the en-US defaults; `enUS` composes them and `ro-RO.ts` translates them. The `labels` prop (`region`, `close`) wins over the Provider's locale, which wins over the defaults.
 
 ## Feedback events
 

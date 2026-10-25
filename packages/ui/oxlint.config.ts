@@ -23,10 +23,5 @@ export default defineConfig({
         ],
       },
     },
-    {
-      // en-US composes every component's own default labels, so it imports one module per component by design.
-      files: ["src/provider/locales/en-US.ts"],
-      rules: { "import/max-dependencies": "off" },
-    },
   ],
 });

@@ -1,9 +1,9 @@
 import type { ComponentProps } from "react";
 
 import type { Labels, Locale } from "../provider/locale.tsx";
+import { skipLink as skipLinkLabels } from "../provider/locales/en-US/skip-link.ts";
 import { join } from "../slot/slot.tsx";
 
-import { skipLinkLabels } from "./labels.ts";
 import styles from "./skip-link.module.css";
 
 export interface SkipLinkProps extends Omit<ComponentProps<"a">, "href"> {

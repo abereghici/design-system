@@ -11,9 +11,9 @@ import { byId, useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as FloatingDetails, Floating } from "../floating/floating.ts";
 import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
+import { datePicker as datePickerLabels } from "../provider/locales/en-US/date-picker.ts";
 import { pointerMarker } from "../toggle/toggle.ts";
 
-import { datePickerLabels } from "./labels.ts";
 import { PanelContext, Trigger } from "./panel.tsx";
 
 /** `cancel()`: keeps the previous value; after a day press the panel stays open. */
