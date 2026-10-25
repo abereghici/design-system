@@ -72,9 +72,19 @@ How do we ship Figtree (wght 300–900) and Noto Serif (wght 100–900, wdth 62.
 - Next.js `turbopack` docs: "When using `type: 'asset'`, importing the file returns its URL". The import attribute `turbopackModuleType` does the same for one import ("Set the module type for the output (same as `turbopack.rules[].type`)"; added in 16.2.0).
 - **Empirical, Next 16.4.3 Turbopack `next build`.** A root layout that imports `@platform/tokens/fonts.css` and preloads `import figtreeLatin from "@platform/tokens/fonts/Figtree-latin.woff2" with { turbopackModuleType: "asset" }` rendered `<link rel="preload" href="/_next/static/media/Figtree-latin.1meowcc0_9_5r.woff2" as="font" crossorigin="" type="font/woff2"/>`. The CSS chunk referenced `url(../media/Figtree-latin.1meowcc0_9_5r.woff2)`, the same file. Under `next start`, Chromium made one request for it, logged no "preloaded but not used" warning, and loaded Figtree. TypeScript needs a `declare module "*.woff2"` for the import (inference: the first app adds it).
 
+### Italics (added 2026-10-25, owner decision on open question 2)
+
+- **Sources.** The same `METADATA.pb` files list the italics next to the romans: Figtree `source_file: "fonts/variable/Figtree-Italic[wght].ttf"` at the same commit (sha256 `e9b7ab9c…dca53`), and Noto Serif `source_file: "NotoSerif/googlefonts/variable-ttf/NotoSerif-Italic[wdth,wght].ttf"` inside the same `NotoSerif-v2.015.zip` (zip sha256 unchanged). Both METADATA files carry `license: "OFL"`, and the licence files are the ones already shipped. Rerunning `pnpm fonts` left the four roman files byte-identical.
+- **Axes, checked with fontTools.** Figtree italic: `wght` 300–900, `post.italicAngle` −9.5. Noto Serif italic: `wght` 100–900 and `wdth` 62.5–100, `italicAngle` −12.02. Both set the `OS/2.fsSelection` italic bit.
+- **Sizes.** Figtree italic latin 21,420 B, latin-ext 10,076 B. Noto Serif italic latin 107,284 B, latin-ext 367,600 B.
+- **Loading.** CSS Fonts 4, §4.8.1: "The @font-face rule is designed to allow lazy loading of font resources that are only downloaded when used within a document." §5.2 step for `@font-face` faces: "If the font resource has not been loaded and the range of characters defined by the unicode-range descriptor value includes the character in question, load the font." Font matching narrows by `font-style` before that step, so an italic face is loaded only for italic text.
+- **Empirical, Chromium 156.0.8078.4 (Playwright 1.64.1).** A page with roman Figtree and Noto Serif text and the full `fonts.css` requested only `Figtree-latin.woff2` and `NotoSerif-latin.woff2`. Adding one `<em>` in each family also requested `Figtree-Italic-latin.woff2` and `NotoSerif-Italic-latin.woff2`, and `document.fonts` reported both italic faces as `loaded`.
+- **Synthesis.** CSS Fonts 4, §2.4: "If no italic or oblique face is available, oblique faces may be synthesized by rendering non-obliqued faces with an artificial obliquing operation." With a real italic face the browser no longer synthesizes one. The base stylesheet never set `font-synthesis-style`, so there was no workaround to remove.
+- **Preload.** Unchanged: only Figtree latin roman is preloaded. Preloading an italic would download it on pages without italic text, which is what lazy `@font-face` loading avoids.
+
 ## Open questions
 
 - Q10-1: `font-size-adjust: from-font` withheld (see above).
 - Q10-2: Noto Serif latin keeps the full layout closure (100 KB vs Google's 64 KB).
-- Q10-3: roman only, no italics; the source shipped none.
+- Q10-3: resolved 2026-10-25, italics ship (see Italics above).
 - Q10-4: the type specimen story waits for Storybook (#7).
