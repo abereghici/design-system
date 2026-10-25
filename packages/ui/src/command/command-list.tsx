@@ -10,6 +10,18 @@ import { composeRefs, join } from "../slot/slot.tsx";
 import { DialogContext, useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";
 
+type Naming =
+  | {
+      /** The list's name, such as "Commands". */
+      "aria-label": string;
+    }
+  | {
+      /** The `id` of visible text that names the list. */
+      "aria-labelledby": string;
+    };
+
+export type ListProps = Omit<ComponentProps<"div">, "aria-label" | "aria-labelledby"> & Naming;
+
 export function List({
   className,
   ref,
@@ -18,13 +30,13 @@ export function List({
   onClickCapture,
   onClick,
   ...props
-}: ComponentProps<"div">) {
+}: ListProps) {
   const command = useCommand();
   const press = use(DialogContext);
   return (
     <Listbox
-      {...props}
       ref={composeRefs(command.list, ref)}
+      {...props}
       id={command.listId}
       className={join(styles["list"], className)}
       onMouseDown={(event) => {

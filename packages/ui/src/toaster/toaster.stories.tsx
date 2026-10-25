@@ -3,10 +3,7 @@ import { expect, fn, waitFor, within } from "storybook/test";
 import type { Decorator } from "@storybook/react-vite";
 
 import { Button } from "@platform/ui/button";
-import { roRO } from "@platform/ui/locales/ro-RO";
 import { toast } from "@platform/ui/toast";
-import { UIProvider } from "@platform/ui/ui-provider";
-import type { Locale } from "@platform/ui/ui-provider";
 
 import preview from "#.storybook/preview.tsx";
 import { trusted } from "#.storybook/test/trusted.ts";
@@ -14,9 +11,12 @@ import { trusted } from "#.storybook/test/trusted.ts";
 import { remove, snapshot } from "../toast/toast.ts";
 
 import { Toaster } from "./toaster.tsx";
+import type { ToasterProps } from "./toaster.tsx";
 
-// @ts-expect-error -- a locale must name the Toaster region and the toast's Dismiss button
-({ tag: "fr-FR", labels: { ...roRO.labels, toaster: {} } }) satisfies Locale;
+// @ts-expect-error -- the region is a landmark, so it needs a name
+({ closeLabel: "Dismiss" }) satisfies ToasterProps;
+// @ts-expect-error -- each toast's close button shows only an icon, so it needs a name
+({ "aria-label": "Notifications" }) satisfies ToasterProps;
 
 const page = within(document.body);
 const region = () => page.findByRole("region", { name: "Notifications" });
@@ -63,6 +63,7 @@ const withDialog: Decorator = (Story) => (
 const meta = preview.meta({
   title: "Components/Toaster",
   component: Toaster,
+  args: { "aria-label": "Notifications", closeLabel: "Dismiss" },
   beforeEach: () => () => {
     for (const { id } of snapshot()) remove(id);
   },
@@ -77,34 +78,6 @@ Default.test("is a landmark only while toasts show", async () => {
   toast.dismiss(id);
   await waitFor(() => expect(page.queryByRole("region")).toBeNull());
 });
-
-Default.test(
-  "takes its names from the locale, and the labels prop wins",
-  {
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
-  async () => {
-    toast({ title: "Link copiat", duration: Infinity });
-    const toasts = within(await page.findByRole("region", { name: "Notificări" }));
-    await expect(toasts.getByRole("button", { name: "Închide" })).toBeInTheDocument();
-  },
-);
-
-Default.test(
-  "uses the labels prop over the locale",
-  { args: { labels: { region: "Alerts", close: "Hide" } } },
-  async () => {
-    toast({ title: "Link copied", duration: Infinity });
-    const toasts = within(await page.findByRole("region", { name: "Alerts" }));
-    await expect(toasts.getByRole("button", { name: "Hide" })).toBeInTheDocument();
-  },
-);
 
 Default.test("pauses timers while hovered and while focus is inside", async ({ userEvent }) => {
   toast({ title: "Saved", duration: 600 });

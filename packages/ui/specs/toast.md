@@ -148,13 +148,9 @@ Proposed new:
 
 The tuck offset reuses `toast-stack-gap` (8, "−8px … per step"), as the prototype does. The more-contrast and forced-colors borders use `border-width-default` and `color-border-default` directly; the focus ring uses `focus-ring-*` and `color-border-focused`. No new Dictionary words: `icon`, `body`, `stack` are already modifiers.
 
-## Built-in labels
+## Author-written text
 
-| Key           | en-US     | ro-RO     | Used by                   |
-| ------------- | --------- | --------- | ------------------------- |
-| `toast.close` | "Dismiss" | "Închide" | The Dismiss button's name |
-
-The Toaster owns the Dismiss name as `toaster.close` (`toaster.md`); Toast is a store with no UI, so it has no labels. "Dismiss" is the source's word and the Alert Close default; Sonner says "Close toast", React Aria "Close".
+None. Toast is a store with no UI; the Toaster requires the Dismiss name as `closeLabel` (`toaster.md`).
 
 ## Feedback events
 

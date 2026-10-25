@@ -1,16 +1,15 @@
 import { expect, fn, waitFor } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
-import type { Locale } from "../ui-provider/locale.tsx";
-
 import * as Sheet from "./sheet.tsx";
+
+// @ts-expect-error -- the x button shows only an icon, so it needs a name
+({}) satisfies Sheet.CloseProps;
 
 const lines = Array.from({ length: 30 }, (_, index) => `Line ${index + 1} · Design review · 2 h`);
 
@@ -28,7 +27,7 @@ const content = (props: Sheet.ContentProps = {}) => (
         <Button variant="primary">Done</Button>
       </Sheet.Close>
     </Sheet.Footer>
-    <Sheet.Close />
+    <Sheet.Close aria-label="Close" />
   </Sheet.Content>
 );
 
@@ -116,24 +115,5 @@ Default.test(
       false,
       expect.objectContaining({ reason: "outside-press" }),
     );
-  },
-);
-
-Default.test(
-  "names Close in the UIProvider's locale",
-  {
-    args: { defaultOpen: true },
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
-  async ({ canvas }) => {
-    await waitFor(() => expect(canvas.getByRole("button", { name: "Închide" })).toBeVisible());
-    // @ts-expect-error -- a locale must carry the Sheet labels
-    void ({ tag: "fr-FR", labels: { ...roRO.labels, sheet: {} } } satisfies Locale);
   },
 );

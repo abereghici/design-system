@@ -77,7 +77,7 @@ Names, checked against the reference libraries:
 - **`reason` values**: Base UI "`type PopoverRootChangeEventReason = | 'trigger-hover' | 'trigger-focus' | 'trigger-press' | 'outside-press' | 'escape-key' | 'close-press' | 'focus-out' | 'imperative-action' | 'none';`". Kept: the six this Popover can produce. No hover or focus opens (Left out), and `"imperative-action"` folds into `"none"` (judgement call).
 - **`side` / `align`**: Radix Content `side` default "bottom", `align` default "center"; Base UI Positioner side `'bottom'`, align `'center'`; shadcn PopoverContent `align "center"`, `side "bottom"`. The `align` default here is `"start"` (judgement call against Radix, Base UI and shadcn: a panel of controls under a toolbar button reads from its leading edge, as the Floating-layer recipe and DropdownMenu do). React Aria (`placement 'bottom'`), MUI and Ark use one `placement` word. Only `"top" | "bottom"` sides (as Tooltip).
 - **`aria-haspopup="dialog"` on Trigger and `role="dialog"` on Content**: Mantine "Target element has `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls="dropdown-id"` attributes" and "Dropdown element has `role="dialog"` and `aria-labelledby="target-id"` attributes"; Radix "Adheres to the Dialog WAI-ARIA design pattern."; the source "`role="dialog"`". Without a Title, the Content is named by the consumer's `aria-label` rather than Mantine's label-by-trigger (judgement call: the Trigger's text, e.g. "Filters ▾", is not always a good dialog name).
-- **`labels`**: the typed `labels` prop plus the root UI provider's locale (spec #1). On Close, the Part that uses it (Alert and Dialog precedent).
+- **`aria-label`** on Close: required by type for the icon-only button; with `asChild` the child's text names it (Base UI precedent: no built-in strings).
 - **`asChild`**: on Trigger, Title and Close (Radix Slot, shared contract).
 - Left out (YAGNI): `modal` (Radix "The modality of the popover. When set to `true`, interaction with outside elements will be disabled…", Base UI `modal`, Ark): use Dialog. `Anchor` (Radix, Ark), `Arrow`, `Portal`, `Backdrop`, `Viewport` (Base UI), `sideOffset` (the `popover-offset` token), `left` / `right` sides, Base UI `openOnHover`, focus props (Radix `onOpenAutoFocus` / `onCloseAutoFocus`, Base UI `finalFocus` (only `initialFocus`'s `RefObject` form is taken, as in Dialog: Base UI "`RefObject`: Move focus to the ref element."), Mantine `trapFocus` / `returnFocus`, Ark `autoFocus`), shadcn `PopoverHeader`, Mantine's `aria-controls` (the `commandfor` relationship is already in the DOM; APG Dialog does not ask for it).
 
@@ -134,7 +134,7 @@ No departure from APG on focus: the native dialog focusing steps move focus insi
 
 - **Roles.** Content `role="dialog"`, not `aria-modal` (APG: "mark a dialog modal only when both: Application code prevents all users from interacting in any way with content outside of it. Visual styling obscures the content outside of it."). Named by the Title (`aria-labelledby`) or the consumer's `aria-label`: APG "The dialog has either: A value set for the aria-labelledby property that refers to a visible dialog title. A label specified by aria-label." No `aria-describedby` on the Content: APG advises against it for structured content (judgement call).
 - **Trigger.** `aria-expanded` from the open state and `aria-haspopup="dialog"`. HTML-AAM already maps a toggle-popover button: "If the associated element is displayed as a popover: aria-expanded=true If the associated element is hidden: aria-expanded=false"; the explicit attribute keeps every engine consistent (inference).
-- **Close.** A native `<button>` with an accessible name from `labels.close` ("Close"). APG: "It is strongly recommended that the tab sequence of all dialogs include a visible element with role button that closes the dialog".
+- **Close.** A native `<button>` with an accessible name from the author's `aria-label`. APG: "It is strongly recommended that the tab sequence of all dialogs include a visible element with role button that closes the dialog".
 - **Contrast.** Text in `color-text-default`, Title the same, Description `color-text-subtle`, on Material that resolves over `surface-floating`-like fills; the text roles are in the contrast matrix on `surface-floating`. Materials are never for long text (brand book), which is why the Popover holds short content (inference: contrast on the translucent fill depends on what is behind it; the solid fallback below covers users who need it).
 - **Targets:** the Trigger and Close follow Button / IconButton sizes.
 - **More contrast:** Description text uses `popover-text-color` (`color-text-default`) under `(prefers-contrast: more)`; the elevation ring is the hairline and is unchanged.
@@ -165,13 +165,9 @@ Proposed new (mirroring `dropdown-menu-enter-scale`, `-enter-duration`, `-exit-d
 
 Close uses the existing `icon-button-*` tokens; the forced-colors border uses `border-width-default` directly.
 
-## Built-in labels
+## Author-written text
 
-| Key     | Default | Where                            |
-| ------- | ------- | -------------------------------- |
-| `close` | "Close" | The icon Close's accessible name |
-
-Per instance through `labels` on Close, app-wide through the root UI provider's locale object: the Popover adds `close` to the locale type and to every shipped locale (`@platform/ui/locales/en-US`). A Close with children uses its children as its name.
+None. The icon-only `Popover.Close` requires its `aria-label` by type; a Close with `asChild` uses its child's text as its name.
 
 ## Feedback events
 

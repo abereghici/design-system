@@ -7,7 +7,7 @@ export default function Page() {
         <Dialog.Trigger>Rename</Dialog.Trigger>
         <Dialog.Content>
           <Dialog.Title>Rename project?</Dialog.Title>
-          <Dialog.Close />
+          <Dialog.Close aria-label="Close" />
         </Dialog.Content>
       </Dialog.Root>
     </main>

@@ -8,7 +8,7 @@ export default function Page() {
         <Popover.Content>
           <Popover.Title>Filters</Popover.Title>
           <Popover.Description>Show only the rows that match.</Popover.Description>
-          <Popover.Close />
+          <Popover.Close aria-label="Close" />
         </Popover.Content>
       </Popover.Root>
     </main>

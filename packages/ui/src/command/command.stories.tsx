@@ -3,8 +3,6 @@ import { expect, fn, waitFor } from "storybook/test";
 
 import { PlusIcon } from "@platform/ui/icons/plus";
 import { Kbd } from "@platform/ui/kbd";
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/ui-provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
@@ -12,12 +10,21 @@ import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Command from "./command.tsx";
 
+// @ts-expect-error -- the search field needs a name
+({}) satisfies Command.InputProps;
+// @ts-expect-error -- the list of commands needs a name
+({}) satisfies Command.ListProps;
+// @ts-expect-error -- the empty state is announced, so it needs its text
+({}) satisfies Command.EmptyProps;
+// @ts-expect-error -- the palette is a dialog, so it needs a name
+({ children: null }) satisfies Command.DialogProps;
+
 const onHome = fn<() => void>();
 const palette = (
   <>
-    <Command.Input />
-    <Command.Empty />
-    <Command.List>
+    <Command.Input aria-label="Search commands" placeholder="Type a command or search…" />
+    <Command.Empty>No results</Command.Empty>
+    <Command.List aria-label="Commands">
       <Command.Group heading="Suggestions">
         <Command.Item aria-keyshortcuts="Meta+N Control+N">
           <PlusIcon />
@@ -33,7 +40,7 @@ const palette = (
         <Command.Item>Open settings</Command.Item>
       </Command.Group>
     </Command.List>
-    <Command.Footer />
+    <Command.Footer navigateLabel="Navigate" openLabel="Open" closeLabel="Close" />
   </>
 );
 
@@ -88,14 +95,14 @@ Default.test(
 );
 
 Default.test(
-  "matches case- and accent-insensitively, named by visible text through aria-labelledby over its built-in name",
+  "matches case- and accent-insensitively, with the input and list named by visible text",
   {
     args: {
       children: (
         <>
           <span id="command-search">Find a page</span>
           <Command.Input aria-labelledby="command-search" />
-          <Command.List>
+          <Command.List aria-labelledby="command-search">
             <Command.Item>Șablon nou</Command.Item>
             <Command.Item>Größe ändern</Command.Item>
           </Command.List>
@@ -105,6 +112,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("combobox", { name: "Find a page" });
+    await expect(canvas.getByRole("listbox", { name: "Find a page" })).toBeInTheDocument();
     for (const [query, match] of [
       ["sab", "Șablon nou"],
       ["AND", "Größe ändern"],
@@ -170,17 +178,6 @@ Default.test(
   },
 );
 
-Default.test(
-  "speaks the UIProvider's locale",
-  { decorators: [(Story) => <UIProvider locale={roRO}>{Story()}</UIProvider>] },
-  async ({ canvas, userEvent }) => {
-    await userEvent.type(canvas.getByRole("combobox", { name: "Caută comenzi" }), "zzz");
-    await waitFor(() => expect(canvas.getByRole("status")).toHaveTextContent("Niciun rezultat"));
-    // @ts-expect-error -- a locale must carry the Command labels
-    void ({ tag: "fr-FR", labels: { ...roRO.labels, command: {} } } satisfies typeof roRO);
-  },
-);
-
 const onOpenChange = fn();
 function Palette(props: Command.RootProps) {
   const [open, setOpen] = useState(false);
@@ -198,6 +195,7 @@ function Palette(props: Command.RootProps) {
         Search <Kbd keys="mod+k" aria-hidden />
       </button>
       <Command.Dialog
+        aria-label="Command palette"
         open={open}
         onOpenChange={(next, details) => {
           onOpenChange(next, details);
@@ -259,6 +257,7 @@ InADialog.test(
   {
     render: (args) => (
       <Command.Dialog
+        aria-label="Command palette"
         defaultOpen
         onOpenChange={(_open, details) => {
           details.cancel();
