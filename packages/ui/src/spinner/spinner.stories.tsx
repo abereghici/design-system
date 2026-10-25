@@ -2,44 +2,29 @@ import { expect } from "storybook/test";
 
 import preview from "#.storybook/preview.tsx";
 
-import type { Locale } from "../ui-provider/locale.tsx";
-import { roRO } from "../ui-provider/locales/ro-RO.ts";
-
 import { Spinner } from "./spinner.tsx";
+import type { SpinnerProps } from "./spinner.tsx";
 
-// @ts-expect-error -- a locale must translate every built-in label
-({ tag: "fr-FR", labels: {} }) satisfies Locale;
+// @ts-expect-error -- a status needs its message
+({}) satisfies SpinnerProps;
+// @ts-expect-error -- a decorative Spinner says nothing
+({ "aria-hidden": true, children: "Loading" }) satisfies SpinnerProps;
 
 const meta = preview.meta({
   title: "Components/Spinner",
   component: Spinner,
+  args: { children: "Loading" },
 });
 
 export const Default = meta.story({});
 
-Default.test("is a status named Loading", async ({ canvas }) => {
-  await expect(canvas.getByRole("status", { name: "Loading" })).toBeVisible();
+Default.test("is a status that says its message", async ({ canvas }) => {
+  await expect(canvas.getByRole("status")).toHaveTextContent("Loading");
 });
 
 Default.test(
-  "takes its name from aria-label",
-  { args: { size: "lg", "aria-label": "Loading results" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("status", { name: "Loading results" })).toBeVisible();
-  },
-);
-
-Default.test(
-  "takes its name from a locale's labels",
-  { args: { labels: roRO.labels.spinner } },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("status", { name: "Se încarcă" })).toBeVisible();
-  },
-);
-
-Default.test(
   "is hidden from assistive technology when decorative",
-  { args: { "aria-hidden": true } },
+  { args: { "aria-hidden": true, children: undefined } },
   async ({ canvas }) => {
     await expect(canvas.queryByRole("status", { hidden: true })).toBeNull();
   },

@@ -4,14 +4,16 @@ import { Button } from "@platform/ui/button";
 
 import preview from "#.storybook/preview.tsx";
 
-import { roRO } from "../ui-provider/locales/ro-RO.ts";
-
 import { SkipLink } from "./skip-link.tsx";
+import type { SkipLinkProps } from "./skip-link.tsx";
+
+// @ts-expect-error -- the link needs its text
+({ href: "#main" }) satisfies SkipLinkProps;
 
 const meta = preview.meta({
   title: "Components/SkipLink",
   component: SkipLink,
-  args: { href: "#main" as const },
+  args: { href: "#main" as const, children: "Skip to main content" },
   decorators: [
     (Story) => (
       <>
@@ -49,19 +51,3 @@ Default.test("is the first tab stop, shown while it has focus", async ({ canvas,
   await expect(canvas.getByRole("link", { name: "Home" })).toHaveFocus();
   await expect(atCentre(link)).not.toBe(link);
 });
-
-Default.test(
-  "takes its text from labels",
-  { args: { labels: roRO.labels.skipLink } },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("link", { name: "Salt la conținutul principal" })).toBeVisible();
-  },
-);
-
-Default.test(
-  "takes its text from children",
-  { args: { children: "Skip to results" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("link", { name: "Skip to results" })).toBeVisible();
-  },
-);

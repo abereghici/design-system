@@ -13,13 +13,14 @@ export default mergeConfig(
   defineConfig({
     test: {
       maxWorkers: "50%",
-      // Snapshot paths resolve from this root option only. Reduced motion takes no aria snapshots, so on
-      // chromium's files it would report every one obsolete, and `-u` would delete them.
+      // Snapshot paths resolve from this root option only. Reduced motion and the screenshot projects
+      // take no aria snapshots, so on chromium's files they would report every one obsolete, and `-u`
+      // would delete them.
       resolveSnapshotPath: (testPath, extension, { config }) =>
         resolve(
           dirname(testPath),
           "__snapshots__",
-          `${basename(testPath)}${config.name === "chromium-reduced-motion" ? ".none" : ""}${extension}`,
+          `${basename(testPath)}${config.name === "chromium-reduced-motion" || config.name?.startsWith("screenshot:") === true ? ".none" : ""}${extension}`,
         ),
       projects: [
         { test: { name: "node", include: ["scripts/**/*.test.ts"] } },

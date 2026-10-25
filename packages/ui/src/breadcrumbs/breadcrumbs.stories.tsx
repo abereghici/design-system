@@ -2,13 +2,10 @@ import { expect } from "storybook/test";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
-import type { Locale } from "../ui-provider/locale.tsx";
-import { roRO } from "../ui-provider/locales/ro-RO.ts";
-
 import * as Breadcrumbs from "./breadcrumbs.tsx";
 
-// @ts-expect-error -- a locale must name the breadcrumb landmark
-({ tag: "fr-FR", labels: { ...roRO.labels, breadcrumbs: {} } }) satisfies Locale;
+// @ts-expect-error -- the navigation landmark needs a name
+({}) satisfies Breadcrumbs.RootProps;
 
 const trail = (
   <>
@@ -30,7 +27,7 @@ const meta = preview.meta({
   title: "Components/Breadcrumbs",
   component: Breadcrumbs.Root,
   subcomponents: partsOf(Breadcrumbs),
-  args: { children: trail },
+  args: { "aria-label": "Breadcrumb", children: trail },
 });
 
 export const Default = meta.story({});
@@ -53,14 +50,6 @@ Default.test("moves through its links with Tab", async ({ canvas, userEvent }) =
   await userEvent.tab();
   await expect(canvas.getByRole("link", { name: "Projects" })).toHaveFocus();
 });
-
-Default.test(
-  "takes its landmark name from labels",
-  { args: { labels: roRO.labels.breadcrumbs } },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("navigation", { name: "Cale de navigare" })).toBeVisible();
-  },
-);
 
 Default.test(
   "renders a router link with asChild",

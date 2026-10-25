@@ -29,7 +29,6 @@ Container → content.
 | `variant`  | `"neutral" \| "accent" \| "danger"`      | `"neutral"`                          | Exposed as `data-variant`. The three the source tokens define.                                                         |
 | `max`      | `number`                                 | `99`                                 | Applies only when `children` is a number. A count above `max` renders `max` formatted plus the overflow label ("99+"). |
 | `locale`   | `Intl.LocalesArgument`                   | the runtime's default                | Passed to `Intl.NumberFormat` for the count and `max`. Pass the same one on the server and in the browser. |
-| `labels`   | `{ overflow?: (max: string) => string }` | `{ overflow: (max) => \`${max}+\` }` | The only built-in string. `max` arrives already formatted. A prop only: it isn't in the UIProvider's locale objects.   |
 | `children` | `number \| string`                       |                                      | A number is formatted with `Intl.NumberFormat` in `locale`.                                                            |
 | …native    | `ComponentProps<"span">`                 |                                      | `ref`, `className` and every native attribute pass through.                                                            |
 
@@ -83,7 +82,7 @@ Not focusable; no keyboard interaction. Tab skips it; focus lands on the owning 
 
 ## RTL
 
-Logical properties only (`padding-inline`, `min-inline-size`). The "+" placement comes from `labels.overflow`, so a locale that writes it first can override it. Digits follow the locale's numbering system through `Intl.NumberFormat`. No arrow keys.
+Logical properties only (`padding-inline`, `min-inline-size`). The overflow reads `max` followed by "+", a notation rather than a word (MUI Badge's `max` does the same). Digits follow the locale's numbering system through `Intl.NumberFormat`. No arrow keys.
 
 ## Component tokens
 
@@ -91,11 +90,9 @@ All exist (`packages/tokens/src/tokens/component.tokens.json`): `badge-height`, 
 
 No new tokens. The forced-colors outline is a 1 px system-colour literal, as in the artifact.
 
-## Built-in labels
+## Author-written text
 
-| Key        | Default                | Used for                                              |
-| ---------- | ---------------------- | ----------------------------------------------------- |
-| `overflow` | `(max) => \`${max}+\`` | The capped count ("99+"). `max` is already formatted. |
+None. Badge shows the author's number or string; the overflow's "+" is notation, as in MUI's Badge, so there is no `labels` prop.
 
 ## Feedback events
 
