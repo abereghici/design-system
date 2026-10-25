@@ -121,14 +121,7 @@ export function Trigger({
     <summary
       {...props}
       className={join(styles["trigger"], className)}
-      onPointerDown={(event) => {
-        onPointerDown?.(event);
-        pointerMarker.onPointerDown(event);
-      }}
-      onKeyDown={(event) => {
-        onKeyDown?.(event);
-        pointerMarker.onKeyDown(event);
-      }}
+      {...pointerMarker({ onPointerDown, onKeyDown })}
       onClick={(event: MouseEvent<HTMLElement>) => {
         onClick?.(event);
         event.preventDefault();

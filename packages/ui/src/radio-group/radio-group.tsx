@@ -52,10 +52,12 @@ export function Root({
   disabled = false,
   orientation = "vertical",
   className,
+  onPointerDown,
   onKeyDown,
   ...props
 }: RootProps) {
   const fallbackName = useId();
+  const marker = pointerMarker({ onPointerDown, onKeyDown });
   const [uncontrolled, setUncontrolled] = useState(defaultValue);
   const current = value === undefined ? uncontrolled : value;
 
@@ -74,14 +76,13 @@ export function Root({
     >
       <fieldset
         {...props}
-        onPointerDown={pointerMarker.onPointerDown}
         role="radiogroup"
         aria-orientation={orientation}
         data-orientation={orientation}
         className={join(styles["root"], className)}
+        {...marker}
         onKeyDown={(event) => {
-          onKeyDown?.(event);
-          pointerMarker.onKeyDown(event);
+          marker.onKeyDown(event);
           followVisualDirection(event);
         }}
       />

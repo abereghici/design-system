@@ -117,14 +117,7 @@ export function Root(props: RootProps) {
       isDateUnavailable={isDateUnavailable}
       labels={labels}
       onFormReset={date.reset}
-      onPointerDown={(event) => {
-        field.onPointerDown?.(event);
-        pointerMarker.onPointerDown(event);
-      }}
-      onKeyDown={(event) => {
-        field.onKeyDown?.(event);
-        pointerMarker.onKeyDown(event);
-      }}
+      {...pointerMarker(field)}
       end={<Trigger panel={panel} value={date.current} disabled={disabled === true} />}
     >
       <PanelContext value={{ ...panel, picker: pickerOf(floating, date, props) }}>

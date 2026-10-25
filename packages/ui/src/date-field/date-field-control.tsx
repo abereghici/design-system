@@ -40,7 +40,7 @@ export interface DateFieldOptions {
   labels?: Partial<Labels["dateField"]> | undefined;
 }
 
-interface ControlOptions extends DateFieldOptions {
+export interface ControlOptions extends DateFieldOptions {
   readonly isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
   readonly onFormReset?: (() => void) | undefined;
 }

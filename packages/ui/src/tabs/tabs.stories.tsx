@@ -130,37 +130,14 @@ Default.test(
   },
 );
 
-Default.test(
-  "still changes when the consumer's onClick calls preventDefault",
-  {
-    args: {
-      children: (
-        <>
-          <Tabs.List aria-label="Project">
-            <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
-            <Tabs.Trigger
-              value="settings"
-              onClick={(event) => {
-                event.preventDefault();
-              }}
-            >
-              Settings
-            </Tabs.Trigger>
-          </Tabs.List>
-          <Tabs.Content value="overview">Overview.</Tabs.Content>
-          <Tabs.Content value="settings">Project settings.</Tabs.Content>
-        </>
-      ),
-    },
-  },
-  async ({ canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole("tab", { name: "Settings" }));
-    await expect(canvas.getByRole("tab", { name: "Settings" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
-  },
-);
+Default.test("still changes when its click is default-prevented", async ({ canvas, userEvent }) => {
+  const tab = canvas.getByRole("tab", { name: "Settings" });
+  tab.addEventListener("click", (event) => {
+    event.preventDefault();
+  });
+  await userEvent.click(tab);
+  await expect(tab).toHaveAttribute("aria-selected", "true");
+});
 
 Default.test(
   "follows a controlled value",

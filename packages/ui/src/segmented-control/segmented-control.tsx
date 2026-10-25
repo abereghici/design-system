@@ -43,6 +43,7 @@ export function Root({
   ...props
 }: RootProps) {
   const name = useId();
+  const marker = pointerMarker({ onPointerDown, onKeyDown });
   const [uncontrolled, setUncontrolled] = useState(defaultValue ?? "");
   const current = value ?? uncontrolled;
 
@@ -64,13 +65,9 @@ export function Root({
         {...props}
         role="radiogroup"
         className={join(styles["root"], className)}
-        onPointerDown={(event) => {
-          onPointerDown?.(event);
-          pointerMarker.onPointerDown(event);
-        }}
+        {...marker}
         onKeyDown={(event) => {
-          onKeyDown?.(event);
-          pointerMarker.onKeyDown(event);
+          marker.onKeyDown(event);
           followVisualDirection(event);
         }}
       />

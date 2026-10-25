@@ -57,14 +57,7 @@ function triggerPropsOf<Props extends TriggerHandlers>(
     commandfor: layer.contentId,
     command: "toggle-popover",
     "aria-expanded": layer.open,
-    onPointerDown: (event) => {
-      props.onPointerDown?.(event);
-      pointerMarker.onPointerDown(event);
-    },
-    onKeyDown: (event) => {
-      props.onKeyDown?.(event);
-      pointerMarker.onKeyDown(event);
-    },
+    ...pointerMarker(props),
     onClick: (event: MouseEvent<HTMLButtonElement>) => {
       props.onClick?.(event);
       // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).

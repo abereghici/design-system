@@ -137,15 +137,15 @@ Default.test(
   },
 );
 
-Default.test("stops a file dropped beside it from opening in the page", async () => {
+const dropBeside = () => {
   const dataTransfer = new DataTransfer();
   dataTransfer.items.add(january);
   const missed = new DragEvent("drop", { bubbles: true, cancelable: true, dataTransfer });
   document.body.dispatchEvent(missed);
-  await expect(missed.defaultPrevented).toBe(true);
-});
+  return missed.defaultPrevented;
+};
 
-function Zones(props: DropZoneProps) {
+function TwoZones(props: DropZoneProps) {
   const [both, setBoth] = useState(true);
   return (
     <>
@@ -164,15 +164,12 @@ function Zones(props: DropZoneProps) {
 }
 
 Default.test(
-  "still stops a file dropped beside the zones after one of two is removed",
-  { render: (args) => <Zones {...args} /> },
+  "stops a file dropped beside the zones from opening in the page while any zone remains",
+  { render: (args) => <TwoZones {...args} /> },
   async ({ canvas, userEvent }) => {
+    await expect(dropBeside()).toBe(true);
     await userEvent.click(canvas.getByRole("button", { name: "Remove one" }));
-    const dataTransfer = new DataTransfer();
-    dataTransfer.items.add(january);
-    const missed = new DragEvent("drop", { bubbles: true, cancelable: true, dataTransfer });
-    document.body.dispatchEvent(missed);
-    await expect(missed.defaultPrevented).toBe(true);
+    await expect(dropBeside()).toBe(true);
   },
 );
 

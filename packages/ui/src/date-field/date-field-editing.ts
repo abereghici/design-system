@@ -5,6 +5,7 @@ import type { DatePart, dateFormats, Temporal } from "../date/date.ts";
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 
+import type { ControlOptions } from "./date-field-control.tsx";
 import { fromDate, stepKey, toDate, typeDigit } from "./segments.ts";
 import type { Segments } from "./segments.ts";
 
@@ -15,14 +16,7 @@ type Reason = "input-change" | "keyboard";
 type Buffer = { readonly part: DatePart; readonly text: string } | null;
 type Formats = ReturnType<typeof dateFormats>;
 
-interface DateOptions {
-  readonly value?: Temporal.PlainDate | null | undefined;
-  readonly defaultValue?: Temporal.PlainDate | null | undefined;
-  readonly onValueChange?:
-    | ((value: Temporal.PlainDate | null, details: DateFieldChangeEventDetails) => void)
-    | undefined;
-  readonly onFormReset?: (() => void) | undefined;
-}
+type DateOptions = Pick<ControlOptions, "value" | "defaultValue" | "onValueChange" | "onFormReset">;
 
 const same = (a: Temporal.PlainDate | null, b: Temporal.PlainDate | null) =>
   a === null || b === null ? a === b : a.equals(b);

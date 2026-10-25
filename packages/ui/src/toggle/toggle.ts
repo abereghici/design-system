@@ -1,4 +1,4 @@
-import type { KeyboardEvent, MouseEventHandler, PointerEvent } from "react";
+import type { DOMAttributes, KeyboardEvent, MouseEventHandler, PointerEvent } from "react";
 
 import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
@@ -32,15 +32,21 @@ export function toggleClick(
   };
 }
 
-/** Marks pointer-initiated changes with `data-pointer`, so keyboard changes skip the motion. */
-export const pointerMarker = {
-  onPointerDown: (event: PointerEvent<HTMLElement>) => {
-    event.currentTarget.dataset["pointer"] = "";
-  },
-  onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
-    delete event.currentTarget.dataset["pointer"];
-  },
-};
+/** Marks pointer-initiated changes with `data-pointer`, so keyboard changes skip the motion; `props`' own handlers run first. */
+export function pointerMarker<Element extends HTMLElement>(
+  props: Pick<DOMAttributes<Element>, "onPointerDown" | "onKeyDown"> = {},
+) {
+  return {
+    onPointerDown: (event: PointerEvent<Element>) => {
+      props.onPointerDown?.(event);
+      event.currentTarget.dataset["pointer"] = "";
+    },
+    onKeyDown: (event: KeyboardEvent<Element>) => {
+      props.onKeyDown?.(event);
+      delete event.currentTarget.dataset["pointer"];
+    },
+  };
+}
 
 // WebKit doesn't swap Left and Right for native radios in RTL (Chromium and Firefox do). Inside a Toolbar the Toolbar owns the arrow keys.
 export function followVisualDirection(event: KeyboardEvent<HTMLElement>) {

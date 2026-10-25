@@ -66,7 +66,7 @@ export function Checkbox({
 
   return (
     <label
-      {...pointerMarker}
+      {...pointerMarker()}
       htmlFor={bindings.id ?? fallbackId}
       className={join(styles["root"], className)}
       style={style}

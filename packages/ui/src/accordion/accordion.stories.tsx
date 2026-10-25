@@ -95,29 +95,14 @@ Default.test(
   },
 );
 
-Default.test(
-  "still opens when the consumer's onClick calls preventDefault",
-  {
-    args: {
-      children: (
-        <Accordion.Item value="browsers">
-          <Accordion.Trigger
-            onClick={(event) => {
-              event.preventDefault();
-            }}
-          >
-            Which browsers are supported?
-          </Accordion.Trigger>
-          <Accordion.Content>{browsers}</Accordion.Content>
-        </Accordion.Item>
-      ),
-    },
-  },
-  async ({ canvas, userEvent }) => {
-    await userEvent.click(canvas.getByText("Which browsers are supported?"));
-    await waitFor(() => expect(canvas.getByText(browsers)).toBeVisible());
-  },
-);
+Default.test("still opens when its click is default-prevented", async ({ canvas, userEvent }) => {
+  const trigger = canvas.getByText("Which browsers are supported?");
+  trigger.addEventListener("click", (event) => {
+    event.preventDefault();
+  });
+  await userEvent.click(trigger);
+  await waitFor(() => expect(canvas.getByText(browsers)).toBeVisible());
+});
 
 Default.test(
   "follows a controlled value",
