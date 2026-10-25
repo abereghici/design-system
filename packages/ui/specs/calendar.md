@@ -22,7 +22,7 @@ Root → header (Previous, month heading, Next) → grid (weekday row, six week 
 
 - **Root.** A `<fieldset>` (implicit role `group`; oxlint prefers it over `div[role=group]`) named by the consumer's `aria-label` / `aria-labelledby` (inside DatePicker, by the panel). Width is seven cells.
 - **Header.** A flex row: Previous, heading, Next, with the heading centred.
-- **Previous / Next.** `IconButton` `size="sm"` with `ChevronRightIcon`, flipped for Previous (Pagination precedent as built: `rotate: 180deg`, which composes with Icon's RTL mirror), named by `labels.previousMonth` / `labels.nextMonth` (APG: `aria-label` "Defines the accessible name of the button (e.g. "Next Year")."). `aria-disabled="true"` when the month before or after lies wholly outside `min` / `max`.
+- **Previous / Next.** `IconButton` `size="sm"` with `ChevronRightIcon`, flipped for Previous (Pagination precedent as built: `rotate: 180deg`, which composes with Icon's RTL mirror), named by the author's required `previousMonthLabel` / `labels.nextMonth` (APG: `aria-label` "Defines the accessible name of the button (e.g. "Next Year")."). `aria-disabled="true"` when the month before or after lies wholly outside `min` / `max`.
 - **Heading.** An `<h2 id aria-live="polite">` with the month and year, `Intl.DateTimeFormat(tag, { month: "long", year: "numeric" })` ("October 2026", "octombrie 2026"), in `calendar-header-font`, `color-text-default`. APG: "When the month and/or year changes the content of the h2 element is updated. Indicates the h2 should be automatically announced by screen readers."
 - **Grid.** A `<table role="grid" aria-labelledby={headingId}>`. APG: "Since the grid role is applied to a table element, the row, columnheader, and gridcell roles do not need to be specified because they are implied by tr, th, and td tags."
 - **Weekday row.** `<thead>` with seven `<th scope="col" abbr={long}>`: short names from `Intl.DateTimeFormat(tag, { weekday: "short" })` ("Mon", "lun."), the full name in `abbr` from `{ weekday: "long" }` (APG: "each th element includes a abbr attribute containing the full spelling of the name of the day for that column."). `type-label-sm`, `color-text-subtle`. The week starts on `new Intl.Locale(tag).getWeekInfo().firstDay` (MDN: "An integer between 1 (Monday) and 7 (Sunday) indicating the first day of the week for the locale."), the same numbering as `Temporal.PlainDate.prototype.dayOfWeek` ("1 usually represents Monday in the calendar"): Sunday for en-US, Monday for ro-RO.
@@ -40,7 +40,7 @@ Root → header (Previous, month heading, Next) → grid (weekday row, six week 
 | `onValueChange`     | `(value: Temporal.PlainDate, details: Calendar.ChangeEventDetails) => void` |         | `reason`: `"day-press"` (click, Enter or Space on a day). `cancel()` keeps the previous value. |
 | `min`, `max`        | `Temporal.PlainDate`                                                        |         | Days outside are unavailable; Previous / Next stop at their months.                            |
 | `isDateUnavailable` | `(date: Temporal.PlainDate) => boolean`                                     |         | Unavailable days stay focusable and readable, but cannot be chosen.                            |
-| `labels`            | `Partial<Locale["labels"]["calendar"]>`                                     |         | Per-instance override (Built-in labels).                                                       |
+| `previousMonthLabel`, `nextMonthLabel` | `string` (required) |  | Names of the icon-only month buttons ("Previous month", "Next month"). |
 | …native             | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                 |         | `ref`, `className`, `aria-label`, `aria-labelledby` on Root. `role` is owned.                  |
 
 Inside `DatePicker.Content`, the Calendar takes `value`, `min`, `max` and `isDateUnavailable` from the DatePicker (DatePicker spec); set them on `DatePicker.Root`.
@@ -148,14 +148,9 @@ Proposed new:
 
 The weekday row (`type-label-sm`, `color-text-subtle`) and gaps use semantic tokens directly. The focus ring uses `focus-ring-width` and `color-border-focused` directly. New Dictionary words: component `calendar`, modifiers `cell` (the Grid pattern's and React Aria's `CalendarCell` word) and `today`.
 
-## Built-in labels
+## Author-written text
 
-| Key                      | en-US            | ro-RO             | Used by             |
-| ------------------------ | ---------------- | ----------------- | ------------------- |
-| `calendar.previousMonth` | "Previous month" | "Luna anterioară" | Previous IconButton |
-| `calendar.nextMonth`     | "Next month"     | "Luna următoare"  | Next IconButton     |
-
-From the `labels` prop, then the root UI provider's Locale, then English. Calendar adds `calendar: { previousMonth, nextMonth }` to the locale type and every shipped locale. Weekday, month and date texts are `Intl` output, not labels.
+None. The month buttons' names are required by type; weekday, month and date texts are `Intl` output in `locale`.
 
 ## Feedback events
 

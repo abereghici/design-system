@@ -82,7 +82,13 @@ Default.test(
   {
     args: {
       errors: { birthDate: "You must be 18 or older." },
-      children: <DateField label="Date of birth" name="birthDate" />,
+      children: (
+        <DateField
+          label="Date of birth"
+          name="birthDate"
+          incompleteMessage="Enter a complete date"
+        />
+      ),
     },
   },
   async ({ canvas, userEvent }) => {

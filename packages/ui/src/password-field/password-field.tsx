@@ -11,9 +11,6 @@ import { EyeOffIcon } from "../icon/icons/eye-off.tsx";
 import { EyeIcon } from "../icon/icons/eye.tsx";
 import { InputGroup, TextInput } from "../text-field/text-field.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
-import { useLabels } from "../ui-provider/locale.tsx";
-import type { Labels } from "../ui-provider/locale.tsx";
-import { passwordField as passwordFieldLabels } from "../ui-provider/locales/en-US/password-field.ts";
 
 /** `cancel()`: keeps the current visibility. */
 export type PasswordFieldVisibleChangeEventDetails = Details<"toggle-press" | "form-submit">;
@@ -31,8 +28,8 @@ type ControlProps = Omit<
    * saves it shown.
    */
   onVisibleChange?: (visible: boolean, details: PasswordFieldVisibleChangeEventDetails) => void;
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: Partial<Labels["passwordField"]>;
+  /** The name of the show-password toggle, such as "Show password": it shows only an icon. */
+  toggleLabel: string;
   /**
    * Tells password managers what to fill: `current-password` to sign in, `new-password` to sign up
    * or change it.
@@ -86,7 +83,7 @@ function Control({
   visible: controlled,
   defaultVisible,
   onVisibleChange,
-  labels,
+  toggleLabel,
   startElement,
   autoComplete = "current-password",
   ...props
@@ -98,7 +95,7 @@ function Control({
   const toggle = (
     <IconButton
       size="sm"
-      aria-label={useLabels("passwordField", passwordFieldLabels, labels).show}
+      aria-label={toggleLabel}
       aria-controls={inputId}
       pressed={visible}
       disabled={blocked}

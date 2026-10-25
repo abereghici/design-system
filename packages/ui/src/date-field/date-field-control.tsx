@@ -4,9 +4,6 @@ import type { ComponentProps, ReactNode } from "react";
 import { dateFormats } from "../date/date.ts";
 import type { DatePart, Temporal } from "../date/date.ts";
 import { useField } from "../field/use-field.ts";
-import { useLabels } from "../ui-provider/locale.tsx";
-import type { Labels } from "../ui-provider/locale.tsx";
-import { dateField as dateFieldLabels } from "../ui-provider/locales/en-US/date-field.ts";
 
 import { useDate, useSegmentEditing } from "./date-field-editing.ts";
 import type { DateValueOptions } from "./date-field-editing.ts";
@@ -43,12 +40,15 @@ export interface DateFieldOptions extends DateValueOptions {
    * the server and in the browser; without it, the runtime's default language is used.
    */
   locale?: Intl.LocalesArgument;
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: Partial<Labels["dateField"]> | undefined;
+  /** The error for a date typed only in part, such as "Enter a complete date". */
+  incompleteMessage: string;
+  /** Hints shown in the empty segments, such as `{ day: "dd", month: "mm", year: "yyyy" }`. */
+  placeholders?: Readonly<Partial<Record<DatePart, string>>> | undefined;
 }
 
 interface ControlOptions extends DateFieldOptions {
   readonly isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
+  readonly unavailableMessage?: string | undefined;
   readonly onFormReset?: (() => void) | undefined;
 }
 
@@ -61,7 +61,7 @@ interface SegmentProps {
 }
 
 function Segment({ part, control, required }: SegmentProps) {
-  const { date, formats, names, field, blocked, invalid, editing } = control;
+  const { date, formats, options, field, blocked, invalid, editing } = control;
   const value = date.segments[part];
   const text = display(part, date.segments, date.buffer?.part === part ? date.buffer.text : "");
   const range = bounds(part, date.segments);
@@ -75,13 +75,13 @@ function Segment({ part, control, required }: SegmentProps) {
       enterKeyHint="next"
       autoComplete="off"
       value={text ?? ""}
-      placeholder={names[`${part}Placeholder`]}
+      placeholder={options.placeholders?.[part]}
       aria-label={formats.name(part)}
       aria-describedby={field?.describedBy}
       aria-valuenow={value}
       aria-valuemin={range.min}
       aria-valuemax={range.max}
-      aria-valuetext={value === undefined ? names.empty : spoken}
+      aria-valuetext={spoken}
       aria-required={required === true || undefined}
       aria-invalid={invalid}
       aria-disabled={blocked || undefined}
@@ -108,14 +108,13 @@ function filledAround(formats: Formats, index: number, segments: Segments) {
 
 function useControl(options: ControlOptions, onValidity: (validity: Validity) => void) {
   const { field, blocked, invalid } = useField(options.disabled);
-  const names = useLabels("dateField", dateFieldLabels, options.labels);
   const formats = dateFormats(options.locale);
   const group = useRef<HTMLFieldSetElement>(null);
   const date = useDate(options);
   const name = field?.name ?? options.name;
   const validity = useValidity(options, {
-    incomplete: names.incomplete,
-    unavailable: names.unavailable,
+    incomplete: options.incompleteMessage,
+    unavailable: options.unavailableMessage ?? "",
     onValidity,
     reset: date.reset,
   });
@@ -130,7 +129,7 @@ function useControl(options: ControlOptions, onValidity: (validity: Validity) =>
     formats,
     submit: validity.submit,
   });
-  return { field, names, formats, group, date, name, validity, blocked, invalid, editing };
+  return { field, options, formats, group, date, name, validity, blocked, invalid, editing };
 }
 
 const isFirstInvalid = (input: HTMLInputElement) =>

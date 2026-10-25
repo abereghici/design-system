@@ -35,7 +35,9 @@ export type DateFieldProps = DateFieldOptions &
 
 type FrameProps = DateFieldProps &
   Pick<ControlProps, "end"> &
-  Pick<ControlProps["options"], "isDateUnavailable" | "onFormReset"> & { children?: ReactNode };
+  Pick<ControlProps["options"], "isDateUnavailable" | "unavailableMessage" | "onFormReset"> & {
+    children?: ReactNode;
+  };
 
 /**
  * Types one date by keyboard, as day, month and year segments in the order of the user's language,
@@ -65,16 +67,18 @@ export function DateFieldFrame({
   required,
   disabled,
   validate,
-  labels,
   locale,
+  incompleteMessage,
+  placeholders,
   isDateUnavailable,
+  unavailableMessage,
   onFormReset,
-  end,
   children,
   ...props
 }: FrameProps) {
   const [validity, setValidity] = useState<Validity>({ invalid: false, message: "" });
-  const options = { value, defaultValue, onValueChange, min, max, name, form, required };
+  const options = { value, defaultValue, onValueChange, min, max, name, form, required, locale };
+  const messages = { incompleteMessage, unavailableMessage, placeholders };
   return (
     <Field.Root
       {...mergeProps({ className: styles["root"] }, { className, style })}
@@ -86,9 +90,8 @@ export function DateFieldFrame({
       {label !== undefined && <Field.Label>{label}</Field.Label>}
       <Control
         {...props}
-        options={{ ...options, disabled, validate, labels, locale, isDateUnavailable, onFormReset }}
+        options={{ ...options, ...messages, disabled, validate, isDateUnavailable, onFormReset }}
         onValidity={setValidity}
-        end={end}
       />
       {description !== undefined && <Field.Description>{description}</Field.Description>}
       <Field.Error>{errorMessage ?? (validity.invalid ? validity.message : undefined)}</Field.Error>

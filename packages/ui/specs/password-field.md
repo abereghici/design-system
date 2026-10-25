@@ -31,7 +31,7 @@ Label → container (input, reveal toggle) → description or error.
 | `visible`                                   | `boolean`                                                                     |                             | Controlled: whether the value is shown as text.                                                                                              |
 | `defaultVisible`                            | `boolean`                                                                     | `false`                     | Uncontrolled counterpart.                                                                                                                    |
 | `onVisibleChange`                           | `(visible: boolean, details: PasswordFieldVisibleChangeEventDetails) => void` |                             | Called before the change commits. `details`: `reason` (`"toggle-press"` or `"form-submit"`), `event`, `cancel()`.                            |
-| `labels`                                    | `{ show?: string }`                                                           | `{ show: "Show password" }` | The toggle's accessible name. Falls back to the UIProvider's locale (`passwordField.show`).                                                  |
+| `toggleLabel` | `string` (required) |  | The show-password toggle's accessible name ("Show password"); it shows only an icon. |
 | `autoComplete`                              | `"current-password" \| "new-password" \| "one-time-code" \| "off"`            | `"current-password"`        | Narrowed from the native type to the values that fit a password field.                                                                       |
 | TextField props except `type`, `endElement` |                                                                               |                             | `label`, `description`, `errorMessage`, `invalid`, `validate`, `size`, `startElement`, `disabled`, `onValueChange`, native input attributes. |
 
@@ -40,7 +40,7 @@ Names, checked against the reference libraries:
 - **`PasswordField`**: the ticket's name, matching TextField and NumberField. Libraries: Mantine `PasswordInput` (https://mantine.dev/core/password-input/), Chakra `PasswordInput` (https://chakra-ui.com/docs/components/password-input), Ark `PasswordInput` (https://ark-ui.com/react/docs/components/password-input), Radix `PasswordToggleField` ("A password input field with an integrated button to toggle the value's visibility.", https://www.radix-ui.com/primitives/docs/components/password-toggle-field). Base UI, React Aria and MUI have none. Three libraries say `PasswordInput`, but our text-entry family is `…Field` (TextField, NumberField), so the suffix follows the family (judgement call).
 - **`visible` / `defaultVisible`**: Mantine "`visible: boolean` — If set, the input value is visible", "`defaultVisible`"; Chakra, Ark and Radix use the same two names. All four agree.
 - **`onVisibleChange`**: Chakra "`onVisibleChange: (visible: boolean) => void` — Callback invoked when the visibility state changes."; Mantine, Ark and Radix use `onVisibilityChange`. Spec #1's naming is `on{Prop}Change` for a `{prop}` pair (`open`/`onOpenChange`, `checked`/`onCheckedChange`), so the prop `visible` gives `onVisibleChange` (Chakra), not three-to-one `onVisibilityChange` (judgement call).
-- **`labels.show`**: Ark `translations: Partial<{ visibilityTrigger: ((visible: boolean) => string) | undefined }>`; spec #1's typed `labels` prop. One constant string, because the label must not change with the state (APG, see Accessibility).
+- **`toggleLabel`** (required): Ark `translations: Partial<{ visibilityTrigger: ((visible: boolean) => string) | undefined }>`; spec #1's typed `labels` prop. One constant string, because the label must not change with the state (APG, see Accessibility).
 - **`autoComplete` default `"current-password"`**: Ark "`autoComplete: 'current-password' | 'new-password' = "current-password"`"; Radix Input "`autoComplete` default `"current-password"`".
 
 ## States
@@ -94,11 +94,9 @@ As TextField; the toggle sits at the inline end. Password text direction: `dir="
 
 None new. TextField's `input-*` set and IconButton's `icon-button-*` set.
 
-## Built-in labels
+## Author-written text
 
-| Key    | Default         | Used by                       |
-| ------ | --------------- | ----------------------------- |
-| `show` | "Show password" | Reveal toggle accessible name |
+None. The toggle's name is the author's `toggleLabel`, required by type.
 
 ## Feedback events
 

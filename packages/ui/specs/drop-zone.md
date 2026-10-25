@@ -35,7 +35,7 @@ Root → content (text, FileTrigger) → hidden file input → selection (file n
 | `multiple`                 | `boolean`                                                     | `false` | Without it, only the first accepted file is kept.                                                                                                     |
 | `name`, `required`, `form` | native                                                        |         | On the hidden input; the files submit with the form.                                                                                                  |
 | `disabled`                 | `boolean`                                                     | `false` | Drops are refused (the cursor shows no drop) and the inner FileTrigger is disabled.                                                                   |
-| `labels`                   | `{ clear?: string }`                                          |         | Per-instance override of the root UI provider's locale (Built-in labels).                                                                             |
+| `clearLabel` | `string` |  | Shows the Clear button with this name, as FileTrigger's. |
 | …native                    | `ComponentProps<"div">`                                       |         | `ref`, `className`, `aria-*`.                                                                                                                         |
 
 Names, checked against the reference libraries:
@@ -115,9 +115,9 @@ New component word `drop-zone` (Dictionary change).
 
 The drop-target state reuses the Dictionary's `hovered` state word: a drag over the zone is the drop equivalent of hover, and the Dictionary has no drag word (judgement call; a new state word would be a Dictionary change for the brand owner).
 
-## Built-in labels
+## Author-written text
 
-`fileTrigger.clear` ("Clear files"), shared with FileTrigger. The instruction text is the consumer's.
+None. As FileTrigger: the Clear button appears only with `clearLabel`; the zone's text is the author's children.
 
 ## Feedback events
 

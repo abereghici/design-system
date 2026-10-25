@@ -15,12 +15,14 @@ export function DueDate() {
     <DatePicker.Root
       label="Due date"
       name="due"
+      triggerLabel="Choose date"
+      incompleteMessage="Enter a complete date"
       onPointerEnter={warmCalendar}
       onFocus={warmCalendar}
     >
       <DatePicker.Content>
         <Suspense>
-          <Calendar />
+          <Calendar previousMonthLabel="Previous month" nextMonthLabel="Next month" />
         </Suspense>
       </DatePicker.Content>
     </DatePicker.Root>

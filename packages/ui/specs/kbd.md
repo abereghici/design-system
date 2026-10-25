@@ -33,7 +33,7 @@ Group (outer `<kbd>`) → Key (one inner `<kbd>` per key) → glyph or text, plu
 | `keys`     | `string`                |          | `+`-separated, case-insensitive key names: `"mod+k"`, `"shift+enter"`. Named keys: `mod`, `ctrl`, `shift`, `alt`, `enter`, `backspace`, `esc`, `tab`, `space`, `up`, `down`, `left`, `right`, `plus`. Anything else renders as written, a single letter upper-cased. Typed as a union of the named keys plus `string & Record<never, never>` (lint bans `{}`), so editors complete them. |
 | `children` | `ReactNode`             |          | Used when `keys` is absent: one Key with this content, as in every reference library.                                                                                                                                                                                                                                                                                                    |
 | `platform` | `"apple" \| "other"`    | detected | Resolves the platform keys (`mod`, `ctrl`, `shift`, `alt`). Pass it when the server knows the platform; omit it to detect on the client (see Behaviour).                                                                                                                                                                                                                                 |
-| `labels`   | `Partial<KbdLabels>`    | English  | Spoken names of glyph keys (see Built-in labels).                                                                                                                                                                                                                                                                                                                                        |
+| `keyLabels` | `Partial<Record<KeyLabel, string>>` |  | Words read for the symbol keys (`{ command: "Command" }`); without them screen readers read the symbol. |
 | …native    | `ComponentProps<"kbd">` |          | `ref`, `className`, `aria-hidden` and every native attribute go on the Group.                                                                                                                                                                                                                                                                                                            |
 
 Glyphs (source: "`mod` resolves per platform (⌘ / Ctrl). Glyphs: ⇧ ⌥ ↵ ⌫ ↑ ↓."):
@@ -95,7 +95,7 @@ Not focusable; no keyboard interaction. Tab skips it. The shortcut itself is the
 
 ## Accessibility
 
-- **In prose** (no control to describe): Kbd is read. Glyph keys render the glyph `aria-hidden` plus a visually hidden spoken name ("Command", "Shift", "Enter"…) from `labels`, because screen readers announce these symbols inconsistently (inference). `<kbd>` can't take `aria-label`: ARIA in HTML says "Naming Prohibited" for `kbd` (https://www.w3.org/TR/html-aria/), hence hidden text rather than a name.
+- **In prose** (no control to describe): Kbd is read. Glyph keys render the glyph `aria-hidden` plus a visually hidden spoken name ("Command", "Shift", "Enter"…) from the author's `keyLabels`, because screen readers announce these symbols inconsistently (inference). `<kbd>` can't take `aria-label`: ARIA in HTML says "Naming Prohibited" for `kbd` (https://www.w3.org/TR/html-aria/), hence hidden text rather than a name.
 - **Inside a control** (Button, IconButton, menu items, Tooltip content describing a trigger): pass `aria-hidden` (native attribute, forwarded to the Group). The control carries the shortcut in `aria-keyshortcuts` instead, so its name stays its label ("Publish", not "Publish Command Enter"). This is how the Button spec's Kbd hint works. Components that render Kbd themselves (Command's footer) pass `aria-hidden` for the consumer. DropdownMenu and ContextMenu have no Shortcut Part: the consumer passes the Kbd as an Item child with `aria-hidden` and sets `aria-keyshortcuts` on the Item, as with Button.
 - **`aria-keyshortcuts` names what the app binds.** WAI-ARIA 1.2: "Indicates keyboard shortcuts that an author has implemented", "a space-separated list of keyboard shortcuts", and authors "MUST specify modifier keys exactly according to the UI Events KeyboardEvent key Values spec" ("Alt", "Control", "Shift", "Meta"). So `mod+enter` is `Meta+Enter` on Apple and `Control+Enter` elsewhere; an app that binds both everywhere writes `"Meta+Enter Control+Enter"`.
 - Contrast: `kbd-text-color` is `color-text-subtle` on `kbd-background-color` (`color-surface-nested`), a pair the token build holds to 4.5:1. The hairline is decorative; the fill and text identify the key (brand book exemption for the subtle hairline).
@@ -113,21 +113,9 @@ All exist (ported from the source): `kbd-height`, `kbd-min-width`, `kbd-padding-
 
 No new tokens. The border widths use semantic `border-width-default` (sides, top) and `border-width-thick` (block end, the 2 px "physical key" edge) directly: the Dictionary has no word for one edge, and no app is expected to change them (design decision; a `kbd-border-width` token can be added if one is).
 
-## Built-in labels
+## Author-written text
 
-Spoken names for glyph keys, rendered as visually hidden text. English defaults, overridable per instance through `labels` or app-wide through the UIProvider's `locale` (spec #1).
-
-| Key     | Label                                                | Default                                                  |
-| ------- | ---------------------------------------------------- | -------------------------------------------------------- |
-| ⌘       | `command`                                            | "Command"                                                |
-| ⌃       | `control`                                            | "Control"                                                |
-| ⇧       | `shift`                                              | "Shift"                                                  |
-| ⌥       | `option`                                             | "Option"                                                 |
-| ↵       | `enter`                                              | "Enter"                                                  |
-| ⌫       | `backspace`                                          | "Backspace"                                              |
-| ↑ ↓ ← → | `arrowUp` · `arrowDown` · `arrowLeft` · `arrowRight` | "Up arrow" · "Down arrow" · "Left arrow" · "Right arrow" |
-
-Text keys (Ctrl, Shift, Alt, Esc, Tab, Space, letters) are read as written.
+None. The words for symbol keys are the author's optional `keyLabels`; without them the symbol itself is read. Inside a control, `aria-hidden` plus the control's `aria-keyshortcuts` stays the recommended pattern.
 
 ## Feedback events
 

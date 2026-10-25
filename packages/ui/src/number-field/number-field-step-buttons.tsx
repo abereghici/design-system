@@ -5,30 +5,28 @@ import type { SyntheticEvent } from "react";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { MinusIcon } from "../icon/icons/minus.tsx";
 import { PlusIcon } from "../icon/icons/plus.tsx";
-import { useLabels } from "../ui-provider/locale.tsx";
-import type { Labels } from "../ui-provider/locale.tsx";
-import { numberField as numberFieldLabels } from "../ui-provider/locales/en-US/number-field.ts";
 
 export type Direction = 1 | -1;
 
 export function StepButtons({
-  labels,
+  incrementLabel,
+  decrementLabel,
   controls,
   disabled,
   onStep,
 }: {
-  labels: Partial<Labels["numberField"]> | undefined;
+  incrementLabel: string;
+  decrementLabel: string;
   controls: string | undefined;
   disabled: (direction: Direction) => boolean;
   onStep: (direction: Direction, event: SyntheticEvent) => void;
 }) {
-  const names = useLabels("numberField", numberFieldLabels, labels);
   return ([-1, 1] as const).map((direction) => (
     <IconButton
       key={direction}
       size="sm"
       tabIndex={-1}
-      aria-label={direction === 1 ? names.increment : names.decrement}
+      aria-label={direction === 1 ? incrementLabel : decrementLabel}
       aria-controls={controls}
       disabled={disabled(direction)}
       onPointerDown={(event) => {

@@ -18,9 +18,6 @@ import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { mergeProps } from "../slot/slot.tsx";
-import { useLabels } from "../ui-provider/locale.tsx";
-import type { Labels } from "../ui-provider/locale.tsx";
-import { calendar as calendarLabels } from "../ui-provider/locales/en-US/calendar.ts";
 
 import { Grid, keyTarget } from "./calendar-grid.tsx";
 import styles from "./calendar.module.css";
@@ -51,8 +48,10 @@ export interface CalendarProps extends Omit<
    * language is used. Inside a DatePicker, the DatePicker's `locale` is used.
    */
   locale?: Intl.LocalesArgument;
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: Partial<Labels["calendar"]> | undefined;
+  /** The name of the previous-month button, such as "Previous month": it shows only an icon. */
+  previousMonthLabel: string;
+  /** The name of the next-month button, such as "Next month": it shows only an icon. */
+  nextMonthLabel: string;
 }
 
 const onFocusIn = (listener: () => void) => {
@@ -81,7 +80,17 @@ function useToday() {
 }
 
 function useCalendar(
-  { value, defaultValue = null, onValueChange, min, max, isDateUnavailable }: CalendarProps,
+  {
+    value,
+    defaultValue = null,
+    onValueChange,
+    min,
+    max,
+    isDateUnavailable,
+  }: Pick<
+    CalendarProps,
+    "value" | "defaultValue" | "onValueChange" | "min" | "max" | "isDateUnavailable"
+  >,
   picker: DatePickerContextValue | null,
 ) {
   const today = useToday();
@@ -107,7 +116,8 @@ function useCalendar(
 }
 
 interface HeaderProps {
-  readonly names: Labels["calendar"];
+  readonly previousMonthLabel: string;
+  readonly nextMonthLabel: string;
   readonly heading: string;
   readonly headingId: string;
   readonly before: boolean;
@@ -115,12 +125,13 @@ interface HeaderProps {
   readonly page: (months: number) => void;
 }
 
-function Header({ names, heading, headingId, before, after, page }: HeaderProps) {
+function Header(props: HeaderProps) {
+  const { previousMonthLabel, nextMonthLabel, heading, headingId, before, after, page } = props;
   return (
     <div className={styles["header"]}>
       <IconButton
         size="sm"
-        aria-label={names.previousMonth}
+        aria-label={previousMonthLabel}
         disabled={!before}
         onClick={() => {
           page(-1);
@@ -133,7 +144,7 @@ function Header({ names, heading, headingId, before, after, page }: HeaderProps)
       </h2>
       <IconButton
         size="sm"
-        aria-label={names.nextMonth}
+        aria-label={nextMonthLabel}
         disabled={!after}
         onClick={() => {
           page(1);
@@ -219,7 +230,8 @@ function useGrid(
  * DateField; for a field with a calendar on demand, DatePicker.
  */
 export function Calendar({
-  labels,
+  previousMonthLabel,
+  nextMonthLabel,
   locale,
   value,
   defaultValue,
@@ -240,7 +252,8 @@ export function Calendar({
   return (
     <fieldset {...mergeProps({ className: styles["root"] }, rest)}>
       <Header
-        names={useLabels("calendar", calendarLabels, labels)}
+        previousMonthLabel={previousMonthLabel}
+        nextMonthLabel={nextMonthLabel}
         heading={formats.heading(first)}
         headingId={headingId}
         before={!outside(first.subtract({ days: 1 }))}

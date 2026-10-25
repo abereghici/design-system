@@ -48,6 +48,7 @@ const meta = preview.meta({
     name: "files",
     accept: ".csv,text/csv",
     multiple: true,
+    clearLabel: "Clear files",
     onDrop: fn<(files: File[], details: DropZoneDropEventDetails) => void>(),
     children: (
       <>
