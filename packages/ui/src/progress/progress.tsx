@@ -23,7 +23,7 @@ export type ProgressProps = Omit<ComponentProps<"progress">, "children" | "value
     formatOptions?: Intl.NumberFormatOptions;
     /**
      * A shipped locale (`@platform/ui/locales/*`). This renders on the server, where the
-     * Provider's `locale` can't reach, so pass it for any language other than en-US.
+     * UIProvider's `locale` can't reach, so pass it for any language other than en-US.
      */
     locale?: Locale;
   };

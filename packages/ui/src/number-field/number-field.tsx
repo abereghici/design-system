@@ -59,9 +59,9 @@ type ControlProps = Omit<
   largeStep?: number;
   /** How the number reads and is typed, such as a currency or a unit. */
   formatOptions?: Intl.NumberFormatOptions | undefined;
-  /** The language whose number format it uses, when it differs from the Provider's. */
+  /** The language whose number format it uses, when it differs from the UIProvider's. */
   locale?: string | undefined;
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: Partial<Labels["numberField"]>;
   /** Content before the number, such as a currency sign. */
   startElement?: ReactNode;

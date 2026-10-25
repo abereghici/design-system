@@ -5,15 +5,15 @@ import preview from "#.storybook/preview.tsx";
 import { useLocale } from "./locale.tsx";
 import { enUS } from "./locales/en-US.ts";
 import { roRO } from "./locales/ro-RO.ts";
-import { Provider } from "./provider.tsx";
+import { UIProvider } from "./provider.tsx";
 
 function Tag() {
   return <output>{useLocale().tag}</output>;
 }
 
 const meta = preview.meta({
-  title: "Components/Provider",
-  component: Provider,
+  title: "Components/UIProvider",
+  component: UIProvider,
   args: { children: <Tag /> },
 });
 

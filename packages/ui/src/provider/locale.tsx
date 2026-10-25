@@ -20,9 +20,9 @@ export function LocaleProvider({ value, children }: { value: Locale; children: R
 }
 
 /**
- * A component's Built-in labels: the consumer's `labels` over the Provider's Locale over the en-US
+ * A component's Built-in labels: the consumer's `labels` over the UIProvider's Locale over the en-US
  * `defaults` the component imports itself, so each component ships only its own namespace. A
- * Server Component can't read the Provider; it spreads its `locale` prop in the same order.
+ * Server Component can't read the UIProvider; it spreads its `locale` prop in the same order.
  */
 export function useLabels<Namespace extends keyof Labels>(
   namespace: Namespace,
@@ -32,7 +32,7 @@ export function useLabels<Namespace extends keyof Labels>(
   return { ...defaults, ...useLocale().labels[namespace], ...labels };
 }
 
-/** The Provider's `locale`, or en-US with no labels so each component falls back to its own. */
+/** The UIProvider's `locale`, or en-US with no labels so each component falls back to its own. */
 export function useLocale(): { readonly tag: string; readonly labels: Partial<Labels> } {
   return use(LocaleContext) ?? { tag: "en-US", labels: {} };
 }

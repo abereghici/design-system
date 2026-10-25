@@ -31,7 +31,7 @@ type ControlProps = Omit<
    * saves it shown.
    */
   onVisibleChange?: (visible: boolean, details: PasswordFieldVisibleChangeEventDetails) => void;
-  /** Replaces the built-in text of the Provider's locale, for this instance only. */
+  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: Partial<Labels["passwordField"]>;
   /**
    * Tells password managers what to fill: `current-password` to sign in, `new-password` to sign up
