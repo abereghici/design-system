@@ -9,7 +9,7 @@ import type { Labels } from "../provider/locale.tsx";
 import { dateField as dateFieldLabels } from "../provider/locales/en-US/date-field.ts";
 
 import { useDate, useSegmentEditing } from "./date-field-editing.ts";
-import type { DateFieldChangeEventDetails } from "./date-field-editing.ts";
+import type { DateValueOptions } from "./date-field-editing.ts";
 import { useValidity } from "./date-field-validity.ts";
 import type { Validity } from "./date-field-validity.ts";
 import { bounds, display } from "./segments.ts";
@@ -17,15 +17,7 @@ import type { Segments } from "./segments.ts";
 import fieldStyles from "../field/field.module.css";
 import styles from "./date-field.module.css";
 
-export interface DateFieldOptions {
-  /** The chosen date, when your state holds it; `null` is no date. */
-  value?: Temporal.PlainDate | null | undefined;
-  /** The starting value when it holds its own state. */
-  defaultValue?: Temporal.PlainDate | null | undefined;
-  /** Called when the complete date changes, or becomes incomplete (`null`). */
-  onValueChange?:
-    | ((value: Temporal.PlainDate | null, details: DateFieldChangeEventDetails) => void)
-    | undefined;
+export interface DateFieldOptions extends DateValueOptions {
   /** The earliest date allowed; an earlier one is invalid. */
   min?: Temporal.PlainDate | undefined;
   /** The latest date allowed; a later one is invalid. */
@@ -89,6 +81,7 @@ function Segment({ part, control, required }: SegmentProps) {
       aria-invalid={invalid}
       aria-disabled={blocked || undefined}
       className={styles["segment"]}
+      onCompositionEnd={editing.onCompositionEnd}
       onChange={(event) => {
         editing.onChange(part, event);
       }}
@@ -109,7 +102,7 @@ function filledAround(formats: Formats, index: number, segments: Segments) {
 }
 
 function useControl(options: ControlOptions, onValidity: (validity: Validity) => void) {
-  const [field, blocked, invalid] = useField(options.disabled);
+  const { field, blocked, invalid } = useField(options.disabled);
   const locale = useLocale();
   const names = useLabels("dateField", dateFieldLabels, options.labels);
   const formats = dateFormats(locale.tag);

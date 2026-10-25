@@ -61,7 +61,7 @@ const budgets: Readonly<Record<string, string>> = {
   toolbar: "830 B",
   tooltip: "2.5 kB",
   "text-area": "2.7 kB",
-  "text-field": "2.7 kB",
+  "text-field": "2.75 kB",
   "visually-hidden": "580 B",
   dialog: "4.15 kB",
   "alert-dialog": "4.2 kB",

@@ -3,7 +3,7 @@
 import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { composeEventHandlers, dispatchFeedback, requestChange } from "../events/events.ts";
 import { useFieldControl } from "../field/field-control.ts";
 import { join } from "../slot/slot.tsx";
 import { followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
@@ -49,9 +49,10 @@ export function Root({
 
   function select(next: string, event: MouseEvent<HTMLInputElement>) {
     if (next === current) return;
-    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) event.preventDefault();
-    // A canceled click restores the input's checkedness (HTML legacy-canceled-activation behavior).
-    if (event.defaultPrevented) return;
+    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) {
+      event.preventDefault();
+      return;
+    }
     setUncontrolled(next);
     dispatchFeedback(event.currentTarget, "ab-toggle", {
       component: "SegmentedControl",
@@ -98,10 +99,9 @@ export function Item({ value, children, className, style, onClick, ...props }: I
         checked={value === group.value}
         className={styles["radio"]}
         onChange={bindings.onChange}
-        onClick={(event) => {
-          onClick?.(event);
+        onClick={composeEventHandlers(onClick, (event) => {
           group.select(value, event);
-        }}
+        })}
       />
       {children}
     </label>

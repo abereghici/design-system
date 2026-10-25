@@ -90,6 +90,11 @@ The Floating layers (Tooltip, Popover, DropdownMenu, ContextMenu, Combobox, Sele
   - `web-features` `display-animation`: `"baseline": false`, with support listing Chrome 117 and Safari 18. Observed: WebKit 27.2 still does not keep a hiding popover rendered.
 - **MDN** (`overlay`): adding it to the transition list "causes its removal from the top layer to be deferred so it can be animated instead of disappearing immediately". MDN (`@starting-style`): "`display` is added to the list of transitioned elements to ensure the animated element is visible … throughout both the entry and exit animations. Without this, the exit animation would not be visible; in effect, the popover would just disappear."
 
+### 6. Pointer modality (spec #1 fix pass, 2026-10-25)
+
+- Floating layers mark `data-pointer` when `ToggleEvent.source` (or, for the DatePicker's field box, a descendant) does not match `:focus-visible`, as Dialog does. Observed with Playwright's trusted input: a click on the Popover and DatePicker triggers marks the layer and Tab then Enter does not, in all three engines. Firefox differs after a programmatic focus (the focus returned on close): Enter then leaves the trigger without `:focus-visible`, so that keyboard open plays the pointer motion.
+- Inline controls keep the JS `pointerMarker`. Observed on a Checkbox: after a click, Chromium matches `:focus-visible` on the next Space, Firefox does not (the keyboard toggle would play the pointer motion), and WebKit does not focus the input at all. The selectors-4 heuristic is UA-defined ("keyboard usage may change whether this pseudo-class matches").
+
 ## Gaps that affect component specs
 
 1. **Exit motion is Chromium-only.** In Firefox and WebKit, Floating layers disappear instantly. User story 62 already expects this. Write the exit transition once (`display`, `overlay`, `allow-discrete`); it degrades to instant with no fallback.

@@ -110,6 +110,22 @@ Default.test(
 );
 
 Default.test(
+  "keeps its value and reports no change when a click is default-prevented",
+  async ({ canvas, userEvent, args }) => {
+    const board = canvas.getByRole("radio", { name: "Board" });
+    board.addEventListener("click", (event) => {
+      event.preventDefault();
+    });
+    const toggles = listen("ab-toggle");
+    await userEvent.click(board);
+    toggles.stop();
+    await expect(canvas.getByRole("radio", { name: "List" })).toBeChecked();
+    await expect(args.onValueChange).not.toHaveBeenCalled();
+    await expect(toggles.events).toEqual([]);
+  },
+);
+
+Default.test(
   "leaves the arrow keys to an enclosing Toolbar in RTL",
   {
     globals: { dir: "rtl" },

@@ -21,10 +21,12 @@
     box-shadow: var(--ab-command-shadow);
     color: var(--ab-command-item-text-color);
     opacity: 0;
-    transition-property: opacity, overlay, display;
+    transition:
+      opacity,
+      overlay allow-discrete,
+      display allow-discrete;
     transition-duration: var(--ab-command-exit-duration);
     transition-timing-function: var(--ab-command-easing);
-    transition-behavior: allow-discrete;
   }
 
   .content:not([open]) {

@@ -3,7 +3,7 @@
 import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, MouseEvent, SyntheticEvent } from "react";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { composeEventHandlers, dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
 import { join } from "../slot/slot.tsx";
@@ -128,11 +128,10 @@ export function Trigger({
       {...props}
       className={join(styles["trigger"], className)}
       {...pointerMarker({ onPointerDown, onKeyDown })}
-      onClick={(event: MouseEvent<HTMLElement>) => {
-        onClick?.(event);
+      onClick={composeEventHandlers(onClick, (event: MouseEvent<HTMLElement>) => {
         event.preventDefault();
         accordion.change(item, !accordion.value.includes(item), event);
-      }}
+      })}
     >
       {children}
       <ChevronDownIcon size="sm" className={styles["icon"]} />

@@ -42,6 +42,7 @@ Audited 2026-10-24 (R1) against each tool's docs and its source at the pinned ve
   - The reduced-motion check reads `inject("reducedMotion")` in a project-level setup file. An instance-level `setupFiles` entry was served untransformed (`Failed to resolve module specifier "vitest"`, observed in all three engines).
   - Coverage in the UI needs `@vitest/coverage-istanbul`: "@vitest/coverage-v8 does not work with" firefox or webkit instances (`vitest/dist/chunks/index.*.js:7426`). No coverage package is installed (Q-IA-4).
 - `mergeConfig(viteConfig, …)` stays, because `@vitejs/plugin-react` is in `vite.config.ts`, which Storybook merges too: "When Storybook loads, it automatically merges the configuration into its own" (https://storybook.js.org/docs/builders/vite).
+- `maxWorkers: "50%"`: in Vitest 5.0.5 browser mode "`maxWorkers` is also the budget of pages shared by the active instances" (`vitest/dist/chunks/index.*.js`, `createBrowserPool`), and the default is `availableParallelism() - 1` (`getDefaultMaxWorkers`), so every run opens 9 pages on a 10-core machine across its six instances. Two runs at once (turbo next to another agent) timed Firefox and WebKit proofs out ("Test timed out in 15000ms while waiting for click": 7 and 6 failures, 451 s each; 1 failure, 247 s, on a rerun). With `maxWorkers: "50%"` (5 pages) the same double run passed twice with 0 failures in about 180 s each; a lone run takes about 150 s instead of 104 s.
 - `build.target: "esnext"`: Vite's default target makes Lightning CSS lower `light-dark()` (docs/research/base-stylesheet.md; Q12-3).
 - Screenshot harness: docs/research/story-screenshots.md. Changes from the audit (notes/screenshot-audit.md): `setupFiles` is relative to the project root, the default `configDir` is used, axe is back, `--only-shell` is in CI, and `update-screenshots.yml` has a `concurrency` group.
 
@@ -75,6 +76,7 @@ Every option the old config set was the default (https://oxc.rs/docs/guide/usage
 
 - `packages/ui/tsconfig.json` includes `".storybook/**/*"`. With the bare entry `".storybook"`, `tsc --listFilesOnly` listed only the 6 `.storybook` files reachable by import, and the type-aware lint reported `error`-typed CSS Module members in the rest. With the glob it lists 33.
 - `typescript-config/node-library.json` had no user after packages/design-sync was deleted.
+- `react.json` adds `esnext.intl` to `lib`: TypeScript 7.0.2 declares `Intl.Locale` `getTextInfo(): TextInfo` and `getWeekInfo(): WeekInfo` only there (`lib/lib.esnext.intl.d.ts`), and web-features 3.44.0 has `intl-locale-info` at Baseline low since 2026-07-21, so `date.ts` and `direction.ts` call them without guards. The lib also references `esnext.temporal`; runtime Temporal still comes from the ponyfill (ADR-0004). A `declare global { namespace Intl }` augmentation instead fails oxlint `typescript/no-namespace`.
 
 ## Style Dictionary 5.7.0
 

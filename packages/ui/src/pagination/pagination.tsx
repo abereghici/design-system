@@ -3,6 +3,7 @@ import type { ComponentProps, ElementType, ReactElement } from "react";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { MoreIcon } from "../icon/icons/more.tsx";
+import { labelsOf } from "../provider/labels.ts";
 import type { Labels, Locale } from "../provider/locale.tsx";
 import { pagination as paginationLabels } from "../provider/locales/en-US/pagination.ts";
 
@@ -82,12 +83,11 @@ export function Pagination({
   labels,
   ...props
 }: PaginationProps) {
-  const text = {
-    ...paginationLabels,
-    page: pageLabel,
-    ...locale?.labels.pagination,
-    ...labels,
-  };
+  const text = labelsOf(
+    { ...paginationLabels, page: pageLabel },
+    locale?.labels.pagination,
+    labels,
+  );
   const formatter = new Intl.NumberFormat(locale?.tag ?? "en-US");
   const url = (target: number) => (target < 1 || target > count ? undefined : getPageUrl(target));
   return (

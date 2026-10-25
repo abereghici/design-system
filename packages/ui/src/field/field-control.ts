@@ -50,11 +50,27 @@ export interface ControlBindings<Element extends FormControl> {
  */
 export function useField(disabled?: boolean) {
   const field = use(FieldContext);
-  return [
+  return {
     field,
-    disabled === true || field?.disabled === true,
-    field?.invalid === true || undefined,
-  ] as const;
+    blocked: disabled === true || field?.disabled === true,
+    invalid: field?.invalid === true || undefined,
+  };
+}
+
+/** The custom validity message: the control's own check, then the server's error, then the app's rule. */
+export function setValidity(
+  target: {
+    setCustomValidity: (message: string) => void;
+    value: string;
+    form: HTMLFormElement | null;
+  },
+  own: string | undefined,
+  server: string | undefined,
+  rule: Validate | undefined,
+) {
+  target.setCustomValidity(
+    own ?? server ?? rule?.(target.value, new FormData(target.form ?? undefined)) ?? "",
+  );
 }
 
 /** Runs `onReset` when the form that owns `control()` resets. */
@@ -81,9 +97,8 @@ export function useFieldControl<
   Element extends FormControl,
   Props extends ControlBindings<Element>,
 >({ id, name, disabled, onFocus, onChange, onValueChange, ...props }: Props) {
-  const field = use(FieldContext);
+  const { field, blocked, invalid } = useField(disabled);
   const previous = useRef("");
-  const blocked = disabled === true || field?.disabled === true;
   const setControlId = field?.setControlId;
   useEffect(() => {
     if (id !== undefined) setControlId?.(id);
@@ -93,7 +108,7 @@ export function useFieldControl<
     id: id ?? field?.controlId,
     name: field?.name ?? name,
     "aria-disabled": blocked || undefined,
-    "aria-invalid": field?.invalid === true || undefined,
+    "aria-invalid": invalid,
     "aria-describedby": field?.describedBy ?? props["aria-describedby"],
     onFocus: (event: FocusEvent<Element>) => {
       previous.current = event.currentTarget.value;

@@ -181,7 +181,7 @@ export function FileTrigger({
   ...props
 }: FileTriggerProps) {
   const zone = use(PickerContext);
-  const [field, blocked, invalid] = useField(disabled || zone?.disabled);
+  const { field, blocked, invalid } = useField(disabled || zone?.disabled);
   const input = useRef<HTMLInputElement>(null);
   const trigger = useRef<HTMLElement>(null);
   const inputRef = zone?.input ?? input;

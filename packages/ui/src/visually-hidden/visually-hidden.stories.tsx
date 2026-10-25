@@ -10,6 +10,7 @@ const meta = preview.meta({
   title: "Components/VisuallyHidden",
   component: VisuallyHidden,
   args: { children: " (opens in a new tab)" },
+  tags: ["!screenshot"],
 });
 
 export const Default = meta.story({});

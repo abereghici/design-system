@@ -31,6 +31,49 @@ export function requestChange<Value, Reason extends string, Cause>(
   return accepted;
 }
 
+/**
+ * Runs the consumer's handler, then ours unless it called `preventDefault()`. Only for events
+ * whose native default is the change itself (an input's checkedness, a `<summary>` toggle, a
+ * `commandfor` command): HTML runs no activation behavior for a canceled click, so ours mustn't
+ * either.
+ */
+export function composeEventHandlers<Cause extends { defaultPrevented: boolean }>(
+  consumer: ((event: Cause) => void) | undefined,
+  own: (event: Cause) => void,
+): (event: Cause) => void {
+  return (event) => {
+    consumer?.(event);
+    if (!event.defaultPrevented) own(event);
+  };
+}
+
+interface Targeted {
+  readonly currentTarget: EventTarget;
+}
+
+const justComposed = new WeakSet<EventTarget>();
+
+/** The input's `onCompositionEnd`: runs `handler`, then marks the input for `isComposing` until the next task. */
+export function trackComposition<Cause extends Targeted>(handler?: (event: Cause) => void) {
+  return (event: Cause) => {
+    handler?.(event);
+    const input = event.currentTarget;
+    justComposed.add(input);
+    setTimeout(() => {
+      justComposed.delete(input);
+    });
+  };
+}
+
+/**
+ * Whether a keydown on an input with `trackComposition` belongs to an IME composition. WebKit runs
+ * `compositionend` before the Enter keydown that confirms it, whose `isComposing` is then false
+ * (WebKit bug 165004), so a keydown in the same task as `compositionend` counts too.
+ */
+export function isComposing(event: Targeted & { readonly nativeEvent: KeyboardEvent }) {
+  return event.nativeEvent.isComposing || justComposed.has(event.currentTarget);
+}
+
 export interface FeedbackEventDetail<Component extends string = string> {
   readonly component: Component;
   readonly reason: FeedbackReason;

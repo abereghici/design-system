@@ -70,7 +70,7 @@ const preventDrop = (event: globalThis.DragEvent) => {
 let zones = 0;
 let listening = new AbortController();
 
-/** Stops a file dropped outside every zone from opening in the page (MDN, file drag and drop), with one pair of window listeners however many zones are mounted. */
+// Module-wide so one pair of window listeners serves every mounted zone; without them a file dropped outside a zone replaces the page.
 function usePreventDocumentDrop() {
   useEffect(() => {
     zones += 1;
@@ -165,7 +165,7 @@ export function DropZone({
   children,
   ...props
 }: DropZoneProps) {
-  const [, blocked, invalid] = useField(disabled);
+  const { blocked, invalid } = useField(disabled);
   const input = useRef<HTMLInputElement>(null);
   const trigger = useRef<HTMLElement>(null);
   const { target, ...handlers } = useDropTarget({ accept, multiple, onDrop, blocked, input });

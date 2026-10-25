@@ -3,6 +3,7 @@
 import { createContext, use } from "react";
 import type { ReactNode } from "react";
 
+import { labelsOf } from "./labels.ts";
 import type { enUS } from "./locales/en-US.ts";
 
 /** Every component's built-in strings, in the shape en-US composes from each one's defaults. */
@@ -19,17 +20,13 @@ export function LocaleProvider({ value, children }: { value: Locale; children: R
   return <LocaleContext value={value}>{children}</LocaleContext>;
 }
 
-/**
- * A component's Built-in labels: the consumer's `labels` over the UIProvider's Locale over the en-US
- * `defaults` the component imports itself, so each component ships only its own namespace. A
- * Server Component can't read the UIProvider; it spreads its `locale` prop in the same order.
- */
+/** `labelsOf` with the UIProvider's Locale. */
 export function useLabels<Namespace extends keyof Labels>(
   namespace: Namespace,
   defaults: Labels[Namespace],
   labels?: Partial<Labels[Namespace]>,
 ): Labels[Namespace] {
-  return { ...defaults, ...useLocale().labels[namespace], ...labels };
+  return labelsOf(defaults, useLocale().labels[namespace], labels);
 }
 
 /** The UIProvider's `locale`, or en-US with no labels so each component falls back to its own. */

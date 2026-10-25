@@ -3,10 +3,10 @@
 import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { composeEventHandlers, dispatchFeedback, requestChange } from "../events/events.ts";
 import { useFieldControl } from "../field/field-control.ts";
 import { join } from "../slot/slot.tsx";
-import { followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
+import { followVisualDirection, pointerMarker, preventDefault } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
 import styles from "./radio-group.module.css";
@@ -68,9 +68,10 @@ export function Root({
 
   function select(next: string, event: MouseEvent<HTMLInputElement>) {
     if (next === current) return;
-    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) event.preventDefault();
-    // A canceled click restores the input's checkedness (HTML legacy-canceled-activation behavior).
-    if (event.defaultPrevented) return;
+    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) {
+      event.preventDefault();
+      return;
+    }
     setUncontrolled(next);
     dispatchFeedback(event.currentTarget, "ab-toggle", { component: "RadioGroup", reason: "user" });
   }
@@ -132,13 +133,9 @@ export function Item({
     onChange,
   });
   const blocked = bindings["aria-disabled"] === true;
-  function handleClick(event: MouseEvent<HTMLInputElement>) {
-    if (blocked) event.preventDefault();
-    else {
-      onClick?.(event);
-      group?.select(value, event);
-    }
-  }
+  const handleClick = composeEventHandlers(blocked ? preventDefault : onClick, (event) => {
+    group.select(value, event);
+  });
   return (
     <label
       htmlFor={bindings.id ?? fallbackId}

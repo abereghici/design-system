@@ -3,7 +3,7 @@
 import { createContext, use } from "react";
 import type { ComponentProps, MouseEvent, ReactNode, RefObject } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { composeEventHandlers, dispatchFeedback } from "../events/events.ts";
 import { useFloating } from "../floating/floating.ts";
 import type {
   ChangeEventDetails as Details,
@@ -138,10 +138,7 @@ export function Close({ asChild = false, labels, className, ...props }: ClosePro
     ...props,
     commandfor: popover.contentId,
     command: "hide-popover" as const,
-    onClick: (event: MouseEvent<HTMLButtonElement>) => {
-      props.onClick?.(event);
-      // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).
-      if (event.defaultPrevented) return;
+    onClick: composeEventHandlers(props.onClick, (event: MouseEvent<HTMLButtonElement>) => {
       if (!popover.request(false, "close-press", event.nativeEvent)) {
         event.preventDefault();
       } else if (!asChild) {
@@ -150,7 +147,7 @@ export function Close({ asChild = false, labels, className, ...props }: ClosePro
           reason: "user",
         });
       }
-    },
+    }),
   };
   if (asChild) return <Slot {...shared} className={className} />;
   return (

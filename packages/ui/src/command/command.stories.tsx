@@ -8,7 +8,7 @@ import { UIProvider } from "@platform/ui/provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
-import { trusted } from "#.storybook/test/trusted.ts";
+import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Command from "./index.parts.ts";
 
@@ -138,10 +138,11 @@ Default.test(
 );
 
 Default.test(
-  "runs the highlighted command on Enter and a pressed one, keeping focus in the input",
+  "runs the highlighted command on Enter, not on one confirming an IME composition, and a pressed one, keeping focus in the input",
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("combobox");
     const confirmations = listen("ab-confirm");
+    confirmComposition(input);
     await userEvent.type(input, "{ArrowDown}{Enter}");
     const home = canvas.getByRole("option", { name: "Go to Home" });
     await userEvent.hover(home);
@@ -181,7 +182,6 @@ Default.test(
 );
 
 const onOpenChange = fn();
-
 function Palette(props: Command.RootProps) {
   const [open, setOpen] = useState(false);
   const opener = useRef<HTMLButtonElement>(null);

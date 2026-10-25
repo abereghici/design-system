@@ -41,6 +41,7 @@ export function Trigger({ panel, value, disabled }: TriggerProps) {
         size="sm"
         aria-label={name}
         {...floating.triggerProps({})}
+        aria-controls={floating.contentId}
         aria-haspopup="dialog"
         aria-describedby={value === null ? undefined : descriptionId}
         disabled={disabled}

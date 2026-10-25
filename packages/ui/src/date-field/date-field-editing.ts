@@ -2,10 +2,9 @@ import { useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from "re
 import type { ChangeEvent, KeyboardEvent, RefObject } from "react";
 
 import type { DatePart, dateFormats, Temporal } from "../date/date.ts";
-import { requestChange } from "../events/events.ts";
+import { isComposing, requestChange, trackComposition } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 
-import type { ControlOptions } from "./date-field-control.tsx";
 import { fromDate, stepKey, toDate, typeDigit } from "./segments.ts";
 import type { Segments } from "./segments.ts";
 
@@ -16,7 +15,20 @@ type Reason = "input-change" | "keyboard";
 type Buffer = { readonly part: DatePart; readonly text: string } | null;
 type Formats = ReturnType<typeof dateFormats>;
 
-type DateOptions = Pick<ControlOptions, "value" | "defaultValue" | "onValueChange" | "onFormReset">;
+export interface DateValueOptions {
+  /** The chosen date, when your state holds it; `null` is no date. */
+  value?: Temporal.PlainDate | null | undefined;
+  /** The starting value when it holds its own state. */
+  defaultValue?: Temporal.PlainDate | null | undefined;
+  /** Called when the complete date changes, or becomes incomplete (`null`). */
+  onValueChange?:
+    | ((value: Temporal.PlainDate | null, details: DateFieldChangeEventDetails) => void)
+    | undefined;
+}
+
+interface DateOptions extends DateValueOptions {
+  readonly onFormReset?: (() => void) | undefined;
+}
 
 const same = (a: Temporal.PlainDate | null, b: Temporal.PlainDate | null) =>
   a === null || b === null ? a === b : a.equals(b);
@@ -170,8 +182,9 @@ function pressKey(
   const erasing = key === "Backspace" || key === "Delete";
   if (!arrow && !erasing && stepped === null && key !== "Enter") return;
   event.preventDefault();
-  if (key === "Enter") submit();
-  else if (arrow) {
+  if (key === "Enter") {
+    if (!isComposing(event)) submit();
+  } else if (arrow) {
     const rtl = event.currentTarget.matches(":dir(rtl)");
     context.focus.move(part, (key === "ArrowRight") === rtl ? -1 : 1);
   } else if (!blocked && stepped === null) erase(context, part, key, nativeEvent);
@@ -206,6 +219,7 @@ export function useSegmentEditing({ group, date, validity, blocked, formats, sub
   const context = { date, focus, change, typed, formats };
   return {
     register: focus.register,
+    onCompositionEnd: trackComposition(),
     focusFirstEmpty: () => {
       focus.firstEmpty(0);
     },

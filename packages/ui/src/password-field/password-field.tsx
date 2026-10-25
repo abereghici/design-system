@@ -91,7 +91,7 @@ function Control({
   autoComplete = "current-password",
   ...props
 }: ControlProps) {
-  const [field, blocked] = useField();
+  const { field, blocked } = useField();
   const inputId = field?.controlId;
   const [visible, change] = useVisibility(inputId, controlled, defaultVisible, onVisibleChange);
 

@@ -19,10 +19,13 @@
     color: var(--ab-dialog-title-text-color);
     overscroll-behavior: contain;
     opacity: 0;
-    transition-property: opacity, scale, overlay, display;
+    transition:
+      opacity,
+      scale,
+      overlay allow-discrete,
+      display allow-discrete;
     transition-duration: var(--ab-dialog-exit-duration);
     transition-timing-function: var(--ab-dialog-easing);
-    transition-behavior: allow-discrete;
   }
 
   .content:not([open]) {
@@ -48,10 +51,12 @@
     background-color: var(--ab-dialog-backdrop-color);
     backdrop-filter: blur(var(--ab-dialog-backdrop-blur));
     opacity: 0;
-    transition-property: opacity, overlay, display;
+    transition:
+      opacity,
+      overlay allow-discrete,
+      display allow-discrete;
     transition-duration: var(--ab-dialog-exit-duration);
     transition-timing-function: var(--ab-motion-easing-exit);
-    transition-behavior: allow-discrete;
   }
 
   .content[open]::backdrop {

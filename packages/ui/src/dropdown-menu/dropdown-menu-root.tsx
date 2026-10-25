@@ -61,7 +61,7 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
       id={`${floating.contentId}-trigger`}
       aria-haspopup="menu"
       onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
-        trigger.onKeyDown(event);
+        props.onKeyDown?.(event);
         const arrow = event.key === "ArrowDown" || event.key === "ArrowUp";
         if (!arrow || event.currentTarget.getAttribute("aria-disabled") === "true") return;
         event.preventDefault();

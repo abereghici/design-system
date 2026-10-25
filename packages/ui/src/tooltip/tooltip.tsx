@@ -112,6 +112,7 @@ export function Root({
   const contentId = useId();
 
   function change(next: boolean, reason: ChangeReason, event?: SyntheticEvent, nextMode?: Mode) {
+    // The DOM, not `current`: delays, Escape and blur show or hide it between renders (Firefox and WebKit proofs fail on `current`).
     if (next === (requested.get(contentId) ?? isOpen(byId(contentId)))) return;
     if (!requestChange(onOpenChange, next, reason, event?.nativeEvent)) return;
     requested.set(contentId, next);

@@ -7,7 +7,7 @@ import { roRO } from "@platform/ui/locales/ro-RO";
 import { UIProvider } from "@platform/ui/provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
-import { trusted } from "#.storybook/test/trusted.ts";
+import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
 
 import type { Locale } from "../provider/locale.tsx";
 
@@ -128,8 +128,11 @@ Default.test("shows and announces No results", async ({ canvas, userEvent }) => 
   await expect(reasons(onOpenChange).at(-1)).toEqual([false, "outside-press"]);
 });
 
-Default.test("chooses by Enter or click, keeping focus", async ({ canvas, userEvent }) => {
-  await type("io{Enter}");
+Default.test("chooses by Enter but not IME's, or click", async ({ canvas, userEvent }) => {
+  await type("io");
+  confirmComposition(field());
+  await expect(field()).toHaveValue("io");
+  await type("{Enter}");
   await expect(field()).toHaveValue("Ioana Munteanu");
   await expect(field()).toHaveAttribute("aria-expanded", "false");
   await expect(submitted()).toBe("im");

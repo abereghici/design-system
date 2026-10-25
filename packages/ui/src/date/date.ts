@@ -5,15 +5,7 @@ export { Temporal };
 
 export type DatePart = "year" | "month" | "day";
 
-type WeekInfoLocale = Intl.Locale & { getWeekInfo: () => { readonly firstDay: number } };
-
-// Intl Locale Info (Baseline newly available, 2026-07-21) is not in TypeScript 7.0's libs yet.
-const hasWeekInfo = (locale: Intl.Locale): locale is WeekInfoLocale => "getWeekInfo" in locale;
-
-const firstDayOf = (tag: string) => {
-  const locale = new Intl.Locale(tag);
-  return hasWeekInfo(locale) ? locale.getWeekInfo().firstDay : 1;
-};
+const firstDayOf = (tag: string) => new Intl.Locale(tag).getWeekInfo().firstDay;
 
 const isPart = (type: string): type is DatePart =>
   type === "year" || type === "month" || type === "day";

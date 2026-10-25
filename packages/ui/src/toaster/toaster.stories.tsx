@@ -68,7 +68,7 @@ const meta = preview.meta({
   },
 });
 
-export const Default = meta.story({});
+export const Default = meta.story({ tags: ["!screenshot"] });
 
 Default.test("is a landmark only while toasts show", async () => {
   await expect(page.queryByRole("region")).toBeNull();

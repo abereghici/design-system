@@ -7,10 +7,12 @@ import type {
   PointerEvent as ReactPointerEvent,
 } from "react";
 
-import { requestChange } from "../events/events.ts";
+import { isComposing, requestChange, trackComposition } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId } from "../floating/floating.ts";
 import { enabled, navigate, optionAt, textOf } from "../listbox/listbox.tsx";
+
+export { trackComposition };
 
 export const chosenOf = (list: Element, value: string | null) =>
   value === null ? null : list.querySelector(`[role="option"][data-value="${CSS.escape(value)}"]`);
@@ -173,10 +175,10 @@ export function keyDown(c: Combobox, event: KeyboardEvent<HTMLInputElement>) {
   const list = listOf(c);
   const input = event.currentTarget;
   const { nativeEvent: native, key } = event;
-  if (event.defaultPrevented || native.isComposing || c.options.disabled === true) return;
+  if (event.defaultPrevented || isComposing(event) || c.options.disabled === true) return;
   if (list === null) return;
-  const next = c.open && navigate(event, list, highlightedOf(input)?.id ?? null);
-  if (next !== false) {
+  const next = c.open ? navigate(event, list, highlightedOf(input)?.id ?? null) : null;
+  if (next !== null) {
     highlight(list, input, next, false);
   } else if (key === "ArrowDown" || key === "ArrowUp") {
     open(c, event);

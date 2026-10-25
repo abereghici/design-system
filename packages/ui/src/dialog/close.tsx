@@ -2,6 +2,7 @@
 
 import type { ComponentProps, MouseEvent } from "react";
 
+import { composeEventHandlers } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { useLabels } from "../provider/locale.tsx";
 import { dialog as dialogLabels } from "../provider/locales/en-US/dialog.ts";
@@ -29,16 +30,13 @@ export function Close({ asChild = false, labels, className, onClick, ...props }:
     labels,
   );
 
-  function handleClick(event: MouseEvent<HTMLButtonElement>) {
-    onClick?.(event);
-    // A canceled click does not run the button's command (HTML: no activation behavior for a canceled click).
-    if (event.defaultPrevented) return;
+  const handleClick = composeEventHandlers(onClick, (event: MouseEvent<HTMLButtonElement>) => {
     controller.press({
       reason: "close-press",
       event: event.nativeEvent,
       dismiss: asChild ? null : event.currentTarget,
     });
-  }
+  });
 
   if (asChild) {
     return <Slot {...props} commandfor={id} command="request-close" onClick={handleClick} />;

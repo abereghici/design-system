@@ -3,8 +3,9 @@
 import { createContext, use, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction } from "react";
 
-import { requestChange } from "../events/events.ts";
+import { isComposing, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { byId } from "../floating/floating.ts";
 import { arrange, enabled, navigate, reveal } from "../listbox/listbox.tsx";
 import { useLocale } from "../provider/locale.tsx";
 import { join } from "../slot/slot.tsx";
@@ -50,14 +51,14 @@ function keyDown(
   highlight: (id: string) => void,
 ) {
   if (event.key === "Enter") {
-    const option = list?.querySelector<HTMLElement>(`[id="${highlighted ?? ""}"]`);
-    if (event.nativeEvent.isComposing || option === null || option === undefined) return;
+    const option = highlighted === null ? null : byId(highlighted);
+    if (isComposing(event) || option === null) return;
     event.preventDefault();
     option.click();
     return;
   }
   const next = navigate(event, list, highlighted);
-  if (next instanceof HTMLElement) highlight(next.id);
+  if (next !== null) highlight(next.id);
 }
 
 /**

@@ -96,14 +96,21 @@ Default.test(
   },
 );
 
-Default.test("still opens when its click is default-prevented", async ({ canvas, userEvent }) => {
-  const trigger = canvas.getByText("Which browsers are supported?");
-  trigger.addEventListener("click", (event) => {
-    event.preventDefault();
-  });
-  await userEvent.click(trigger);
-  await waitFor(() => expect(canvas.getByText(browsers)).toBeVisible());
-});
+Default.test(
+  "stays closed and reports no change when its click is default-prevented",
+  async ({ canvas, userEvent, args }) => {
+    const trigger = canvas.getByText("Which browsers are supported?");
+    trigger.addEventListener("click", (event) => {
+      event.preventDefault();
+    });
+    const toggles = listen("ab-toggle");
+    await userEvent.click(trigger);
+    toggles.stop();
+    await expect(canvas.getByText(browsers)).not.toBeVisible();
+    await expect(args.onValueChange).not.toHaveBeenCalled();
+    await expect(toggles.events).toEqual([]);
+  },
+);
 
 Default.test(
   "follows a controlled value",

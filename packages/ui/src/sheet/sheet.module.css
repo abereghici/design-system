@@ -26,10 +26,13 @@
     color: var(--ab-sheet-title-text-color);
     overflow: hidden;
     overscroll-behavior: contain;
-    transition-property: translate, opacity, overlay, display;
+    transition:
+      translate,
+      opacity,
+      overlay allow-discrete,
+      display allow-discrete;
     transition-duration: var(--ab-sheet-exit-duration);
     transition-timing-function: var(--ab-sheet-easing);
-    transition-behavior: allow-discrete;
   }
 
   .content[open] {
@@ -79,10 +82,12 @@
     background-color: var(--ab-sheet-backdrop-color);
     backdrop-filter: blur(var(--ab-sheet-backdrop-blur));
     opacity: 0;
-    transition-property: opacity, overlay, display;
+    transition:
+      opacity,
+      overlay allow-discrete,
+      display allow-discrete;
     transition-duration: var(--ab-sheet-exit-duration);
     transition-timing-function: var(--ab-motion-easing-exit);
-    transition-behavior: allow-discrete;
   }
 
   .content[open]::backdrop {

@@ -306,7 +306,7 @@ These are already settled and not re-decided here:
   - The `performance` guide: "DON'T overuse `will-change` globally".
 - **`@starting-style`.** It defines "starting values for properties set on an element that you want to transition from when the element receives its first style update". "Baseline 2024 Newly available". https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style
 - **Exit animations on top-layer elements are below our floor.** From the modern-web-guidance `animate-to-from-top-layer` guide:
-  - "Baseline status for transition-behavior: Newly available"
+  - "Baseline status for transition-behavior: Newly available". That holds for the feature and for the `allow-discrete` keyword in the `transition` shorthand (web-features 3.44.0 `css.properties.transition.transition-behavior`, low 2024-08-06), not for the `transition-behavior` longhand (`css.properties.transition-behavior`, limited), so every rule writes `allow-discrete` in the shorthand.
   - "Browser support for overlay: Limited availability. … Unsupported in: Firefox and Safari."
   - "css.properties.transition-behavior.transitionable_display … Unsupported in: Firefox."
   - "Firefox 129+ parses `transition-behavior: allow-discrete` … without actually transitioning the `display` property (Firefox bug 1882408), causing elements to disappear immediately on exit."
