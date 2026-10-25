@@ -1,5 +1,5 @@
 /// <reference types="@vitest/browser-playwright" />
-import { afterEach, beforeAll, expect, inject } from "vitest";
+import { afterEach, beforeAll, beforeEach, expect, inject } from "vitest";
 import { cdp, page } from "vitest/browser";
 
 import { storyCanvas } from "./canvas.ts";
@@ -27,6 +27,17 @@ beforeAll(async () => {
   const faces = [...document.fonts];
   expect(faces.length).toBeGreaterThan(0);
   await Promise.all(faces.map((face) => face.load()));
+});
+
+// The pointer stays where an earlier story's play left it, and a story drawn under it would show
+// its hover. The corner is clear of stories, which start at the top-left (hovering a label hovers
+// its control too).
+beforeEach(async () => {
+  await cdp().send("Input.dispatchMouseEvent", {
+    type: "mouseMoved",
+    x: innerWidth - 1,
+    y: innerHeight - 1,
+  });
 });
 
 afterEach(async ({ story, task }) => {
