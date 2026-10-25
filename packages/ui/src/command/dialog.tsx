@@ -18,14 +18,18 @@ export interface DialogProps
   extends
     Omit<ComponentProps<"dialog">, "open" | "id">,
     Pick<RootProps, "inputValue" | "defaultInputValue" | "onInputValueChange" | "filter"> {
-  /** Controlled open state. */
+  /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
   open?: boolean;
+  /** Opens it on the first render when it holds its own state. */
   defaultOpen?: boolean;
-  /** Called before the change commits; `details.cancel()` keeps the dialog as it is. */
+  /** Called before it opens or closes; `details.cancel()` keeps it as it is. */
   onOpenChange?: Callback<boolean, Reason>;
-  /** The app's opener (the ⌘K button), focused on close when the browser would leave focus on `<body>`. */
+  /**
+   * Your opener (the ⌘K button), which gets focus back on close, so keyboard users keep their
+   * place.
+   */
   finalFocus?: RefObject<HTMLElement | null>;
-  /** Overrides the Provider's locale for the dialog's accessible name. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: { dialog?: string };
 }
 

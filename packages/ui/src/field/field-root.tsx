@@ -11,16 +11,16 @@ import type { FormControl } from "./field-control.ts";
 import styles from "./field.module.css";
 
 export interface RootProps extends ComponentProps<"div"> {
-  /** Passed to the control's `name`; also the key Form's `errors` uses for this field. */
+  /** The form field name; Form's `errors` uses it to show a server error on this field. */
   name?: string | undefined;
   /**
-   * Passed to the control, which renders `aria-disabled="true"`: focusable, announced, not
-   * editable. A disabled Fieldset disables the control natively instead.
+   * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+   * nearby why it is unavailable.
    */
   disabled?: boolean | undefined;
-  /** Forces the invalid state (an external validation library); wins over native validity. */
+  /** Marks the value invalid from outside, such as a server or validation library result. */
   invalid?: boolean | undefined;
-  /** Custom rule run on every change; a string becomes the `setCustomValidity()` message. */
+  /** Your own rule: return a message to mark the value invalid, or nothing when it is valid. */
   validate?: ((value: string, formData: FormData) => string | null | undefined) | undefined;
 }
 
@@ -127,10 +127,10 @@ function useValidity({ name, validate }: Pick<RootProps, "name" | "validate">, c
 }
 
 /**
- * Wires one form control to a visible label, a description and an error, and shows the error only
- * after interaction (`:user-invalid`), in place of the description. Use it to compose your own
- * control or to add a description and error to Checkbox, Switch, RadioGroup or Slider. TextField,
- * TextArea, PasswordField, NumberField and Select already contain a Field.
+ * Gives one form control a visible label, a description and an error, and shows the error only
+ * after the user has interacted, in place of the description. Use it to build your own control or to
+ * add a description and error to Checkbox, Switch, RadioGroup or Slider. TextField, TextArea,
+ * PasswordField, NumberField and Select already contain one.
  */
 export function Root({
   name,

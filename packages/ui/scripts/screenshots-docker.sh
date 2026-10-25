@@ -10,6 +10,8 @@ git ls-files --cached --others --exclude-standard | tar -cf - -T - | docker run 
     npm install --global --silent "pnpm@$(node -p "require(\"./package.json\").devEngines.packageManager.version")"
     pnpm install --frozen-lockfile && pnpm --filter @platform/tokens build
     status=0 && pnpm --filter @platform/ui run test:screenshots "$@" || status=$?
-    rm -rf /out/.vitest /out/__screenshots__ && cp -R packages/ui/.vitest packages/ui/__screenshots__ /out/ || true
+    rm -rf /out/.vitest && cp -R packages/ui/.vitest /out/ || true
+    find /out/src -name __screenshots__ -prune -exec rm -rf {} +
+    cd packages/ui && find src -name __screenshots__ -prune | tar -cf - -T - | tar -xf - -C /out
     exit "$status"
   ' sh "$@"

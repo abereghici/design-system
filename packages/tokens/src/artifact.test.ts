@@ -109,7 +109,13 @@ test("type families and fonts come from the font tokens and the shipped files", 
     weight: "100 900",
     style: "normal",
   });
-  expect(artifact.type.fonts).toHaveLength(4);
+  expect(artifact.type.fonts).toContainEqual({
+    family: "Noto Serif",
+    file: "fonts/NotoSerif-Italic-latin.woff2",
+    weight: "100 900",
+    style: "italic",
+  });
+  expect(artifact.type.fonts).toHaveLength(8);
 });
 
 const literals = (value: Themed | undefined): string[] =>

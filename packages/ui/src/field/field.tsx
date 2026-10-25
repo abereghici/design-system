@@ -46,11 +46,14 @@ export function Description({ className, ...props }: ComponentProps<"p">) {
 }
 
 export interface ErrorProps extends Omit<ComponentProps<"div">, "children"> {
-  /** The message, or one per failure. Omitted: the browser's localised `validationMessage`. */
+  /**
+   * The message, or a function that picks one per failure. Without it the browser's own message
+   * shows.
+   */
   children?: ReactNode | ((validity: ValidityState) => ReactNode);
 }
 
-/** Announced (`aria-live="assertive"`) when it fills; stays mounted so the region exists first. */
+/** The error message, announced by screen readers as soon as it appears. */
 export function Error({ children, className, ...props }: ErrorProps) {
   const field = use(FieldContext);
   const content =
@@ -71,11 +74,13 @@ export function Error({ children, className, ...props }: ErrorProps) {
 
 export interface ControlProps extends ComponentProps<"input"> {
   onValueChange?: (value: string, details: ChangeEventDetails) => void;
-  /** Renders `aria-disabled="true"` and `readOnly`: focusable and selectable, not editable. */
+  /**
+   * Stops editing but keeps the text focusable and selectable, so it can still be read and copied.
+   */
   disabled?: boolean;
 }
 
-/** A native `<input>` wired to the enclosing Root. */
+/** The text input, named and described by its Field. */
 export function Control({ className, readOnly, ...props }: ControlProps) {
   const bindings = useFieldControl<HTMLInputElement, typeof props>(props);
   return (

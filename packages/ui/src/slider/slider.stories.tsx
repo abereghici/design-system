@@ -1,6 +1,6 @@
 import { expect, fn } from "storybook/test";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Slider from "./slider.tsx";
 
@@ -26,8 +26,9 @@ const price = (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/Slider",
+  title: "Components/Slider",
   component: Slider.Root,
+  subcomponents: partsOf(Slider),
   args: {
     defaultValue: 40,
     children: volume,

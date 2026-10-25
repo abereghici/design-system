@@ -18,28 +18,35 @@ type AccessibleName =
 
 export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "aria-labelledby"> &
   AccessibleName & {
-    /** 28 / 32 / 40 square, growing to 40 / 44 / 48 on coarse pointers. */
+    /**
+     * `lg` for prominent or spacious layouts, `sm` for dense ones. Touch screens get larger targets
+     * on their own.
+     */
     size?: "sm" | "md" | "lg";
-    /** Controlled toggle state. Setting `pressed` or `defaultPressed` makes it a toggle button. */
+    /** Makes it a toggle that stays on or off, such as Pin or Bold, held by your state. */
     pressed?: boolean;
+    /** Makes it a toggle that holds its own on or off state, starting with this one. */
     defaultPressed?: boolean;
     /** Called before the change commits; `details.cancel()` keeps the current state. */
     onPressedChange?: (pressed: boolean, details: IconButtonChangeEventDetails) => void;
-    /** Busy: renders `aria-busy="true"` and blocks activation; focus stays. */
+    /** Shows a spinner and blocks presses while the action runs, keeping focus. */
     loading?: boolean;
-    /** Renders `aria-disabled="true"`: it stays focusable and announced, and activation is blocked. */
+    /**
+     * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+     * nearby why it is unavailable.
+     */
     disabled?: boolean;
-    /** Renders the single child element (a link) with IconButton's props and styles. */
+    /** Gives the IconButton's look to its one child, such as a link. */
     asChild?: boolean;
   };
 
 const feedback = { component: "IconButton", reason: "user" } as const;
 
 /**
- * A square native `<button>` whose only content is an icon, named by `aria-label` or
- * `aria-labelledby` (the type requires one). With `pressed` or `defaultPressed` it is a toggle
- * button. A press dispatches `ab-press`; a toggle dispatches `ab-toggle` instead. Use a Button with
- * a visible label whenever space allows.
+ * An action shown as an icon alone, for toolbars and tight rows. Give it a name with `aria-label`
+ * (or `aria-labelledby`), since the icon says nothing to a screen reader. With `pressed` or
+ * `defaultPressed` it is a toggle. A press dispatches `ab-press`, a toggle `ab-toggle`. Use a Button
+ * with a visible label whenever space allows.
  */
 export function IconButton({
   size = "md",

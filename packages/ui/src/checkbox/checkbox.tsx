@@ -19,22 +19,21 @@ type Name =
 
 export type CheckboxProps = Omit<ComponentProps<"input">, "type" | "children"> &
   Name & {
-    /** Called in the click, before the change commits; `details.cancel()` keeps the old state. */
+    /** Called before the box changes; `details.cancel()` keeps the old state. */
     onCheckedChange?: (checked: boolean, details: CheckboxChangeEventDetails) => void;
-    /** Mixed state, shown and announced only: the form still submits by `checked`. */
+    /** Shows "some selected", for a box that selects a group whose items are partly chosen. */
     indeterminate?: boolean;
     /**
-     * Renders `aria-disabled="true"`: the box stays focusable and announced, and the change is
-     * blocked. A disabled `<fieldset>` still disables it natively.
+     * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+     * nearby why it is unavailable.
      */
     disabled?: boolean;
   };
 
 /**
- * A native checkbox inside its label, for an on/off choice in a form that is submitted, or one item
- * of a set where any number may be chosen. Every committed change dispatches a bubbling
- * `ab-toggle`. For a setting that applies immediately, use Switch; for one choice among several,
- * RadioGroup.
+ * An on/off choice in a form that is submitted, or one item of a set where any number may be
+ * chosen. Its children are its label. Every change dispatches a bubbling `ab-toggle`. For a setting
+ * that applies at once, use Switch; for one choice among several, RadioGroup.
  */
 export function Checkbox({
   children,

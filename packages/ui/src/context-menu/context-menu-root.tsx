@@ -36,7 +36,9 @@ function useContextMenu(): Menu {
   return menu;
 }
 
-/** Moves the fixed anchor to a viewport point, measured so a transformed ancestor cannot offset it. */
+/**
+ * Moves the fixed anchor to a viewport point, measured so a transformed ancestor cannot offset it.
+ */
 function place(anchor: HTMLElement, x: number, y: number, pointer: boolean) {
   anchor.style.left = "0";
   anchor.style.top = "0";
@@ -56,14 +58,14 @@ function cornerAnchor(contentId: string) {
 }
 
 export interface RootProps extends FloatingOptions<ChangeReason> {
+  /** The Trigger and Content. */
   children?: ReactNode;
 }
 
 /**
- * The same menu as DropdownMenu, opened at the pointer by a right click or a long press on an
- * area, or below the focused element by the context-menu key. It is a shortcut, never the only
- * way to an action: put the same items in a visible control too. Root holds the open state and
- * renders no element.
+ * The same menu as DropdownMenu, opened by a right click or a long press on an area, or by the
+ * keyboard's context-menu key. It is a shortcut, never the only way to an action: put the same items
+ * in a visible control too.
  */
 export function Root({ children, ...options }: RootProps) {
   const floating = useFloating("ContextMenu", options, cornerAnchor);
@@ -71,9 +73,9 @@ export function Root({ children, ...options }: RootProps) {
 }
 
 export interface TriggerProps extends ComponentProps<"div"> {
-  /** The menu does not open and the browser's own context menu comes back. */
+  /** Lets the browser's own context menu open instead, such as while a row is being edited. */
   disabled?: boolean;
-  /** Makes the single child (a row, a card) the area. */
+  /** Makes its one child the area, such as a table row or a card. */
   asChild?: boolean;
 }
 
@@ -158,7 +160,7 @@ function openFromContextMenu(event: MouseEvent<HTMLDivElement>, floating: Menu["
   );
 }
 
-/** The area that opens the menu. It adds no role and no styles. */
+/** The area that opens the menu. It keeps its own look. */
 export function Trigger({ disabled = false, asChild = false, ...props }: TriggerProps) {
   const { floating } = useContextMenu();
   const Area = asChild ? Slot : "div";
@@ -204,7 +206,7 @@ type Naming = { "aria-label": string } | { "aria-labelledby": string };
 
 export type ContentProps = Omit<ComponentProps<"div">, "id" | "role" | "popover"> & Naming;
 
-/** The menu, opened below and after the pointer and flipped at the viewport edges. */
+/** The menu, opened at the pointer and kept inside the window. */
 export function Content({ className, ...props }: ContentProps) {
   const menu = useContextMenu();
   return (

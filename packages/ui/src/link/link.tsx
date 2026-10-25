@@ -8,15 +8,18 @@ export type LinkProps = ComponentProps<"a"> &
   (
     | { href: string; asChild?: false }
     | {
-        /** Renders the single child element (a router link), which carries the `href`. */
+        /**
+         * Gives the Link's look to its one child, such as your router's link, which carries the
+         * `href`.
+         */
         asChild: true;
       }
   );
 
 /**
- * A native `<a href>` for navigation, always underlined, inheriting the surrounding type. Wrap a
- * router link with `asChild`. To trigger an action, use a Button; to jump past repeated navigation,
- * use a SkipLink.
+ * Goes to another page or place, always underlined so it reads as a link, in the type of the text
+ * around it. Wrap a router link with `asChild`. To start an action, use a Button; to jump past
+ * repeated navigation, a SkipLink.
  */
 export function Link({ asChild = false, className, ...props }: LinkProps) {
   const Root = asChild ? Slot : "a";

@@ -81,7 +81,10 @@ export interface ActionProps extends ButtonProps {
   variant?: "primary" | "danger";
 }
 
-/** Runs `onClick`, then closes the dialog unless `onOpenChange`'s `details.cancel()` is called. */
+/**
+ * The answer that carries out the action. It closes the dialog after `onClick`, unless
+ * `onOpenChange` cancels.
+ */
 export function Action({ variant = "primary", className, onClick, ...props }: ActionProps) {
   return (
     <button

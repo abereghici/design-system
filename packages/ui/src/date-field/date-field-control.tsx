@@ -18,25 +18,35 @@ import fieldStyles from "../field/field.module.css";
 import styles from "./date-field.module.css";
 
 export interface DateFieldOptions {
-  /** Controlled. `null` is no date. */
+  /** The chosen date, when your state holds it; `null` is no date. */
   value?: Temporal.PlainDate | null | undefined;
+  /** The starting value when it holds its own state. */
   defaultValue?: Temporal.PlainDate | null | undefined;
   /** Called when the complete date changes, or becomes incomplete (`null`). */
   onValueChange?:
     | ((value: Temporal.PlainDate | null, details: DateFieldChangeEventDetails) => void)
     | undefined;
-  /** Written to the hidden date input, so `rangeUnderflow` and the browser's message apply. */
+  /** The earliest date allowed; an earlier one is invalid. */
   min?: Temporal.PlainDate | undefined;
+  /** The latest date allowed; a later one is invalid. */
   max?: Temporal.PlainDate | undefined;
-  /** Submits the ISO date ("YYYY-MM-DD"). */
+  /** The form field name; the form submits the date as "YYYY-MM-DD". */
   name?: string | undefined;
+  /** The `id` of a form elsewhere on the page that this field belongs to. */
   form?: string | undefined;
+  /** Makes a complete date necessary before the form submits. */
   required?: boolean | undefined;
-  /** `aria-disabled`: focusable, nothing changes, the value still submits. */
+  /**
+   * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+   * nearby why it is unavailable.
+   */
   disabled?: boolean | undefined;
-  /** Custom rule; receives the ISO string, `""` when there is no complete date. */
+  /**
+   * Your own rule, given the date as "YYYY-MM-DD" (`""` when incomplete): return a message when
+   * invalid.
+   */
   validate?: ((value: string, formData: FormData) => string | null | undefined) | undefined;
-  /** Placeholders and messages; fall back to the Provider's locale. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: Partial<Labels["dateField"]> | undefined;
 }
 

@@ -3,13 +3,14 @@ import { expect } from "storybook/test";
 import { Button } from "@platform/ui/button";
 import { FilesIcon } from "@platform/ui/icons/files";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as EmptyState from "./empty-state.tsx";
 
 const meta = preview.meta({
-  title: "Components/Feedback/EmptyState",
+  title: "Components/EmptyState",
   component: EmptyState.Root,
+  subcomponents: partsOf(EmptyState),
   args: {
     children: (
       <>

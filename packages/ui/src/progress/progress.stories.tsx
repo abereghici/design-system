@@ -7,7 +7,7 @@ import { roRO } from "../provider/locales/ro-RO.ts";
 import { Progress } from "./progress.tsx";
 
 const meta = preview.meta({
-  title: "Components/Feedback/Progress",
+  title: "Components/Progress",
   component: Progress,
   args: { value: 40, label: "Uploading 3 files" },
 });

@@ -17,25 +17,34 @@ async function openFont(file: string): Promise<Font> {
 
 const subsets = FONT_SUBSETS.map((subset) => subset.name);
 
-test.each(subsets)("Figtree %s is variable on wght 300–900", async (subset) => {
-  const { variationAxes } = await openFont(`Figtree-${subset}.woff2`);
+const STYLES = ["", "-Italic"];
+const styled = (stem: string) =>
+  STYLES.flatMap((style) => subsets.map((subset) => `${stem}${style}-${subset}.woff2`));
+
+test.each(styled("Figtree"))("%s is variable on wght 300–900", async (file) => {
+  const { variationAxes } = await openFont(file);
   expect(Object.keys(variationAxes)).toEqual(["wght"]);
   expect(variationAxes).toMatchObject({ wght: { min: 300, max: 900 } });
 });
 
-test.each(subsets)(
-  "Noto Serif %s is variable on wght 100–900 and wdth 62.5–100",
-  async (subset) => {
-    const { variationAxes } = await openFont(`NotoSerif-${subset}.woff2`);
-    expect(Object.keys(variationAxes).toSorted()).toEqual(["wdth", "wght"]);
-    expect(variationAxes).toMatchObject({
-      wght: { min: 100, max: 900 },
-      wdth: { min: 62.5, max: 100 },
-    });
+test.each(styled("NotoSerif"))("%s is variable on wght 100–900 and wdth 62.5–100", async (file) => {
+  const { variationAxes } = await openFont(file);
+  expect(Object.keys(variationAxes).toSorted()).toEqual(["wdth", "wght"]);
+  expect(variationAxes).toMatchObject({
+    wght: { min: 100, max: 900 },
+    wdth: { min: 62.5, max: 100 },
+  });
+});
+
+test.each([...styled("Figtree"), ...styled("NotoSerif")])(
+  "%s slants only if it is an italic file",
+  async (file) => {
+    const { italicAngle } = await openFont(file);
+    expect(italicAngle < 0).toBe(file.includes("-Italic-"));
   },
 );
 
-const files = ["Figtree", "NotoSerif"].flatMap((stem) =>
+const files = ["Figtree", "Figtree-Italic", "NotoSerif", "NotoSerif-Italic"].flatMap((stem) =>
   FONT_SUBSETS.map((subset) => [`${stem}-${subset.name}.woff2`, subset.unicodeRange] as const),
 );
 
@@ -52,7 +61,7 @@ const SAMPLES = {
     "U+0102-0103, U+0218-021B, U+0141-0142, U+0158-0159, U+015E-015F, U+011E-011F, U+0174-0177",
 } as const;
 
-const samples = ["Figtree", "NotoSerif"].flatMap((stem) =>
+const samples = ["Figtree", "Figtree-Italic", "NotoSerif", "NotoSerif-Italic"].flatMap((stem) =>
   subsets.map((subset) => [`${stem}-${subset}.woff2`, SAMPLES[subset]] as const),
 );
 

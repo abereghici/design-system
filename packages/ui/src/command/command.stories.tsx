@@ -6,7 +6,7 @@ import { Kbd } from "@platform/ui/kbd";
 import { roRO } from "@platform/ui/locales/ro-RO";
 import { Provider } from "@platform/ui/provider";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
@@ -45,8 +45,9 @@ const shown = (canvas: { getAllByRole: (role: "option") => HTMLElement[] }) =>
 const reason = (value: string): unknown => expect.objectContaining({ reason: value });
 
 const meta = preview.meta({
-  title: "Components/Overlays/Command",
+  title: "Components/Command",
   component: Command.Root,
+  subcomponents: partsOf(Command),
   args: { children: palette, onInputValueChange: fn() },
 });
 
@@ -214,7 +215,7 @@ function Palette(props: Command.RootProps) {
 const outside = { keys: "[MouseLeft]", coords: { clientX: 1, clientY: 1 } };
 
 export const InADialog = meta.story({
-  render: (args) => <Palette {...args} />,
+  render: Palette,
   parameters: { docs: { description: { story: "The ⌘K palette; the app holds `open`." } } },
 });
 
@@ -245,9 +246,8 @@ InADialog.test(
     const record = () => {
       focused.push([document.activeElement, onHome.mock.calls.length]);
     };
-    document.addEventListener("ab-confirm", record);
+    document.addEventListener("ab-confirm", record, { once: true });
     await userEvent.type(canvas.getByRole("combobox"), "home{Enter}");
-    document.removeEventListener("ab-confirm", record);
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     await expect(onOpenChange).toHaveBeenCalledWith(false, reason("item-press"));
     await expect(focused).toEqual([[opener, 1]]);

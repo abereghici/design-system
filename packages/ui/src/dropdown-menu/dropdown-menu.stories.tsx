@@ -6,7 +6,7 @@ import { CopyIcon } from "@platform/ui/icons/copy";
 import { TrashIcon } from "@platform/ui/icons/trash";
 import { Kbd } from "@platform/ui/kbd";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
@@ -27,8 +27,9 @@ async function openWithKeyboard() {
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const meta = preview.meta({
-  title: "Components/Overlays/DropdownMenu",
+  title: "Components/DropdownMenu",
   component: DropdownMenu.Root,
+  subcomponents: partsOf(DropdownMenu),
   args: {
     onOpenChange,
     children: (

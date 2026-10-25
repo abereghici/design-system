@@ -36,8 +36,14 @@ const submitted = (form: HTMLFormElement) =>
   new FormData(form).getAll("files").map((file) => (file instanceof File ? file.name : file));
 
 const meta = preview.meta({
-  title: "Components/Forms/DropZone",
+  title: "Components/DropZone",
   component: DropZone,
+  argTypes: {
+    multiple: {
+      control: "boolean",
+      description: "Accepts several files at once; otherwise only the first is kept.",
+    },
+  },
   args: {
     name: "files",
     accept: ".csv,text/csv",

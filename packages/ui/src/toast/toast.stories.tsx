@@ -46,7 +46,7 @@ const withTextField: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Feedback/Toast",
+  title: "Components/Toast",
   component: Toaster,
   beforeEach: () => clear,
 });

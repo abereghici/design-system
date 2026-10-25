@@ -7,7 +7,7 @@ import { enUS } from "../provider/locales/en-US.ts";
 import { Badge } from "./badge.tsx";
 
 const meta = preview.meta({
-  title: "Components/Feedback/Badge",
+  title: "Components/Badge",
   component: Badge,
   args: { children: 3 },
 });

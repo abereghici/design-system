@@ -2,7 +2,7 @@ import { expect } from "storybook/test";
 
 import type { Decorator } from "@storybook/react-vite";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import { Checkbox } from "../checkbox/checkbox.tsx";
 
@@ -22,8 +22,9 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/Field",
+  title: "Components/Field",
   component: Field.Root,
+  subcomponents: partsOf(Field),
   args: {
     name: "handle",
     children: (

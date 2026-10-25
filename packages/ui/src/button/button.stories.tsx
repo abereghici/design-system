@@ -28,7 +28,7 @@ async function blocksActivation({ canvas, userEvent, args }: Context) {
 }
 
 const meta = preview.meta({
-  title: "Components/Actions/Button",
+  title: "Components/Button",
   component: Button,
   args: { children: "Save changes", onClick: fn() },
 });

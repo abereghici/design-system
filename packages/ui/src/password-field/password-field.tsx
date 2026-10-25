@@ -7,7 +7,8 @@ import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useField } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
 import { IconButton } from "../icon-button/icon-button.tsx";
-import { InspectIcon } from "../icon/icons/inspect.tsx";
+import { EyeOffIcon } from "../icon/icons/eye-off.tsx";
+import { EyeIcon } from "../icon/icons/eye.tsx";
 import { useLabels } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { passwordField as passwordFieldLabels } from "../provider/locales/en-US/password-field.ts";
@@ -21,14 +22,23 @@ type ControlProps = Omit<
   Field.ControlProps,
   "type" | "autoComplete" | "size" | "aria-label" | "aria-labelledby"
 > & {
-  /** Controlled: whether the value is shown as plain text. */
+  /** Shows the password as plain text, when your state holds it. */
   visible?: boolean;
+  /** Shows the password as plain text on the first render. */
   defaultVisible?: boolean;
-  /** Called before the change commits. Submitting the form hides it with `reason: "form-submit"`. */
+  /**
+   * Called before the password shows or hides. Submitting the form hides it, so the browser never
+   * saves it shown.
+   */
   onVisibleChange?: (visible: boolean, details: PasswordFieldVisibleChangeEventDetails) => void;
-  /** The toggle's accessible name; falls back to the Provider's locale. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: Partial<Labels["passwordField"]>;
+  /**
+   * Tells password managers what to fill: `current-password` to sign in, `new-password` to sign up
+   * or change it.
+   */
   autoComplete?: "current-password" | "new-password" | "one-time-code" | "off";
+  /** Content before the input, such as a decorative icon. */
   startElement?: TextFieldProps["startElement"];
 };
 
@@ -99,7 +109,7 @@ function Control({
         if (event.detail > 0) inputOf(inputId)?.focus();
       }}
     >
-      <InspectIcon size="sm" />
+      {visible ? <EyeIcon size="sm" /> : <EyeOffIcon size="sm" />}
     </IconButton>
   );
 

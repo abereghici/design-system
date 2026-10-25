@@ -9,26 +9,35 @@ import { Spinner } from "../spinner/spinner.tsx";
 import styles from "./button.module.css";
 
 export interface ButtonProps extends ComponentProps<"button"> {
+  /**
+   * The weight of the action: one `primary` per view, `secondary` for the rest, `tertiary` in
+   * toolbars and dense rows, `danger` only to confirm a destructive action.
+   */
   variant?: "primary" | "secondary" | "tertiary" | "danger";
-  /** Heights 28 / 32 / 40, growing to 40 / 44 / 48 on coarse pointers. */
+  /**
+   * `lg` for prominent or spacious layouts, `sm` for dense ones. Touch screens get larger targets
+   * on their own.
+   */
   size?: "sm" | "md" | "lg";
-  /** Busy: renders `aria-busy="true"` and blocks activation; the label and focus stay. */
+  /**
+   * Shows a spinner and blocks presses while the action runs, keeping the label, width and focus.
+   */
   loading?: boolean;
   /**
-   * Renders `aria-disabled="true"`: the button stays focusable and announced, and activation is
-   * blocked. The native `disabled` attribute is never set; a disabled `<fieldset>` still disables
-   * the button natively.
+   * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+   * nearby why it is unavailable.
    */
   disabled?: boolean;
-  /** Renders the single child element (a link, a router link) with the Button's props and styles. */
+  /**
+   * Gives the Button's look to its one child, such as a router link that should look like a button.
+   */
   asChild?: boolean;
 }
 
 /**
- * A native `<button type="button">` for an action: one primary per view, secondary for the rest,
- * tertiary in toolbars and dense rows, danger only to confirm a destructive action. Every press
- * dispatches a bubbling `ab-press` event after `onClick`. For an icon-only action, use IconButton;
- * to navigate, use Link.
+ * Starts an action, such as saving or opening a dialog. It never submits a form unless you pass
+ * `type="submit"`, and every press dispatches a bubbling `ab-press` event after `onClick`. For an
+ * icon-only action, use IconButton; to go to another page, use Link.
  */
 export function Button({
   variant = "secondary",

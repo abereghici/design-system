@@ -6,19 +6,24 @@ import { join } from "../slot/slot.tsx";
 import styles from "./badge.module.css";
 
 export interface BadgeLabels {
-  /** The capped count. `max` arrives already formatted. */
+  /** The text for a count above `max`, given the formatted `max` ("99+"). */
   overflow?: (max: string) => string;
 }
 
 export interface BadgeProps extends Omit<ComponentProps<"span">, "children"> {
+  /**
+   * `danger` for counts that need attention, such as errors; `accent` to stand out from neutral
+   * counts.
+   */
   variant?: "neutral" | "accent" | "danger";
-  /** A numeric count above it renders as `max` plus the overflow label ("99+"). */
+  /** The highest count shown in full; above it the Badge shows "99+", keeping it short. */
   max?: number;
   /**
-   * A shipped locale (`@platform/ui/locales/*`) that formats a numeric count on the server. A
-   * Server Component can't read the Provider's `locale`, so without it the count is en-US.
+   * A shipped locale (`@platform/ui/locales/*`). This renders on the server, where the
+   * Provider's `locale` can't reach, so pass it for any language other than en-US.
    */
   locale?: Locale;
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: BadgeLabels;
   /** A number is formatted and capped; a string (one to four characters) renders as given. */
   children: number | string;
@@ -27,11 +32,9 @@ export interface BadgeProps extends Omit<ComponentProps<"span">, "children"> {
 const overflowLabel = (max: string) => `${max}+`;
 
 /**
- * A count or a one-glyph mark ("!") placed next to the tab, nav item or button it counts. A number
- * is formatted with `Intl.NumberFormat` and capped at `max`. It is a Server Component, so pass
- * `locale` to format in the app's language. Put the exact count in the owner's accessible name
- * ("Inbox, 1 280 unread"). For a static word ("Draft"), use a Tag; for a state marker in a dense
- * list, a StatusDot.
+ * A count or a one-glyph mark ("!") next to the tab, nav item or button it counts. Put the exact
+ * count in that control's name too ("Inbox, 1 280 unread"), since the Badge alone is easy to miss.
+ * For a static word ("Draft"), use a Tag; for a state marker in a dense list, a StatusDot.
  */
 export function Badge({
   variant = "neutral",

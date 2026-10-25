@@ -19,21 +19,25 @@ export const family = (key) => {
 
 # Typography
 
-Noto Serif sets headings and display statements, Figtree sets everything people read and operate, and code uses the system monospace stack with no webfont. Both webfonts are variable, self-hosted and split into Latin and Latin Extended files, so a page downloads only the scripts it shows.
+Noto Serif sets headings and display statements, Figtree sets everything people read and operate, and code uses the system monospace stack. Both families include a true italic. The Provider loads the fonts, so apps add nothing.
 
 Set text with a type role: `font: var(--ab-type-body-md)` plus `letter-spacing: var(--ab-type-body-md-letter-spacing)`, because the `font` shorthand can't carry letter spacing. The roles keep size, weight and line height in step.
 
 - Sizes are in `rem`, so text follows the reader's default size.
 - Line heights are unitless.
-- The larger steps are fluid between 360px and 1280px viewports, with a `rem` term in every value (never viewport units alone) and at most 1.14× growth, well inside WCAG 1.4.4.
+- The larger steps grow a little with the window and still follow the reader's text size, as WCAG 1.4.4 asks.
 
 ## Noto Serif
 
 <Typeset {...family("noto-serif")} />
 
+<Typeset {...family("noto-serif")} style={{ fontStyle: "italic" }} />
+
 ## Figtree
 
 <Typeset {...family("figtree")} />
+
+<Typeset {...family("figtree")} style={{ fontStyle: "italic" }} />
 
 ## System monospace
 

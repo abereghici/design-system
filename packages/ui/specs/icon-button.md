@@ -97,8 +97,7 @@ Native `<button>` provides Space and Enter; no key handler is added. In a Toolba
 - `aria-expanded` is passed through by the Floating-layer triggers that wrap IconButton (DropdownMenu, Popover); IconButton only styles it as selected.
 - Disabled: pair with an explanation (`aria-describedby`), as Button.
 - Targets: `size-control-*` heights reach 40/44/48 under `(pointer: coarse)`; sm (28) meets the 24 px minimum on fine pointers (brand book: "icon-only controls keep at least the minimum target size").
-- **Selected vs rest contrast (review item).** The selected state changes the fill (`color-background-selected`) and the icon colour (`color-icon-subtle` → `color-icon-selected`). Whether that difference alone is enough to identify the state (WCAG 1.4.11) is for the brand-owner review; under more contrast a border is added (next bullet).
-- **More contrast:** under `(prefers-contrast: more)` the selected state draws a 1 px inset `icon-button-border-color-selected` ring, so on/off no longer relies on a fill step.
+- **Selected vs rest contrast:** the fill step alone measures 1.10:1 (light) and 1.14:1 (dark) against the surface, under WCAG 1.4.11's 3:1, so the selected state always draws a 1 px inset `icon-button-border-color-selected` ring: 13.40:1 (light) and 15.07:1 (dark) (user decision 2026-10-25).
 - **Forced colors:** the fills disappear. CSS Color Adjust 1: "if its computed value is a color other than a system color, its used value is instead forced to a system color", and for background-color "its alpha channel is taken from the original background-color value so that transparent backgrounds remain transparent" (https://www.w3.org/TR/css-color-adjust-1/). The icon follows `currentColor`, so it takes the forced text colour. Because system colours are not forced, the selected state sets `background-color: Highlight` and icon `HighlightText` in `@media (forced-colors: active)`, so on/off stays visible. Disabled uses `GrayText`. The focus ring is an `outline`, so the system colour applies.
 - **Reduced transparency:** not affected (no Material).
 
@@ -115,7 +114,7 @@ Proposed new:
 | Token                               | References                         | `$type` | Why                                                                                                              |
 | ----------------------------------- | ---------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
 | `icon-button-scale-pressed`         | `{semantic.motion-scale-pressed}`  | number  | The source's "pressed (scale .97)"; mirrors `button-scale-pressed` so an app can tune press depth per component. |
-| `icon-button-border-color-selected` | `{semantic.color-border-selected}` | color   | The selected ring under more contrast (above).                                                                   |
+| `icon-button-border-color-selected` | `{semantic.color-border-selected}` | color   | The selected state's ring (above).                                                                               |
 
 Consumed as semantic tokens directly: `opacity-disabled` (no `opacity` property in the Dictionary, and the value is the system's single disabled opacity), `focus-ring-width`, `focus-ring-offset`, `color-border-focused` (R6), and the `motion-*` tokens. No new Dictionary words.
 

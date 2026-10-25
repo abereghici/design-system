@@ -29,13 +29,11 @@ export const motion = (property) =>
 
 Motion is fast, eased out, interruptible and optional. It confirms what the user did and shows where things come from; it never decorates.
 
-- **Animate `transform`, `opacity` and `filter` only.** Never `transition: all`.
 - **Ease out to enter and exit,** never ease in. Exits are faster than entrances.
-- **Use transitions, not keyframes,** for anything that can be triggered again before it ends, so it reverses from where it is.
+- **Let motion reverse** from where it is when it is triggered again before it ends.
 - **Don't animate keyboard-initiated or very frequent actions** (more than about 100 a day).
-- **Grow from the trigger,** at 0.97 scale, never from 0. Modals stay centred and enter at 0.95.
-- **Hover motion is gated** behind `(hover: hover) and (pointer: fine)`, so touch never gets a stuck hover.
-- **Springs** (`linear()` approximations, no script) are only for what the user moves directly: switch thumbs, segmented and tab indicators, the radio diamond, a toast's entrance. Everything the system starts uses ease-out.
+- **Grow from the trigger,** never from nothing. Modals stay centred.
+- **Springs only for what the user moves directly,** such as a switch thumb. Everything the system starts eases out.
 
 ## Reduced motion
 
@@ -43,7 +41,7 @@ Under `prefers-reduced-motion: reduce` the tokens remove movement: every scale, 
 
 ## Durations and delays
 
-Interface motion stays at or under 300ms. The 700ms entrance plays once per visit, and the toast durations are how long a toast stays, not an animation.
+The toast durations are how long a toast stays, not an animation.
 
 <TokenTable tokens={[...motion("duration"), ...motion("delay")]} />
 

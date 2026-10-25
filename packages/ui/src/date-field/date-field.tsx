@@ -13,14 +13,21 @@ export type { DateFieldChangeEventDetails } from "./date-field-editing.ts";
 
 export type DateFieldProps = DateFieldOptions &
   Omit<ControlProps, "options" | "onValidity" | "end"> & {
+    /** The visible label. Every field needs one, or an `aria-label`. */
     label?: ReactNode;
-    /** Helper text below the field, replaced by the error while invalid. */
+    /**
+     * Helper text under the field, such as a format hint; the error message takes its place while
+     * invalid.
+     */
     description?: ReactNode;
-    /** Shown only after interaction while invalid. Defaults to the browser's `validationMessage`. */
+    /**
+     * What to fix, shown once the user has interacted and the value is invalid. Without it the
+     * browser's own message is shown.
+     */
     errorMessage?: ReactNode;
-    /** Forces the invalid state, e.g. from an external validation library. */
+    /** Marks the value invalid from outside, such as a server or validation library result. */
     invalid?: boolean | undefined;
-    /** Exposed as `data-size`. */
+    /** `lg` for prominent or spacious forms. Touch screens get larger targets on their own. */
     size?: "md" | "lg";
   };
 
@@ -29,9 +36,9 @@ type FrameProps = DateFieldProps &
   Pick<ControlProps["options"], "isDateUnavailable" | "onFormReset"> & { children?: ReactNode };
 
 /**
- * Entry of one calendar date by keyboard: day, month and year segments in the Locale's order, with
- * a hidden native date input for the form value and validation. To pick from a month, use Calendar
- * or DatePicker.
+ * Types one date by keyboard, as day, month and year segments in the order of the user's language,
+ * such as a birth date people know by heart. It submits with the form and validates like any input.
+ * To pick from a month, use Calendar or DatePicker.
  */
 export function DateField(props: DateFieldProps) {
   return <DateFieldFrame {...props} />;

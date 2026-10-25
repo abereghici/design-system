@@ -11,7 +11,11 @@ import { pointerMarker } from "../toggle/toggle.ts";
 
 import styles from "./accordion.module.css";
 
-/** `"trigger-press"`: a Trigger click, Enter or Space. `"none"`: the browser opened an Item (find-in-page, fragment navigation). `cancel()`: keeps the open Items as they were. Only a `"trigger-press"` can be cancelled: the browser has already revealed its match. */
+/**
+ * `"trigger-press"`: a Trigger click, Enter or Space. `"none"`: the browser opened an Item
+ * (find-in-page, fragment navigation). `cancel()`: keeps the open Items as they were. Only a
+ * `"trigger-press"` can be cancelled: the browser has already revealed its match.
+ */
 export type ChangeEventDetails = Details<"trigger-press" | "none">;
 
 interface AccordionState {
@@ -24,19 +28,21 @@ const AccordionContext = createContext<AccordionState | null>(null);
 const ItemContext = createContext<string | null>(null);
 
 export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
-  /** `false`: opening an Item closes the open one. */
+  /** Lets several Items stay open at once; by default opening one closes the other. */
   multiple?: boolean;
-  /** The `value`s of the open Items. */
+  /** The `value`s of the open Items, when your state holds them. */
   value?: readonly string[];
+  /** The Items open on the first render when it holds its own state. */
   defaultValue?: readonly string[];
+  /** Called before an Item opens or closes, with the open `value`s it would have. */
   onValueChange?: (value: string[], details: ChangeEventDetails) => void;
 }
 
 /**
- * A stack of native `<details>` sections for secondary content; by default opening one closes the
- * other (`<details name>`), and `multiple` lets any combination stay open. Enter and Space toggle,
- * find-in-page opens a section with a match, and every press dispatches a bubbling `ab-toggle`.
- * Never hide a primary task inside one; for peer views of the same place use Tabs.
+ * Stacked sections of secondary content that open one at a time, or several with `multiple`. Enter
+ * and Space toggle a section, the browser's find-in-page opens one with a match, and every press
+ * dispatches a bubbling `ab-toggle`. Never hide a primary task inside one; for peer views of the
+ * same place, use Tabs.
  */
 export function Root({
   multiple = false,

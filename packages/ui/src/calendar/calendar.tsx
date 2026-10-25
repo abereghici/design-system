@@ -31,18 +31,21 @@ export interface CalendarProps extends Omit<
   ComponentProps<"fieldset">,
   "defaultValue" | "onChange" | "role" | "children"
 > {
-  /** Controlled. `null` is no date. */
+  /** The chosen date, when your state holds it; `null` is no date. */
   value?: Temporal.PlainDate | null | undefined;
+  /** The starting value when it holds its own state. */
   defaultValue?: Temporal.PlainDate | null | undefined;
+  /** Called before a day is chosen; `details.cancel()` keeps the previous one. */
   onValueChange?:
     | ((value: Temporal.PlainDate, details: CalendarChangeEventDetails) => void)
     | undefined;
-  /** Days outside are unavailable; Previous and Next stop at their months. */
+  /** The earliest day that can be chosen; months before it can't be reached. */
   min?: Temporal.PlainDate | undefined;
+  /** The latest day that can be chosen; months after it can't be reached. */
   max?: Temporal.PlainDate | undefined;
-  /** Unavailable days stay focusable and readable, but cannot be chosen. */
+  /** Days that can't be chosen, such as weekends or booked dates. They stay readable. */
   isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
-  /** Previous and Next names; fall back to the Provider's locale. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: Partial<Labels["calendar"]> | undefined;
 }
 

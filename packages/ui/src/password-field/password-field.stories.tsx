@@ -2,6 +2,7 @@ import { expect, fn } from "storybook/test";
 
 import type { Decorator } from "@storybook/react-vite";
 
+import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -28,8 +29,9 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/PasswordField",
+  title: "Components/PasswordField",
   component: PasswordField,
+  argTypes: textFieldArgTypes,
   args: {
     label: "Password",
     name: "password",

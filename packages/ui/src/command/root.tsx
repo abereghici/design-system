@@ -60,7 +60,10 @@ function keyDown(
   if (next instanceof HTMLElement) highlight(next.id);
 }
 
-/** Ranks the Items, then keeps the highlight on a shown, enabled Item: the first one after a new query. */
+/**
+ * Ranks the Items, then keeps the highlight on a shown, enabled Item: the first one after a new
+ * query.
+ */
 function useRanking(
   list: RefObject<HTMLDivElement | null>,
   query: string,
@@ -102,12 +105,16 @@ function useRanking(
 }
 
 export interface RootProps extends ComponentProps<"div"> {
-  /** Controlled query. */
+  /** The typed query, when your state holds it; pair it with `onInputValueChange`. */
   inputValue?: string | undefined;
+  /** The query on the first render when it holds its own state. */
   defaultInputValue?: string | undefined;
-  /** `details.cancel()` keeps the current query. */
+  /** Called before the query changes; `details.cancel()` keeps the current one. */
   onInputValueChange?: Callback<string, "input-change" | "input-clear"> | undefined;
-  /** `null` turns the ranking off: every Item shows in the order rendered, for consumers that search themselves. */
+  /**
+   * `null` turns the built-in ranking off, when you search yourself (on a server) and render the
+   * results.
+   */
   filter?: null | undefined;
 }
 

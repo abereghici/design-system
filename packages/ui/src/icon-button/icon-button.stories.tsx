@@ -44,7 +44,7 @@ function ControlledIconButton(props: IconButtonProps) {
 }
 
 const meta = preview.meta({
-  title: "Components/Actions/IconButton",
+  title: "Components/IconButton",
   component: IconButton,
   args: {
     "aria-label": "Pin",
@@ -217,7 +217,7 @@ Default.test(
 
 export const Controlled = meta.story({
   args: { pressed: true },
-  render: (args) => <ControlledIconButton {...args} />,
+  render: ControlledIconButton,
   parameters: {
     docs: { description: { story: "The parent holds `pressed` and updates it on change." } },
   },

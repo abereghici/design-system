@@ -4,6 +4,7 @@ import type { Decorator } from "@storybook/react-vite";
 
 import { Provider } from "@platform/ui/provider";
 
+import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -30,8 +31,9 @@ const inAForm: Decorator = (Story) => (
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/NumberField",
+  title: "Components/NumberField",
   component: NumberField,
+  argTypes: textFieldArgTypes,
   args: {
     label: "Seats",
     name: "seats",

@@ -22,16 +22,16 @@ interface Group {
 const GroupContext = createContext<Group | null>(null);
 
 export type RootProps = Omit<ComponentProps<"fieldset">, "defaultValue"> & {
-  /** Called in the click, before the change commits; `details.cancel()` keeps the old choice. */
+  /** Called before the choice changes; `details.cancel()` keeps the old one. */
   onValueChange?: (value: string, details: ChangeEventDetails) => void;
 } & ({ value: string; defaultValue?: never } | { defaultValue: string; value?: never }) &
   ({ "aria-label": string } | { "aria-labelledby": string });
 
 /**
- * A native radio group that switches between 2–5 views or modes of the same content in place; one
- * floating indicator glides to the checked item. Arrow keys move and choose (following the visual
- * direction in RTL), and every committed change dispatches a bubbling `ab-toggle`. For peer
- * sections with their own content use Tabs; for a choice in a form, RadioGroup.
+ * Switches between 2–5 views or modes of the same content in place, such as List and Board. Name it
+ * with `aria-label`. Arrow keys move and choose (following the reading direction), and every change
+ * dispatches a bubbling `ab-toggle`. For sections with their own content use Tabs; for a choice in a
+ * form, RadioGroup.
  */
 export function Root({
   value,

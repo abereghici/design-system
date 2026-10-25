@@ -7,7 +7,7 @@ import { roRO } from "../provider/locales/ro-RO.ts";
 import { SkipLink } from "./skip-link.tsx";
 
 const meta = preview.meta({
-  title: "Components/Navigation/SkipLink",
+  title: "Components/SkipLink",
   component: SkipLink,
   args: { href: "#main" as const },
   decorators: [

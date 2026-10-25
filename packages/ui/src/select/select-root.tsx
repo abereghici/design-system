@@ -19,28 +19,38 @@ type ControlProps = Omit<
   ComponentProps<"select">,
   "multiple" | "size" | "value" | "defaultValue" | "placeholder"
 > & {
+  /** The chosen value, when your state holds it; pair it with `onValueChange`. */
   value?: string;
+  /** The starting value when it holds its own state. */
   defaultValue?: string;
+  /** Called when the user chooses an option. */
   onValueChange?: (value: string, details: ChangeEventDetails) => void;
-  /** Shown until the user chooses; with `required`, choosing nothing fails `valueMissing`. */
+  /** The prompt shown until the user chooses, such as "Choose a region". */
   placeholder?: string | undefined;
   /**
-   * Renders `aria-disabled="true"`: the select stays focusable and announced, and it neither
-   * opens nor changes value. A disabled `<fieldset>` still disables it natively.
+   * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+   * nearby why it is unavailable.
    */
   disabled?: boolean;
 };
 
 export type RootProps = Naming &
   ControlProps & {
-    /** Helper text below the trigger, replaced by the error while invalid. */
+    /**
+     * Helper text under the field, such as a format hint; the error message takes its place while
+     * invalid.
+     */
     description?: ReactNode;
-    /** Shown only after interaction while invalid. Defaults to the browser's `validationMessage`. */
+    /**
+     * What to fix, shown once the user has interacted and the value is invalid. Without it the
+     * browser's own message is shown.
+     */
     errorMessage?: ReactNode | ((validity: ValidityState) => ReactNode);
-    /** Forces the invalid state, e.g. from an external validation library. */
+    /** Marks the value invalid from outside, such as a server or validation library result. */
     invalid?: boolean;
+    /** Your own rule: return a message to mark the value invalid, or nothing when it is valid. */
     validate?: Field.RootProps["validate"];
-    /** Exposed as `data-size`. Replaces the native `size`, which turns a select into a list box. */
+    /** `lg` for prominent or spacious forms. Touch screens get larger targets on their own. */
     size?: "md" | "lg";
   };
 
@@ -84,11 +94,10 @@ function Control({
 }
 
 /**
- * Chooses one value from a short, known list (up to about 15 options). It is a native `<select>`:
- * keyboard, typeahead, screen readers, autofill, mobile pickers and form submission are the
- * platform's. Engines with customizable select draw the brand picker; the others show the operating
- * system's. For a long or searchable list use Combobox; for 2–6 options that should stay visible,
- * RadioGroup.
+ * Chooses one value from a short, known list (up to about 15 options). Keyboard, typing to jump,
+ * autofill and phone pickers work as people expect from any select; browsers that can't style the
+ * list show the system one. For a long or searchable list use Combobox; for 2–6 options that should
+ * stay visible, RadioGroup.
  */
 export function Root({
   label,

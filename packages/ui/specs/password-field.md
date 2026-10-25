@@ -22,7 +22,7 @@ Status: draft for brand-owner review (phase 2). No source guide: drafted from Te
 Label → container (input, reveal toggle) → description or error.
 
 - Everything TextField has (Field Parts, container, input), with `type="password"` while hidden and `type="text"` while shown.
-- **Reveal toggle.** An IconButton (`sm`) in TextField's end element, used as a toggle (`pressed`). Icon: the eye glyph is not in the 42-icon set, so phase 2 uses `inspect` (closest existing glyph, decorative) until the brand owner adds `eye` / `eye-off` (review item). The label never changes ("Show password"); the pressed state carries shown/hidden.
+- **Reveal toggle.** An IconButton (`sm`) in TextField's end element, used as a toggle (`pressed`). Icon (decorative): `eye` while shown, `eye-off` while hidden, drawn for the set on 2026-10-25 and pending the brand owner's review of the drawing. The icon shows the current state, as in Radix (`<PasswordToggleField.Icon visible={<EyeOpenIcon />} hidden={<EyeClosedIcon />} />`) and Ark (Indicator `fallback`: "The fallback content to display when the password is not visible."). The label never changes ("Show password"); the pressed state carries shown/hidden.
 
 ## API
 

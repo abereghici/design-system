@@ -8,17 +8,19 @@ import styles from "./card.module.css";
 const body = (content: ReactNode) => <div className={styles["layout"]}>{content}</div>;
 
 export interface RootProps extends ComponentProps<"div"> {
-  /** `"row"` puts the Footer at the inline end once the card itself is at least 480 px wide. */
+  /**
+   * `"row"` moves the Footer beside the content once the card is wide enough, for list-like cards.
+   */
   layout?: "column" | "row";
-  /** Renders the one child element (`<article>`, `<li>`) as the card. */
+  /** Makes its one child the card, such as an `<article>` or an `<li>` in a list of cards. */
   asChild?: boolean;
 }
 
 /**
- * Groups content about one subject so cards can be scanned and compared, flat in the flow of the
- * page. Compose `Card.Header` (`Title`, `Description`), `Content` and `Footer`. A link inside
- * `Card.Title` stretches over the whole card. Don't nest cards or use one as a page section:
- * separate in-flow content with space, a Separator or a surface step.
+ * Groups content about one subject so cards can be scanned and compared. Compose `Card.Header`
+ * (`Title`, `Description`), `Content` and `Footer`; a link inside `Card.Title` makes the whole card
+ * clickable. Don't nest cards or use one as a page section: separate other content with space or a
+ * Separator.
  */
 export function Root({
   layout = "column",
@@ -44,8 +46,8 @@ export function Header({ className, ...props }: ComponentProps<"div">) {
 
 export interface TitleProps extends ComponentProps<"h3"> {
   /**
-   * Renders the one child heading (`<h2>`) so the level fits the page outline. A link inside the
-   * Title stretches over the whole card and is its one tab stop.
+   * Makes its one child heading the Title, so the level fits the page outline. A link inside the
+   * Title makes the whole card clickable and is its one tab stop.
    */
   asChild?: boolean;
 }

@@ -26,7 +26,10 @@
     inset-inline: anchor(self-start) anchor(self-end);
     background-color: var(--ab-segmented-control-indicator-background-color);
     border-radius: var(--ab-segmented-control-item-border-radius);
-    box-shadow: var(--ab-segmented-control-indicator-shadow);
+    /* The raised fill alone is under WCAG 1.4.11's 3:1 against the track; the ring carries the state. */
+    box-shadow:
+      inset 0 0 0 var(--ab-border-width-default) var(--ab-color-border-selected),
+      var(--ab-segmented-control-indicator-shadow);
   }
 
   .item {

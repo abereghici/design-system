@@ -41,28 +41,34 @@ type ControlProps = Omit<
   | "aria-label"
   | "aria-labelledby"
 > & {
-  /** Controlled raw value; `null` is empty. */
+  /** The number, when your state holds it; `null` is empty. */
   value?: number | null | undefined;
+  /** The starting value when it holds its own state. */
   defaultValue?: number | null | undefined;
   /** Called when a value commits: blur or Enter after typing, a step button, an arrow key. */
   onValueChange?:
     | ((value: number | null, details: NumberFieldChangeEventDetails) => void)
     | undefined;
-  /** A committed value is clamped to `min` and `max`. */
+  /** The lowest value allowed; a lower one is raised to it. */
   min?: number | undefined;
+  /** The highest value allowed; a higher one is lowered to it. */
   max?: number | undefined;
-  /** Arrow keys and step buttons move by `step`; a committed value snaps to `min + n × step`. */
+  /** How much the arrow keys and step buttons change the value; a typed value rounds to it. */
   step?: number;
-  /** Page Up / Page Down and Shift+Arrow. Defaults to 10 × `step`. */
+  /** The bigger jump for Page Up, Page Down and Shift with an arrow. Defaults to 10 steps. */
   largeStep?: number;
-  /** How the value is displayed and parsed. */
+  /** How the number reads and is typed, such as a currency or a unit. */
   formatOptions?: Intl.NumberFormatOptions | undefined;
-  /** Defaults to the Provider's locale. */
+  /** The language whose number format it uses, when it differs from the Provider's. */
   locale?: string | undefined;
-  /** Step button names; fall back to the Provider's locale. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: Partial<Labels["numberField"]>;
+  /** Content before the number, such as a currency sign. */
   startElement?: ReactNode;
-  /** Renders `aria-disabled="true"` and `readOnly`, and disables the step buttons. */
+  /**
+   * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+   * nearby why it is unavailable.
+   */
   disabled?: boolean;
 };
 
@@ -242,7 +248,10 @@ function Control({ labels, startElement, readOnly, ...options }: ControlProps) {
   );
 }
 
-/** A real quantity in the locale format. For digit codes use TextField; to pick by feel, Slider. */
+/**
+ * A number people type or step, such as a quantity or a price. For digit codes use TextField; to
+ * pick by feel, Slider.
+ */
 export function NumberField({
   label,
   description,

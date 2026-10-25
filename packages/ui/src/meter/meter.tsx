@@ -22,27 +22,27 @@ export type MeterProps = Omit<
 > &
   Name &
   Thresholds & {
-    /** Clamped to `min…max`. */
+    /** The measurement, kept between `min` and `max`. */
     value: number;
+    /** The lowest possible value. */
     min?: number;
+    /** The highest possible value. */
     max?: number;
-    /** The preferred value. With `low` and `high` it picks which region is good, as on `<meter>`. */
+    /** The best value. With `low` and `high` it decides which range shows as good, fair or poor. */
     optimum?: number;
-    /** With `style: "percent"` the fraction of the range is formatted, otherwise `value`. */
+    /** How the value reads, such as a percent or a unit ("12 GB"). */
     formatOptions?: Intl.NumberFormatOptions;
     /**
-     * A shipped locale (`@platform/ui/locales/*`) that formats it on the server. A Server Component
-     * can't read the Provider's `locale`, so without it the value is en-US.
+     * A shipped locale (`@platform/ui/locales/*`). This renders on the server, where the
+     * Provider's `locale` can't reach, so pass it for any language other than en-US.
      */
     locale?: Locale;
   };
 
 /**
  * A measurement within a known range: storage used, a quota, a score. With `low`, `high` and
- * `optimum` the fill takes the success, warning or danger colour of the HTML meter's regions, and a
- * string `valueLabel` must say the same in words. The value text is formatted with
- * `Intl.NumberFormat` on the server, in en-US unless you pass a shipped `locale`. For progress
- * use Progress; for a value the user sets, Slider.
+ * `optimum` the fill turns green, amber or red, so say the same in words with `valueLabel`. For
+ * progress use Progress; for a value the user sets, Slider.
  */
 export function Meter({
   value,

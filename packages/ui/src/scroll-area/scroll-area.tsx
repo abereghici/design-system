@@ -5,15 +5,16 @@ import { Slot, join } from "../slot/slot.tsx";
 import styles from "./scroll-area.module.css";
 
 export interface ScrollAreaProps extends ComponentProps<"div"> {
-  /** Renders the single child element as the box: a `<section>` with a name for a named region. */
+  /**
+   * Makes its one child the box, such as a named `<section>` that screen-reader users can jump to.
+   */
   asChild?: boolean;
 }
 
 /**
- * A bounded box whose content scrolls inside it with the browser's own scrolling and scrollbars,
- * and fades its top and bottom edges while there is more to scroll. It is a tab stop, so keyboard
- * users can scroll it. Use it only for content that must stay inside a region (a wide Table, a long
- * side-panel list, a terms text); if the page can scroll instead, let it.
+ * A box whose content scrolls inside it, with faded edges while there is more to see. Keyboard users
+ * can Tab to it and scroll. Use it only for content that must stay inside a region (a wide Table, a
+ * long side-panel list, a terms text); if the page can scroll instead, let it.
  */
 export function ScrollArea({
   asChild = false,

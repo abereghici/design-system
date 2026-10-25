@@ -58,11 +58,17 @@ export type FileTriggerSelectEventDetails = Details<"none">;
 export interface FileTriggerProps extends NativeProps {
   /** Exactly one element, usually a Button; it opens the system file picker. */
   children: ReactElement;
-  /** Picks a folder; every file inside it is selected (native `webkitdirectory`). */
+  /** Picks a whole folder instead of files; every file inside it is selected. */
   directory?: boolean;
-  /** Renders the trigger disabled (`aria-disabled`); the picker does not open. */
+  /**
+   * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+   * nearby why it is unavailable.
+   */
   disabled?: boolean;
-  /** Called after the user picks files. Choosing the same files again or closing the picker fires nothing. */
+  /**
+   * Called after the user picks files. Choosing the same files again or closing the picker fires
+   * nothing.
+   */
   onSelect?: (files: File[], details: FileTriggerSelectEventDetails) => void;
 }
 
@@ -84,9 +90,9 @@ function selectOnce(input: HTMLInputElement, onSelect: FileTriggerProps["onSelec
 }
 
 /**
- * Opens the system file picker from its one child (usually a Button) and keeps the chosen files in
- * a native file input, so they submit with the form. It draws nothing itself; render the chosen
- * files from `onSelect`. To also accept files dragged onto an area, put it inside a DropZone.
+ * Opens the system file picker from its one child (usually a Button), and the chosen files submit
+ * with the form. It draws nothing itself: show the chosen files from `onSelect`. To also accept files
+ * dragged onto an area, put it inside a DropZone.
  */
 export function FileTrigger({
   children,

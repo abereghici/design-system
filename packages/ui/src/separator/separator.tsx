@@ -5,13 +5,14 @@ import { join } from "../slot/slot.tsx";
 import styles from "./separator.module.css";
 
 interface SeparatorBaseProps extends ComponentProps<"hr"> {
-  /** Removes the line from the accessibility tree (`role="none"`), for a purely visual break. */
+  /** Hides the line from screen readers, for a purely visual break that doesn't split content. */
   decorative?: boolean;
 }
 
 interface HorizontalProps extends SeparatorBaseProps {
+  /** `vertical` between items in a row, such as toolbar groups. */
   orientation?: "horizontal";
-  /** `"ornament"` centres the ochi diamond on the line: editorial pages only, never dense UI. */
+  /** `"ornament"` adds a diamond at the center, for editorial pages only, never dense UI. */
   variant?: "solid" | "ornament";
 }
 
@@ -23,10 +24,8 @@ interface VerticalProps extends SeparatorBaseProps {
 export type SeparatorProps = HorizontalProps | VerticalProps;
 
 /**
- * A native `<hr>` hairline between groups of content. Prefer space first: use it only when space
- * alone leaves the grouping unclear. `variant="ornament"` (the ochi diamond) is for editorial
- * pages, never dense UI. A separator the user drags to resize panes is a window splitter, not this
- * component.
+ * A line between groups of content. Prefer space first: use it only when space alone leaves the
+ * grouping unclear. A line the user drags to resize panes is a window splitter, not this component.
  */
 export function Separator({
   orientation = "horizontal",

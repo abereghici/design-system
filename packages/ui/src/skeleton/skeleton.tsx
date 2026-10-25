@@ -4,20 +4,17 @@ import type { ComponentProps } from "react";
 import styles from "./skeleton.module.css";
 
 export interface SkeletonProps extends ComponentProps<"span"> {
-  /**
-   * `false` renders the children unchanged. An element child becomes the placeholder itself, so it
-   * keeps its own size and radius.
-   */
+  /** Shows the placeholder; set it to `false` once the content has arrived. */
   loading?: boolean;
 }
 
 const classes = (...names: (string | undefined)[]) => names.filter(Boolean).join(" ");
 
 /**
- * Holds the place of content that is still loading, in its shape: wrap an element to keep its size
- * and radius, wrap placeholder text to cover its lines, or leave it empty and size it with
- * `className`. Set `aria-busy` on the loading region; Skeleton hides itself from assistive
- * technology. For a wait of unknown shape use Spinner, for a measurable task Progress.
+ * Holds the place of content that is still loading, in its shape, so the page doesn't jump when it
+ * arrives: wrap an element to keep its size, wrap placeholder text to cover its lines, or leave it
+ * empty and size it with CSS. Set `aria-busy` on the loading region, since screen readers skip the
+ * Skeleton. For a wait of unknown shape use Spinner, for a measurable task Progress.
  */
 export function Skeleton({ loading = true, children, className, ...props }: SkeletonProps) {
   if (!loading) return children;

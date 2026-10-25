@@ -13,9 +13,8 @@ export interface LogoProps extends Omit<ComponentProps<"svg">, "children"> {
 }
 
 /**
- * Stâlpul cerului, the Bereghici Logo, in `--ab-logo-color`. One em square by default, so it scales
- * with the text it sits in; size it with CSS `inline-size` and `block-size`. It never renders below
- * `--ab-logo-min-size` (16px). For an interface glyph, use an icon.
+ * Stâlpul cerului, the Bereghici Logo. It scales with the text it sits in; size it with CSS, and
+ * it never shrinks below the smallest size that stays legible. For an interface glyph, use an icon.
  */
 export function Logo({ label, className, ...props }: LogoProps) {
   return (

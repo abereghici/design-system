@@ -24,7 +24,7 @@ All names are lowercase and hyphenated, and a segment is left out when it holds 
 
 ## Dictionary
 
-Semantic and component names may use only these words; the build rejects any other. The full list, with every component and element word, is the validator's own (`packages/tokens/src/naming.ts`).
+Semantic and component names use only these words, so a name tells you what a token is for.
 
 | Group    | Words                                                                                                                           |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
@@ -36,15 +36,3 @@ Semantic and component names may use only these words; the build rejects any oth
 | Size     | `2xs` to `2xl`, always ascending; `min` and `recommended` for target sizes                                                      |
 | Space    | `inline` (horizontal gap), `inset` (padding), `stack` (vertical gap), `section` (between page sections)                         |
 | Type     | `heading`, `display` (serif); `body`, `label` (sans); `data`, `overline`, `code`                                                |
-
-## Rules
-
-The token build checks every rule and fails with the full list of problems.
-
-- **R1** Primitives hold literals only. **R2** Semantic tokens reference one primitive. **R3** Component tokens reference one semantic token.
-- **R4** Product code never references a primitive.
-- **R5** Every themed color has a light and a dark value; component tokens are the same in every Theme.
-- **R6** Patterns that aren't components (selection, highlight, focus) use semantic tokens directly.
-- **R7** Every name matches its tier's grammar and uses only Dictionary words.
-
-Two semantic tokens may compose other semantic tokens: a type style uses its own font size, and an Elevation composes the ring, highlight and shadow colors.

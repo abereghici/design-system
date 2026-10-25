@@ -9,7 +9,7 @@ import { pagination as paginationLabels } from "../provider/locales/en-US/pagina
 import styles from "./pagination.module.css";
 
 export interface PaginationLabels extends Partial<Labels["pagination"]> {
-  /** A page link's name; receives the formatted number. */
+  /** The name of a page link, given the formatted number ("Page 3"). */
   page?: (page: string) => string;
 }
 
@@ -20,14 +20,14 @@ export interface PaginationProps extends ComponentProps<"nav"> {
   count: number;
   /** The `href` of each page link and of Previous / Next. */
   getPageUrl: (page: number) => string;
-  /** Renders every link with this component (a router link), given `href`, `aria-label`, `aria-current`, `className` and children. */
+  /** Your router's link component, used for every link so navigation stays client-side. */
   linkComponent?: ElementType;
   /**
-   * A shipped locale (`@platform/ui/locales/*`) that formats and translates it on the server. A
-   * Server Component can't read the Provider's `locale`, so without it the text is en-US.
+   * A shipped locale (`@platform/ui/locales/*`). This renders on the server, where the
+   * Provider's `locale` can't reach, so pass it for any language other than en-US.
    */
   locale?: Locale;
-  /** Overrides the locale's labels. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: PaginationLabels;
 }
 
@@ -69,10 +69,9 @@ function Step({ href, label, Anchor, children }: StepProps) {
 }
 
 /**
- * A named navigation landmark of links to the pages of a long, ordered result set: Previous, up to
- * seven page slots with ellipses, Next. Each page is a URL, so it works without client JavaScript
- * and opens in a new tab; pass `linkComponent` for a router link. For a short list show everything;
- * for a feed, load more on demand.
+ * Links to the pages of a long, ordered list of results: Previous, a few page numbers, Next. Each
+ * page is a URL, so it can be shared, bookmarked and opened in a new tab. For a short list show
+ * everything; for a feed, load more on demand.
  */
 export function Pagination({
   page,

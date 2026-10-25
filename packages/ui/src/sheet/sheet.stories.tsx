@@ -4,7 +4,7 @@ import { Button } from "@platform/ui/button";
 import { roRO } from "@platform/ui/locales/ro-RO";
 import { Provider } from "@platform/ui/provider";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
@@ -42,8 +42,9 @@ const children = (
 );
 
 const meta = preview.meta({
-  title: "Components/Overlays/Sheet",
+  title: "Components/Sheet",
   component: Sheet.Root,
+  subcomponents: partsOf(Sheet),
   args: { children, onOpenChange: fn() },
 });
 

@@ -28,18 +28,26 @@ export interface RootProps extends Omit<
   DateFieldProps,
   "value" | "defaultValue" | "onValueChange" | "labels"
 > {
-  /** Controlled. `null` is no date. */
+  /** The chosen date, when your state holds it; `null` is no date. */
   value?: Temporal.PlainDate | null | undefined;
+  /** The starting value when it holds its own state. */
   defaultValue?: Temporal.PlainDate | null | undefined;
+  /** Called before the date changes; `details.cancel()` keeps the previous one. */
   onValueChange?:
     | ((value: Temporal.PlainDate | null, details: ChangeEventDetails) => void)
     | undefined;
-  /** Unavailable in the Calendar; a typed unavailable date is invalid. */
+  /**
+   * Days that can't be chosen, such as weekends or booked dates; typing one marks the field
+   * invalid.
+   */
   isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
+  /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
   open?: boolean | undefined;
+  /** Opens it on the first render when it holds its own state. */
   defaultOpen?: boolean | undefined;
+  /** Called before it opens or closes; `details.cancel()` keeps it as it is. */
   onOpenChange?: ((open: boolean, details: OpenChangeEventDetails) => void) | undefined;
-  /** Trigger, panel and field labels; fall back to the Provider's locale. */
+  /** Replaces the built-in text of the Provider's locale, for this instance only. */
   labels?: Partial<Labels["datePicker"] & Labels["dateField"]> | undefined;
   /** The `DatePicker.Content`. */
   children?: ReactNode;
@@ -91,10 +99,9 @@ function pickerOf(
 }
 
 /**
- * A DateField with a trigger that opens a Calendar in a popover: type the date, or pick it from the
- * month. Put a `<Calendar />` in `DatePicker.Content`; it reads the value and limits from the
- * DatePicker. For dates people type from memory (birth dates), use DateField; for an always
- * visible month, Calendar.
+ * A date field with a button that opens a month: type the date, or pick it. Put a `<Calendar />` in
+ * `DatePicker.Content`; it follows the DatePicker's value and limits. For dates people type from
+ * memory (birth dates), use DateField; for an always visible month, Calendar.
  */
 export function Root(props: RootProps) {
   const { defaultValue, open, defaultOpen, onOpenChange, isDateUnavailable, ...rest } = props;

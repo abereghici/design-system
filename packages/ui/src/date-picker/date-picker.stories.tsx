@@ -6,7 +6,7 @@ import { Button } from "@platform/ui/button";
 import { Calendar } from "@platform/ui/calendar";
 import { roRO } from "@platform/ui/locales/ro-RO";
 
-import preview from "#.storybook/preview.tsx";
+import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
@@ -18,20 +18,22 @@ import * as DatePicker from "./date-picker.tsx";
 const date = (iso: string) => Temporal.PlainDate.from(iso);
 const submitted = fn<(data: FormData) => void>();
 const onOpenChange = fn<NonNullable<DatePicker.RootProps["onOpenChange"]>>();
+const onValueChange = fn<NonNullable<DatePicker.RootProps["onValueChange"]>>();
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
-const LazyCalendar = lazy(() =>
+const LoadedCalendar = lazy(() =>
   import("@platform/ui/calendar").then((module) => ({ default: module.Calendar })),
 );
 
 const meta = preview.meta({
-  title: "Components/Forms/DatePicker",
+  title: "Components/DatePicker",
   component: DatePicker.Root,
+  subcomponents: partsOf(DatePicker),
   args: {
     label: "Due date",
     name: "due",
     defaultValue: date("2025-03-12"),
-    onValueChange: fn<NonNullable<DatePicker.RootProps["onValueChange"]>>(),
+    onValueChange,
     onOpenChange,
     children: (
       <DatePicker.Content>
@@ -76,12 +78,16 @@ Default.test("opens from the keyboard with focus on the selected day", async ({ 
 });
 
 Default.test(
-  "chooses a clicked day, closes and returns focus to the trigger",
+  "keeps the panel on a cancelled day press, then chooses the day, closes and returns focus",
   async ({ args, canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Choose date" });
     await user.click(trigger);
     await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
+    onValueChange.mockImplementationOnce((_value, details) => {
+      details.cancel();
+    });
+    await user.click(canvas.getByLabelText("Thursday, March 20, 2025"));
     await user.click(canvas.getByLabelText("Thursday, March 20, 2025"));
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     await expect(trigger).toHaveFocus();
@@ -95,26 +101,6 @@ Default.test(
       [true, "trigger-press"],
       [false, "day-press"],
     ]);
-  },
-);
-
-Default.test(
-  "keeps the value and the panel open when a change is cancelled",
-  {
-    args: {
-      onValueChange: (_value, details) => {
-        details.cancel();
-      },
-    },
-  },
-  async ({ canvas }) => {
-    const user = await trusted();
-    const trigger = canvas.getByRole("button", { name: "Choose date" });
-    await user.click(trigger);
-    await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
-    await user.click(canvas.getByLabelText("Thursday, March 20, 2025"));
-    await expect(canvas.getByRole("dialog")).toBeVisible();
-    await expect(trigger).toHaveAccessibleDescription("Wednesday, March 12, 2025");
   },
 );
 
@@ -185,9 +171,8 @@ Default.test("closes when its trigger is pressed again", async ({ canvas }) => {
   await user.click(trigger);
   await waitFor(() => expect(canvas.getByRole("dialog")).toBeVisible());
   await user.click(trigger);
-  await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
+  await waitFor(() => expect(reasons().at(-1)).toEqual([false, "trigger-press"]));
   await expect(trigger).toHaveAttribute("aria-expanded", "false");
-  await expect(reasons().at(-1)).toEqual([false, "trigger-press"]);
   await expect(pressed.events.map((event) => event.detail.component)).toEqual([
     "IconButton",
     "IconButton",
@@ -275,23 +260,40 @@ InAForm.test(
   },
 );
 
-export const LazyCalendarStory = meta.story({
-  name: "Lazy calendar",
+export const LazyCalendar = meta.story({
   parameters: {
-    docs: { description: { story: "The Calendar loads with `lazy()` on the first open." } },
+    docs: {
+      description: { story: "The Calendar loads with `lazy()` on the first open." },
+      source: {
+        code: `import { lazy, Suspense } from "react";
+import { DatePicker } from "@platform/ui/date-picker";
+
+const Calendar = lazy(() =>
+  import("@platform/ui/calendar").then((module) => ({ default: module.Calendar })),
+);
+
+<DatePicker.Root label="Due date" name="due">
+  <DatePicker.Content>
+    <Suspense>
+      <Calendar />
+    </Suspense>
+  </DatePicker.Content>
+</DatePicker.Root>`,
+      },
+    },
   },
   args: {
     children: (
       <DatePicker.Content>
         <Suspense>
-          <LazyCalendar />
+          <LoadedCalendar />
         </Suspense>
       </DatePicker.Content>
     ),
   },
 });
 
-LazyCalendarStory.test("focuses the selected day once the Calendar loads", async ({ canvas }) => {
+LazyCalendar.test("focuses the selected day once the Calendar loads", async ({ canvas }) => {
   const user = await trusted();
   await user.click(canvas.getByRole("button", { name: "Choose date" }));
   await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());

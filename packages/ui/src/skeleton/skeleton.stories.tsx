@@ -11,7 +11,7 @@ const save = (
 );
 
 const meta = preview.meta({
-  title: "Components/Feedback/Skeleton",
+  title: "Components/Skeleton",
   component: Skeleton,
   args: { children: "Placeholder name" },
 });

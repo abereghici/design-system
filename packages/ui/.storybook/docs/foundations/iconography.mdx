@@ -24,9 +24,8 @@ import { BellIcon } from "@platform/ui/icons/bell";
 <BellIcon size="md" />;
 ```
 
-- **Size and stroke go together.** `sm` is 16px at a 2 stroke, `md` 20px and `lg` 24px at 1.75, `xl` 32px at 1.5, so lines look equally heavy at every size.
+- **Size and stroke go together,** so lines look equally heavy at every size; match the size to the text beside the icon.
 - **An icon is decorative by default** and hidden from assistive technology. Name it only when it stands alone and carries meaning (`label`), and prefer a visible text label.
-- **Icon-only controls** keep at least a 24px target (`--ab-size-target-min`); use IconButton, which handles both.
-- **A new icon** is an SVG in `packages/ui/assets/icons/`, turned into its component by `pnpm --filter @platform/ui icons`.
+- **Icon-only controls** need a name and a large enough target; use IconButton, which handles both.
 
 <IconGallery>{icons}</IconGallery>
