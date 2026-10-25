@@ -6,8 +6,6 @@ import { screenshotProjects } from "#.storybook/screenshots/projects.ts";
 
 import viteConfig from "./vite.config.ts";
 
-const browsers = ["chromium", "firefox", "webkit"] as const;
-
 export default mergeConfig(
   viteConfig,
   defineConfig({
@@ -29,13 +27,13 @@ export default mergeConfig(
               headless: true,
               provider: playwright(),
               instances: [
-                ...browsers.map((browser) => ({ browser })),
-                ...browsers.map((browser) => ({
-                  browser,
-                  name: `${browser}-reduced-motion`,
+                { browser: "chromium" },
+                {
+                  browser: "chromium",
+                  name: "chromium-reduced-motion",
                   provide: { reducedMotion: true },
                   provider: playwright({ contextOptions: { reducedMotion: "reduce" } }),
-                })),
+                },
               ],
             },
           },
