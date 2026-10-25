@@ -57,7 +57,7 @@ Names, checked against the reference libraries:
 
 ## States
 
-TextField's states. The step buttons follow IconButton; a button is `aria-disabled` when its step would leave `min` / `max` (the value is already at the bound).
+TextField's states. The step buttons follow IconButton; a button is `aria-disabled` when its step would leave `min` / `max` (the value is already at the bound). Read-only (the native `readOnly`) blocks typing, arrow keys and both step buttons, as disabled does, and the value still submits.
 
 ## Behaviour
 

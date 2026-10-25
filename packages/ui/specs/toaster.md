@@ -1,20 +1,16 @@
 # Toaster
 
-The region that shows toasts: a "Notifications" landmark at the bottom centre of the viewport that stacks, times, announces and positions every toast the app adds with `toast()`. Mount it once, near the root, inside the UIProvider. It stays above Floating layers, including an open modal Dialog, Sheet, AlertDialog or Command dialog, and stays usable there. What one toast looks like and does is in `toast.md`.
+The region that shows toasts: a "Notifications" landmark at the bottom centre of the viewport that stacks, times, announces and positions every toast the app adds with `toast()`. Mount it once, near the root. It stays above Floating layers, including an open modal Dialog, Sheet, AlertDialog or Command dialog, and stays usable there. What one toast looks like and does is in `toast.md`.
 
 ```tsx
-import { roRO } from "@platform/ui/locales/ro-RO";
 import { Toaster } from "@platform/ui/toaster";
-import { UIProvider } from "@platform/ui/ui-provider";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ro">
+    <html lang="en">
       <body>
-        <UIProvider locale={roRO}>
-          {children}
-          <Toaster />
-        </UIProvider>
+        {children}
+        <Toaster aria-label="Notifications" closeLabel="Dismiss" />
       </body>
     </html>
   );
@@ -133,7 +129,7 @@ None of its own. Each toast dispatches `ab-appear`, `ab-confirm` and `ab-dismiss
 Stated as what a user, assistive technology or consumer perceives (user-centric rule):
 
 - A `toast()` call from a page's client component shows a toast in the Toaster mounted in the layout, in `apps/ui-next-fixture` (one store across the two subpaths), and a route that only calls `toast()` ships no Toaster code.
-- The Region is a landmark named "Notifications" (and "Notificări" with `roRO`) only while toasts show; it exposes `aria-keyshortcuts="Alt+T"`; it lists the visible toasts, newest first.
+- The Region is a landmark named by its `aria-label` ("Notifications") only while toasts show; it exposes `aria-keyshortcuts="Alt+T"`; it lists the visible toasts, newest first.
 - A toast added while a modal Dialog is open is visible above it, its Action and Dismiss are pressable and reachable with Tab inside the dialog, Escape on it dismisses the toast and leaves the dialog open, and the dialog's own Escape and backdrop still close the dialog. The same toast is visible and pressable while a DropdownMenu is open.
 - Announcements: a status message for a neutral toast and an alert for a danger one, each once, including a toast added in the same task the Toaster first mounts and one added while a modal is open (accessibility tree plus the manual screen-reader pass).
 - Timers: a toast is gone after its duration; still visible past it while hovered, while focus is inside the Region, and while the tab is hidden; gone once that ends and its remaining time has passed. A danger toast stays 6 s.

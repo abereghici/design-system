@@ -10,8 +10,6 @@ export default defineConfig({
     {
       files: ["src/**"],
       rules: {
-        // Parts find each other by useId ids, whose «» need CSS.escape in a selector; getElementById takes them as they are.
-        "unicorn/prefer-query-selector": "off",
         "no-restricted-imports": [
           "error",
           {
@@ -26,6 +24,24 @@ export default defineConfig({
       },
     },
     {
+      // Parts find each other by useId ids, whose «» need CSS.escape in a selector; spec #53 makes
+      // these lookups document.getElementById, which takes them as they are. See docs/open-questions.md.
+      files: [
+        "src/combobox/combobox-state.ts",
+        "src/combobox/use-combobox.ts",
+        "src/command/command-root.tsx",
+        "src/context-menu/context-menu-root.tsx",
+        "src/context-menu/context-menu-trigger.tsx",
+        "src/date-picker/date-picker-root.tsx",
+        "src/dropdown-menu/dropdown-menu-trigger.tsx",
+        "src/floating/floating.ts",
+        "src/menu/menu.tsx",
+        "src/tooltip/tooltip-root.tsx",
+        "src/tooltip/tooltip-trigger.tsx",
+      ],
+      rules: { "unicorn/prefer-query-selector": "off" },
+    },
+    {
       // Oxlint lacks eslint-plugin-jsx-a11y's exemption for input[type=checkbox][role=switch], and ARIA
       // in HTML forbids aria-checked there: https://github.com/oxc-project/oxc/issues/24838
       files: ["src/switch/switch.tsx"],
@@ -33,7 +49,7 @@ export default defineConfig({
     },
     {
       // HTML allows <option> only inside select, datalist or optgroup, and rich options in a select
-      // need customizable select, which is below the Baseline floor (no Firefox).
+      // need customizable select, which is below the Baseline floor (no Firefox). See docs/open-questions.md.
       files: ["src/listbox/listbox.tsx"],
       rules: { "jsx-a11y/prefer-tag-over-role": "off" },
     },

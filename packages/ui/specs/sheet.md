@@ -55,7 +55,7 @@ Root (no element) → Trigger → Content (`<dialog>` + `::backdrop`) → Title 
 
 ## API
 
-`Sheet.Root`, `Sheet.Trigger`, `Sheet.Title`, `Sheet.Description`, `Sheet.Footer`, `Sheet.Close`: as the Dialog Parts of the same name (`dialog.md` API), including the `reason` set `"trigger-press"` \| `"outside-press"` \| `"escape-key"` \| `"close-press"` \| `"none"` and `labels.close`.
+`Sheet.Root`, `Sheet.Trigger`, `Sheet.Title`, `Sheet.Description`, `Sheet.Footer`, `Sheet.Close`: as the Dialog Parts of the same name (`dialog.md` API), including the `reason` set `"trigger-press"` \| `"outside-press"` \| `"escape-key"` \| `"close-press"` \| `"none"` and the icon-only Close's required `aria-label`.
 
 `Sheet.Content`
 
