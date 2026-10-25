@@ -98,6 +98,26 @@ Default.test(
   },
 );
 
+Default.test(
+  "keeps the value and the panel open when a change is cancelled",
+  {
+    args: {
+      onValueChange: (_value, details) => {
+        details.cancel();
+      },
+    },
+  },
+  async ({ canvas }) => {
+    const user = await trusted();
+    const trigger = canvas.getByRole("button", { name: "Choose date" });
+    await user.click(trigger);
+    await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
+    await user.click(canvas.getByLabelText("Thursday, March 20, 2025"));
+    await expect(canvas.getByRole("dialog")).toBeVisible();
+    await expect(trigger).toHaveAccessibleDescription("Wednesday, March 12, 2025");
+  },
+);
+
 Default.test("chooses with Enter and with Space", async ({ canvas }) => {
   const user = await trusted();
   const trigger = canvas.getByRole("button", { name: "Choose date" });

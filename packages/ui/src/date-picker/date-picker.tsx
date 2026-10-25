@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { DateFieldFrame } from "../date-field/date-field.tsx";
 import type { DateFieldChangeEventDetails, DateFieldProps } from "../date-field/date-field.tsx";
 import type { DatePickerContextValue, Temporal } from "../date/date.ts";
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId, useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as FloatingDetails, Floating } from "../floating/floating.ts";
@@ -51,16 +52,10 @@ function useValue({ value, defaultValue = null, onValueChange }: RootProps) {
     date: Temporal.PlainDate | null,
     reason: ChangeEventDetails["reason"],
     event: Event,
-    onCancel?: () => void,
   ) => {
-    let cancelled = false;
-    const cancel = () => {
-      cancelled = true;
-      onCancel?.();
-    };
-    onValueChange?.(date, { reason, event, cancel });
-    if (!cancelled) setOwn(date);
-    return !cancelled;
+    const accepted = requestChange(onValueChange, date, reason, event);
+    if (accepted) setOwn(date);
+    return accepted;
   };
   const reset = () => {
     setOwn(defaultValue);
@@ -119,7 +114,7 @@ export function Root(props: RootProps) {
       value={date.current}
       defaultValue={defaultValue}
       onValueChange={(next, details) => {
-        date.change(next, details.reason, details.event, details.cancel);
+        if (!date.change(next, details.reason, details.event)) details.cancel();
       }}
       isDateUnavailable={isDateUnavailable}
       labels={labels}

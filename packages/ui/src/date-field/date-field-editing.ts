@@ -1,10 +1,11 @@
-import { useEffect, useEffectEvent, useLayoutEffect, useRef } from "react";
+import { useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from "react";
 import type { ChangeEvent, KeyboardEvent, RefObject } from "react";
 
 import type { DatePart, dateFormats, Temporal } from "../date/date.ts";
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 
-import { stepKey, typeDigit } from "./segments.ts";
+import { fromDate, stepKey, toDate, typeDigit } from "./segments.ts";
 import type { Segments } from "./segments.ts";
 
 /** `cancel()`: keeps the previous segments. */
@@ -14,20 +15,53 @@ type Reason = "input-change" | "keyboard";
 type Buffer = { readonly part: DatePart; readonly text: string } | null;
 type Formats = ReturnType<typeof dateFormats>;
 
+interface DateOptions {
+  readonly value?: Temporal.PlainDate | null | undefined;
+  readonly defaultValue?: Temporal.PlainDate | null | undefined;
+  readonly onValueChange?:
+    | ((value: Temporal.PlainDate | null, details: DateFieldChangeEventDetails) => void)
+    | undefined;
+  readonly onFormReset?: (() => void) | undefined;
+}
+
+const same = (a: Temporal.PlainDate | null, b: Temporal.PlainDate | null) =>
+  a === null || b === null ? a === b : a.equals(b);
+
+/** The committed date and the segments being edited; an edit that changes the date is a change request. */
+export function useDate({ value, defaultValue = null, onValueChange, onFormReset }: DateOptions) {
+  const [own, setOwn] = useState(defaultValue);
+  const committed = value === undefined ? own : value;
+  const [segments, setSegments] = useState(() => fromDate(committed));
+  const [seen, setSeen] = useState(committed);
+  const [buffer, setBuffer] = useState<Buffer>(null);
+  if (!same(seen, committed)) {
+    setSeen(committed);
+    setSegments(fromDate(committed));
+  }
+  const edit = (next: Segments, text: Buffer, reason: Reason, event: Event) => {
+    const date = toDate(next);
+    if (!same(date, committed)) {
+      if (!requestChange(onValueChange, date, reason, event)) return null;
+      setOwn(date);
+      setSeen(date);
+    }
+    const shown = date === null ? next : fromDate(date);
+    setSegments(shown);
+    setBuffer(text);
+    return { segments: shown, date };
+  };
+  const reset = () => {
+    setOwn(defaultValue);
+    setSegments(fromDate(defaultValue));
+    setBuffer(null);
+    onFormReset?.();
+  };
+  return { committed, segments, buffer, setBuffer, edit, reset };
+}
+
 interface Editing {
   readonly group: RefObject<HTMLElement | null>;
-  readonly date: {
-    readonly committed: Temporal.PlainDate | null;
-    readonly segments: Segments;
-    readonly buffer: Buffer;
-    readonly setBuffer: (buffer: Buffer) => void;
-    readonly edit: (
-      next: Segments,
-      text: Buffer,
-      reason: Reason,
-      event: Event,
-    ) => { segments: Segments; date: Temporal.PlainDate | null } | null;
-  };
+  readonly date: ReturnType<typeof useDate>;
   readonly validity: {
     readonly apply: (segments: Segments, date: Temporal.PlainDate | null) => void;
     readonly report: (commit?: boolean) => void;

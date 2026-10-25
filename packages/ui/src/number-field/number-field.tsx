@@ -3,6 +3,7 @@
 import { use, useEffect, useEffectEvent, useRef, useState } from "react";
 import type { ComponentProps, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { FieldContext } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
@@ -131,12 +132,7 @@ function useNumber({
   const commit = (next: number | null, reason: Reason, event: SyntheticEvent) => {
     setText(null);
     if (next === committed) return;
-    let cancelled = false;
-    const cancel = () => {
-      cancelled = true;
-    };
-    onValueChange?.(next, { reason, event, cancel });
-    if (!cancelled) setOwn(next);
+    if (requestChange(onValueChange, next, reason, event)) setOwn(next);
   };
   const reset = useEffectEvent(() => {
     setOwn(defaultValue);

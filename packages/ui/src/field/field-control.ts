@@ -1,6 +1,7 @@
 import { createContext, use, useEffect, useRef } from "react";
 import type { ChangeEvent, ChangeEventHandler, FocusEvent, FocusEventHandler } from "react";
 
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 
 /** The native elements a Field validates. */
@@ -40,16 +41,6 @@ export interface ControlBindings<Element extends FormControl> {
   onValueChange?: ((value: string, details: ChangeEventDetails<Element>) => void) | undefined;
 }
 
-function changeEventDetails<Element extends FormControl>(
-  event: ChangeEvent<Element>,
-): [ChangeEventDetails<Element>, () => boolean] {
-  let cancelled = false;
-  const cancel = () => {
-    cancelled = true;
-  };
-  return [{ reason: "none", event, cancel }, () => cancelled];
-}
-
 /**
  * The Field contract for a control: spread the result on the native element. It takes the id,
  * `name`, `disabled` and describedby list from the enclosing Root, sets `aria-invalid` and
@@ -85,9 +76,9 @@ export function useFieldControl<
         return;
       }
       onChange?.(event);
-      const [details, cancelled] = changeEventDetails(event);
-      onValueChange?.(target.value, details);
-      if (cancelled()) target.value = previous.current;
+      if (!requestChange(onValueChange, target.value, "none", event)) {
+        target.value = previous.current;
+      }
       previous.current = target.value;
     },
   };

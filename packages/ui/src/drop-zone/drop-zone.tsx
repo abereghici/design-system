@@ -3,6 +3,7 @@
 import { use, useEffect, useRef, useState } from "react";
 import type { ComponentProps, DragEvent, RefObject } from "react";
 
+import { requestChange } from "../events/events.ts";
 import { FieldContext } from "../field/field-control.ts";
 import { FileInput, PickerContext } from "../file-trigger/file-trigger.tsx";
 import { join } from "../slot/slot.tsx";
@@ -120,13 +121,12 @@ function useDropTarget({ accept, multiple, onDrop, blocked, input }: DropTargetO
       const files = [...event.dataTransfer.files];
       if (blocked || input.current === null) return;
       const accepted = files.filter((file) => accepts(file)).slice(0, multiple ? undefined : 1);
-      let cancelled = false;
-      const cancel = () => {
-        cancelled = true;
-      };
       const rejected = files.filter((file) => !accepts(file));
-      onDrop?.(accepted, { reason: "none", event, rejected, cancel });
-      if (!cancelled && accepted.length > 0) setFiles(input.current, accepted);
+      const report = (value: File[], details: Omit<DropZoneDropEventDetails, "rejected">) =>
+        onDrop?.(value, { ...details, rejected });
+      if (requestChange(report, accepted, "none", event) && accepted.length > 0) {
+        setFiles(input.current, accepted);
+      }
     },
   };
 }

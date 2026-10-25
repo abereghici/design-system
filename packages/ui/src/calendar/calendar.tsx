@@ -13,6 +13,7 @@ import type { ComponentProps, FocusEvent, KeyboardEvent, MouseEvent } from "reac
 
 import { DatePickerContext, dateFormats, Temporal } from "../date/date.ts";
 import type { DatePickerContextValue } from "../date/date.ts";
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
@@ -88,12 +89,7 @@ function useCalendar(
       return;
     }
     if (selected?.equals(date) === true) return;
-    let cancelled = false;
-    const cancel = () => {
-      cancelled = true;
-    };
-    onValueChange?.(date, { reason: "day-press", event, cancel });
-    if (!cancelled) setOwn(date);
+    if (requestChange(onValueChange, date, "day-press", event)) setOwn(date);
   };
   return { today, selected, start, focused, setFocused, outside, unavailable, choose };
 }

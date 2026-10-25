@@ -1,7 +1,7 @@
 import { useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "react";
 import type { ToggleEvent } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 
 export type ChangeReason =
@@ -62,18 +62,6 @@ const invokerOf = (contentId: string) =>
   document.querySelector(`[commandfor="${CSS.escape(contentId)}"]`);
 
 export const byId = (id: string) => document.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
-
-function report(options: Options, open: boolean, reason: ChangeReason, event?: Event): boolean {
-  let cancelled = false;
-  options.onOpenChange?.(open, {
-    reason,
-    event,
-    cancel: () => {
-      cancelled = true;
-    },
-  });
-  return !cancelled;
-}
 
 function nativeReason(layer: Layer): ChangeReason {
   if (layer.input instanceof KeyboardEvent) return "escape-key";
@@ -138,7 +126,9 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
   const reason = reported ?? (opening ? "none" : nativeReason(layer));
   layer.pending = undefined;
   layer.input = undefined;
-  const accepted = reported !== undefined || report(options, opening, reason, event.nativeEvent);
+  const accepted =
+    reported !== undefined ||
+    requestChange(options.onOpenChange, opening, reason, event.nativeEvent);
   if (!opening) {
     layer.closing = reason;
     layer.focusInside =
@@ -192,7 +182,7 @@ function claim(
   reason: ChangeReason,
   event?: Event,
 ) {
-  if (!report(options, next, reason, event)) return false;
+  if (!requestChange(options.onOpenChange, next, reason, event)) return false;
   const layer = layerOf(element);
   layer.pending = reason;
   setTimeout(() => {

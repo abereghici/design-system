@@ -3,6 +3,7 @@
 import { createContext, use, useEffect, useId, useRef } from "react";
 import type { ComponentProps, MouseEvent, ReactElement, RefObject } from "react";
 
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { FieldContext, useFieldControl } from "../field/field-control.ts";
 import { Slot } from "../slot/slot.tsx";
@@ -76,13 +77,7 @@ function selectOnce(input: HTMLInputElement, onSelect: FileTriggerProps["onSelec
     "change",
     (event) => {
       stop();
-      onSelect?.([...(input.files ?? [])], {
-        reason: "none",
-        event,
-        cancel: () => {
-          input.value = "";
-        },
-      });
+      if (!requestChange(onSelect, [...(input.files ?? [])], "none", event)) input.value = "";
     },
     { signal },
   );

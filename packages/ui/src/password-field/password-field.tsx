@@ -2,6 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { FieldContext } from "../field/field-control.ts";
 import * as Field from "../field/field.tsx";
@@ -51,13 +52,9 @@ function useVisibility(
   const [own, setOwn] = useState(defaultVisible ?? false);
   const current = visible ?? own;
   const change = (next: boolean, reason: Reason, event: Event) => {
-    let cancelled = false;
-    const cancel = () => {
-      cancelled = true;
-    };
-    onVisibleChange?.(next, { reason, event, cancel });
-    if (!cancelled) setOwn(next);
-    return !cancelled;
+    const accepted = requestChange(onVisibleChange, next, reason, event);
+    if (accepted) setOwn(next);
+    return accepted;
   };
   useEffect(() => {
     const input = inputOf(inputId);

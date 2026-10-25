@@ -1,4 +1,4 @@
-import { use, useLayoutEffect, useRef, useState } from "react";
+import { use, useLayoutEffect, useRef } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import { dateFormats } from "../date/date.ts";
@@ -8,11 +8,11 @@ import { useLocale } from "../provider/locale.tsx";
 import type { Labels } from "../provider/locale.tsx";
 import { dateField as dateFieldLabels } from "../provider/locales/en-US/date-field.ts";
 
-import { useSegmentEditing } from "./date-field-editing.ts";
+import { useDate, useSegmentEditing } from "./date-field-editing.ts";
 import type { DateFieldChangeEventDetails } from "./date-field-editing.ts";
 import { useValidity } from "./date-field-validity.ts";
 import type { Validity } from "./date-field-validity.ts";
-import { bounds, display, fromDate, toDate } from "./segments.ts";
+import { bounds, display } from "./segments.ts";
 import type { Segments } from "./segments.ts";
 import fieldStyles from "../field/field.module.css";
 import styles from "./date-field.module.css";
@@ -45,52 +45,7 @@ interface ControlOptions extends DateFieldOptions {
   readonly onFormReset?: (() => void) | undefined;
 }
 
-type Buffer = { readonly part: DatePart; readonly text: string } | null;
 type Formats = ReturnType<typeof dateFormats>;
-
-const same = (a: Temporal.PlainDate | null, b: Temporal.PlainDate | null) =>
-  a === null || b === null ? a === b : a.equals(b);
-
-function useDate({ value, defaultValue = null, onValueChange, onFormReset }: ControlOptions) {
-  const [own, setOwn] = useState(defaultValue);
-  const committed = value === undefined ? own : value;
-  const [segments, setSegments] = useState(() => fromDate(committed));
-  const [seen, setSeen] = useState(committed);
-  const [buffer, setBuffer] = useState<Buffer>(null);
-  if (!same(seen, committed)) {
-    setSeen(committed);
-    setSegments(fromDate(committed));
-  }
-  const edit = (
-    next: Segments,
-    text: Buffer,
-    reason: DateFieldChangeEventDetails["reason"],
-    event: Event,
-  ) => {
-    const date = toDate(next);
-    let cancelled = false;
-    if (!same(date, committed)) {
-      const cancel = () => {
-        cancelled = true;
-      };
-      onValueChange?.(date, { reason, event, cancel });
-      if (cancelled) return null;
-      setOwn(date);
-      setSeen(date);
-    }
-    const shown = date === null ? next : fromDate(date);
-    setSegments(shown);
-    setBuffer(text);
-    return { segments: shown, date };
-  };
-  const reset = () => {
-    setOwn(defaultValue);
-    setSegments(fromDate(defaultValue));
-    setBuffer(null);
-    onFormReset?.();
-  };
-  return { committed, segments, buffer, setBuffer, edit, reset };
-}
 
 interface SegmentProps {
   readonly part: DatePart;

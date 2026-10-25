@@ -3,6 +3,7 @@
 import { createContext, use, useEffectEvent, useId, useLayoutEffect, useState } from "react";
 import type { ComponentProps, ReactNode, SyntheticEvent } from "react";
 
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId, isOpen, sourceOf } from "../floating/floating.ts";
 import { Slot, join } from "../slot/slot.tsx";
@@ -106,15 +107,7 @@ export function Root({
 
   function change(next: boolean, reason: ChangeReason, event?: SyntheticEvent, nextMode?: Mode) {
     if (next === (requested.get(contentId) ?? isOpen(byId(contentId)))) return;
-    let cancelled = false;
-    onOpenChange?.(next, {
-      reason,
-      event: event?.nativeEvent,
-      cancel: () => {
-        cancelled = true;
-      },
-    });
-    if (cancelled) return;
+    if (!requestChange(onOpenChange, next, reason, event?.nativeEvent)) return;
     requested.set(contentId, next);
     setMode(nextMode);
     setUncontrolled(next);

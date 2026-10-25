@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { Slot, join } from "../slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
@@ -34,16 +34,6 @@ export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "ari
   };
 
 const feedback = { component: "IconButton", reason: "user" } as const;
-
-function changeEventDetails(
-  event: MouseEvent<HTMLButtonElement>,
-): [IconButtonChangeEventDetails, () => boolean] {
-  let cancelled = false;
-  const cancel = () => {
-    cancelled = true;
-  };
-  return [{ reason: "none", event, cancel }, () => cancelled];
-}
 
 /**
  * A square native `<button>` whose only content is an icon, named by `aria-label` or
@@ -77,9 +67,7 @@ export function IconButton({
       dispatchFeedback(event.currentTarget, "ab-press", feedback);
       return;
     }
-    const [details, cancelled] = changeEventDetails(event);
-    onPressedChange?.(!current, details);
-    if (cancelled()) return;
+    if (!requestChange(onPressedChange, !current, "none", event)) return;
     setUncontrolled(!current);
     dispatchFeedback(event.currentTarget, "ab-toggle", feedback);
   }

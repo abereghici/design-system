@@ -7,6 +7,7 @@ import type {
   PointerEvent as ReactPointerEvent,
 } from "react";
 
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { byId } from "../floating/floating.ts";
 import { enabled, optionAt, shownOf, textOf } from "../listbox/listbox.tsx";
@@ -109,29 +110,12 @@ export function memoryOf(c: Combobox): Memory {
   return memory;
 }
 
-function report<Value, Reason extends string>(
-  callback: Callback<Value, Reason> | undefined,
-  value: Value,
-  reason: Reason,
-  event?: Event,
-) {
-  let accepted = true;
-  callback?.(value, {
-    reason,
-    event,
-    cancel: () => {
-      accepted = false;
-    },
-  });
-  return accepted;
-}
-
 function changeText(c: Combobox, next: string, reason: InputReason, event?: Event) {
   const input = inputOf(c);
   const memory = memoryOf(c);
   const previous = memory.text ?? "";
   if (input === null) return false;
-  if (next !== previous && !report(c.options.onInputValueChange, next, reason, event)) {
+  if (next !== previous && !requestChange(c.options.onInputValueChange, next, reason, event)) {
     input.value = previous;
     return false;
   }
@@ -142,14 +126,14 @@ function changeText(c: Combobox, next: string, reason: InputReason, event?: Even
 
 function changeValue(c: Combobox, next: string | null, reason: ValueReason, event?: Event) {
   if (next === c.value) return true;
-  if (!report(c.options.onValueChange, next, reason, event)) return false;
+  if (!requestChange(c.options.onValueChange, next, reason, event)) return false;
   c.setValue(next);
   return true;
 }
 
 function changeOpen(c: Combobox, next: boolean, reason: OpenReason, event?: Event) {
   if (next === c.open || (next && c.options.disabled === true)) return false;
-  if (!report(c.options.onOpenChange, next, reason, event)) return false;
+  if (!requestChange(c.options.onOpenChange, next, reason, event)) return false;
   c.setOpen(next);
   return true;
 }

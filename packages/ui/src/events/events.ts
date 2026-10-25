@@ -13,6 +13,24 @@ export interface ChangeEventDetails<Reason extends string, Cause = Event> {
   readonly cancel: () => void;
 }
 
+/** Calls `onChange` and answers whether the change was accepted: `false` once it calls `details.cancel()`. */
+export function requestChange<Value, Reason extends string, Cause>(
+  onChange: ((value: Value, details: ChangeEventDetails<Reason, Cause>) => void) | undefined,
+  value: Value,
+  reason: Reason,
+  event: Cause,
+): boolean {
+  let accepted = true;
+  onChange?.(value, {
+    reason,
+    event,
+    cancel: () => {
+      accepted = false;
+    },
+  });
+  return accepted;
+}
+
 export interface FeedbackEventDetail<Component extends string = string> {
   readonly component: Component;
   readonly reason: FeedbackReason;

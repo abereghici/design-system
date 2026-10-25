@@ -3,25 +3,13 @@
 import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../events/events.ts";
 import { CheckIcon } from "../icon/icons/check.tsx";
 import { join } from "../slot/slot.tsx";
 
 import { useItem } from "./menu.tsx";
 import type { ItemBaseProps, ItemChangeEventDetails } from "./menu.tsx";
 import styles from "./menu.module.css";
-
-function changeDetails(event: MouseEvent): [ItemChangeEventDetails, () => boolean] {
-  let cancelled = false;
-  const details = {
-    reason: "item-press",
-    event: event.nativeEvent,
-    cancel: () => {
-      cancelled = true;
-    },
-  } as const;
-  return [details, () => cancelled];
-}
 
 function Indicator({ checked, radio }: { checked: boolean; radio: boolean }) {
   return (
@@ -58,9 +46,7 @@ export function CheckboxItem({
       onClick={(event) => {
         if (blocked(event)) return;
         onClick?.(event);
-        const [details, cancelled] = changeDetails(event);
-        onCheckedChange?.(!current, details);
-        if (cancelled()) return;
+        if (!requestChange(onCheckedChange, !current, "item-press", event.nativeEvent)) return;
         setUncontrolled(!current);
         dispatchFeedback(event.currentTarget, "ab-toggle", {
           component: menu.component,
@@ -100,10 +86,7 @@ export function RadioGroup({
   const [uncontrolled, setUncontrolled] = useState(defaultValue);
   const current = value === undefined ? uncontrolled : value;
   function select(next: string, event: MouseEvent<HTMLButtonElement>) {
-    if (next === current) return false;
-    const [details, cancelled] = changeDetails(event);
-    onValueChange?.(next, details);
-    if (cancelled()) return false;
+    if (!requestChange(onValueChange, next, "item-press", event.nativeEvent)) return false;
     setUncontrolled(next);
     return true;
   }
@@ -131,7 +114,8 @@ export function RadioItem({ value, onClick, children, ...rest }: RadioItemProps)
       onClick={(event) => {
         if (blocked(event)) return;
         onClick?.(event);
-        if (group.select(value, event)) {
+        if (!checked) {
+          if (!group.select(value, event)) return;
           dispatchFeedback(event.currentTarget, "ab-toggle", {
             component: menu.component,
             reason: "user",

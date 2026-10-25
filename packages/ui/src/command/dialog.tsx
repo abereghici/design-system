@@ -4,10 +4,11 @@ import { useState } from "react";
 import type { ComponentProps, RefObject, SyntheticEvent } from "react";
 
 import { Content, ModalRoot } from "../dialog/modal.tsx";
+import { requestChange } from "../events/events.ts";
 import { useLocale } from "../provider/locale.tsx";
 import { command as commandLabels } from "../provider/locales/en-US/command.ts";
 
-import { DialogContext, report, Root } from "./root.tsx";
+import { DialogContext, Root } from "./root.tsx";
 import type { Callback, RootProps } from "./root.tsx";
 import styles from "./command.module.css";
 
@@ -34,7 +35,7 @@ function handleClose(
 ) {
   onClose?.(event);
   if ((event.currentTarget.querySelector("input")?.value ?? "") !== "") {
-    report(onInputValueChange, "", "input-clear", event.nativeEvent);
+    requestChange(onInputValueChange, "", "input-clear", event.nativeEvent);
   }
   if (document.activeElement === document.body && finalFocus?.current?.isConnected === true) {
     finalFocus.current.focus();
@@ -49,9 +50,9 @@ export function Dialog(props: DialogProps) {
   const [closes, setCloses] = useState(0);
   const locale = useLocale();
   const close = (reason: Exclude<Reason, "none">, event: Event) => {
-    const cancelled = report(onOpenChange, false, reason, event);
-    if (!cancelled) setOwn(false);
-    return cancelled;
+    const accepted = requestChange(onOpenChange, false, reason, event);
+    if (accepted) setOwn(false);
+    return accepted;
   };
   return (
     <ModalRoot
@@ -60,7 +61,7 @@ export function Dialog(props: DialogProps) {
       component="Dialog"
       onOpenChange={(_open, details) => {
         const { reason, event } = details;
-        if ((reason === "outside-press" || reason === "escape-key") && close(reason, event))
+        if ((reason === "outside-press" || reason === "escape-key") && !close(reason, event))
           details.cancel();
       }}
     >
@@ -74,7 +75,7 @@ export function Dialog(props: DialogProps) {
       >
         <DialogContext
           value={(event, option) => {
-            if (!close("item-press", event)) option.closest("dialog")?.close();
+            if (close("item-press", event)) option.closest("dialog")?.close();
           }}
         >
           <Root

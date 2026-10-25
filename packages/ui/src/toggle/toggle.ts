@@ -1,20 +1,10 @@
-import type { KeyboardEvent, MouseEvent, MouseEventHandler, PointerEvent } from "react";
+import type { KeyboardEvent, MouseEventHandler, PointerEvent } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 
 /** `cancel()`: keeps the previous state: the browser restores it once the click is cancelled. */
 export type ChangeEventDetails = Details<"none">;
-
-export function changeDetails(event: MouseEvent): ChangeEventDetails {
-  return {
-    reason: "none",
-    event: event.nativeEvent,
-    cancel: () => {
-      event.preventDefault();
-    },
-  };
-}
 
 /**
  * The input's `click` handler. The browser has already flipped the checkedness when it runs, and
@@ -32,7 +22,9 @@ export function toggleClick(
       return;
     }
     onClick?.(event);
-    onCheckedChange?.(event.currentTarget.checked, changeDetails(event));
+    if (!requestChange(onCheckedChange, event.currentTarget.checked, "none", event.nativeEvent)) {
+      event.preventDefault();
+    }
     if (!event.defaultPrevented) {
       dispatchFeedback(event.currentTarget, "ab-toggle", { component, reason: "user" });
     }

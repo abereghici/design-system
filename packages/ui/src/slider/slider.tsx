@@ -3,6 +3,7 @@
 import { Children, createContext, isValidElement, use, useId, useState } from "react";
 import type { ComponentProps, KeyboardEvent, PointerEvent } from "react";
 
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useFieldControl } from "../field/field-control.ts";
 import { useLocale } from "../provider/locale.tsx";
@@ -69,10 +70,7 @@ function useSliderState(options: Options, scale: Scale) {
     const [lo, hi] = bounds(index, from);
     const next = from.with(index, Math.min(Math.max(snap(raw, min, step), lo), hi));
     if (next[index] === from[index]) return from;
-    const cancelled = new AbortController();
-    const cancel = cancelled.abort.bind(cancelled);
-    options.onValueChange?.(output(next), { reason, event, cancel });
-    if (cancelled.signal.aborted) return from;
+    if (!requestChange(options.onValueChange, output(next), reason, event)) return from;
     setUncontrolled(output(next));
     return next;
   }

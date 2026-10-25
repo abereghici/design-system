@@ -3,10 +3,10 @@
 import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../events/events.ts";
 import { useFieldControl } from "../field/field-control.ts";
 import { join } from "../slot/slot.tsx";
-import { changeDetails, followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
+import { followVisualDirection, pointerMarker } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
 import styles from "./segmented-control.module.css";
@@ -48,7 +48,7 @@ export function Root({
 
   function select(next: string, event: MouseEvent<HTMLInputElement>) {
     if (next === current) return;
-    onValueChange?.(next, changeDetails(event));
+    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) event.preventDefault();
     if (event.defaultPrevented) return;
     setUncontrolled(next);
     dispatchFeedback(event.currentTarget, "ab-toggle", {

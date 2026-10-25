@@ -3,6 +3,7 @@
 import { createContext, use, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction } from "react";
 
+import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { arrange, enabled, shownOf } from "../listbox/listbox.tsx";
 import { useLocale } from "../provider/locale.tsx";
@@ -16,23 +17,6 @@ export type Callback<Value, Reason extends string> = (
   value: Value,
   details: ChangeEventDetails<Reason>,
 ) => void;
-
-export function report<Value, Reason extends string>(
-  callback: Callback<Value, Reason> | undefined,
-  value: Value,
-  reason: Reason,
-  event: Event,
-): boolean {
-  let cancelled = false;
-  callback?.(value, {
-    reason,
-    event,
-    cancel: () => {
-      cancelled = true;
-    },
-  });
-  return cancelled;
-}
 
 interface CommandContext {
   readonly query: string;
@@ -178,7 +162,7 @@ export function Root({
   const context: CommandContext = {
     query,
     change: (next, event) => {
-      if (!report(onInputValueChange, next, "input-change", event)) setOwn(next);
+      if (requestChange(onInputValueChange, next, "input-change", event)) setOwn(next);
     },
     highlighted,
     highlight: setHighlighted,
