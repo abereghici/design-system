@@ -17,7 +17,7 @@ import { UIProvider } from "@platform/ui/ui-provider";
 <UIProvider locale={roRO}>{children}</UIProvider>;
 ```
 
-Shipped: `en-US` and `ro-RO`. Without a locale, components use their own en-US labels and format numbers in en-US. Each component carries only its own default labels, so importing one never ships another's strings.
+Shipped: `en-US` and `ro-RO`. Without a locale, components use their own en-US labels. Each component carries only its own default labels, so importing one never ships another's strings.
 
 ## Change some labels
 
@@ -35,9 +35,13 @@ const enGB = {
 
 To change a label for one instance, pass the component's `labels` prop where it has one (for example SkipLink and Spinner).
 
-## Server Components
+## Formatting
 
-Context doesn't reach Server Components. The ones that label or format on the server (Badge, Breadcrumbs, Meter, Pagination, Progress, SkipLink, Spinner) take their own `locale` prop; pass the same shipped locale you give the UIProvider. Their `labels` prop still overrides single strings.
+Components that format numbers or dates (Badge, Calendar, Combobox and Command matching, DateField, DatePicker, Meter, NumberField, Pagination, Progress, Slider) take an optional `locale`, a BCP 47 tag such as `"ro-RO"`, which they pass to `Intl`. Without it, `Intl` uses the runtime's default language, which can differ between your server and the browser, so a server-rendered app passes the same `locale` everywhere:
+
+```tsx
+<Meter value={42} label="Spațiu" locale="ro-RO" />
+```
 
 ## Direction
 

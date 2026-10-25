@@ -75,7 +75,7 @@ Names, checked against the reference libraries:
 - **Previous / Next.** Show the month before or after; focus stays on the button; the tab stop takes the same day number in the new month (or its last day). Each press is an IconButton press.
 - **Choosing** (`"day-press"`): a click, Enter or Space on an available day calls `onValueChange(day, details)`; `cancel()` keeps the old value. Choosing the selected day again changes nothing. An unavailable day does nothing (`aria-disabled`).
 - **Today** is `Temporal.Now.plainDateISO()` (MDN: "returns the current date as a `Temporal.PlainDate` object, in the ISO 8601 calendar and the specified time zone"; the system time zone by default), read on mount and on each `focus` of the Root, so a page left open overnight moves the marker (inference).
-- **Locale.** Weekday names, month heading, day numbers, the cells' accessible names and the first day of the week come from the root UIProvider's Locale `tag`; formatters are created once per tag, lazily.
+- **Locale.** Weekday names, month heading, day numbers, the cells' accessible names and the first day of the week come from the `locale` prop (inside a DatePicker, the DatePicker's), else the runtime's default; formatters are created once per locale, lazily. The focused day follows today and the value until the user moves it, so after hydration it starts in the user's time zone.
 - **Server rendering.** "Today" differs between server and client time zones, so the server renders the value's month (or the current UTC month) and the client corrects it after hydration (inference: the build ticket checks no hydration error when the server and the browser are on different dates).
 - Client component (`'use client'`): one file.
 

@@ -4,7 +4,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { dateFormats } from "../date/date.ts";
 import type { DatePart, Temporal } from "../date/date.ts";
 import { useField } from "../field/use-field.ts";
-import { useLabels, useLocale } from "../ui-provider/locale.tsx";
+import { useLabels } from "../ui-provider/locale.tsx";
 import type { Labels } from "../ui-provider/locale.tsx";
 import { dateField as dateFieldLabels } from "../ui-provider/locales/en-US/date-field.ts";
 
@@ -38,6 +38,11 @@ export interface DateFieldOptions extends DateValueOptions {
    * invalid.
    */
   validate?: ((value: string, formData: FormData) => string | null | undefined) | undefined;
+  /**
+   * The language of the segment order, separators and names, such as "ro-RO". Pass the same one on
+   * the server and in the browser; without it, the runtime's default language is used.
+   */
+  locale?: Intl.LocalesArgument;
   /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: Partial<Labels["dateField"]> | undefined;
 }
@@ -103,9 +108,8 @@ function filledAround(formats: Formats, index: number, segments: Segments) {
 
 function useControl(options: ControlOptions, onValidity: (validity: Validity) => void) {
   const { field, blocked, invalid } = useField(options.disabled);
-  const locale = useLocale();
   const names = useLabels("dateField", dateFieldLabels, options.labels);
-  const formats = dateFormats(locale.tag);
+  const formats = dateFormats(options.locale);
   const group = useRef<HTMLFieldSetElement>(null);
   const date = useDate(options);
   const name = field?.name ?? options.name;

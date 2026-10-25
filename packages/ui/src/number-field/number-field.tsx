@@ -9,7 +9,6 @@ import * as Field from "../field/field.tsx";
 import { useField, useFormReset } from "../field/use-field.ts";
 import { InputGroup } from "../text-field/text-field.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
-import { useLocale } from "../ui-provider/locale.tsx";
 import type { Labels } from "../ui-provider/locale.tsx";
 
 import { StepButtons } from "./number-field-step-buttons.tsx";
@@ -59,8 +58,11 @@ type ControlProps = Omit<
   largeStep?: number;
   /** How the number reads and is typed, such as a currency or a unit. */
   formatOptions?: Intl.NumberFormatOptions | undefined;
-  /** The language whose number format it uses, when it differs from the UIProvider's. */
-  locale?: string | undefined;
+  /**
+   * The language the number is formatted and typed in, such as "ro-RO". Pass the same one on the
+   * server and in the browser; without it, the runtime's default language is used.
+   */
+  locale?: Intl.LocalesArgument;
   /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
   labels?: Partial<Labels["numberField"]>;
   /** Content before the number, such as a currency sign. */
@@ -76,14 +78,16 @@ export type NumberFieldProps = Naming &
   ControlProps &
   Pick<TextFieldProps, "description" | "errorMessage" | "invalid" | "validate" | "size">;
 
-function numberFormat(locale: string, options: Intl.NumberFormatOptions | undefined) {
+function buildNumberFormat(
+  locale: Intl.LocalesArgument,
+  options: Intl.NumberFormatOptions | undefined,
+) {
   const format = new Intl.NumberFormat(locale, options);
   const parts = format.formatToParts(-1234567.89);
   const symbol = (type: Intl.NumberFormatPartTypes) =>
     parts.find((part) => part.type === type)?.value;
-  const digits = Array.from({ length: 10 }, (_, digit) =>
-    new Intl.NumberFormat(locale, { useGrouping: false }).format(digit),
-  );
+  const digitFormat = new Intl.NumberFormat(locale, { useGrouping: false });
+  const digits = Array.from({ length: 10 }, (_, digit) => digitFormat.format(digit));
   const parse = (text: string) => {
     let raw = "";
     for (const char of text) {
@@ -97,6 +101,15 @@ function numberFormat(locale: string, options: Intl.NumberFormatOptions | undefi
     return options?.style === "percent" ? value / 100 : value;
   };
   return { format: (value: number) => format.format(value), parse };
+}
+
+const numberFormats = new Map<string, ReturnType<typeof buildNumberFormat>>();
+
+function numberFormat(locale: Intl.LocalesArgument, options: Intl.NumberFormatOptions | undefined) {
+  const key = `${String(locale)} ${JSON.stringify(options)}`;
+  const cached = numberFormats.get(key) ?? buildNumberFormat(locale, options);
+  numberFormats.set(key, cached);
+  return cached;
 }
 
 const decimals = (value: number) => (String(value).split(".")[1] ?? "").length;
@@ -163,8 +176,7 @@ function useNumberValue({
   largeStep = step * 10,
   ...rest
 }: Omit<ControlProps, "labels" | "startElement" | "readOnly">) {
-  const app = useLocale();
-  const { format, parse } = numberFormat(locale ?? app.tag, formatOptions);
+  const { format, parse } = numberFormat(locale, formatOptions);
   const { committed, text, setText, commit, hidden } = useNumber({
     value,
     defaultValue,
