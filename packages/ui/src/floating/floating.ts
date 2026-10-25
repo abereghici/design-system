@@ -102,8 +102,6 @@ export const sourceOf = (source: Element | null): ShowPopoverOptions =>
 const invokerOf = (contentId: string) =>
   document.querySelector(`[commandfor="${CSS.escape(contentId)}"]`);
 
-export const byId = (id: string) => document.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
-
 function settle(element: HTMLElement, component: Component) {
   const layer = layerOf(element);
   const { closing, focusInside } = layer;
@@ -119,7 +117,7 @@ function settle(element: HTMLElement, component: Component) {
  * Records where focus was before a press that may open the layer moved it (WebKit blurs on press).
  */
 export function rememberFocus(contentId: string, focus = document.activeElement) {
-  const element = byId(contentId);
+  const element = document.getElementById(contentId);
   if (element !== null)
     layerOf(element).returnTo = focus instanceof HTMLElement ? focus : undefined;
 }
@@ -136,7 +134,10 @@ export function returnFocus(
 
 function leaves(contentId: string, next: EventTarget | null) {
   if (!(next instanceof Node)) return false;
-  return byId(contentId)?.contains(next) !== true && invokerOf(contentId)?.contains(next) !== true;
+  return (
+    document.getElementById(contentId)?.contains(next) !== true &&
+    invokerOf(contentId)?.contains(next) !== true
+  );
 }
 
 function recordInput(element: HTMLElement, focusOut: (event: FocusEvent) => void) {
@@ -189,7 +190,7 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
 }
 
 function reconcile(contentId: string, open: boolean, findSource: (id: string) => Element | null) {
-  const element = byId(contentId);
+  const element = document.getElementById(contentId);
   if (element === null) return;
   const layer = layerOf(element);
   // `closing` lasts until the async `toggle` event, so a render in between (a value set on the closing press) does not reopen the layer.
@@ -229,7 +230,7 @@ function controlsOf(
   findSource: (id: string) => Element | null,
 ) {
   const request = (next: boolean, reason: ChangeReason, event?: Event) => {
-    const element = byId(contentId);
+    const element = document.getElementById(contentId);
     if (element === null || !requestChange(options.onOpenChange, next, reason, event)) return false;
     const layer = layerOf(element);
     layer.pending = reason;
@@ -239,7 +240,7 @@ function controlsOf(
     return true;
   };
   const toggle = (next: boolean, reason: ChangeReason, event?: Event, source?: Element | null) => {
-    const element = byId(contentId);
+    const element = document.getElementById(contentId);
     if (element === null || isOpen(element) === next || !request(next, reason, event)) return false;
     if (next) element.showPopover(sourceOf(source ?? findSource(contentId)));
     else element.hidePopover();
@@ -273,7 +274,7 @@ export function useFloating(
   const controls = controlsOf(contentId, options, findSource);
   const onFocusOut = useEffectEvent(controls.focusOut);
   useEffect(() => {
-    const element = byId(contentId);
+    const element = document.getElementById(contentId);
     return current && element !== null ? recordInput(element, onFocusOut) : undefined;
   }, [contentId, current]);
 

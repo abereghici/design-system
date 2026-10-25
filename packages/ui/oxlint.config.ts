@@ -10,6 +10,8 @@ export default defineConfig({
     {
       files: ["src/**"],
       rules: {
+        // Parts find each other by useId ids, whose «» need CSS.escape in a selector; getElementById takes them as they are.
+        "unicorn/prefer-query-selector": "off",
         "no-restricted-imports": [
           "error",
           {

@@ -3,7 +3,7 @@
 import { use } from "react";
 import type { ReactNode } from "react";
 
-import { byId, useFloating } from "../floating/floating.ts";
+import { useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as Details, FloatingOptions } from "../floating/floating.ts";
 import { MenuContext } from "../menu/menu.tsx";
 import type { Menu } from "../menu/menu.tsx";
@@ -38,8 +38,8 @@ export function place(anchor: HTMLElement, x: number, y: number, pointer: boolea
 }
 
 function cornerAnchor(contentId: string) {
-  const anchor = byId(`${contentId}-anchor`);
-  const area = byId(`${contentId}-area`);
+  const anchor = document.getElementById(`${contentId}-anchor`);
+  const area = document.getElementById(`${contentId}-area`);
   if (anchor === null || area === null) return anchor;
   const rect = area.getBoundingClientRect();
   return place(anchor, area.matches(":dir(rtl)") ? rect.right : rect.left, rect.top, false);

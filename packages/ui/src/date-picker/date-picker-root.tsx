@@ -8,7 +8,7 @@ import type { DateFieldChangeEventDetails, DateFieldProps } from "../date-field/
 import type { DatePickerContextValue, Temporal } from "../date/date.ts";
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { byId, useFloating } from "../floating/floating.ts";
+import { useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as FloatingDetails, Floating } from "../floating/floating.ts";
 
 import { PanelContext } from "./date-picker-panel.tsx";
@@ -95,7 +95,7 @@ function pickerOf(
       return (
         focus === document.body ||
         focus?.getAttribute("commandfor") === floating.contentId ||
-        byId(floating.contentId)?.contains(focus) === true
+        document.getElementById(floating.contentId)?.contains(focus) === true
       );
     },
   };

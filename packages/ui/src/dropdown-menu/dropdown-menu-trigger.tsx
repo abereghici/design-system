@@ -2,7 +2,6 @@
 
 import type { ComponentProps, KeyboardEvent } from "react";
 
-import { byId } from "../floating/floating.ts";
 import { focusLast, itemsOf } from "../menu/menu.tsx";
 import { Slot } from "../slot/slot.tsx";
 
@@ -29,7 +28,7 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
         const arrow = event.key === "ArrowDown" || event.key === "ArrowUp";
         if (!arrow || event.currentTarget.getAttribute("aria-disabled") === "true") return;
         event.preventDefault();
-        const content = byId(floating.contentId);
+        const content = document.getElementById(floating.contentId);
         if (content === null) return;
         if (floating.open) {
           itemsOf(content)

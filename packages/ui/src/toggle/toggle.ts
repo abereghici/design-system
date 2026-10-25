@@ -1,4 +1,4 @@
-import type { DOMAttributes, KeyboardEvent, MouseEventHandler, PointerEvent } from "react";
+import type { MouseEventHandler } from "react";
 
 import { composeEventHandlers, dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
@@ -27,34 +27,4 @@ export function toggleClick(
       event.preventDefault();
     }
   });
-}
-
-/** Marks pointer-initiated changes with `data-pointer`, so keyboard changes skip the motion; `props`' own handlers run first. */
-export function pointerMarker<Element extends HTMLElement>(
-  props: Pick<DOMAttributes<Element>, "onPointerDown" | "onKeyDown"> = {},
-) {
-  return {
-    onPointerDown: (event: PointerEvent<Element>) => {
-      props.onPointerDown?.(event);
-      event.currentTarget.dataset["pointer"] = "";
-    },
-    onKeyDown: (event: KeyboardEvent<Element>) => {
-      props.onKeyDown?.(event);
-      delete event.currentTarget.dataset["pointer"];
-    },
-  };
-}
-
-// WebKit doesn't swap Left and Right for native radios in RTL (Chromium and Firefox do). Inside a Toolbar the Toolbar owns the arrow keys.
-export function followVisualDirection(event: KeyboardEvent<HTMLElement>) {
-  const step = event.key === "ArrowLeft" ? 1 : event.key === "ArrowRight" ? -1 : 0;
-  const group = event.currentTarget;
-  if (step === 0 || event.defaultPrevented || !group.matches(":dir(rtl)")) return;
-  if (group.closest('[role="toolbar"]') !== null) return;
-  if (!(event.target instanceof HTMLInputElement)) return;
-  event.preventDefault();
-  const radios = [...group.querySelectorAll<HTMLInputElement>('input[type="radio"]')];
-  const next = radios.at((radios.indexOf(event.target) + step) % radios.length);
-  next?.focus();
-  next?.click();
 }

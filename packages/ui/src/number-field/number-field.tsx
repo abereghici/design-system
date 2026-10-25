@@ -5,8 +5,9 @@ import type { ComponentProps, KeyboardEvent, ReactNode, SyntheticEvent } from "r
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useEvent } from "../events/use-event.ts";
 import * as Field from "../field/field.tsx";
-import { useField, useFormReset } from "../field/use-field.ts";
+import { useField } from "../field/use-field.ts";
 import { InputGroup } from "../text-field/text-field.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
 
@@ -155,12 +156,13 @@ function useNumber({
     if (requestChange(onValueChange, next, reason, event)) setUncontrolled(next);
   };
   const hidden = useRef<HTMLInputElement>(null);
-  useFormReset(
-    () => hidden.current,
+  useEvent(
+    "reset",
     () => {
       setUncontrolled(defaultValue);
       setText(null);
     },
+    () => hidden.current?.form,
   );
   return { committed, text, setText, commit, hidden };
 }

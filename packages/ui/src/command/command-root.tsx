@@ -5,7 +5,6 @@ import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction
 
 import { isComposing, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { byId } from "../floating/floating.ts";
 import { filterOptions, enabled, navigate, reveal } from "../listbox/listbox.tsx";
 import { mergeProps } from "../slot/slot.tsx";
 
@@ -50,7 +49,7 @@ function keyDown(
   highlight: (id: string) => void,
 ) {
   if (event.key === "Enter") {
-    const option = highlighted === null ? null : byId(highlighted);
+    const option = highlighted === null ? null : document.getElementById(highlighted);
     if (isComposing(event) || option === null) return;
     event.preventDefault();
     option.click();

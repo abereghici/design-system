@@ -8,15 +8,7 @@ import { Listbox } from "../listbox/listbox.tsx";
 import { InputGroup } from "../text-field/text-field.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
-import {
-  blur,
-  inputChange,
-  keyDown,
-  listProps,
-  part,
-  press,
-  trackComposition,
-} from "./combobox-state.ts";
+import { inputProps, listProps, part, press } from "./combobox-state.ts";
 import type { Combobox, Options } from "./combobox-state.ts";
 import { ValueContext, useCombobox } from "./use-combobox.ts";
 import textFieldStyles from "../text-field/text-field.module.css";
@@ -106,24 +98,7 @@ function Control({ c, input }: { c: Combobox; input: Field.ControlProps }) {
         press(c, event.nativeEvent);
       }}
     >
-      <Input
-        {...input}
-        aria-expanded={c.open}
-        aria-controls={part(c, "list")}
-        onCompositionEnd={trackComposition(input.onCompositionEnd)}
-        onKeyDown={(event) => {
-          input.onKeyDown?.(event);
-          keyDown(c, event);
-        }}
-        onChange={(event) => {
-          input.onChange?.(event);
-          inputChange(c, event);
-        }}
-        onBlur={(event) => {
-          blur(c, event);
-          input.onBlur?.(event);
-        }}
-      />
+      <Input {...inputProps(c, input)} aria-expanded={c.open} aria-controls={part(c, "list")} />
     </InputGroup>
   );
 }

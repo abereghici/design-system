@@ -1,4 +1,4 @@
-import { expect, fn } from "storybook/test";
+import { expect, fn, waitFor } from "storybook/test";
 
 import type { Decorator } from "@storybook/react-vite";
 
@@ -76,6 +76,18 @@ Default.test(
     await expect(canvas.getByRole("button", { name: "Choose image" })).toHaveFocus();
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
     await expect(new FormData(form).get("avatar")).toHaveProperty("size", 0);
+  },
+);
+
+Default.test(
+  "drops the chosen file names when its form resets",
+  { decorators: [inAForm] },
+  async ({ canvas, canvasElement }) => {
+    pick(canvasElement, photo);
+    await expect(canvas.getByRole("status")).toHaveTextContent("photo.png");
+    canvas.getByRole<HTMLFormElement>("form", { name: "Profile" }).reset();
+    await waitFor(() => expect(canvas.getByRole("status")).toBeEmptyDOMElement());
+    await expect(canvas.queryByRole("button", { name: "Clear files" })).toBeNull();
   },
 );
 

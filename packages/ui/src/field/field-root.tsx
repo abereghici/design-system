@@ -38,7 +38,7 @@ const failureOf = (target: FormControl): Failure =>
     : null;
 
 const controlOf = (id: string) => {
-  const element = document.querySelector(`#${CSS.escape(id)}`);
+  const element = document.getElementById(id);
   return element instanceof HTMLInputElement ||
     element instanceof HTMLSelectElement ||
     element instanceof HTMLTextAreaElement

@@ -1,7 +1,8 @@
 import { useRef } from "react";
 
 import type { Temporal } from "../date/date.ts";
-import { setValidity, useField, useFormReset } from "../field/use-field.ts";
+import { useEvent } from "../events/use-event.ts";
+import { setValidity, useField } from "../field/use-field.ts";
 import type { Validate } from "../field/use-field.ts";
 
 import type { Segments } from "./segments.ts";
@@ -24,7 +25,7 @@ interface Wiring {
 }
 
 const hiddenInput = (id: string | undefined) => {
-  const node = id === undefined ? null : document.querySelector(`#${CSS.escape(id)}`);
+  const node = id === undefined ? null : document.getElementById(id);
   return node instanceof HTMLInputElement ? node : null;
 };
 
@@ -51,13 +52,14 @@ export function useValidity(
     if (node === null || !touched.current) return;
     onValidity({ invalid: !node.validity.valid, message: node.validationMessage });
   };
-  useFormReset(
-    () => hiddenInput(id),
+  useEvent(
+    "reset",
     () => {
       reset();
       touched.current = false;
       onValidity({ invalid: false, message: "" });
     },
+    () => hiddenInput(id)?.form,
   );
   const submit = () => {
     hiddenInput(id)?.form?.requestSubmit();

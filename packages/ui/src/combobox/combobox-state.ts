@@ -9,16 +9,14 @@ import type {
 
 import { isComposing, requestChange, trackComposition } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { byId } from "../floating/floating.ts";
 import { enabled, navigate, optionAt, textOf } from "../listbox/listbox.tsx";
-
-export { trackComposition };
+import { mergeProps } from "../slot/slot.tsx";
 
 export const chosenOf = (list: Element, value: string | null) =>
   value === null ? null : list.querySelector(`[role="option"][data-value="${CSS.escape(value)}"]`);
 function highlightedOf(input: Element) {
   const id = input.getAttribute("aria-activedescendant");
-  return id === null ? null : byId(id);
+  return id === null ? null : document.getElementById(id);
 }
 
 export function highlight(
@@ -95,12 +93,13 @@ const memories = new WeakMap<Element, Memory>();
 
 export const part = (c: Combobox, name: "root" | "box" | "list" | "label" | "empty" | "status") =>
   `${c.id}${name}`;
-export const listOf = (c: Combobox) => byId(part(c, "list"));
+export const listOf = (c: Combobox) => document.getElementById(part(c, "list"));
 export const inputOf = (c: Combobox) =>
-  byId(part(c, "root"))?.querySelector<HTMLInputElement>('[role="combobox"]') ?? null;
+  document.getElementById(part(c, "root"))?.querySelector<HTMLInputElement>('[role="combobox"]') ??
+  null;
 
 export function memoryOf(c: Combobox): Memory {
-  const root = byId(part(c, "root"));
+  const root = document.getElementById(part(c, "root"));
   const memory = (root && memories.get(root)) ?? {
     pointer: false,
     edge: "first",
@@ -207,12 +206,32 @@ export function inputChange(c: Combobox, event: ChangeEvent<HTMLInputElement>) {
 
 export function blur(c: Combobox, event: FocusEvent<HTMLInputElement>) {
   const next = event.relatedTarget;
-  const inside = next instanceof Node && byId(part(c, "root"))?.contains(next) === true;
+  const inside =
+    next instanceof Node && document.getElementById(part(c, "root"))?.contains(next) === true;
   if (!c.open || inside || !document.hasFocus()) return;
   // The Field reads :user-invalid in this same blur, so the restored text must already be in place.
   flushSync(() => {
     dismiss(c, "focus-out", event.nativeEvent);
   });
+}
+
+/** The input: keys navigate and choose, typing filters, leaving closes; composed with the consumer's props. */
+export function inputProps<Props extends object>(c: Combobox, consumer: Props) {
+  return mergeProps(
+    {
+      onCompositionEnd: trackComposition(),
+      onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => {
+        keyDown(c, event);
+      },
+      onChange: (event: ChangeEvent<HTMLInputElement>) => {
+        inputChange(c, event);
+      },
+      onBlur: (event: FocusEvent<HTMLInputElement>) => {
+        blur(c, event);
+      },
+    },
+    consumer,
+  );
 }
 
 /** The listbox: presses choose without taking focus from the input; the pointer highlights. */
