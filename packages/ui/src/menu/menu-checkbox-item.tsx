@@ -9,7 +9,9 @@ import { useItem } from "./menu.tsx";
 import type { ItemBaseProps, ItemChangeEventDetails } from "./menu.tsx";
 
 export interface CheckboxItemProps extends ItemBaseProps {
+  /** Whether it is on, when your state holds it; pair it with `onCheckedChange`. */
   checked?: boolean;
+  /** Whether it starts on when it holds its own state. */
   defaultChecked?: boolean;
   /** Called before the change commits; `details.cancel()` keeps the current state. */
   onCheckedChange?: (checked: boolean, details: ItemChangeEventDetails) => void;

@@ -6,6 +6,7 @@ export interface ContentProps extends ModalContentProps {
   side?: "start" | "end";
 }
 
+/** The panel itself, sliding in from `side`. */
 export function Content({ side = "end", ...props }: ContentProps) {
   return <ModalContent {...props} data-side={side} />;
 }

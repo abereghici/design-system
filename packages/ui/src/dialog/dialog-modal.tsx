@@ -12,7 +12,7 @@ export interface RootProps<R extends Reason = Reason> {
   /** Opens it on the first render when it holds its own state. */
   defaultOpen?: boolean;
   /** Called before it opens or closes; `details.cancel()` keeps it as it is. */
-  onOpenChange?(open: boolean, details: ChangeEventDetails<R>): void;
+  onOpenChange?: (open: boolean, details: ChangeEventDetails<R>) => void;
   /** The Trigger and Content. */
   children?: ReactNode;
 }
@@ -36,7 +36,14 @@ export function useModal(): ModalContext {
   return context;
 }
 
-export function ModalRoot(props: RootProps & Pick<ModalContext, "styles" | "component">) {
+type ModalRootProps = Omit<RootProps, "onOpenChange"> &
+  Pick<ModalContext, "styles" | "component"> & {
+    // Method syntax stays bivariant, so a narrower reason set fits:
+    // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html#strict-function-types
+    onOpenChange?(open: boolean, details: ChangeEventDetails): void;
+  };
+
+export function ModalRoot(props: ModalRootProps) {
   const { open, defaultOpen = false, styles, component, children } = props;
   const id = useId();
   const [title, setTitle] = useState(false);

@@ -11,16 +11,19 @@ const meta = preview.meta({
     orientation: {
       control: "inline-radio",
       options: ["horizontal", "vertical"],
+      table: { type: { summary: '"horizontal" | "vertical"' } },
       description: "`vertical` between items in a row, such as toolbar groups.",
     },
     variant: {
       control: "inline-radio",
       options: ["solid", "ornament"],
+      table: { type: { summary: '"solid" | "ornament"' } },
       description:
         "`ornament` adds a diamond at the center, for editorial pages only, never dense UI.",
     },
     decorative: {
       control: "boolean",
+      table: { type: { summary: "boolean" } },
       description: "Hides the line from screen readers, for a purely visual break.",
     },
   },

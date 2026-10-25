@@ -9,6 +9,7 @@ import styles from "./slider.module.css";
 
 export type ValueProps = ComponentProps<"output">;
 
+/** The current value as formatted text, announced as it changes. */
 export function Value({ style, children, ...props }: ValueProps) {
   const { id, values, format, min, max } = useSlider();
   const widest = Math.max(format(min).length, format(max).length);

@@ -2,6 +2,7 @@ export { Root } from "./sheet-root.tsx";
 export { Content } from "./sheet-content.tsx";
 export type { ContentProps } from "./sheet-content.tsx";
 export { Body } from "./sheet-body.tsx";
+export type { BodyProps } from "./sheet-body.tsx";
 export { Footer } from "./sheet-footer.tsx";
 export { Close } from "../dialog/dialog-close.tsx";
 export type { CloseProps } from "../dialog/dialog-close.tsx";

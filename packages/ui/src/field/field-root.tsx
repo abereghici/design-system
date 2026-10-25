@@ -72,7 +72,8 @@ function useValidity(
     if (control !== null) setValidity(control, undefined, server, validate);
   }, [control, server, validate]);
 
-  // React's onChange on a text input is the input event; user validity turns on at the native change.
+  // React's onChange on a text input is the input event; user validity turns on at the native
+  // change: https://react.dev/reference/react-dom/components/input#props
   useEvent(
     "change",
     () => {

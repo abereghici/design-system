@@ -82,6 +82,7 @@ function sync(contentId: string, open: boolean, mode: Mode | undefined, closeOth
 export interface RootProps {
   /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
   open?: boolean;
+  /** Shows it on the first render when it holds its own state. */
   defaultOpen?: boolean;
   /** Called before it opens or closes; `details.cancel()` keeps it as it is. */
   onOpenChange?: (open: boolean, details: ChangeEventDetails) => void;
@@ -109,7 +110,7 @@ export function Root({
   const contentId = useId();
 
   function change(next: boolean, reason: ChangeReason, event?: SyntheticEvent, nextMode?: Mode) {
-    // The DOM, not `current`: delays, Escape and blur show or hide it between renders (Firefox and WebKit proofs fail on `current`).
+    // The DOM, not `current`: delays, Escape and blur show or hide it between renders.
     if (next === (requested.get(contentId) ?? isOpen(document.getElementById(contentId)))) return;
     if (!requestChange(onOpenChange, next, reason, event?.nativeEvent)) return;
     requested.set(contentId, next);

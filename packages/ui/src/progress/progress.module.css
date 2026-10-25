@@ -95,7 +95,6 @@
     }
   }
 
-  /* 150% of the 40% segment carries it to the track's far end. */
   @keyframes sweep {
     to {
       translate: 150%;

@@ -192,7 +192,8 @@ function reconcile(contentId: string, open: boolean, findSource: (id: string) =>
   const element = document.getElementById(contentId);
   if (element === null) return;
   const layer = layerOf(element);
-  // `closing` lasts until the async `toggle` event, so a render in between (a value set on the closing press) does not reopen the layer.
+  // `closing` lasts until the async `toggle` event (https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/toggle_event), so a render in
+  // between (a value set on the closing press) does not reopen the layer.
   if (layer.pending !== undefined || layer.closing !== undefined || open === isOpen(element))
     return;
   layer.pending = "none";

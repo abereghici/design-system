@@ -13,11 +13,12 @@ export interface ItemProps extends ComponentProps<"div"> {
   /** The text the query is ranked against. Defaults to the Item's text without its Kbd. */
   value?: string;
   /** Extra words that match the query; not displayed. */
-  keywords?: readonly string[];
+  keywords?: ReadonlyArray<string>;
   /** Shown, so people know the command exists, but it can't be run. */
   disabled?: boolean;
 }
 
+/** A command; pressing it or Enter while highlighted runs its `onClick`. */
 export function Item({ value, keywords = [], disabled = false, ...props }: ItemProps) {
   const { highlighted } = useCommand();
   const id = useId();

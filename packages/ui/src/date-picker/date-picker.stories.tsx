@@ -5,6 +5,7 @@ import { Temporal } from "temporal-polyfill";
 import { Button } from "@platform/ui/button";
 import { Calendar } from "@platform/ui/calendar";
 
+import { dateFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
@@ -18,7 +19,6 @@ const onValueChange = fn<NonNullable<DatePicker.RootProps["onValueChange"]>>();
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const months = { previousMonthLabel: "Previous month", nextMonthLabel: "Next month" };
-
 // @ts-expect-error -- the calendar button shows only an icon, so it needs a name
 ({ label: "Due date", incompleteMessage: "Enter a complete date" }) satisfies DatePicker.RootProps;
 
@@ -30,6 +30,7 @@ const meta = preview.meta({
   title: "Components/DatePicker",
   component: DatePicker.Root,
   subcomponents: partsOf(DatePicker),
+  argTypes: dateFieldArgTypes,
   args: {
     label: "Due date",
     name: "due",
@@ -193,8 +194,7 @@ Default.test(
   { args: { defaultValue: null } },
   async ({ canvas }) => {
     const user = await trusted();
-    const trigger = canvas.getByRole("button", { name: "Choose date" });
-    await user.click(trigger);
+    await user.click(canvas.getByRole("button", { name: "Choose date" }));
     await waitFor(() => expect(document.activeElement).toHaveAttribute("aria-current", "date"));
   },
 );

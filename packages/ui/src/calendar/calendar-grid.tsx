@@ -40,8 +40,8 @@ interface GridProps {
   readonly onFocus: (event: FocusEvent<HTMLTableElement>) => void;
 }
 
-function Day({ date, props }: { date: Temporal.PlainDate; props: GridProps }) {
-  const { formats, focused, selected, today, unavailable } = props;
+function Day({ date, grid }: { date: Temporal.PlainDate; grid: GridProps }) {
+  const { formats, focused, selected, today, unavailable } = grid;
   return (
     <td
       tabIndex={date.equals(focused) ? 0 : -1}
@@ -94,7 +94,7 @@ export function Grid(props: GridProps) {
               .slice(week * 7, week * 7 + 7)
               .map((day) =>
                 day.month === first.month ? (
-                  <Day key={day.toString()} date={day} props={props} />
+                  <Day key={day.toString()} date={day} grid={props} />
                 ) : (
                   <td key={day.toString()} aria-hidden="true" className={styles["outside"]} />
                 ),

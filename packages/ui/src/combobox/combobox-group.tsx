@@ -8,6 +8,7 @@ import { mergeProps } from "../slot/slot.tsx";
 import styles from "./combobox.module.css";
 
 export interface GroupProps extends ComponentProps<"fieldset"> {
+  /** The heading of its Items, read before them. */
   label: string;
 }
 

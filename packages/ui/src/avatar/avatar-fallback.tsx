@@ -22,6 +22,7 @@ function initials(name: string) {
   return firstGrapheme(words[0]) + (words.length > 1 ? firstGrapheme(words.at(-1)) : "");
 }
 
+/** Initials from `name`, or its children, shown while there is no photo. */
 export function Fallback({ name, children, ...props }: FallbackProps) {
   const text = name === undefined ? "" : initials(name);
   return (

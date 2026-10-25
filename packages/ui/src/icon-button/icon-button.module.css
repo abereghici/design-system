@@ -55,7 +55,8 @@
     }
   }
 
-  /* The fill alone is under WCAG 1.4.11's 3:1 against the surface; the ring carries the state. */
+  /* The fill alone is under WCAG 1.4.11's 3:1 against the surface; the ring carries the state:
+     https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html */
   .root:where([aria-pressed="true"], [aria-expanded="true"]) {
     background-color: var(--ab-icon-button-background-color-selected);
     color: var(--ab-icon-button-icon-color-selected);

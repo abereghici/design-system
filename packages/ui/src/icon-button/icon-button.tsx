@@ -36,6 +36,8 @@ export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "ari
      * nearby why it is unavailable.
      */
     disabled?: boolean;
+    /** `submit` sends its form; the default, `button`, does nothing on its own. */
+    type?: "button" | "submit" | "reset";
     /** Gives the IconButton's look to its one child, such as a link. */
     asChild?: boolean;
   };

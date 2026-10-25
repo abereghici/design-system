@@ -24,6 +24,7 @@ export interface ContentProps extends Omit<ComponentProps<"dialog">, "open" | "i
   initialFocus?: RefObject<HTMLElement | null>;
 }
 
+/** The modal itself, named by its Title and described by its Description. */
 export function Content({ initialFocus, ref, ...props }: ContentProps) {
   const { controller, open, onOpenChange, component, ...context } = useModal();
   const dialog = useRef<HTMLDialogElement>(null);
@@ -62,7 +63,8 @@ export function Content({ initialFocus, ref, ...props }: ContentProps) {
         },
         props,
       )}
-      // React forbids passing a ref object through a plain function during render, so it composes here.
+      // React forbids reading a ref object during render, so it composes here:
+      // https://react.dev/reference/react/useRef#caveats
       ref={composeRefs(dialog, ref)}
       id={context.id}
     />

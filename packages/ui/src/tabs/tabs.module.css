@@ -13,8 +13,6 @@
 }
 
 @layer ab.components {
-  /* Each trigger is padded by --pad so its inset focus ring clears the label; the list's negative
-     margin, smaller gap, inset hairline and inset indicator keep the zip's geometry at rest. */
   .list {
     --pad: var(--ab-space-inline-xs);
 
@@ -101,7 +99,7 @@
     }
   }
 
-  /* The edges fade only when there is more to scroll (brand book), like ScrollArea, but inline. */
+  /* Without scroll timelines the fade would run on the document timeline: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/animation-timeline */
   @supports (animation-timeline: scroll()) {
     .list {
       mask-image: linear-gradient(

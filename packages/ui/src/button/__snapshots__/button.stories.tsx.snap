@@ -3,3 +3,19 @@
 exports[`Default   > base story 1`] = `
 - button "Save changes"
 `;
+
+exports[`In A Disabled Fieldset   > base story 1`] = `
+- group "Billing":
+  - text: Billing
+  - button "Save changes" [disabled]
+`;
+
+exports[`Loading   > base story 1`] = `
+- button "Save changes" [disabled]
+- link "Open report" [disabled]:
+  - /url: "#report"
+`;
+
+exports[`Long Label 1`] = `
+- button "Save changes and notify everyone who follows this project"
+`;

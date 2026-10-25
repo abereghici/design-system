@@ -11,22 +11,23 @@ import { mergeProps } from "../slot/slot.tsx";
 import { DialogContext, useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";
 
-type Naming =
-  | {
-      /** The search field's name, such as "Search commands". */
-      "aria-label": string;
-    }
-  | {
-      /** The `id` of visible text that names the search field. */
-      "aria-labelledby": string;
-    };
+interface Name {
+  /** The search field's name, such as "Search commands". */
+  "aria-label"?: string;
+  /** The `id` of visible text that names the search field. */
+  "aria-labelledby"?: string;
+}
+
+type Naming = { "aria-label": string } | { "aria-labelledby": string };
 
 export type InputProps = Omit<
   ComponentProps<"input">,
   "value" | "defaultValue" | "type" | "aria-label" | "aria-labelledby"
 > &
+  Name &
   Naming;
 
+/** The search field; arrow keys move the highlight, Enter runs it. */
 export function Input({ onChange, onKeyDown, ...props }: InputProps) {
   const command = useCommand();
   const inDialog = use(DialogContext) !== null;

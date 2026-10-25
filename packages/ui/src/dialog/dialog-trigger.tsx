@@ -11,8 +11,11 @@ export interface TriggerProps extends Omit<ComponentProps<"button">, "command" |
   asChild?: boolean;
 }
 
-export function Trigger({ asChild = false, type = "button", ...props }: TriggerProps) {
+/** Opens the dialog; focus returns here when it closes. */
+export function Trigger({ asChild = false, ...props }: TriggerProps) {
   const { id } = useModal();
   const Root = asChild ? Slot : "button";
-  return <Root {...props} type={asChild ? undefined : type} commandfor={id} command="show-modal" />;
+  return (
+    <Root type={asChild ? undefined : "button"} {...props} commandfor={id} command="show-modal" />
+  );
 }

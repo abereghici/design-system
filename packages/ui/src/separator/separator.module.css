@@ -16,7 +16,8 @@
     border-inline-start: var(--ab-separator-border-width) solid var(--ab-separator-border-color);
   }
 
-  /* <hr> is void, so the diamond is a pseudo-element and the two lines are background layers. */
+  /* <hr> is void, so the diamond is a pseudo-element and the two lines are background layers:
+     https://html.spec.whatwg.org/multipage/grouping-content.html#the-hr-element */
   .root[data-variant="ornament"] {
     --line: linear-gradient(var(--ab-separator-border-color) 0 0) no-repeat;
     --diagonal: calc(

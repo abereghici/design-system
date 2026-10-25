@@ -61,7 +61,8 @@ function useVisibility(
   useEvent(
     "submit",
     (event) => {
-      // The type must switch before the submission reads the form, not on React's next render.
+      // The type must switch before the submission reads the form, not on React's next render:
+      // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-submission-algorithm
       if (current && change(false, "form-submit", event) && input !== null) mask(input);
     },
     input?.form ?? null,

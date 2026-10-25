@@ -22,6 +22,7 @@ export type TextProps = Omit<ComponentProps<"p">, "color" | "ref"> &
     as?: "p" | "span" | "div" | "label" | "code";
     /** The control it labels, with `as="label"`. */
     htmlFor?: string;
+    /** The rendered element, for focus or measuring. */
     ref?: Ref<HTMLElement>;
   };
 

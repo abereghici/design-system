@@ -70,7 +70,8 @@ const preventDrop = (event: globalThis.DragEvent) => {
 const windowDragOver = sharedListener("dragover", () => window);
 const windowDrop = sharedListener("drop", () => window);
 
-// Without these, a file dropped outside a zone replaces the page; one pair serves every zone.
+// Without these, a file dropped outside a zone replaces the page; one pair serves every zone:
+// https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop
 function usePreventDocumentDrop() {
   useEffect(() => {
     const stopDragOver = windowDragOver((event) => {

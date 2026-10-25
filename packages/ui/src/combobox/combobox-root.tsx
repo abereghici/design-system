@@ -21,15 +21,7 @@ type Naming =
 
 type Loading =
   | { loading?: false | undefined; loadingText?: string | undefined }
-  | {
-      /**
-       * Shows `loadingText` in place of `noOptionsText` while the app fetches Items; the Items
-       * already rendered stay.
-       */
-      loading: boolean;
-      /** The text shown and announced while `loading`, such as "Loading…". */
-      loadingText: string;
-    };
+  | { loading: boolean; loadingText: string };
 
 type InputProps = Omit<
   ComponentProps<"input">,
@@ -49,6 +41,13 @@ export type RootProps = Naming &
     disabled?: boolean;
     /** The text shown and announced while no Item matches, such as "No results". */
     noOptionsText: string;
+    /**
+     * Shows `loadingText` in place of `noOptionsText` while the app fetches Items; the Items
+     * already rendered stay.
+     */
+    loading?: boolean | undefined;
+    /** The text shown and announced while `loading`, such as "Loading…". */
+    loadingText?: string | undefined;
     /**
      * Helper text under the field, such as a format hint; the error message takes its place while
      * invalid.

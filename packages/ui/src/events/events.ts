@@ -145,7 +145,8 @@ type FeedbackEventType = {
 type DetailOf<Type extends FeedbackEventType> =
   GlobalEventHandlersEventMap[Type] extends CustomEvent<infer Detail> ? Detail : never;
 
-// Synchronous, so a listener runs inside the user's gesture (user activation).
+// Synchronous, so a listener runs inside the user's gesture:
+// https://html.spec.whatwg.org/multipage/interaction.html#tracking-user-activation
 export function dispatchFeedback<Type extends FeedbackEventType>(
   target: EventTarget,
   type: Type,

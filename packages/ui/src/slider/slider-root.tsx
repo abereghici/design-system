@@ -24,7 +24,9 @@ export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
   onValueChange?: (value: number | number[], details: ChangeEventDetails) => void;
   /** Called once per gesture, when the user lets go or after a key step: the moment to save. */
   onValueCommitted?: (value: number | number[], details: CommitEventDetails) => void;
+  /** The lowest value, at the start of the track. */
   min?: number;
+  /** The highest value, at the end of the track. */
   max?: number;
   /** The smallest change, for the arrow keys and dragging alike. */
   step?: number;

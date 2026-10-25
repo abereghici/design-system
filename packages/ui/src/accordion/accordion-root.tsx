@@ -30,9 +30,9 @@ export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
   /** Lets several Items stay open at once; by default opening one closes the other. */
   multiple?: boolean;
   /** The `value`s of the open Items, when your state holds them; one at most without `multiple`. */
-  value?: readonly string[];
+  value?: ReadonlyArray<string>;
   /** The Items open on the first render when it holds its own state. */
-  defaultValue?: readonly string[];
+  defaultValue?: ReadonlyArray<string>;
   /** Called before an Item opens or closes, with the open `value`s it would have. */
   onValueChange?: (value: string[], details: ChangeEventDetails) => void;
 }

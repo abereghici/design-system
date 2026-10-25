@@ -4,10 +4,14 @@ import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./sheet.module.css";
 
+export interface BodyProps extends ComponentProps<"div"> {
+  /** `0` lets keyboard users scroll it; `-1` lets a field inside take focus first. */
+  tabIndex?: number;
+}
+
 /**
- * The scrolling content between the Title and the Footer. Pass `tabIndex={-1}` to let a field
- * inside take focus first.
+ * The scrolling content between the Title and the Footer.
  */
-export function Body({ tabIndex = 0, ...props }: ComponentProps<"div">) {
+export function Body({ tabIndex = 0, ...props }: BodyProps) {
   return <div {...mergeProps({ className: styles["body"] }, props)} tabIndex={tabIndex} />;
 }

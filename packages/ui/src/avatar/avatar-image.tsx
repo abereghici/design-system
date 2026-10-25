@@ -12,6 +12,7 @@ export type LoadingStatus = "loading" | "loaded" | "error";
 export interface ImageProps extends ComponentProps<"img"> {
   /** The person's name, or `""` when the name is written beside the avatar. */
   alt: string;
+  /** Called as the photo starts loading, loads or fails, so you can show your own state. */
   onLoadingStatusChange?: (status: LoadingStatus) => void;
 }
 
@@ -29,11 +30,13 @@ function useLoadingStatus(src: ImageProps["src"], onChange: ImageProps["onLoadin
   return [status, setStatus] as const;
 }
 
+/** The photo; the Fallback shows until it loads or if it fails. */
 export function Image({ src, alt, onLoadingStatusChange, ...props }: ImageProps) {
   const [status, setStatus] = useLoadingStatus(src, onLoadingStatusChange);
   const attach = useCallback(
     (image: HTMLImageElement | null) => {
-      // The image may have settled before hydration attached the load and error listeners.
+      // The image may have settled before hydration attached the load and error listeners:
+      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/complete
       if (image?.complete === true) setStatus(image.naturalWidth > 0 ? "loaded" : "error");
     },
     [setStatus],
