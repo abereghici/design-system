@@ -98,17 +98,19 @@ Contrast runs only when the other checks pass.
 
 ## Fonts
 
-Two variable families, self-hosted from their upstream OFL sources, each split into a `latin` and a `latin-ext` file:
+Two variable families, self-hosted from their upstream OFL sources, each in a roman and an italic style, and each style split into a `latin` and a `latin-ext` file:
 
-| Family     | Axes                        | Use                              | latin    | latin-ext |
-| ---------- | --------------------------- | -------------------------------- | -------- | --------- |
-| Figtree    | wght 300–900                | Body, labels, data and overlines | 20.7 KB  | 10.0 KB   |
-| Noto Serif | wght 100–900, wdth 62.5–100 | Headings and display statements  | 100.4 KB | 341.4 KB  |
+| Family     | Axes                        | Use                              | Style  | latin    | latin-ext |
+| ---------- | --------------------------- | -------------------------------- | ------ | -------- | --------- |
+| Figtree    | wght 300–900                | Body, labels, data and overlines | roman  | 20.7 KB  | 10.0 KB   |
+| Figtree    | wght 300–900                | Body, labels, data and overlines | italic | 21.4 KB  | 10.1 KB   |
+| Noto Serif | wght 100–900, wdth 62.5–100 | Headings and display statements  | roman  | 100.4 KB | 341.4 KB  |
+| Noto Serif | wght 100–900, wdth 62.5–100 | Headings and display statements  | italic | 107.3 KB | 367.6 KB  |
 
 Code uses the system monospace stack, with no webfont.
 
-- **`Provider` brings `fonts.css`.** Each `@font-face` has its subset's `unicode-range`, so a browser downloads a file only when the page has a character in that range. A page of plain English text never fetches the latin-ext files. Faces use `font-display: swap`.
-- **`Provider` preloads exactly one file: Figtree latin**, with React's `preload()`. It is the body text face, and it is the file almost every page needs. The other files are not preloaded: a preload ignores `unicode-range`, so it would download them on every page. The preload and the `@font-face` request the same hashed URL, so the file is fetched once.
+- **`Provider` brings `fonts.css`.** Each `@font-face` has its subset's `unicode-range`, so a browser downloads a file only when the page has a character in that range. A page of plain English text never fetches the latin-ext files. The italic faces share their family name with the romans and declare `font-style: italic`, so a browser downloads an italic file only when italic text renders, and never synthesizes an oblique for these families. Faces use `font-display: swap`.
+- **`Provider` preloads exactly one file: Figtree latin**, with React's `preload()`. It is the body text face, and it is the file almost every page needs. The other files, the italics among them, are not preloaded: a preload ignores `unicode-range`, so it would download them on every page. The preload and the `@font-face` request the same hashed URL, so the file is fetched once.
 - **Licence.** Both families are under the SIL Open Font License 1.1. The licence texts ship next to the files (`fonts/Figtree-OFL.txt`, `fonts/NotoSerif-OFL.txt`).
 - **Rebuilding.** `pnpm fonts` downloads the pinned upstream files (the commit and release google/fonts ships), checks their sha256, subsets them with HarfBuzz and rewrites `fonts/`. Run it only to move to a new upstream release, then commit the result. The subset ranges and descriptors live in `src/fonts.ts`.
 

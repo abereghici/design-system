@@ -1,6 +1,6 @@
 import type { Dictionary, TransformedToken } from "style-dictionary/types";
 
-import { FONT_FAMILIES, FONT_SUBSETS, fontFileName } from "./fonts.ts";
+import { FONT_FAMILIES, FONT_STYLES, FONT_SUBSETS, fontFileName } from "./fonts.ts";
 import { THEMES, isWholeReference, valueIn } from "./theme.ts";
 import type { ThemeId } from "./theme.ts";
 import { inTierOrder, tierOf } from "./tiers.ts";
@@ -32,7 +32,7 @@ interface ArtifactType {
     readonly family: string;
     readonly file: string;
     readonly weight: string;
-    readonly style: "normal";
+    readonly style: (typeof FONT_STYLES)[number];
   }[];
   readonly families: Readonly<Record<string, string>>;
   readonly groups: readonly {
@@ -173,12 +173,14 @@ const styleOf = (token: TransformedToken): ArtifactTypeStyle => ({
 });
 
 const FONTS: ArtifactType["fonts"] = FONT_FAMILIES.flatMap((family) =>
-  FONT_SUBSETS.map((subset) => ({
-    family: family.family,
-    file: `fonts/${fontFileName(family, subset)}`,
-    weight: family.weight,
-    style: "normal" as const,
-  })),
+  FONT_STYLES.flatMap((style) =>
+    FONT_SUBSETS.map((subset) => ({
+      family: family.family,
+      file: `fonts/${fontFileName(family, subset, style)}`,
+      weight: family.weight,
+      style,
+    })),
+  ),
 );
 
 const typeOf = (tokens: readonly TransformedToken[]): ArtifactType => {
