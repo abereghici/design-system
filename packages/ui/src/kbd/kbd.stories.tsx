@@ -30,7 +30,8 @@ const meta = preview.meta({
   args: { keys: "mod+k" },
 });
 
-export const Default = meta.story({});
+// Without `platform`, Kbd reads the OS, so the story pins one for snapshots that match on every machine.
+export const Default = meta.story({ beforeEach: onPlatform("Linux x86_64") });
 
 Default.test("shows ⌘ K on Apple platforms", { args: { platform: "apple" } }, reads("⌘", "K"));
 
