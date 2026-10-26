@@ -1,0 +1,71 @@
+{
+  "name": "@platform/ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "imports": {
+    "#.storybook/*": "./.storybook/*"
+  },
+  "exports": {
+    "./*": "./src/*/index.ts",
+    "./icons/*": "./src/icon/icons/*.tsx",
+    "./locales/*": "./src/provider/locales/*.ts"
+  },
+  "scripts": {
+    "storybook": "storybook dev --port 6006",
+    "build-storybook": "storybook build",
+    "check-types": "tsc --noEmit && tsc --noEmit -p scripts",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "size": "size-limit",
+    "test": "vitest run --project \"!screenshot:*\"",
+    "test:watch": "vitest --project \"!screenshot:*\"",
+    "icons": "node scripts/icons.ts",
+    "test:screenshots": "vitest run --project \"screenshot:*\" --reporter=default --reporter=html",
+    "test:screenshots:docker": "sh scripts/screenshots-docker.sh"
+  },
+  "dependencies": {
+    "@platform/tokens": "workspace:*",
+    "temporal-polyfill": "catalog:"
+  },
+  "devDependencies": {
+    "@platform/oxlint-config": "workspace:*",
+    "@platform/typescript-config": "workspace:*",
+    "@size-limit/esbuild": "catalog:",
+    "@size-limit/file": "catalog:",
+    "@storybook/addon-a11y": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/addon-mcp": "catalog:",
+    "@storybook/addon-vitest": "catalog:",
+    "@storybook/react-vite": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "playwright": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "remark-gfm": "catalog:",
+    "size-limit": "catalog:",
+    "storybook": "catalog:",
+    "storybook-addon-pseudo-states": "catalog:",
+    "svgo": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:",
+    "web-features": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  }
+}

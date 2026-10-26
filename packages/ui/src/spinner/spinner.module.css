@@ -1,0 +1,50 @@
+@import "@platform/tokens/components/spinner.css";
+
+@layer ab.components {
+  /* Eight staves: the conic ramp fades the tail, the repeating mask cuts it into 18° staves. */
+  .root {
+    display: inline-block;
+    flex-shrink: 0;
+    inline-size: var(--ab-spinner-size);
+    block-size: var(--ab-spinner-size);
+    color: var(--ab-spinner-color);
+    background: conic-gradient(from 0deg, transparent 0 12%, currentColor);
+    mask:
+      repeating-conic-gradient(from -9deg, #000 0 18deg, transparent 18deg 45deg),
+      radial-gradient(closest-side, transparent 52%, #000 54%);
+    mask-composite: intersect;
+    animation: turn var(--ab-spinner-duration) steps(8) infinite;
+  }
+
+  .root:where([data-size="lg"]) {
+    inline-size: var(--ab-spinner-lg-size);
+    block-size: var(--ab-spinner-lg-size);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .root {
+      animation: pulse calc(var(--ab-spinner-duration) * 2) var(--ab-motion-easing-move) infinite
+        alternate;
+    }
+  }
+
+  /* Forced colors would drop the background the staves are painted with. */
+  @media (forced-colors: active) {
+    .root {
+      forced-color-adjust: none;
+      color: CanvasText;
+    }
+  }
+
+  @keyframes turn {
+    to {
+      rotate: 1turn;
+    }
+  }
+
+  @keyframes pulse {
+    to {
+      opacity: 0.4;
+    }
+  }
+}

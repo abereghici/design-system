@@ -1,0 +1,70 @@
+@import "@platform/tokens/components/avatar.css";
+
+@layer ab.components {
+  .root {
+    display: inline-grid;
+    grid-template: 100% / 100%;
+    flex-shrink: 0;
+    vertical-align: middle;
+    inline-size: var(--ab-avatar-md-size);
+    block-size: var(--ab-avatar-md-size);
+    overflow: clip;
+    border-radius: var(--ab-avatar-border-radius);
+    background-color: var(--ab-avatar-background-color);
+  }
+
+  .root[data-size="sm"] {
+    inline-size: var(--ab-avatar-sm-size);
+    block-size: var(--ab-avatar-sm-size);
+  }
+
+  .root > * {
+    grid-area: 1 / 1;
+  }
+
+  .image {
+    z-index: 1;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: opacity var(--ab-motion-duration-swap) var(--ab-motion-easing-enter);
+  }
+
+  .image:is([data-loading], [data-error]) {
+    opacity: 0;
+  }
+
+  .fallback {
+    --ab-icon-size: var(--ab-avatar-icon-size);
+    --ab-icon-ink: var(--ab-avatar-icon-color);
+
+    display: grid;
+    place-items: center;
+    color: var(--ab-avatar-text-color);
+    font: var(--ab-avatar-font);
+    text-transform: uppercase;
+    /* Hidden only once the image has faded in over it. */
+    transition: visibility 0s var(--ab-motion-duration-swap);
+  }
+
+  .root[data-size="sm"] > .fallback {
+    --ab-icon-size: var(--ab-avatar-sm-icon-size);
+
+    font: var(--ab-avatar-sm-font);
+  }
+
+  .root:has(> .image:not([data-loading], [data-error])) > .fallback {
+    visibility: hidden;
+  }
+
+  @media (forced-colors: active) {
+    .root {
+      outline: 1px solid CanvasText;
+      outline-offset: -1px;
+    }
+
+    .fallback {
+      color: CanvasText;
+    }
+  }
+}

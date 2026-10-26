@@ -1,0 +1,13 @@
+@import "@platform/tokens/components/logo.css";
+
+@layer ab.components {
+  .root {
+    flex-shrink: 0;
+    inline-size: max(1em, var(--ab-logo-min-size));
+    block-size: max(1em, var(--ab-logo-min-size));
+    min-inline-size: var(--ab-logo-min-size);
+    min-block-size: var(--ab-logo-min-size);
+    color: var(--ab-logo-color);
+    stroke-width: var(--ab-logo-stroke-width);
+  }
+}

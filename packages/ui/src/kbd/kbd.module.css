@@ -1,0 +1,27 @@
+@import "@platform/tokens/components/kbd.css";
+
+@layer ab.components {
+  .root {
+    display: inline-flex;
+    gap: var(--ab-kbd-gap);
+    margin-inline-start: var(--ab-kbd-margin-inline-start, 0);
+    vertical-align: middle;
+    font: var(--ab-kbd-font);
+    font-variant-numeric: var(--ab-kbd-font-variant-numeric);
+  }
+
+  .key {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    block-size: var(--ab-kbd-height);
+    min-inline-size: var(--ab-kbd-min-width);
+    padding-inline: var(--ab-kbd-padding-inline);
+    border: var(--ab-border-width-default) solid var(--ab-kbd-border-color);
+    border-block-end-width: var(--ab-border-width-thick);
+    border-radius: var(--ab-kbd-border-radius);
+    background-color: var(--ab-kbd-background-color);
+    color: var(--ab-kbd-text-color);
+    font: inherit;
+  }
+}

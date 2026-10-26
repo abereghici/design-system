@@ -1,0 +1,117 @@
+@import "@platform/tokens/components/switch.css";
+
+@layer ab.components {
+  .root {
+    --travel: calc(
+      var(--ab-switch-track-width) - var(--ab-switch-thumb-size) - 2 *
+        var(--ab-switch-track-padding)
+    );
+    --stretch: calc(var(--ab-switch-thumb-width-pressed) - var(--ab-switch-thumb-size));
+    --sign: 1;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-switch-gap);
+    min-block-size: var(--ab-size-control-xs);
+    font: var(--ab-switch-label-font);
+    letter-spacing: var(--ab-type-label-sm-letter-spacing);
+    color: var(--ab-color-text-default);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .root:has(.track:is([aria-disabled="true"], :disabled)) {
+    color: var(--ab-color-text-disabled);
+    cursor: not-allowed;
+  }
+
+  .root:dir(rtl) {
+    --sign: -1;
+  }
+
+  .track {
+    appearance: none;
+    flex: none;
+    position: relative;
+    margin: 0;
+    inline-size: var(--ab-switch-track-width);
+    block-size: var(--ab-switch-track-height);
+    border-radius: var(--ab-switch-border-radius);
+    background-color: var(--ab-switch-track-background-color);
+    cursor: inherit;
+    transition: background-color var(--ab-switch-duration) var(--ab-motion-easing-color);
+  }
+
+  .track::before {
+    content: "";
+    position: absolute;
+    inset-block-start: var(--ab-switch-track-padding);
+    inset-inline-start: var(--ab-switch-track-padding);
+    inline-size: var(--ab-switch-thumb-size);
+    block-size: var(--ab-switch-thumb-size);
+    border-radius: var(--ab-switch-border-radius);
+    background-color: var(--ab-switch-thumb-background-color);
+    box-shadow: var(--ab-switch-thumb-shadow);
+  }
+
+  .track:checked {
+    background-color: var(--ab-switch-track-background-color-checked);
+  }
+
+  .track:checked::before {
+    translate: calc(var(--sign) * var(--travel)) 0;
+  }
+
+  .track:is([aria-disabled="true"], :disabled) {
+    background-color: var(--ab-color-background-disabled);
+  }
+
+  .track:is([aria-disabled="true"], :disabled)::before {
+    background-color: var(--ab-color-icon-disabled);
+    box-shadow: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .track:active:not([aria-disabled="true"], :disabled)::before {
+      inline-size: var(--ab-switch-thumb-width-pressed);
+    }
+
+    .track:checked:active:not([aria-disabled="true"], :disabled)::before {
+      translate: calc(var(--sign) * (var(--travel) - var(--stretch))) 0;
+    }
+
+    /* Keyboard toggles jump: the spring is for direct manipulation (brand book). */
+    .root[data-pointer] .track::before {
+      transition:
+        translate var(--ab-motion-duration-spring) var(--ab-switch-easing),
+        inline-size var(--ab-motion-duration-swap) var(--ab-motion-easing-enter);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .root:hover .track:not(:checked, :disabled, [aria-disabled="true"]) {
+      background-color: var(--ab-switch-track-background-color-hovered);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .track {
+      outline: 1px solid ButtonBorder;
+    }
+
+    .track::before {
+      background-color: ButtonText;
+    }
+
+    .track:checked {
+      background-color: Highlight;
+    }
+
+    .track:checked::before {
+      background-color: HighlightText;
+    }
+
+    .track:is([aria-disabled="true"], :disabled)::before {
+      background-color: GrayText;
+    }
+  }
+}

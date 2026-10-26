@@ -1,0 +1,30 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Guides/Theming" />
+
+# Theming
+
+There are three Themes: **System**, **Light** and **Dark**. CSS does the switching; the design system ships no script for it.
+
+- **System is the default.** With no `data-theme` attribute, every themed color follows the operating system's light or dark preference, live.
+- **`data-theme="light"` or `"dark"` forces a Theme** on that element and everything inside it. Set it on `<html>` for the whole page, or on any element for one region. Nesting works: a light region inside a dark one is light again.
+- **Brand colors stay the same** in every Theme.
+
+```html
+<html data-theme="dark">
+  …
+  <aside data-theme="light">This panel is always light.</aside>
+</html>
+```
+
+This works because each themed token is a `light-dark()` value that resolves where it is used, against that element's `color-scheme`. Don't register themed tokens with `@property` and `syntax: "<color>"`: a registered color computes once on `:root`, and regions stop switching.
+
+## Letting the user choose
+
+The app owns the choice and where it is stored. Set `data-theme` only for an explicit light or dark choice, and remove it for System. To paint the right Theme before the page hydrates, follow the Next.js guide [How to prevent flash before hydration](https://nextjs.org/docs/app/guides/preventing-flash-before-hydration): store the choice in a cookie, set the attribute from a small inline script in `<head>`, and declare `viewport.colorScheme = "light dark"` so the browser paints the right canvas.
+
+## User preferences
+
+The tokens also follow increased contrast, reduced transparency, reduced motion and forced colors, through media queries. Apps need no code for these.
+
+In this Storybook, the toolbar's Theme sets `data-theme` on the pages and examples, and the sidebar follows it.

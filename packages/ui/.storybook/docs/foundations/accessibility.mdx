@@ -1,0 +1,41 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks";
+
+import * as ButtonStories from "../../../src/button/button.stories.tsx";
+import { ContrastTable } from "../blocks/contrast-table.tsx";
+
+<Meta title="Foundations/Accessibility" />
+
+# Accessibility
+
+The target is **WCAG 2.2 Level AA**, in both Themes, for every component. Most of it is built in: components carry their roles and keyboard behaviour, and the tokens carry contrast, target size and the user's preferences. Each component page says what you must still provide, such as a name.
+
+| Criterion                                 | How the system meets it                                             |
+| ----------------------------------------- | ------------------------------------------------------------------- |
+| 1.4.3 Contrast (Minimum)                  | Every text role is at least 4.5:1 on every background it may sit on |
+| 1.4.11 Non-text Contrast                  | Icons and control borders are at least 3:1                          |
+| 1.4.1 Use of Color                        | A state pairs color with a label, a shape, a weight or an underline |
+| 1.4.4 Resize Text                         | Text follows the reader's text size                                 |
+| 1.4.10, 1.4.12 Reflow, Text Spacing       | Layouts reflow, and no text has a fixed height                      |
+| 2.4.7, 2.4.11 Focus Visible, Not Obscured | One focus ring on every focusable component, never removed          |
+| 2.5.8 Target Size (Minimum)               | Every target meets the minimum, and grows on touch screens          |
+| 2.2.2, 2.3.3 Motion                       | Reduced motion removes movement; no loops or scroll-linked motion   |
+
+## Contrast
+
+The lowest ratio of each foreground over every background it may sit on, computed from the tokens. `--ab-color-border-subtle` is decorative and is never a control's only boundary; `disabled` roles are exempt, so pair them with an explanation.
+
+<ContrastTable />
+
+## Focus
+
+Tab to the button: the ring is the same on every focusable component.
+
+<Canvas of={ButtonStories.Default} />
+
+## User preferences
+
+- **Color scheme:** the System Theme follows the operating system live.
+- **Increased contrast** (`prefers-contrast: more`): subtle borders, subtlest text and subtlest icons step up one emphasis level.
+- **Reduced transparency:** every material becomes the solid floating surface.
+- **Reduced motion:** movement goes, fades stay.
+- **Forced colors:** components that draw edges with shadows or fills redraw them in system colors.

@@ -1,0 +1,38 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- navigation "Breadcrumb":
+  - list:
+    - listitem:
+      - link "Home":
+        - /url: "#home"
+    - listitem:
+      - link "Projects":
+        - /url: "#projects"
+    - listitem:
+      - link "Atlas":
+        - /url: "#atlas"
+`;
+
+exports[`Long Trail   > base story 1`] = `
+- navigation "Breadcrumb":
+  - list:
+    - listitem:
+      - link "Home":
+        - /url: "#Home"
+    - listitem:
+      - link "Workspaces":
+        - /url: "#Workspaces"
+    - listitem:
+      - link "Design system":
+        - /url: "#Design system"
+    - listitem:
+      - link "Components":
+        - /url: "#Components"
+    - listitem:
+      - link "Navigation":
+        - /url: "#Navigation"
+    - listitem:
+      - link "Breadcrumbs and pagination guidelines for dense data views":
+        - /url: "#current"
+`;

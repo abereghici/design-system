@@ -1,3 +1,5 @@
 # Baseline "newly available" is the floor, with no fallbacks
 
 The design system may use any web feature that is Baseline newly available (or newer) without a fallback or polyfill. Browser compatibility below that line is deliberately not supported: the system is for our own apps, and supporting older engines would mean rebuilding in script what `popover`, anchor positioning, `light-dark()` and friends already do. Accessibility is not traded away by this: WCAG 2.2 AA must hold in every engine that meets the floor.
+
+Baseline is judged per compat key: a feature whose other keys are limited may be used if every key we use is newly available (e.g. anchor positioning without `position-visibility`). A declaration or media query below the floor is allowed only as a progressive enhancement that engines ignore when unknown, with no fallback code, no polyfill and nothing that accessibility or layout depends on (e.g. `interpolate-size`, `text-wrap: pretty`, a decorative scroll-driven fade inside `@supports (animation-timeline: scroll())`).

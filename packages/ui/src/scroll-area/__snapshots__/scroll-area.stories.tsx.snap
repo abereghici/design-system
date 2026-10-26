@@ -1,0 +1,12 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- paragraph: These terms apply to every workspace on the plan.
+- paragraph: Invoices are issued on the first day of each month and are due within 14 days.
+- paragraph: Seats can be added at any time; the change is billed from the next invoice.
+- paragraph: Removing a seat keeps its history until the end of the billing period.
+- paragraph: Exports stay available for 30 days after a workspace is closed.
+- paragraph: Support answers within one business day on every plan.
+- paragraph: Data is stored in the region chosen when the workspace was created.
+- paragraph: Either party may end the agreement with 30 days' written notice.
+`;

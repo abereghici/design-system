@@ -1,0 +1,36 @@
+@import "@platform/tokens/components/status-dot.css";
+
+@layer ab.components {
+  .root {
+    display: inline-block;
+    flex-shrink: 0;
+    vertical-align: middle;
+    inline-size: var(--ab-status-dot-size);
+    block-size: var(--ab-status-dot-size);
+    margin-inline-end: var(--ab-space-inline-xs);
+    border: var(--ab-status-dot-border-width) solid var(--ab-status-dot-neutral-border-color);
+    border-radius: var(--ab-radius-full);
+  }
+
+  .root[data-variant="success"] {
+    border-color: transparent;
+    background-color: var(--ab-status-dot-success-background-color);
+  }
+
+  .root[data-variant="warning"] {
+    border-color: transparent;
+    background-color: var(--ab-status-dot-warning-background-color);
+  }
+
+  .root[data-variant="danger"] {
+    border-color: transparent;
+    background-color: var(--ab-status-dot-danger-background-color);
+  }
+
+  /* Forced colors would erase the fill, the only thing that tells the statuses apart. */
+  @media (forced-colors: active) {
+    .root {
+      forced-color-adjust: none;
+    }
+  }
+}

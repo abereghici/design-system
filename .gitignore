@@ -1,16 +1,16 @@
-# Dependencies
 node_modules
 
-# Build outputs
 dist
 .next/
 coverage
+storybook-static
 
-# Turbo
 .turbo
 
-# Env
 .env*.local
 
-# OS
 .DS_Store
+
+.vitest
+
+.claude/worktrees/

@@ -1,0 +1,30 @@
+@layer ab.components {
+  .root {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-space-inline-sm);
+    justify-self: start;
+    max-inline-size: 100%;
+  }
+
+  .selection {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-space-inline-xs);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  .names {
+    overflow: hidden;
+    color: var(--ab-color-text-default);
+    font: var(--ab-type-body-xs);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Out of the flow, not hidden: the empty live region must stay in the accessibility tree. */
+  .selection:has(.names:empty) {
+    position: absolute;
+  }
+}

@@ -1,0 +1,130 @@
+@import "@platform/tokens/components/dialog.css";
+
+@layer ab.components {
+  :root:has(.content:modal) {
+    overflow: hidden;
+  }
+
+  .content {
+    box-sizing: border-box;
+    inline-size: min(var(--ab-dialog-width), calc(100vw - 2 * var(--ab-space-inset-lg)));
+    max-block-size: calc(100dvh - 2 * var(--ab-space-stack-xl));
+    display: grid;
+    gap: var(--ab-dialog-gap);
+    padding: var(--ab-dialog-padding);
+    border: 0;
+    border-radius: var(--ab-dialog-border-radius);
+    background-color: var(--ab-dialog-background-color);
+    box-shadow: var(--ab-dialog-shadow);
+    color: var(--ab-dialog-title-text-color);
+    overscroll-behavior: contain;
+    opacity: 0;
+    transition:
+      opacity,
+      scale,
+      overlay allow-discrete,
+      display allow-discrete;
+    transition-duration: var(--ab-dialog-exit-duration);
+    transition-timing-function: var(--ab-dialog-easing);
+  }
+
+  .content:not([open]) {
+    display: none;
+  }
+
+  .content[open] {
+    opacity: 1;
+    transition-duration: var(--ab-dialog-enter-duration);
+  }
+
+  @starting-style {
+    .content[open] {
+      opacity: 0;
+    }
+
+    .content[open][data-pointer] {
+      scale: var(--ab-dialog-enter-scale);
+    }
+  }
+
+  .content::backdrop {
+    background-color: var(--ab-dialog-backdrop-color);
+    backdrop-filter: blur(var(--ab-dialog-backdrop-blur));
+    opacity: 0;
+    transition:
+      opacity,
+      overlay allow-discrete,
+      display allow-discrete;
+    transition-duration: var(--ab-dialog-exit-duration);
+    transition-timing-function: var(--ab-motion-easing-exit);
+  }
+
+  .content[open]::backdrop {
+    opacity: 1;
+    transition-duration: var(--ab-dialog-enter-duration);
+  }
+
+  @starting-style {
+    .content[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  .title,
+  .description {
+    margin: 0;
+    padding-inline-end: var(--ab-space-inline-xl);
+  }
+
+  .title {
+    font: var(--ab-dialog-title-font);
+    letter-spacing: var(--ab-type-heading-sm-letter-spacing);
+    color: var(--ab-dialog-title-text-color);
+    text-wrap: balance;
+  }
+
+  .description {
+    font: var(--ab-dialog-description-font);
+    color: var(--ab-dialog-description-text-color);
+    text-wrap: pretty;
+  }
+
+  .title + .description {
+    margin-block-start: calc(var(--ab-dialog-title-gap) - var(--ab-dialog-gap));
+  }
+
+  .footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--ab-dialog-footer-gap);
+  }
+
+  .close {
+    position: absolute;
+    inset-block-start: var(--ab-dialog-close-offset);
+    inset-inline-end: var(--ab-dialog-close-offset);
+  }
+
+  @media (prefers-contrast: more) {
+    .content {
+      border: var(--ab-border-width-default) solid var(--ab-color-border-default);
+    }
+
+    .description {
+      color: var(--ab-dialog-title-text-color);
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .content::backdrop {
+      backdrop-filter: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .content {
+      border: var(--ab-border-width-default) solid CanvasText;
+    }
+  }
+}

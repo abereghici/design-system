@@ -1,0 +1,6 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- group: How are tokens versioned? Semantic Versioning. Renames are major; additions are minor.
+- group: Which browsers are supported?
+`;

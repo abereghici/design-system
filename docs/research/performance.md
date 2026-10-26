@@ -22,6 +22,7 @@ Which performance techniques are standard for a React 19 design system that is c
 6. Measuring: size budgets, bundle analysis, and Core Web Vitals.
 
 These are already settled and not re-decided here:
+
 - the packages are consumed just-in-time as source;
 - tokens are DTCG → Style Dictionary 5 → `--ab-*` custom properties with `light-dark()`;
 - components use native popover, dialog, anchor positioning and invoker commands, with no headless library;
@@ -84,20 +85,20 @@ These are already settled and not re-decided here:
   - `same-document-transitions`, `scoped-component-transitions`
   - `identify-inp-causes`
 - **No guide covers custom-property recalc cost.** The search "reduce style recalculation custom properties" returned only unrelated guides (`reduce-style-repetition` with `@function`, `interactive-content-reveal`). The primary sources in section 2 cover that topic.
-- **Browser policy.** The skill applies its fallback rules "unless the user has specified a custom browser support policy". Our policy is "newly available, no fallbacks", so the guides' fallback recipes are not adopted. The status lines they quote are used below to flag features that fall *below* our floor.
+- **Browser policy.** The skill applies its fallback rules "unless the user has specified a custom browser support policy". Our policy is "newly available, no fallbacks", so the guides' fallback recipes are not adopted. The status lines they quote are used below to flag features that fall _below_ our floor.
 
 ### 1. Icons
 
 #### 1.1 The three techniques
 
-| | External sprite `<use href>` | Inline React SVG | CSS `mask-image` |
-|---|---|---|---|
-| JS bundle | ~0 (inference) | 0 if a server component; path data in JS if a client component (inference) | 0 |
-| RSC payload / HTML | `<svg><use>` stub only (inference) | full path data per instance (inference) | class name only |
-| HTTP caching | one cached file (inference) | none; part of the HTML/RSC stream | one cached file per icon or sheet |
-| `currentColor` | inherits from `<use>` (spec) | yes | yes, as `background-color: currentColor`; single colour only |
-| Cross-origin | **forbidden** (spec) | n/a | allowed with CORS (spec) |
-| Semantics | on the outer `<svg>` | on the `<svg>` | none on the element; needs a wrapper |
+|                    | External sprite `<use href>`       | Inline React SVG                                                           | CSS `mask-image`                                             |
+| ------------------ | ---------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| JS bundle          | ~0 (inference)                     | 0 if a server component; path data in JS if a client component (inference) | 0                                                            |
+| RSC payload / HTML | `<svg><use>` stub only (inference) | full path data per instance (inference)                                    | class name only                                              |
+| HTTP caching       | one cached file (inference)        | none; part of the HTML/RSC stream                                          | one cached file per icon or sheet                            |
+| `currentColor`     | inherits from `<use>` (spec)       | yes                                                                        | yes, as `background-color: currentColor`; single colour only |
+| Cross-origin       | **forbidden** (spec)               | n/a                                                                        | allowed with CORS (spec)                                     |
+| Semantics          | on the outer `<svg>`               | on the `<svg>`                                                             | none on the element; needs a wrapper                         |
 
 - **RSC payload.** "The RSC Payload contains: The rendered result of Server Components; Placeholders for where Client Components should be rendered and references to their JavaScript files." https://nextjs.org/docs/app/getting-started/server-and-client-components
   - (inference) An inline icon rendered by a server component costs no JS. Its markup appears in the HTML, and again in the RSC payload that streams with it.
@@ -140,7 +141,7 @@ These are already settled and not re-decided here:
   - Material Symbols is a variable icon font with "four adjustable variable font axes (fill, weight, grade, and optical size)". https://developers.google.com/fonts/docs/material_symbols
   - `@mui/icons-material` generates one `"use client"` file per icon through `createSvgIcon`. https://raw.githubusercontent.com/mui/material-ui/master/packages/mui-icons-material/templateSvgIcon.js
   - `SvgIcon` sets `aria-hidden={titleAccess ? undefined : true}` and `role={titleAccess ? 'img' : undefined}`, and renders a `<title>` when `titleAccess` is passed. https://raw.githubusercontent.com/mui/material-ui/master/packages/mui-material/src/SvgIcon/SvgIcon.js
-- **Atlassian (`@atlaskit/icon`).** The glyph is an SVG *string*, injected with `dangerouslySetGlyph: '<path fill="currentcolor" d="…"/>'`. https://unpkg.com/@atlaskit/icon@38.0.2/core/add.js
+- **Atlassian (`@atlaskit/icon`).** The glyph is an SVG _string_, injected with `dangerouslySetGlyph: '<path fill="currentcolor" d="…"/>'`. https://unpkg.com/@atlaskit/icon@38.0.2/core/add.js
   - The wrapper is a `span` with `role={label?'img'}` and `aria-hidden={label?undefined:true}`. https://unpkg.com/@atlaskit/icon@38.0.2/dist/esm/components/icon-new.js
   - The docs require `label`, and say to set it to "an empty string ("")" when visible text already names the icon. https://atlassian.design/components/icon/usage
 - **Shopify Polaris (`@shopify/polaris-icons`).** Components are generated with SVGR and carry only a `viewBox`. https://unpkg.com/@shopify/polaris-icons@9.3.1/dist/icons/AdjustIcon.svg.mjs
@@ -187,7 +188,7 @@ These are already settled and not re-decided here:
 - **`@layer` and Next.** The Next docs don't mention `@layer` (not found). MDN:
   - "The first declared layer gets the lowest priority". https://developer.mozilla.org/en-US/docs/Web/CSS/@layer
   - "Styles that are not defined in a layer always override styles declared in named and anonymous layers." (same URL)
-  - (inference) If the `@layer ab.reset, ab.tokens, ab.base, ab.components;` statement loads first, in the root layout's global CSS, chunk order can no longer change precedence *between* our layers. Order *within* `ab.components` still follows import order, which only matters when two modules target the same element. Unlayered app CSS still wins over all of it.
+  - (inference) If the `@layer ab.reset, ab.tokens, ab.base, ab.components;` statement loads first, in the root layout's global CSS, chunk order can no longer change precedence _between_ our layers. Order _within_ `ab.components` still follows import order, which only matters when two modules target the same element. Unlayered app CSS still wins over all of it.
 - **The modern-web-guidance `css` guide agrees.** It says to "declare their order upfront (e.g. `@layer reset, base, theme, components, utilities;`)".
 
 #### 2.2 The cost of a large `:root` set of custom properties
@@ -199,10 +200,10 @@ These are already settled and not re-decided here:
   - Its conclusion: "If you can register your custom property with `inherits: false`, you definitely should."
 - **Blink copies style for nodes that don't use the variable.** The Igalia post (Igalia are the Chromium engineers who did the work) says that since Chrome 84, "the nodes with computed styles that don't have references to custom properties declarations shouldn't be affected by the new declaration". It adds "it's also just a first step". https://blogs.igalia.com/jfernandez/2020/08/13/improving-css-custom-properties-performance/
 - **Element count drives recalc.** "the worst case cost of calculating the computed elements style is the number of elements multiplied by the selector count". https://web.dev/articles/reduce-the-scope-and-complexity-of-style-calculations
-- **What this means for ~210 primitives plus semantic and component tokens (inference).** The static cost is the parse plus one inherited custom-property map, shared by the elements beneath `:root`. The quotes above show that the expensive moment is *changing* an inherited variable high in the tree, because every element that references it is recalculated.
+- **What this means for ~210 primitives plus semantic and component tokens (inference).** The static cost is the parse plus one inherited custom-property map, shared by the elements beneath `:root`. The quotes above show that the expensive moment is _changing_ an inherited variable high in the tree, because every element that references it is recalculated.
   - Theme switches through `color-scheme` are rare, user-initiated events and are acceptable.
   - Don't animate or JS-drive inherited `--ab-*` tokens. Instead, register per-component animated properties with `@property { inherits: false }`, or animate `transform`/`opacity`.
-  - Registering *all* tokens is unnecessary. The benchmark shows "a slight performance cost" for registration that keeps inheritance.
+  - Registering _all_ tokens is unnecessary. The benchmark shows "a slight performance cost" for registration that keeps inheritance.
 - **Component-tier tokens.** Declaring `--ab-button-*` on `:root` makes them inherit across the whole tree (inference). Declaring them on the component's own class keeps them off `:root`, but then the theme cannot override them from the top. Measured data on this trade-off: not found.
 
 #### 2.3 `light-dark()` vs duplicated theme scopes
@@ -223,7 +224,7 @@ These are already settled and not re-decided here:
   - "you MUST verify sequential keyboard reachability".
 - **The guide's `performance` rules.** "DON'T apply `content-visibility: auto` on smaller, simpler pages" and "For isolated UI components (like modals or widgets), use `contain: layout style paint`".
 - **`contain`.** "The contain CSS property indicates that an element and its contents are, as much as possible, independent from the rest of the document tree." For `paint`: "Descendants of the element don't display outside its bounds." It is widely available. https://developer.mozilla.org/en-US/docs/Web/CSS/contain
-- **For a design system (inference).** `content-visibility` belongs to *page* composition: long lists, feeds, data tables. Expose it as an opt-in, for example on a Table or List prop or as a utility class, not as a default inside components.
+- **For a design system (inference).** `content-visibility` belongs to _page_ composition: long lists, feeds, data tables. Expose it as an opt-in, for example on a Table or List prop or as a utility class, not as a default inside components.
   - Paint containment clips overflow. Applying it to components that render focus rings or other outlines outside their box would cut them off.
   - Top-layer popovers and dialogs are not clipped by an ancestor's `contain: paint`. This is inference from how the top layer works and should be verified with anchor-positioned popovers.
 
@@ -245,7 +246,7 @@ These are already settled and not re-decided here:
 - **Preloading is per route.** The font "is only preloaded on the related routes". https://nextjs.org/docs/app/api-reference/components/font
 - **Automatic fallbacks.** "Starting in Next 13, next/font automatically uses font metric overrides and size-adjust to provide matching font fallbacks." https://developer.chrome.com/blog/font-fallbacks
   - `adjustFontFallback` takes "`'Arial'`, `'Times New Roman'` or `false`". (font API page)
-- **No per-file `unicode-range`.** `declarations` takes "An array of font face descriptor key-value pairs". In the loader source, they are spread inside `src.map(...)`, so a `unicode-range` you pass lands on *every* file. https://github.com/vercel/next.js/blob/canary/packages/font/src/local/loader.ts
+- **No per-file `unicode-range`.** `declarations` takes "An array of font face descriptor key-value pairs". In the loader source, they are spread inside `src.map(...)`, so a `unicode-range` you pass lands on _every_ file. https://github.com/vercel/next.js/blob/canary/packages/font/src/local/loader.ts
   - (inference) One call cannot express per-subset ranges.
 - **Calls must be module-scope constants.** "Font loaders must be called and assigned to a const in the module scope". (`find_functions_outside_module_scope.rs`, same repo)
 
@@ -296,7 +297,7 @@ These are already settled and not re-decided here:
   - "Lazy loading applies to Client Components." `next/dynamic` "is a composite of `React.lazy()` and Suspense". https://nextjs.org/docs/app/guides/lazy-loading
   - The docs' load-on-demand pattern is `{showMore && <ComponentB />}`.
   - Restrictions: "`ssr: false` is not allowed with `next/dynamic` in Server Components", and "When a Server Component dynamically imports a Client Component, automatic code splitting is currently **not** supported." (same URL)
-  - `React.lazy`: "Do not declare `lazy` components *inside* other components". "Both the returned Promise and the Promise's resolved value will be cached". https://react.dev/reference/react/lazy
+  - `React.lazy`: "Do not declare `lazy` components _inside_ other components". "Both the returned Promise and the Promise's resolved value will be cached". https://react.dev/reference/react/lazy
 
 ### 5. Motion
 
@@ -305,7 +306,7 @@ These are already settled and not re-decided here:
   - The `performance` guide: "DON'T overuse `will-change` globally".
 - **`@starting-style`.** It defines "starting values for properties set on an element that you want to transition from when the element receives its first style update". "Baseline 2024 Newly available". https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style
 - **Exit animations on top-layer elements are below our floor.** From the modern-web-guidance `animate-to-from-top-layer` guide:
-  - "Baseline status for transition-behavior: Newly available"
+  - "Baseline status for transition-behavior: Newly available". That holds for the feature and for the `allow-discrete` keyword in the `transition` shorthand (web-features 3.44.0 `css.properties.transition.transition-behavior`, low 2024-08-06), not for the `transition-behavior` longhand (`css.properties.transition-behavior`, limited), so every rule writes `allow-discrete` in the shorthand.
   - "Browser support for overlay: Limited availability. … Unsupported in: Firefox and Safari."
   - "css.properties.transition-behavior.transitionable_display … Unsupported in: Firefox."
   - "Firefox 129+ parses `transition-behavior: allow-discrete` … without actually transitioning the `display` property (Firefox bug 1882408), causing elements to disappear immediately on exit."

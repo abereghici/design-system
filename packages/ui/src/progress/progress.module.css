@@ -1,0 +1,116 @@
+@import "@platform/tokens/components/progress.css";
+
+@layer ab.components {
+  .root {
+    position: relative;
+    display: grid;
+    gap: var(--ab-progress-gap);
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--ab-progress-gap);
+  }
+
+  .label {
+    font: var(--ab-progress-label-font);
+    letter-spacing: var(--ab-type-label-sm-letter-spacing);
+    color: var(--ab-progress-label-text-color);
+  }
+
+  .value {
+    font: var(--ab-progress-value-font);
+    letter-spacing: var(--ab-type-data-sm-letter-spacing);
+    font-variant-numeric: var(--ab-progress-value-font-variant-numeric);
+    color: var(--ab-progress-value-text-color);
+  }
+
+  .track {
+    appearance: none;
+    display: block;
+    inline-size: 100%;
+    block-size: var(--ab-progress-track-height);
+    border: 0;
+    border-radius: var(--ab-progress-track-border-radius);
+    background-color: var(--ab-progress-track-background-color);
+  }
+
+  .track::-webkit-progress-inner-element {
+    border-radius: inherit;
+  }
+
+  .track::-webkit-progress-bar {
+    border-radius: inherit;
+    background-color: transparent;
+  }
+
+  .track::-webkit-progress-value {
+    border-radius: inherit;
+    background-color: var(--ab-progress-indicator-background-color);
+  }
+
+  .track::-moz-progress-bar {
+    border-radius: inherit;
+    background-color: var(--ab-progress-indicator-background-color);
+  }
+
+  .track:indeterminate::-moz-progress-bar {
+    background-color: transparent;
+  }
+
+  /* <progress> renders no pseudo-element of its own while indeterminate in every engine, so the root draws the segment. */
+  .root:has(> .track:indeterminate)::after {
+    content: "";
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inline-size: 40%;
+    block-size: var(--ab-progress-track-height);
+    border-radius: var(--ab-progress-track-border-radius);
+    background-color: var(--ab-progress-indicator-background-color);
+    animation: sweep var(--ab-progress-duration) var(--ab-motion-easing-constant) infinite alternate;
+  }
+
+  .root:has(> .track:indeterminate):dir(rtl)::after {
+    animation-name: sweep-rtl;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .root:has(> .track:indeterminate)::after {
+      inline-size: 100%;
+      animation-name: fade;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .track,
+    .root::after {
+      forced-color-adjust: none;
+    }
+
+    .track {
+      outline: 1px solid CanvasText;
+    }
+  }
+
+  /* 150% of the 40% segment carries it to the track's far end. */
+  @keyframes sweep {
+    to {
+      translate: 150%;
+    }
+  }
+
+  @keyframes sweep-rtl {
+    to {
+      translate: -150%;
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+}

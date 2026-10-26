@@ -1,0 +1,75 @@
+@layer ab.components {
+  .root {
+    margin: 0;
+    color: var(--ab-color-text-default);
+    font: var(--ab-type-body-md);
+    letter-spacing: var(--ab-type-body-md-letter-spacing);
+  }
+
+  .root:where([data-variant="body"][data-size="xs"]) {
+    font: var(--ab-type-body-xs);
+    letter-spacing: var(--ab-type-body-xs-letter-spacing);
+  }
+
+  .root:where([data-variant="body"][data-size="sm"]) {
+    font: var(--ab-type-body-sm);
+    letter-spacing: var(--ab-type-body-sm-letter-spacing);
+  }
+
+  .root:where([data-variant="body"][data-size="lg"]) {
+    font: var(--ab-type-body-lg);
+    letter-spacing: var(--ab-type-body-lg-letter-spacing);
+  }
+
+  .root:where([data-variant="label"][data-size="sm"]) {
+    font: var(--ab-type-label-sm);
+    letter-spacing: var(--ab-type-label-sm-letter-spacing);
+  }
+
+  .root:where([data-variant="label"][data-size="md"]) {
+    font: var(--ab-type-label-md);
+    letter-spacing: var(--ab-type-label-md-letter-spacing);
+  }
+
+  .root:where([data-variant="label"][data-size="lg"]) {
+    font: var(--ab-type-label-lg);
+    letter-spacing: var(--ab-type-label-lg-letter-spacing);
+  }
+
+  .root:where([data-variant="data"][data-size="sm"]) {
+    font: var(--ab-type-data-sm);
+    letter-spacing: var(--ab-type-data-sm-letter-spacing);
+    font-variant-numeric: var(--ab-type-data-sm-font-variant-numeric);
+  }
+
+  .root:where([data-variant="data"][data-size="md"]) {
+    font: var(--ab-type-data-md);
+    letter-spacing: var(--ab-type-data-md-letter-spacing);
+    font-variant-numeric: var(--ab-type-data-md-font-variant-numeric);
+  }
+
+  .root:where([data-variant="code"][data-size="md"]) {
+    font: var(--ab-type-code-md);
+    letter-spacing: var(--ab-type-code-md-letter-spacing);
+  }
+
+  .root:where([data-variant="overline"][data-size="sm"]) {
+    font: var(--ab-type-overline-sm);
+    letter-spacing: var(--ab-type-overline-sm-letter-spacing);
+    font-variant-numeric: var(--ab-type-overline-sm-font-variant-numeric);
+    text-transform: var(--ab-type-overline-sm-text-transform);
+  }
+
+  .root:where([data-variant="display"][data-size="md"]) {
+    font: var(--ab-type-display-md);
+    letter-spacing: var(--ab-type-display-md-letter-spacing);
+  }
+
+  .root:where([data-color="subtle"]) {
+    color: var(--ab-color-text-subtle);
+  }
+
+  .root:where([data-color="subtlest"]) {
+    color: var(--ab-color-text-subtlest);
+  }
+}

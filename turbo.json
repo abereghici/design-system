@@ -7,12 +7,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "!.next/dev/**"]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "check-types": {
       "dependsOn": ["transit"]
@@ -23,13 +18,8 @@
     "lint:fix": {
       "cache": false
     },
-    "test": {
-      "dependsOn": ["transit"]
-    },
-    "test:watch": {
-      "cache": false,
-      "persistent": true
-    },
+    "test": {},
+    "size": {},
     "//#lint:root": {},
     "//#lint:root:fix": {
       "cache": false

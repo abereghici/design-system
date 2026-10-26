@@ -1,0 +1,54 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import primitive from "@platform/tokens/source/primitive.tokens.json";
+import semantic from "@platform/tokens/source/semantic.tokens.json";
+
+import { TokenTable } from "../blocks/token-table.tsx";
+
+<Meta title="Foundations/Motion" />
+
+export const literal = (reference) => {
+  const value = primitive.primitive[reference.slice("{primitive.".length, -1)].$value;
+  if (Array.isArray(value)) return `cubic-bezier(${value.join(", ")})`;
+  return typeof value === "object" ? `${value.value}${value.unit}` : value;
+};
+
+export const motion = (property) =>
+  Object.entries(semantic.semantic)
+    .filter(([name]) => name.startsWith(`motion-${property}`))
+    .map(([name, token]) => {
+      const reduced =
+        token.$extensions?.["com.bereghici.media"]?.["(prefers-reduced-motion: reduce)"];
+      return {
+        name: `ab-${name}`,
+        value: literal(token.$value),
+        usage: reduced === undefined ? "" : `${literal(reduced)} under reduced motion`,
+      };
+    });
+
+# Motion
+
+Motion is fast, eased out, interruptible and optional. It confirms what the user did and shows where things come from; it never decorates.
+
+- **Ease out to enter and exit,** never ease in. Exits are faster than entrances.
+- **Let motion reverse** from where it is when it is triggered again before it ends.
+- **Don't animate keyboard-initiated or very frequent actions** (more than about 100 a day).
+- **Grow from the trigger,** never from nothing. Modals stay centred.
+- **Springs only for what the user moves directly,** such as a switch thumb. Everything the system starts eases out.
+
+## Reduced motion
+
+Under `prefers-reduced-motion: reduce` the tokens remove movement: every scale, distance and blur becomes neutral and stagger becomes 0, while opacity and color fades stay. Components read the tokens, so apps get this with no code. Anything an app animates itself should use the same tokens, or check the media query.
+
+## Durations and delays
+
+The toast durations are how long a toast stays, not an animation.
+
+<TokenTable tokens={[...motion("duration"), ...motion("delay")]} />
+
+## Easings
+
+<TokenTable tokens={motion("easing")} />
+
+## Scale, distance and blur
+
+<TokenTable tokens={[...motion("scale"), ...motion("distance"), ...motion("blur")]} />

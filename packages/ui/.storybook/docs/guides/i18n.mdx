@@ -1,0 +1,52 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Guides/Internationalization" />
+
+# Internationalization
+
+Components contain a few words of their own (a close button's name, "Loading", the names of keys) and format a few numbers. A **locale** supplies both: a BCP 47 tag and every built-in label.
+
+## Choose a locale
+
+Each shipped locale is a typed object on its own entry point. Pass it to `UIProvider`:
+
+```tsx
+import { roRO } from "@platform/ui/locales/ro-RO";
+import { UIProvider } from "@platform/ui/provider";
+
+<UIProvider locale={roRO}>{children}</UIProvider>;
+```
+
+Shipped: `en-US` and `ro-RO`. Without a locale, components use their own en-US labels and format numbers in en-US. Each component carries only its own default labels, so importing one never ships another's strings.
+
+## Change some labels
+
+A locale is a plain object, so spread a shipped one and replace what you need. TypeScript checks that every label is still there.
+
+```tsx
+import { enUS } from "@platform/ui/locales/en-US";
+
+const enGB = {
+  ...enUS,
+  tag: "en-GB",
+  labels: { ...enUS.labels, spinner: { loading: "Loading…" } },
+};
+```
+
+To change a label for one instance, pass the component's `labels` prop where it has one (for example SkipLink and Spinner).
+
+## Server Components
+
+Context doesn't reach Server Components. The ones that label or format on the server (Badge, Breadcrumbs, Meter, Pagination, Progress, SkipLink, Spinner) take their own `locale` prop; pass the same shipped locale you give the UIProvider. Their `labels` prop still overrides single strings.
+
+## Direction
+
+Right-to-left languages also need `dir` on `<html>`. `getDirection` from `@platform/ui/direction` reads it from the tag and is safe on the server:
+
+```tsx
+import { getDirection } from "@platform/ui/direction";
+
+<html lang={locale.tag} dir={getDirection(locale.tag)}>
+```
+
+See [Right-to-left](?path=/docs/guides-right-to-left--docs).

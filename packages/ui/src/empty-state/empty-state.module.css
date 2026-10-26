@@ -1,0 +1,34 @@
+@import "@platform/tokens/components/empty-state.css";
+
+@layer ab.components {
+  .root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--ab-empty-state-gap);
+    padding: var(--ab-empty-state-padding);
+    text-align: center;
+  }
+
+  .root > :not(.indicator) {
+    max-inline-size: var(--ab-empty-state-max-width);
+  }
+
+  .indicator {
+    --ab-icon-size: var(--ab-empty-state-icon-size);
+    --ab-icon-ink: var(--ab-empty-state-icon-color);
+  }
+
+  .title {
+    margin: 0;
+    color: var(--ab-empty-state-title-text-color);
+    font: var(--ab-empty-state-title-font);
+  }
+
+  .description {
+    margin: 0;
+    margin-block-start: calc(var(--ab-space-stack-xs) - var(--ab-empty-state-gap));
+    color: var(--ab-empty-state-description-text-color);
+    font: var(--ab-empty-state-description-font);
+  }
+}

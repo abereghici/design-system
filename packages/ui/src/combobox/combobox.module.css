@@ -1,0 +1,166 @@
+@import "@platform/tokens/components/combobox.css";
+
+@layer ab.components {
+  .list {
+    position-anchor: auto;
+    inset: auto;
+    inset-block-start: anchor(self-end);
+    inset-inline-start: anchor(self-start);
+    position-try-fallbacks: flip-block;
+    box-sizing: border-box;
+    min-inline-size: anchor-size(self-inline);
+    max-block-size: var(--ab-combobox-list-max-height);
+    margin: 0;
+    margin-block-start: var(--ab-combobox-list-offset);
+    padding: var(--ab-combobox-list-padding);
+    border: 0;
+    border-radius: var(--ab-combobox-list-border-radius);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background-color: var(--ab-combobox-list-background-color);
+    backdrop-filter: blur(var(--ab-combobox-list-blur)) saturate(var(--ab-combobox-list-saturate));
+    box-shadow: var(--ab-combobox-list-shadow);
+    color: var(--ab-combobox-option-text-color);
+    opacity: 0;
+    transform-origin: left top;
+  }
+
+  .list:dir(rtl) {
+    transform-origin: right top;
+  }
+
+  .list:where([data-pointer]) {
+    transition:
+      opacity var(--ab-combobox-list-exit-duration) var(--ab-combobox-list-easing),
+      overlay var(--ab-combobox-list-exit-duration) allow-discrete,
+      display var(--ab-combobox-list-exit-duration) allow-discrete;
+  }
+
+  .list:popover-open {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    scale: 1;
+  }
+
+  .list:popover-open:where([data-pointer]) {
+    transition:
+      opacity var(--ab-combobox-list-enter-duration) var(--ab-combobox-list-easing),
+      scale var(--ab-combobox-list-enter-duration) var(--ab-combobox-list-easing);
+  }
+
+  @starting-style {
+    .list:popover-open:where([data-pointer]) {
+      opacity: 0;
+      scale: var(--ab-combobox-list-enter-scale);
+    }
+  }
+
+  .group {
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .group:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .label {
+    padding: var(--ab-space-inset-sm) var(--ab-combobox-option-padding-inline)
+      var(--ab-space-inset-xs);
+    color: var(--ab-color-text-subtlest);
+    font: var(--ab-type-overline-sm);
+    letter-spacing: var(--ab-type-overline-sm-letter-spacing);
+    text-transform: var(--ab-type-overline-sm-text-transform);
+  }
+
+  .option,
+  .empty {
+    align-items: center;
+    box-sizing: border-box;
+    min-block-size: var(--ab-combobox-option-height);
+    padding-inline: var(--ab-combobox-option-padding-inline);
+  }
+
+  .option {
+    --ab-icon-size: var(--ab-icon-sm-size);
+    --ab-icon-ink: var(--ab-combobox-option-icon-color);
+
+    gap: var(--ab-combobox-option-gap);
+    border-radius: var(--ab-combobox-option-border-radius);
+    color: var(--ab-combobox-option-text-color);
+    font: var(--ab-combobox-option-font);
+    cursor: default;
+    user-select: none;
+    scroll-margin-block: var(--ab-combobox-list-padding);
+  }
+
+  .option:not([hidden]),
+  .empty:not([hidden]) {
+    display: flex;
+  }
+
+  .option:where([data-highlighted]) {
+    background-color: var(--ab-combobox-option-background-color-hovered);
+  }
+
+  .option:where([data-selected]) {
+    color: var(--ab-combobox-option-text-color-selected);
+  }
+
+  .option:where([aria-disabled="true"]) {
+    --ab-icon-ink: var(--ab-color-icon-disabled);
+
+    color: var(--ab-color-text-disabled);
+  }
+
+  .indicator {
+    --ab-icon-ink: var(--ab-combobox-option-icon-color-selected);
+
+    display: grid;
+    flex: none;
+    place-items: center;
+    inline-size: var(--ab-icon-sm-size);
+    block-size: var(--ab-icon-sm-size);
+    margin-inline-start: auto;
+  }
+
+  .empty {
+    color: var(--ab-color-text-subtle);
+    font: var(--ab-type-body-xs);
+  }
+
+  @media (prefers-contrast: more) {
+    .option {
+      --ab-icon-ink: var(--ab-color-icon-default);
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .list {
+      backdrop-filter: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .list {
+      outline: var(--ab-border-width-default) solid CanvasText;
+      outline-offset: calc(var(--ab-border-width-default) * -1);
+    }
+
+    .option:where([data-highlighted]) {
+      --ab-icon-ink: HighlightText;
+
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .indicator {
+      --ab-icon-ink: currentColor;
+    }
+  }
+}

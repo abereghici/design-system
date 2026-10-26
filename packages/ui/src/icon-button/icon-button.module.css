@@ -1,0 +1,90 @@
+@import "@platform/tokens/components/icon-button.css";
+
+@layer ab.components {
+  .root {
+    --ab-icon-size: var(--ab-icon-button-icon-size);
+    --ab-icon-stroke-width: var(--ab-stroke-width-lg);
+    --ab-spinner-color: currentColor;
+
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    inline-size: var(--ab-icon-button-md-size);
+    block-size: var(--ab-icon-button-md-size);
+    padding: 0;
+    border: 0;
+    border-radius: var(--ab-icon-button-border-radius);
+    background-color: transparent;
+    color: var(--ab-icon-button-icon-color);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition-property: background-color, color, scale;
+    transition-duration:
+      var(--ab-motion-duration-hover-out), var(--ab-motion-duration-hover-out),
+      var(--ab-motion-duration-press);
+    transition-timing-function:
+      var(--ab-motion-easing-color), var(--ab-motion-easing-color), var(--ab-motion-easing-enter);
+  }
+
+  .root:where([data-size="sm"]) {
+    inline-size: var(--ab-icon-button-sm-size);
+    block-size: var(--ab-icon-button-sm-size);
+  }
+
+  .root:where([data-size="lg"]) {
+    --ab-icon-size: var(--ab-icon-button-lg-icon-size);
+
+    inline-size: var(--ab-icon-button-lg-size);
+    block-size: var(--ab-icon-button-lg-size);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .root:where(
+        :not(
+          [aria-disabled="true"],
+          [aria-busy="true"],
+          [aria-pressed="true"],
+          [aria-expanded="true"]
+        )
+      ):hover {
+      background-color: var(--ab-icon-button-background-color-hovered);
+      color: var(--ab-icon-button-icon-color-hovered);
+      transition-duration:
+        var(--ab-motion-duration-hover-in), var(--ab-motion-duration-hover-in),
+        var(--ab-motion-duration-press);
+    }
+  }
+
+  /* The fill alone is under WCAG 1.4.11's 3:1 against the surface; the ring carries the state. */
+  .root:where([aria-pressed="true"], [aria-expanded="true"]) {
+    background-color: var(--ab-icon-button-background-color-selected);
+    color: var(--ab-icon-button-icon-color-selected);
+    box-shadow: inset 0 0 0 var(--ab-border-width-default)
+      var(--ab-icon-button-border-color-selected);
+  }
+
+  .root:where(:not([aria-disabled="true"], [aria-busy="true"])):active {
+    background-color: var(--ab-icon-button-background-color-pressed);
+    scale: var(--ab-icon-button-scale-pressed);
+  }
+
+  .root:where([aria-disabled="true"]) {
+    color: var(--ab-color-icon-disabled);
+    cursor: not-allowed;
+  }
+
+  .root:where([aria-busy="true"]) {
+    cursor: progress;
+  }
+
+  @media (forced-colors: active) {
+    .root:where([aria-pressed="true"], [aria-expanded="true"]) {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .root:where([aria-disabled="true"]) {
+      color: GrayText;
+    }
+  }
+}

@@ -1,0 +1,50 @@
+@import "@platform/tokens/components/dropdown-menu.css";
+
+@layer ab.components {
+  .content {
+    --min-width: var(--ab-dropdown-menu-min-width);
+    --padding: var(--ab-dropdown-menu-padding);
+    --border-radius: var(--ab-dropdown-menu-border-radius);
+    --background-color: var(--ab-dropdown-menu-background-color);
+    --blur: var(--ab-dropdown-menu-blur);
+    --saturate: var(--ab-dropdown-menu-saturate);
+    --shadow: var(--ab-dropdown-menu-shadow);
+    --item-height: var(--ab-dropdown-menu-item-height);
+    --item-padding-inline: var(--ab-dropdown-menu-item-padding-inline);
+    --item-gap: var(--ab-dropdown-menu-item-gap);
+    --item-border-radius: var(--ab-dropdown-menu-item-border-radius);
+    --item-font: var(--ab-dropdown-menu-item-font);
+    --item-text-color: var(--ab-dropdown-menu-item-text-color);
+    --item-icon-color: var(--ab-dropdown-menu-item-icon-color);
+    --item-background-color-hovered: var(--ab-dropdown-menu-item-background-color-hovered);
+    --item-icon-color-selected: var(--ab-dropdown-menu-item-icon-color-selected);
+    --item-danger-text-color: var(--ab-dropdown-menu-item-danger-text-color);
+    --item-danger-icon-color: var(--ab-dropdown-menu-item-danger-icon-color);
+    --item-shortcut-text-color: var(--ab-dropdown-menu-item-shortcut-text-color);
+    --group-label-font: var(--ab-dropdown-menu-group-label-font);
+    --group-label-text-color: var(--ab-dropdown-menu-group-label-text-color);
+    --separator-border-color: var(--ab-dropdown-menu-separator-border-color);
+    --enter-scale: var(--ab-dropdown-menu-enter-scale);
+    --enter-duration: var(--ab-dropdown-menu-enter-duration);
+    --exit-duration: var(--ab-dropdown-menu-exit-duration);
+    --easing: var(--ab-dropdown-menu-easing);
+
+    inset-block-start: anchor(self-end);
+    inset-inline-start: anchor(self-start);
+    position-try-fallbacks: flip-block;
+    min-inline-size: max(var(--ab-dropdown-menu-min-width), anchor-size(self-inline));
+    margin: var(--ab-dropdown-menu-offset);
+  }
+
+  .content:where([data-side="top"]) {
+    --origin-block: bottom;
+
+    inset-block: auto anchor(self-start);
+  }
+
+  .content:where([data-align="end"]) {
+    --origin-inline: var(--end);
+
+    inset-inline: auto anchor(self-end);
+  }
+}

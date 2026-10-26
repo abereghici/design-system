@@ -1,0 +1,133 @@
+@import "@platform/tokens/components/fieldset.css";
+@import "@platform/tokens/components/radio.css";
+
+@layer ab.components {
+  .root {
+    display: grid;
+    justify-items: start;
+    gap: var(--ab-fieldset-gap);
+    min-inline-size: 0;
+    margin: 0;
+    border: 0;
+    padding: 0;
+  }
+
+  .root:where([data-orientation="horizontal"]) {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--ab-space-inline-lg);
+  }
+
+  .label {
+    margin-block-end: var(--ab-fieldset-gap);
+    padding: 0;
+    font: var(--ab-fieldset-legend-font);
+    letter-spacing: var(--ab-type-label-sm-letter-spacing);
+    color: var(--ab-fieldset-legend-text-color);
+  }
+
+  .item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-radio-gap);
+    min-block-size: var(--ab-size-control-xs);
+    font: var(--ab-radio-label-font);
+    letter-spacing: var(--ab-type-label-sm-letter-spacing);
+    color: var(--ab-color-text-default);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .item:has(.radio:is([aria-disabled="true"], :disabled)) {
+    color: var(--ab-color-text-disabled);
+    cursor: not-allowed;
+  }
+
+  .radio {
+    appearance: none;
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    margin: 0;
+    inline-size: var(--ab-radio-size);
+    block-size: var(--ab-radio-size);
+    border: var(--ab-radio-border-width) solid var(--ab-radio-border-color);
+    border-radius: var(--ab-radio-border-radius);
+    background-color: var(--ab-radio-background-color);
+    cursor: inherit;
+    transition:
+      background-color var(--ab-radio-duration) var(--ab-motion-easing-color),
+      border-color var(--ab-radio-duration) var(--ab-motion-easing-color),
+      scale var(--ab-motion-duration-press) var(--ab-motion-easing-enter);
+  }
+
+  .radio::before {
+    content: "";
+    inline-size: var(--ab-radio-indicator-size);
+    aspect-ratio: 1;
+    rotate: 45deg;
+    scale: 0;
+    background-color: var(--ab-radio-indicator-color-checked);
+  }
+
+  .radio:checked {
+    border-color: var(--ab-radio-background-color-checked);
+    background-color: var(--ab-radio-background-color-checked);
+  }
+
+  .radio:checked::before {
+    scale: 1;
+  }
+
+  .radio:is(:user-invalid, [aria-invalid="true"]) {
+    border-color: var(--ab-radio-border-color-invalid);
+  }
+
+  .radio:active:not([aria-disabled="true"], :disabled) {
+    scale: var(--ab-motion-scale-pressed);
+  }
+
+  .radio:is([aria-disabled="true"], :disabled) {
+    border-color: var(--ab-color-border-disabled);
+    background-color: var(--ab-color-background-disabled);
+  }
+
+  .radio:is([aria-disabled="true"], :disabled)::before {
+    background-color: var(--ab-color-icon-disabled);
+  }
+
+  /* Arrow-key changes skip the spring (brand book, no keyboard motion). */
+  @media (prefers-reduced-motion: no-preference) {
+    .root[data-pointer] .radio::before {
+      transition: scale var(--ab-motion-duration-exit) var(--ab-motion-easing-exit);
+    }
+
+    .root[data-pointer] .radio:checked::before {
+      transition: scale var(--ab-motion-duration-spring) var(--ab-radio-easing);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .item:hover .radio:not(:checked, :disabled, [aria-disabled="true"]) {
+      border-color: var(--ab-radio-border-color-hovered);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .radio {
+      border-color: CanvasText;
+    }
+
+    .radio:checked {
+      border-color: Highlight;
+      background-color: Highlight;
+    }
+
+    .radio::before {
+      background-color: HighlightText;
+    }
+
+    .radio:is([aria-disabled="true"], :disabled) {
+      border-color: GrayText;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+@import "@platform/tokens/components/badge.css";
+
+@layer ab.components {
+  .root {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--ab-badge-height);
+    min-inline-size: var(--ab-badge-min-width);
+    padding-inline: var(--ab-badge-padding-inline);
+    border-radius: var(--ab-badge-border-radius);
+    background-color: var(--ab-badge-neutral-background-color);
+    color: var(--ab-badge-neutral-text-color);
+    font: var(--ab-badge-font);
+    font-variant-numeric: var(--ab-badge-font-variant-numeric);
+    white-space: nowrap;
+  }
+
+  .root[data-variant="accent"] {
+    background-color: var(--ab-badge-accent-background-color);
+    color: var(--ab-badge-accent-text-color);
+  }
+
+  .root[data-variant="danger"] {
+    background-color: var(--ab-badge-danger-background-color);
+    color: var(--ab-badge-danger-text-color);
+  }
+
+  @media (forced-colors: active) {
+    .root {
+      forced-color-adjust: none;
+      outline: 1px solid CanvasText;
+      outline-offset: -1px;
+    }
+  }
+}

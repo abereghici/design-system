@@ -1,0 +1,31 @@
+import { IconGallery, IconItem, Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Foundations/Iconography" />
+
+export const icons = Object.entries(
+  import.meta.glob("../../../src/icon/icons/*.tsx", { eager: true }),
+).map(([path, module]) => {
+  const name = path.split("/").at(-1).replace(".tsx", "");
+  const Glyph = Object.values(module)[0];
+  return (
+    <IconItem key={name} name={name}>
+      <Glyph size="lg" />
+    </IconItem>
+  );
+});
+
+# Iconography
+
+A custom set on a 24-unit grid: straight strokes, 45° chamfers and square ends, carved rather than drawn, stroked in `currentColor` so an icon takes the color of the text it sits in.
+
+```tsx
+import { BellIcon } from "@platform/ui/icons/bell";
+
+<BellIcon size="md" />;
+```
+
+- **Size and stroke go together,** so lines look equally heavy at every size; match the size to the text beside the icon.
+- **An icon is decorative by default** and hidden from assistive technology. Name it only when it stands alone and carries meaning (`label`), and prefer a visible text label.
+- **Icon-only controls** need a name and a large enough target; use IconButton, which handles both.
+
+<IconGallery>{icons}</IconGallery>

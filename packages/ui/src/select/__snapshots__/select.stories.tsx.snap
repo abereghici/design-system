@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Controlled   > base story 1`] = `
+- text: Sort by
+- combobox "Sort by":
+  - option "Most recent" [selected]
+  - option "Name"
+`;
+
+exports[`Default   > base story 1`] = `
+- text: Region
+- combobox "Region":
+  - option "Europe"
+  - option "North America"
+`;

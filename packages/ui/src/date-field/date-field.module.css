@@ -1,0 +1,73 @@
+@import "@platform/tokens/components/input.css";
+@import "@platform/tokens/components/date-field.css";
+
+@layer ab.components {
+  .group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: text;
+  }
+
+  .segment {
+    box-sizing: border-box;
+    field-sizing: content;
+    min-inline-size: var(--ab-size-target-min);
+    margin: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    padding-inline: var(--ab-space-inset-xs);
+    border-radius: var(--ab-date-field-segment-border-radius);
+    color: var(--ab-input-text-color);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    caret-color: transparent;
+    white-space: nowrap;
+  }
+
+  .segment:focus {
+    outline: none;
+    background-color: var(--ab-date-field-segment-background-color-focused);
+    color: var(--ab-date-field-segment-text-color-focused);
+  }
+
+  .segment:focus::placeholder {
+    color: inherit;
+  }
+
+  .separator {
+    color: var(--ab-input-placeholder-color);
+  }
+
+  .separator[data-filled] {
+    color: var(--ab-input-text-color);
+  }
+
+  .input {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  [aria-disabled="true"] > :is(.segment, .separator) {
+    color: var(--ab-input-text-color-disabled);
+  }
+
+  @media (forced-colors: active) {
+    .segment::placeholder {
+      color: GrayText;
+    }
+
+    .segment:focus {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+  }
+}

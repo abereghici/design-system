@@ -1,0 +1,130 @@
+import { createContext, use, useEffect, useRef } from "react";
+import type { ChangeEvent, ChangeEventHandler, FocusEvent, FocusEventHandler } from "react";
+
+import { requestChange } from "../events/events.ts";
+import type { ChangeEventDetails as Details } from "../events/events.ts";
+
+/** The native elements a Field validates. */
+export type FormControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+
+export type Validate = (value: string, formData: FormData) => string | null | undefined;
+
+export interface FieldState {
+  readonly controlId: string;
+  readonly labelId: string;
+  readonly descriptionId: string;
+  readonly errorId: string;
+  readonly name: string | undefined;
+  readonly disabled: boolean;
+  readonly invalid: boolean;
+  readonly describedBy: string | undefined;
+  readonly message: string | undefined;
+  readonly validity: ValidityState | undefined;
+  readonly serverError: string | undefined;
+  readonly clearServerError: () => void;
+  readonly setControlId: (id: string) => void;
+  readonly describe: (described: boolean) => void;
+}
+
+export const FieldContext = createContext<FieldState | undefined>(undefined);
+
+export type ChangeEventDetails<Element extends FormControl = HTMLInputElement> = Details<
+  "none",
+  ChangeEvent<Element>
+>;
+
+export interface ControlBindings<Element extends FormControl> {
+  id?: string | undefined;
+  name?: string | undefined;
+  disabled?: boolean | undefined;
+  "aria-describedby"?: string | undefined;
+  onFocus?: FocusEventHandler<Element> | undefined;
+  onChange?: ChangeEventHandler<Element> | undefined;
+  onValueChange?: ((value: string, details: ChangeEventDetails<Element>) => void) | undefined;
+}
+
+/**
+ * The enclosing Field for any control, a composite one included (segments, a trigger, a drop
+ * area): its state, whether the control is blocked (its own `disabled` or the Field's), and its
+ * `aria-invalid`.
+ */
+export function useField(disabled?: boolean) {
+  const field = use(FieldContext);
+  return {
+    field,
+    blocked: disabled === true || field?.disabled === true,
+    invalid: field?.invalid === true || undefined,
+  };
+}
+
+/** The custom validity message: the control's own check, then the server's error, then the app's rule. */
+export function setValidity(
+  target: {
+    setCustomValidity: (message: string) => void;
+    value: string;
+    form: HTMLFormElement | null;
+  },
+  own: string | undefined,
+  server: string | undefined,
+  rule: Validate | undefined,
+) {
+  target.setCustomValidity(
+    own ?? server ?? rule?.(target.value, new FormData(target.form ?? undefined)) ?? "",
+  );
+}
+
+/** Runs `onReset` when the form that owns `control()` resets. */
+export function useFormReset(
+  control: () => { readonly form: HTMLFormElement | null } | null | undefined,
+  onReset: () => void,
+) {
+  useEffect(() => {
+    const controller = new AbortController();
+    control()?.form?.addEventListener("reset", onReset, { signal: controller.signal });
+    return () => {
+      controller.abort();
+    };
+  });
+}
+
+/**
+ * The Field contract for a control: spread the result on the native element. It takes the id,
+ * `name`, `disabled` and describedby list from the enclosing Root, sets `aria-invalid` and
+ * `aria-disabled`, and calls `onValueChange` with `cancel()`. A disabled control keeps its value;
+ * how it blocks input (`readOnly`, key handling) is the control's.
+ */
+export function useFieldControl<
+  Element extends FormControl,
+  Props extends ControlBindings<Element>,
+>({ id, name, disabled, onFocus, onChange, onValueChange, ...props }: Props) {
+  const { field, blocked, invalid } = useField(disabled);
+  const previous = useRef("");
+  const setControlId = field?.setControlId;
+  useEffect(() => {
+    if (id !== undefined) setControlId?.(id);
+  }, [id, setControlId]);
+  return {
+    ...props,
+    id: id ?? field?.controlId,
+    name: field?.name ?? name,
+    "aria-disabled": blocked || undefined,
+    "aria-invalid": invalid,
+    "aria-describedby": field?.describedBy ?? props["aria-describedby"],
+    onFocus: (event: FocusEvent<Element>) => {
+      previous.current = event.currentTarget.value;
+      onFocus?.(event);
+    },
+    onChange: (event: ChangeEvent<Element>) => {
+      const target = event.currentTarget;
+      if (blocked) {
+        target.value = previous.current;
+        return;
+      }
+      onChange?.(event);
+      if (!requestChange(onValueChange, target.value, "none", event)) {
+        target.value = previous.current;
+      }
+      previous.current = target.value;
+    },
+  };
+}

@@ -1,0 +1,15 @@
+@layer ab.components {
+  .trigger {
+    flex: none;
+    margin-inline: auto calc(var(--ab-input-border-width) * -1);
+  }
+
+  .content {
+    --ab-popover-max-width: none;
+  }
+
+  /* Popover's margin nudges the panel inward on every side; the spec lines the panel up with the field. */
+  .content[popover] {
+    margin-inline: 0;
+  }
+}

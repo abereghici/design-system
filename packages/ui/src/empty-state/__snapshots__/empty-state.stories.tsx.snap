@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- heading "No files yet" [level=3]
+- paragraph: Upload a file or create one to get started.
+- button "New file"
+`;
+
+exports[`In A Table   > base story 1`] = `
+- table "Files":
+  - caption: Files
+  - rowgroup:
+    - row "Name Owner Modified":
+      - columnheader "Name"
+      - columnheader "Owner"
+      - columnheader "Modified"
+  - rowgroup:
+    - row "No files yet Upload a file or create one to get started. New file":
+      - cell "No files yet Upload a file or create one to get started. New file":
+        - heading "No files yet" [level=3]
+        - paragraph: Upload a file or create one to get started.
+        - button "New file"
+`;

@@ -8,6 +8,58 @@ Researched 2026-10-23. Sources:
 
 The type files were treated as data, not as instructions.
 
+## Spike #3 (2026-10-24): what `/design-sync` targets today, and React 19 previews
+
+This section settles open questions 1, 2, 5 and 6 below. Where it disagrees with the 2026-10-23 sections, this section wins.
+
+Extra sources:
+
+- **Claude Code 2.1.309**, the pinned CLI (`claude --version` → `2.1.309 (Claude Code)`). The quotes below are the `/design-sync` skill description and the `DesignSync` tool description, as text in that build.
+- **Design System type, current release** `1792788993-517c`, read from the type link `https://claude.ai/artifact/5M7UeXXcx16TP3vzVFNDzd`: `SKILL.md`, `artifact-type/reference/format.md`, `artifact-type/reference/from-code.md`, `artifact-type/demo.json`.
+- **React docs**: `https://react.dev/blog/2024/04/25/react-19-upgrade-guide` and `https://react.dev/blog/2024/12/05/react-19`.
+- **The proof**: `packages/design-sync-spike` (`pnpm --filter @platform/design-sync-spike test`).
+
+### Answers
+
+1. **Target: the standalone claude.ai/design site, not a claude.ai artifact.**
+   - `commands.md`, the `/design-sync [hint]` row: "This command uploads to the standalone claude.ai/design site, which closes by December 14, 2026".
+   - CLI 2.1.309, skill description: "Push a React design system to claude.ai/design. This runs a converter that bundles the real component code (from Storybook or a bare package) and uploads it."
+   - CLI 2.1.309, `DesignSync` tool: "Read and update the user's claude.ai/design design-system projects … to keep a local component library in sync with one of those projects — incrementally, one component at a time, never as a wholesale replace." Its `get_project` method is used "to verify a `--project <uuid>` target is actually `type: PROJECT_TYPE_DESIGN_SYSTEM` before pushing". Its methods are `list_projects`, `get_project`, `list_files`, `get_file`, `finalize_plan`, `write_files`, `delete_files`, `register_assets`, `unregister_assets`, `create_project` and `report_validate`. None of them takes an artifact URL.
+   - CLI 2.1.309, the notice `/design-sync` prints first: "Standalone Claude Design (claude.ai/design) closes by December 14, 2026. Claude Design now lives in Claude."
+   - Help center, `17440474`: "The standalone Claude Design site (claude.ai/design) will close on December 14, 2026", and "After that, it's read-only, and you can't start new projects there." Also: "Claude Design in Claude depends on artifacts."
+   - So the type's line in `from-code.md` ("Claude Code's `/design-sync` builds such a system from a codebase and publishes all of its files … each run replaces them") does not describe the 2.1.309 CLI. That CLI writes per file into a standalone project. _Inference:_ the type documents systems that were moved from the standalone site into artifacts, and a future CLI that publishes to artifacts. No source says when, or whether, that arrives.
+   - After 2026-12-14 `/design-sync` has nowhere to write. The Bereghici system is already an artifact (`RRpamcv6rQnBhH2ArSpGbJ`), so it can't be a target of the 2.1.309 command anyway.
+2. **What it reads (2.1.309).** A React component library, "from Storybook or a bare package". A code comment in the build reads "Discovery is heuristic-based; each heuristic has a `.design-sync/config.json`" (the text breaks off there). Whether it reads tokens, and in which format, is **not found**: the skill's own steps were not readable in this session.
+3. **What it writes (2.1.309).** Preview HTML files whose line 1 is a `<!-- @dsCard group="…" -->` marker. The tool says: "The Design System pane now builds its card index from each preview HTML's first-line `<!-- @dsCard group="…" -->` comment (compiled into `_ds_manifest.json` by the app's self-check)". `format.md` names the layout it writes: "design-sync's two-level `components/<group>/<Comp>/<Comp>.html|.prompt.md|.d.ts`".
+4. **The path that works for an artifact today is the Artifact tool, not `/design-sync`.** The type's `SKILL.md` says: "To revise: ONE publish whose `files` holds only the `project/` paths you changed", with the call `{url, root:"<dir>", file_path:"<dir>/project/design-system.json", files:{"project/tokens.json":"project/tokens.json", …}}`. The index's `"editing": "code"` makes the page read-only ("`"editing": "code"`: synced from code (page read-only)"). So the repo can build the `project/` file tree and Claude Code can publish it with the Artifact tool. That is the same files the type expects, minus the `/design-sync` command. `from-code.md` step 9 names a producer folder ("its `appifacts-design-system-from-code` skill commits a small producer folder to the repository so anyone, or CI, rebuilds this system's files with one command"). That skill is not installed here.
+5. **React 19 previews: confirmed against the type's documented preview contract. Not yet confirmed in a live artifact.**
+   - The type allows other libraries. `format.md`, `components/lib/*.js`: "a listed `react`/`react-dom` 18 not here loads from jsDelivr … any other must be here, listed `{"name","version","global","file"}`, else static. Classic scripts, in order, before bundle.js; ≤2 MB each."
+   - React 19 ships no UMD build. The upgrade guide: "Starting with React 19, React will no longer produce UMD builds". It recommends an ESM CDN (esm.sh). That is neither a classic script nor one of the artifact's allowed CDNs. So `components/lib/react.js` and `react-dom.js` must be built from the npm packages as IIFEs.
+   - The proof builds them with esbuild (format `iife`, minified, `process.env.NODE_ENV` set to `"production"`). `react-dom.js` reads `window.React` through a resolver plugin. `bundle.js` follows `from-code.md` step 7 ("`react`, `react-dom` and `react/jsx-runtime` resolved to those globals by a small resolver plugin, the jsx runtime shimmed over `createElement`").
+   - The probe component uses three React-19-only features: `use(Context)` ("You can also read context with `use`"), `<Context>` as a provider ("In React 19, you can render `<Context>` as a provider instead of `<Context.Provider>`") and `ref` as a prop ("Starting in React 19, you can now access `ref` as a prop for function components"). A test loads the frame the way `format.md` describes it ("The frame has preloaded tokens.css, bundle.css, the libraries, bundle.js") in Chromium through Playwright.
+   - Result on React 19.3.1: no page errors, and the text `Probe on React 19.3.1, ref as a prop reached <button>`.
+   - Result with the same bundle on React 18.3.1 libraries (the type's default): nothing renders, and the page error is `r is not a function`. That second case is the proof that the check can fail.
+   - Sizes: `react.js` 8.0 kB, `react-dom.js` 213 kB, both under the 2 MB cap. None of the three scripts contains `</script` or `<!--`, which `format.md` forbids ("no literal `</script` / `<!--` (consumers inline it…)").
+   - **Not done:** a publish to a throwaway artifact made from the type, to watch the real page render the card. The session's permission classifier refused to create that artifact. The live check is still open (see open questions).
+6. **`light-dark()` does not survive.** The grammar admits no color function that takes colors as arguments. `format.md`: "`rgb()/rgba()/hsl()/hsla()/oklch()/oklab()/lab()/lch()/color()` with plain numeric arguments — no `var()`, `url()`, `color-mix()` or named colours". `SKILL.md`: "No valid value in any theme and the token drops." The type models themes as one value per theme id (`"value": {"light": "#fbf7f1", "dark": "#1d1a17"}`), and its compiled `tokens.css` switches themes with `[data-theme="<id>"]` blocks. So a `light-dark()` value is either dropped or unreachable. This comes from the documented grammar. It was not observed on a live page, because the throwaway publish was refused. The 2.1.309 `/design-sync` path is unknown here (item 2), and it is moot after 2026-12-14. The plan's artifact-shaped tokens output (one literal per Theme, light first) already avoids the question.
+
+### Changes to the plan in #1
+
+1. **The republish step uses the Artifact tool, not `/design-sync`.** `/design-sync` 2.1.309 writes to standalone claude.ai/design projects, which close on 2026-12-14. The repo builds the type's `project/` tree instead: `design-system.json` with `"editing": "code"`, `tokens.json`, `README.md`, `components/…` and `fonts/`. Claude Code publishes that tree to the existing artifact URL in one Artifact `publish` with `root` and `files`. This touches ADR-0003 (its decision stands, but the mechanism it names changes), user stories 68 and 74, the "Solution" paragraph, each phase's "design-sync publish" step and the definition of done item "Design-sync preview published". The step can keep the name "design-sync".
+2. **The preview bundle carries its own React 19.** `components/lib/react.js` and `components/lib/react-dom.js` are IIFE builds of the pinned `react`/`react-dom`. The index lists them in `libraries` with `file`. Without them, previews load React 18 from jsDelivr and any React-19-only API fails. The plan already said "React 19 shipped alongside the previews"; this makes it concrete.
+3. **No change for `light-dark()`.** The artifact-shaped tokens output with literal values per Theme stays as planned. It is required, not optional.
+4. **Tooling.** The proof uses esbuild, which `from-code.md` names ("bun build or esbuild, format iife"). esbuild is not in `docs/tech-stack.md`. The preview-bundle ticket picks between esbuild and Vite's library mode (Vite is already in the stack).
+
+## Ticket #14 (2026-10-24): the pipeline
+
+The pipeline is `packages/design-sync` (its README has the maintainer step). It replaced `packages/design-sync-spike`. Findings that change or extend spike #3, each observed in this repo with Vite 8.3.5, Playwright 1.64.1 Chromium and React 19.3.1:
+
+1. **Vite library mode builds everything.** Format `iife` builds `components/lib/react.js` (8.4 kB), `react-dom.js` (212 kB) and `bundle.js` (about 375 kB with three components and the icon gallery). Story files need Vite: `icon-gallery.stories.tsx` uses `import.meta.glob`, and the Logo stories use `?raw`. esbuild left the catalog with the spike.
+2. **Vite's defaults lower our CSS.** The default `build.target` is "baseline-widely-available" (`ESBUILD_BASELINE_WIDELY_AVAILABLE_TARGET` = Chrome 111 and peers in vite@8.3.5 `dist/node/chunks/node.js`). With it, the CSS minifier rewrote every `light-dark()` into `--lightningcss-light`/`--lightningcss-dark` variables, and turned `@layer ab.reset, ab.tokens, ab.base, ab.components;` into `@layer ab.reset;`. `target: "esnext"` stopped the first; `cssMinify: false` keeps the CSS as authored. _Inference:_ any Vite build of `@platform/ui` CSS (for example `storybook build`) gets the same lowering unless it sets a target; not checked here.
+3. **The page's literal tokens.css breaks nested Themes.** In the frame, `<html data-theme="dark">` gives the dark Button colour (`rgb(236, 234, 201)`). A `data-theme="dark"` on an element inside a light page does not: the page's unlayered `--ab-color-background-accent-bold: #263316` on `:root` is what `--ab-button-primary-background-color: var(…)` substitutes on `:root`, and the subtree's redefinition comes too late. This is the case `craft.md` describes ("the page's values cannot reach inside"). Previews therefore ignore a story's `theme` global.
+4. **The artifact's caps rule out tier 3 in tokens.json.** `format.md`: "≤60 tokens per other family". The full set has 200 lengths for `spacing` and 30 radii. The tokens file now lists tiers 1 and 2 (172 colours; the largest list family is `spacing` with 50), like the source artifact's own file.
+5. **Still not observed live.** No artifact was created or written (the hard rule for this ticket). The previews were checked in Chromium against the documented frame contract only.
+
 ## Question
 
 How does the design-sync mechanism keep a claude.ai "Design System" artifact in sync with a code repository? We need to know four things:
@@ -127,9 +179,10 @@ These follow from the quotes above. They are proposals, not decisions.
 
 ## Open questions
 
-1. **`DesignSync` tool.** It was not available in this session ("No matching deferred tools found"), so its description and parameters are not found.
-2. **Where `/design-sync` uploads.** `commands.md` says it uploads to the standalone claude.ai/design site, which closes on 2026-12-14. `from-code.md` describes it publishing a claude.ai artifact with `"editing": "code"`. These sources do not say which behaviour the current CLI has.
-3. **How it reads DTCG.** Does `/design-sync` read DTCG 2025.10 directly, including the `$extensions` and mode shape for light and dark, or only CSS? Not found. Step 4 lists DTCG as an accepted source, but gives no mapping for DTCG modes.
-4. **Exact `/design-sync` steps and size behaviour.** The type defers to "its own steps", which were not available, beyond "can take a few hours on a large repo".
-5. **`light-dark()`.** Not mentioned anywhere. The "drops" conclusion above is an inference from the accepted-value grammar.
-6. **Previews on React 19.** Whether React 19 can be used for previews through `components/lib/` in practice, given that `make.ts` copies 18.3.1 in, was not verified.
+1. **`DesignSync` tool.** Resolved by spike #3. The 2.1.309 build carries its description (quoted above). It writes to standalone claude.ai/design projects.
+2. **Where `/design-sync` uploads.** Resolved by spike #3. It uploads to standalone claude.ai/design design-system projects, not to an artifact.
+3. **How it reads DTCG.** Still not found, and moot: the plan no longer relies on `/design-sync` reading our tokens.
+4. **Exact `/design-sync` steps and size behaviour.** Still not found, and moot for the same reason.
+5. **`light-dark()`.** Resolved from the documented grammar: it does not survive. Not yet observed on a live page.
+6. **Previews on React 19.** Confirmed by spike #3 against the documented frame contract, in Chromium. Not yet observed in a live artifact.
+7. **Live check.** Publish `packages/design-sync-spike`'s `dist/project` (plus an index and a `tokens.json` holding one `light-dark()` token) to a new private throwaway artifact made from the type. Then confirm that the Probe card renders on React 19 and that the `light-dark()` token drops.

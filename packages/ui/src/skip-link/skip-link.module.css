@@ -1,0 +1,29 @@
+@import "@platform/tokens/components/skip-link.css";
+
+@layer ab.components {
+  .root {
+    position: fixed;
+    inset-block-start: var(--ab-skip-link-offset);
+    inset-inline-start: var(--ab-skip-link-offset);
+    z-index: var(--ab-z-index-tooltip);
+    padding-block: var(--ab-skip-link-padding-block);
+    padding-inline: var(--ab-skip-link-padding-inline);
+    border-radius: var(--ab-skip-link-border-radius);
+    background-color: var(--ab-skip-link-background-color);
+    color: var(--ab-skip-link-text-color);
+    font: var(--ab-skip-link-font);
+    text-decoration: none;
+    clip-path: inset(50%);
+  }
+
+  /* Fixed, so the clipped link takes no space; no :not(:focus), which the pseudo-states addon rewrites into a rule that always matches. */
+  .root:focus {
+    clip-path: none;
+  }
+
+  @media (forced-colors: active) {
+    .root {
+      border: var(--ab-border-width-default) solid CanvasText;
+    }
+  }
+}

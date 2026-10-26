@@ -1,0 +1,101 @@
+@import "@platform/tokens/components/table.css";
+
+@layer ab.components {
+  .root {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  .caption {
+    padding-block-end: var(--ab-space-stack-sm);
+    font: var(--ab-table-caption-font);
+    color: var(--ab-table-caption-text-color);
+    text-align: start;
+  }
+
+  .row {
+    border-block-end: var(--ab-table-border-width) solid var(--ab-table-border-color);
+  }
+
+  .body > .row:last-child {
+    border-block-end: none;
+  }
+
+  .row[data-selected] {
+    background-color: var(--ab-table-row-background-color-selected);
+  }
+
+  .sort-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ab-space-inline-xs);
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  /* Drawn in CSS, not with an Icon, so a Table without sorting ships no Icon styles. */
+  .sort-label::after {
+    content: "";
+    inline-size: var(--ab-size-icon-sm);
+    block-size: var(--ab-size-icon-sm);
+    background-color: var(--ab-table-sort-icon-color);
+    mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>')
+      center / 100% no-repeat;
+  }
+
+  .column-header:where(:not([aria-sort])) .sort-label::after {
+    visibility: hidden;
+  }
+
+  .column-header[aria-sort="ascending"] .sort-label::after {
+    rotate: 180deg;
+  }
+
+  .sort-label:focus-visible::after {
+    visibility: visible;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .sort-label:hover::after {
+      visibility: visible;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .sort-label::after {
+      background-color: ButtonText;
+    }
+  }
+
+  .column-header,
+  .cell {
+    padding-block: var(--ab-table-padding-block);
+    padding-inline: var(--ab-table-padding-inline);
+    text-align: start;
+    vertical-align: baseline;
+  }
+
+  .column-header {
+    font: var(--ab-table-header-font);
+    color: var(--ab-table-header-text-color);
+  }
+
+  .cell {
+    font: var(--ab-table-body-font);
+    color: var(--ab-table-body-text-color);
+  }
+
+  @media (prefers-contrast: more) {
+    .row {
+      border-block-end-color: var(--ab-color-border-default);
+    }
+
+    .column-header {
+      color: var(--ab-table-body-text-color);
+    }
+  }
+}

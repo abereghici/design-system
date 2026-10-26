@@ -1,0 +1,66 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Guides/Getting started" />
+
+# Getting started
+
+## Install
+
+Both packages live in this monorepo. Add them to an app's `package.json` as workspace dependencies:
+
+```json
+{
+  "dependencies": {
+    "@platform/ui": "workspace:*",
+    "@platform/tokens": "workspace:*"
+  },
+  "browserslist": ["baseline newly available"]
+}
+```
+
+The system targets Baseline newly available and uses those features directly, with no fallbacks. The `browserslist` entry matters: with Next.js's default targets, Lightning CSS lowers `light-dark()` and `data-theme` subtrees stop switching.
+
+## Mount the UIProvider
+
+Render `UIProvider` once, at the root of the app. It brings the cascade layer order, the tokens, the fonts (preloading Figtree latin) and the base stylesheet, so the app imports no CSS from the design system.
+
+```tsx
+// app/layout.tsx
+import { UIProvider } from "@platform/ui/provider";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <UIProvider>{children}</UIProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+## Import components one by one
+
+Each component has its own entry point, and importing it brings only its JavaScript, its CSS and its component tokens.
+
+```tsx
+import { Button } from "@platform/ui/button";
+import { PlusIcon } from "@platform/ui/icons/plus";
+
+<Button variant="primary">
+  <PlusIcon />
+  New project
+</Button>;
+```
+
+Static components are Server Components, and interactive ones are client components. Compound components are namespaces: `import { Card } from "@platform/ui/card"`, then `<Card.Root>`, `<Card.Title>`.
+
+## Next.js and CSS chunks
+
+Next.js merges small stylesheets into shared chunks by default (`experimental.cssChunking: true`), so a route can load CSS for components it never imported. The library still splits per component. For strict per-route CSS, set Turbopack's `cssChunking: { type: "graph", requestCost: 0 }`: each route then loads exactly what it imports, at the cost of more requests ([Next.js `cssChunking`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cssChunking)).
+
+## Next
+
+- [Theming](?path=/docs/guides-theming--docs) to offer light and dark.
+- [Styling and overrides](?path=/docs/guides-styling-and-overrides--docs) before restyling anything.
+- [Internationalization](?path=/docs/guides-internationalization--docs) for a language other than English.
