@@ -49,11 +49,11 @@ At least one of Title or Description is required. There is no Action Part: an ac
 
 `Alert.Close`
 
-| Prop      | Type                       | Default                | Notes                                                                     |
-| --------- | -------------------------- | ---------------------- | ------------------------------------------------------------------------- |
-| `labels`  | `{ close?: string }`       | `{ close: "Dismiss" }` | The button's accessible name. Falls back to LocaleProvider, then English. |
-| `onClick` | native                     |                        | The app removes the Alert here. Alert has no open state of its own.       |
-| …native   | `ComponentProps<"button">` |                        | `ref`, `className`, `disabled` (as `aria-disabled`, per IconButton).      |
+| Prop         | Type                       | Default | Notes                                                                                            |
+| ------------ | -------------------------- | ------- | ------------------------------------------------------------------------------------------------ |
+| `aria-label` | `string` (required)        |         | The button's accessible name, such as "Dismiss": it shows only an icon. Close takes no children. |
+| `onClick`    | native                     |         | The app removes the Alert here. Alert has no open state of its own.                              |
+| …native      | `ComponentProps<"button">` |         | `ref`, `className`, `disabled` (as `aria-disabled`, per IconButton).                             |
 
 Names, checked against the reference libraries:
 
@@ -62,7 +62,7 @@ Names, checked against the reference libraries:
 - **Part `Close`**: Radix "Close: The button that closes the dialog." (Dialog). Chakra composes "the `Alert` with a close button"; MUI "When provided and no `action` prop is set, a close icon button is displayed"; Mantine `withCloseButton`. A Part follows the namespaced-Parts rule instead of MUI's `onClose` or Mantine's boolean.
 - **`variant`**: shadcn "`"default" | "destructive"`"; Chakra `status` "`'info' | 'warning' | 'success' | 'error' | 'neutral'`" with `variant` for the visual style ("`'subtle' | 'surface' | 'outline' | 'solid'`"); MUI `severity` "The severity of the alert. This defines the color and icon used."; Mantine and Radix Themes `color`. No name has a majority. We take shadcn's `variant`, because there is only one axis here, the UI glossary defines Variant as "One of a component's enumerated visual treatments", and the source Toast already uses `variant: 'danger'`. The values come from the Dictionary's Role words (`neutral · success · warning · danger`), not Chakra's `info`/`error`, as in the Toast tokens (`toast-neutral-icon-color`, `toast-danger-…`). No `accent` Variant: the Dictionary reserves Accent for "The single brand action color".
 - **`role` passthrough, no default**: MUI and Mantine default to `role="alert"` (MUI "By default, the Alert renders an element with the `role="alert"`"; Mantine "Root element role set to `alert`."), and shadcn hard-codes it. Radix Themes leaves it to the consumer: "Add a native WAI-ARIA alert role to the callout when the user's immediate attention is required". We follow Radix Themes, because MDN says the role "should not be used on HTML that the user hasn't interacted with" (see Accessibility).
-- **`labels.close`**: MUI `closeText` "Override the default label for the _close popup_ icon button."; Mantine "Set `closeButtonLabel` prop to make close button accessible." Spec #1 replaces per-string props with the typed `labels` prop. The default "Dismiss" is the source Toast guide's word for the same control ("**Dismiss** recedes until the toast is hovered").
+- **`aria-label`** (required): MUI `closeText` "Override the default label for the _close popup_ icon button."; Mantine "Set `closeButtonLabel` prop to make close button accessible." Base UI ships no strings, so the name is the author's, and the type requires it.
 
 ## States
 
@@ -77,7 +77,7 @@ Names, checked against the reference libraries:
 
 - Alert never hides itself. `Alert.Close` calls the consumer's `onClick`, then dispatches `ab-dismiss`; the app removes the Alert (MUI and Mantine work the same way with `onClose`). There is no `open`/`onOpenChange` pair in phase 1, so Root has no state.
 - Never auto-dismissed. APG: "It is also important to avoid designing alerts that disappear automatically."
-- Focus on dismiss: when the focused Close button unmounts, focus falls to `<body>`. The app moves focus to the next logical element (the heading or field the Alert was about) in the same handler. Inference from WCAG 2.4.3 Focus Order; documented on the docs page with an example.
+- Focus on dismiss: when the focused Close button unmounts, focus falls to `<body>`. The app moves focus to the next logical element (the heading or field the Alert was about) in the same handler. Inference from WCAG 2.4.3 Focus Order; stated in Root's TSDoc.
 - Copy states the status in words. The Title names the situation ("Couldn't save changes", not "Error"), so the message reads without the colour or icon.
 - Server Components: `Alert.Root`, `Alert.Title` and `Alert.Description` have no handlers or state and are Server Components. `Alert.Close` is a `'use client'` leaf. The namespace is a directive-free `index.ts` (`export * as Alert from "./alert.tsx"`), per the UI scaffold.
 - Width: fills its container; text wraps. Long words break (`overflow-wrap: anywhere` on the text column).
@@ -104,9 +104,9 @@ Alert never moves focus when it appears. There is no Escape binding: Escape belo
 
 - **Role.** No role by default: a message rendered with the page is ordinary content, read in order. APG: "screen readers do not inform users of alerts that are present on the page before page load completes." MDN: "The most important thing to know about the `alert` role is that it's for content that is dynamically displayed, not for content that appears on page load." and "It should not be used on HTML that the user hasn't interacted with." (https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/alert_role).
 - **`role="alert"`** when the app inserts an urgent message after load (a failed save, a lost connection). MDN: "Setting `role="alert"` is equivalent to setting `aria-live="assertive"` and `aria-atomic="true"`." and "screen readers … will automatically announce the updated content regardless of where keyboard focus when the role is added." WCAG technique ARIA19, "Using ARIA role=alert or Live Regions to Identify Errors" (https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html), satisfies 4.1.3 Status Messages.
-- **`role="status"`** is for less urgent dynamic messages (MDN: "Dynamic changes that are less urgent should use a less aggressive method, such as including `aria-live="polite"` or using an other live region role like `status`."). MDN's live region guide: "Establish the live region before updating its content. Start with an empty live region…" (https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions). So `status` only works on an Alert that is already rendered and whose text changes; a newly inserted polite message belongs in a Toast. Documented on the docs page.
+- **`role="status"`** is for less urgent dynamic messages (MDN: "Dynamic changes that are less urgent should use a less aggressive method, such as including `aria-live="polite"` or using an other live region role like `status`."). MDN's live region guide: "Establish the live region before updating its content. Start with an empty live region…" (https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions). So `status` only works on an Alert that is already rendered and whose text changes; a newly inserted polite message belongs in a Toast. Stated in the `role` TSDoc.
 - **Icons** are decorative. The status is carried by the Title text (see Behaviour); the glyph shape is the visual second channel. The brand book: "State always pairs color with a label, a shape, a weight change or an underline."
-- **Close** has an accessible name from `labels.close` ("Dismiss") and is a native `<button>` through IconButton. Its target follows IconButton sm (28, 40 on coarse pointers).
+- **Close** has an accessible name from the author's `aria-label` and is a native `<button>` through IconButton. Its target follows IconButton sm (28, 40 on coarse pointers).
 - **Contrast.** Title uses `color-text-default`, already checked on the three status fills (`contrast.ts` PAIRS) and on `surface-raised`. Description uses `color-text-subtle` and icons use `color-icon-{role}`; those pairs on the status fills are not in the matrix yet. Measured from the primitive hex values with the WCAG formula (inference, to be added to `PAIRS`): `text-subtle` 6.84–6.93:1 light, 7.21–7.41:1 dark; `icon-success` 7.27 / 10.51, `icon-warning` 3.40 / 10.91, `icon-danger` 5.34 / 8.20. All pass (4.5:1 text, 3:1 icons).
 - **More contrast:** Description switches to `color-text-default` and Root draws a 1 px border in its Variant's icon colour, so the box edge and the secondary text both step up (`@media (prefers-contrast: more)`, reusing `alert-description-text-color` → title colour and `alert-{variant}-icon-color`).
 - **Forced colors:** fills disappear, so Root draws a 1 px `CanvasText` border in `@media (forced-colors: active)`. Icons use `currentColor` and become `CanvasText`; the glyph shape and the Title still tell the Variants apart. Close follows IconButton.
@@ -146,11 +146,9 @@ Contrast matrix additions proposed for `packages/tokens/src/contrast.ts` PAIRS: 
 
 Review item: IconButton's hover fill (`color-background-neutral-subtle-hovered`, sage-50 / night-900) equals the neutral Alert's fill in light (`surface-raised`, sage-50) and differs only slightly from the status fills, so Close's hover is barely visible inside an Alert. Hover is never the only feedback (press still scales), but the brand owner may want a dedicated Close hover token.
 
-## Built-in labels
+## Author-written text
 
-| Key     | Default   | Used by                       |
-| ------- | --------- | ----------------------------- |
-| `close` | "Dismiss" | `Alert.Close` accessible name |
+None. `Alert.Close` requires its `aria-label` by type, so a nameless button is a type error (Base UI precedent: the library ships no strings).
 
 ## Feedback events
 

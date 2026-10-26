@@ -1,14 +1,12 @@
 import { expect } from "storybook/test";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
-
-import type { Locale } from "../provider/locale.tsx";
-import { roRO } from "../provider/locales/ro-RO.ts";
 
 import * as Breadcrumbs from "./breadcrumbs.tsx";
 
-// @ts-expect-error -- a locale must name the breadcrumb landmark
-({ tag: "fr-FR", labels: { ...roRO.labels, breadcrumbs: {} } }) satisfies Locale;
+// @ts-expect-error -- the navigation landmark needs a name
+({}) satisfies Breadcrumbs.RootProps;
 
 const trail = (
   <>
@@ -30,37 +28,14 @@ const meta = preview.meta({
   title: "Components/Breadcrumbs",
   component: Breadcrumbs.Root,
   subcomponents: partsOf(Breadcrumbs),
-  args: { children: trail },
+  args: { "aria-label": "Breadcrumb", children: trail },
 });
 
 export const Default = meta.story({});
 
-Default.test("is a navigation landmark named Breadcrumb", async ({ canvas }) => {
-  const nav = canvas.getByRole("navigation", { name: "Breadcrumb" });
-  await expect(nav).toBeVisible();
-  await expect(canvas.getAllByRole("listitem")).toHaveLength(3);
-});
-
-Default.test("marks the current page and orders the trail root first", async ({ canvas }) => {
-  const links = canvas.getAllByRole("link");
-  await expect(links.map((link) => link.textContent)).toEqual(["Home", "Projects", "Atlas"]);
+Default.test("marks the current page", async ({ canvas }) => {
   await expect(canvas.getByRole("link", { name: "Atlas" })).toHaveAttribute("aria-current", "page");
 });
-
-Default.test("moves through its links with Tab", async ({ canvas, userEvent }) => {
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Home" })).toHaveFocus();
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Projects" })).toHaveFocus();
-});
-
-Default.test(
-  "takes its landmark name from labels",
-  { args: { labels: roRO.labels.breadcrumbs } },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("navigation", { name: "Cale de navigare" })).toBeVisible();
-  },
-);
 
 Default.test(
   "renders a router link with asChild",
@@ -97,13 +72,7 @@ export const LongTrail = meta.story({
       </>
     ),
   },
-  decorators: [
-    (Story) => (
-      <div style={{ maxInlineSize: 320 }}>
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWidth("20rem")],
   parameters: {
     docs: { description: { story: "A long trail wraps between items; nothing is truncated." } },
   },

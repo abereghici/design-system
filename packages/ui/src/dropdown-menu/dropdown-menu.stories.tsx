@@ -1,4 +1,4 @@
-import { expect, fn, waitFor } from "storybook/test";
+import { expect, fn, waitFor, within } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
 import { Dialog } from "@platform/ui/dialog";
@@ -19,9 +19,10 @@ const onArchivedChange = fn<NonNullable<DropdownMenu.CheckboxItemProps["onChecke
 
 async function openWithKeyboard() {
   const user = await trusted();
+
   await user.keyboard("{Tab}{Enter}");
-  const first = document.querySelector('[role="menuitem"]');
-  await waitFor(() => expect(first).toHaveFocus());
+
+  await waitFor(() => expect(within(document.body).getAllByRole("menuitem")[0]).toHaveFocus());
 }
 
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
@@ -78,6 +79,7 @@ export const Default = meta.story({});
 Default.test("opens from the keyboard at its first item", async ({ canvas }) => {
   const user = await trusted();
   const trigger = canvas.getByRole("button", { name: "Actions" });
+
   await expect(trigger).toHaveAttribute("aria-haspopup", "menu");
   await user.keyboard("{Tab}{Enter}");
   await waitFor(() => expect(canvas.getByRole("menu", { name: "Actions" })).toBeVisible());
@@ -87,12 +89,14 @@ Default.test("opens from the keyboard at its first item", async ({ canvas }) => 
 
 Default.test("opens at its last item on Up Arrow", async ({ canvas }) => {
   const user = await trusted();
+
   await user.keyboard("{Tab}{ArrowUp}");
   await expect(canvas.getByRole("menuitem", { name: "Delete" })).toHaveFocus();
 });
 
 Default.test("moves with the arrow keys, wrapping, Home, End and typing", async ({ canvas }) => {
   const user = await trusted();
+
   await openWithKeyboard();
   await user.keyboard("{ArrowUp}");
   await expect(canvas.getByRole("menuitem", { name: "Delete" })).toHaveFocus();
@@ -113,9 +117,12 @@ Default.test(
   async ({ canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Actions" });
+
     await user.click(trigger);
     await expect(canvas.getByRole("menuitem", { name: "Duplicate" })).toHaveFocus();
+
     const dismissals = listen("ab-dismiss");
+
     await user.keyboard("{Escape}");
     await waitFor(() => expect(trigger).toHaveFocus());
     dismissals.stop();
@@ -132,6 +139,7 @@ Default.test(
 
 Default.test("closes on a press outside", async ({ canvas }) => {
   const user = await trusted();
+
   await user.click(canvas.getByRole("button", { name: "Actions" }));
   await user.click(document.body, { position: { x: 600, y: 5 } });
   await waitFor(() => expect(canvas.queryByRole("menu")).toBeNull());
@@ -143,8 +151,11 @@ Default.test(
   async ({ canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Actions" });
+
     await openWithKeyboard();
+
     const presses = listen("ab-press");
+
     await user.keyboard("{Enter}");
     presses.stop();
     await expect(onDuplicate).toHaveBeenCalledOnce();
@@ -160,9 +171,12 @@ Default.test(
 
 Default.test("keeps a disabled item focusable and inert", async ({ canvas }) => {
   const user = await trusted();
+
   await openWithKeyboard();
   await user.keyboard("{ArrowDown}");
+
   const rename = canvas.getByRole("menuitem", { name: "Rename…" });
+
   await expect(rename).toHaveFocus();
   await expect(rename).toHaveAttribute("aria-disabled", "true");
   await user.keyboard("{Enter}");
@@ -173,11 +187,16 @@ Default.test(
   "toggles a CheckboxItem on Space and stays open, dispatching ab-toggle",
   async ({ canvas }) => {
     const user = await trusted();
+
     await openWithKeyboard();
     await user.keyboard("{End}{ArrowUp}");
+
     const item = canvas.getByRole("menuitemcheckbox", { name: "Show archived" });
+
     await expect(item).toHaveAttribute("aria-checked", "false");
+
     const toggles = listen("ab-toggle");
+
     await user.keyboard(" ");
     toggles.stop();
     await expect(item).toHaveAttribute("aria-checked", "true");
@@ -190,6 +209,7 @@ Default.test(
 
 Default.test("chooses a RadioItem and closes on Enter", async ({ canvas }) => {
   const user = await trusted();
+
   await openWithKeyboard();
   await user.keyboard("o");
   await user.keyboard("{Enter}");
@@ -212,7 +232,9 @@ Default.test("keeps the choices and stays open when a change is cancelled", asyn
   onArchivedChange.mockImplementationOnce((_checked, details) => {
     details.cancel();
   });
+
   const user = await trusted();
+
   await openWithKeyboard();
   await user.keyboard("o{Enter}{End}{ArrowUp} ");
   await expect(canvas.getByRole("menuitemradio", { name: "Oldest" })).toHaveAttribute(
@@ -232,6 +254,7 @@ Default.test("keeps the choices and stays open when a change is cancelled", asyn
 
 Default.test("closes when Tab moves focus on", async ({ canvas }) => {
   const user = await trusted();
+
   await openWithKeyboard();
   await user.keyboard("{Tab}");
   await waitFor(() => expect(canvas.queryByRole("menu")).toBeNull());
@@ -240,6 +263,7 @@ Default.test("closes when Tab moves focus on", async ({ canvas }) => {
 
 Default.test("highlights the item under the pointer", async ({ canvas }) => {
   const user = await trusted();
+
   await user.click(canvas.getByRole("button", { name: "Actions" }));
   await user.hover(canvas.getByRole("menuitemradio", { name: "Oldest" }));
   await expect(canvas.getByRole("menuitemradio", { name: "Oldest" })).toHaveFocus();
@@ -269,6 +293,7 @@ Default.test(
   },
   async ({ canvas }) => {
     const user = await trusted();
+
     await user.click(canvas.getByRole("button", { name: "Rename…" }));
     canvas.getByRole("button", { name: "Actions" }).focus();
     await user.keyboard("{Enter}");

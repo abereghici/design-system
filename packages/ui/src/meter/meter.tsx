@@ -1,8 +1,7 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import type { Locale } from "../provider/locale.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./meter.module.css";
 
@@ -33,10 +32,10 @@ export type MeterProps = Omit<
     /** How the value reads, such as a percent or a unit ("12 GB"). */
     formatOptions?: Intl.NumberFormatOptions;
     /**
-     * A shipped locale (`@platform/ui/locales/*`). This renders on the server, where the
-     * UIProvider's `locale` can't reach, so pass it for any language other than en-US.
+     * The language the value is formatted in, such as "ro-RO". Pass the same one on the server and
+     * in the browser; without it, the runtime's default language is used.
      */
-    locale?: Locale;
+    locale?: Intl.LocalesArgument;
   };
 
 /**
@@ -62,14 +61,14 @@ export function Meter({
   const now = Math.min(Math.max(value, min), max);
   const text =
     valueLabel ??
-    new Intl.NumberFormat(locale?.tag ?? "en-US", formatOptions).format(
+    new Intl.NumberFormat(locale, formatOptions).format(
       formatOptions.style === "percent" ? (now - min) / (max - min) : now,
     );
+
   return (
     <div
       data-thresholds={low === undefined && high === undefined ? undefined : ""}
-      className={join(styles["root"], className)}
-      style={style}
+      {...mergeProps({ className: styles["root"] }, { className, style })}
     >
       {label !== undefined && (
         <div className={styles["header"]}>

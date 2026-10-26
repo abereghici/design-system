@@ -9,6 +9,7 @@ const media = (overrides: Readonly<Record<string, unknown>>) => ({
 
 test("a media override must reference a token, not hold a literal", async () => {
   const tokens = validTokens();
+
   tokens.semantic["radius-sm"] = {
     $type: "dimension",
     $value: "{primitive.dimension-8}",
@@ -21,6 +22,7 @@ test("a media override must reference a token, not hold a literal", async () => 
 
 test("a media override cannot reference a component token", async () => {
   const tokens = validTokens();
+
   tokens.semantic["radius-sm"] = {
     $type: "dimension",
     $value: "{primitive.dimension-8}",
@@ -33,6 +35,7 @@ test("a media override cannot reference a component token", async () => {
 
 test("only semantic tokens take media overrides", async () => {
   const tokens = validTokens();
+
   tokens.component["button-border-radius"] = {
     $type: "dimension",
     $value: "{semantic.radius-sm}",
@@ -45,6 +48,7 @@ test("only semantic tokens take media overrides", async () => {
 
 test("only themed colors take a per-Theme media override", async () => {
   const tokens = validTokens();
+
   tokens.semantic["radius-sm"] = {
     $type: "dimension",
     $value: "{primitive.dimension-8}",
@@ -61,6 +65,7 @@ const animated = { "com.bereghici.animated": true };
 
 test("only component tokens can be animated", async () => {
   const tokens = validTokens();
+
   tokens.semantic["radius-sm"] = {
     $type: "dimension",
     $value: "{primitive.dimension-8}",
@@ -73,6 +78,7 @@ test("only component tokens can be animated", async () => {
 
 test("an animated token that follows the Theme fails the build", async () => {
   const tokens = validTokens();
+
   tokens.component["card-background-color"] = {
     $type: "color",
     $value: "{semantic.color-surface-default}",
@@ -85,6 +91,7 @@ test("an animated token that follows the Theme fails the build", async () => {
 
 test("an animated token needs a computationally independent value", async () => {
   const tokens = validTokens();
+
   tokens.primitive["dimension-8"] = { $type: "dimension", $value: { value: 0.5, unit: "rem" } };
   tokens.component["button-border-radius"] = {
     $type: "dimension",

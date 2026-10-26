@@ -36,7 +36,8 @@
     background: var(--ab-meter-track-background-color);
   }
 
-  /* Chromium and WebKit size the bar from a block inner element; flex stretches it to the track. */
+  /* Chromium's inner element is a grid that puts the bar in its middle half; flex stretches it to
+     the track: https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/core/html/resources/html.css */
   .track::-webkit-meter-inner-element {
     display: flex;
     border-radius: inherit;

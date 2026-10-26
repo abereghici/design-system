@@ -155,7 +155,7 @@ Existing: `dialog-width`, `dialog-padding`, `dialog-gap`, `dialog-border-radius`
 
 Proposed new: none.
 
-## Built-in labels
+## Author-written text
 
 None. Cancel and Action labels are the consumer's text (they name the answer, so no default can be right).
 

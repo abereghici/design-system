@@ -2,16 +2,15 @@ import { useRef, useState } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
-import type { Locale } from "../provider/locale.tsx";
-
 import * as Popover from "./popover.tsx";
+
+// @ts-expect-error -- the x button shows only an icon, so it needs a name
+({}) satisfies Popover.CloseProps;
 
 const onOpenChange = fn<NonNullable<Popover.RootProps["onOpenChange"]>>();
 
@@ -28,13 +27,14 @@ const filters = (
       <label>
         <input type="checkbox" name="mine" /> Assigned to me
       </label>
-      <Popover.Close />
+      <Popover.Close aria-label="Close" />
     </Popover.Content>
   </>
 );
 
 function Controlled(props: Popover.RootProps) {
   const [open, setOpen] = useState(props.defaultOpen ?? false);
+
   return (
     <>
       <Popover.Root
@@ -52,6 +52,7 @@ function Controlled(props: Popover.RootProps) {
 
 function WithInitialFocus(props: Popover.RootProps) {
   const field = useRef<HTMLInputElement>(null);
+
   return (
     <Popover.Root {...props}>
       <Popover.Trigger>Rename</Popover.Trigger>
@@ -85,6 +86,7 @@ Default.test(
   async ({ canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Filters" });
+
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
     await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
     await user.keyboard("{Tab}{Enter}");
@@ -105,9 +107,12 @@ Default.test(
   async ({ canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Filters" });
+
     await user.click(trigger);
     await user.click(canvas.getByRole("checkbox", { name: "Assigned to me" }));
+
     const dismissals = listen("ab-dismiss");
+
     await user.keyboard("{Escape}");
     await waitFor(() => expect(trigger).toHaveFocus());
     dismissals.stop();
@@ -121,8 +126,11 @@ Default.test(
 
 Default.test("closes on a press outside", async ({ canvas }) => {
   const user = await trusted();
+
   await user.click(canvas.getByRole("button", { name: "Filters" }));
+
   const dismissals = listen("ab-dismiss");
+
   await user.click(document.body, { position: { x: 400, y: 5 } });
   await waitFor(() => expect(dismissals.events).toHaveLength(1));
   dismissals.stop();
@@ -133,9 +141,12 @@ Default.test("closes on a press outside", async ({ canvas }) => {
 Default.test("closes from Close and returns focus to the Trigger", async ({ canvas }) => {
   const user = await trusted();
   const trigger = canvas.getByRole("button", { name: "Filters" });
+
   await user.click(trigger);
+
   const close = canvas.getByRole("button", { name: "Close" });
   const dismissals = listen("ab-dismiss");
+
   await user.click(close);
   dismissals.stop();
   await waitFor(() => expect(trigger).toHaveFocus());
@@ -149,6 +160,7 @@ Default.test("closes from Close and returns focus to the Trigger", async ({ canv
 Default.test("closes once Tab moves focus past its Content", async ({ canvas }) => {
   const user = await trusted();
   const trigger = canvas.getByRole("button", { name: "Filters" });
+
   await user.click(trigger);
   await expect(canvas.getByRole("checkbox", { name: "Assigned to me" })).toHaveFocus();
   await user.keyboard("{Tab}{Tab}");
@@ -168,31 +180,11 @@ Default.test(
   },
   async ({ canvas }) => {
     const user = await trusted();
+
     await user.click(canvas.getByRole("button", { name: "Filters" }));
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
   },
 );
-
-Default.test(
-  "names Close in the UIProvider's locale",
-  {
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
-  async ({ canvas }) => {
-    const user = await trusted();
-    await user.click(canvas.getByRole("button", { name: "Filters" }));
-    await waitFor(() => expect(canvas.getByRole("button", { name: "Închide" })).toBeVisible());
-  },
-);
-
-// @ts-expect-error -- a locale must name the Popover's Close
-void ({ ...roRO, labels: { ...roRO.labels, popover: {} } } satisfies Locale);
 
 export const ControlledOpen = meta.story({
   parameters: {
@@ -203,6 +195,7 @@ export const ControlledOpen = meta.story({
 
 ControlledOpen.test("follows the state its parent holds", async ({ canvas }) => {
   const user = await trusted();
+
   await user.click(canvas.getByRole("button", { name: "Filters" }));
   await waitFor(() => expect(canvas.getByRole("dialog", { name: "Filters" })).toBeVisible());
   await expect(canvas.getByRole("status")).toHaveTextContent("Open");
@@ -221,6 +214,7 @@ export const InitialFocus = meta.story({
 
 InitialFocus.test("focuses the field it names", async ({ canvas }) => {
   const user = await trusted();
+
   await user.click(canvas.getByRole("button", { name: "Rename" }));
   await expect(canvas.getByRole("textbox", { name: "Name" })).toHaveFocus();
   await user.keyboard("{Escape}");

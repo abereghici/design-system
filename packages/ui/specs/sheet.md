@@ -55,7 +55,7 @@ Root (no element) → Trigger → Content (`<dialog>` + `::backdrop`) → Title 
 
 ## API
 
-`Sheet.Root`, `Sheet.Trigger`, `Sheet.Title`, `Sheet.Description`, `Sheet.Footer`, `Sheet.Close`: as the Dialog Parts of the same name (`dialog.md` API), including the `reason` set `"trigger-press"` \| `"outside-press"` \| `"escape-key"` \| `"close-press"` \| `"none"` and `labels.close`.
+`Sheet.Root`, `Sheet.Trigger`, `Sheet.Title`, `Sheet.Description`, `Sheet.Footer`, `Sheet.Close`: as the Dialog Parts of the same name (`dialog.md` API), including the `reason` set `"trigger-press"` \| `"outside-press"` \| `"escape-key"` \| `"close-press"` \| `"none"` and the icon-only Close's required `aria-label`.
 
 `Sheet.Content`
 
@@ -95,7 +95,7 @@ Names, checked against the reference libraries:
 - **Body is not a ScrollArea component** but follows its rules (keyboard reachable with `tabIndex={0}`, no role, native scrollbars): WebKit bug 277290 "AX: Scrolling containers inoperable with keyboard" (ScrollArea spec) is why the default tab stop exists.
 - **Body edge fades left out.** The source has "Body scrolls with edge fades", which the brand book builds with scroll-driven animation ("`animation-timeline: scroll(self)`"); `scroll-driven-animations` is limited (webstatus.dev: no Firefox), and the ScrollArea spec left them out for the same reason. The Footer's position at the bottom and the native scrollbar show that there is more (judgement call, ScrollArea precedent).
 - **Side.** `side` sets `data-side`, which picks the inset and the slide direction in CSS; nothing else changes.
-- Client components (`'use client'`): the shared Dialog Parts (`src/dialog/modal.tsx`, `close.tsx`). `sheet.tsx` itself is a Server module: Root and Content bind Sheet's styles and `side` onto them, and Body and Footer are plain `<div>`s.
+- Client components (`'use client'`): the shared Dialog Parts (`src/dialog/dialog-modal.tsx` and the `dialog-<part>.tsx` files). `sheet.tsx` itself is a Server module: Root and Content bind Sheet's styles and `side` onto them, and Body and Footer are plain `<div>`s.
 
 ## Motion
 
@@ -154,13 +154,9 @@ Proposed new (mirroring Dialog's set):
 
 The Close uses the `icon-button-*` tokens; the more-contrast and forced-colors borders use `border-width-default` and `color-border-default` directly. Body padding reuses `sheet-padding`.
 
-## Built-in labels
+## Author-written text
 
-| Key     | Default | Used by                                   |
-| ------- | ------- | ----------------------------------------- |
-| `close` | "Close" | `Sheet.Close` (icon-only) accessible name |
-
-From the `labels` prop, then the root UI provider's locale, then English. Sheet adds its `close` key to the locale type and every shipped locale (en-US, ro-RO).
+None. The icon-only `Sheet.Close` requires its `aria-label` by type, as Dialog's.
 
 ## Feedback events
 

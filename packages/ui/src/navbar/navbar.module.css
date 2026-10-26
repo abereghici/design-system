@@ -48,7 +48,6 @@
     color: var(--ab-navbar-item-text-color-selected);
   }
 
-  /* Inset to the text, as the Tabs indicator spans its tab's label, so the bar stays clear of the rounded hover fill. */
   .link[aria-current="page"]::after {
     content: "";
     position: absolute;

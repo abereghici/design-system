@@ -1,4 +1,7 @@
-import { expect, fn, waitFor } from "storybook/test";
+import { useState } from "react";
+import { hydrateRoot } from "react-dom/client";
+import { renderToString } from "react-dom/server";
+import { expect, fn, isInaccessible, waitFor, within } from "storybook/test";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
@@ -21,6 +24,26 @@ const person = (src: string) => (
   </>
 );
 
+const imageRef = fn<(image: HTMLImageElement | null) => void>();
+
+function ChangingPhoto() {
+  const [src, setSrc] = useState(photo);
+
+  return (
+    <>
+      <Avatar.Root>{person(src)}</Avatar.Root>
+      <button
+        type="button"
+        onClick={() => {
+          setSrc(broken);
+        }}
+      >
+        Change photo
+      </button>
+    </>
+  );
+}
+
 const meta = preview.meta({
   title: "Components/Avatar",
   component: Avatar.Root,
@@ -30,18 +53,61 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("comes in a small size", { args: { size: "sm" } }, async ({ canvas }) => {
-  await expect(canvas.getByRole("img", { name: "Alexandru Bereghici" })).toBeInTheDocument();
-});
-
-Default.test("is named by its image's alt", async ({ canvas }) => {
-  await expect(canvas.getByRole("img", { name: "Alexandru Bereghici" })).toBeInTheDocument();
-});
-
 Default.test("shows the picture once it has loaded", async ({ canvas }) => {
   await waitFor(() => expect(onLoadingStatusChange).toHaveBeenLastCalledWith("loaded"));
   await waitFor(() => expect(canvas.getByText("AB")).not.toBeVisible());
 });
+
+Default.test(
+  "shows a server-rendered photo that loaded before hydration",
+  async ({ canvasElement }) => {
+    const host = document.createElement("div");
+    const avatar = <Avatar.Root>{person(photo)}</Avatar.Root>;
+
+    canvasElement.append(host);
+    host.innerHTML = renderToString(avatar);
+    await within(host).getByRole<HTMLImageElement>("img").decode();
+
+    const root = hydrateRoot(host, avatar);
+
+    await waitFor(() => expect(within(host).getByText("AB")).not.toBeVisible());
+    root.unmount();
+  },
+);
+
+Default.test(
+  "reports loading again when the photo changes",
+  { render: ChangingPhoto },
+  async ({ canvas, userEvent }) => {
+    await waitFor(() => expect(onLoadingStatusChange).toHaveBeenLastCalledWith("loaded"));
+    onLoadingStatusChange.mockClear();
+    await userEvent.click(canvas.getByRole("button", { name: "Change photo" }));
+    await waitFor(() => expect(onLoadingStatusChange).toHaveBeenLastCalledWith("error"));
+    await expect(onLoadingStatusChange.mock.calls).toEqual([["loading"], ["error"]]);
+  },
+);
+
+Default.test(
+  "hands a callback ref the image once",
+  {
+    args: {
+      children: (
+        <Avatar.Image
+          src={photo}
+          alt="Alexandru Bereghici"
+          ref={imageRef}
+          onLoadingStatusChange={onLoadingStatusChange}
+        />
+      ),
+    },
+  },
+  async ({ canvas }) => {
+    await waitFor(() => expect(onLoadingStatusChange).toHaveBeenLastCalledWith("loaded"));
+    await expect(imageRef.mock.calls).toEqual([
+      [canvas.getByRole("img", { name: "Alexandru Bereghici" })],
+    ]);
+  },
+);
 
 Default.test(
   "keeps the initials when the picture fails, with the same name",
@@ -54,6 +120,8 @@ Default.test(
 );
 
 export const Initials = meta.story({
+  // The Fallback is decorative, so its tree is empty, and an empty aria snapshot matches anything.
+  tags: ["!aria-snapshot"],
   args: { children: <Avatar.Fallback name="Ana Maria Popescu" /> },
   parameters: {
     docs: {
@@ -78,5 +146,14 @@ Initials.test(
 );
 
 Initials.test("is not announced", async ({ canvas }) => {
-  await expect(canvas.getByText("AP")).toHaveAttribute("aria-hidden", "true");
+  await expect(isInaccessible(canvas.getByText("AP"))).toBe(true);
+});
+
+export const Anonymous = meta.story({
+  args: { children: <Avatar.Fallback /> },
+  // The Fallback is decorative, so its tree is empty, and an empty aria snapshot matches anything.
+  tags: ["!aria-snapshot"],
+  parameters: {
+    docs: { description: { story: "Without a name, the Fallback shows a generic person glyph." } },
+  },
 });

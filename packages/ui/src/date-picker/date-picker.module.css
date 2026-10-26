@@ -8,8 +8,10 @@
     --ab-popover-max-width: none;
   }
 
-  /* Popover's margin nudges the panel inward on every side; the spec lines the panel up with the field. */
+  /* The Trigger is the popover source, so Tab leaves the panel to the control after it, but the spec
+     lines the panel up with the field box; Popover's margin would nudge it inward. */
   .content[popover] {
+    position-anchor: --ab-date-field-box;
     margin-inline: 0;
   }
 }

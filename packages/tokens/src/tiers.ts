@@ -1,6 +1,7 @@
 import type { TransformedToken } from "style-dictionary/types";
 
 export const TIERS = ["primitive", "semantic", "component"] as const;
+
 export type Tier = (typeof TIERS)[number];
 
 export const tierOf = (token: TransformedToken): Tier | undefined =>
@@ -8,6 +9,7 @@ export const tierOf = (token: TransformedToken): Tier | undefined =>
 
 const rank = (token: TransformedToken): number => {
   const tier = tierOf(token);
+
   return tier === undefined ? TIERS.length : TIERS.indexOf(tier);
 };
 

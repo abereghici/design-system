@@ -24,7 +24,7 @@ Label → container (textarea) → description or error.
 | Prop                                                                                       | Type                                                 | Default | Notes                                                                                                                                                                                                               |
 | ------------------------------------------------------------------------------------------ | ---------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `label`, `description`, `errorMessage`, `invalid`, `validate`, `disabled`, `onValueChange` | as TextField                                         |         | Same meaning and types (with `HTMLTextAreaElement`).                                                                                                                                                                |
-| `minRows`                                                                                  | `number`                                             | `3`     | Height floor in lines. Set inline as the `min-block-size`.                                                                                                                                                          |
+| `minRows`                                                                                  | `number`                                             | `3`     | Height floor in lines. Set inline as `--min-rows`, which the stylesheet's `min-block-size` reads.                                                                                                                   |
 | `maxRows`                                                                                  | `number`                                             | `12`    | Height ceiling in lines; beyond it the textarea scrolls. Set inline as the `max-block-size`.                                                                                                                        |
 | `value` / `defaultValue`                                                                   | `string`                                             |         | Native.                                                                                                                                                                                                             |
 | `className`, `style`                                                                       |                                                      |         | On the root wrapper.                                                                                                                                                                                                |
@@ -80,7 +80,7 @@ Logical properties only. Text direction per paragraph from `dir="auto"`. The res
 
 None new. The `input-*` set, as TextField: container chrome, `input-padding-block`, `input-font`, label, helper, error, placeholder, border states and disabled colours.
 
-## Built-in labels
+## Author-written text
 
 None.
 

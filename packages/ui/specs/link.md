@@ -98,7 +98,7 @@ All exist (ported from the source): `link-text-color`, `link-underline-color`, `
 
 No new tokens. The focus ring uses `focus-ring-width`, `focus-ring-offset` and `color-border-focused` directly (R6), and the transition uses the `motion-*` semantic tokens. If the base stylesheet styles bare `a` elements, it uses the same `link-*` tokens, so a Link and a plain `<a>` in Markdown content look the same.
 
-## Built-in labels
+## Author-written text
 
 None. The text is the children.
 

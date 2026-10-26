@@ -40,6 +40,14 @@ _Avoid_: Field context (as an API), input binding
 The one treatment every disabled control gets: its parts swap to the `*-disabled` colour roles (`text-disabled` ink, `icon-disabled` glyphs and marks, `background-disabled` fill, `border-disabled` edge), the label next to it takes `text-disabled`, and the description that says why stays readable. Never `opacity`: a disabled control stays focusable (`aria-disabled`), and opacity on it fades its focus ring below WCAG 1.4.11's 3:1, then fades again in any disabled ancestor. Button, Field, Command and Calendar set the precedent; Primer (`fgColor-disabled`, `bgColor-disabled`), Carbon (`$text-disabled`, `$icon-disabled`) and Atlassian (`color.text.disabled`) do the same.
 _Avoid_: Dimmed, greyed out, faded, inactive
 
+**State attribute**:
+A `data-*` attribute a component sets on its own element so CSS can style a state. A yes/no state is present with the empty string while it holds and absent otherwise (`data-selected=""`), as HTML boolean attributes are; an enumerated one carries its value (`data-variant="danger"`, `data-side="top"`). Never `"true"` or `"false"`.
+_Avoid_: Data flag, state class
+
+**Uncontrolled state**:
+The state a component holds itself when the consumer passes only the `default…` prop, named `uncontrolled` in the code (`const [uncontrolled, setUncontrolled] = useState(defaultValue)`); the controlled prop wins whenever it is defined. React's controlled and uncontrolled components, Radix's `useControllableState`.
+_Avoid_: Own state, internal state, local value
+
 **Icon**:
 A glyph from the carved icon set on the 24-unit grid, stroked in the surrounding text colour; decorative unless it has a label. Each one is its own component (`SearchIcon`).
 _Avoid_: Glyph (as a component name), symbol, pictogram
@@ -53,13 +61,13 @@ A thin line dividing content or groups of items.
 _Avoid_: Divider, rule, hr
 
 **UIProvider**:
-The component an app mounts once at its root. It brings the global stylesheets (layer order, shared tokens, fonts, base) and the optional Locale, so apps import no CSS.
+The component an app mounts once at its root. It brings the global stylesheets (layer order, shared tokens, fonts, base), so apps import no CSS. It holds no state and no text.
 _Avoid_: Root, app shell, LocaleProvider, ThemeProvider
 
 **Locale**:
-A typed object holding a BCP 47 tag and every built-in label in that language (`enUS`, `roRO`), passed to the UIProvider.
-_Avoid_: Translations, messages, i18n bundle
+The optional `locale` prop (a BCP 47 tag such as `"ro-RO"`) of a component that formats numbers or dates; it goes straight to `Intl`, and without it `Intl` uses the runtime's default.
+_Avoid_: Locale object, translations, i18n bundle
 
-**Built-in label**:
-A string a component supplies by default, from its namespace in the Locale. It names only elements the component owns (a Close button, the steppers), and it gives way to any name the consumer gives (`aria-label`, `aria-labelledby`, or a `<label for>` through `id`). Precedence: the consumer's `labels`, then the UIProvider's Locale, then the component's own en-US namespace.
-_Avoid_: Default text, i18n key
+**Author-written text**:
+Every name, label and message a component shows or announces comes from the app, as children or a named prop (`aria-label`, `closeLabel`, `noOptionsText`); the library ships none. Where a part would otherwise have no accessible name, its prop type requires the text.
+_Avoid_: Built-in label, default text, i18n key

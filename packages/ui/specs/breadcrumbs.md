@@ -20,7 +20,7 @@ import NextLink from "next/link";
   </Breadcrumbs.Item>
 </Breadcrumbs.Root>
 
-<Breadcrumbs.Root labels={{ root: "Fil d’Ariane" }}>…</Breadcrumbs.Root>
+<Breadcrumbs.Root aria-label="Fil d’Ariane">…</Breadcrumbs.Root>
 ```
 
 Status: draft for brand-owner review (phase 3). No source guide: drafted from the WAI-ARIA APG Breadcrumb pattern, the Link spec and the reference libraries.
@@ -29,7 +29,7 @@ Status: draft for brand-owner review (phase 3). No source guide: drafted from th
 
 Root (nav → ordered list) → Items (separator → link).
 
-- **Root.** A native `<nav>` (the navigation landmark) named by `aria-label` from `labels.root`, wrapping a native `<ol>` with list styling reset. The list is a wrapping flex row (`flex-wrap: wrap`), gap `breadcrumbs-gap`, text in `breadcrumbs-font`.
+- **Root.** A native `<nav>` (the navigation landmark) named by the author's required `aria-label` (or `aria-labelledby`), wrapping a native `<ol>` with list styling reset. The list is a wrapping flex row (`flex-wrap: wrap`), gap `breadcrumbs-gap`, text in `breadcrumbs-font`.
 - **Item.** A native `<li>`, `display: inline-flex`, centred, `min-block-size: size-target-min` (24) so wrapped rows keep targets apart (Accessibility).
 - **Separator.** Drawn by the Item, not a Part: a `ChevronRightIcon` (`size="sm"`, 16, decorative: `aria-hidden` from the Icon component) before the link, in `breadcrumbs-separator-icon-color`. Hidden on the first Item (`li:first-child`), so it only ever sits between two items.
 - **Link.** The Link component (a native `<a href>`, or the child element with `asChild`), so the underline, hover and focus are Link's own. Ancestors: text `breadcrumbs-item-text-color`, underlined like Link (`link-underline-*`). The current page (`aria-current="page"`): `link-text-color`, no underline.
@@ -38,11 +38,10 @@ Root (nav → ordered list) → Items (separator → link).
 
 `Breadcrumbs.Root`
 
-| Prop     | Type                    | Default                  | Notes                                                                                                     |
-| -------- | ----------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------- |
-| `locale` | `Locale`                | en-US                    | A shipped locale; translates `root` on the server.                                                        |
-| `labels` | `{ root?: string }`     | `{ root: "Breadcrumb" }` | Built-in labels: the landmark's `aria-label`.                                                             |
-| …native  | `ComponentProps<"nav">` |                          | `ref`, `className`, `aria-labelledby` and native attributes go on the `<nav>`. The `<ol>` takes no props. |
+| Prop                              | Type                    | Default | Notes                                                                                                     |
+| --------------------------------- | ----------------------- | ------- | --------------------------------------------------------------------------------------------------------- |
+| `aria-label` \| `aria-labelledby` | `string` (one required) |         | The landmark's name, such as "Breadcrumb".                                                                |
+| …native                           | `ComponentProps<"nav">` |         | `ref`, `className`, `aria-labelledby` and native attributes go on the `<nav>`. The `<ol>` takes no props. |
 
 `Breadcrumbs.Item`: `ComponentProps<"li">`.
 
@@ -61,7 +60,7 @@ Names, checked against the reference libraries:
 - **`asChild`**: shadcn `BreadcrumbLink` takes `asChild` in its source (`const Comp = asChild ? Slot.Root : "a"`, https://github.com/shadcn-ui/ui/blob/main/apps/v4/registry/new-york-v4/ui/breadcrumb.tsx); its docs now say "you can use the `render` prop on `<BreadcrumbLink />`". Spec #1 uses `asChild`.
 - **Current page is a link with `aria-current="page"`, no `Page` / `CurrentLink` Part and no `isCurrent` prop.** APG's example marks up the last crumb as `<a href="" aria-current="page">Breadcrumb Example</a>`, and its table says `aria-current=page` is "Applied to the last link in the set to indicate that it represents the current page." The libraries differ: shadcn `BreadcrumbPage` is a `<span role="link" aria-disabled="true" aria-current="page">`, "displays the current page in the breadcrumb (non-clickable)"; Chakra has `CurrentLink`; React Aria's last `<Breadcrumb>` has no `href` and is styled with `[data-current]`; MUI's basic demo uses plain `Typography`, and another demo says "Keep the last breadcrumb interactive." We follow the APG example and the shared contract (the native attribute is the API, styled with `[aria-current="page"]`), so one Part covers both (judgement call). A consumer who wants plain text puts text in the Item instead: APG "If the element representing the current page is not a link, aria-current is optional."
 - **Separator drawn by the Item, no `separator` prop and no Separator Part.** MUI `separator` "Custom separator node." default `'/'`; Mantine "adds a given separator (defaults to `/`)"; shadcn `BreadcrumbSeparator` "You can pass custom children to override the default separator icon."; React Aria draws `ChevronRight` inside each item. The system has one separator (the chevron), so it is not configurable (judgement call).
-- **`labels.root` default "Breadcrumb"**: APG's example `aria-label=Breadcrumb` "Provides a label that describes the type of navigation provided in the `nav` element." shadcn hard-codes `aria-label="breadcrumb"`; MUI: "Be sure to add a `aria-label` description on the `Breadcrumbs` component." The `labels` prop follows spec #1 ("a typed `labels` prop per component").
+- **Required landmark name** (for example "Breadcrumb"): APG's example `aria-label=Breadcrumb` "Provides a label that describes the type of navigation provided in the `nav` element." shadcn hard-codes `aria-label="breadcrumb"`; MUI: "Be sure to add a `aria-label` description on the `Breadcrumbs` component." So Root requires an `aria-label` or `aria-labelledby` by type, in the author's language.
 - **Left out (YAGNI):** collapsing (MUI `maxItems` default 8, `itemsBeforeCollapse`, `itemsAfterCollapse`, `expandText` "Show path"; shadcn `BreadcrumbEllipsis`; Chakra `Ellipsis`), a custom `separator`, React Aria's `onAction`, `isDisabled` and `items`, Chakra's `size` and `variant`. A long trail wraps onto more lines instead of collapsing (Behaviour).
 
 ## States
@@ -103,12 +102,12 @@ No arrow keys: it is a list of links, not a composite. No key handler is added.
 
 ## Accessibility
 
-- APG: "Breadcrumb trail is contained within a navigation landmark region." and "The landmark region is labelled via aria-label or aria-labelledby." Root's `<nav>` has the implicit `navigation` role (ARIA in HTML: `nav` → `role=navigation`), named by `labels.root`; a consumer `aria-labelledby` also passes through.
+- APG: "Breadcrumb trail is contained within a navigation landmark region." and "The landmark region is labelled via aria-label or aria-labelledby." Root's `<nav>` has the implicit `navigation` role (ARIA in HTML: `nav` → `role=navigation`), named by the author's required `aria-label` or `aria-labelledby`.
 - APG: "The link to the current page has aria-current set to `page`." MDN: "Only mark one element in a set of elements as current with aria-current." (https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-current)
 - An ordered list (`<ol>`), as APG's example and MUI: "The set of links is structured using an ordered list (`<ol>` element)." Screen readers announce the item count.
 - **Separators are decorative.** APG's example draws them "via CSS" "To prevent screen reader announcement of the visual separators between links". We draw an icon element instead and hide it with `aria-hidden` (Icon's default when it has no `label`), as MUI: "they are hidden with `aria-hidden`." (judgement call: one glyph source, and the Icon component's RTL mirror).
-- **Landmark names:** a second Breadcrumbs on the same page needs a different `labels.root` (APG landmarks: "If a page includes more than one `navigation` landmark, each should have a unique label.", https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/examples/navigation.html).
-- **Targets:** links are at least 24 px tall (Item `min-block-size`), and items are separated by the chevron and two gaps, so WCAG 2.5.8 holds on wrapped rows too (inference; measured in the build).
+- **Landmark names:** a second Breadcrumbs on the same page needs a different `aria-label` (APG landmarks: "If a page includes more than one `navigation` landmark, each should have a unique label.", https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/examples/navigation.html).
+- **Targets:** links are at least 24 px tall (`size-target-min` on the link itself), and items are separated by the chevron and two gaps, so WCAG 2.5.8 holds on wrapped rows too (inference; measured in the build).
 - **Contrast:** ancestor text `color-text-subtle` and current `color-text-default` are matrix text roles (4.5:1 on every surface). The underline uses `color-border-default` (3:1). The separator is decorative and needs no contrast.
 - **Not colour alone:** ancestors are underlined and the current page is not, so the current page differs by shape as well as colour.
 - **More contrast:** no change needed (text roles already pass; the underline already uses `color-border-default`).
@@ -134,13 +133,9 @@ Proposed new:
 
 Consumed as semantic tokens directly: `size-target-min` (Item minimum height, a system rule), `focus-ring-width`, `focus-ring-offset`, `color-border-focused`, and the `motion-*` tokens. New Dictionary component word: `breadcrumbs`. No new modifier words (`item`, `separator` exist).
 
-## Built-in labels
+## Author-written text
 
-| Key    | Default      | Used by                 |
-| ------ | ------------ | ----------------------- |
-| `root` | "Breadcrumb" | `aria-label` on `<nav>` |
-
-Root is a Server Component and cannot read the UIProvider, so it takes the shipped `locale` object (as Pagination does) and `labels` overrides; without either, `breadcrumbs` in `src/provider/locales/en-US/breadcrumbs.ts` is the en-US default (Q19-1).
+None. The landmark's name is required by type (Navbar precedent); link texts are the author's.
 
 ## Feedback events
 

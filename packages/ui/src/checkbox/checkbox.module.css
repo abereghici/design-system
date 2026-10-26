@@ -3,9 +3,11 @@
 @layer ab.components {
   .root {
     display: inline-flex;
-    align-items: center;
+    align-items: start;
     gap: var(--ab-checkbox-gap);
     min-block-size: var(--ab-size-control-xs);
+    padding-block: calc((var(--ab-size-control-xs) - 1lh) / 2);
+    overflow-wrap: anywhere;
     font: var(--ab-checkbox-label-font);
     letter-spacing: var(--ab-type-label-sm-letter-spacing);
     color: var(--ab-color-text-default);
@@ -22,7 +24,7 @@
     flex: none;
     display: inline-grid;
     place-items: center;
-    margin: 0;
+    margin: calc((1lh - var(--ab-checkbox-size)) / 2) 0;
     inline-size: var(--ab-checkbox-size);
     block-size: var(--ab-checkbox-size);
     border: var(--ab-checkbox-border-width) solid var(--ab-checkbox-border-color);
@@ -115,8 +117,17 @@
       background-color: HighlightText;
     }
 
+    .root:has(.input:is([aria-disabled="true"], :disabled)) {
+      color: GrayText;
+    }
+
     .input:is([aria-disabled="true"], :disabled) {
       border-color: GrayText;
+      background-color: Canvas;
+    }
+
+    .input:is([aria-disabled="true"], :disabled)::before {
+      background-color: GrayText;
     }
   }
 }

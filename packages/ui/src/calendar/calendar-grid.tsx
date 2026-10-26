@@ -24,10 +24,11 @@ export function keyTarget(event: KeyboardEvent, date: Temporal.PlainDate, firstD
     ["PageDown", () => date.add({ [unit]: 1 })],
     ["PageUp", () => date.subtract({ [unit]: 1 })],
   ]);
+
   return moves.get(event.key)?.() ?? null;
 }
 
-export interface GridProps {
+interface GridProps {
   readonly grid: RefObject<HTMLTableElement | null>;
   readonly headingId: string;
   readonly formats: Formats;
@@ -40,8 +41,9 @@ export interface GridProps {
   readonly onFocus: (event: FocusEvent<HTMLTableElement>) => void;
 }
 
-function Day({ date, props }: { date: Temporal.PlainDate; props: GridProps }) {
-  const { formats, focused, selected, today, unavailable } = props;
+function Day({ date, grid }: { date: Temporal.PlainDate; grid: GridProps }) {
+  const { formats, focused, selected, today, unavailable } = grid;
+
   return (
     <td
       tabIndex={date.equals(focused) ? 0 : -1}
@@ -63,6 +65,7 @@ export function Grid(props: GridProps) {
   const first = focused.with({ day: 1 });
   const start = startOfWeek(first, formats.firstDay);
   const days = Array.from({ length: 42 }, (_, index) => start.add({ days: index }));
+
   return (
     <table
       ref={grid}
@@ -94,7 +97,7 @@ export function Grid(props: GridProps) {
               .slice(week * 7, week * 7 + 7)
               .map((day) =>
                 day.month === first.month ? (
-                  <Day key={day.toString()} date={day} props={props} />
+                  <Day key={day.toString()} date={day} grid={props} />
                 ) : (
                   <td key={day.toString()} aria-hidden="true" className={styles["outside"]} />
                 ),

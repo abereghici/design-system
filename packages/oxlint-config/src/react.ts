@@ -3,7 +3,15 @@ import { defineConfig } from "oxlint";
 export default defineConfig({
   plugins: ["react", "jsx-a11y"],
   rules: {
+    // The automatic JSX runtime (React 17+) imports jsx itself.
     "react/react-in-jsx-scope": "off",
+    // React Compiler rules outside the correctness and suspicious categories: every compiler bailout is an error.
+    "react/invariant": "error",
+    "react/no-deriving-state-in-effects": "error",
+    "react/rule-suppression": "error",
+    "react/syntax": "error",
+    "react/todo": "error",
+    "react/unsupported-syntax": "error",
     // React props, events and story contexts are library types that are never deeply readonly.
     "typescript/prefer-readonly-parameter-types": "off",
     "import/no-unassigned-import": ["error", { allow: ["**/*.css"] }],

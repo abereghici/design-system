@@ -56,6 +56,7 @@ Default.test(
   async ({ canvas, userEvent, args }) => {
     const activity = canvas.getByRole("tab", { name: "Activity 3" });
     const toggles = listen("ab-toggle");
+
     await userEvent.click(activity);
     await userEvent.click(activity);
     toggles.stop();
@@ -78,6 +79,7 @@ Default.test(
   "moves focus and selection with the arrow keys, Home and End",
   async ({ canvas, userEvent }) => {
     const [overview, activity, settings] = canvas.getAllByRole("tab");
+
     await userEvent.tab();
     await expect(overview).toHaveFocus();
     await userEvent.keyboard("{ArrowRight}");
@@ -93,6 +95,35 @@ Default.test(
     await expect(settings).toHaveAttribute("aria-selected", "true");
     await userEvent.tab();
     await expect(canvas.getByRole("tabpanel", { name: "Settings" })).toHaveFocus();
+  },
+);
+
+Default.test(
+  "skips a disabled tab with the arrow keys",
+  {
+    args: {
+      children: (
+        <>
+          <Tabs.List aria-label="Project">
+            <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+            <Tabs.Trigger value="activity" disabled>
+              Activity
+            </Tabs.Trigger>
+            <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="overview">Selection glides on a spring.</Tabs.Content>
+          <Tabs.Content value="activity">Three new comments.</Tabs.Content>
+          <Tabs.Content value="settings">Project settings.</Tabs.Content>
+        </>
+      ),
+    },
+  },
+  async ({ canvas, userEvent }) => {
+    await userEvent.tab();
+    await userEvent.keyboard("{ArrowRight}");
+    await expect(canvas.getByRole("tab", { name: "Settings" })).toHaveFocus();
+    await userEvent.keyboard("{ArrowLeft}");
+    await expect(canvas.getByRole("tab", { name: "Overview" })).toHaveFocus();
   },
 );
 
@@ -118,6 +149,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const toggles = listen("ab-toggle");
+
     await userEvent.tab();
     await userEvent.keyboard("{ArrowRight}");
     await userEvent.click(canvas.getByRole("tab", { name: "Settings" }));
@@ -133,6 +165,7 @@ Default.test(
 
 Default.test("still changes when its click is default-prevented", async ({ canvas, userEvent }) => {
   const tab = canvas.getByRole("tab", { name: "Settings" });
+
   tab.addEventListener("click", (event) => {
     event.preventDefault();
   });
@@ -165,8 +198,11 @@ export const Overflowing = meta.story({
 
 Overflowing.test("scrolls a partly hidden tab into view", async ({ canvas, userEvent }) => {
   const settings = canvas.getByRole("tab", { name: "Settings" });
+
   await userEvent.click(settings);
+
   const list = canvas.getByRole("tablist").getBoundingClientRect();
   const tab = settings.getBoundingClientRect();
+
   await expect(tab.right).toBeLessThanOrEqual(list.right + 0.5);
 });

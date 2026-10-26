@@ -4,10 +4,12 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 
 import * as Field from "../field/field.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { Control } from "./date-field-control.tsx";
 import type { ControlProps, DateFieldOptions } from "./date-field-control.tsx";
 import type { Validity } from "./date-field-validity.ts";
+import styles from "./date-field.module.css";
 
 export type { DateFieldChangeEventDetails } from "./date-field-editing.ts";
 
@@ -33,7 +35,9 @@ export type DateFieldProps = DateFieldOptions &
 
 type FrameProps = DateFieldProps &
   Pick<ControlProps, "end"> &
-  Pick<ControlProps["options"], "isDateUnavailable" | "onFormReset"> & { children?: ReactNode };
+  Pick<ControlProps["options"], "isDateUnavailable" | "unavailableMessage" | "onFormReset"> & {
+    children?: ReactNode;
+  };
 
 /**
  * Types one date by keyboard, as day, month and year segments in the order of the user's language,
@@ -63,19 +67,22 @@ export function DateFieldFrame({
   required,
   disabled,
   validate,
-  labels,
+  locale,
+  incompleteMessage,
+  placeholders,
   isDateUnavailable,
+  unavailableMessage,
   onFormReset,
-  end,
   children,
   ...props
 }: FrameProps) {
   const [validity, setValidity] = useState<Validity>({ invalid: false, message: "" });
-  const options = { value, defaultValue, onValueChange, min, max, name, form, required };
+  const options = { value, defaultValue, onValueChange, min, max, name, form, required, locale };
+  const messages = { incompleteMessage, unavailableMessage, placeholders };
+
   return (
     <Field.Root
-      className={className}
-      style={style}
+      {...mergeProps({ className: styles["root"] }, { className, style })}
       data-size={size}
       name={name}
       invalid={invalid ?? (validity.invalid || undefined)}
@@ -84,9 +91,8 @@ export function DateFieldFrame({
       {label !== undefined && <Field.Label>{label}</Field.Label>}
       <Control
         {...props}
-        options={{ ...options, disabled, validate, labels, isDateUnavailable, onFormReset }}
+        options={{ ...options, ...messages, disabled, validate, isDateUnavailable, onFormReset }}
         onValidity={setValidity}
-        end={end}
       />
       {description !== undefined && <Field.Description>{description}</Field.Description>}
       <Field.Error>{errorMessage ?? (validity.invalid ? validity.message : undefined)}</Field.Error>

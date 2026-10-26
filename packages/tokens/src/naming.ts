@@ -12,7 +12,7 @@ const SEMANTIC = [
   /^elevation-ring$/v,
   /^elevation-highlight$/v,
   /^material-(blur|saturate)-(thin|regular|thick)$/v,
-  /^opacity-(disabled|scrim)$/v,
+  /^opacity-(disabled|scrim|subtle|bold)$/v,
   /^type-(heading|display|body|label|data|code|overline|kbd)-(xs|sm|md|lg)(-(font-family|font-size|font-weight|line-height|letter-spacing|font-variant-numeric|text-transform))?$/v,
   /^space-(inline|inset|stack)-(2xs|xs|sm|md|lg|xl|2xl)$/v,
   /^space-section$/v,
@@ -221,17 +221,24 @@ export const componentOf = (name: string): string | undefined =>
 
 const checkComponentName = (name: string): string | undefined => {
   const component = componentOf(name);
+
   if (component === undefined) {
     return `names no component in the Dictionary (${COMPONENTS.join(", ")})`;
   }
+
   let rest = name.slice(component.length + 1);
   const state = STATES.find((s) => rest.endsWith(`-${s}`));
+
   if (state !== undefined) rest = rest.slice(0, -state.length - 1);
+
   const property = PROPERTIES.find((p) => rest === p || rest.endsWith(`-${p}`));
+
   if (property === undefined) {
     return "does not match the component grammar ({component}-{variant}-{element}-{property}-{state}): no known property";
   }
+
   const modifiers = rest === property ? [] : rest.slice(0, -property.length - 1).split("-");
+
   return outsideDictionary(modifiers.filter((m) => !MODIFIERS.has(m)));
 };
 
@@ -244,8 +251,11 @@ const checkSemanticName = (name: string): string | undefined => {
   if (!SEMANTIC.some((pattern) => pattern.test(name))) {
     return "does not match the semantic grammar (e.g. color-{property}-{role}-{emphasis}-{state})";
   }
+
   if (!name.startsWith("color-")) return undefined;
+
   const words = name.split("-").slice(2);
+
   return outsideDictionary(words.filter((word) => !COLOR_WORDS.has(word)));
 };
 

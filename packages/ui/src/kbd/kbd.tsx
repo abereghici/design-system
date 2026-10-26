@@ -1,13 +1,10 @@
 import type { ComponentProps, ReactNode } from "react";
 
-import type { Labels } from "../provider/locale.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import { KbdKey } from "./kbd-key.tsx";
-import type { KbdFace } from "./kbd-key.tsx";
+import type { KbdFace, KeyLabel } from "./kbd-key.tsx";
 import styles from "./kbd.module.css";
-
-type KbdLabels = Labels["kbd"];
 
 const glyphs: Readonly<Record<string, KbdFace>> = {
   enter: { text: "↵", label: "enter" },
@@ -45,22 +42,29 @@ export interface KbdProps extends ComponentProps<"kbd"> {
    * user's platform; otherwise the page shows the other keys until it detects the platform.
    */
   platform?: "apple" | "other";
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: Partial<KbdLabels>;
+  /**
+   * Words screen readers say for the symbol keys, such as `{ command: "Command" }`; without them
+   * they read the symbol.
+   */
+  keyLabels?: Partial<Record<KeyLabel, string>>;
 }
 
 function key(
   name: string,
-  { platform, labels }: { [Prop in "platform" | "labels"]: KbdProps[Prop] | undefined },
+  { platform, keyLabels }: { [Prop in "platform" | "keyLabels"]: KbdProps[Prop] | undefined },
 ): ReactNode {
   const id = name.toLowerCase();
   const modifier = modifiers[id];
   const glyph = glyphs[id];
+
   if (modifier !== undefined && platform === undefined) {
-    return <KbdKey apple={modifier.apple} other={modifier.other} labels={labels} />;
+    return <KbdKey apple={modifier.apple} other={modifier.other} keyLabels={keyLabels} />;
   }
+
   const face = modifier?.[platform ?? "other"] ?? glyph;
-  if (face?.label !== undefined) return <KbdKey apple={face} other={face} labels={labels} />;
+
+  if (face?.label !== undefined) return <KbdKey apple={face} other={face} keyLabels={keyLabels} />;
+
   return face?.text ?? words[id] ?? (name.length === 1 ? name.toUpperCase() : name);
 }
 
@@ -69,13 +73,14 @@ function key(
  * It only shows the keys; your app handles them. Inside a control, pass `aria-hidden` and set
  * `aria-keyshortcuts` on the control, so the shortcut isn't read twice.
  */
-export function Kbd({ keys, platform, labels, children, className, ...props }: KbdProps) {
+export function Kbd({ keys, platform, keyLabels, children, ...props }: KbdProps) {
   const content =
     keys === undefined
       ? [children]
-      : keys.split("+").map((name) => key(name.trim(), { platform, labels }));
+      : keys.split("+").map((name) => key(name.trim(), { platform, keyLabels }));
+
   return (
-    <kbd dir="ltr" {...props} className={join(styles["root"], className)}>
+    <kbd dir="ltr" {...mergeProps({ className: styles["root"] }, props)}>
       {content.map((node, index) => (
         <kbd key={index} className={styles["key"]}>
           {node}

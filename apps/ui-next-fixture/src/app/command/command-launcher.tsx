@@ -10,6 +10,7 @@ const CommandMenu = dynamic(
 
 export function CommandLauncher() {
   const [open, setOpen] = useState(false);
+
   return (
     <>
       <button

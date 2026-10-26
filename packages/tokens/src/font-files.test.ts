@@ -11,7 +11,9 @@ const fonts = new URL("../fonts/", import.meta.url);
 
 async function openFont(file: string): Promise<Font> {
   const font = create(await readFile(new URL(file, fonts)));
+
   if (!("variationAxes" in font)) throw new Error(`${file} is a font collection`);
+
   return font;
 }
 
@@ -23,12 +25,14 @@ const styled = (stem: string) =>
 
 test.each(styled("Figtree"))("%s is variable on wght 300–900", async (file) => {
   const { variationAxes } = await openFont(file);
+
   expect(Object.keys(variationAxes)).toEqual(["wght"]);
   expect(variationAxes).toMatchObject({ wght: { min: 300, max: 900 } });
 });
 
 test.each(styled("NotoSerif"))("%s is variable on wght 100–900 and wdth 62.5–100", async (file) => {
   const { variationAxes } = await openFont(file);
+
   expect(Object.keys(variationAxes).toSorted()).toEqual(["wdth", "wght"]);
   expect(variationAxes).toMatchObject({
     wght: { min: 100, max: 900 },
@@ -40,6 +44,7 @@ test.each([...styled("Figtree"), ...styled("NotoSerif")])(
   "%s slants only if it is an italic file",
   async (file) => {
     const { italicAngle } = await openFont(file);
+
     expect(italicAngle < 0).toBe(file.includes("-Italic-"));
   },
 );
@@ -52,6 +57,7 @@ test.each(files)("%s maps only characters inside its unicode-range", async (file
   const font = await openFont(file);
   // U+FFFF is the end-of-table sentinel every format 4 cmap must have, not a character.
   const allowed = new Set([...codePointsIn(range), 0xff_ff]);
+
   expect(new Set(font.characterSet).difference(allowed)).toEqual(new Set());
 });
 
@@ -68,10 +74,12 @@ const samples = ["Figtree", "Figtree-Italic", "NotoSerif", "NotoSerif-Italic"].f
 test.each(samples)("%s has a glyph for every sample letter", async (file, sample) => {
   const font = await openFont(file);
   const missing = new Set(codePointsIn(sample)).difference(new Set(font.characterSet));
+
   expect(missing).toEqual(new Set());
 });
 
 test.each(["Figtree", "NotoSerif"])("%s ships its SIL Open Font License", async (stem) => {
   const licence = await readFile(new URL(`${stem}-OFL.txt`, fonts), "utf8");
+
   expect(licence).toContain("SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007");
 });

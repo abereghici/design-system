@@ -17,6 +17,7 @@ async function isNamed({ canvas }: Context) {
 async function blocksActivation({ canvas, userEvent, args }: Context) {
   const button = canvas.getByRole("button", { name: "Save changes" });
   const presses = listen("ab-press");
+
   await userEvent.tab();
   await expect(button).toHaveFocus();
   await userEvent.keyboard("{Enter}");
@@ -35,22 +36,20 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("calls onClick when pressed", async ({ canvas, userEvent, args }) => {
-  await userEvent.click(canvas.getByRole("button", { name: "Save changes" }));
-  await expect(args.onClick).toHaveBeenCalledOnce();
-});
+Default.test("activates with a press, Enter and Space", async ({ canvas, userEvent, args }) => {
+  const button = canvas.getByRole("button", { name: "Save changes" });
 
-Default.test("activates with Enter and Space", async ({ canvas, userEvent, args }) => {
-  await userEvent.tab();
-  await expect(canvas.getByRole("button", { name: "Save changes" })).toHaveFocus();
+  await userEvent.click(button);
+  await expect(button).toHaveFocus();
   await userEvent.keyboard("{Enter}");
   await userEvent.keyboard(" ");
-  await expect(args.onClick).toHaveBeenCalledTimes(2);
+  await expect(args.onClick).toHaveBeenCalledTimes(3);
 });
 
 Default.test("dispatches a bubbling ab-press after a press", async ({ canvas, userEvent }) => {
   const button = canvas.getByRole("button", { name: "Save changes" });
   const presses = listen("ab-press");
+
   await userEvent.click(button);
   presses.stop();
   await expect(
@@ -58,15 +57,13 @@ Default.test("dispatches a bubbling ab-press after a press", async ({ canvas, us
   ).toEqual([{ target: button, bubbles: true, detail: { component: "Button", reason: "user" } }]);
 });
 
-Default.test("keeps its name at the primary variant", { args: { variant: "primary" } }, isNamed);
+Default.test("reads at AA contrast as primary", { args: { variant: "primary" } }, isNamed);
 
-Default.test("keeps its name at the tertiary variant", { args: { variant: "tertiary" } }, isNamed);
+Default.test("reads at AA contrast as tertiary", { args: { variant: "tertiary" } }, isNamed);
 
-Default.test("keeps its name at the danger variant", { args: { variant: "danger" } }, isNamed);
+Default.test("reads at AA contrast as danger", { args: { variant: "danger" } }, isNamed);
 
-Default.test("keeps its name at the sm size", { args: { size: "sm" } }, isNamed);
-
-Default.test("keeps its name at the lg size", { args: { size: "lg" } }, isNamed);
+Default.test("passes the accessibility checks at the sm size", { args: { size: "sm" } }, isNamed);
 
 Default.test(
   "stays focusable and blocks activation when disabled",
@@ -88,11 +85,22 @@ Default.test("is announced as disabled", { args: { disabled: true } }, async ({ 
 });
 
 Default.test(
-  "is announced as busy while loading",
+  "is announced as busy and unavailable while loading",
   { args: { loading: true } },
   async ({ canvas }) => {
+    const button = canvas.getByRole("button", { name: "Save changes" });
+
+    await expect(button).toHaveAttribute("aria-busy", "true");
+    await expect(button).toHaveAttribute("aria-disabled", "true");
+  },
+);
+
+Default.test(
+  "keeps a consumer's aria-disabled",
+  { args: { "aria-disabled": true } },
+  async ({ canvas }) => {
     await expect(canvas.getByRole("button", { name: "Save changes" })).toHaveAttribute(
-      "aria-busy",
+      "aria-disabled",
       "true",
     );
   },
@@ -116,6 +124,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const submits = listen("submit");
+
     await userEvent.click(canvas.getByRole("button", { name: "Save changes" }));
     submits.stop();
     await expect(submits.events).toEqual([]);
@@ -179,6 +188,7 @@ Default.test(
   async ({ canvas, userEvent, args }) => {
     const link = canvas.getByRole("link", { name: "Settings" });
     const presses = listen("ab-press");
+
     await userEvent.click(link);
     await expect(childClick).toHaveBeenCalledOnce();
     await expect(args.onClick).toHaveBeenCalledOnce();
@@ -189,13 +199,38 @@ Default.test(
   },
 );
 
+const busyChildClick = fn<(event: MouseEvent) => void>();
+
+Default.test(
+  "ignores presses on its child's own click handler while loading with asChild",
+  {
+    args: {
+      asChild: true,
+      loading: true,
+      children: (
+        <a href="#settings" onClick={busyChildClick}>
+          Settings
+        </a>
+      ),
+    },
+  },
+  async ({ canvas, userEvent, args }) => {
+    await userEvent.click(canvas.getByRole("link", { name: "Settings" }));
+    await expect(busyChildClick).not.toHaveBeenCalled();
+    await expect(args.onClick).not.toHaveBeenCalled();
+  },
+);
+
 function backgroundUnder(css: string, button: HTMLElement) {
   const appStyles = document.createElement("style");
+
   appStyles.textContent = css;
   document.head.prepend(appStyles);
+
   try {
     // Finishing jumps to the settled colour; awaiting `finished` rejects when a busy engine cancels the transition.
     for (const animation of button.getAnimations()) animation.finish();
+
     return getComputedStyle(button).backgroundColor;
   } finally {
     appStyles.remove();
@@ -204,6 +239,7 @@ function backgroundUnder(css: string, button: HTMLElement) {
 
 Default.test("yields to unlayered app CSS", async ({ canvas }) => {
   const button = canvas.getByRole("button", { name: "Save changes" });
+
   await expect(backgroundUnder("button { background-color: rgb(1, 2, 3); }", button)).toBe(
     "rgb(1, 2, 3)",
   );
@@ -214,8 +250,57 @@ Default.test(
   { args: { variant: "primary" } },
   async ({ canvas }) => {
     const button = canvas.getByRole("button", { name: "Save changes" });
+
     await expect(
       backgroundUnder(":root { --ab-button-primary-background-color: rgb(1, 2, 3); }", button),
     ).toBe("rgb(1, 2, 3)");
   },
 );
+
+export const Loading = meta.story({
+  args: { loading: true, variant: "primary" },
+  parameters: {
+    docs: { description: { story: "Busy: a spinner covers the label, also through `asChild`." } },
+  },
+  render: (args) => (
+    <div style={{ display: "flex", gap: "0.5rem" }}>
+      <Button {...args} />
+      <Button {...args} asChild>
+        <a href="#report">Open report</a>
+      </Button>
+    </div>
+  ),
+});
+
+Loading.test("keeps its child busy and named with asChild", async ({ canvas, userEvent, args }) => {
+  const link = canvas.getByRole("link", { name: "Open report" });
+
+  await expect(link).toHaveAttribute("aria-busy", "true");
+  await userEvent.click(link);
+  await expect(args.onClick).not.toHaveBeenCalled();
+});
+
+export const InADisabledFieldset = meta.story({
+  parameters: {
+    docs: { description: { story: "A disabled fieldset disables the Button and its look." } },
+  },
+  decorators: [
+    (Story) => (
+      <fieldset disabled>
+        <legend>Billing</legend>
+        <Story />
+      </fieldset>
+    ),
+  ],
+});
+
+InADisabledFieldset.test("is disabled", async ({ canvas }) => {
+  await expect(canvas.getByRole("button", { name: "Save changes" })).toBeDisabled();
+});
+
+export const LongLabel = meta.story({
+  args: { children: "Save changes and notify everyone who follows this project" },
+  parameters: {
+    docs: { description: { story: "A long or translated label wraps on narrow screens." } },
+  },
+});

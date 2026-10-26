@@ -28,6 +28,9 @@
   }
 
   .link {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--ab-size-target-min);
     overflow-wrap: anywhere;
   }
 

@@ -10,3 +10,15 @@ exports[`Default   > base story 1`] = `
   - radio "Lifetime"
   - text: Lifetime
 `;
+
+exports[`Invalid   > base story 1`] = `
+- radiogroup "Plan":
+  - text: Plan
+  - radio "Monthly Yearly Lifetime"
+  - text: Monthly
+  - radio
+  - text: Yearly
+  - radio
+  - text: Lifetime
+- text: Choose a plan.
+`;

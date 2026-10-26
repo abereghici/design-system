@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import type { ComponentProps, DragEvent, RefObject } from "react";
 
-import { requestChange } from "../events/events.ts";
-import { useField } from "../field/field-control.ts";
+import { requestChange, sharedListener } from "../events/events.ts";
+import { useField } from "../field/use-field.ts";
 import { FileInput, PickerContext } from "../file-trigger/file-trigger.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./drop-zone.module.css";
 
@@ -27,8 +27,8 @@ export interface DropZoneProps
   onDrop?: (files: File[], details: DropZoneDropEventDetails) => void;
   /** Refuses drops and turns off the FileTrigger inside, such as while an upload runs. */
   disabled?: boolean;
-  /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-  labels?: { clear?: string };
+  /** Shows a button that clears the chosen files, with this name, such as "Clear files". */
+  clearLabel?: string | undefined;
 }
 
 const hasFiles = (event: { dataTransfer: DataTransfer | null }) =>
@@ -40,6 +40,7 @@ const typeMatches = (token: string, type: string) =>
 /** During a drag only MIME types are known, so an extension token can't reject anything yet. */
 function matcher(accept: string | undefined) {
   const tokens = accept?.split(",").flatMap((token) => token.trim().toLowerCase() || []) ?? [];
+
   return {
     couldAccept: (items: DataTransferItemList) =>
       tokens.length === 0 ||
@@ -59,6 +60,7 @@ function matcher(accept: string | undefined) {
 
 const preventDragOver = (event: globalThis.DragEvent) => {
   if (!hasFiles(event) || event.defaultPrevented || event.dataTransfer === null) return;
+
   event.preventDefault();
   event.dataTransfer.dropEffect = "none";
 };
@@ -67,28 +69,32 @@ const preventDrop = (event: globalThis.DragEvent) => {
   if (hasFiles(event)) event.preventDefault();
 };
 
-let zones = 0;
-let listening = new AbortController();
+const windowDragOver = sharedListener("dragover", () => window);
+const windowDrop = sharedListener("drop", () => window);
 
-// Module-wide so one pair of window listeners serves every mounted zone; without them a file dropped outside a zone replaces the page.
+// Without these, a file dropped outside a zone replaces the page; one pair serves every zone:
+// https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop
 function usePreventDocumentDrop() {
   useEffect(() => {
-    zones += 1;
-    if (zones === 1) {
-      listening = new AbortController();
-      window.addEventListener("dragover", preventDragOver, { signal: listening.signal });
-      window.addEventListener("drop", preventDrop, { signal: listening.signal });
-    }
+    const stopDragOver = windowDragOver((event) => {
+      if (event instanceof DragEvent) preventDragOver(event);
+    });
+    const stopDrop = windowDrop((event) => {
+      if (event instanceof DragEvent) preventDrop(event);
+    });
+
     return () => {
-      zones -= 1;
-      if (zones === 0) listening.abort();
+      stopDragOver();
+      stopDrop();
     };
   }, []);
 }
 
 function setFiles(input: HTMLInputElement, files: File[]) {
   const transfer = new DataTransfer();
+
   for (const file of files) transfer.items.add(file);
+
   input.files = transfer.files;
   input.dispatchEvent(new Event("input", { bubbles: true }));
   input.dispatchEvent(new Event("change", { bubbles: true }));
@@ -110,34 +116,44 @@ function useDropTarget({ accept, multiple, onDrop, blocked, input }: DropTargetO
   const depth = useRef(0);
   const [target, setTarget] = useState<"" | "rejected">();
   const { couldAccept, accepts } = matcher(accept);
+
   return {
     target,
     onDragEnter: (event: DragEvent<HTMLDivElement>) => {
       if (!hasFiles(event) || blocked) return;
+
       depth.current += 1;
       setTarget(couldAccept(event.dataTransfer.items) ? "" : "rejected");
     },
     onDragOver: (event: DragEvent<HTMLDivElement>) => {
       if (!hasFiles(event)) return;
+
       event.preventDefault();
       event.dataTransfer.dropEffect = blocked || target === "rejected" ? "none" : "copy";
     },
     onDragLeave: (event: DragEvent<HTMLDivElement>) => {
       if (!hasFiles(event) || blocked) return;
+
       depth.current -= 1;
+
       if (depth.current === 0) setTarget(undefined);
     },
     onDrop: (event: DragEvent<HTMLDivElement>) => {
       if (!hasFiles(event)) return;
+
       event.preventDefault();
       depth.current = 0;
       setTarget(undefined);
+
       const files = [...event.dataTransfer.files];
+
       if (blocked || input.current === null) return;
+
       const accepted = files.filter((file) => accepts(file)).slice(0, multiple ? undefined : 1);
       const rejected = files.filter((file) => !accepts(file));
       const report = (value: File[], details: Omit<DropZoneDropEventDetails, "rejected">) =>
         onDrop?.(value, { ...details, rejected });
+
       if (requestChange(report, accepted, "none", event) && accepted.length > 0) {
         setFiles(input.current, accepted);
       }
@@ -160,8 +176,7 @@ export function DropZone({
   form,
   disabled = false,
   onDrop,
-  labels,
-  className,
+  clearLabel,
   children,
   ...props
 }: DropZoneProps) {
@@ -170,16 +185,16 @@ export function DropZone({
   const trigger = useRef<HTMLElement>(null);
   const { target, ...handlers } = useDropTarget({ accept, multiple, onDrop, blocked, input });
   const picker = { input, trigger, disabled: blocked };
+
   usePreventDocumentDrop();
 
   return (
     <PickerContext value={picker}>
       <div
-        {...props}
-        className={join(styles["root"], className)}
+        {...mergeProps({ className: styles["root"] }, props)}
         data-drop-target={target}
-        data-invalid={invalid}
-        data-disabled={blocked || undefined}
+        data-invalid={invalid ? "" : undefined}
+        data-disabled={blocked ? "" : undefined}
         {...handlers}
       >
         {children}
@@ -188,7 +203,7 @@ export function DropZone({
           inputRef={input}
           triggerRef={trigger}
           disabled={blocked}
-          labels={labels}
+          clearLabel={clearLabel}
         />
       </div>
     </PickerContext>

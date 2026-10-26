@@ -1,21 +1,21 @@
 import { expect } from "storybook/test";
 
 import preview from "#.storybook/preview.tsx";
-
-import { roRO } from "../provider/locales/ro-RO.ts";
+import { moves } from "#.storybook/test/motion.ts";
 
 import { Progress } from "./progress.tsx";
 
 const meta = preview.meta({
   title: "Components/Progress",
   component: Progress,
-  args: { value: 40, label: "Uploading 3 files" },
+  args: { value: 40, label: "Uploading 3 files", locale: "en-US" },
 });
 
 export const Default = meta.story({});
 
 Default.test("is a progressbar named by its label, with its value", async ({ canvas }) => {
   const bar = canvas.getByRole("progressbar", { name: "Uploading 3 files" });
+
   await expect(bar).toHaveProperty("value", 40);
   await expect(bar).toHaveProperty("max", 100);
   await expect(canvas.getByText("40%")).toBeVisible();
@@ -26,6 +26,7 @@ Default.test(
   { args: { value: 3, max: 4, label: "Setup", valueLabel: "Step 3 of 4" } },
   async ({ canvas }) => {
     const bar = canvas.getByRole("progressbar", { name: "Setup" });
+
     await expect(bar).toHaveAttribute("aria-valuetext", "Step 3 of 4");
     await expect(canvas.getByText("Step 3 of 4")).toBeVisible();
   },
@@ -46,14 +47,9 @@ Default.test(
   "sweeps only when motion is allowed",
   { args: { value: null } },
   async ({ canvasElement }) => {
-    const sweeping = canvasElement
-      .getAnimations({ subtree: true })
-      .some(
-        ({ effect }) =>
-          effect instanceof KeyframeEffect &&
-          effect.getKeyframes().some((frame) => "translate" in frame),
-      );
-    await expect(sweeping).toBe(!matchMedia("(prefers-reduced-motion: reduce)").matches);
+    await expect(moves(canvasElement)).toBe(
+      !matchMedia("(prefers-reduced-motion: reduce)").matches,
+    );
   },
 );
 
@@ -68,7 +64,7 @@ Default.test("clamps its value to the range", { args: { value: 140 } }, async ({
 
 Default.test(
   "formats its value in the given locale",
-  { args: { locale: roRO, label: "Se încarcă 3 fișiere" } },
+  { args: { locale: "ro-RO", label: "Se încarcă 3 fișiere" } },
   async ({ canvas }) => {
     await expect(canvas.getByText("40 %")).toBeVisible();
   },

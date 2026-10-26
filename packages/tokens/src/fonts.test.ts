@@ -11,6 +11,7 @@ const LATIN_EXT =
 
 function faces(css: string): Map<string, string> {
   const bodies = css.split("@font-face {").slice(1);
+
   return new Map(bodies.map((body) => [/url\("([^"]+)"\)/v.exec(body)?.[1] ?? "", body]));
 }
 
@@ -29,6 +30,7 @@ test.each([
   ["NotoSerif-Italic", "italic"],
 ])("%s faces declare font-style: %s", (stem, style) => {
   const all = faces(fontFaceCss());
+
   for (const subset of ["latin", "latin-ext"]) {
     expect(all.get(`../fonts/${stem}-${subset}.woff2`)).toContain(`font-style: ${style};`);
   }
@@ -42,6 +44,7 @@ test("every src names the woff2 format", () => {
 
 test("each subset carries its own unicode-range, latin declared after latin-ext", () => {
   const all = faces(fontFaceCss());
+
   for (const stem of STEMS) {
     expect(all.get(`../fonts/${stem}-latin.woff2`)).toContain(`unicode-range: ${LATIN};`);
     expect(all.get(`../fonts/${stem}-latin-ext.woff2`)).toContain(`unicode-range: ${LATIN_EXT};`);
@@ -56,9 +59,11 @@ test("every face swaps in when it loads", () => {
 
 test("faces declare the variable axis ranges as descriptor ranges", () => {
   const all = faces(fontFaceCss());
+
   for (const style of ["", "-Italic"]) {
     const figtree = all.get(`../fonts/Figtree${style}-latin.woff2`);
     const noto = all.get(`../fonts/NotoSerif${style}-latin.woff2`);
+
     expect(figtree).toContain('font-family: "Figtree";');
     expect(figtree).toContain("font-weight: 300 900;");
     expect(figtree).not.toContain("font-stretch");
@@ -70,6 +75,7 @@ test("faces declare the variable axis ranges as descriptor ranges", () => {
 
 test("every url resolves to a committed font file from dist/", async () => {
   const dist = new URL("../dist/", import.meta.url);
+
   for (const src of faces(fontFaceCss()).keys()) {
     await expect(access(new URL(src, dist))).resolves.toBeUndefined();
   }

@@ -1,43 +1,17 @@
-import { expect, fn } from "storybook/test";
-
-import type { Decorator } from "@storybook/react-vite";
+import { expect, fn, waitFor } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
 import { Field } from "@platform/ui/field";
-import { Form } from "@platform/ui/form";
 import { PlusIcon } from "@platform/ui/icons/plus";
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
 
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview from "#.storybook/preview.tsx";
+import { pick } from "#.storybook/test/files.ts";
 
 import { FileTrigger } from "./file-trigger.tsx";
 import type { FileTriggerSelectEventDetails } from "./file-trigger.tsx";
 
 const photo = new File(["png"], "photo.png", { type: "image/png" });
-
-/** Stands in for the system picker, which no test can reach: sets the files on the native input. */
-const pick = (root: HTMLElement, ...files: File[]) => {
-  const input = root.querySelector<HTMLInputElement>("input[type=file]");
-  if (input === null) throw new Error("No file input");
-  const transfer = new DataTransfer();
-  for (const file of files) transfer.items.add(file);
-  input.files = transfer.files;
-  input.dispatchEvent(new Event("input", { bubbles: true }));
-  input.dispatchEvent(new Event("change", { bubbles: true }));
-};
-
-const inAForm: Decorator = (Story) => (
-  <Form
-    aria-label="Profile"
-    onSubmit={(event) => {
-      event.preventDefault();
-    }}
-  >
-    <Story />
-    <Button type="submit">Save</Button>
-  </Form>
-);
 
 const meta = preview.meta({
   title: "Components/FileTrigger",
@@ -45,6 +19,7 @@ const meta = preview.meta({
   args: {
     accept: "image/png,image/jpeg",
     children: <Button>Choose image</Button>,
+    clearLabel: "Clear files",
     onSelect: fn<(files: File[], details: FileTriggerSelectEventDetails) => void>(),
   },
 });
@@ -52,7 +27,7 @@ const meta = preview.meta({
 export const Default = meta.story({});
 
 Default.test(
-  "calls onSelect with the picked files after its trigger opens the picker",
+  "reports the picked files after its trigger opens the picker",
   async ({ canvas, canvasElement, userEvent, args }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Choose image" }));
     pick(canvasElement, photo);
@@ -66,7 +41,7 @@ Default.test(
 
 Default.test(
   "shows and announces the chosen file names, and clears them",
-  { args: { name: "avatar" }, decorators: [inAForm] },
+  { args: { name: "avatar" }, decorators: [withForm] },
   async ({ canvas, canvasElement, userEvent }) => {
     await expect(canvas.queryByRole("button", { name: "Clear files" })).toBeNull();
     await userEvent.click(canvas.getByRole("button", { name: "Choose image" }));
@@ -75,19 +50,34 @@ Default.test(
     await userEvent.click(canvas.getByRole("button", { name: "Clear files" }));
     await expect(canvas.getByRole("status")).toBeEmptyDOMElement();
     await expect(canvas.getByRole("button", { name: "Choose image" })).toHaveFocus();
+
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect(new FormData(form).get("avatar")).toHaveProperty("size", 0);
   },
 );
 
 Default.test(
-  "names Clear in the UIProvider's locale",
-  { decorators: [(Story) => <UIProvider locale={roRO}>{Story()}</UIProvider>] },
+  "drops the chosen file names when its form resets",
+  { decorators: [withForm] },
+  async ({ canvas, canvasElement, userEvent }) => {
+    pick(canvasElement, photo);
+    await expect(canvas.getByRole("status")).toHaveTextContent("photo.png");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await waitFor(() => expect(canvas.getByRole("status")).toBeEmptyDOMElement());
+    await expect(canvas.queryByRole("button", { name: "Clear files" })).toBeNull();
+  },
+);
+
+Default.test(
+  "shows the names without a Clear button when it has no clearLabel",
+  { args: { clearLabel: undefined } },
   async ({ canvas, canvasElement }) => {
     pick(canvasElement, photo);
-    await expect(canvas.getByRole("button", { name: "Golește fișierele" })).toBeVisible();
-    // @ts-expect-error -- a locale must carry the FileTrigger labels
-    void ({ tag: "fr-FR", labels: { ...roRO.labels, fileTrigger: {} } } satisfies typeof roRO);
+    await expect(canvas.getByRole("status")).toHaveTextContent("photo.png");
+    await expect(canvas.getAllByRole("button")).toEqual([
+      canvas.getByRole("button", { name: "Choose image" }),
+    ]);
   },
 );
 
@@ -100,11 +90,13 @@ Default.test("adds one tab stop, its trigger", async ({ canvas, userEvent }) => 
 
 Default.test(
   "submits the picked files under its name",
-  { args: { name: "avatar" }, decorators: [inAForm] },
+  { args: { name: "avatar" }, decorators: [withForm] },
   async ({ canvas, canvasElement, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Choose image" }));
     pick(canvasElement, photo);
+
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect(new FormData(form).get("avatar")).toHaveProperty("name", "photo.png");
   },
 );
@@ -118,12 +110,14 @@ Default.test(
         details.cancel();
       },
     },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas, canvasElement, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Choose image" }));
     pick(canvasElement, photo);
+
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect(new FormData(form).get("avatar")).toHaveProperty("name", "");
   },
 );
@@ -133,6 +127,7 @@ Default.test(
   { args: { disabled: true } },
   async ({ canvas, canvasElement, userEvent, args }) => {
     const trigger = canvas.getByRole("button", { name: "Choose image" });
+
     await expect(trigger).toHaveAttribute("aria-disabled", "true");
     await userEvent.tab();
     await expect(trigger).toHaveFocus();
@@ -169,7 +164,7 @@ export const InAField = meta.story({
         <Field.Error />
       </Field.Root>
     ),
-    inAForm,
+    withForm,
   ],
   parameters: {
     docs: {
@@ -191,6 +186,7 @@ InAField.test(
   "takes focus and shows the error after a blocked submit",
   async ({ canvas, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Attachments Add files" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(trigger).toHaveFocus();
     await expect(trigger).toHaveAttribute("aria-invalid", "true");
@@ -202,6 +198,7 @@ InAField.test(
   "clears the error once files are picked",
   async ({ canvas, canvasElement, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Attachments Add files" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await userEvent.click(trigger);
     pick(canvasElement, photo);

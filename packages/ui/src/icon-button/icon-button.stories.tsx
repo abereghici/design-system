@@ -15,12 +15,15 @@ type Context = Parameters<Parameters<typeof Default.test>[2]>[0];
 async function blocksActivation({ canvas, userEvent, args }: Context) {
   const button = canvas.getByRole("button", { name: "Pin" });
   const feedback = [listen("ab-press"), listen("ab-toggle")];
+
   await userEvent.tab();
   await expect(button).toHaveFocus();
   await userEvent.keyboard("{Enter}");
   await userEvent.keyboard(" ");
   await userEvent.click(button);
+
   for (const { stop } of feedback) stop();
+
   await expect(args.onClick).not.toHaveBeenCalled();
   await expect(args.onPressedChange).not.toHaveBeenCalled();
   await expect(feedback.flatMap(({ events }): Event[] => events)).toEqual([]);
@@ -31,6 +34,7 @@ void (<IconButton />);
 
 function ControlledIconButton(props: IconButtonProps) {
   const [pressed, setPressed] = useState(props.pressed ?? false);
+
   return (
     <IconButton
       {...props}
@@ -56,8 +60,9 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a button named by its aria-label", async ({ canvas, userEvent, args }) => {
+Default.test("is a plain button that reports a press", async ({ canvas, userEvent, args }) => {
   const button = canvas.getByRole("button", { name: "Pin" });
+
   await expect(button).not.toHaveAttribute("aria-pressed");
   await userEvent.click(button);
   await expect(args.onClick).toHaveBeenCalledOnce();
@@ -66,6 +71,7 @@ Default.test("is a button named by its aria-label", async ({ canvas, userEvent, 
 Default.test("dispatches a bubbling ab-press after a press", async ({ canvas, userEvent }) => {
   const button = canvas.getByRole("button", { name: "Pin" });
   const presses = listen("ab-press");
+
   await userEvent.click(button);
   presses.stop();
   await expect(
@@ -93,13 +99,13 @@ Default.test(
   },
 );
 
-Default.test("keeps its name at the sm size", { args: { size: "sm" } }, async ({ canvas }) => {
-  await expect(canvas.getByRole("button", { name: "Pin" })).toBeVisible();
-});
-
-Default.test("keeps its name at the lg size", { args: { size: "lg" } }, async ({ canvas }) => {
-  await expect(canvas.getByRole("button", { name: "Pin" })).toBeVisible();
-});
+Default.test(
+  "passes the accessibility checks at the sm size",
+  { args: { size: "sm" } },
+  async ({ canvas }) => {
+    await expect(canvas.getByRole("button", { name: "Pin" })).toBeVisible();
+  },
+);
 
 Default.test(
   "stays focusable and blocks activation when disabled",
@@ -118,6 +124,7 @@ Default.test(
   { args: { disabled: true, loading: true } },
   async ({ canvas }) => {
     const button = canvas.getByRole("button", { name: "Pin" });
+
     await expect(button).toHaveAttribute("aria-disabled", "true");
     await expect(button).toHaveAttribute("aria-busy", "true");
   },
@@ -128,6 +135,7 @@ Default.test(
   { args: { defaultPressed: false } },
   async ({ canvas, userEvent, args }) => {
     const button = canvas.getByRole("button", { name: "Pin" });
+
     await expect(button).toHaveAttribute("aria-pressed", "false");
     await userEvent.click(button);
     await expect(button).toHaveAttribute("aria-pressed", "true");
@@ -151,6 +159,7 @@ Default.test(
     const button = canvas.getByRole("button", { name: "Pin" });
     const toggles = listen("ab-toggle");
     const presses = listen("ab-press");
+
     await userEvent.click(button);
     toggles.stop();
     presses.stop();
@@ -174,6 +183,7 @@ Default.test(
   async ({ canvas, userEvent }) => {
     const button = canvas.getByRole("button", { name: "Pin" });
     const toggles = listen("ab-toggle");
+
     await userEvent.click(button);
     toggles.stop();
     await expect(button).toHaveAttribute("aria-pressed", "false");
@@ -186,6 +196,7 @@ Default.test(
   { args: { pressed: true } },
   async ({ canvas, userEvent, args }) => {
     const button = canvas.getByRole("button", { name: "Pin" });
+
     await userEvent.click(button);
     await expect(args.onPressedChange).toHaveBeenCalledWith(false, expect.anything());
     await expect(button).toHaveAttribute("aria-pressed", "true");
@@ -225,6 +236,7 @@ export const Controlled = meta.story({
 
 Controlled.test("follows the parent's state", async ({ canvas, userEvent, args }) => {
   const button = canvas.getByRole("button", { name: "Pin", pressed: true });
+
   await userEvent.click(button);
   await expect(button).toHaveAttribute("aria-pressed", "false");
   await expect(args.onPressedChange).toHaveBeenCalledWith(false, expect.anything());

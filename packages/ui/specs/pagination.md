@@ -5,7 +5,6 @@ Moves between the pages of a long, ordered result set (invoices, search results,
 ```tsx
 import { Pagination } from "@platform/ui/pagination";
 import NextLink from "next/link";
-import { roRO } from "@platform/ui/locales/ro-RO";
 
 <Pagination
   page={page}
@@ -18,8 +17,11 @@ import { roRO } from "@platform/ui/locales/ro-RO";
   page={2}
   count={40}
   getPageUrl={(page) => `?page=${page}`}
-  locale={roRO}
-  labels={{ page: (page) => `Pagina ${page}` }}
+  locale="ro-RO"
+  aria-label="Paginare"
+  previousLabel="Pagina anterioară"
+  nextLabel="Pagina următoare"
+  getPageLabel={(page) => `Pagina ${page}`}
 />
 ```
 
@@ -29,23 +31,25 @@ Status: draft for brand-owner review (phase 3). No source guide: drafted from th
 
 Root (nav → list) → Previous → page items and ellipses → Next.
 
-- **Root.** A native `<nav>` named by `aria-label` from `labels.root`, wrapping a native `<ul>` with list styling reset: a single row (`display: flex`, no wrap), gap `pagination-gap`, items centred.
-- **Previous / Next.** The IconButton component (md) with `asChild` around a link, each in its own `<li>`, so they look and press exactly like IconButton. Icon `ChevronRightIcon`, turned for Previous (RTL). Named by `labels.previous` / `labels.next`. With no target (first / last page) it is a plain disabled IconButton (Behaviour).
-- **Page item.** A link per page, `<li>` → `<a href>` (or `linkComponent`), at least `pagination-item-min-width` wide and `pagination-item-height` tall, `pagination-item-padding-inline` for long numbers, radius `pagination-item-border-radius`, text `pagination-item-font` (tabular figures) in `pagination-item-text-color`. The visible text is the number formatted with `Intl.NumberFormat`; the accessible name is `labels.page`.
+- **Root.** A native `<nav>` named by the author's required `aria-label` (or `aria-labelledby`), wrapping a native `<ul>` with list styling reset: a single row (`display: flex`, no wrap), gap `pagination-gap`, items centred.
+- **Previous / Next.** A link (or, at an end, an `aria-disabled` native button) drawn with IconButton's CSS Module at `data-size="md"`, so the Pagination ships no client code, each in its own `<li>`, so they look and press exactly like IconButton. Icon `ChevronRightIcon`, turned for Previous (RTL). Named by the author's required `previousLabel` / `nextLabel`. With no target (first / last page) it is a plain disabled IconButton (Behaviour).
+- **Page item.** A link per page, `<li>` → `<a href>` (or `linkComponent`), at least `pagination-item-min-width` wide and `pagination-item-height` tall, `pagination-item-padding-inline` for long numbers, radius `pagination-item-border-radius`, text `pagination-item-font` (tabular figures) in `pagination-item-text-color`. The visible text is the number formatted with `Intl.NumberFormat`; the accessible name is the number, or `getPageLabel(formatted)` when given.
 - **Current page item.** Fill `pagination-item-background-color-selected`, text `pagination-item-text-color-selected`, and a 1 px inset ring `pagination-item-border-color-selected`; carries `aria-current="page"`.
 - **Ellipsis.** An `<li aria-hidden="true">` with a `MoreIcon` (`size="sm"`) turned 90° into a horizontal ellipsis, as MUI ("…"), shadcn `PaginationEllipsis` (`MoreHorizontal`), Carbon and Primer draw elided pages (upright it reads as "more actions"), the same footprint as a page item, `currentColor` from `pagination-item-text-color`. Not focusable, not a link.
 
 ## API
 
-| Prop            | Type                                                                                   | Default             | Notes                                                                                                                                                         |
-| --------------- | -------------------------------------------------------------------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `page`          | `number`                                                                               | required            | The current page, 1-based, an integer in 1…`count` (as Mantine: "must be an integer in [1, total] interval"). Not corrected when out of range.                |
-| `count`         | `number`                                                                               | required            | The total number of pages, an integer ≥ 1. Pages, not items.                                                                                                  |
-| `getPageUrl`    | `(page: number) => string`                                                             | required            | The `href` of each page item and of Previous / Next.                                                                                                          |
-| `linkComponent` | `ElementType`                                                                          | `"a"`               | Renders every enabled item (pages, Previous, Next) with this component, given `href`, `aria-label`, `aria-current`, `className` and children (a router link). |
-| `locale`        | `Locale`                                                                               |                     | A shipped locale object: its `tag` formats the numbers (`"en"` without it) and its `labels.pagination` translate the names (Q15-2, Badge precedent).          |
-| `labels`        | `{ root?: string; previous?: string; next?: string; page?: (page: string) => string }` | see Built-in labels | Each key overrides the locale's, then the English default. `page` receives the formatted number and lives only here (locale labels are strings).              |
-| …native         | `ComponentProps<"nav">`                                                                |                     | `ref`, `className`, `aria-labelledby` and native attributes go on the `<nav>`.                                                                                |
+| Prop                              | Type                       | Default  | Notes                                                                                                                                                         |
+| --------------------------------- | -------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `page`                            | `number`                   | required | The current page, 1-based, an integer in 1…`count` (as Mantine: "must be an integer in [1, total] interval"). Not corrected when out of range.                |
+| `count`                           | `number`                   | required | The total number of pages, an integer ≥ 1. Pages, not items.                                                                                                  |
+| `getPageUrl`                      | `(page: number) => string` | required | The `href` of each page item and of Previous / Next.                                                                                                          |
+| `linkComponent`                   | `ElementType`              | `"a"`    | Renders every enabled item (pages, Previous, Next) with this component, given `href`, `aria-label`, `aria-current`, `className` and children (a router link). |
+| `locale`                          | `Intl.LocalesArgument`     |          | Passed to `Intl.NumberFormat` for the page numbers; the runtime's default without it. Pass the same one on the server and in the browser.                     |
+| `aria-label` \| `aria-labelledby` | `string` (one required)    |          | The landmark's name, such as "Pagination".                                                                                                                    |
+| `previousLabel`, `nextLabel`      | `string` (required)        |          | Names of the icon-only Previous and Next controls.                                                                                                            |
+| `getPageLabel`                    | `(page: string) => string` |          | A page link's name from its formatted number ("Page 3"); without it the number names the link.                                                                |
+| …native                           | `ComponentProps<"nav">`    |          | `ref`, `className`, `aria-labelledby` and native attributes go on the `<nav>`.                                                                                |
 
 Names, checked against the reference libraries:
 
@@ -58,7 +62,7 @@ Names, checked against the reference libraries:
 - **Links only, no `onPageChange` / `defaultPage` / button mode (judgement call).** MUI (`onChange` "`function(event, page) => void`", `defaultPage` default `1`), Mantine (`onChange` "`(value: number) => void`", `defaultValue`) and Ark (`onPageChange`, `defaultPage`, `type` default `'button'`) default to client-state buttons; shadcn's Pagination is links only (`<PaginationLink href="#">`). The apps are Next.js App Router pages whose data loads on the server, where a page is a URL (`?page=2`); links work with no client JavaScript, can be opened in a new tab and are crawlable (Ark, above). Client-side paging still works by linking to `?page=n` through `linkComponent`. Without state, Pagination stays a Server Component. To change: add `onPageChange(page, details)` with `<button>` items, which makes it a client component.
 - **No `active` / `isActive` prop.** shadcn `PaginationLink` `isActive` renders `aria-current={isActive ? "page" : undefined}` (source: https://github.com/shadcn-ui/ui/blob/main/apps/v4/registry/new-york-v4/ui/pagination.tsx); MUI sets `'aria-current': item === page ? 'page' : undefined` in `usePagination`. Ours derives it from `page`, so no prop.
 - **No `disabled`.** MUI `disabled` "If `true`, the component is disabled."; Mantine `disabled` "Disables all controls". A link list has no disabled state (Link spec); hide the Pagination while results load instead.
-- **`labels.page`**: MUI `getItemAriaLabel` "`function(type: string, page: number | null, selected: boolean) => string`", default `` `${selected ? '' : 'Go to '}page ${page}` `` and `` `Go to ${type} page` `` (source `Pagination.js`); Ark `translations` with `rootLabel: "pagination"`, `prevTriggerLabel: "previous page"`, `nextTriggerLabel: "next page"`, `itemLabel({ page, totalPages })` (Zag source, https://github.com/chakra-ui/zag/blob/main/packages/machines/pagination/src/pagination.connect.ts). Our keys follow Ark's split; the `labels` prop follows spec #1.
+- **`getPageLabel`**: MUI `getItemAriaLabel` "`function(type: string, page: number | null, selected: boolean) => string`", default `` `${selected ? '' : 'Go to '}page ${page}` `` and `` `Go to ${type} page` `` (source `Pagination.js`); Ark `translations` with `rootLabel: "pagination"`, `prevTriggerLabel: "previous page"`, `nextTriggerLabel: "next page"`, `itemLabel({ page, totalPages })` (Zag source, https://github.com/chakra-ui/zag/blob/main/packages/machines/pagination/src/pagination.connect.ts). Our props follow Ark's split: `previousLabel`, `nextLabel`, `getPageLabel` and the landmark's `aria-label`.
 - **Left out (YAGNI):** `siblingCount` / `boundaryCount` (MUI, Ark; Mantine `siblings` / `boundaries`): fixed at the libraries' shared default of 1 (MUI `siblingCount` default `1`, `boundaryCount` default `1`; Ark "`siblingCount`: default `1`", "`boundaryCount`: default `1`"; Mantine "1 sibling (default)", "1 boundary (default)"). Also First / Last controls (MUI `showFirstButton`, `showLastButton`; Mantine `withEdges`; Ark `FirstTrigger`, `LastTrigger`), hiding Previous / Next (MUI `hidePrevButton`, `hideNextButton`; Mantine `withControls`), Mantine `withPages`, `hideWithOnePage`, `layout="responsive"`, `startValue`, custom icons, `size`, `shape`, `variant`, `color`, and Ark `pageSize` / `onPageSizeChange`.
 
 ## States
@@ -80,7 +84,7 @@ Names, checked against the reference libraries:
   - Examples with `count = 10`: page 1 → `1 2 3 4 5 … 10`; page 5 → `1 … 4 5 6 … 10`; page 10 → `1 … 6 7 8 9 10`. With `count ≤ 7` every page shows; `count = 1` → `1`. An ellipsis therefore always stands for at least two pages (MUI fills a one-page gap with the page).
 - **Previous / Next** link to `getPageUrl(page − 1)` / `getPageUrl(page + 1)` through IconButton `asChild`. On the first (last) page, Previous (Next) has no target, so it renders a plain IconButton `<button>` with `aria-disabled="true"`: focusable (spec #1: "disabled controls stay focusable"), announced as dimmed, and its click is blocked by IconButton. A link without `href` (ARIA in HTML: "remove the href attribute", "`<a role=link aria-disabled=true>`") was the draft; lint rejects both `<a role="link">` (redundant role, missing `href`) and `<span role="link">` (prefer the tag), and MUI renders its disabled Previous / Next as disabled buttons too, so the button is the lint-clean equivalent (Q35-1).
 - **The current page is a link** to its own URL with `aria-current="page"`, as shadcn's `PaginationLink isActive` and the APG breadcrumb example. Following it reloads the same page (harmless; judgement call).
-- **Numbers:** `new Intl.NumberFormat(locale ?? "en").format(n)` for the visible text and `labels.page`. Server Component: it cannot read LocaleProvider or `document.documentElement.lang`, so `locale` is a prop with an `"en"` fallback (Q15-2). The digits are tabular (`pagination-item-font`), so the row's width changes only with the digit count.
+- **Numbers:** `new Intl.NumberFormat(locale).format(n)` for the visible text and `getPageLabel`, in the runtime's default without `locale` (Base UI). The digits are tabular (`pagination-item-font`), so the row's width changes only with the digit count.
 - **Server Component.** No state and no handlers, no `'use client'`. Passing `getPageUrl` (a function) and `linkComponent` (a client component reference) works when the caller is a Server Component, because props between Server Components are not serialised (inference; tested in `apps/ui-next-fixture`). Called from a client component, Pagination renders on the client like any component.
 - **One row.** The list does not wrap; with 7 slots plus Previous / Next at md size it needs about 9 × 32 px + gaps (≈ 320 px at fine pointers, more on coarse pointers where `size-control-md` grows to 44). At w320 with coarse pointers it can overflow; the Root sets `overflow-x: auto` on the list as the fallback (inference: checked in the w320 screenshot variant; a compact layout is left out under YAGNI).
 
@@ -108,10 +112,10 @@ No arrow keys: it is a list of links, not a composite widget with one tab stop (
 
 ## Accessibility
 
-- The `<nav>` has the implicit `navigation` role (ARIA in HTML: `nav` → `role=navigation`), named by `labels.root` ("Pagination"); MUI: "The root node has a role of "navigation" and aria-label "pagination navigation" by default."; shadcn `aria-label="pagination"`.
-- **Two Paginations for the same list** (above and below a table) are the same set of links, so they keep the same name. APG navigation landmark: "If a `navigation` landmark has an identical set of links … use the same label for each `navigation` landmark." A Pagination for a different list on the same page needs its own `labels.root` ("If a page includes more than one `navigation` landmark, each should have a unique label.", https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/examples/navigation.html).
+- The `<nav>` has the implicit `navigation` role (ARIA in HTML: `nav` → `role=navigation`), named by the author's `aria-label` ("Pagination"); MUI: "The root node has a role of "navigation" and aria-label "pagination navigation" by default."; shadcn `aria-label="pagination"`.
+- **Two Paginations for the same list** (above and below a table) are the same set of links, so they keep the same name. APG navigation landmark: "If a `navigation` landmark has an identical set of links … use the same label for each `navigation` landmark." A Pagination for a different list on the same page needs its own `aria-label` ("If a page includes more than one `navigation` landmark, each should have a unique label.", https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/examples/navigation.html).
 - **Current page:** `aria-current="page"` on its link. MDN: "In a breadcrumb list, when a link within a set of pagination links is styled to indicate the user is currently on that page, aria-current="page" should be set on that link." and "Only mark one element in a set of elements as current with aria-current."
-- **Names:** each page link is named `labels.page(formatted)` ("Page 3"), which contains the visible "3" (WCAG 2.5.3 Label in Name; inference that the containment satisfies it). Previous / Next are named by `labels.previous` / `labels.next`; their icons are decorative (Icon's `aria-hidden`).
+- **Names:** each page link is named by its number, or by `getPageLabel(formatted)` ("Page 3"), which contains the visible "3" (WCAG 2.5.3 Label in Name; inference that the containment satisfies it). Previous / Next are named by `previousLabel` / `nextLabel`; their icons are decorative (Icon's `aria-hidden`).
 - **Ellipsis is decorative** (`aria-hidden="true"`), as shadcn `PaginationEllipsis` (`<span aria-hidden …>`). The page numbers on either side already say which pages are skipped. MUI renders a visible "…" with no `aria-hidden` (judgement call: hidden, so screen readers hear only links).
 - **Disabled Previous / Next:** a `button` with `aria-disabled="true"`, focusable (Behaviour, Q35-1).
 - **Targets:** items are `size-control-md` (32, 44 on coarse pointers), above the 24 px minimum.
@@ -148,16 +152,9 @@ Proposed new:
 
 The `selected` state word stands for `aria-current="page"`: the Dictionary has no `current` state (Tabs precedent, `tabs-item-text-color-selected`). Consumed as semantic tokens directly: `border-width-default` (ring width), `opacity-disabled`, `motion-scale-pressed`, `focus-ring-width`, `focus-ring-offset`, `color-border-focused`, and the `motion-*` tokens. New Dictionary component word: `pagination`. No new modifier words (`item` exists).
 
-## Built-in labels
+## Author-written text
 
-| Key        | Default                       | Used by                                                      |
-| ---------- | ----------------------------- | ------------------------------------------------------------ |
-| `root`     | "Pagination"                  | `aria-label` on `<nav>`                                      |
-| `previous` | "Previous page"               | Previous link's `aria-label`                                 |
-| `next`     | "Next page"                   | Next link's `aria-label`                                     |
-| `page`     | ``(page) => `Page ${page}` `` | Each page link's `aria-label`; receives the formatted number |
-
-`root`, `previous` and `next` are in the locale type and every shipped locale; Pagination is a Server Component and cannot read the UIProvider, so they arrive through `locale` (or `labels`). `page` is a function, so it is a `labels` key only. Defaults follow Ark's (`"previous page"`, `"next page"`, `` `page ${page}` ``) in sentence case.
+None. The landmark's name and the Previous and Next names are required by type; `getPageLabel` is optional because the number already names a page link.
 
 ## Feedback events
 

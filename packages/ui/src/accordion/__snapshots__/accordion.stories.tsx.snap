@@ -4,3 +4,7 @@ exports[`Default   > base story 1`] = `
 - group: How are tokens versioned? Semantic Versioning. Renames are major; additions are minor.
 - group: Which browsers are supported?
 `;
+
+exports[`Long Trigger 1`] = `
+- group: Why does https://platform.example.com/settings/organization/billing/limits say 0? The latest Chromium and Safari.
+`;

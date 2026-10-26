@@ -23,20 +23,20 @@ Container → leading icon (optional) → label → trailing icon (optional) →
 
 - **Container.** A native `<button>`. Radius 8 (lg: 10). Primary and danger are filled. Secondary is the floating surface with a subtle hairline and raised elevation. Tertiary has no fill at rest.
 - **Icons** are children, not props. Button spaces them with its `gap`, so an icon needs no marker and keeps its side in either direction. Icons are decorative (`aria-hidden`); the label names the button.
-- **Kbd hint** is an optional child Kbd, passed `aria-hidden`. The consumer sets `aria-keyshortcuts` on the button, because the Kbd text would otherwise join the accessible name (see Accessibility).
-- **Spinner** is centred over the content while `loading`, rendered `<Spinner aria-hidden />` (decorative; Spinner spec), as the artifact's `.ab-button[aria-busy]`. The label and icons are hidden but stay in the accessible name and the layout, so the width never changes (brand book: "Busy buttons keep their width").
+- **Kbd hint** is an optional child Kbd, passed `aria-hidden`. The consumer sets `aria-keyshortcuts` on the button, because the Kbd text would otherwise join the accessible name (see Accessibility). Its keycap border is the Button's colour at `opacity-subtle`, and on filled variants its text at `opacity-bold`.
+- **Spinner** is centred over the content while `loading`, rendered `<Spinner aria-hidden />` (inside the child with `asChild`) (decorative; Spinner spec), as the artifact's `.ab-button[aria-busy]`. The label and icons are hidden but stay in the accessible name and the layout, so the width never changes (brand book: "Busy buttons keep their width").
 
 ## API
 
-| Prop       | Type                                                 | Default       | Notes                                                                                                              |
-| ---------- | ---------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `variant`  | `"primary" \| "secondary" \| "tertiary" \| "danger"` | `"secondary"` | Exposed as `data-variant`.                                                                                         |
-| `size`     | `"sm" \| "md" \| "lg"`                               | `"md"`        | Exposed as `data-size`. Heights 28 / 32 / 40, growing to 40 / 44 / 48 on coarse pointers through `size-control-*`. |
-| `loading`  | `boolean`                                            | `false`       | Busy state: `aria-busy="true"`, `data-loading`, activation blocked, focus kept.                                    |
-| `disabled` | `boolean`                                            | `false`       | `aria-disabled="true"`; never native `disabled` (spec #1).                                                         |
-| `asChild`  | `boolean`                                            | `false`       | Renders the single child element with the Button's props and styles (Radix Slot).                                  |
-| `type`     | native                                               | `"button"`    | Defaults to `"button"`, not the HTML default `"submit"`.                                                           |
-| …native    | `ComponentProps<"button">`                           |               | `ref`, `className`, `onClick` and every native attribute pass through unchanged.                                   |
+| Prop       | Type                                                 | Default       | Notes                                                                                                                                                                |
+| ---------- | ---------------------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`  | `"primary" \| "secondary" \| "tertiary" \| "danger"` | `"secondary"` | Exposed as `data-variant`.                                                                                                                                           |
+| `size`     | `"sm" \| "md" \| "lg"`                               | `"md"`        | Exposed as `data-size`. Minimum heights 28 / 32 / 40 (a long label wraps and grows the Button), growing to 40 / 44 / 48 on coarse pointers through `size-control-*`. |
+| `loading`  | `boolean`                                            | `false`       | Busy state: `aria-busy="true"` with `aria-disabled="true"`, `data-loading`, activation blocked, focus kept.                                                          |
+| `disabled` | `boolean`                                            | `false`       | `aria-disabled="true"`; never native `disabled` (spec #1).                                                                                                           |
+| `asChild`  | `boolean`                                            | `false`       | Renders the single child element with the Button's props and styles (Radix Slot).                                                                                    |
+| `type`     | native                                               | `"button"`    | Defaults to `"button"`, not the HTML default `"submit"`.                                                                                                             |
+| …native    | `ComponentProps<"button">`                           |               | `ref`, `className`, `onClick` and every native attribute pass through unchanged.                                                                                     |
 
 Names, checked against the reference libraries:
 
@@ -49,21 +49,22 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State         | How it shows                                                           | Exposed as                         |
-| ------------- | ---------------------------------------------------------------------- | ---------------------------------- |
-| rest          | Variant fill / hairline                                                | `data-variant`, `data-size`        |
-| hovered       | Fill steps to `-hovered`; fine pointers only (`@media (hover: hover)`) | `:hover`                           |
-| pressed       | Scale 0.97 and the `-pressed` fill, 100 ms                             | `:active`                          |
-| focus-visible | 2 px focus ring, 3 px offset, `color-border-focused`                   | `:focus-visible`                   |
-| disabled      | Disabled fill, text and border; no hover or press                      | `aria-disabled="true"`             |
-| loading       | Spinner centred, content hidden, width kept; no hover or press         | `aria-busy="true"`, `data-loading` |
+| State         | How it shows                                                           | Exposed as                                                 |
+| ------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------- |
+| rest          | Variant fill / hairline                                                | `data-variant`, `data-size`                                |
+| hovered       | Fill steps to `-hovered`; fine pointers only (`@media (hover: hover)`) | `:hover`                                                   |
+| pressed       | Scale 0.97 and the `-pressed` fill, 100 ms                             | `:active`                                                  |
+| focus-visible | 2 px focus ring, 3 px offset, `color-border-focused`                   | `:focus-visible`                                           |
+| disabled      | Disabled fill, text and border; no hover or press                      | `aria-disabled="true"`, `:disabled`                        |
+| loading       | Spinner centred, content hidden, width kept; no hover or press         | `aria-busy="true"`, `aria-disabled="true"`, `data-loading` |
 
 ## Behaviour
 
 - Press feedback is instant and runs for every pointer; hover is never required to understand the control.
 - Disabled and loading block activation in the click handler (`preventDefault()` and return, without calling `onClick` or dispatching events), and the element stays focusable and announced.
 - Label verbs, sentence case: "Save changes", not "OK".
-- Inside a disabled `<fieldset>`, native disabling applies (spec #1).
+- Inside a disabled `<fieldset>`, native disabling applies (spec #1) and the Button shows the disabled look (`:disabled`).
+- Loading is also exposed as unavailable (`aria-disabled="true"` beside `aria-busy`), as React Aria's `isPending` does, because presses are dropped. A consumer's own `aria-disabled` is kept.
 
 ## Motion
 
@@ -93,7 +94,7 @@ APG on focus after activation: "If activating the button does not dismiss the cu
 - Toggle buttons are not a Button variant: a pressed state belongs to IconButton (`pressed`) and, later, Toggle/SegmentedControl.
 - Targets: heights come from `size-control-*`, which reach 40/44/48 under `(pointer: coarse)`; sm (28) meets the 24 px minimum on fine pointers.
 - **More contrast:** secondary's hairline uses `color-border-subtle`, which steps up to `color-border-default` under `(prefers-contrast: more)` (token media override).
-- **Forced colors:** fills disappear, so every variant draws a 1 px `ButtonText` border in `@media (forced-colors: active)` (secondary already has one), and the focus ring uses `outline` so the system colour applies. Disabled uses `GrayText`.
+- **Forced colors:** fills disappear, so every variant draws a 1 px `ButtonText` border in `@media (forced-colors: active)` (secondary already has one), and the focus ring uses `outline` so the system colour applies. Disabled uses `GrayText`. A busy Button keeps its own `ButtonFace` / `ButtonText` (`forced-color-adjust: none`), because forced colours would repaint the hidden label under the spinner.
 - **Reduced transparency:** not affected (no Material).
 
 ## RTL
@@ -106,7 +107,7 @@ All exist (ported from the source, `packages/tokens/src/tokens/component.tokens.
 
 No new tokens. The focus ring uses semantic `focus-ring-width`, `focus-ring-offset` and `color-border-focused` directly (R6: focus is a pattern, not a component).
 
-## Built-in labels
+## Author-written text
 
 None. Every string in a Button comes from its children.
 

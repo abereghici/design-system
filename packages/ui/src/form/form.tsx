@@ -28,9 +28,11 @@ export function Form({ errors, onInvalidCapture, ...props }: FormProps) {
         onInvalidCapture={(event) => {
           onInvalidCapture?.(event);
           event.preventDefault();
+
           const first = Array.from(event.currentTarget.elements).find(
             (element) => !(element instanceof HTMLFieldSetElement) && element.matches(":invalid"),
           );
+
           if (event.target === first && first instanceof HTMLElement) first.focus();
         }}
       />

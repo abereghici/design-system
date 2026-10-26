@@ -1,8 +1,8 @@
 "use client";
 
-import type { ComponentProps, FocusEvent, KeyboardEvent, Ref } from "react";
+import type { ComponentProps, FocusEvent, KeyboardEvent } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./toolbar.module.css";
 
@@ -32,22 +32,20 @@ function rove(root: HTMLElement, stop?: EventTarget) {
     list.find((item) => item === stop) ??
     list.find((item) => item.getAttribute("tabindex") === "0") ??
     list.find((item) => item.getAttribute("aria-disabled") !== "true");
+
   for (const item of list) item.tabIndex = item === current ? 0 : -1;
 }
 
-function connect(root: HTMLDivElement, ref: Ref<HTMLDivElement> | undefined) {
+function connect(root: HTMLDivElement) {
   const observer = new MutationObserver(() => {
     rove(root);
   });
+
   observer.observe(root, { childList: true, subtree: true });
   rove(root);
-  const cleanup = typeof ref === "function" ? ref(root) : undefined;
-  if (ref && typeof ref === "object") ref.current = root;
+
   return () => {
     observer.disconnect();
-    if (typeof cleanup === "function") cleanup();
-    else if (typeof ref === "function") ref(null);
-    else if (ref) ref.current = null;
   };
 }
 
@@ -55,11 +53,30 @@ function destination(event: KeyboardEvent<HTMLDivElement>) {
   const list = items(event.currentTarget);
   const index = list.findIndex((item) => item === event.target);
   const offset = { ...steps, Home: -index, End: list.length - 1 - index }[event.key];
+
   if (index === -1 || offset === undefined) return null;
+
   const mirrored =
     event.currentTarget.matches(":dir(rtl)") &&
     (event.key === "ArrowLeft" || event.key === "ArrowRight");
+
   return list.at((index + (mirrored ? -offset : offset)) % list.length) ?? null;
+}
+
+function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+  // A control inside (a SegmentedControl, a Slider) already handled the arrow key.
+  if (event.defaultPrevented) return;
+
+  const target = destination(event);
+
+  if (target === null) return;
+
+  event.preventDefault();
+  target.focus();
+}
+
+function handleFocus(event: FocusEvent<HTMLDivElement>) {
+  rove(event.currentTarget, event.target);
 }
 
 /**
@@ -68,31 +85,20 @@ function destination(event: KeyboardEvent<HTMLDivElement>) {
  * with `aria-label`. For one or two controls, place them directly; never put text fields, Selects or
  * Sliders inside, since they need the arrow keys themselves.
  */
-export function Toolbar({ ref, className, onKeyDown, onFocus, ...props }: ToolbarProps) {
-  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    onKeyDown?.(event);
-    // A control inside (a SegmentedControl, a Slider) already handled the arrow key.
-    if (event.defaultPrevented) return;
-    const target = destination(event);
-    if (target === null) return;
-    event.preventDefault();
-    target.focus();
-  }
-
-  function handleFocus(event: FocusEvent<HTMLDivElement>) {
-    onFocus?.(event);
-    rove(event.currentTarget, event.target);
-  }
-
+export function Toolbar(props: ToolbarProps) {
   return (
     <div
-      role="toolbar"
-      tabIndex={-1}
-      {...props}
-      ref={(root) => (root === null ? undefined : connect(root, ref))}
-      className={join(styles["root"], className)}
-      onKeyDown={handleKeyDown}
-      onFocus={handleFocus}
+      {...mergeProps(
+        {
+          role: "toolbar",
+          tabIndex: -1,
+          ref: connect,
+          className: styles["root"],
+          onKeyDown: handleKeyDown,
+          onFocus: handleFocus,
+        },
+        props,
+      )}
     />
   );
 }

@@ -93,7 +93,7 @@ New component word `fieldset` and element word `legend` (Dictionary change).
 | `fieldset-legend-font`       | `type-label-sm`      | The field label type (`input-label-font`) |
 | `fieldset-legend-text-color` | `color-text-default` |                                           |
 
-## Built-in labels
+## Author-written text
 
 None.
 

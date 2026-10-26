@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import styles from "./visually-hidden.module.css";
 
@@ -14,7 +14,8 @@ export interface VisuallyHiddenProps extends ComponentProps<"span"> {
  * technology needs. To name an icon-only control, use IconButton's `aria-label`; to show content on
  * focus, use SkipLink; to hide content from everyone, use the `hidden` attribute.
  */
-export function VisuallyHidden({ asChild = false, className, ...props }: VisuallyHiddenProps) {
+export function VisuallyHidden({ asChild = false, ...props }: VisuallyHiddenProps) {
   const Root = asChild ? Slot : "span";
-  return <Root {...props} className={join(styles["root"], className)} />;
+
+  return <Root {...mergeProps({ className: styles["root"] }, props)} />;
 }

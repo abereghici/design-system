@@ -9,11 +9,16 @@ interface MediaOverride {
 
 export const mediaOverrides = (token: TransformedToken): MediaOverride[] => {
   const extensions: unknown = token.original["$extensions"];
+
   if (typeof extensions !== "object" || extensions === null) return [];
+
   const overrides: unknown = Reflect.get(extensions, MEDIA_EXTENSION);
+
   if (typeof overrides !== "object" || overrides === null) return [];
+
   return Object.keys(overrides).map((query) => {
     const value: unknown = Reflect.get(overrides, query);
+
     return { query, value };
   });
 };

@@ -122,7 +122,7 @@ New component word `empty-state` (Dictionary change). All other words already ex
 
 None exist yet. Title and Description sit closer than the Root gap: Description takes `margin-block-start: calc(var(--ab-space-stack-xs) - var(--ab-empty-state-gap))`, so the pair reads as one group (design decision; no extra token).
 
-## Built-in labels
+## Author-written text
 
 None. Every string comes from its children.
 

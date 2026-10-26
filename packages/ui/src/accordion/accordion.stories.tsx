@@ -2,6 +2,7 @@ import { expect, fn, waitFor } from "storybook/test";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
+import { trusted } from "#.storybook/test/trusted.ts";
 
 import { Accordion } from "./index.ts";
 
@@ -22,7 +23,7 @@ const meta = preview.meta({
         </Accordion.Item>
         <Accordion.Item value="browsers">
           <Accordion.Trigger>Which browsers are supported?</Accordion.Trigger>
-          <Accordion.Content>{browsers}</Accordion.Content>
+          <Accordion.Content id="browsers">{browsers}</Accordion.Content>
         </Accordion.Item>
       </>
     ),
@@ -42,6 +43,7 @@ Default.test(
   async ({ canvas, userEvent, args }) => {
     const trigger = canvas.getByText("Which browsers are supported?");
     const toggles = listen("ab-toggle");
+
     await userEvent.click(trigger);
     toggles.stop();
     await waitFor(() => expect(canvas.getByText(browsers)).toBeVisible());
@@ -57,12 +59,46 @@ Default.test(
   },
 );
 
-Default.test("puts every trigger in the tab sequence", async ({ canvas, userEvent }) => {
-  await userEvent.tab();
-  await expect(canvas.getByText("How are tokens versioned?")).toHaveFocus();
-  await userEvent.tab();
+Default.test("toggles the focused item with Enter and Space", async ({ canvas, args }) => {
+  const user = await trusted();
+
+  await user.keyboard("{Tab}{Tab}");
   await expect(canvas.getByText("Which browsers are supported?")).toHaveFocus();
+  await user.keyboard("{Enter}");
+  await waitFor(() => expect(canvas.getByText(browsers)).toBeVisible());
+  await user.keyboard(" ");
+  await waitFor(() => expect(canvas.getByText(browsers)).not.toBeVisible());
+  await expect(args.onValueChange).toHaveBeenLastCalledWith(
+    [],
+    expect.objectContaining({ reason: "trigger-press" }),
+  );
 });
+
+Default.test(
+  "opens the item a link points into and reports reason none",
+  async ({ canvas, args }) => {
+    location.hash = "browsers";
+    await waitFor(() => expect(canvas.getByText(browsers)).toBeVisible());
+    history.replaceState(null, "", location.pathname + location.search);
+    await expect(canvas.getByText(tokens)).not.toBeVisible();
+    await expect(args.onValueChange).toHaveBeenCalledWith(
+      ["browsers"],
+      expect.objectContaining({ reason: "none" }),
+    );
+  },
+);
+
+Default.test(
+  "opens only the first of several values without multiple",
+  { args: { value: ["tokens", "browsers"] } },
+  async ({ args, canvas, userEvent }) => {
+    await expect(canvas.getByText(tokens)).toBeVisible();
+    await expect(canvas.getByText(browsers)).not.toBeVisible();
+    await userEvent.click(canvas.getByText("How are tokens versioned?"));
+    await expect(args.onValueChange).toHaveBeenLastCalledWith([], expect.anything());
+    await expect(canvas.getByText(browsers)).not.toBeVisible();
+  },
+);
 
 Default.test(
   "keeps several items open when multiple",
@@ -89,6 +125,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const toggles = listen("ab-toggle");
+
     await userEvent.click(canvas.getByText("How are tokens versioned?"));
     toggles.stop();
     await expect(canvas.getByText(tokens)).toBeVisible();
@@ -100,10 +137,13 @@ Default.test(
   "stays closed and reports no change when its click is default-prevented",
   async ({ canvas, userEvent, args }) => {
     const trigger = canvas.getByText("Which browsers are supported?");
+
     trigger.addEventListener("click", (event) => {
       event.preventDefault();
     });
+
     const toggles = listen("ab-toggle");
+
     await userEvent.click(trigger);
     toggles.stop();
     await expect(canvas.getByText(browsers)).not.toBeVisible();
@@ -121,3 +161,20 @@ Default.test(
     await expect(canvas.getByText(browsers)).not.toBeVisible();
   },
 );
+
+export const LongTrigger = meta.story({
+  args: {
+    defaultValue: ["limits"],
+    children: (
+      <Accordion.Item value="limits">
+        <Accordion.Trigger>
+          Why does https://platform.example.com/settings/organization/billing/limits say 0?
+        </Accordion.Trigger>
+        <Accordion.Content>{browsers}</Accordion.Content>
+      </Accordion.Item>
+    ),
+  },
+  parameters: {
+    docs: { description: { story: "A long trigger wraps, with the chevron kept in view." } },
+  },
+});

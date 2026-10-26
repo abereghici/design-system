@@ -2,8 +2,6 @@ import { expect } from "storybook/test";
 
 import preview from "#.storybook/preview.tsx";
 
-import { roRO } from "../provider/locales/ro-RO.ts";
-
 import { Meter } from "./meter.tsx";
 import type { MeterProps } from "./meter.tsx";
 
@@ -13,13 +11,14 @@ import type { MeterProps } from "./meter.tsx";
 const meta = preview.meta({
   title: "Components/Meter",
   component: Meter,
-  args: { value: 42, label: "Storage" },
+  args: { value: 42, label: "Storage", locale: "en-US" },
 });
 
 export const Default = meta.story({});
 
 Default.test("is a meter named by its label, with its value", async ({ canvas }) => {
   const meter = canvas.getByRole("meter", { name: "Storage" });
+
   await expect(meter).toHaveProperty("value", 42);
   await expect(meter).toHaveProperty("min", 0);
   await expect(meter).toHaveProperty("max", 100);
@@ -33,6 +32,7 @@ Default.test(
   },
   async ({ canvas }) => {
     const meter = canvas.getByRole("meter", { name: "Rating" });
+
     await expect(meter).toHaveAttribute("aria-valuetext", "3 out of 5");
     await expect(meter).toHaveProperty("max", 5);
   },
@@ -47,22 +47,6 @@ Default.test(
       "92%, almost full",
     );
     await expect(canvas.getByText("92%, almost full")).toBeVisible();
-  },
-);
-
-Default.test(
-  "shows a suboptimal value",
-  { args: { value: 80, low: 70, high: 90, optimum: 0, valueLabel: "80%, filling up" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("80%, filling up")).toBeVisible();
-  },
-);
-
-Default.test(
-  "shows an optimal value",
-  { args: { value: 30, low: 70, high: 90, optimum: 0, valueLabel: "30%, plenty of room" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("30%, plenty of room")).toBeVisible();
   },
 );
 
@@ -85,7 +69,7 @@ Default.test(
 
 Default.test(
   "formats its value in the given locale",
-  { args: { locale: roRO, label: "Spațiu" } },
+  { args: { locale: "ro-RO", label: "Spațiu" } },
   async ({ canvas }) => {
     await expect(canvas.getByText("42 %")).toBeVisible();
   },

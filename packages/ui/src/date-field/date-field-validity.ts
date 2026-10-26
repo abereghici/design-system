@@ -1,8 +1,9 @@
 import { useRef } from "react";
 
 import type { Temporal } from "../date/date.ts";
-import { setValidity, useField, useFormReset } from "../field/field-control.ts";
-import type { Validate } from "../field/field-control.ts";
+import { useEvent } from "../events/use-event.ts";
+import { setValidity, useField } from "../field/use-field.ts";
+import type { Validate } from "../field/use-field.ts";
 
 import type { Segments } from "./segments.ts";
 
@@ -23,10 +24,9 @@ interface Wiring {
   readonly reset: () => void;
 }
 
-const hiddenInput = (id: string | undefined) => {
-  const node = id === undefined ? null : document.querySelector(`#${CSS.escape(id)}`);
-  return node instanceof HTMLInputElement ? node : null;
-};
+function write(node: { value: string }, value: string) {
+  node.value = value;
+}
 
 /** Writes the value and custom validity to the hidden date input and reports its validity. */
 export function useValidity(
@@ -34,33 +34,44 @@ export function useValidity(
   { incomplete, unavailable, onValidity, reset }: Wiring,
 ) {
   const { field } = useField();
-  const id = field?.controlId;
   const server = field?.serverError;
   const touched = useRef(false);
   const apply = (segments: Segments, date: Temporal.PlainDate | null) => {
-    const node = hiddenInput(id);
+    const node = field?.control ?? null;
+
     if (node === null) return;
-    node.value = date?.toString() ?? "";
+
+    write(node, date?.toString() ?? "");
+
     const partial = date === null && Object.values(segments).some((part) => part !== undefined);
     const rejected = date !== null && isDateUnavailable?.(date) === true;
+
     setValidity(node, partial ? incomplete : rejected ? unavailable : undefined, server, validate);
   };
+
   const report = (commit = false) => {
-    const node = hiddenInput(id);
+    const node = field?.control ?? null;
+
     if (commit) touched.current = true;
+
     if (node === null || !touched.current) return;
+
     onValidity({ invalid: !node.validity.valid, message: node.validationMessage });
   };
-  useFormReset(
-    () => hiddenInput(id),
+
+  useEvent(
+    "reset",
     () => {
       reset();
       touched.current = false;
       onValidity({ invalid: false, message: "" });
     },
+    field?.control?.form ?? null,
   );
+
   const submit = () => {
-    hiddenInput(id)?.form?.requestSubmit();
+    field?.control?.form?.requestSubmit();
   };
+
   return { apply, report, submit, clearServerError: field?.clearServerError };
 }

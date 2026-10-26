@@ -83,7 +83,7 @@ None. Heading sets type from one semantic `type-heading-*` role and colour from 
 
 No new Dictionary words.
 
-## Built-in labels
+## Author-written text
 
 None. Every string comes from the children.
 

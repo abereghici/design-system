@@ -1,42 +1,30 @@
 import { expect, fn } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
-
-import { Button } from "@platform/ui/button";
-
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
-import type { Locale } from "../provider/locale.tsx";
-import { roRO } from "../provider/locales/ro-RO.ts";
-import { UIProvider } from "../provider/provider.tsx";
-
 import { PasswordField } from "./password-field.tsx";
-import type { PasswordFieldVisibleChangeEventDetails } from "./password-field.tsx";
+import type {
+  PasswordFieldProps,
+  PasswordFieldVisibleChangeEventDetails,
+} from "./password-field.tsx";
 
-// @ts-expect-error -- a locale must name the password toggle
-({ tag: "fr-FR", labels: { ...roRO.labels, passwordField: {} } }) satisfies Locale;
-
-const inAForm: Decorator = (Story) => (
-  <form
-    aria-label="Sign in"
-    onSubmit={(event) => {
-      event.preventDefault();
-    }}
-  >
-    <Story />
-    <Button type="submit">Sign in</Button>
-  </form>
-);
+// @ts-expect-error -- the show-password toggle shows only an icon, so it needs a name
+({ label: "Password" }) satisfies PasswordFieldProps;
 
 const meta = preview.meta({
   title: "Components/PasswordField",
   component: PasswordField,
-  argTypes: textFieldArgTypes,
+  argTypes: {
+    ...textFieldArgTypes,
+    onValueChange: { control: false, description: "Called as the user types, with the new text." },
+  },
   args: {
     label: "Password",
     name: "password",
+    toggleLabel: "Show password",
     onVisibleChange: fn(),
     onValueChange: fn(),
   },
@@ -61,8 +49,11 @@ Default.test(
   async ({ args, canvas, userEvent }) => {
     const toggle = canvas.getByRole("button", { name: "Show password" });
     const toggled = listen("ab-toggle");
+
     await userEvent.click(toggle);
+
     const input = canvas.getByRole("textbox", { name: "Password" });
+
     await expect(toggle).toHaveAttribute("aria-pressed", "true");
     await expect(input).toHaveFocus();
     await expect(args.onVisibleChange).toHaveBeenCalledWith(
@@ -95,6 +86,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const toggle = canvas.getByRole("button", { name: "Show password" });
+
     await userEvent.click(toggle);
     await expect(toggle).toHaveAttribute("aria-pressed", "false");
     await expect(canvas.queryByRole("textbox", { name: "Password" })).toBeNull();
@@ -103,38 +95,14 @@ Default.test(
 
 Default.test(
   "hides the value again when the form is submitted",
-  { args: { defaultVisible: true }, decorators: [inAForm] },
+  { args: { defaultVisible: true }, decorators: [withForm] },
   async ({ args, canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole("button", { name: "Sign in" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(canvas.queryByRole("textbox", { name: "Password" })).toBeNull();
     await expect(args.onVisibleChange).toHaveBeenCalledWith(
       false,
       expect.objectContaining({ reason: "form-submit" }),
     );
-  },
-);
-
-Default.test(
-  "names the toggle from the locale",
-  {
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("button", { name: "Afișează parola" })).toBeVisible();
-  },
-);
-
-Default.test(
-  "takes a per-instance label over the locale",
-  { args: { labels: { show: "Reveal PIN" } } },
-  async ({ canvas }) => {
-    await expect(canvas.getByRole("button", { name: "Reveal PIN" })).toBeVisible();
   },
 );
 

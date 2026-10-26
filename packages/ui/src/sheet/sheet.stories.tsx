@@ -1,16 +1,15 @@
 import { expect, fn, waitFor } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
-import type { Locale } from "../provider/locale.tsx";
-
 import * as Sheet from "./sheet.tsx";
+
+// @ts-expect-error -- the x button shows only an icon, so it needs a name
+({}) satisfies Sheet.CloseProps;
 
 const lines = Array.from({ length: 30 }, (_, index) => `Line ${index + 1} · Design review · 2 h`);
 
@@ -28,7 +27,7 @@ const content = (props: Sheet.ContentProps = {}) => (
         <Button variant="primary">Done</Button>
       </Sheet.Close>
     </Sheet.Footer>
-    <Sheet.Close />
+    <Sheet.Close aria-label="Close" />
   </Sheet.Content>
 );
 
@@ -54,7 +53,9 @@ Default.test(
   "opens as a modal named by its Title, focusing the scrollable Body",
   async ({ args, canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Open details" }));
+
     const sheet = canvas.getByRole("dialog", { name: "Invoice 0142" });
+
     await expect(sheet).toHaveAccessibleDescription("Issued 3 October to Moss & Co.");
     await expect(document.activeElement).toHaveTextContent(/^Line 1 ·/v);
     await expect(args.onOpenChange).toHaveBeenCalledWith(
@@ -68,9 +69,12 @@ Default.test(
   "closes with the Close button, returns focus to the Trigger and dispatches ab-dismiss",
   async ({ canvas, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Open details" });
+
     await userEvent.click(trigger);
+
     const close = canvas.getByRole("button", { name: "Close" });
     const dismissals = listen("ab-dismiss");
+
     await userEvent.click(close);
     dismissals.stop();
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
@@ -85,8 +89,11 @@ Default.test(
   "closes on Escape, returns focus to the Trigger and dispatches ab-dismiss",
   async ({ args, canvas, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Open details" });
+
     await userEvent.click(trigger);
+
     const dismissals = listen("ab-dismiss");
+
     await (await trusted()).keyboard("{Escape}");
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     dismissals.stop();
@@ -106,6 +113,7 @@ Default.test(
   { args: { children: content({ side: "start" }), defaultOpen: true } },
   async ({ args, canvas, userEvent }) => {
     const sheet = canvas.getByRole("dialog");
+
     await userEvent.pointer({
       keys: "[MouseLeft]",
       target: sheet,
@@ -116,24 +124,5 @@ Default.test(
       false,
       expect.objectContaining({ reason: "outside-press" }),
     );
-  },
-);
-
-Default.test(
-  "names Close in the UIProvider's locale",
-  {
-    args: { defaultOpen: true },
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
-  async ({ canvas }) => {
-    await waitFor(() => expect(canvas.getByRole("button", { name: "Închide" })).toBeVisible());
-    // @ts-expect-error -- a locale must carry the Sheet labels
-    void ({ tag: "fr-FR", labels: { ...roRO.labels, sheet: {} } } satisfies Locale);
   },
 );

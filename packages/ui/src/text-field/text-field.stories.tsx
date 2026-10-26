@@ -1,30 +1,15 @@
 import { useState } from "react";
 import { expect, fn } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
+import { SearchIcon } from "@platform/ui/icons/search";
+import { Kbd } from "@platform/ui/kbd";
 
-import { Button } from "@platform/ui/button";
-
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview from "#.storybook/preview.tsx";
 import { trusted } from "#.storybook/test/trusted.ts";
 
-import { SearchIcon } from "../icon/icons/search.tsx";
-import { Kbd } from "../kbd/kbd.tsx";
-
 import { TextField } from "./text-field.tsx";
 import type { TextFieldChangeEventDetails, TextFieldProps } from "./text-field.tsx";
-
-const inAForm: Decorator = (Story) => (
-  <form
-    aria-label="Profile"
-    onSubmit={(event) => {
-      event.preventDefault();
-    }}
-  >
-    <Story />
-    <Button type="submit">Save</Button>
-  </form>
-);
 
 const meta = preview.meta({
   title: "Components/TextField",
@@ -41,12 +26,9 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a textbox named by its label", async ({ canvas }) => {
-  await expect(canvas.getByRole("textbox", { name: "Email" })).toBeVisible();
-});
-
-Default.test("calls onValueChange with each new value", async ({ args, canvas, userEvent }) => {
+Default.test("reports each new value", async ({ args, canvas, userEvent }) => {
   const input = canvas.getByRole("textbox", { name: "Email" });
+
   await userEvent.type(input, "ab");
   await expect(input).toHaveValue("ab");
   await expect(args.onValueChange).toHaveBeenLastCalledWith(
@@ -67,6 +49,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await userEvent.type(input, "x");
     await expect(input).toHaveValue("ana@example.com");
   },
@@ -93,6 +76,7 @@ Default.test(
   async ({ canvas }) => {
     const user = await trusted();
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await user.click(input);
     await user.keyboard("ana");
     await expect(input).not.toHaveAttribute("aria-invalid");
@@ -107,6 +91,7 @@ Default.test(
   { args: { disabled: true, defaultValue: "ana@example.com" } },
   async ({ args, canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await userEvent.tab();
     await expect(input).toHaveFocus();
     await expect(input).toHaveAttribute("aria-disabled", "true");
@@ -117,22 +102,31 @@ Default.test(
 );
 
 Default.test(
-  "shows no error before the user interacts",
-  { args: { required: true, description: "Used for sign-in only." } },
-  async ({ canvas }) => {
+  "lets a read-only value be focused but not changed, and submits it",
+  { args: { readOnly: true, defaultValue: "ana@example.com" }, decorators: [withForm] },
+  async ({ args, canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
-    await expect(input).not.toHaveAttribute("aria-invalid");
-    await expect(input).toHaveAccessibleDescription("Used for sign-in only.");
+
+    await userEvent.tab();
+    await expect(input).toHaveFocus();
+    await userEvent.keyboard("x");
+    await expect(input).toHaveValue("ana@example.com");
+    await expect(args.onValueChange).not.toHaveBeenCalled();
+
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    await expect(new FormData(form).get("email")).toBe("ana@example.com");
   },
 );
 
 Default.test(
-  "shows no error while the user is still typing",
-  { args: { errorMessage: "Enter a valid email address." }, decorators: [inAForm] },
-  async ({ canvas, userEvent }) => {
+  "shows no error before the user interacts",
+  { args: { required: true, description: "Used for sign-in only." } },
+  async ({ canvas }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
-    await userEvent.type(input, "ana");
+
     await expect(input).not.toHaveAttribute("aria-invalid");
+    await expect(input).toHaveAccessibleDescription("Used for sign-in only.");
   },
 );
 
@@ -140,10 +134,11 @@ Default.test(
   "replaces the description with the error after a submit with an invalid value",
   {
     args: { description: "Used for sign-in only.", errorMessage: "Enter a valid email address." },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await userEvent.type(input, "ana");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAttribute("aria-invalid", "true");
@@ -154,9 +149,10 @@ Default.test(
 
 Default.test(
   "clears the error as soon as the value is valid",
-  { args: { errorMessage: "Enter a valid email address." }, decorators: [inAForm] },
+  { args: { errorMessage: "Enter a valid email address." }, decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await userEvent.type(input, "ana");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await userEvent.type(input, "@example.com");
@@ -167,9 +163,10 @@ Default.test(
 
 Default.test(
   "shows the browser's message after a submit with nothing entered",
-  { args: { required: true }, decorators: [inAForm] },
+  { args: { required: true }, decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole<HTMLInputElement>("textbox", { name: "Email" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAttribute("aria-invalid", "true");
     await expect(input.validationMessage).not.toBe("");
@@ -185,7 +182,7 @@ Default.test(
       errorMessage: (validity: ValidityState) =>
         validity.valueMissing ? "Enter your email." : "Enter a valid email address.",
     },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
@@ -203,10 +200,11 @@ Default.test(
       label: "Handle",
       validate: (value: string) => (value.startsWith("@") ? null : "Start with @"),
     },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
+
     await userEvent.type(input, "ana");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAccessibleDescription("Start with @");
@@ -218,6 +216,7 @@ Default.test(
   { args: { invalid: true, errorMessage: "That name is taken." } },
   async ({ canvas }) => {
     const input = canvas.getByRole("textbox", { name: "Email" });
+
     await expect(input).toHaveAttribute("aria-invalid", "true");
     await expect(input).toHaveAccessibleDescription("That name is taken.");
   },
@@ -225,9 +224,10 @@ Default.test(
 
 Default.test(
   "submits its value with its form",
-  { args: { defaultValue: "ana@example.com" }, decorators: [inAForm] },
+  { args: { defaultValue: "ana@example.com" }, decorators: [withForm] },
   async ({ canvas }) => {
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect(new FormData(form).get("email")).toBe("ana@example.com");
   },
 );
@@ -255,6 +255,7 @@ WithIconAndShortcut.test(
   "is a searchbox that announces its shortcut, not the hint",
   async ({ canvas }) => {
     const input = canvas.getByRole("searchbox", { name: "Search" });
+
     await expect(input).toHaveAttribute("aria-keyshortcuts", "/");
     await expect(input).toHaveAccessibleDescription("");
   },
@@ -262,6 +263,7 @@ WithIconAndShortcut.test(
 
 function ControlledTextField(args: TextFieldProps) {
   const [value, setValue] = useState(typeof args.value === "string" ? args.value : "Ana");
+
   return (
     <>
       <TextField

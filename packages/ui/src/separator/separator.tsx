@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./separator.module.css";
 
@@ -31,17 +31,15 @@ export function Separator({
   orientation = "horizontal",
   variant = "solid",
   decorative = false,
-  className,
   ...props
 }: SeparatorProps) {
   return (
     <hr
       aria-orientation={orientation === "vertical" && !decorative ? "vertical" : undefined}
       role={decorative ? "none" : undefined}
-      {...props}
+      {...mergeProps({ className: styles["root"] }, props)}
       data-orientation={orientation}
       data-variant={variant}
-      className={join(styles["root"], className)}
     />
   );
 }

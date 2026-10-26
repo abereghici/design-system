@@ -3,11 +3,12 @@
 import { use, useEffect, useId, useState } from "react";
 import type { ComponentProps, SyntheticEvent } from "react";
 
+import { useEvent } from "../events/use-event.ts";
 import { FormErrorsContext } from "../form/form.tsx";
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
-import { FieldContext, setValidity } from "./field-control.ts";
-import type { FormControl } from "./field-control.ts";
+import { FieldContext, setValidity } from "./use-field.ts";
+import type { FormControl } from "./use-field.ts";
 import styles from "./field.module.css";
 
 export interface RootProps extends ComponentProps<"div"> {
@@ -37,27 +38,21 @@ const failureOf = (target: FormControl): Failure =>
     ? { message: target.validationMessage, validity: target.validity }
     : null;
 
-const controlOf = (id: string) => {
-  const element = document.querySelector(`#${CSS.escape(id)}`);
-  return element instanceof HTMLInputElement ||
-    element instanceof HTMLSelectElement ||
-    element instanceof HTMLTextAreaElement
-    ? element
-    : null;
-};
-
-function useServerError(name: string | undefined, controlId: string) {
+function useServerError(name: string | undefined, control: FormControl | null) {
   const errors = use(FormErrorsContext);
   const [cleared, setCleared] = useState<typeof errors>();
   const server = errors === cleared || name === undefined ? undefined : errors?.[name];
+
   useEffect(() => {
-    const target = controlOf(controlId);
-    if (server === undefined || target === null || errors === undefined) return;
-    const first = [...(target.form?.elements ?? [])].find(
+    if (server === undefined || control === null || errors === undefined) return;
+
+    const first = [...(control.form?.elements ?? [])].find(
       (element) => errors[element.getAttribute("name") ?? ""] !== undefined,
     );
-    if (first === target && document.activeElement !== target) target.focus();
-  }, [errors, server, controlId]);
+
+    if (first === control && document.activeElement !== control) control.focus();
+  }, [errors, server, control]);
+
   return {
     server,
     clear: () => {
@@ -66,49 +61,48 @@ function useServerError(name: string | undefined, controlId: string) {
   };
 }
 
-function useValidity({ name, validate }: Pick<RootProps, "name" | "validate">, controlId: string) {
+function useValidity(
+  { name, validate }: Pick<RootProps, "name" | "validate">,
+  control: FormControl | null,
+) {
   const [failure, setFailure] = useState<Failure>(null);
-  const { server, clear } = useServerError(name, controlId);
+  const { server, clear } = useServerError(name, control);
   const clearServerError = () => {
     setFailure(null);
     clear();
   };
 
   useEffect(() => {
-    const target = controlOf(controlId);
-    if (target !== null) setValidity(target, undefined, server, validate);
-  }, [controlId, server, validate]);
+    if (control !== null) setValidity(control, undefined, server, validate);
+  }, [control, server, validate]);
 
-  useEffect(() => {
-    const target = controlOf(controlId);
-    const form = target?.form;
-    const commit = () => {
-      setFailure(target === null ? null : failureOf(target));
-    };
-    // React's onChange on a text input is the input event; user validity turns on at the native change.
-    const controller = new AbortController();
-    target?.addEventListener("change", commit, { signal: controller.signal });
-    form?.addEventListener("reset", clearServerError, { signal: controller.signal });
-    return () => {
-      controller.abort();
-    };
-  });
+  // React's onChange on a text input is the input event; user validity turns on at the native
+  // change: https://react.dev/reference/react-dom/components/input#props
+  useEvent(
+    "change",
+    () => {
+      setFailure(control === null ? null : failureOf(control));
+    },
+    control,
+  );
+  useEvent("reset", clearServerError, control?.form ?? null);
 
-  const own = (event: SyntheticEvent) => {
-    const target = controlOf(controlId);
-    return event.target === target ? target : null;
-  };
+  const own = (event: SyntheticEvent) => (event.target === control ? control : null);
+
   return {
     failure,
     serverError: server,
     clearServerError,
     sync: (event: SyntheticEvent) => {
       const target = own(event);
+
       if (target !== null) setFailure(failureOf(target));
     },
     edit: (event: SyntheticEvent) => {
       const target = own(event);
+
       if (target === null) return;
+
       clear();
       setValidity(target, undefined, undefined, validate);
       setFailure(failureOf(target));
@@ -122,48 +116,40 @@ function useValidity({ name, validate }: Pick<RootProps, "name" | "validate">, c
  * add a description and error to Checkbox, Switch, RadioGroup or Slider. TextField, TextArea,
  * PasswordField, NumberField and Select already contain one.
  */
-export function Root({
-  name,
-  disabled = false,
-  invalid,
-  validate,
-  className,
-  onChange,
-  onBlur,
-  onInvalidCapture,
-  ...props
-}: RootProps) {
+export function Root({ name, disabled = false, invalid, validate, ...props }: RootProps) {
   const ids = useId();
-  const [controlId, setControlId] = useState(`${ids}control`);
+  const [control, setControl] = useState<FormControl | null>(null);
+  const [register] = useState(() => (node: FormControl | null) => {
+    setControl(node);
+
+    return () => {
+      setControl((current) => (current === node ? null : current));
+    };
+  });
+  const controlId = control === null || control.id === "" ? `${ids}control` : control.id;
   const [described, describe] = useState(false);
-  const { failure, sync, edit, ...server } = useValidity({ name, validate }, controlId);
+  const { failure, sync, edit, ...server } = useValidity({ name, validate }, control);
   const shown = invalid ?? (server.serverError !== undefined || failure !== null);
   const parts = partIds(ids);
   const describedBy = shown ? parts.errorId : described ? parts.descriptionId : undefined;
   const message = server.serverError ?? failure?.message;
   const state = { controlId, ...parts, name, disabled, invalid: shown, describedBy };
+  const context = { ...state, ...server, message, validity: failure?.validity, control, register };
 
   return (
-    <FieldContext
-      value={{ ...state, ...server, message, validity: failure?.validity, setControlId, describe }}
-    >
+    <FieldContext value={{ ...context, describe }}>
       <div
-        {...props}
-        className={join(styles["root"], className)}
-        data-invalid={shown || undefined}
-        data-disabled={disabled || undefined}
-        onChange={(event) => {
-          onChange?.(event);
-          edit(event);
-        }}
-        onBlur={(event) => {
-          onBlur?.(event);
-          sync(event);
-        }}
-        onInvalidCapture={(event) => {
-          onInvalidCapture?.(event);
-          sync(event);
-        }}
+        {...mergeProps(
+          {
+            className: styles["root"],
+            onChange: edit,
+            onBlur: sync,
+            onInvalidCapture: sync,
+          },
+          props,
+        )}
+        data-invalid={shown ? "" : undefined}
+        data-disabled={disabled ? "" : undefined}
       />
     </FieldContext>
   );

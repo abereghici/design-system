@@ -5,7 +5,7 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./icon-button.module.css";
@@ -36,6 +36,8 @@ export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "ari
      * nearby why it is unavailable.
      */
     disabled?: boolean;
+    /** `submit` sends its form; the default, `button`, does nothing on its own. */
+    type?: "button" | "submit" | "reset";
     /** Gives the IconButton's look to its one child, such as a link. */
     asChild?: boolean;
   };
@@ -56,7 +58,6 @@ export function IconButton({
   loading = false,
   disabled = false,
   asChild = false,
-  className,
   type = "button",
   onClick,
   ...props
@@ -67,29 +68,35 @@ export function IconButton({
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     if (disabled || loading) {
       event.preventDefault();
+
       return;
     }
+
     onClick?.(event);
+
     if (current === undefined) {
       dispatchFeedback(event.currentTarget, "ab-press", feedback);
+
       return;
     }
+
     if (!requestChange(onPressedChange, !current, "none", event)) return;
+
     setUncontrolled(!current);
     dispatchFeedback(event.currentTarget, "ab-toggle", feedback);
   }
 
   const Root = asChild ? Slot : "button";
+
   return (
     <Root
-      {...props}
+      {...mergeProps({ className: styles["root"] }, props)}
       type={asChild ? undefined : type}
       aria-pressed={current}
       aria-disabled={disabled ? true : undefined}
       aria-busy={loading ? true : undefined}
       data-loading={loading ? "" : undefined}
       data-size={size}
-      className={join(styles["root"], className)}
       onClick={handleClick}
     >
       {loading && !asChild ? <Spinner aria-hidden /> : props.children}

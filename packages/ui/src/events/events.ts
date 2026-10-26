@@ -21,6 +21,7 @@ export function requestChange<Value, Reason extends string, Cause>(
   event: Cause,
 ): boolean {
   let accepted = true;
+
   onChange?.(value, {
     reason,
     event,
@@ -28,6 +29,7 @@ export function requestChange<Value, Reason extends string, Cause>(
       accepted = false;
     },
   });
+
   return accepted;
 }
 
@@ -43,9 +45,20 @@ export function composeEventHandlers<Cause extends { defaultPrevented: boolean }
 ): (event: Cause) => void {
   return (event) => {
     consumer?.(event);
+
     if (!event.defaultPrevented) own(event);
   };
 }
+
+/** Marks pointer-initiated changes with `data-pointer`, so keyboard changes skip the motion. */
+export const pointerMarker = {
+  onPointerDown: (event: { readonly currentTarget: HTMLElement }) => {
+    event.currentTarget.dataset["pointer"] = "";
+  },
+  onKeyDown: (event: { readonly currentTarget: HTMLElement }) => {
+    delete event.currentTarget.dataset["pointer"];
+  },
+};
 
 interface Targeted {
   readonly currentTarget: EventTarget;
@@ -57,7 +70,9 @@ const justComposed = new WeakSet<EventTarget>();
 export function trackComposition<Cause extends Targeted>(handler?: (event: Cause) => void) {
   return (event: Cause) => {
     handler?.(event);
+
     const input = event.currentTarget;
+
     justComposed.add(input);
     setTimeout(() => {
       justComposed.delete(input);
@@ -135,7 +150,8 @@ type FeedbackEventType = {
 type DetailOf<Type extends FeedbackEventType> =
   GlobalEventHandlersEventMap[Type] extends CustomEvent<infer Detail> ? Detail : never;
 
-// Synchronous, so a listener runs inside the user's gesture (user activation).
+// Synchronous, so a listener runs inside the user's gesture:
+// https://html.spec.whatwg.org/multipage/interaction.html#tracking-user-activation
 export function dispatchFeedback<Type extends FeedbackEventType>(
   target: EventTarget,
   type: Type,
@@ -144,4 +160,31 @@ export function dispatchFeedback<Type extends FeedbackEventType>(
   target.dispatchEvent(
     new CustomEvent(type, { bubbles: true, cancelable: false, composed: true, detail }),
   );
+}
+
+/**
+ * A `subscribe` (for `useSyncExternalStore` or an effect) that shares one `type` listener on
+ * `target()` among every subscriber, so a page of instances adds one listener, not one each.
+ */
+export function sharedListener(type: string, target: () => EventTarget, capture = false) {
+  const listeners = new Set<(event: Event) => void>();
+  const notify = (event: Event) => {
+    for (const listener of listeners) listener(event);
+  };
+
+  return (listener: (event: Event) => void) => {
+    const entry = (event: Event) => {
+      listener(event);
+    };
+
+    if (listeners.size === 0) target().addEventListener(type, notify, capture);
+
+    listeners.add(entry);
+
+    return () => {
+      listeners.delete(entry);
+
+      if (listeners.size === 0) target().removeEventListener(type, notify, capture);
+    };
+  };
 }

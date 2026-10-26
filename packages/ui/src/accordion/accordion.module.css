@@ -30,7 +30,7 @@
     padding-block: var(--ab-accordion-trigger-padding-block);
     font: var(--ab-accordion-trigger-font);
     color: var(--ab-accordion-trigger-text-color);
-    list-style: none;
+    overflow-wrap: anywhere;
     cursor: pointer;
     user-select: none;
     border-radius: var(--ab-radius-xs);
@@ -59,6 +59,7 @@
     font: var(--ab-accordion-panel-font);
     color: var(--ab-accordion-panel-text-color);
     text-wrap: pretty;
+    overflow-wrap: anywhere;
   }
 
   .item:has(> .trigger[data-pointer])::details-content {

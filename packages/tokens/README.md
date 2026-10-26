@@ -19,7 +19,7 @@ Two source exports exist for documentation (the Storybook foundations pages in `
 - `@platform/tokens/source/{primitive,semantic,component}.tokens.json`: the DTCG source files.
 - `@platform/tokens/contrast-matrix`: the AA contrast pairs and the WCAG ratio formula, the same module the build check uses.
 
-Apps import none of these by hand. `UIProvider` from `@platform/ui/provider` brings the layer order (`ab.reset, ab.tokens, ab.base, ab.components`), `tokens.css`, `fonts.css` and the base stylesheet, and each component brings its own `components/<component>.css`. Unlayered app CSS always wins over the design system, including over component tokens set on `:root` or on a subtree.
+Apps import none of these by hand. `UIProvider` from `@platform/ui/ui-provider` brings the layer order (`ab.reset, ab.tokens, ab.base, ab.components`), `tokens.css`, `fonts.css` and the base stylesheet, and each component brings its own `components/<component>.css`. Unlayered app CSS always wins over the design system, including over component tokens set on `:root` or on a subtree.
 
 Apps must target the Baseline newly available floor (ADR-0002), for example `"browserslist": ["baseline newly available"]` in a Next.js app's `package.json`. With Next's default targets, Lightning CSS lowers `light-dark()` into `--lightningcss-light` toggles, and `data-theme` subtrees stop switching (`docs/research/turbopack-tree-shaking-react-compiler.md`).
 

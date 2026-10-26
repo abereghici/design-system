@@ -11,16 +11,19 @@ const meta = preview.meta({
     orientation: {
       control: "inline-radio",
       options: ["horizontal", "vertical"],
+      table: { type: { summary: '"horizontal" | "vertical"' } },
       description: "`vertical` between items in a row, such as toolbar groups.",
     },
     variant: {
       control: "inline-radio",
       options: ["solid", "ornament"],
+      table: { type: { summary: '"solid" | "ornament"' } },
       description:
         "`ornament` adds a diamond at the center, for editorial pages only, never dense UI.",
     },
     decorative: {
       control: "boolean",
+      table: { type: { summary: "boolean" } },
       description: "Hides the line from screen readers, for a purely visual break.",
     },
   },
@@ -36,10 +39,6 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({});
-
-Default.test("is announced as a separator", async ({ canvas }) => {
-  await expect(canvas.getByRole("separator")).not.toHaveAttribute("aria-orientation");
-});
 
 Default.test(
   "is hidden from assistive technology when decorative",
@@ -82,6 +81,7 @@ export const BetweenGroups = meta.story({
 
 BetweenGroups.test("announces its vertical orientation", async ({ canvas }) => {
   const separator = canvas.getByRole("separator");
+
   await expect(separator).toHaveAttribute("aria-orientation", "vertical");
   await expect(separator).toBeVisible();
 });

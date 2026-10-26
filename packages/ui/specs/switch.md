@@ -105,7 +105,7 @@ Proposed new:
 
 Contrast matrix additions: `surface-floating` on `background-accent-bold`, and `background-accent-bold` on the four surfaces (shared with Checkbox and Slider).
 
-## Built-in labels
+## Author-written text
 
 None.
 

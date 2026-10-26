@@ -97,9 +97,13 @@ export function InputGroup({
       className={`${fieldStyles["control"]} ${styles["group"]}`}
       onPointerDown={(event) => {
         onPointerDown?.(event);
+
         const input = event.currentTarget.querySelector("input");
+
         if (!(event.target instanceof Element) || input === null || event.target === input) return;
+
         if (event.target.closest("button, a, [tabindex]") !== null) return;
+
         event.preventDefault();
         input.focus();
       }}
@@ -113,6 +117,7 @@ export function InputGroup({
 
 export function TextInput({ readOnly, ...props }: Field.ControlProps) {
   const bindings = Field.useFieldControl<HTMLInputElement, typeof props>(props);
+
   return (
     <input
       dir="auto"

@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
-
-import { Button } from "@platform/ui/button";
-
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
@@ -19,18 +16,6 @@ const regions = (
       <Select.Item value="sg">Singapore</Select.Item>
     </Select.Group>
   </>
-);
-
-const inAForm: Decorator = (Story) => (
-  <form
-    aria-label="Settings"
-    onSubmit={(event) => {
-      event.preventDefault();
-    }}
-  >
-    <Story />
-    <Button type="submit">Save</Button>
-  </form>
 );
 
 const meta = preview.meta({
@@ -52,10 +37,6 @@ const basePicker = () => CSS.supports("appearance: base-select");
 
 export const Default = meta.story({});
 
-Default.test("is a combobox named by its label", async ({ canvas }) => {
-  await expect(canvas.getByRole("combobox", { name: "Region" })).toBeVisible();
-});
-
 Default.test("shows the placeholder until the user chooses", async ({ canvas }) => {
   await expect(canvas.getByRole("combobox", { name: "Region" })).toHaveDisplayValue(
     "Choose a region",
@@ -68,19 +49,17 @@ Default.test("groups options under a named group", async ({ canvas }) => {
   );
 });
 
-Default.test(
-  "calls onValueChange with the chosen value and shows its text",
-  async ({ args, canvas, userEvent }) => {
-    const select = canvas.getByRole("combobox", { name: "Region" });
-    await userEvent.selectOptions(select, "jp");
-    await expect(select).toHaveDisplayValue("Japan");
-    await expect(args.onValueChange).toHaveBeenCalledTimes(1);
-    await expect(args.onValueChange).toHaveBeenCalledWith(
-      "jp",
-      expect.objectContaining({ reason: "none" }),
-    );
-  },
-);
+Default.test("reports the chosen value and shows its text", async ({ args, canvas, userEvent }) => {
+  const select = canvas.getByRole("combobox", { name: "Region" });
+
+  await userEvent.selectOptions(select, "jp");
+  await expect(select).toHaveDisplayValue("Japan");
+  await expect(args.onValueChange).toHaveBeenCalledTimes(1);
+  await expect(args.onValueChange).toHaveBeenCalledWith(
+    "jp",
+    expect.objectContaining({ reason: "none" }),
+  );
+});
 
 Default.test(
   "keeps the previous value when the change is cancelled",
@@ -93,6 +72,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const select = canvas.getByRole("combobox", { name: "Region" });
+
     await userEvent.selectOptions(select, "jp");
     await expect(select).toHaveDisplayValue("Choose a region");
   },
@@ -121,6 +101,7 @@ Default.test(
   { args: { disabled: true, placeholder: undefined } },
   async ({ args, canvas, userEvent }) => {
     const select = canvas.getByRole("combobox", { name: "Region" });
+
     await userEvent.tab();
     await expect(select).toHaveFocus();
     await expect(select).toHaveAttribute("aria-disabled", "true");
@@ -137,6 +118,7 @@ Default.test(
   { args: { required: true, description: "Where your data is stored." } },
   async ({ canvas }) => {
     const select = canvas.getByRole("combobox", { name: "Region" });
+
     await expect(select).not.toHaveAttribute("aria-invalid");
     await expect(select).toHaveAccessibleDescription("Where your data is stored.");
   },
@@ -150,10 +132,11 @@ Default.test(
       description: "Where your data is stored.",
       errorMessage: "Choose a region.",
     },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas, userEvent }) => {
     const select = canvas.getByRole("combobox", { name: "Region" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(select).toHaveAttribute("aria-invalid", "true");
     await expect(select).toHaveAccessibleDescription("Choose a region.");
@@ -163,9 +146,10 @@ Default.test(
 
 Default.test(
   "shows the browser's message when no error message is given",
-  { args: { required: true }, decorators: [inAForm] },
+  { args: { required: true }, decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const select = canvas.getByRole<HTMLSelectElement>("combobox", { name: "Region" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(select).toHaveAccessibleDescription(select.validationMessage);
     await expect(select.validationMessage).not.toBe("");
@@ -174,9 +158,10 @@ Default.test(
 
 Default.test(
   "clears the error once a valid option is chosen",
-  { args: { required: true, errorMessage: "Choose a region." }, decorators: [inAForm] },
+  { args: { required: true, errorMessage: "Choose a region." }, decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const select = canvas.getByRole("combobox", { name: "Region" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await userEvent.selectOptions(select, "eu");
     await expect(select).not.toHaveAttribute("aria-invalid");
@@ -188,10 +173,11 @@ Default.test(
   "shows the message from validate once the form is submitted",
   {
     args: { validate: (value) => (value === "na" ? "North America is full." : null) },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas, userEvent }) => {
     const select = canvas.getByRole("combobox", { name: "Region" });
+
     await userEvent.selectOptions(select, "na");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(select).toHaveAttribute("aria-invalid", "true");
@@ -204,6 +190,7 @@ Default.test(
   { args: { invalid: true, errorMessage: "Region is unavailable." } },
   async ({ canvas }) => {
     const select = canvas.getByRole("combobox", { name: "Region" });
+
     await expect(select).toHaveAttribute("aria-invalid", "true");
     await expect(select).toHaveAccessibleDescription("Region is unavailable.");
   },
@@ -211,15 +198,17 @@ Default.test(
 
 Default.test(
   "submits the chosen value with its form",
-  { args: { defaultValue: "sg" }, decorators: [inAForm] },
+  { args: { defaultValue: "sg" }, decorators: [withForm] },
   async ({ canvas }) => {
-    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Settings" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect(new FormData(form).get("region")).toBe("sg");
   },
 );
 
 function ControlledSelect(args: Select.RootProps) {
   const [value, setValue] = useState(args.value ?? "recent");
+
   return (
     <Select.Root
       {...args}
@@ -234,9 +223,11 @@ function ControlledSelect(args: Select.RootProps) {
 
 Default.test("opens its picker on click and chooses an option", async ({ args, canvas }) => {
   if (!basePicker()) return;
+
   const user = await trusted();
   const select = canvas.getByRole("combobox", { name: "Region" });
   const japan = canvas.getByRole("option", { name: "Japan" });
+
   await expect(japan.checkVisibility()).toBe(false);
   await user.click(select);
   await waitFor(() => expect(japan.checkVisibility()).toBe(true));
@@ -250,7 +241,9 @@ Default.test(
   { args: { disabled: true } },
   async ({ canvas }) => {
     if (!basePicker()) return;
+
     const user = await trusted();
+
     await user.click(canvas.getByRole("combobox", { name: "Region" }), { force: true });
     await expect(canvas.getByRole("option", { name: "Japan" }).checkVisibility()).toBe(false);
   },
@@ -278,6 +271,7 @@ export const Controlled = meta.story({
 
 Controlled.test("follows the value the app holds", async ({ canvas, userEvent }) => {
   const select = canvas.getByRole("combobox", { name: "Sort by" });
+
   await expect(select).toHaveDisplayValue("Most recent");
   await userEvent.selectOptions(select, "name");
   await expect(select).toHaveDisplayValue("Name");

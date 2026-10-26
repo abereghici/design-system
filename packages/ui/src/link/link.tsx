@@ -1,20 +1,20 @@
 import type { ComponentProps } from "react";
 
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 
 import styles from "./link.module.css";
 
-export type LinkProps = ComponentProps<"a"> &
-  (
-    | { href: string; asChild?: false }
-    | {
-        /**
-         * Gives the Link's look to its one child, such as your router's link, which carries the
-         * `href`.
-         */
-        asChild: true;
-      }
-  );
+interface LinkBase extends ComponentProps<"a"> {
+  /** Where it goes; with `asChild`, the child carries it instead. */
+  href?: string;
+  /**
+   * Gives the Link's look to its one child, such as your router's link, which carries the
+   * `href`.
+   */
+  asChild?: boolean;
+}
+
+export type LinkProps = LinkBase & ({ href: string; asChild?: false } | { asChild: true });
 
 /**
  * Goes to another page or place, always underlined so it reads as a link, in the type of the text
@@ -22,7 +22,8 @@ export type LinkProps = ComponentProps<"a"> &
  * repeated navigation, a SkipLink. A link stays inline text so it can wrap, so mark an icon child
  * with `data-icon="inline-start"` or `data-icon="inline-end"` to space it from the words.
  */
-export function Link({ asChild = false, className, ...props }: LinkProps) {
+export function Link({ asChild = false, ...props }: LinkProps) {
   const Root = asChild ? Slot : "a";
-  return <Root {...props} className={join(styles["root"], className)} />;
+
+  return <Root {...mergeProps({ className: styles["root"] }, props)} />;
 }

@@ -1,35 +1,15 @@
 import { expect, fn } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
-
-import { Button } from "@platform/ui/button";
-import { UIProvider } from "@platform/ui/provider";
-
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
-import type { Locale } from "../provider/locale.tsx";
-import { roRO } from "../provider/locales/ro-RO.ts";
-
 import { NumberField } from "./number-field.tsx";
-import type { NumberFieldChangeEventDetails } from "./number-field.tsx";
+import type { NumberFieldChangeEventDetails, NumberFieldProps } from "./number-field.tsx";
 
-// @ts-expect-error -- a locale must name the step buttons
-({ tag: "fr-FR", labels: { ...roRO.labels, numberField: {} } }) satisfies Locale;
-
-const inAForm: Decorator = (Story) => (
-  <form
-    aria-label="Order"
-    onSubmit={(event) => {
-      event.preventDefault();
-    }}
-  >
-    <Story />
-    <Button type="submit">Order</Button>
-    <Button type="reset">Reset</Button>
-  </form>
-);
+// @ts-expect-error -- the step buttons show only icons, so they need names
+({ label: "Seats" }) satisfies NumberFieldProps;
 
 const meta = preview.meta({
   title: "Components/NumberField",
@@ -41,22 +21,20 @@ const meta = preview.meta({
     defaultValue: 5,
     min: 1,
     max: 50,
+    incrementLabel: "Increase",
+    decrementLabel: "Decrease",
+    locale: "en-US",
     onValueChange: fn(),
   },
 });
 
 export const Default = meta.story({});
 
-Default.test("is a textbox named by its label, with named step buttons", async ({ canvas }) => {
-  await expect(canvas.getByRole("textbox", { name: "Seats" })).toHaveValue("5");
-  await expect(canvas.getByRole("button", { name: "Increase" })).toBeVisible();
-  await expect(canvas.getByRole("button", { name: "Decrease" })).toBeVisible();
-});
-
 Default.test(
   "steps with the arrow, page, home and end keys",
   async ({ args, canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
+
     await userEvent.click(input);
     await userEvent.keyboard("{ArrowUp}");
     await expect(input).toHaveValue("6");
@@ -82,6 +60,7 @@ Default.test(
     const input = canvas.getByRole("textbox", { name: "Seats" });
     const increase = canvas.getByRole("button", { name: "Increase" });
     const presses = listen("ab-press");
+
     await userEvent.click(input);
     await userEvent.click(increase);
     await expect(input).toHaveValue("50");
@@ -104,12 +83,21 @@ Default.test("keeps the step buttons out of the tab order", async ({ canvas, use
 
 Default.test("clamps a typed value when it commits", async ({ args, canvas, userEvent }) => {
   const input = canvas.getByRole("textbox", { name: "Seats" });
+
   await userEvent.clear(input);
   await userEvent.type(input, "120{Enter}");
   await expect(input).toHaveValue("50");
   await expect(args.onValueChange).toHaveBeenCalledWith(
     50,
-    expect.objectContaining({ reason: "input-commit" }),
+    expect.objectContaining({ reason: "keyboard" }),
+  );
+  await userEvent.clear(input);
+  await userEvent.type(input, "0");
+  await userEvent.tab();
+  await expect(input).toHaveValue("1");
+  await expect(args.onValueChange).toHaveBeenLastCalledWith(
+    1,
+    expect.objectContaining({ reason: "input-blur" }),
   );
 });
 
@@ -117,6 +105,7 @@ Default.test(
   "keeps the last number when the typed text is not one",
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
+
     await userEvent.tripleClick(input);
     await userEvent.keyboard("abc");
     await userEvent.tab();
@@ -151,31 +140,34 @@ Default.test(
       step: 0.5,
       formatOptions: { style: "currency", currency: "EUR" },
     },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas }) => {
     await expect(canvas.getByRole("textbox", { name: "Price" })).toHaveValue("€1,234.50");
-    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Order" });
+
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect(new FormData(form).getAll("price")).toEqual(["1234.5"]);
   },
 );
 
 Default.test(
-  "formats and parses in the UIProvider's locale",
+  "formats and parses in its locale",
   {
-    args: { label: "Preț", name: "price", defaultValue: 1234.5, min: 0, max: 1e6, step: 0.1 },
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
+    args: {
+      label: "Preț",
+      name: "price",
+      defaultValue: 1234.5,
+      min: 0,
+      max: 1e6,
+      step: 0.1,
+      locale: "ro-RO",
+    },
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Preț" });
+
     await expect(input).toHaveValue("1.234,5");
-    await expect(canvas.getByRole("button", { name: "Mărește" })).toBeVisible();
     await userEvent.clear(input);
     await userEvent.type(input, "2.000,7{Enter}");
     await expect(input).toHaveValue("2.000,7");
@@ -186,11 +178,12 @@ Default.test(
   "fails valueMissing only when required and empty",
   {
     args: { required: true, defaultValue: null, errorMessage: "Enter a number of seats." },
-    decorators: [inAForm],
+    decorators: [withForm],
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
-    await userEvent.click(canvas.getByRole("button", { name: "Order" }));
+
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAttribute("aria-invalid", "true");
     await expect(input).toHaveAccessibleDescription("Enter a number of seats.");
   },
@@ -201,6 +194,7 @@ Default.test(
   { args: { disabled: true } },
   async ({ args, canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
+
     await userEvent.tab();
     await expect(input).toHaveFocus();
     await userEvent.keyboard("{ArrowUp}7");
@@ -214,16 +208,37 @@ Default.test(
 );
 
 Default.test(
+  "lets a read-only value be focused but not changed, and submits it",
+  { args: { readOnly: true }, decorators: [withForm] },
+  async ({ args, canvas, userEvent }) => {
+    const input = canvas.getByRole("textbox", { name: "Seats" });
+
+    await userEvent.tab();
+    await expect(input).toHaveFocus();
+    await userEvent.keyboard("{ArrowUp}7");
+    await expect(input).toHaveValue("5");
+    await expect(args.onValueChange).not.toHaveBeenCalled();
+
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    await expect(new FormData(form).getAll("seats")).toEqual(["5"]);
+  },
+);
+
+Default.test(
   "restores the default value on form reset",
-  { decorators: [inAForm] },
+  { decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Seats" });
+
     await userEvent.clear(input);
     await userEvent.type(input, "12{Enter}");
     await expect(input).toHaveValue("12");
     await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
     await expect(input).toHaveValue("5");
-    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Order" });
+
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect(new FormData(form).getAll("seats")).toEqual(["5"]);
   },
 );

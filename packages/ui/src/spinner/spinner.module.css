@@ -1,7 +1,6 @@
 @import "@platform/tokens/components/spinner.css";
 
 @layer ab.components {
-  /* Eight staves: the conic ramp fades the tail, the repeating mask cuts it into 18° staves. */
   .root {
     display: inline-block;
     flex-shrink: 0;
@@ -28,7 +27,7 @@
     }
   }
 
-  /* Forced colors would drop the background the staves are painted with. */
+  /* Forced colors would drop the background the staves are painted with: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/forced-colors */
   @media (forced-colors: active) {
     .root {
       forced-color-adjust: none;
@@ -44,7 +43,7 @@
 
   @keyframes pulse {
     to {
-      opacity: 0.4;
+      opacity: var(--ab-opacity-subtle);
     }
   }
 }

@@ -46,7 +46,9 @@ Default.test(
   "opens as an alert dialog named and described by its message, focusing Cancel",
   async ({ canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Delete project" }));
+
     const dialog = canvas.getByRole("alertdialog", { name: "Delete project?" });
+
     await expect(dialog).toHaveAccessibleDescription("This removes 12 files. You can’t undo this.");
     await expect(canvas.getByRole("button", { name: "Cancel" })).toHaveFocus();
   },
@@ -56,8 +58,11 @@ Default.test(
   "treats Escape as Cancel: closes, returns focus to the Trigger and dispatches ab-dismiss",
   async ({ args, canvas, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Delete project" });
+
     await userEvent.click(trigger);
+
     const dismissals = listen("ab-dismiss");
+
     await (await trusted()).keyboard("{Escape}");
     await waitFor(() => expect(canvas.queryByRole("alertdialog")).toBeNull());
     dismissals.stop();
@@ -76,9 +81,11 @@ Default.test(
   "runs the Action, dispatches ab-confirm and closes",
   async ({ args, canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Delete project" }));
+
     const action = canvas.getByRole("button", { name: "Delete" });
     const confirmations = listen("ab-confirm");
     const dismissals = listen("ab-dismiss");
+
     await userEvent.click(action);
     confirmations.stop();
     dismissals.stop();
@@ -97,8 +104,10 @@ Default.test(
 
 Default.test("closes with Cancel and dispatches ab-dismiss", async ({ canvas, userEvent }) => {
   await userEvent.click(canvas.getByRole("button", { name: "Delete project" }));
+
   const cancel = canvas.getByRole("button", { name: "Cancel" });
   const dismissals = listen("ab-dismiss");
+
   await userEvent.click(cancel);
   dismissals.stop();
   await waitFor(() => expect(canvas.queryByRole("alertdialog")).toBeNull());
@@ -108,7 +117,9 @@ Default.test("closes with Cancel and dispatches ab-dismiss", async ({ canvas, us
 
 Default.test("stays open on a press on the backdrop", async ({ args, canvas, userEvent }) => {
   await userEvent.click(canvas.getByRole("button", { name: "Delete project" }));
+
   const dialog = canvas.getByRole("alertdialog");
+
   await userEvent.pointer({
     keys: "[MouseLeft]",
     target: dialog,
@@ -129,7 +140,9 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Delete project" }));
+
     const confirmations = listen("ab-confirm");
+
     await userEvent.click(canvas.getByRole("button", { name: "Delete" }));
     confirmations.stop();
     await expect(canvas.getByRole("alertdialog")).toBeInTheDocument();

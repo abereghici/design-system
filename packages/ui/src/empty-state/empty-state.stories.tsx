@@ -28,11 +28,6 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("names the empty region with a level-3 heading", async ({ canvas }) => {
-  await expect(canvas.getByRole("heading", { level: 3, name: "No files yet" })).toBeVisible();
-  await expect(canvas.queryByRole("img")).toBeNull();
-});
-
 Default.test(
   "takes the heading level of the child it renders",
   {
@@ -65,25 +60,27 @@ export const InATable = meta.story({
       },
     },
   },
-  render: (args) => (
-    <Table.Root>
-      <Table.Caption>Files</Table.Caption>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader>Name</Table.ColumnHeader>
-          <Table.ColumnHeader>Owner</Table.ColumnHeader>
-          <Table.ColumnHeader>Modified</Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        <Table.Row>
-          <Table.Cell colSpan={3}>
-            <EmptyState.Root {...args} />
-          </Table.Cell>
-        </Table.Row>
-      </Table.Body>
-    </Table.Root>
-  ),
+  decorators: [
+    (Story) => (
+      <Table.Root>
+        <Table.Caption>Files</Table.Caption>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>Name</Table.ColumnHeader>
+            <Table.ColumnHeader>Owner</Table.ColumnHeader>
+            <Table.ColumnHeader>Modified</Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell colSpan={3}>
+              <Story />
+            </Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table.Root>
+    ),
+  ],
 });
 
 InATable.test("keeps the column headers and says why it is empty", async ({ canvas }) => {

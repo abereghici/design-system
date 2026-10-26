@@ -1,27 +1,11 @@
 import { expect } from "storybook/test";
 
-import type { Decorator } from "@storybook/react-vite";
+import { Checkbox } from "@platform/ui/checkbox";
 
-import { Button } from "@platform/ui/button";
-
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
-import { Checkbox } from "../checkbox/checkbox.tsx";
-
 import * as Field from "./field.tsx";
-
-const inAForm: Decorator = (Story) => (
-  <form
-    aria-label="Profile"
-    onSubmit={(event) => {
-      event.preventDefault();
-    }}
-  >
-    <Story />
-    <Button type="submit">Save</Button>
-    <Button type="reset">Reset</Button>
-  </form>
-);
 
 const meta = preview.meta({
   title: "Components/Field",
@@ -44,16 +28,36 @@ export const Default = meta.story({});
 
 Default.test("names and describes its control", async ({ canvas }) => {
   const input = canvas.getByRole("textbox", { name: "Handle" });
+
   await expect(input).toHaveAccessibleDescription("Letters, digits and underscores.");
   await expect(input).toBeRequired();
   await expect(input).toHaveAttribute("name", "handle");
 });
 
 Default.test(
+  "names a control that has its own id",
+  {
+    args: {
+      children: (
+        <>
+          <Field.Label>Handle</Field.Label>
+          <Field.Control id="handle" />
+        </>
+      ),
+    },
+  },
+  async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByText("Handle"));
+    await expect(canvas.getByRole("textbox", { name: "Handle" })).toHaveFocus();
+  },
+);
+
+Default.test(
   "replaces the description with the browser's message after a failed submit",
-  { decorators: [inAForm] },
+  { decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole<HTMLInputElement>("textbox", { name: "Handle" });
+
     await userEvent.type(input, "ana");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAttribute("aria-invalid", "true");
@@ -64,9 +68,10 @@ Default.test(
 
 Default.test(
   "clears the error when the form is reset",
-  { decorators: [inAForm] },
+  { decorators: [withForm] },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
+
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
     await expect(input).not.toHaveAttribute("aria-invalid");
@@ -77,7 +82,7 @@ Default.test(
 Default.test(
   "shows a message per failure",
   {
-    decorators: [inAForm],
+    decorators: [withForm],
     args: {
       children: (
         <>
@@ -94,6 +99,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
+
     await userEvent.type(input, "a b");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAccessibleDescription("Use only letters, digits and underscores.");
@@ -103,13 +109,14 @@ Default.test(
 Default.test(
   "runs validate on every change",
   {
-    decorators: [inAForm],
+    decorators: [withForm],
     args: {
       validate: (value: string) => (value === "@admin" ? "That handle is reserved." : null),
     },
   },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
+
     await userEvent.type(input, "@admin");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(input).toHaveAccessibleDescription("That handle is reserved.");
@@ -123,6 +130,7 @@ Default.test(
   { args: { disabled: true } },
   async ({ canvas, userEvent }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
+
     await userEvent.tab();
     await expect(input).toHaveFocus();
     await expect(input).toHaveAttribute("aria-disabled", "true");
@@ -147,6 +155,7 @@ Default.test(
   },
   async ({ canvas }) => {
     const input = canvas.getByRole("textbox", { name: "Handle" });
+
     await expect(input).toHaveAttribute("aria-invalid", "true");
     await expect(input).toHaveAccessibleDescription("That handle is taken.");
   },
@@ -155,7 +164,7 @@ Default.test(
 Default.test(
   "adds a description and an error to a Checkbox",
   {
-    decorators: [inAForm],
+    decorators: [withForm],
     args: {
       name: "terms",
       children: (
@@ -169,6 +178,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const box = canvas.getByRole("checkbox", { name: "I accept the terms" });
+
     await expect(box).toHaveAccessibleDescription("You can read them in Settings.");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(box).toHaveAttribute("aria-invalid", "true");

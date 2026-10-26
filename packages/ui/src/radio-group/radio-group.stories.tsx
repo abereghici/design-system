@@ -1,5 +1,7 @@
 import { expect, fn } from "storybook/test";
 
+import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withInvalidField } from "#.storybook/decorators/with-invalid-field.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -30,10 +32,11 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a radio group named by its label", async ({ canvas }) => {
-  const group = canvas.getByRole("radiogroup", { name: "Plan" });
-  await expect(group).toHaveAttribute("aria-orientation", "vertical");
-  await expect(canvas.getByRole("radio", { name: "Monthly" })).toBeChecked();
+Default.test("is vertical by default", async ({ canvas }) => {
+  await expect(canvas.getByRole("radiogroup", { name: "Plan" })).toHaveAttribute(
+    "aria-orientation",
+    "vertical",
+  );
 });
 
 Default.test(
@@ -41,6 +44,7 @@ Default.test(
   async ({ canvas, userEvent, args }) => {
     const yearly = canvas.getByRole("radio", { name: "Yearly" });
     const toggles = listen("ab-toggle");
+
     await userEvent.click(canvas.getByText("Yearly"));
     await userEvent.click(yearly);
     toggles.stop();
@@ -65,7 +69,9 @@ Default.test(
     await userEvent.keyboard("{ArrowDown}");
     await expect(canvas.getByRole("radio", { name: "Yearly" })).toBeChecked();
     await userEvent.keyboard("{ArrowUp}{ArrowUp}");
+
     const lifetime = canvas.getByRole("radio", { name: "Lifetime" });
+
     await expect(lifetime).toHaveFocus();
     await expect(lifetime).toBeChecked();
     await expect(args.onValueChange).toHaveBeenLastCalledWith("lifetime", expect.anything());
@@ -80,7 +86,9 @@ Default.test(
     await userEvent.keyboard("{ArrowLeft}");
     await expect(canvas.getByRole("radio", { name: "Yearly" })).toBeChecked();
     await userEvent.keyboard("{ArrowRight}{ArrowRight}");
+
     const lifetime = canvas.getByRole("radio", { name: "Lifetime" });
+
     await expect(lifetime).toHaveFocus();
     await expect(lifetime).toBeChecked();
   },
@@ -97,6 +105,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const toggles = listen("ab-toggle");
+
     await userEvent.click(canvas.getByRole("radio", { name: "Yearly" }));
     toggles.stop();
     await expect(canvas.getByRole("radio", { name: "Monthly" })).toBeChecked();
@@ -111,6 +120,7 @@ Default.test(
   async ({ canvas, userEvent, args }) => {
     await userEvent.click(canvas.getByRole("radio", { name: "Yearly" }));
     await expect(args.onValueChange).toHaveBeenCalledWith("yearly", expect.anything());
+
     for (const radio of canvas.getAllByRole("radio")) await expect(radio).not.toBeChecked();
   },
 );
@@ -122,6 +132,7 @@ Default.test(
     for (const radio of canvas.getAllByRole("radio")) {
       await expect(radio).toHaveAttribute("aria-disabled", "true");
     }
+
     await userEvent.tab();
     await expect(canvas.getByRole("radio", { name: "Monthly" })).toHaveFocus();
     await userEvent.click(canvas.getByText("Yearly"));
@@ -145,9 +156,10 @@ Default.test(
 
 Default.test(
   "submits name=value for the chosen option",
-  { decorators: [(Story) => <form aria-label="Billing">{Story()}</form>] },
+  { decorators: [withForm] },
   async ({ canvas }) => {
-    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Billing" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect([...new FormData(form)]).toEqual([["plan", "monthly"]]);
   },
 );
@@ -167,10 +179,13 @@ Default.test(
   "keeps its value and reports no change when a click is default-prevented",
   async ({ canvas, userEvent, args }) => {
     const yearly = canvas.getByRole("radio", { name: "Yearly" });
+
     yearly.addEventListener("click", (event) => {
       event.preventDefault();
     });
+
     const toggles = listen("ab-toggle");
+
     await userEvent.click(yearly);
     toggles.stop();
     await expect(canvas.getByRole("radio", { name: "Monthly" })).toBeChecked();
@@ -178,3 +193,18 @@ Default.test(
     await expect(toggles.events).toEqual([]);
   },
 );
+
+export const Invalid = meta.story({
+  args: { defaultValue: null, required: true },
+  decorators: [withInvalidField("Choose a plan.")],
+  parameters: {
+    docs: { description: { story: "Inside an invalid Field every radio shows the error state." } },
+  },
+});
+
+Invalid.test("marks every radio invalid and describes it with the error", async ({ canvas }) => {
+  for (const radio of canvas.getAllByRole("radio")) {
+    await expect(radio).toBeInvalid();
+    await expect(radio).toHaveAccessibleDescription("Choose a plan.");
+  }
+});

@@ -24,14 +24,13 @@ Container → content.
 
 ## API
 
-| Prop       | Type                                     | Default                              | Notes                                                                                                                  |
-| ---------- | ---------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| `variant`  | `"neutral" \| "accent" \| "danger"`      | `"neutral"`                          | Exposed as `data-variant`. The three the source tokens define.                                                         |
-| `max`      | `number`                                 | `99`                                 | Applies only when `children` is a number. A count above `max` renders `max` formatted plus the overflow label ("99+"). |
-| `locale`   | `Locale`                                 | English                              | A shipped locale (`@platform/ui/locales/*`) whose `tag` formats the count. Badge doesn't read the UIProvider's locale. |
-| `labels`   | `{ overflow?: (max: string) => string }` | `{ overflow: (max) => \`${max}+\` }` | The only built-in string. `max` arrives already formatted. A prop only: it isn't in the UIProvider's locale objects.   |
-| `children` | `number \| string`                       |                                      | A number is formatted with `Intl.NumberFormat` in `locale`.                                                            |
-| …native    | `ComponentProps<"span">`                 |                                      | `ref`, `className` and every native attribute pass through.                                                            |
+| Prop       | Type                                | Default               | Notes                                                                                                                  |
+| ---------- | ----------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `variant`  | `"neutral" \| "accent" \| "danger"` | `"neutral"`           | Exposed as `data-variant`. The three the source tokens define.                                                         |
+| `max`      | `number`                            | `99`                  | Applies only when `children` is a number. A count above `max` renders `max` formatted plus the overflow label ("99+"). |
+| `locale`   | `Intl.LocalesArgument`              | the runtime's default | Passed to `Intl.NumberFormat` for the count and `max`. Pass the same one on the server and in the browser.             |
+| `children` | `number \| string`                  |                       | A number is formatted with `Intl.NumberFormat` in `locale`.                                                            |
+| …native    | `ComponentProps<"span">`            |                       | `ref`, `className` and every native attribute pass through.                                                            |
 
 Names, checked against the reference libraries:
 
@@ -52,8 +51,8 @@ Badge is not interactive: no hover, press, focus or disabled state.
 
 ## Behaviour
 
-- Number formatting: `new Intl.NumberFormat(locale?.tag ?? "en").format(n)`. MDN: "The `Intl.NumberFormat` object enables language-sensitive number formatting." (Baseline widely available, "since September 2017"). So 1 280 in `de` reads "1.280" and `max` 1000 overflows to "1.000+".
-- **Locale on the server.** Badge is a Server Component with no client code (spec #1 user story 4). A Server Component can't read the UIProvider's locale context or `document.documentElement.lang`, so Badge formats with its own `locale` prop (the same locale object the UIProvider takes) and falls back to `"en"`. The output is deterministic, so the server and client renders never differ. Progress and Meter work the same way.
+- Number formatting: `new Intl.NumberFormat(locale).format(n)`, built only for a number child. MDN: "The `Intl.NumberFormat` object enables language-sensitive number formatting." (Baseline widely available, "since September 2017"). So 1 280 in `de` reads "1.280" and `max` 1000 overflows to "1.000+".
+- **Locale on the server.** Badge is a Server Component with no client code (spec #1 user story 4). It formats with its own `locale` prop, a BCP 47 tag; without it `Intl` uses the runtime's default, as in Base UI, so a server-rendered app passes the same `locale` on the server and in the browser. Progress and Meter work the same way.
 - Negative numbers and non-integers are rendered as formatted; `max` caps only from above.
 - Content stays short: one to four characters. A word belongs in a Tag.
 
@@ -78,24 +77,22 @@ Not focusable; no keyboard interaction. Tab skips it; focus lands on the owning 
 - Not colour alone: the count or glyph carries the meaning; the fill only adds emphasis (WCAG 1.4.1: "Color is not used as the only visual means of conveying information").
 - Contrast: `on-accent` / `on-danger` on their bold fills and `text-subtle` on `surface-nested` are in the AA matrix (`packages/tokens/src/contrast.ts`).
 - **More contrast:** text tokens already pass 4.5:1; no change. The pill shape is decorative.
-- **Forced colors:** as the artifact's adaptive.css, Badge sets `forced-color-adjust: none` (it keeps its own fill and ink, an AA pair) and draws a 1 px inset `CanvasText` outline so the pill edge shows on any `Canvas`.
+- **Forced colors:** as the artifact's adaptive.css, Badge takes the user's palette (its fill only adds emphasis, so colour is not essential and `forced-color-adjust: none` would only keep looks) and draws a 1 px inset `CanvasText` outline so the pill edge shows on any `Canvas`.
 - **Reduced transparency:** not affected (no Material).
 
 ## RTL
 
-Logical properties only (`padding-inline`, `min-inline-size`). The "+" placement comes from `labels.overflow`, so a locale that writes it first can override it. Digits follow the locale's numbering system through `Intl.NumberFormat`. No arrow keys.
+Logical properties only (`padding-inline`, `min-inline-size`). The overflow reads `max` followed by "+", a notation rather than a word (MUI Badge's `max` does the same). Digits follow the locale's numbering system through `Intl.NumberFormat`. No arrow keys.
 
 ## Component tokens
 
 All exist (`packages/tokens/src/tokens/component.tokens.json`): `badge-height`, `badge-min-width`, `badge-padding-inline`, `badge-border-radius`, `badge-font`, `badge-font-variant-numeric`, `badge-{neutral,accent,danger}-background-color`, `badge-{neutral,accent,danger}-text-color`.
 
-No new tokens. The forced-colors outline is a 1 px system-colour literal, as in the artifact.
+No new tokens. `badge-height` is a minimum (`min-block-size`), so the pill grows with larger text. The forced-colors outline uses `border-width-default` with a system colour.
 
-## Built-in labels
+## Author-written text
 
-| Key        | Default                | Used for                                              |
-| ---------- | ---------------------- | ----------------------------------------------------- |
-| `overflow` | `(max) => \`${max}+\`` | The capped count ("99+"). `max` is already formatted. |
+None. Badge shows the author's number or string; the overflow's "+" is notation, as in MUI's Badge, so there is no `labels` prop.
 
 ## Feedback events
 

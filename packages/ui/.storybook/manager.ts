@@ -18,10 +18,12 @@ addons.register("platform/theme", (api) => {
       theme === "light" || theme === "dark" ? theme : "light dark";
     api.setOptions({ theme: themes[resolve(theme)] });
   };
+
   const follow = ({ globals }: { globals: Globals }) => {
     theme = globals["theme"];
     apply();
   };
+
   api.on(SET_GLOBALS, follow);
   api.on(GLOBALS_UPDATED, follow);
   prefersDark.addEventListener("change", apply);

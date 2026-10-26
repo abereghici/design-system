@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { expect, fn, screen, waitFor } from "storybook/test";
 
-import { Dialog } from "@platform/ui/dialog";
 import { UserIcon } from "@platform/ui/icons/user";
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
 
+import { withDialog } from "#.storybook/decorators/with-dialog.tsx";
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
 
-import type { Locale } from "../provider/locale.tsx";
-
 import * as Combobox from "./combobox.tsx";
+
+// @ts-expect-error -- the empty list is announced, so it needs its text
+({ label: "Assignee" }) satisfies Combobox.RootProps;
+// @ts-expect-error -- while loading, the list announces its loading text
+({ label: "Assignee", noOptionsText: "No results", loading: true }) satisfies Combobox.RootProps;
 
 const onValueChange = fn<NonNullable<Combobox.RootProps["onValueChange"]>>();
 const onInputValueChange = fn<NonNullable<Combobox.RootProps["onInputValueChange"]>>();
@@ -19,7 +21,7 @@ const onOpenChange = fn<NonNullable<Combobox.RootProps["onOpenChange"]>>();
 const reasons = (callback: { mock: { calls: [unknown, { reason: string }][] } }) =>
   callback.mock.calls.map(([value, { reason }]) => [value, reason]);
 const field = (name = "Assignee") => screen.getByRole<HTMLInputElement>("combobox", { name });
-const highlighted = () => document.querySelector('[role="option"][aria-selected="true"]');
+const highlighted = () => screen.queryByRole("option", { selected: true });
 const names = () => screen.queryAllByRole("option").map((option) => option.textContent);
 const submitted = () => new FormData(screen.getByRole<HTMLFormElement>("form")).get("assignee");
 const type = async (keys: string, name?: string) => {
@@ -30,6 +32,7 @@ const type = async (keys: string, name?: string) => {
 const cancel = (_value: unknown, details: { cancel: () => void }) => {
   details.cancel();
 };
+
 const person = (value: string, name: string, keywords?: string[]) => (
   <Combobox.Item value={value} {...(keywords && { keywords })}>
     <UserIcon />
@@ -45,6 +48,7 @@ const meta = preview.meta({
     label: "Assignee",
     name: "assignee",
     placeholder: "Search people",
+    noOptionsText: "No results",
     onValueChange,
     onInputValueChange,
     onOpenChange,
@@ -63,17 +67,11 @@ const meta = preview.meta({
     ),
   },
   decorators: [
+    withForm,
     (Story) => (
-      <form
-        aria-label="Task"
-        style={{ maxInlineSize: "20rem", paddingBlockEnd: "16rem" }}
-        onSubmit={(event) => {
-          event.preventDefault();
-        }}
-      >
+      <div style={{ maxInlineSize: "20rem", paddingBlockEnd: "16rem" }}>
         <Story />
-        <button type="submit">Save</button>
-      </form>
+      </div>
     ),
   ],
 });
@@ -100,7 +98,9 @@ Default.test("opens on a press, first option highlighted", async ({ canvas, user
 Default.test("ranks prefix, word start, then subsequence", async ({ canvas, userEvent }) => {
   await type("mu");
   await expect(highlighted()).toHaveAccessibleName("Mugur Ionescu");
+
   const ioana = canvas.getByRole("option", { name: "Ioana Munteanu" });
+
   await expect(ioana).toHaveAttribute("aria-posinset", "2");
   await expect(canvas.queryByRole("option", { name: "Alexandru Bereghici" })).toBeNull();
   await expect(canvas.queryByRole("group")).toBeNull();
@@ -163,17 +163,12 @@ Default.test("moves past disabled, wrapping, with Home and End", async ({ canvas
   await expect(reasons(onOpenChange)).toEqual([[true, "list-navigation"]]);
 });
 
-const inADialog = (Story: () => React.ReactNode) => (
-  <Dialog.Root defaultOpen>
-    <Dialog.Content aria-label="Assign task">{Story()}</Dialog.Content>
-  </Dialog.Root>
-);
-
 Default.test(
   "restores on Escape, then clears, keeping its Dialog open",
-  { args: { defaultValue: "ab" }, decorators: [inADialog] },
+  { args: { defaultValue: "ab" }, decorators: [withDialog] },
   async ({ canvas }) => {
-    const dialog = canvas.getByRole("dialog", { name: "Assign task" });
+    const dialog = canvas.getByRole("dialog", { name: "Edit" });
+
     await waitFor(() => expect(dialog).toBeVisible());
     await expect(field()).toHaveValue("Alexandru Bereghici");
     await type("x{Escape}");
@@ -222,7 +217,7 @@ Default.test(
     await userEvent.keyboard("mu{Enter}");
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await expect(field()).toHaveAccessibleDescription("Mugur is on leave.");
-    canvas.getByRole<HTMLFormElement>("form").reset();
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
     await waitFor(() => expect(field()).toHaveValue("Ioana Munteanu"));
     await waitFor(() => expect(submitted()).toBe("im"));
   },
@@ -244,20 +239,21 @@ Default.test(
 );
 
 Default.test(
-  "matches Romanian accents and speaks the UIProvider's locale",
-  { decorators: [(Story) => <UIProvider locale={roRO}>{Story()}</UIProvider>] },
-  async ({ canvas }) => {
-    await type("țur");
-    await expect(highlighted()).toHaveAccessibleName("Ștefan Țurcanu");
-    await type("q");
-    await expect(canvas.getByRole("status")).toHaveTextContent("Niciun rezultat");
-    // @ts-expect-error -- a locale must carry the Combobox labels
-    void ({ tag: "fr-FR", labels: { ...roRO.labels, combobox: {} } } satisfies Locale);
+  "lets a read-only value be focused but not changed, and submits it",
+  { args: { readOnly: true, defaultValue: "ab" } },
+  async ({ userEvent }) => {
+    await userEvent.click(field());
+    await expect(field()).toHaveFocus();
+    await userEvent.keyboard("{ArrowDown}x{Enter}{Escape}");
+    await expect(field()).toHaveValue("Alexandru Bereghici");
+    await expect(submitted()).toBe("ab");
+    await expect(onValueChange).not.toHaveBeenCalled();
   },
 );
 
 function ServerSearch(args: Combobox.RootProps) {
   const [query, setQuery] = useState("");
+
   return (
     <Combobox.Root
       {...args}
@@ -279,8 +275,24 @@ function ServerSearch(args: Combobox.RootProps) {
   );
 }
 
+Default.test(
+  "announces its loading text in place of No results",
+  { args: { loading: true, loadingText: "Loading…" } },
+  async () => {
+    await type("zzz");
+    await expect(screen.getByRole("status")).toHaveTextContent("Loading…");
+  },
+);
+
+export const Open = meta.story({
+  parameters: { docs: { description: { story: "Open, with the first option highlighted." } } },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("combobox", { name: "Assignee" }));
+  },
+});
+
 export const ServerSearchResults = meta.story({
-  args: { label: "Repository", name: "repo", labels: { noResults: "No repositories" } },
+  args: { label: "Repository", name: "repo", noOptionsText: "No repositories" },
   render: ServerSearch,
   parameters: { docs: { description: { story: "With `filter={null}` the app filters." } } },
 });
@@ -292,9 +304,4 @@ ServerSearchResults.test("shows the Items the app renders", async ({ canvas, use
   await expect(canvas.getByRole("status")).toHaveTextContent("No repositories");
   await userEvent.keyboard("{Backspace}{Enter}");
   await expect(field("Repository")).toHaveValue("platform/web");
-});
-
-Default.test("announces Loading… in place of No results", { args: { loading: true } }, async () => {
-  await type("zzz");
-  await expect(screen.getByRole("status")).toHaveTextContent("Loading…");
 });

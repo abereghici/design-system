@@ -1,27 +1,49 @@
+import { useState } from "react";
 import { expect, fn } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
-
 import preview from "#.storybook/preview.tsx";
 
-import type { Locale } from "../provider/locale.tsx";
-
 import { Calendar } from "./calendar.tsx";
-import type { CalendarChangeEventDetails } from "./calendar.tsx";
+import type { CalendarChangeEventDetails, CalendarProps } from "./calendar.tsx";
 
-// @ts-expect-error -- a locale must name the Previous and Next month buttons
-({ tag: "fr-FR", labels: { ...roRO.labels, calendar: {} } }) satisfies Locale;
+const names = { previousMonthLabel: "Previous month", nextMonthLabel: "Next month" };
+
+// @ts-expect-error -- the month buttons show only icons, so they need names
+({}) satisfies CalendarProps;
+// @ts-expect-error -- a Calendar has nothing to disable or submit
+({ ...names, disabled: true }) satisfies CalendarProps;
+// @ts-expect-error -- a Calendar has nothing to disable or submit
+({ ...names, name: "day", form: "booking" }) satisfies CalendarProps;
 
 const date = (iso: string) => Temporal.PlainDate.from(iso);
+
+function NarrowingMax(args: CalendarProps) {
+  const [max, setMax] = useState<Temporal.PlainDate>();
+
+  return (
+    <>
+      <Calendar {...args} max={max} />
+      <button
+        type="button"
+        onClick={() => {
+          setMax(date("2026-09-15"));
+        }}
+      >
+        Book by September 15
+      </button>
+    </>
+  );
+}
 
 const meta = preview.meta({
   title: "Components/Calendar",
   component: Calendar,
   args: {
     "aria-label": "Delivery date",
+    ...names,
     defaultValue: date("2026-10-24"),
+    locale: "en-US",
     onValueChange: fn<(value: Temporal.PlainDate, details: CalendarChangeEventDetails) => void>(),
   },
 });
@@ -30,7 +52,9 @@ export const Default = meta.story({});
 
 Default.test("names the grid by its month and selects the value", async ({ canvas }) => {
   await expect(canvas.getByRole("group", { name: "Delivery date" })).toBeVisible();
+
   const grid = canvas.getByRole("grid", { name: "October 2026" });
+
   await expect(grid).toBeVisible();
   await expect(canvas.getAllByRole("columnheader").map((header) => header.textContent)).toEqual([
     "Sun",
@@ -60,6 +84,7 @@ Default.test(
   "moves the focused day with the arrow, Home, End and Page keys",
   async ({ canvas, userEvent }) => {
     const cell = (name: string) => canvas.getByLabelText(name);
+
     cell("Saturday, October 24, 2026").focus();
     await userEvent.keyboard("{ArrowLeft}");
     await expect(cell("Friday, October 23, 2026")).toHaveFocus();
@@ -117,6 +142,7 @@ Default.test(
   "pages months with Previous and Next, keeping focus on the button",
   async ({ canvas, userEvent }) => {
     const next = canvas.getByRole("button", { name: "Next month" });
+
     await userEvent.click(next);
     await expect(canvas.getByRole("grid", { name: "November 2026" })).toBeVisible();
     await expect(next).toHaveFocus();
@@ -140,13 +166,27 @@ Default.test(
       "aria-disabled",
       "true",
     );
+
     const sunday = canvas.getByLabelText("Sunday, October 4, 2026");
+
     await expect(sunday).toHaveAttribute("aria-disabled", "true");
     canvas.getByLabelText("Monday, October 5, 2026").focus();
     await userEvent.keyboard("{ArrowLeft}");
     await expect(canvas.getByLabelText("Monday, October 5, 2026")).toHaveFocus();
     await userEvent.click(canvas.getByLabelText("Saturday, October 10, 2026"));
     await expect(args.onValueChange).not.toHaveBeenCalled();
+  },
+);
+
+Default.test(
+  "moves into the range when max changes to before the shown month",
+  { render: NarrowingMax },
+  async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: "Book by September 15" }));
+    await expect(canvas.getByRole("grid", { name: "September 2026" })).toBeVisible();
+    await expect(canvas.getByRole("button", { name: "Previous month" })).not.toHaveAttribute(
+      "aria-disabled",
+    );
   },
 );
 
@@ -170,23 +210,15 @@ Default.test(
 
 Default.test("marks today", { args: { defaultValue: null } }, async ({ canvas }) => {
   const name = new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(new Date());
+
   await expect(canvas.getByLabelText(name)).toHaveAttribute("aria-current", "date");
 });
 
 Default.test(
   "starts the week on Monday for ro-RO, in Romanian",
-  {
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
+  { args: { locale: "ro-RO" } },
   async ({ canvas }) => {
     await expect(canvas.getByRole("grid", { name: "octombrie 2026" })).toBeVisible();
     await expect(canvas.getAllByRole("columnheader")[0]).toHaveTextContent("lun.");
-    await expect(canvas.getByRole("button", { name: "Luna următoare" })).toBeVisible();
   },
 );

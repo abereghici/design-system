@@ -1,5 +1,7 @@
 import { expect, fn } from "storybook/test";
 
+import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withInvalidField } from "#.storybook/decorators/with-invalid-field.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -19,6 +21,7 @@ export const Default = meta.story({});
 
 Default.test("checks when its label is clicked", async ({ canvas, userEvent, args }) => {
   const checkbox = canvas.getByRole("checkbox", { name: "Email me updates" });
+
   await userEvent.click(canvas.getByText("Email me updates"));
   await expect(checkbox).toBeChecked();
   await expect(args.onCheckedChange).toHaveBeenCalledOnce();
@@ -30,6 +33,7 @@ Default.test("checks when its label is clicked", async ({ canvas, userEvent, arg
 
 Default.test("toggles with Space", async ({ canvas, userEvent }) => {
   const checkbox = canvas.getByRole("checkbox", { name: "Email me updates" });
+
   await userEvent.tab();
   await expect(checkbox).toHaveFocus();
   await userEvent.keyboard(" ");
@@ -41,6 +45,7 @@ Default.test("toggles with Space", async ({ canvas, userEvent }) => {
 Default.test("dispatches a bubbling ab-toggle after a change", async ({ canvas, userEvent }) => {
   const checkbox = canvas.getByRole("checkbox", { name: "Email me updates" });
   const toggles = listen("ab-toggle");
+
   await userEvent.click(checkbox);
   toggles.stop();
   await expect(
@@ -62,6 +67,7 @@ Default.test(
   async ({ canvas, userEvent }) => {
     const checkbox = canvas.getByRole("checkbox", { name: "Email me updates" });
     const toggles = listen("ab-toggle");
+
     await userEvent.click(checkbox);
     checkbox.focus();
     await userEvent.keyboard(" ");
@@ -76,6 +82,7 @@ Default.test(
   { args: { checked: true } },
   async ({ canvas, userEvent, args }) => {
     const checkbox = canvas.getByRole("checkbox", { name: "Email me updates" });
+
     await userEvent.click(checkbox);
     await expect(args.onCheckedChange).toHaveBeenCalledWith(false, expect.anything());
     await expect(checkbox).toBeChecked();
@@ -95,8 +102,11 @@ Default.test(
   { args: { disabled: true } },
   async ({ canvas, userEvent, args }) => {
     const checkbox = canvas.getByRole("checkbox", { name: "Email me updates" });
+
     await expect(checkbox).toHaveAttribute("aria-disabled", "true");
+
     const toggles = listen("ab-toggle");
+
     await userEvent.tab();
     await expect(checkbox).toHaveFocus();
     await userEvent.keyboard(" ");
@@ -112,10 +122,11 @@ Default.test(
   "submits name=value when checked",
   {
     args: { name: "updates", value: "weekly", defaultChecked: true },
-    decorators: [(Story) => <form aria-label="Preferences">{Story()}</form>],
+    decorators: [withForm],
   },
   async ({ canvas }) => {
-    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Preferences" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
     await expect([...new FormData(form)]).toEqual([["updates", "weekly"]]);
   },
 );
@@ -134,10 +145,13 @@ Default.test(
   "keeps its state and reports no change when its click is default-prevented",
   async ({ canvas, userEvent, args }) => {
     const checkbox = canvas.getByRole("checkbox", { name: "Email me updates" });
+
     checkbox.addEventListener("click", (event) => {
       event.preventDefault();
     });
+
     const toggles = listen("ab-toggle");
+
     await userEvent.click(checkbox);
     toggles.stop();
     await expect(checkbox).not.toBeChecked();
@@ -145,3 +159,20 @@ Default.test(
     await expect(toggles.events).toEqual([]);
   },
 );
+
+export const LongLabel = meta.story({
+  args: {
+    children: "Send a copy of every report to reports-archive@platform-production.example.com",
+  },
+  parameters: {
+    docs: { description: { story: "A long label wraps, with the box on its first line." } },
+  },
+});
+
+export const Invalid = meta.story({
+  args: { children: "I accept the terms" },
+  decorators: [withInvalidField("Accept the terms to continue.")],
+  parameters: {
+    docs: { description: { story: "Inside an invalid Field the box shows the error state." } },
+  },
+});

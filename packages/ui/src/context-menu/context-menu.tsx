@@ -1,13 +1,35 @@
-export { Content, Root, Trigger } from "./context-menu-root.tsx";
-export type {
-  ChangeEventDetails,
-  ChangeReason,
-  ContentProps,
-  RootProps,
-  TriggerProps,
-} from "./context-menu-root.tsx";
-export { Item } from "../menu/menu.tsx";
-export { CheckboxItem, Group, Label, RadioGroup, RadioItem } from "../menu/menu-items.tsx";
-export type { ItemChangeEventDetails, ItemProps } from "../menu/menu.tsx";
-export type { CheckboxItemProps, RadioGroupProps, RadioItemProps } from "../menu/menu-items.tsx";
-export { Separator } from "../menu/separator.tsx";
+export { Content } from "./context-menu-content.tsx";
+
+export { Root } from "./context-menu-root.tsx";
+
+export { Trigger } from "./context-menu-trigger.tsx";
+
+export type { ChangeEventDetails, ChangeReason, RootProps } from "./context-menu-root.tsx";
+
+export type { ContentProps } from "./context-menu-content.tsx";
+
+export type { TriggerProps } from "./context-menu-trigger.tsx";
+
+export { Item } from "../menu/menu-item.tsx";
+
+export { CheckboxItem } from "../menu/menu-checkbox-item.tsx";
+
+export { Group } from "../menu/menu-group.tsx";
+
+export { Label } from "../menu/menu-label.tsx";
+
+export { RadioGroup } from "../menu/menu-radio-group.tsx";
+
+export { RadioItem } from "../menu/menu-radio-item.tsx";
+
+export type { ItemChangeEventDetails } from "../menu/menu.tsx";
+
+export type { ItemProps } from "../menu/menu-item.tsx";
+
+export type { CheckboxItemProps } from "../menu/menu-checkbox-item.tsx";
+
+export type { RadioGroupProps } from "../menu/menu-radio-group.tsx";
+
+export type { RadioItemProps } from "../menu/menu-radio-item.tsx";
+
+export { Separator } from "../menu/menu-separator.tsx";

@@ -17,23 +17,27 @@ export interface ToastOptions {
 export interface ToastRecord extends ToastOptions {
   readonly id: string;
   readonly exiting: boolean;
+}
+
+interface Progress {
   readonly remaining?: number;
   readonly shown?: boolean;
   readonly announced?: boolean;
 }
 
-type Progress = Partial<Pick<ToastRecord, "remaining" | "shown" | "announced">>;
-
 let toasts: readonly ToastRecord[] = [];
+const progress = new Map<string, Progress>();
 const listeners = new Set<() => void>();
 
 const emit = (next: readonly ToastRecord[]) => {
   toasts = next;
+
   for (const listener of listeners) listener();
 };
 
 export const subscribe = (listener: () => void) => {
   listeners.add(listener);
+
   return () => {
     listeners.delete(listener);
   };
@@ -41,13 +45,16 @@ export const subscribe = (listener: () => void) => {
 
 export const snapshot = () => toasts;
 
-/** Records what must survive a remount of the Toaster without re-rendering it. */
-export const mark = (id: string, progress: Progress) => {
-  const record = toasts.find((entry) => entry.id === id);
-  if (record !== undefined) Object.assign(record, progress);
+/** What must survive a remount of the Toaster without re-rendering it, kept out of the snapshot. */
+export const progressOf = (id: string): Progress => progress.get(id) ?? {};
+
+export const mark = (id: string, next: Progress) => {
+  progress.set(id, { ...progressOf(id), ...next });
 };
 
 export const remove = (id: string) => {
+  progress.delete(id);
+
   if (toasts.some((record) => record.id === id)) emit(toasts.filter((record) => record.id !== id));
 };
 
@@ -59,8 +66,11 @@ export const close = (id: string) => {
 
 function add(options: ToastOptions): string {
   if (typeof document === "undefined") return "";
+
   const id = crypto.randomUUID();
+
   emit([{ ...options, id, exiting: false }, ...toasts]);
+
   return id;
 }
 

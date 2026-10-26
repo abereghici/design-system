@@ -147,7 +147,7 @@ New component word `table` (Dictionary change) and a new modifier word `caption`
 
 None exist yet. The gap below the Caption uses `space-stack-sm` directly; the more-contrast hairline uses `color-border-default` directly.
 
-## Built-in labels
+## Author-written text
 
 None. The Caption or `aria-label` is the consumer's.
 

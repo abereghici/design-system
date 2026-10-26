@@ -8,15 +8,7 @@ import { Listbox } from "../listbox/listbox.tsx";
 import { InputGroup } from "../text-field/text-field.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
-import {
-  blur,
-  inputChange,
-  keyDown,
-  listProps,
-  part,
-  press,
-  trackComposition,
-} from "./combobox-state.ts";
+import { inputProps, listProps, part, press } from "./combobox-state.ts";
 import type { Combobox, Options } from "./combobox-state.ts";
 import { ValueContext, useCombobox } from "./use-combobox.ts";
 import textFieldStyles from "../text-field/text-field.module.css";
@@ -27,12 +19,17 @@ type Naming =
   | { label?: undefined; "aria-label": string }
   | { label?: undefined; "aria-labelledby": string };
 
+type Loading =
+  | { loading?: false | undefined; loadingText?: string | undefined }
+  | { loading: boolean; loadingText: string };
+
 type InputProps = Omit<
   ComponentProps<"input">,
   "size" | "type" | "value" | "defaultValue" | "disabled" | "children"
 >;
 
 export type RootProps = Naming &
+  Loading &
   InputProps &
   Options & {
     /** The Items and Groups to choose from. */
@@ -42,13 +39,15 @@ export type RootProps = Naming &
      * nearby why it is unavailable.
      */
     disabled?: boolean;
+    /** The text shown and announced while no Item matches, such as "No results". */
+    noOptionsText: string;
     /**
-     * Shows "Loading…" in place of "No results" while the app fetches Items; the Items that are
+     * Shows `loadingText` in place of `noOptionsText` while the app fetches Items; the Items
      * already rendered stay.
      */
-    loading?: boolean;
-    /** Replaces the built-in text of the UIProvider's locale, for this instance only. */
-    labels?: { noResults?: string; loading?: string };
+    loading?: boolean | undefined;
+    /** The text shown and announced while `loading`, such as "Loading…". */
+    loadingText?: string | undefined;
     /**
      * Helper text under the field, such as a format hint; the error message takes its place while
      * invalid.
@@ -72,6 +71,7 @@ export type RootProps = Naming &
 
 function Input({ readOnly, ...props }: Field.ControlProps) {
   const bindings = Field.useFieldControl<HTMLInputElement, typeof props>(props);
+
   return (
     <input
       dir="auto"
@@ -98,24 +98,7 @@ function Control({ c, input }: { c: Combobox; input: Field.ControlProps }) {
         press(c, event.nativeEvent);
       }}
     >
-      <Input
-        {...input}
-        aria-expanded={c.open}
-        aria-controls={part(c, "list")}
-        onCompositionEnd={trackComposition(input.onCompositionEnd)}
-        onKeyDown={(event) => {
-          input.onKeyDown?.(event);
-          keyDown(c, event);
-        }}
-        onChange={(event) => {
-          input.onChange?.(event);
-          inputChange(c, event);
-        }}
-        onBlur={(event) => {
-          blur(c, event);
-          input.onBlur?.(event);
-        }}
-      />
+      <Input {...inputProps(c, input)} aria-expanded={c.open} aria-controls={part(c, "list")} />
     </InputGroup>
   );
 }
@@ -151,6 +134,7 @@ const split = ({
   defaultOpen,
   onOpenChange,
   filter,
+  locale,
   ...rest
 }: Omit<RootProps, "label" | "description" | "errorMessage" | "invalid" | "validate">) =>
   [
@@ -165,7 +149,9 @@ const split = ({
       defaultOpen,
       onOpenChange,
       filter,
-      disabled: rest.disabled,
+      locale,
+      // Read-only blocks the same presses and keys as disabled; only the look and announcement differ.
+      disabled: rest.disabled === true || rest.readOnly === true,
     },
     { ...rest, defaultValue: inputValue ?? defaultInputValue },
   ] as const;
@@ -179,10 +165,23 @@ export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, validate, ...rest } = props;
   const [
     options,
-    { size = "md", className, style, loading, labels, name, form, children, ...input },
+    {
+      size = "md",
+      className,
+      style,
+      loading,
+      loadingText,
+      noOptionsText,
+      name,
+      form,
+      children,
+      ...input
+    },
   ] = split(rest);
-  const [c, empty] = useCombobox(options, labels, loading);
+  const empty = (loading === true ? loadingText : undefined) ?? noOptionsText;
+  const c = useCombobox(options, empty);
   const field = { className, style, name, invalid, disabled: input.disabled, id: part(c, "root") };
+
   return (
     <Field.Root
       {...field}

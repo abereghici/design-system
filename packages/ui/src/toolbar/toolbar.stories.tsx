@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { expect } from "storybook/test";
+import type { KeyboardEvent } from "react";
+import { expect, fn } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
 import { IconButton } from "@platform/ui/icon-button";
@@ -28,10 +29,13 @@ const controls = (
   </>
 );
 
+const toolbarRef = fn<(toolbar: HTMLDivElement | null) => void>();
+
 function Growing() {
   const [extra, setExtra] = useState(false);
+
   return (
-    <Toolbar aria-label="Report">
+    <Toolbar aria-label="Report" ref={toolbarRef}>
       <IconButton
         aria-label="Copy link"
         onClick={() => {
@@ -144,7 +148,9 @@ Default.test(
   async ({ canvas, userEvent }) => {
     await userEvent.tab();
     await userEvent.keyboard("{ArrowRight}{ArrowRight}");
+
     const board = canvas.getByRole("radio", { name: "Board" });
+
     await expect(board).toHaveFocus();
     await expect(canvas.getByRole("radio", { name: "List" })).toBeChecked();
     await userEvent.keyboard(" ");
@@ -158,11 +164,46 @@ Default.test(
   async ({ canvas, userEvent }) => {
     await userEvent.tab();
     await userEvent.keyboard("{Enter}");
+
     const download = await canvas.findByRole("button", { name: "Download" });
+
     await userEvent.keyboard("{End}");
     await expect(download).toHaveFocus();
     await userEvent.tab({ shift: true });
     await userEvent.tab();
     await expect(canvas.getByRole("button", { name: "Download" })).toHaveFocus();
+  },
+);
+
+Default.test(
+  "hands a callback ref its element once across re-renders",
+  { render: Growing },
+  async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: "Copy link" }));
+    await canvas.findByRole("button", { name: "Download" });
+    await expect(toolbarRef.mock.calls).toEqual([[canvas.getByRole("toolbar")]]);
+  },
+);
+
+Default.test(
+  "passes the consumer's class, style, handler and ref to the toolbar",
+  {
+    args: {
+      className: "report",
+      style: { color: "rgb(1, 2, 3)" },
+      onKeyDown: fn<(event: KeyboardEvent) => void>(),
+      ref: fn<(node: HTMLDivElement | null) => void>(),
+    },
+  },
+  async ({ canvas, userEvent, args }) => {
+    const toolbar = canvas.getByRole("toolbar", { name: "Report" });
+
+    await expect(toolbar).toHaveClass("report");
+    await expect(toolbar).toHaveStyle({ color: "rgb(1, 2, 3)" });
+    await expect(args.ref).toHaveBeenCalledWith(toolbar);
+    await userEvent.tab();
+    await userEvent.keyboard("{ArrowRight}");
+    await expect(args.onKeyDown).toHaveBeenCalledOnce();
+    await expect(canvas.getByRole("button", { name: "Copy link" })).toHaveFocus();
   },
 );

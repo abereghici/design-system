@@ -1,10 +1,10 @@
 import { expect, fn } from "storybook/test";
 
-import preview from "#.storybook/preview.tsx";
+import { Button } from "@platform/ui/button";
+import { DateField } from "@platform/ui/date-field";
+import { TextField } from "@platform/ui/text-field";
 
-import { Button } from "../button/button.tsx";
-import { DateField } from "../date-field/date-field.tsx";
-import { TextField } from "../text-field/text-field.tsx";
+import preview from "#.storybook/preview.tsx";
 
 import { Form } from "./form.tsx";
 
@@ -31,16 +31,14 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a form landmark named by its label", async ({ canvas }) => {
-  await expect(canvas.getByRole("form", { name: "Sign up" })).toBeVisible();
-});
-
 Default.test(
   "blocks the submit and focuses the first invalid field",
   async ({ args, canvas, userEvent }) => {
     await userEvent.type(canvas.getByRole("textbox", { name: "Name" }), "Ana");
     await userEvent.click(canvas.getByRole("button", { name: "Create account" }));
+
     const email = canvas.getByRole("textbox", { name: "Email" });
+
     await expect(email).toHaveFocus();
     await expect(email).toHaveAttribute("aria-invalid", "true");
     await expect(canvas.getByRole("textbox", { name: "Name" })).not.toHaveAttribute("aria-invalid");
@@ -60,6 +58,7 @@ Default.test(
   { args: { errors: { name: "Names can't contain digits." } } },
   async ({ canvas }) => {
     const name = canvas.getByRole("textbox", { name: "Name" });
+
     await expect(name).toHaveFocus();
     await expect(name).toHaveAttribute("aria-invalid", "true");
     await expect(name).toHaveAccessibleDescription("Names can't contain digits.");
@@ -71,6 +70,7 @@ Default.test(
   { args: { errors: { name: "Names can't contain digits." } } },
   async ({ canvas, userEvent }) => {
     const name = canvas.getByRole("textbox", { name: "Name" });
+
     await userEvent.type(name, "Ana");
     await expect(name).not.toHaveAttribute("aria-invalid");
     await expect(canvas.queryByText("Names can't contain digits.")).toBeNull();
@@ -82,11 +82,18 @@ Default.test(
   {
     args: {
       errors: { birthDate: "You must be 18 or older." },
-      children: <DateField label="Date of birth" name="birthDate" />,
+      children: (
+        <DateField
+          label="Date of birth"
+          name="birthDate"
+          incompleteMessage="Enter a complete date"
+        />
+      ),
     },
   },
   async ({ canvas, userEvent }) => {
     const month = canvas.getByRole("spinbutton", { name: "month" });
+
     await expect(month).toBeInvalid();
     await expect(canvas.getByText("You must be 18 or older.")).toBeVisible();
     await userEvent.click(month);

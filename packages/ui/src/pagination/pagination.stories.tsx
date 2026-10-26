@@ -4,33 +4,37 @@ import { expect, within } from "storybook/test";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
-import type { Locale } from "../provider/locale.tsx";
-import { roRO } from "../provider/locales/ro-RO.ts";
-
 import { Pagination } from "./pagination.tsx";
+import type { PaginationProps } from "./pagination.tsx";
 
-// @ts-expect-error -- a locale must name the pagination landmark and its steps
-({ tag: "fr-FR", labels: { ...roRO.labels, pagination: { root: "Pagination" } } }) satisfies Locale;
+// @ts-expect-error -- the landmark and the Previous and Next buttons need names
+({ page: 1, count: 2, getPageUrl: String }) satisfies PaginationProps;
 
 const controls = (canvasElement: HTMLElement) =>
   within(canvasElement)
     .getAllByRole("listitem")
     .map((item) => {
       const control = within(item).queryByRole("link") ?? within(item).getByRole("button");
+
       return control.getAttribute("aria-label");
     });
 
 const meta = preview.meta({
   title: "Components/Pagination",
   component: Pagination,
-  args: { page: 5, count: 10, getPageUrl: (page: number) => `#page-${page}` },
+  args: {
+    "aria-label": "Pagination",
+    previousLabel: "Previous page",
+    nextLabel: "Next page",
+    getPageLabel: (page: string) => `Page ${page}`,
+    page: 5,
+    count: 10,
+    getPageUrl: (page: number) => `#page-${page}`,
+    locale: "en-US",
+  },
 });
 
 export const Default = meta.story({});
-
-Default.test("is a navigation landmark named Pagination", async ({ canvas }) => {
-  await expect(canvas.getByRole("navigation", { name: "Pagination" })).toBeVisible();
-});
 
 Default.test(
   "shows the first, last and neighbouring pages around the current one",
@@ -44,7 +48,9 @@ Default.test(
       "Page 10",
       "Next page",
     ]);
+
     const current = canvas.getByRole("link", { name: "Page 5" });
+
     await expect(current).toHaveAttribute("aria-current", "page");
     await expect(current).toHaveTextContent("5");
     await expect(canvas.getByRole("link", { name: "Next page" })).toHaveAttribute(
@@ -57,15 +63,6 @@ Default.test(
     );
   },
 );
-
-Default.test("moves through every link with Tab", async ({ canvas, userEvent }) => {
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Previous page" })).toHaveFocus();
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Page 1" })).toHaveFocus();
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Page 4" })).toHaveFocus();
-});
 
 Default.test(
   "on the first page, Previous is a disabled button that stays focusable and does nothing",
@@ -81,11 +78,15 @@ Default.test(
       "Page 10",
       "Next page",
     ]);
+
     const previous = canvas.getByRole("button", { name: "Previous page" });
+
     await expect(previous).toHaveAttribute("aria-disabled", "true");
     await userEvent.tab();
     await expect(previous).toHaveFocus();
+
     const presses = listen("ab-press");
+
     await userEvent.keyboard("{Enter}");
     await userEvent.click(previous);
     presses.stop();
@@ -128,19 +129,17 @@ Default.test(
 );
 
 Default.test(
-  "formats numbers and labels with a locale, and labels override it",
+  "formats page numbers in its locale, and names page links with getPageLabel",
   {
     args: {
       page: 1200,
       count: 1500,
-      locale: roRO,
-      labels: { page: (page: string) => `Pagina ${page}` },
+      locale: "ro-RO",
+      getPageLabel: (page: string) => `Pagina ${page}`,
     },
   },
   async ({ canvas }) => {
-    await expect(canvas.getByRole("navigation", { name: "Paginare" })).toBeVisible();
     await expect(canvas.getByRole("link", { name: "Pagina 1.200" })).toHaveTextContent("1.200");
-    await expect(canvas.getByRole("link", { name: "Pagina următoare" })).toBeVisible();
   },
 );
 

@@ -1,6 +1,6 @@
 import type { ComponentProps, ElementType, Ref } from "react";
 
-import { join } from "../slot/slot.tsx";
+import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./text.module.css";
 
@@ -22,6 +22,7 @@ export type TextProps = Omit<ComponentProps<"p">, "color" | "ref"> &
     as?: "p" | "span" | "div" | "label" | "code";
     /** The control it labels, with `as="label"`. */
     htmlFor?: string;
+    /** The rendered element, for focus or measuring. */
     ref?: Ref<HTMLElement>;
   };
 
@@ -30,22 +31,15 @@ export type TextProps = Omit<ComponentProps<"p">, "color" | "ref"> &
  * same across the product. A paragraph by default. For a section title use Heading, for a keyboard
  * key Kbd, and for a link Link.
  */
-export function Text({
-  variant = "body",
-  size = variant === "overline" ? "sm" : "md",
-  color = "default",
-  as = variant === "code" ? "code" : "p",
-  className,
-  ...props
-}: TextProps) {
-  const Element = as as ElementType;
+export function Text({ variant = "body", size, color = "default", as, ...props }: TextProps) {
+  const Element = (as ?? (variant === "code" ? "code" : "p")) as ElementType;
+
   return (
     <Element
-      {...props}
+      {...mergeProps({ className: styles["root"] }, props)}
       data-variant={variant}
-      data-size={size}
+      data-size={size ?? (variant === "overline" ? "sm" : "md")}
       data-color={color}
-      className={join(styles["root"], className)}
     />
   );
 }

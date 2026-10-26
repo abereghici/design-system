@@ -32,6 +32,7 @@ function route(name: string): Route {
       .map((url) => readFileSync(join(next, url.slice("/_next/".length)), "utf8"))
       .join("\n");
   const manifest = join(next, "server", "app", name === "index" ? "" : name);
+
   return {
     html,
     css: assets("css"),
@@ -42,7 +43,6 @@ function route(name: string): Route {
 
 const button = route("index");
 const logo = route("logo");
-const locale = route("locale");
 const iconButton = route("icon-button");
 
 const uiClientModules = (r: Route) =>
@@ -51,6 +51,7 @@ const uiClientModules = (r: Route) =>
 // A token ships when its sheet defines it or a component rule reads it. A component redefining another's token on itself (Button restyles Kbd hints) does neither.
 const shippedComponentTokens = (css: string) => {
   const sheets = css.match(/@layer ab\.tokens\{:root\{[^\}]*\}\}/gv)?.join("") ?? "";
+
   return componentTokens.filter(
     (token) => sheets.includes(token) || css.includes(`var(${token.slice(0, -1)})`),
   );
@@ -77,6 +78,7 @@ describe("the UIProvider owns the global CSS", () => {
         /<link rel="preload" href="\/_next\/static\/media\/([^"]+)" as="font"/gv,
       ),
     ].map(([, file]) => String(file));
+
     expect(button.html.match(/as="font"/gv)).toHaveLength(1);
     expect(files).toEqual([expect.stringMatching(/^Figtree-latin\./v)]);
     expect(button.css).toContain(`src:url(../media/${String(files[0])})`);
@@ -100,6 +102,7 @@ describe("per-component CSS", () => {
 
   test("a route that imports IconButton and an icon ships only their component tokens", () => {
     const shipped = shippedComponentTokens(iconButton.css);
+
     expect(shipped).toContain("--ab-icon-button-background-color-selected:");
     expect(shipped).toContain("--ab-icon-md-size:");
     expect(shipped.filter((t) => !/^--ab-(icon|spinner)-/v.test(t))).toEqual([]);
@@ -114,18 +117,22 @@ const readInBuild = (name: string) => built.includes(`var(${name})`) || built.in
 
 test("every component token is read by a component rule or script in the build", () => {
   const names = componentTokens.map((token) => token.slice(0, -1));
+
   expect(names.filter((name) => !readInBuild(name))).toEqual([]);
 });
 
 describe("each component route ships only its own CSS, tokens and client code", () => {
   test.each(componentRoutes)("$name", ({ name, tokens, client, html }) => {
     const r = route(name);
+
     expect(r.html).toContain(html);
+
     const shipped = shippedComponentTokens(r.css);
     const owner = (token: string) => tokens.find((word) => word === ownerOf(token));
+
     expect(shipped.filter((token) => owner(token) === undefined)).toEqual([]);
     expect(new Set(shipped.map((token) => owner(token)))).toEqual(new Set(tokens));
-    expect(uiClientModules(r)).toEqual([...client, "provider/locale.tsx"].toSorted());
+    expect(uiClientModules(r)).toEqual(client.toSorted());
   });
 });
 
@@ -145,14 +152,11 @@ describe("DatePicker and Calendar", () => {
 
 describe("per-component JS", () => {
   test("only the Button route loads Button's client code", () => {
-    expect(uiClientModules(button)).toEqual(["button/button.tsx", "provider/locale.tsx"]);
+    expect(uiClientModules(button)).toEqual(["button/button.tsx"]);
     expect(button.js).toContain("ab-press");
-    expect(uiClientModules(logo)).toEqual(["provider/locale.tsx"]);
+    expect(uiClientModules(logo)).toEqual([]);
     expect(logo.js).not.toContain("ab-press");
-    expect(uiClientModules(iconButton)).toEqual([
-      "icon-button/icon-button.tsx",
-      "provider/locale.tsx",
-    ]);
+    expect(uiClientModules(iconButton)).toEqual(["icon-button/icon-button.tsx"]);
   });
 
   test.each([
@@ -170,16 +174,20 @@ describe("per-component JS", () => {
     "the %s route renders on the server and ships its CSS and tokens only",
     (name, rule, count) => {
       const r = route(name);
-      expect(uiClientModules(r)).toEqual(["provider/locale.tsx"]);
+
+      expect(uiClientModules(r)).toEqual([]);
       expect(r.css).toContain(rule);
+
       const tokens = shippedComponentTokens(r.css);
+
       expect(tokens).toHaveLength(count);
       expect(tokens.filter((t) => !t.startsWith(`--ab-${name}-`))).toEqual([]);
     },
   );
 
-  test("Server Components label and format on the server", () => {
-    expect(route("spinner").html).toContain('aria-label="Loading"');
+  test("Server Components render the author's text and their formatting on the server", () => {
+    expect(route("spinner").html).toContain(">Loading</span></span>");
+    expect(route("pagination").html).toContain('aria-label="Next page"');
     expect(route("progress").html).toContain("40\u00A0%");
     expect(route("meter").html).toContain("42%");
     expect(route("skip-link").html).toContain(">Skip to main content</a>");
@@ -187,26 +195,22 @@ describe("per-component JS", () => {
   });
 });
 
-describe("locale, labels and direction", () => {
+describe("interface text and direction", () => {
   test("the root layout sets dir from getDirection on the server", () => {
     expect(button.html).toContain('<html lang="en" dir="ltr"');
   });
 
   test("a sorted Table header renders aria-sort and its button on the server", () => {
     expect(route("table").html).toMatch(
-      /<th scope="col" aria-sort="ascending" class="[^"]+"><button type="button"/v,
+      /<th scope="col" aria-sort="ascending" class="[^"]+"><button [^>]*type="button"/v,
     );
   });
 
-  test("a locale reaches client components, and ships only on the route that imports it", () => {
-    expect(locale.html).toContain("<output>ro-RO</output>");
-    expect(button.js).not.toContain('"ro-RO"');
-  });
-
-  test("a client component ships its own default labels and no other component's", () => {
+  test("a client component ships no interface text of its own; the author's reaches the HTML", () => {
     const alert = route("alert");
-    expect(alert.js).toContain('"Dismiss"');
-    expect(alert.js).not.toContain("Command palette");
+
+    expect(alert.html).toContain('aria-label="Dismiss"');
+    expect(alert.js).not.toContain('"Dismiss"');
     expect(alert.js).not.toContain("Skip to main content");
   });
 });
@@ -217,6 +221,7 @@ describe("a lazily loaded component", () => {
   test("Command stays out of its route's initial JavaScript and loads through the dynamic import", () => {
     const command = route("command");
     const chunks = join(next, "static", "chunks");
+
     expect(command.html).toContain(">Search</button>");
     expect(shipsCommand(command.js)).toBe(false);
     expect(
@@ -230,10 +235,13 @@ describe("a lazily loaded component", () => {
 describe("a client leaf inside a Server Component", () => {
   test("Kbd renders its platform keys as Ctrl on the server and resolves them on the client", () => {
     const kbd = route("kbd");
-    expect(uiClientModules(kbd)).toEqual(["kbd/kbd-key.tsx", "provider/locale.tsx"]);
+
+    expect(uiClientModules(kbd)).toEqual(["kbd/kbd-key.tsx"]);
     expect(kbd.html).toContain("Ctrl");
     expect(kbd.html).toContain("Enter");
+
     const tokens = shippedComponentTokens(kbd.css);
+
     expect(tokens).toHaveLength(10);
     expect(tokens.filter((t) => !t.startsWith("--ab-kbd-"))).toEqual([]);
   });

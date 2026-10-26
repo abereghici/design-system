@@ -5,7 +5,7 @@ export default function Page() {
     <main>
       <Alert.Root variant="warning">
         <Alert.Title>Your trial ends in 3 days</Alert.Title>
-        <Alert.Close />
+        <Alert.Close aria-label="Dismiss" />
       </Alert.Root>
     </main>
   );

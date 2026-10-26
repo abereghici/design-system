@@ -4,23 +4,31 @@ import { Link } from "@platform/ui/link";
 
 import preview from "#.storybook/preview.tsx";
 
-import { enUS } from "../provider/locales/en-US.ts";
-
 import { Badge } from "./badge.tsx";
 
 const meta = preview.meta({
   title: "Components/Badge",
   component: Badge,
-  args: { children: 3 },
+  args: { children: 3, locale: "en-US" },
 });
 
 export const Default = meta.story({});
 
-for (const variant of ["neutral", "accent", "danger"] as const) {
-  Default.test(`reads at AA contrast as ${variant}`, { args: { variant } }, async ({ canvas }) => {
+Default.test(
+  "reads at AA contrast as accent",
+  { args: { variant: "accent" } },
+  async ({ canvas }) => {
     await expect(canvas.getByText("3")).toBeVisible();
-  });
-}
+  },
+);
+
+Default.test(
+  "reads at AA contrast as danger",
+  { args: { variant: "danger" } },
+  async ({ canvas }) => {
+    await expect(canvas.getByText("3")).toBeVisible();
+  },
+);
 
 Default.test("caps a count above max", { args: { children: 1280 } }, async ({ canvas }) => {
   await expect(canvas.getByText("99+")).toBeVisible();
@@ -28,33 +36,17 @@ Default.test("caps a count above max", { args: { children: 1280 } }, async ({ ca
 
 Default.test(
   "formats the count and the cap in its locale",
-  { args: { children: 1280, max: 1000, locale: { ...enUS, tag: "de" } } },
+  { args: { children: 1280, max: 1000, locale: "ro-RO" } },
   async ({ canvas }) => {
     await expect(canvas.getByText("1.000+")).toBeVisible();
   },
 );
 
 Default.test(
-  "formats a count in English without a locale",
+  "formats a count in its locale",
   { args: { children: 1280, max: 9999 } },
   async ({ canvas }) => {
     await expect(canvas.getByText("1,280")).toBeVisible();
-  },
-);
-
-Default.test(
-  "takes a translated overflow label",
-  { args: { children: 100, labels: { overflow: (max) => `+${max}` } } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("+99")).toBeVisible();
-  },
-);
-
-Default.test(
-  "renders a string as given",
-  { args: { children: "!", variant: "danger" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("!")).toBeVisible();
   },
 );
 

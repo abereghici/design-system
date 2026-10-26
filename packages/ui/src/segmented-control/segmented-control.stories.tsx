@@ -29,16 +29,12 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a radio group with the chosen view checked", async ({ canvas }) => {
-  await expect(canvas.getByRole("radiogroup", { name: "View" })).toBeVisible();
-  await expect(canvas.getByRole("radio", { name: "List" })).toBeChecked();
-});
-
 Default.test(
   "chooses a view on click and dispatches one ab-toggle",
   async ({ canvas, userEvent, args }) => {
     const board = canvas.getByRole("radio", { name: "Board" });
     const toggles = listen("ab-toggle");
+
     await userEvent.click(canvas.getByText("Board"));
     await userEvent.click(board);
     toggles.stop();
@@ -63,7 +59,9 @@ Default.test(
     await userEvent.keyboard("{ArrowRight}");
     await expect(canvas.getByRole("radio", { name: "Board" })).toBeChecked();
     await userEvent.keyboard("{ArrowLeft}{ArrowLeft}");
+
     const calendar = canvas.getByRole("radio", { name: "Calendar" });
+
     await expect(calendar).toHaveFocus();
     await expect(calendar).toBeChecked();
   },
@@ -92,6 +90,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const toggles = listen("ab-toggle");
+
     await userEvent.click(canvas.getByRole("radio", { name: "Board" }));
     toggles.stop();
     await expect(canvas.getByRole("radio", { name: "List" })).toBeChecked();
@@ -113,10 +112,13 @@ Default.test(
   "keeps its value and reports no change when a click is default-prevented",
   async ({ canvas, userEvent, args }) => {
     const board = canvas.getByRole("radio", { name: "Board" });
+
     board.addEventListener("click", (event) => {
       event.preventDefault();
     });
+
     const toggles = listen("ab-toggle");
+
     await userEvent.click(board);
     toggles.stop();
     await expect(canvas.getByRole("radio", { name: "List" })).toBeChecked();

@@ -27,7 +27,7 @@
     background-color: var(--ab-status-dot-danger-background-color);
   }
 
-  /* Forced colors would erase the fill, the only thing that tells the statuses apart. */
+  /* Forced colors would erase the fill, the only thing that tells the statuses apart: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/forced-colors */
   @media (forced-colors: active) {
     .root {
       forced-color-adjust: none;

@@ -224,7 +224,7 @@ Proposed new:
 
 The diamond size (`size-indicator`), the Label's block padding (`space-inset-xs`) and the Separator width (`border-width-default`) use semantic tokens directly; no app is expected to change them. The check and the diamond reuse `dropdown-menu-item-icon-color-selected`.
 
-## Built-in labels
+## Author-written text
 
 None. Item text is the consumer's, and the menu is named by its Trigger.
 

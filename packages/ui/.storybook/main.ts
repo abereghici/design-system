@@ -15,7 +15,6 @@ export default defineMain({
     "@storybook/addon-a11y",
     "@storybook/addon-vitest",
     "@storybook/addon-mcp",
-    "storybook-addon-pseudo-states",
   ],
   tags: { _test: { defaultFilterSelection: "exclude" } },
   managerHead: (head) => `${head}<style>${fontFaceCss("./fonts/")}</style>`,

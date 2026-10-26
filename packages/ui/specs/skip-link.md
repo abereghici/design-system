@@ -27,13 +27,11 @@ One part: a native `<a href="#…">` with a text label.
 
 ## API
 
-| Prop       | Type                  | Default                             | Notes                                                                 |
-| ---------- | --------------------- | ----------------------------------- | --------------------------------------------------------------------- |
-| `href`     | `` `#${string}` ``    | required                            | The fragment of the main content's `id`.                              |
-| `children` | `ReactNode`           | `labels.label`                      | The link text.                                                        |
-| `locale`   | `Locale`              | en-US                               | A shipped locale; translates the text on the server.                  |
-| `labels`   | `{ label?: string }`  | `{ label: "Skip to main content" }` | Built-in string (spec #1). Ignored when `children` is given.          |
-| …native    | `ComponentProps<"a">` |                                     | `ref`, `className` and every native attribute pass through unchanged. |
+| Prop       | Type                   | Default  | Notes                                                                 |
+| ---------- | ---------------------- | -------- | --------------------------------------------------------------------- |
+| `href`     | `` `#${string}` ``     | required | The fragment of the main content's `id`.                              |
+| `children` | `ReactNode` (required) |          | The link text.                                                        |
+| …native    | `ComponentProps<"a">`  |          | `ref`, `className` and every native attribute pass through unchanged. |
 
 Names, checked against the reference libraries:
 
@@ -56,7 +54,7 @@ Names, checked against the reference libraries:
 - No script: the platform does the jump. GOV.UK v4.0.0 "Added JavaScript that moves focus to the skip link’s target to improve the consistency of screen reader behaviour."; with `tabIndex={-1}` on the target, the native focusing steps do the same, so we don't (inference from the HTML steps above).
 - Plain `<a href="#main">`, never a router link: a same-page fragment needs no client routing.
 - Several SkipLinks may follow each other (WCAG 2.4.1 sufficient technique "G124: Adding links at the top of the page to each area of the content"), each with its own `href` and text.
-- Server Component: no `'use client'`. The label comes from `children` or `labels`; the UIProvider's optional `locale` is a client context that a Server Component can't read, so an app that localises passes `labels` (or children) in its layout (judgement call).
+- Server Component: no `'use client'`. The text is the author's `children`, required by type, so it renders on the server with no client code.
 
 Tests: the stories prove the first Tab shows it and the next Tab hides it. The Enter → `<main>` jump is the browser's fragment navigation; the Vitest browser runner closes its connection on a fragment navigation in all three engines, so it is not automated (built in #17).
 
@@ -108,13 +106,9 @@ All new. `skip-link` is a new component word (Dictionary change). No other new w
 
 Consumed as semantic tokens directly: `z-index-tooltip` (a stacking decision, not a look an app overrides), `focus-ring-width`, `focus-ring-offset`, `color-border-focused` (R6).
 
-## Built-in labels
+## Author-written text
 
-| Key     | English default        | Used for                                  |
-| ------- | ---------------------- | ----------------------------------------- |
-| `label` | "Skip to main content" | The link text when no children are given. |
-
-The default is `skipLink` in `src/provider/locales/en-US/skip-link.ts`, one module per namespace that `enUS` composes, so importing SkipLink ships only its own string.
+None. The link text is the author's `children` ("Skip to main content"), required by type.
 
 ## Feedback events
 

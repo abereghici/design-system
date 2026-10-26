@@ -3,6 +3,7 @@ import { expect } from "storybook/test";
 import { Link } from "@platform/ui/link";
 
 import preview from "#.storybook/preview.tsx";
+import { atCentre } from "#.storybook/test/pointer.ts";
 
 import { VisuallyHidden } from "./visually-hidden.tsx";
 
@@ -17,7 +18,8 @@ export const Default = meta.story({});
 
 Default.test("keeps its text for assistive technology but draws nothing", async ({ canvas }) => {
   const text = canvas.getByText("(opens in a new tab)");
-  await expect(text.getBoundingClientRect()).toMatchObject({ width: 1, height: 1 });
+
+  await expect(atCentre(text)).not.toBe(text);
 });
 
 Default.test(
@@ -25,7 +27,8 @@ Default.test(
   { args: { asChild: true, children: <h2>Filters</h2> } },
   async ({ canvas }) => {
     const heading = canvas.getByRole("heading", { name: "Filters", level: 2 });
-    await expect(heading.getBoundingClientRect()).toMatchObject({ width: 1, height: 1 });
+
+    await expect(atCentre(heading)).not.toBe(heading);
   },
 );
 

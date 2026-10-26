@@ -1,39 +1,19 @@
-import { expect, fn, waitFor } from "storybook/test";
+import { expect, fn, screen, waitFor } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
-import type { Decorator } from "@storybook/react-vite";
-
-import { Button } from "@platform/ui/button";
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
-
+import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
 import preview from "#.storybook/preview.tsx";
 import { confirmComposition } from "#.storybook/test/trusted.ts";
 
-import type { Locale } from "../provider/locale.tsx";
-
 import { DateField } from "./date-field.tsx";
-import type { DateFieldChangeEventDetails } from "./date-field.tsx";
+import type { DateFieldChangeEventDetails, DateFieldProps } from "./date-field.tsx";
 
-// @ts-expect-error -- a locale must give the DateField placeholders and messages
-({ tag: "fr-FR", labels: { ...roRO.labels, dateField: {} } }) satisfies Locale;
+// @ts-expect-error -- a date typed in part is invalid, so it needs its error
+({ label: "Date of birth" }) satisfies DateFieldProps;
 
-const submitted = fn<(data: FormData) => void>();
 const date = (iso: string) => Temporal.PlainDate.from(iso);
-
-const inAForm: Decorator = (Story) => (
-  <form
-    aria-label="Profile"
-    noValidate={false}
-    onSubmit={(event) => {
-      event.preventDefault();
-      submitted(new FormData(event.currentTarget));
-    }}
-  >
-    <Story />
-    <Button type="submit">Save</Button>
-  </form>
-);
+const names = () =>
+  screen.getAllByRole("spinbutton").map((segment) => segment.getAttribute("aria-label"));
 
 const meta = preview.meta({
   title: "Components/DateField",
@@ -41,6 +21,9 @@ const meta = preview.meta({
   args: {
     label: "Date of birth",
     name: "birthDate",
+    locale: "en-US",
+    incompleteMessage: "Enter a complete date",
+    placeholders: { day: "dd", month: "mm", year: "yyyy" },
     onValueChange:
       fn<(value: Temporal.PlainDate | null, details: DateFieldChangeEventDetails) => void>(),
   },
@@ -49,37 +32,10 @@ const meta = preview.meta({
 export const Default = meta.story({});
 
 Default.test(
-  "is a group named by its label with month, day and year spinbuttons in en-US order",
+  "orders and names the segments for ro-RO, with the author's placeholders",
+  { args: { locale: "ro-RO", placeholders: { day: "zz", month: "ll", year: "aaaa" } } },
   async ({ canvas }) => {
-    const group = canvas.getByRole("group", { name: "Date of birth" });
-    await expect(group).toBeVisible();
-    const names = canvas
-      .getAllByRole("spinbutton")
-      .map((segment) => segment.getAttribute("aria-label"));
-    await expect(names).toEqual(["month", "day", "year"]);
-    await expect(canvas.getByRole("spinbutton", { name: "month" })).toHaveAttribute(
-      "aria-valuetext",
-      "Empty",
-    );
-  },
-);
-
-Default.test(
-  "orders the segments for ro-RO",
-  {
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
-  async ({ canvas }) => {
-    const names = canvas
-      .getAllByRole("spinbutton")
-      .map((segment) => segment.getAttribute("aria-label"));
-    await expect(names).toEqual(["zi", "lună", "an"]);
+    await expect(names()).toEqual(["zi", "lună", "an"]);
     await expect(canvas.getByRole("spinbutton", { name: "zi" })).toHaveAttribute(
       "placeholder",
       "zz",
@@ -91,6 +47,7 @@ Default.test(
   "types a date segment by segment and reports it",
   async ({ args, canvas, userEvent }) => {
     const month = canvas.getByRole("spinbutton", { name: "month" });
+
     await userEvent.click(month);
     await userEvent.keyboard("1");
     await expect(month).toHaveFocus();
@@ -133,6 +90,7 @@ Default.test(
   { args: { defaultValue: date("2026-12-24") } },
   async ({ args, canvas, userEvent }) => {
     const month = canvas.getByRole("spinbutton", { name: "month" });
+
     await userEvent.click(month);
     await userEvent.keyboard("{ArrowUp}");
     await expect(month).toHaveAttribute("aria-valuenow", "1");
@@ -154,6 +112,7 @@ Default.test(
 
 Default.test("starts an empty segment at today's part", async ({ canvas, userEvent }) => {
   const year = canvas.getByRole("spinbutton", { name: "year" });
+
   await userEvent.click(year);
   await userEvent.keyboard("{ArrowUp}");
   await expect(year).toHaveAttribute("aria-valuenow", String(new Date().getFullYear()));
@@ -164,6 +123,7 @@ Default.test(
   { args: { defaultValue: date("2026-10-24") } },
   async ({ args, canvas, userEvent }) => {
     const day = canvas.getByRole("spinbutton", { name: "day" });
+
     await userEvent.click(day);
     await userEvent.keyboard("{Backspace}");
     await expect(day).toHaveValue("2");
@@ -172,7 +132,7 @@ Default.test(
       expect.anything(),
     );
     await userEvent.keyboard("{Delete}");
-    await expect(day).toHaveAttribute("aria-valuetext", "Empty");
+    await expect(day).toHaveValue("");
     await expect(args.onValueChange).toHaveBeenLastCalledWith(null, expect.anything());
     await userEvent.keyboard("{Backspace}");
     await expect(canvas.getByRole("spinbutton", { name: "month" })).toHaveFocus();
@@ -208,6 +168,7 @@ Default.test(
   },
   async ({ canvas, userEvent }) => {
     const day = canvas.getByRole("spinbutton", { name: "day" });
+
     await userEvent.click(day);
     await userEvent.keyboard("{ArrowUp}");
     await expect(day).toHaveValue("24");
@@ -219,6 +180,7 @@ Default.test(
   { args: { disabled: true, defaultValue: date("2026-10-24") } },
   async ({ canvas, userEvent }) => {
     const day = canvas.getByRole("spinbutton", { name: "day" });
+
     await expect(day).toHaveAttribute("aria-disabled", "true");
     await userEvent.click(day);
     await userEvent.keyboard("{ArrowUp}5");
@@ -226,7 +188,13 @@ Default.test(
   },
 );
 
-export const InAForm = meta.story({ decorators: [inAForm], args: { required: true } });
+export const Editing = meta.story({
+  parameters: { docs: { description: { story: "Month typed, focus moved on to the day." } } },
+  play: ({ canvas, userEvent }) =>
+    userEvent.type(canvas.getByRole("spinbutton", { name: "month" }), "4"),
+});
+
+export const InAForm = meta.story({ decorators: [withForm], args: { required: true } });
 
 InAForm.test(
   "submits the ISO date",
@@ -243,7 +211,9 @@ InAForm.test(
   { args: { defaultValue: date("2026-10-24") } },
   async ({ canvas, userEvent }) => {
     submitted.mockClear();
+
     const day = canvas.getByRole("spinbutton", { name: "day" });
+
     confirmComposition(day);
     await expect(submitted).not.toHaveBeenCalled();
     await userEvent.type(day, "{Enter}");
@@ -255,6 +225,7 @@ InAForm.test(
   "shows the error after a failed submit and focuses the first segment",
   async ({ canvas, userEvent }) => {
     const month = canvas.getByRole("spinbutton", { name: "month" });
+
     await expect(month).not.toBeInvalid();
     await userEvent.click(canvas.getByRole("button", { name: "Save" }));
     await waitFor(() => expect(month).toHaveFocus());
@@ -266,6 +237,7 @@ InAForm.test(
   "shows the error after leaving an edited empty field, not before",
   async ({ canvas, userEvent }) => {
     const month = canvas.getByRole("spinbutton", { name: "month" });
+
     await userEvent.click(month);
     await userEvent.keyboard("1{Backspace}");
     await userEvent.tab();
@@ -274,6 +246,21 @@ InAForm.test(
     await userEvent.tab();
     await expect(canvas.getByRole("button", { name: "Save" })).toHaveFocus();
     await expect(month).toBeInvalid();
+  },
+);
+
+InAForm.test(
+  "restores its default value and clears its error when the form resets",
+  { args: { defaultValue: date("2026-10-24") } },
+  async ({ canvas, userEvent }) => {
+    const day = canvas.getByRole("spinbutton", { name: "day" });
+
+    await userEvent.type(day, "{Backspace}{Backspace}");
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
+    await expect(day).toBeInvalid();
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await waitFor(() => expect(day).toHaveValue("24"));
+    await expect(day).not.toBeInvalid();
   },
 );
 

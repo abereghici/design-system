@@ -21,22 +21,30 @@ type Ref = (reference: unknown) => string;
 
 const shadowLayer = (layer: unknown, ref: Ref): string => {
   if (typeof layer !== "object" || layer === null) return ref(layer);
+
   const get = (key: string): unknown => Reflect.get(layer, key);
   const lengths = ["offsetX", "offsetY", "blur", "spread"].map((key) => ref(get(key)));
+
   return [...(get("inset") === true ? ["inset"] : []), ...lengths, ref(get("color"))].join(" ");
 };
 
 export const compositeCss = (type: unknown, authored: object, dictionary: Dictionary): string => {
   const ref: Ref = (reference) => {
     const target = isWholeReference(reference) ? dictionary.tokenMap.get(reference) : undefined;
+
     if (target === undefined) throw new Error(`unresolvable composite member ${String(reference)}`);
+
     return `var(--${target.name})`;
   };
+
   if (type === "typography") {
     const get = (key: string) => ref(Reflect.get(authored, key));
+
     // `letterSpacing` has no place in the `font` shorthand; it stays its own token, as in the source.
     return `${get("fontWeight")} ${get("fontSize")}/${get("lineHeight")} ${get("fontFamily")}`;
   }
+
   const layers: unknown[] = Array.isArray(authored) ? authored : [authored];
+
   return layers.map((layer) => shadowLayer(layer, ref)).join(", ");
 };

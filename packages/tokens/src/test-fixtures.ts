@@ -20,7 +20,9 @@ const sourceTier = (tier: string): Record<string, object> => {
     readFileSync(new URL(`tokens/${tier}.tokens.json`, import.meta.url), "utf8"),
   );
   const group: unknown = isGroup(file) ? Reflect.get(file, tier) : undefined;
+
   if (!isGroup(group)) throw new Error(`src/tokens/${tier}.tokens.json has no "${tier}" group`);
+
   return group;
 };
 
@@ -37,6 +39,8 @@ export const setMember = (
   value: unknown,
 ): void => {
   const composite: unknown = Reflect.get(group[name] ?? {}, "$value");
+
   if (!isGroup(composite)) throw new Error(`${name} is not a composite token`);
+
   Reflect.set(composite, member, value);
 };

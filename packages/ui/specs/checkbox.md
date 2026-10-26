@@ -70,12 +70,12 @@ Names, checked against the reference libraries:
 - **Indeterminate** is the DOM property, set from the input's ref callback on every render. MDN: "This is purely a visual change. It has no impact on whether the checkbox's `value` is used in a form submission. That is decided by the `checked` state, regardless of the `indeterminate` state." A user click clears it (native); the parent decides the next state, following APG's tri-state rules ("Checking the overall checkbox checks all options in the group. Unchecking the overall checkbox will uncheck all options in the group.").
 - **Disabled** (`aria-disabled`): the click handler calls `preventDefault()` and returns, so the box does not flip, no callback runs and no event is dispatched; a label click and Space reach the same handler. Inside a disabled Fieldset the input is natively disabled.
 - `required` and errors follow the Field contract when the Checkbox sits in a `Field.Root` (the "accept the terms" case).
-- Client component (`'use client'`): the click handler and the `indeterminate` effect.
+- Client component (`'use client'`): the click handler and the `indeterminate` ref callback.
 
 ## Motion
 
 - Checking: the fill fades in over `checkbox-duration` (`motion-duration-toggle`, 180 ms) and the check is revealed from the inline start to the inline end by `clip-path: inset()` over the same duration with `motion-easing-exit`, starting `calc(var(--ab-checkbox-duration) / 4)` (45 ms) after the fill (the source CSS). Source: "Fill fades (180ms), then the check draws left→right with a 45ms delay".
-- Unchecking: fill and check fade out together over `motion-duration-exit` (150 ms); exits are faster than entrances.
+- Unchecking: fill and check fade out together over the same `checkbox-duration` (180 ms), so one token times both directions.
 - Press: scale to `checkbox-scale-pressed` over `motion-duration-press`.
 - **Reduced motion:** the check does not draw; it fades in with the fill. The press scale resolves to 1 (`motion-scale-pressed` media override). Colour and opacity fades stay.
 - **Instant exit:** with no transition the fill and check disappear in the same frame as `:checked` stops matching, which reads as correct.
@@ -100,8 +100,9 @@ Native; no key handler is added. Enter is not bound (APG lists Space only; Enter
 - **No interactive content in the label.** MDN: "don't place additional interactive elements such as anchors or buttons inside a `<label>`." A link to the terms goes in a `Field.Description`.
 - **Contrast.** The checked state is the accent fill plus the check (shape, not colour alone). `background-accent-bold` against every surface is added to the contrast matrix at 3:1 (lowest measured 12.19:1 light, 14.25:1 dark). The unchecked box edge is `color-border-default`, already in the matrix (3:1).
 - Targets: the whole row is the label, at least 24 px tall through the line height plus padding (the box alone is 16 px; because the label activates the input, the row is the target for WCAG 2.5.8; inference).
+- Reflow: the box sits on the label's first line (`1lh` centring), and a long or unbroken label wraps anywhere, so nothing overflows at 320 px.
 - **More contrast:** no change needed (the border is already `border-default`).
-- **Forced colors:** the fill disappears, so the checked box sets `background-color: Highlight` and the check `HighlightText`; the border is `CanvasText`. Disabled uses `GrayText`.
+- **Forced colors:** the fill disappears, so the checked box sets `background-color: Highlight` and the check `HighlightText`; the border is `CanvasText`. Disabled uses `GrayText` for the border, the check and the label, on a `Canvas` box, as native disabled checkboxes do.
 - **Reduced transparency:** not affected.
 
 ## RTL
@@ -110,7 +111,7 @@ Logical properties only: the box at the inline start. The check is not mirrored 
 
 ## Component tokens
 
-Existing (ported from the source): `checkbox-size`, `checkbox-border-radius`, `checkbox-border-width`, `checkbox-gap`, `checkbox-label-font`, `checkbox-background-color`, `checkbox-border-color`, `checkbox-border-color-hovered`, `checkbox-background-color-checked`, `checkbox-icon-color-checked`, `checkbox-scale-pressed`, `checkbox-duration`, `checkbox-easing`.
+Existing (ported from the source): `checkbox-size`, `checkbox-border-radius`, `checkbox-border-width`, `checkbox-gap`, `checkbox-label-font`, `checkbox-background-color`, `checkbox-border-color`, `checkbox-border-color-hovered`, `checkbox-background-color-checked`, `checkbox-icon-color-checked`, `checkbox-scale-pressed`, `checkbox-duration`.
 
 Proposed new:
 
@@ -122,7 +123,7 @@ Contrast matrix additions (`packages/tokens/src/contrast.ts`, non-text 3:1): `ba
 
 The label text colour is `color-text-default` (semantic, directly; no source token).
 
-## Built-in labels
+## Author-written text
 
 None.
 

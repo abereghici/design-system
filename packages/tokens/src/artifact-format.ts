@@ -95,12 +95,19 @@ const UNLISTED =
 // An unmapped tier-1 or tier-2 token throws, so a new kind of token is placed here on purpose.
 const placementOf = (token: TransformedToken): Placement => {
   if (tierOf(token) === "component") return undefined;
+
   if (token.$type === "color") return { in: "color" };
+
   if (token.$type === "shadow") return { list: "shadow" };
+
   if (token.$type === "typography") return { in: "type" };
+
   const named = BY_NAME.find(([pattern]) => pattern.test(token.name));
+
   if (named !== undefined) return { list: named[1] };
+
   if (UNLISTED.test(token.name)) return undefined;
+
   throw new Error(`--${token.name}: no artifact family (see src/artifact-format.ts)`);
 };
 
@@ -122,10 +129,13 @@ const layerCss = (layer: unknown, theme: ThemeId, dictionary: Dictionary): strin
   const member = (key: string) => {
     const value = memberOf(layer, key);
     const target = isWholeReference(value) ? dictionary.tokenMap.get(value) : undefined;
+
     return String(target === undefined ? value : valueIn(target, theme, dictionary));
   };
+
   const inset = memberOf(layer, "inset") === true ? "inset " : "";
   const lengths = ["offsetX", "offsetY", "blur", "spread"].map((key) => member(key)).join(" ");
+
   return `${inset}${lengths} ${member("color")}`;
 };
 
@@ -137,15 +147,20 @@ const shadowLayers = (
   const authored: unknown = token.original.$value;
   const layers: unknown[] = Array.isArray(authored) ? authored : [authored];
   const css: string[] = [];
+
   for (const layer of layers) {
     if (!isWholeReference(layer)) {
       css.push(layerCss(layer, theme, dictionary));
       continue;
     }
+
     const target = dictionary.tokenMap.get(layer);
+
     if (target === undefined) throw new Error(`--${token.name}: ${layer} does not exist`);
+
     css.push(...shadowLayers(target, theme, dictionary));
   }
+
   return css;
 };
 
@@ -158,6 +173,7 @@ const shadowValue = (token: TransformedToken, dictionary: Dictionary): Themed =>
 const shownSize = (fontSize: unknown) => {
   const text = String(fontSize);
   const fluid = /^clamp\(.*,\s*(?<max>[^,\(\)]+)\)$/v.exec(text);
+
   return fluid?.groups?.["max"]?.trim() ?? text;
 };
 
@@ -186,20 +202,25 @@ const FONTS: ArtifactType["fonts"] = FONT_FAMILIES.flatMap((family) =>
 const typeOf = (tokens: readonly TransformedToken[]): ArtifactType => {
   const families: Record<string, string> = {};
   const groups = new Map<string, { family: string; styles: ArtifactTypeStyle[] }>();
+
   for (const token of tokens) {
     if (token.$type === "fontFamily" && tierOf(token) === "primitive") {
       families[token.name.replace("ab-font-family-", "")] = String(token.$value);
     }
   }
+
   for (const token of tokens) {
     if (token.$type !== "typography" || tierOf(token) !== "semantic") continue;
+
     const category = /^ab-type-(?<cat>[a-z]+)-/v.exec(token.name)?.groups?.["cat"] ?? "";
     const stack = memberOf(token.$value, "fontFamily");
     const family = Object.keys(families).find((key) => families[key] === stack) ?? "";
     const group = groups.get(category) ?? { family, styles: [] };
+
     group.styles.push(styleOf(token));
     groups.set(category, group);
   }
+
   return {
     fonts: FONTS,
     families,
@@ -215,17 +236,22 @@ export const toArtifactTokens = (dictionary: Dictionary): ArtifactTokens => {
   const tokens = inTierOrder(dictionary.allTokens);
   const colors: TransformedToken[] = [];
   const lists = new Map<List, TransformedToken[]>(LISTS.map((list) => [list, []]));
+
   for (const token of tokens) {
     const placement = placementOf(token);
+
     if (placement === undefined) continue;
+
     if ("list" in placement) lists.get(placement.list)?.push(token);
     else if (placement.in === "color") colors.push(token);
   }
+
   const family = <Value>(list: List, value: (token: TransformedToken) => Value) => ({
     ...(NOTES[list] === undefined ? {} : { note: NOTES[list] }),
     tokens: (lists.get(list) ?? []).map((token) => entry(token, value(token))),
   });
   const plain = (list: List) => family(list, (token) => String(token.$value));
+
   return {
     name: "Bereghici Design System",
     version: 1,

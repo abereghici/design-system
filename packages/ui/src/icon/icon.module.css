@@ -33,4 +33,12 @@
   .root:where([data-mirror]):dir(rtl) {
     scale: -1 1;
   }
+
+  /* An explicit ink stops the UA's preserve-parent-color on svg from forcing it, so forced colors
+     take the host's system text colour back: https://www.w3.org/TR/css-color-adjust-1/#forced-color-adjust-prop */
+  @media (forced-colors: active) {
+    .root {
+      color: inherit;
+    }
+  }
 }

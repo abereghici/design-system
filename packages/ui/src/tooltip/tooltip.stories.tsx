@@ -48,6 +48,7 @@ export const Default = meta.story({});
 
 Default.test("describes its Trigger, which keeps its own name", async ({ canvas }) => {
   const trigger = canvas.getByRole("button", { name: "Copy link" });
+
   await expect(trigger).toHaveAccessibleDescription(/^Copy link/v);
   await expect(canvas.queryByRole("tooltip")).toBeNull();
 });
@@ -57,6 +58,7 @@ Default.test(
   async ({ canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Copy link" });
+
     await user.hover(trigger);
     await waitFor(() => expect(canvas.getByRole("tooltip")).toBeVisible());
     await expect(canvas.getByRole("tooltip")).toHaveTextContent(/^Copy link/v);
@@ -71,6 +73,7 @@ Default.test(
 
 Default.test("stays open while the pointer moves onto it", async ({ canvas }) => {
   const user = await trusted();
+
   await user.hover(canvas.getByRole("button", { name: "Copy link" }));
   await waitFor(() => expect(canvas.getByRole("tooltip")).toBeVisible());
   await user.hover(canvas.getByRole("tooltip"));
@@ -82,6 +85,7 @@ Default.test(
   async ({ canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Copy link" });
+
     await user.keyboard("{Tab}");
     await expect(trigger).toHaveFocus();
     await expect(canvas.getByRole("tooltip")).toBeVisible();
@@ -97,6 +101,7 @@ Default.test(
 
 Default.test("hides when its Trigger is pressed", async ({ canvas }) => {
   const user = await trusted();
+
   await user.keyboard("{Tab}");
   await expect(canvas.getByRole("tooltip")).toBeVisible();
   await user.keyboard("{Enter}");
@@ -107,8 +112,20 @@ Default.test("hides when its Trigger is pressed", async ({ canvas }) => {
   ]);
 });
 
+Default.test("never opens from a touch", async ({ canvas, userEvent }) => {
+  await userEvent.pointer({
+    keys: "[TouchA]",
+    target: canvas.getByRole("button", { name: "Copy link" }),
+  });
+  // user-event's touch then focuses the Trigger by script, which the :focus-visible heuristics match
+  // though a real tap would not, so the proof checks the pointer path only:
+  // https://drafts.csswg.org/selectors-4/#the-focus-visible-pseudo
+  await expect(reasons()).not.toContainEqual([true, "trigger-hover"]);
+});
+
 Default.test("stays hidden after its Trigger is clicked", async ({ canvas }) => {
   const user = await trusted();
+
   await user.click(canvas.getByRole("button", { name: "Copy link" }));
   await expect(canvas.queryByRole("tooltip")).toBeNull();
 });
@@ -130,6 +147,7 @@ Default.test(
   async ({ canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Publish" });
+
     await expect(trigger).toHaveAccessibleDescription("Add a title before publishing");
     await user.keyboard("{Tab}");
     await expect(canvas.getByRole("tooltip")).toBeVisible();
@@ -139,6 +157,7 @@ Default.test(
 Default.test("adds nothing when disabled", { args: { disabled: true } }, async ({ canvas }) => {
   const user = await trusted();
   const trigger = canvas.getByRole("button", { name: "Copy link" });
+
   await expect(trigger).not.toHaveAccessibleDescription();
   await user.keyboard("{Tab}");
   await expect(canvas.queryByRole("tooltip")).toBeNull();
@@ -155,6 +174,7 @@ Default.test(
   },
   async ({ canvas }) => {
     const user = await trusted();
+
     await user.keyboard("{Tab}");
     await expect(canvas.queryByRole("tooltip")).toBeNull();
   },
@@ -188,6 +208,7 @@ Neighbours.test(
   "hides when its Trigger loses focus, so one shows at a time",
   async ({ canvas }) => {
     const user = await trusted();
+
     await user.keyboard("{Tab}");
     await expect(canvas.getByRole("tooltip")).toHaveTextContent("Pin");
     await user.keyboard("{Tab}");
@@ -202,6 +223,7 @@ Neighbours.test(
 
 Neighbours.test("shows the neighbour at once while warm", async ({ canvas }) => {
   const user = await trusted();
+
   await user.hover(canvas.getByRole("button", { name: "Pin" }));
   await waitFor(() => expect(canvas.getByRole("tooltip")).toBeVisible());
   await user.hover(canvas.getByRole("button", { name: "Copy link" }));

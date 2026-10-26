@@ -169,7 +169,7 @@ Proposed new (`sidebar` is a new component word):
 
 Every word but `sidebar` is in the Dictionary (`group`, `label`, `item`, `indicator`; `padding`, `gap`, `font`, `text-color`, `padding-inline`, `min-height`, `border-radius`, `background-color`, `color`, `width`; `hovered`, `pressed`, `selected`).
 
-## Built-in labels
+## Author-written text
 
 None. The landmark name is required from the app, and group labels and link text are the app's.
 

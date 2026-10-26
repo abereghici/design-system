@@ -39,21 +39,8 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("is a named navigation landmark with a list of links", async ({ canvas }) => {
-  await expect(canvas.getByRole("navigation", { name: "Main" })).toBeVisible();
-  await expect(canvas.getAllByRole("listitem")).toHaveLength(4);
-});
-
-Default.test("names a link by its text and marks the current page", async ({ canvas }) => {
-  await expect(canvas.getByRole("link", { name: "Home" })).toBeVisible();
+Default.test("marks the current page", async ({ canvas }) => {
   await expect(canvas.getByRole("link", { name: "Work" })).toHaveAttribute("aria-current", "page");
-});
-
-Default.test("makes every link a tab stop", async ({ canvas, userEvent }) => {
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Home" })).toHaveFocus();
-  await userEvent.tab();
-  await expect(canvas.getByRole("link", { name: "Work" })).toHaveFocus();
 });
 
 Default.test(

@@ -1306,13 +1306,18 @@
     },
     "opacity-40": {
       "$type": "number",
-      "$description": "Feeds `ab-opacity-disabled`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$description": "Feeds `ab-opacity-disabled`, `ab-opacity-subtle`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": 0.4
     },
     "opacity-64": {
       "$type": "number",
       "$description": "Not referenced by a tier-2 token yet. Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": 0.64
+    },
+    "opacity-80": {
+      "$type": "number",
+      "$description": "Feeds `ab-opacity-bold`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$value": 0.8
     },
     "font-family-noto-serif": {
       "$type": "fontFamily",

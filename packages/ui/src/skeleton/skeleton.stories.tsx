@@ -1,6 +1,7 @@
-import { expect } from "storybook/test";
+import { expect, isInaccessible } from "storybook/test";
 
 import preview from "#.storybook/preview.tsx";
+import { animates, moves } from "#.storybook/test/motion.ts";
 
 import { Skeleton } from "./skeleton.tsx";
 
@@ -21,7 +22,7 @@ const meta = preview.meta({
 export const Default = meta.story({});
 
 Default.test("hides its placeholder text from assistive technology", async ({ canvas }) => {
-  await expect(canvas.getByText("Placeholder name")).toHaveAttribute("aria-hidden", "true");
+  await expect(isInaccessible(canvas.getByText("Placeholder name"))).toBe(true);
 });
 
 Default.test(
@@ -43,8 +44,29 @@ Default.test(
   },
 );
 
-Default.test("keeps its colour pulse under reduced motion", async ({ canvas }) => {
-  await expect(canvas.getByText("Placeholder name").getAnimations()).toHaveLength(1);
+Default.test(
+  "keeps a wrapped element's shape and class beside the consumer's",
+  {
+    args: {
+      children: <span className="pill" style={{ borderRadius: "999px" }} />,
+      className: "wide",
+      style: { inlineSize: "12rem" },
+    },
+  },
+  async ({ canvasElement }) => {
+    const placeholder = canvasElement.querySelector(".pill");
+
+    await expect(placeholder).toHaveClass("wide");
+    await expect(placeholder).not.toHaveClass("undefined");
+    await expect(placeholder).toHaveStyle({ borderRadius: "999px", inlineSize: "192px" });
+  },
+);
+
+Default.test("pulses without moving, also under reduced motion", async ({ canvas }) => {
+  const placeholder = canvas.getByText("Placeholder name");
+
+  await expect(animates(placeholder)).toBe(true);
+  await expect(moves(placeholder)).toBe(false);
 });
 
 export const Empty = meta.story({

@@ -1,14 +1,17 @@
 "use client";
 
-import type { ComponentProps, MouseEvent } from "react";
+import { cloneElement, isValidElement } from "react";
+import type { ComponentProps, MouseEvent, MouseEventHandler, ReactNode } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
-import { Slot, join } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./button.module.css";
 
-export interface ButtonProps extends ComponentProps<"button"> {
+export interface ButtonProps extends Omit<ComponentProps<"button">, "onClick"> {
+  /** Runs on every press, unless the Button is disabled or loading. */
+  onClick?: MouseEventHandler<HTMLElement> | undefined;
   /**
    * The weight of the action: one `primary` per view, `secondary` for the rest, `tertiary` in
    * toolbars and dense rows, `danger` only to confirm a destructive action.
@@ -28,6 +31,8 @@ export interface ButtonProps extends ComponentProps<"button"> {
    * nearby why it is unavailable.
    */
   disabled?: boolean;
+  /** `submit` sends its form; the default, `button`, does nothing on its own. */
+  type?: "button" | "submit" | "reset";
   /**
    * Gives the Button's look to its one child, such as a router link that should look like a button.
    */
@@ -45,43 +50,56 @@ export function Button({
   loading = false,
   disabled = false,
   asChild = false,
-  className,
   type = "button",
   onClick,
   children,
   ...props
 }: ButtonProps) {
-  function handleClick(event: MouseEvent<HTMLButtonElement>) {
-    if (disabled || loading) {
+  const blocked = disabled || loading;
+  const spinner = loading ? <Spinner aria-hidden className={styles["spinner"]} /> : null;
+
+  function handleClick(event: MouseEvent<HTMLElement>) {
+    if (blocked) {
       // preventDefault also stops a submit or reset button from acting on its form.
       event.preventDefault();
+
       return;
     }
+
     onClick?.(event);
     dispatchFeedback(event.currentTarget, "ab-press", { component: "Button", reason: "user" });
   }
 
   const Root = asChild ? Slot : "button";
+
   return (
     <Root
-      {...props}
+      {...mergeProps({ className: styles["root"] }, props)}
       type={asChild ? undefined : type}
-      aria-disabled={disabled ? true : undefined}
+      aria-disabled={blocked ? true : props["aria-disabled"]}
       aria-busy={loading ? true : undefined}
       data-loading={loading ? "" : undefined}
       data-variant={variant}
       data-size={size}
-      className={join(styles["root"], className)}
       onClick={handleClick}
     >
-      {loading && !asChild ? (
+      {asChild ? (
+        child(children, blocked, spinner)
+      ) : (
         <>
           {children}
-          <Spinner aria-hidden className={styles["spinner"]} />
+          {spinner}
         </>
-      ) : (
-        children
       )}
     </Root>
   );
+}
+
+function child(children: ReactNode, blocked: boolean, spinner: ReactNode) {
+  if (!blocked || !isValidElement<{ children?: ReactNode; onClick?: unknown }>(children)) {
+    return children;
+  }
+
+  // Slot runs the child's own onClick before handleClick, so a blocked Button drops it here.
+  return cloneElement(children, { onClick: undefined }, children.props.children, spinner);
 }

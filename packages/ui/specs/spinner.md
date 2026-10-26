@@ -22,14 +22,12 @@ Status (`<span role="status">`), painted with eight staves.
 
 ## API
 
-| Prop          | Type                         | Default          | Notes                                                             |
-| ------------- | ---------------------------- | ---------------- | ----------------------------------------------------------------- |
-| `size`        | `"sm" \| "lg"`               | `"sm"`           | Exposed as `data-size`. 16 / 24 px.                               |
-| `aria-label`  | `string`                     | `labels.loading` | The status's name. Overrides the built-in label for one instance. |
-| `aria-hidden` | `boolean`                    |                  | When true, the Spinner is decorative: no `role`, no name.         |
-| `locale`      | `Locale`                     | en-US            | A shipped locale; translates the name on the server.              |
-| `labels`      | `Partial<Labels["spinner"]>` | English          | See Built-in labels.                                              |
-| …native       | `ComponentProps<"span">`     |                  | `ref`, `className` and every native attribute pass through.       |
+| Prop          | Type                                        | Default | Notes                                                                                             |
+| ------------- | ------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------- |
+| `size`        | `"sm" \| "lg"`                              | `"sm"`  | Exposed as `data-size`. 16 / 24 px.                                                               |
+| `children`    | `ReactNode` (required unless `aria-hidden`) |         | The status message ("Loading"), visually hidden inside the status, so it is announced as content. |
+| `aria-hidden` | `boolean`                                   |         | When true, the Spinner is decorative: no `role`, no name.                                         |
+| …native       | `ComponentProps<"span">`                    |         | `ref`, `className` and every native attribute pass through.                                       |
 
 Names, checked against the reference libraries:
 
@@ -58,7 +56,7 @@ Names, checked against the reference libraries:
 
 - Spin: `rotate` from 0 to 360° over `spinner-duration` (`motion-duration-loop`, 700 ms), `animation-timing-function: steps(8)`, infinite. Eight discrete steps, so each stave lands where the last one was (source: "Steps through 8 positions per `--ab-spinner-duration` (700ms)"). A step function is not an ease, so the brand's never-ease-in rule is met (inference).
 - The rotation is clockwise in both directions (see RTL).
-- **Reduced motion:** under `(prefers-reduced-motion: reduce)` the rotation is removed and the whole Spinner pulses `opacity` between 1 and 0.4 over twice `spinner-duration`, `motion-easing-move`, alternating (artifact `ab-pulse`) (source: "Under reduced motion it pulses opacity instead of rotating"). Opacity fades are what reduced motion keeps (spec #1 user story 47). The reduced-motion project asserts that no `rotate` runs.
+- **Reduced motion:** under `(prefers-reduced-motion: reduce)` the rotation is removed and the whole Spinner pulses `opacity` between 1 and `opacity-subtle` (0.4) over twice `spinner-duration`, `motion-easing-move`, alternating (artifact `ab-pulse`) (source: "Under reduced motion it pulses opacity instead of rotating"). Opacity fades are what reduced motion keeps (spec #1 user story 47). The reduced-motion project asserts that no `rotate` runs.
 - Looping past 5 s is allowed here: WCAG 2.2.2 Note 4, "An animation that occurs as part of a preload phase or similar situation can be considered essential if interaction cannot occur during that phase for all users and if not indicating progress could confuse users or cause them to think that content was frozen or broken." (https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html). Where the wait runs in parallel with other content the user can use, the caller should keep it short or use Progress (inference from the SC's "presented in parallel with other content").
 - **Instant exit:** Spinner has no exit animation; it is unmounted when the wait ends. That reads as correct because the loaded content takes its place in the same spot (and in a Button the label never moved).
 
@@ -86,15 +84,11 @@ Not mirrored: the Spinner keeps turning clockwise. Adobe Spectrum: "Icons that r
 
 All exist (ported from the source): `spinner-size` (→ `size-icon-sm`), `spinner-lg-size` (→ `size-icon-lg`), `spinner-color` (→ `color-icon-subtle`), `spinner-stroke-width` (→ `stroke-width-lg`), `spinner-duration` (→ `motion-duration-loop`).
 
-No new tokens. The reduced-motion pulse uses semantic `motion-easing-move` directly. `spinner-stroke-width` was deleted: the staves are a mask.
+No new tokens. The reduced-motion pulse uses semantic `motion-easing-move` and `opacity-subtle` directly. `spinner-stroke-width` was deleted: the staves are a mask.
 
-## Built-in labels
+## Author-written text
 
-| Label     | Default   | Used for                                          |
-| --------- | --------- | ------------------------------------------------- |
-| `loading` | "Loading" | The status's name when no `aria-label` is passed. |
-
-The en-US default is `spinner` in `src/provider/locales/en-US/spinner.ts`, which `enUS` composes. A Server Component can't read the UIProvider's locale, so a localised app passes the shipped object, `locale={roRO}`, as on Progress, Meter, Badge and Pagination; `labels` overrides single strings (decision Q19-1).
+None. The message is the author's `children`, required by type unless the Spinner is `aria-hidden` inside a busy control; it renders as visually hidden text inside the `status`, so the live region carries its message as content (WAI-ARIA `aria-relevant`: "Text content or a text alternative is added to any descendant").
 
 ## Feedback events
 

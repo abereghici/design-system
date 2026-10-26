@@ -22,7 +22,7 @@ Root → header (Previous, month heading, Next) → grid (weekday row, six week 
 
 - **Root.** A `<fieldset>` (implicit role `group`; oxlint prefers it over `div[role=group]`) named by the consumer's `aria-label` / `aria-labelledby` (inside DatePicker, by the panel). Width is seven cells.
 - **Header.** A flex row: Previous, heading, Next, with the heading centred.
-- **Previous / Next.** `IconButton` `size="sm"` with `ChevronRightIcon`, flipped for Previous (Pagination precedent as built: `rotate: 180deg`, which composes with Icon's RTL mirror), named by `labels.previousMonth` / `labels.nextMonth` (APG: `aria-label` "Defines the accessible name of the button (e.g. "Next Year")."). `aria-disabled="true"` when the month before or after lies wholly outside `min` / `max`.
+- **Previous / Next.** `IconButton` `size="sm"` with `ChevronRightIcon`, flipped for Previous (Pagination precedent as built: `rotate: 180deg`, which composes with Icon's RTL mirror), named by the author's required `previousMonthLabel` / `nextMonthLabel` (APG: `aria-label` "Defines the accessible name of the button (e.g. "Next Year")."). `aria-disabled="true"` when the month before or after lies wholly outside `min` / `max`.
 - **Heading.** An `<h2 id aria-live="polite">` with the month and year, `Intl.DateTimeFormat(tag, { month: "long", year: "numeric" })` ("October 2026", "octombrie 2026"), in `calendar-header-font`, `color-text-default`. APG: "When the month and/or year changes the content of the h2 element is updated. Indicates the h2 should be automatically announced by screen readers."
 - **Grid.** A `<table role="grid" aria-labelledby={headingId}>`. APG: "Since the grid role is applied to a table element, the row, columnheader, and gridcell roles do not need to be specified because they are implied by tr, th, and td tags."
 - **Weekday row.** `<thead>` with seven `<th scope="col" abbr={long}>`: short names from `Intl.DateTimeFormat(tag, { weekday: "short" })` ("Mon", "lun."), the full name in `abbr` from `{ weekday: "long" }` (APG: "each th element includes a abbr attribute containing the full spelling of the name of the day for that column."). `type-label-sm`, `color-text-subtle`. The week starts on `new Intl.Locale(tag).getWeekInfo().firstDay` (MDN: "An integer between 1 (Monday) and 7 (Sunday) indicating the first day of the week for the locale."), the same numbering as `Temporal.PlainDate.prototype.dayOfWeek` ("1 usually represents Monday in the calendar"): Sunday for en-US, Monday for ro-RO.
@@ -33,15 +33,15 @@ Root → header (Previous, month heading, Next) → grid (weekday row, six week 
 
 `Calendar`
 
-| Prop                | Type                                                                        | Default | Notes                                                                                          |
-| ------------------- | --------------------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------- |
-| `value`             | `Temporal.PlainDate \| null`                                                |         | Controlled.                                                                                    |
-| `defaultValue`      | `Temporal.PlainDate \| null`                                                | `null`  | Uncontrolled.                                                                                  |
-| `onValueChange`     | `(value: Temporal.PlainDate, details: Calendar.ChangeEventDetails) => void` |         | `reason`: `"day-press"` (click, Enter or Space on a day). `cancel()` keeps the previous value. |
-| `min`, `max`        | `Temporal.PlainDate`                                                        |         | Days outside are unavailable; Previous / Next stop at their months.                            |
-| `isDateUnavailable` | `(date: Temporal.PlainDate) => boolean`                                     |         | Unavailable days stay focusable and readable, but cannot be chosen.                            |
-| `labels`            | `Partial<Locale["labels"]["calendar"]>`                                     |         | Per-instance override (Built-in labels).                                                       |
-| …native             | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                 |         | `ref`, `className`, `aria-label`, `aria-labelledby` on Root. `role` is owned.                  |
+| Prop                                   | Type                                                                        | Default | Notes                                                                                          |
+| -------------------------------------- | --------------------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------- |
+| `value`                                | `Temporal.PlainDate \| null`                                                |         | Controlled.                                                                                    |
+| `defaultValue`                         | `Temporal.PlainDate \| null`                                                | `null`  | Uncontrolled.                                                                                  |
+| `onValueChange`                        | `(value: Temporal.PlainDate, details: Calendar.ChangeEventDetails) => void` |         | `reason`: `"day-press"` (click, Enter or Space on a day). `cancel()` keeps the previous value. |
+| `min`, `max`                           | `Temporal.PlainDate`                                                        |         | Days outside are unavailable; Previous / Next stop at their months.                            |
+| `isDateUnavailable`                    | `(date: Temporal.PlainDate) => boolean`                                     |         | Unavailable days stay focusable and readable, but cannot be chosen.                            |
+| `previousMonthLabel`, `nextMonthLabel` | `string` (required)                                                         |         | Names of the icon-only month buttons ("Previous month", "Next month").                         |
+| …native                                | `Omit<ComponentProps<"div">, "defaultValue" \| "onChange">`                 |         | `ref`, `className`, `aria-label`, `aria-labelledby` on Root. `role` is owned.                  |
 
 Inside `DatePicker.Content`, the Calendar takes `value`, `min`, `max` and `isDateUnavailable` from the DatePicker (DatePicker spec); set them on `DatePicker.Root`.
 
@@ -53,7 +53,7 @@ Names, checked against the reference libraries:
 - **`value` / `defaultValue` / `onValueChange`**: Ark "`value` … The selected date.", `onValueChange`; React Aria `value` "The current value (controlled).", `onChange`; shadcn `selected` / `onSelect` (React DayPicker). The type is `Temporal.PlainDate` (ADR-0004).
 - **`min` / `max`**: Ark DatePicker `min`, `max`; React Aria `minValue` / `maxValue` "The minimum allowed date that a user may select." DateField's names, which are the HTML attribute names.
 - **`isDateUnavailable`**: React Aria "Callback that is called for each date of the calendar. If it returns true, then the date is unavailable."; Ark "`isDateUnavailable` `(date: DateValue, locale: string) => boolean` … Returns whether a date of the calendar is available." Both libraries use this name.
-- **First day of the week from the Locale**: React Aria `firstDayOfWeek` "The day that starts the week." and Ark `startOfWeek` "The first day of the week." override the locale; here the Locale's `getWeekInfo()` decides (YAGNI: no override prop).
+- **First day of the week from the `locale`**: React Aria `firstDayOfWeek` "The day that starts the week." and Ark `startOfWeek` "The first day of the week." override the locale; here the `locale`'s `getWeekInfo()` decides (YAGNI: no override prop).
 - Left out (YAGNI): ranges (React Aria `RangeCalendar`, Ark `selectionMode`, shadcn `mode="range"`); several months (`visibleDuration`, `pageBehavior`, Ark `numOfMonths`); month and year pickers (React Aria `CalendarMonthPicker` / `CalendarYearPicker`, Ark `ViewTrigger` and month / year views): Shift + Page Up / Down move by year, and DateField types any year; `focusedValue` / `defaultFocusedValue` / `onFocusChange` (React Aria, Ark); `firstDayOfWeek` / `startOfWeek`; `outsideDaySelectable` (Ark) and visible outside days; week numbers; `isReadOnly`, `isInvalid` and `errorMessage` (React Aria); international calendars (Gregorian only, ADR-0004); the APG example's previous / next year buttons, OK / Cancel buttons and keyboard help text (a press chooses, Escape cancels in DatePicker).
 
 ## States
@@ -75,7 +75,7 @@ Names, checked against the reference libraries:
 - **Previous / Next.** Show the month before or after; focus stays on the button; the tab stop takes the same day number in the new month (or its last day). Each press is an IconButton press.
 - **Choosing** (`"day-press"`): a click, Enter or Space on an available day calls `onValueChange(day, details)`; `cancel()` keeps the old value. Choosing the selected day again changes nothing. An unavailable day does nothing (`aria-disabled`).
 - **Today** is `Temporal.Now.plainDateISO()` (MDN: "returns the current date as a `Temporal.PlainDate` object, in the ISO 8601 calendar and the specified time zone"; the system time zone by default), read on mount and on each `focus` of the Root, so a page left open overnight moves the marker (inference).
-- **Locale.** Weekday names, month heading, day numbers, the cells' accessible names and the first day of the week come from the root UIProvider's Locale `tag`; formatters are created once per tag, lazily.
+- **Locale.** Weekday names, month heading, day numbers, the cells' accessible names and the first day of the week come from the `locale` prop (inside a DatePicker, the DatePicker's), else the runtime's default; formatters are created once per locale, lazily. The focused day follows today and the value until the user moves it, so after hydration it starts in the user's time zone.
 - **Server rendering.** "Today" differs between server and client time zones, so the server renders the value's month (or the current UTC month) and the client corrects it after hydration (inference: the build ticket checks no hydration error when the server and the browser are on different dates).
 - Client component (`'use client'`): one file.
 
@@ -96,8 +96,8 @@ APG patterns: **Date Picker Dialog** example, "Date Grid" table (https://www.w3.
 | Left Arrow        | "Moves focus to the previous day."                                                                                                                                                     | As APG; swapped in RTL.                                                             |
 | Down Arrow        | "Moves focus to the same day of the next week."                                                                                                                                        | As APG.                                                                             |
 | Up Arrow          | "Moves focus to the same day of the previous week."                                                                                                                                    | As APG.                                                                             |
-| Home              | "Moves focus to the first day (e.g Sunday) of the current week."                                                                                                                       | The Locale's first day of the week.                                                 |
-| End               | "Moves focus to the last day (e.g. Saturday) of the current week."                                                                                                                     | The Locale's last day of the week.                                                  |
+| Home              | "Moves focus to the first day (e.g Sunday) of the current week."                                                                                                                       | The `locale`'s first day of the week.                                               |
+| End               | "Moves focus to the last day (e.g. Saturday) of the current week."                                                                                                                     | The `locale`'s last day of the week.                                                |
 | Page Up           | "Changes the grid of dates to the previous month. Moves focus to the day of the month that has the same number. If that day does not exist, moves focus to the last day of the month." | As APG.                                                                             |
 | Page Down         | "Changes the grid of dates to the next month." (same focus rule)                                                                                                                       | As APG.                                                                             |
 | Shift + Page Up   | "Changes the grid of dates to the same month in the previous year." (same focus rule)                                                                                                  | As APG.                                                                             |
@@ -148,14 +148,9 @@ Proposed new:
 
 The weekday row (`type-label-sm`, `color-text-subtle`) and gaps use semantic tokens directly. The focus ring uses `focus-ring-width` and `color-border-focused` directly. New Dictionary words: component `calendar`, modifiers `cell` (the Grid pattern's and React Aria's `CalendarCell` word) and `today`.
 
-## Built-in labels
+## Author-written text
 
-| Key                      | en-US            | ro-RO             | Used by             |
-| ------------------------ | ---------------- | ----------------- | ------------------- |
-| `calendar.previousMonth` | "Previous month" | "Luna anterioară" | Previous IconButton |
-| `calendar.nextMonth`     | "Next month"     | "Luna următoare"  | Next IconButton     |
-
-From the `labels` prop, then the root UI provider's Locale, then English. Calendar adds `calendar: { previousMonth, nextMonth }` to the locale type and every shipped locale. Weekday, month and date texts are `Intl` output, not labels.
+None. The month buttons' names are required by type; weekday, month and date texts are `Intl` output in `locale`.
 
 ## Feedback events
 

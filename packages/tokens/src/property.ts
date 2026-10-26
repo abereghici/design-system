@@ -15,6 +15,7 @@ const SYNTAX: Readonly<Record<string, string>> = {
 
 const isAnimated = (token: TransformedToken): boolean => {
   const extensions: unknown = token.original["$extensions"];
+
   return (
     typeof extensions === "object" &&
     extensions !== null &&
@@ -26,21 +27,27 @@ const INDEPENDENT = /^(?:-?[\d.]+(?:px|ms|s)?|#[0-9a-f]{6}|rgba\([\d., ]+\))$/iv
 
 export const checkAnimated = (token: TransformedToken, dictionary: Dictionary): string[] => {
   if (!isAnimated(token)) return [];
+
   const label = `--${token.name}`;
+
   if (tierOf(token) !== "component") {
     return [
       `${label}: only component tokens can be animated; a registered shared token with inherits: false would stop reaching the elements below it`,
     ];
   }
+
   if (SYNTAX[String(token.$type)] === undefined) {
     return [`${label}: a ${String(token.$type)} token can't be registered with @property`];
   }
+
   const [first, ...rest] = THEMES.map(({ id }) => String(valueIn(token, id, dictionary)));
+
   if (rest.some((value) => value !== first)) {
     return [
       `${label}: an animated token needs one value in every Theme; a registered property computes to one value and stops following the Theme`,
     ];
   }
+
   return INDEPENDENT.test(String(first))
     ? []
     : [

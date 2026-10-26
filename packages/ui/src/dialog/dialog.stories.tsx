@@ -2,8 +2,6 @@ import { useRef, useState } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
 import { Button } from "@platform/ui/button";
-import { roRO } from "@platform/ui/locales/ro-RO";
-import { UIProvider } from "@platform/ui/provider";
 import { TextField } from "@platform/ui/text-field";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
@@ -11,6 +9,9 @@ import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Dialog from "./dialog.tsx";
+
+// @ts-expect-error -- the x button shows only an icon, so it needs a name
+({}) satisfies Dialog.CloseProps;
 
 const content = (props: Dialog.ContentProps = {}) => (
   <Dialog.Content {...props}>
@@ -23,7 +24,7 @@ const content = (props: Dialog.ContentProps = {}) => (
       </Dialog.Close>
       <Button variant="primary">Rename</Button>
     </Dialog.Footer>
-    <Dialog.Close />
+    <Dialog.Close aria-label="Close" />
   </Dialog.Content>
 );
 
@@ -49,7 +50,9 @@ Default.test(
   "opens as a modal named by its Title and described by its Description, focusing the first field",
   async ({ args, canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Rename…" }));
+
     const dialog = canvas.getByRole("dialog", { name: "Rename project?" });
+
     await expect(dialog).toHaveAccessibleDescription("Links to the old name keep working.");
     await expect(canvas.getByRole("textbox", { name: "Name" })).toHaveFocus();
     await expect(args.onOpenChange).toHaveBeenCalledWith(
@@ -63,9 +66,12 @@ Default.test(
   "closes with the Close button, returns focus to the Trigger and dispatches ab-dismiss",
   async ({ args, canvas, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Rename…" });
+
     await userEvent.click(trigger);
+
     const close = canvas.getByRole("button", { name: "Close" });
     const dismissals = listen("ab-dismiss");
+
     await userEvent.click(close);
     dismissals.stop();
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
@@ -84,7 +90,9 @@ Default.test(
   "closes with a Cancel button without dispatching ab-dismiss",
   async ({ args, canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Rename…" }));
+
     const dismissals = listen("ab-dismiss");
+
     await userEvent.click(canvas.getByRole("button", { name: "Cancel" }));
     dismissals.stop();
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
@@ -100,10 +108,14 @@ Default.test(
   "closes on a press on the backdrop but not inside the dialog",
   async ({ args, canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Rename…" }));
+
     const dialog = canvas.getByRole("dialog");
+
     await userEvent.click(canvas.getByText("Links to the old name keep working."));
     await waitFor(() => expect(dialog).toBeVisible());
+
     const dismissals = listen("ab-dismiss");
+
     await userEvent.pointer({
       keys: "[MouseLeft]",
       target: dialog,
@@ -139,6 +151,7 @@ Default.test(
   {
     render: function InitialFocus(args) {
       const rename = useRef<HTMLButtonElement>(null);
+
       return (
         <Dialog.Root {...args}>
           <Dialog.Trigger>Rename…</Dialog.Trigger>
@@ -157,49 +170,9 @@ Default.test(
   },
 );
 
-Default.test(
-  "names Close in the UIProvider's locale",
-  {
-    args: { defaultOpen: true },
-    decorators: [
-      (Story) => (
-        <UIProvider locale={roRO}>
-          <Story />
-        </UIProvider>
-      ),
-    ],
-  },
-  async ({ canvas }) => {
-    await waitFor(() => expect(canvas.getByRole("button", { name: "Închide" })).toBeVisible());
-    // @ts-expect-error -- a locale must carry the Dialog labels
-    void ({ tag: "fr-FR", labels: { ...roRO.labels, dialog: {} } } satisfies typeof roRO);
-  },
-);
-
-Default.test(
-  "takes a per-instance label over the locale",
-  {
-    args: {
-      defaultOpen: true,
-      children: (
-        <Dialog.Content aria-label="Rename project">
-          <Dialog.Close labels={{ close: "Dismiss rename" }} />
-        </Dialog.Content>
-      ),
-    },
-  },
-  async ({ canvas }) => {
-    await waitFor(() =>
-      expect(canvas.getByRole("dialog", { name: "Rename project" })).toBeVisible(),
-    );
-    await waitFor(() =>
-      expect(canvas.getByRole("button", { name: "Dismiss rename" })).toBeVisible(),
-    );
-  },
-);
-
 function ControlledDialog(props: Dialog.RootProps) {
   const [open, setOpen] = useState(props.open ?? false);
+
   return (
     <>
       <Button
@@ -223,17 +196,11 @@ function ControlledDialog(props: Dialog.RootProps) {
   );
 }
 
-export const Controlled = meta.story({
-  render: ControlledDialog,
-  parameters: {
-    docs: { description: { story: "The parent holds `open` and updates it on change." } },
-  },
-});
-
 Default.test(
   "closes on Escape and returns focus to the Trigger",
   async ({ args, canvas, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Rename…" });
+
     await userEvent.click(trigger);
     await expect(canvas.getByRole("textbox", { name: "Name" })).toHaveFocus();
     await (await trusted()).keyboard("{Escape}");
@@ -246,8 +213,16 @@ Default.test(
   },
 );
 
+export const Controlled = meta.story({
+  render: ControlledDialog,
+  parameters: {
+    docs: { description: { story: "The parent holds `open` and updates it on change." } },
+  },
+});
+
 Controlled.test("opens and closes through open", async ({ args, canvas, userEvent }) => {
   const opener = canvas.getByRole("button", { name: "Rename…" });
+
   await userEvent.click(opener);
   await waitFor(() =>
     expect(canvas.getByRole("dialog", { name: "Rename project?" })).toBeVisible(),

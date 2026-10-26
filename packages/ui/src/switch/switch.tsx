@@ -3,9 +3,10 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { useFieldControl } from "../field/field-control.ts";
-import { join } from "../slot/slot.tsx";
-import { pointerMarker, toggleClick } from "../toggle/toggle.ts";
+import { pointerMarker } from "../events/events.ts";
+import { useFieldControl } from "../field/use-field.ts";
+import { mergeProps } from "../slot/slot.tsx";
+import { toggleClick } from "../toggle/toggle.ts";
 import type { ChangeEventDetails } from "../toggle/toggle.ts";
 
 import styles from "./switch.module.css";
@@ -36,34 +37,24 @@ export type SwitchProps = Omit<ComponentProps<"input">, "type" | "role" | "child
 export function Switch({
   children,
   onCheckedChange,
-  disabled = false,
   className,
   style,
-  id,
   onClick,
-  onChange,
   ...props
 }: SwitchProps) {
   const fallbackId = useId();
-  const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>({
-    ...props,
-    id,
-    disabled,
-    onChange: (event) => onChange?.(event),
-  });
+  const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>(props);
 
   return (
     <label
-      {...pointerMarker()}
+      {...pointerMarker}
       htmlFor={bindings.id ?? fallbackId}
-      className={join(styles["root"], className)}
-      style={style}
+      {...mergeProps({ className: styles["root"] }, { className, style })}
     >
       <input
         {...bindings}
         id={bindings.id ?? fallbackId}
         type="checkbox"
-        // oxlint-disable-next-line jsx-a11y/role-has-required-aria-props -- oxlint bug: lacks jsx-a11y's isSemanticRoleElement exemption for input[type=checkbox][role=switch]; ARIA in HTML forbids aria-checked here
         role="switch"
         className={styles["track"]}
         onClick={toggleClick(

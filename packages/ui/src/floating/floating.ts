@@ -1,8 +1,9 @@
-import { useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "react";
-import type { ComponentProps, MouseEvent, ToggleEvent } from "react";
+import { useId, useLayoutEffect, useState } from "react";
+import type { ComponentProps, FocusEvent, MouseEvent, ToggleEvent } from "react";
 
 import { composeEventHandlers, dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { getDocument, useEvent } from "../events/use-event.ts";
 
 export type ChangeReason =
   | "trigger-press"
@@ -89,7 +90,9 @@ const layers = new WeakMap<Element, Layer>();
 
 function layerOf(element: Element): Layer {
   const layer = layers.get(element) ?? {};
+
   layers.set(element, layer);
+
   return layer;
 }
 
@@ -102,16 +105,18 @@ export const sourceOf = (source: Element | null): ShowPopoverOptions =>
 const invokerOf = (contentId: string) =>
   document.querySelector(`[commandfor="${CSS.escape(contentId)}"]`);
 
-export const byId = (id: string) => document.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
-
 function settle(element: HTMLElement, component: Component) {
   const layer = layerOf(element);
   const { closing, focusInside } = layer;
+
   layer.closing = undefined;
+
   if (closing === "escape-key" || closing === "outside-press") {
     dispatchFeedback(element, "ab-dismiss", { component, reason: "user" });
   }
+
   if (focusInside === true && closing !== "outside-press") returnFocus(element);
+
   layer.returnTo = undefined;
 }
 
@@ -119,7 +124,8 @@ function settle(element: HTMLElement, component: Component) {
  * Records where focus was before a press that may open the layer moved it (WebKit blurs on press).
  */
 export function rememberFocus(contentId: string, focus = document.activeElement) {
-  const element = byId(contentId);
+  const element = document.getElementById(contentId);
+
   if (element !== null)
     layerOf(element).returnTo = focus instanceof HTMLElement ? focus : undefined;
 }
@@ -130,31 +136,42 @@ export function returnFocus(
   to: Element | null | undefined = layerOf(element).returnTo,
 ) {
   const focus = document.activeElement;
+
   if (focus !== document.body && !element.contains(focus)) return;
+
   if (to instanceof HTMLElement) to.focus({ preventScroll: true });
 }
 
 function leaves(contentId: string, next: EventTarget | null) {
   if (!(next instanceof Node)) return false;
-  return byId(contentId)?.contains(next) !== true && invokerOf(contentId)?.contains(next) !== true;
+
+  return (
+    document.getElementById(contentId)?.contains(next) !== true &&
+    invokerOf(contentId)?.contains(next) !== true
+  );
 }
 
-function recordInput(element: HTMLElement, focusOut: (event: FocusEvent) => void) {
+/** Remembers the open layer's last Escape or outside press, so its close reports the reason. */
+function useInputRecord(contentId: string, open: boolean) {
   const record = (event: Event) => {
+    const element = document.getElementById(contentId);
+
+    if (element === null) return;
+
     if (event instanceof KeyboardEvent && event.key !== "Escape") return;
+
     const inside = event.target instanceof Node && element.contains(event.target);
+
     if (event instanceof PointerEvent && inside) return;
+
     layerOf(element).input = event;
   };
-  const controller = new AbortController();
-  const { signal } = controller;
-  for (const type of ["keydown", "pointerdown", "pointerup"] as const) {
-    document.addEventListener(type, record, { capture: true, signal });
-  }
-  element.addEventListener("focusout", focusOut, { signal });
-  return () => {
-    controller.abort();
-  };
+
+  const target = open ? getDocument : null;
+
+  useEvent("keydown", record, target, true);
+  useEvent("pointerdown", record, target, true);
+  useEvent("pointerup", record, target, true);
 }
 
 function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, component: Component) {
@@ -165,11 +182,14 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
   const { input } = opening ? {} : layer;
   const native = input instanceof PointerEvent ? "outside-press" : "none";
   const reason = reported ?? (input instanceof KeyboardEvent ? "escape-key" : native);
+
   layer.pending = undefined;
   layer.input = undefined;
+
   const accepted =
     reported !== undefined ||
     requestChange(options.onOpenChange, opening, reason, event.nativeEvent);
+
   if (!opening) {
     layer.closing = reason;
     layer.focusInside =
@@ -177,11 +197,14 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
   } else if (accepted) {
     const { source } = event.nativeEvent;
     const from = component === "ContextMenu" ? (layer.returnTo ?? document.activeElement) : source;
+
     layer.returnTo = from instanceof HTMLElement ? from : undefined;
+
     const keyboard =
       component === "ContextMenu"
         ? ":not([data-pointer])"
         : ":is(:focus-visible, :has(:focus-visible))";
+
     element.toggleAttribute("data-pointer", source?.matches(keyboard) === false);
   } else {
     event.preventDefault();
@@ -189,13 +212,19 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
 }
 
 function reconcile(contentId: string, open: boolean, findSource: (id: string) => Element | null) {
-  const element = byId(contentId);
+  const element = document.getElementById(contentId);
+
   if (element === null) return;
+
   const layer = layerOf(element);
-  // `closing` lasts until the async `toggle` event, so a render in between (a value set on the closing press) does not reopen the layer.
+
+  // `closing` lasts until the async `toggle` event (https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/toggle_event), so a render in
+  // between (a value set on the closing press) does not reopen the layer.
   if (layer.pending !== undefined || layer.closing !== undefined || open === isOpen(element))
     return;
+
   layer.pending = "none";
+
   if (open) element.showPopover(sourceOf(findSource(contentId)));
   else element.hidePopover();
 }
@@ -205,18 +234,24 @@ function contentPropsOf(
   component: Component,
   options: Options,
   setOpen: (open: boolean) => void,
+  focusOut: (event: globalThis.FocusEvent) => void,
   hooks: ContentHooks = {},
 ) {
   return {
     id,
     popover: "auto",
+    onBlur: (event: FocusEvent<HTMLElement>) => {
+      focusOut(event.nativeEvent);
+    },
     onBeforeToggle: (event: ToggleEvent<HTMLElement>) => {
       beforeToggle(options, event, component);
       hooks.onBeforeToggle?.(event);
     },
     onToggle: (event: ToggleEvent<HTMLElement>) => {
       setOpen(event.newState === "open");
+
       if (event.newState === "closed") settle(event.currentTarget, component);
+
       hooks.onToggle?.(event);
     },
   } as const;
@@ -229,28 +264,39 @@ function controlsOf(
   findSource: (id: string) => Element | null,
 ) {
   const request = (next: boolean, reason: ChangeReason, event?: Event) => {
-    const element = byId(contentId);
+    const element = document.getElementById(contentId);
+
     if (element === null || !requestChange(options.onOpenChange, next, reason, event)) return false;
+
     const layer = layerOf(element);
+
     layer.pending = reason;
     setTimeout(() => {
       if (layer.pending === reason) layer.pending = undefined;
     });
+
     return true;
   };
+
   const toggle = (next: boolean, reason: ChangeReason, event?: Event, source?: Element | null) => {
-    const element = byId(contentId);
+    const element = document.getElementById(contentId);
+
     if (element === null || isOpen(element) === next || !request(next, reason, event)) return false;
+
     if (next) element.showPopover(sourceOf(source ?? findSource(contentId)));
     else element.hidePopover();
+
     return true;
   };
-  const focusOut = (event: FocusEvent) => {
+
+  const focusOut = (event: globalThis.FocusEvent) => {
     if (!leaves(contentId, event.relatedTarget)) return;
+
     setTimeout(() => {
       toggle(false, "focus-out", event);
     });
   };
+
   return { contentId, request, toggle, focusOut };
 }
 
@@ -271,11 +317,8 @@ export function useFloating(
   const contentId = useId();
 
   const controls = controlsOf(contentId, options, findSource);
-  const onFocusOut = useEffectEvent(controls.focusOut);
-  useEffect(() => {
-    const element = byId(contentId);
-    return current && element !== null ? recordInput(element, onFocusOut) : undefined;
-  }, [contentId, current]);
+
+  useInputRecord(contentId, current);
 
   useLayoutEffect(() => {
     reconcile(contentId, current, findSource);
@@ -287,7 +330,7 @@ export function useFloating(
     request: controls.request,
     toggle: controls.toggle,
     contentProps: (hooks?: ContentHooks) =>
-      contentPropsOf(contentId, component, options, setUncontrolled, hooks),
+      contentPropsOf(contentId, component, options, setUncontrolled, controls.focusOut, hooks),
     triggerProps: <Props extends TriggerHandlers>(props: Props) =>
       triggerPropsOf(props, { ...controls, open: current, anchored: anchor !== undefined }),
   };

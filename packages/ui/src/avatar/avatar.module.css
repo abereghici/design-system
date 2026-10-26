@@ -2,6 +2,7 @@
 
 @layer ab.components {
   .root {
+    isolation: isolate;
     display: inline-grid;
     grid-template: 100% / 100%;
     flex-shrink: 0;
@@ -18,7 +19,8 @@
     block-size: var(--ab-avatar-sm-size);
   }
 
-  .root > * {
+  .image,
+  .fallback {
     grid-area: 1 / 1;
   }
 
@@ -59,8 +61,8 @@
 
   @media (forced-colors: active) {
     .root {
-      outline: 1px solid CanvasText;
-      outline-offset: -1px;
+      outline: var(--ab-border-width-default) solid CanvasText;
+      outline-offset: calc(var(--ab-border-width-default) * -1);
     }
 
     .fallback {
