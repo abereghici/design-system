@@ -13,17 +13,18 @@ jobs:
     runs-on: ubuntu-24.04
     container:
       image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --init --ipc=host
     steps:
       - run: apt-get update && apt-get install --yes --no-install-recommends git-lfs
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           lfs: true
-      - uses: pnpm/setup@v3
+      - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
         with:
           require-lockfile: true
-      - run: pnpm --filter @platform/tokens build
-      - run: pnpm --filter @platform/ui test:screenshots
-      - uses: actions/upload-artifact@v7
+          cache: true
+      - run: pnpm turbo run test:screenshots --filter=@platform/ui
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ !cancelled() }}
         with:
           name: story-screenshots-report

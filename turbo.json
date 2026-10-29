@@ -7,7 +7,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "!.next/dev/**", "out/**"]
     },
     "check-types": {
       "dependsOn": ["transit"]
@@ -22,10 +22,6 @@
     "size": {},
     "//#lint:root": {},
     "//#lint:root:fix": {
-      "cache": false
-    },
-    "//#format": {},
-    "//#format:fix": {
       "cache": false
     }
   }

@@ -9,6 +9,7 @@ import component from "@platform/tokens/source/component.tokens.json";
 import { componentRoutes } from "./component-routes.ts";
 
 const next = join(import.meta.dirname, "..", ".next");
+const out = join(import.meta.dirname, "..", "out");
 const componentTokens = Object.keys(component.component).map((name) => `--ab-${name}:`);
 // Longest name first, so `--ab-icon-button-*` belongs to icon-button, not icon.
 const components = readdirSync(
@@ -26,11 +27,12 @@ interface Route {
 }
 
 function route(name: string): Route {
-  const html = readFileSync(join(next, "server", "app", `${name}.html`), "utf8");
+  const html = readFileSync(join(out, `${name}.html`), "utf8");
   const assets = (extension: string) =>
     [...new Set(html.match(new RegExp(String.raw`/_next/static/[\w.\/\-]+\.${extension}`, "gv")))]
-      .map((url) => readFileSync(join(next, url.slice("/_next/".length)), "utf8"))
+      .map((url) => readFileSync(join(out, url), "utf8"))
       .join("\n");
+  // No documented output carries the client modules; this internal manifest may move in a Next upgrade.
   const manifest = join(next, "server", "app", name === "index" ? "" : name);
 
   return {
@@ -109,9 +111,10 @@ describe("per-component CSS", () => {
   });
 });
 
-const built = readdirSync(join(next, "static"), { recursive: true, encoding: "utf8" })
+const statics = join(out, "_next", "static");
+const built = readdirSync(statics, { recursive: true, encoding: "utf8" })
   .filter((file) => /\.(?:css|js)$/v.test(file))
-  .map((file) => readFileSync(join(next, "static", file), "utf8"))
+  .map((file) => readFileSync(join(statics, file), "utf8"))
   .join("\n");
 const readInBuild = (name: string) => built.includes(`var(${name})`) || built.includes(`"${name}"`);
 
@@ -220,7 +223,7 @@ const shipsCommand = (js: string) => js.includes('"input-clear"');
 describe("a lazily loaded component", () => {
   test("Command stays out of its route's initial JavaScript and loads through the dynamic import", () => {
     const command = route("command");
-    const chunks = join(next, "static", "chunks");
+    const chunks = join(statics, "chunks");
 
     expect(command.html).toContain(">Search</button>");
     expect(shipsCommand(command.js)).toBe(false);

@@ -14,17 +14,18 @@ jobs:
       contents: write
     container:
       image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --init --ipc=host
     steps:
       - run: apt-get update && apt-get install --yes --no-install-recommends git-lfs
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           lfs: true
-      - uses: pnpm/setup@v3
+      - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
         with:
           require-lockfile: true
-      - run: pnpm --filter @platform/tokens build
+          cache: true
       - run: find packages/ui/src -name __screenshots__ -prune -exec rm -rf {} +
-      - run: pnpm --filter @platform/ui test:screenshots --update
+      - run: pnpm turbo run test:screenshots --filter=@platform/ui -- --update
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
