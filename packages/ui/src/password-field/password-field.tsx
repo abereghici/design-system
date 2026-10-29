@@ -1,25 +1,23 @@
-"use client";
-
-import { Frame, splitFrame } from "../field/field-frame.tsx";
-import type { Naming, SizedFrameProps } from "../field/field-frame.tsx";
+import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
+import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 
 import { Control } from "./password-field-control.tsx";
 import type { ControlProps } from "./password-field-control.tsx";
 
 export type { PasswordFieldVisibleChangeEventDetails } from "./password-field-control.tsx";
 
-export type PasswordFieldProps = Naming & SizedFrameProps & ControlProps;
+export type PasswordFieldProps = Naming & SizedWrapperProps & ControlProps;
 
 /**
  * A TextField for secrets, with a toggle that shows the password as plain text so users can check
  * what they typed. Use it for sign-in, sign-up and password-change forms.
  */
 export function PasswordField(props: PasswordFieldProps) {
-  const [frame, control] = splitFrame(props);
+  const [wrapper, control] = splitWrapperProps(props);
 
   return (
-    <Frame {...frame}>
+    <Wrapper {...wrapper}>
       <Control {...control} />
-    </Frame>
+    </Wrapper>
   );
 }

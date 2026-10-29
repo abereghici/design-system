@@ -2,8 +2,8 @@
 
 import type { ComponentProps, KeyboardEvent } from "react";
 
-import { Frame, splitFrame } from "../field/field-frame.tsx";
-import type { Naming, SizedFrameProps } from "../field/field-frame.tsx";
+import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
+import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
 
@@ -31,7 +31,7 @@ type ControlProps = Omit<
   disabled?: boolean;
 };
 
-export type RootProps = Naming & SizedFrameProps & ControlProps;
+export type RootProps = Naming & SizedWrapperProps & ControlProps;
 
 const blocked = (event: KeyboardEvent) =>
   /^(?:Arrow|Page|Home|End|Enter)/v.test(event.key) ||
@@ -81,11 +81,11 @@ function Control({ placeholder, defaultValue, children, ...props }: ControlProps
  * stay visible, RadioGroup.
  */
 export function Root(props: RootProps) {
-  const [frame, control] = splitFrame(props);
+  const [wrapper, control] = splitWrapperProps(props);
 
   return (
-    <Frame {...frame}>
+    <Wrapper {...wrapper}>
       <Control {...control} />
-    </Frame>
+    </Wrapper>
   );
 }

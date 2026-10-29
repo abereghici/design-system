@@ -1,9 +1,7 @@
-"use client";
-
 import type { ComponentProps, ReactNode } from "react";
 
-import { Frame, splitFrame } from "../field/field-frame.tsx";
-import type { Naming, SizedFrameProps } from "../field/field-frame.tsx";
+import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
+import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
 
 import { InputGroup } from "./text-field-input-group.tsx";
@@ -12,7 +10,7 @@ import { Input } from "./text-field-input.tsx";
 export type TextFieldChangeEventDetails = Field.ChangeEventDetails;
 
 export type TextFieldProps = Naming &
-  SizedFrameProps &
+  SizedWrapperProps &
   Omit<ComponentProps<"input">, "size"> & {
     /** Content before the input, such as a decorative search icon. */
     startElement?: ReactNode;
@@ -33,13 +31,13 @@ export type TextFieldProps = Naming &
  * NumberField for numbers and Select to choose from a short known list.
  */
 export function TextField({ startElement, endElement, ...props }: TextFieldProps) {
-  const [frame, control] = splitFrame(props);
+  const [wrapper, control] = splitWrapperProps(props);
 
   return (
-    <Frame {...frame}>
+    <Wrapper {...wrapper}>
       <InputGroup start={startElement} end={endElement}>
         <Input {...control} />
       </InputGroup>
-    </Frame>
+    </Wrapper>
   );
 }

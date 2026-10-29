@@ -2,22 +2,16 @@
 
 import type { ComponentProps, ReactNode } from "react";
 
-import * as Field from "../field/field.tsx";
-import { SearchIcon } from "../icon/icons/search.tsx";
+import { Wrapper } from "../field/field-wrapper.tsx";
+import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import { Listbox } from "../internal/listbox/listbox.tsx";
-import { InputGroup } from "../text-field/text-field-input-group.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
-import { inputProps, listProps, part, press } from "./combobox-state.ts";
+import { Control } from "./combobox-control.tsx";
+import { listProps, part } from "./combobox-state.ts";
 import type { ComboboxState, Options } from "./combobox-state.ts";
 import { ValueContext, useCombobox } from "./use-combobox.ts";
-import textFieldStyles from "../text-field/text-field.module.css";
 import styles from "./combobox.module.css";
-
-type Naming =
-  | { label: ReactNode }
-  | { label?: undefined; "aria-label": string }
-  | { label?: undefined; "aria-labelledby": string };
 
 type Loading =
   | { loading?: false | undefined; loadingText?: string | undefined }
@@ -29,6 +23,7 @@ type InputProps = Omit<
 >;
 
 export type RootProps = Naming &
+  Omit<SizedWrapperProps, "validate"> &
   Loading &
   InputProps &
   Options & {
@@ -49,59 +44,11 @@ export type RootProps = Naming &
     /** The text shown and announced while `loading`, such as "Loading…". */
     loadingText?: string | undefined;
     /**
-     * Helper text under the field, such as a format hint; the error message takes its place while
-     * invalid.
-     */
-    description?: ReactNode;
-    /**
-     * What to fix, shown once the user has interacted and the value is invalid. Without it the
-     * browser's own message is shown.
-     */
-    errorMessage?: ReactNode | ((validity: ValidityState) => ReactNode);
-    /** Marks the value invalid from outside, such as a server or validation library result. */
-    invalid?: boolean;
-    /**
      * Your own rule, given the chosen Item's `value` (`""` when none): return a message when
      * invalid.
      */
-    validate?: Field.RootProps["validate"];
-    /** `lg` for prominent or spacious forms. Touch screens get larger targets on their own. */
-    size?: "md" | "lg";
+    validate?: SizedWrapperProps["validate"];
   };
-
-function Input({ readOnly, ...props }: Field.ControlProps) {
-  const bindings = Field.useFieldControl<HTMLInputElement, typeof props>(props);
-
-  return (
-    <input
-      dir="auto"
-      autoComplete="off"
-      {...bindings}
-      name={undefined}
-      role="combobox"
-      aria-autocomplete="list"
-      aria-expanded={props["aria-expanded"]}
-      aria-controls={props["aria-controls"]}
-      readOnly={bindings["aria-disabled"] ?? readOnly}
-      className={textFieldStyles["input"]}
-    />
-  );
-}
-
-function Control({ c, input }: { c: ComboboxState; input: Field.ControlProps }) {
-  return (
-    <InputGroup
-      id={part(c, "box")}
-      start={<SearchIcon />}
-      end={undefined}
-      onPointerDown={(event) => {
-        press(c, event.nativeEvent);
-      }}
-    >
-      <Input {...inputProps(c, input)} aria-expanded={c.open} aria-controls={part(c, "list")} />
-    </InputGroup>
-  );
-}
 
 interface ListProps {
   c: ComboboxState;
@@ -165,30 +112,27 @@ export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, validate, ...rest } = props;
   const [
     options,
-    {
-      size = "md",
-      className,
-      style,
-      loading,
-      loadingText,
-      noOptionsText,
-      name,
-      form,
-      children,
-      ...input
-    },
+    { size, className, style, loading, loadingText, noOptionsText, name, form, children, ...input },
   ] = split(rest);
   const empty = (loading === true ? loadingText : undefined) ?? noOptionsText;
   const c = useCombobox(options, empty);
   const field = { className, style, name, invalid, disabled: input.disabled, id: part(c, "root") };
 
   return (
-    <Field.Root
+    <Wrapper
       {...field}
-      data-size={size}
+      size={size}
+      label={label}
+      labelId={part(c, "label")}
+      description={description}
+      errorMessage={errorMessage}
       validate={validate && ((_text, formData) => validate(c.value ?? "", formData))}
+      after={
+        <VisuallyHidden asChild>
+          <output id={part(c, "status")} />
+        </VisuallyHidden>
+      }
     >
-      {label !== undefined && <Field.Label id={part(c, "label")}>{label}</Field.Label>}
       <Control c={c} input={input} />
       <input type="hidden" name={name} form={form} value={c.value ?? ""} />
       <List
@@ -201,11 +145,6 @@ export function Root(props: RootProps) {
           {empty}
         </div>
       </List>
-      {description !== undefined && <Field.Description>{description}</Field.Description>}
-      <Field.Error>{errorMessage}</Field.Error>
-      <VisuallyHidden asChild>
-        <output id={part(c, "status")} />
-      </VisuallyHidden>
-    </Field.Root>
+    </Wrapper>
   );
 }

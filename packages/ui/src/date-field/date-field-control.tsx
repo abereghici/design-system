@@ -4,6 +4,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { useField } from "../field/use-field.ts";
 import { dateFormats } from "../internal/date/date.ts";
 import type { DatePart, Temporal } from "../internal/date/date.ts";
+import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import { bounds, display } from "./segments.ts";
 import type { Segments } from "./segments.ts";
@@ -13,7 +14,6 @@ import { useSegmentEditing } from "./use-segment-editing.ts";
 import { useValidity } from "./use-validity.ts";
 import type { Validity } from "./use-validity.ts";
 import fieldStyles from "../field/field.module.css";
-import visuallyHidden from "../visually-hidden/visually-hidden.module.css";
 import styles from "./date-field.module.css";
 
 export interface DateFieldOptions extends DateValueOptions {
@@ -151,28 +151,29 @@ function HiddenInput({
   const { field, name, date, editing, validity } = control;
 
   return (
-    <input
-      type="date"
-      tabIndex={-1}
-      aria-hidden="true"
-      id={field?.controlId}
-      ref={field?.register}
-      name={name}
-      form={options.form}
-      required={options.required}
-      min={options.min?.toString()}
-      max={options.max?.toString()}
-      defaultValue={date.committed?.toString() ?? ""}
-      className={visuallyHidden["root"]}
-      onFocus={editing.focusFirstEmpty}
-      onClick={editing.focusFirstEmpty}
-      onInvalid={(event) => {
-        validity.report(true);
+    <VisuallyHidden asChild>
+      <input
+        type="date"
+        tabIndex={-1}
+        aria-hidden="true"
+        id={field?.controlId}
+        ref={field?.register}
+        name={name}
+        form={options.form}
+        required={options.required}
+        min={options.min?.toString()}
+        max={options.max?.toString()}
+        defaultValue={date.committed?.toString() ?? ""}
+        onFocus={editing.focusFirstEmpty}
+        onClick={editing.focusFirstEmpty}
+        onInvalid={(event) => {
+          validity.report(true);
 
-        // The control is visually hidden, so the user lands on the first segment they can fill in.
-        if (isFirstInvalid(event.currentTarget)) setTimeout(editing.focusFirstEmpty);
-      }}
-    />
+          // The control is visually hidden, so the user lands on the first segment they can fill in.
+          if (isFirstInvalid(event.currentTarget)) setTimeout(editing.focusFirstEmpty);
+        }}
+      />
+    </VisuallyHidden>
   );
 }
 

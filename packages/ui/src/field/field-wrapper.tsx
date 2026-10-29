@@ -12,7 +12,7 @@ export type Naming =
   | { label?: undefined; "aria-label": string }
   | { label?: undefined; "aria-labelledby": string };
 
-export interface FrameProps {
+export interface WrapperProps {
   /**
    * Helper text under the field, such as a format hint; the error message takes its place while
    * invalid.
@@ -29,12 +29,12 @@ export interface FrameProps {
   validate?: RootProps["validate"];
 }
 
-export interface SizedFrameProps extends FrameProps {
+export interface SizedWrapperProps extends WrapperProps {
   /** `lg` for prominent or spacious forms. Touch screens get larger targets on their own. */
   size?: "md" | "lg";
 }
 
-interface Framed extends SizedFrameProps {
+interface WrappedProps extends SizedWrapperProps {
   label?: ReactNode;
   className?: string | undefined;
   style?: CSSProperties | undefined;
@@ -42,8 +42,8 @@ interface Framed extends SizedFrameProps {
   disabled?: boolean | undefined;
 }
 
-/** Splits a field's props into its Frame's and its control's. */
-export function splitFrame<Props extends Framed>({
+/** Splits a field's props into its Wrapper's and its control's. */
+export function splitWrapperProps<Props extends WrappedProps>({
   label,
   description,
   errorMessage,
@@ -62,21 +62,32 @@ export function splitFrame<Props extends Framed>({
   ] as const;
 }
 
+type WrapperOwnProps = { [Key in keyof WrappedProps]?: WrappedProps[Key] | undefined } & {
+  children: ReactNode;
+  id?: string | undefined;
+  labelId?: string | undefined;
+  /** Content after the error, such as a popover or a status region. */
+  after?: ReactNode;
+};
+
 /** A Field around one control: its label above, its description and error below. */
-export function Frame({
+export function Wrapper({
   label,
+  labelId,
   description,
   errorMessage,
   size = "md",
   children,
+  after,
   ...root
-}: { [Key in keyof Framed]?: Framed[Key] | undefined } & { children: ReactNode }) {
+}: WrapperOwnProps) {
   return (
     <Root {...root} data-size={size}>
-      {label !== undefined && <Label>{label}</Label>}
+      {label !== undefined && <Label id={labelId}>{label}</Label>}
       {children}
       {description !== undefined && <Description>{description}</Description>}
       <Error>{errorMessage}</Error>
+      {after}
     </Root>
   );
 }

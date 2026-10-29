@@ -2,8 +2,8 @@
 
 import type { ComponentProps } from "react";
 
-import { Frame, splitFrame } from "../field/field-frame.tsx";
-import type { FrameProps, Naming } from "../field/field-frame.tsx";
+import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
+import type { WrapperProps, Naming } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
 
 import fieldStyles from "../field/field.module.css";
@@ -34,7 +34,7 @@ type ControlProps = Omit<ComponentProps<"textarea">, "rows" | "cols"> & {
   disabled?: boolean;
 };
 
-export type TextAreaProps = Naming & FrameProps & ControlProps;
+export type TextAreaProps = Naming & WrapperProps & ControlProps;
 
 function Control({ minRows = 3, maxRows = 12, readOnly, ...props }: ControlProps) {
   const bindings = Field.useFieldControl<HTMLTextAreaElement, typeof props>(props);
@@ -55,11 +55,11 @@ function Control({ minRows = 3, maxRows = 12, readOnly, ...props }: ControlProps
  * Use TextField for a single line.
  */
 export function TextArea(props: TextAreaProps) {
-  const [frame, control] = splitFrame(props);
+  const [wrapper, control] = splitWrapperProps(props);
 
   return (
-    <Frame {...frame}>
+    <Wrapper {...wrapper}>
       <Control {...control} />
-    </Frame>
+    </Wrapper>
   );
 }

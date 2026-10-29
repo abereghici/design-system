@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import type { ReactNode } from "react";
 
-import { DateFieldFrame } from "../date-field/date-field.tsx";
+import { Root as DateFieldRoot } from "../date-field/date-field-root.tsx";
 import type { DateFieldChangeEventDetails, DateFieldProps } from "../date-field/date-field.tsx";
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
@@ -119,7 +119,7 @@ export function Root(props: RootProps) {
   const panel = { overlay, name, trigger };
 
   return (
-    <DateFieldFrame
+    <DateFieldRoot
       {...field}
       disabled={disabled}
       value={date.current}
@@ -141,6 +141,6 @@ export function Root(props: RootProps) {
       <PanelContext value={{ ...panel, picker: pickerOf(overlay, date, props) }}>
         {children}
       </PanelContext>
-    </DateFieldFrame>
+    </DateFieldRoot>
   );
 }

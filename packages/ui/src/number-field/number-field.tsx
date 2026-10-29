@@ -6,8 +6,8 @@ import type { ComponentProps, KeyboardEvent, ReactNode, SyntheticEvent } from "r
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useEvent } from "../events/use-event.ts";
-import { Frame, splitFrame } from "../field/field-frame.tsx";
-import type { Naming, SizedFrameProps } from "../field/field-frame.tsx";
+import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
+import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
 import { useField } from "../field/use-field.ts";
 import { InputGroup } from "../text-field/text-field-input-group.tsx";
@@ -72,7 +72,7 @@ type ControlProps = Omit<
   disabled?: boolean;
 };
 
-export type NumberFieldProps = Naming & SizedFrameProps & ControlProps;
+export type NumberFieldProps = Naming & SizedWrapperProps & ControlProps;
 
 function buildNumberFormat(
   locale: Intl.LocalesArgument,
@@ -290,11 +290,11 @@ function Control({ startElement, incrementLabel, decrementLabel, ...options }: C
  * pick by feel, Slider.
  */
 export function NumberField(props: NumberFieldProps) {
-  const [frame, control] = splitFrame(props);
+  const [wrapper, control] = splitWrapperProps(props);
 
   return (
-    <Frame {...frame}>
+    <Wrapper {...wrapper}>
       <Control {...control} />
-    </Frame>
+    </Wrapper>
   );
 }

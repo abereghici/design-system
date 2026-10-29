@@ -73,7 +73,14 @@ export const componentRoutes = [
   {
     name: "text-field",
     tokens: ["input"],
-    client: ["text-field/text-field.tsx"],
+    client: [
+      "field/field-description.tsx",
+      "field/field-error.tsx",
+      "field/field-label.tsx",
+      "field/field-root.tsx",
+      "text-field/text-field-input-group.tsx",
+      "text-field/text-field-input.tsx",
+    ],
     html: 'dir="auto"',
   },
   {
@@ -85,7 +92,13 @@ export const componentRoutes = [
   {
     name: "password-field",
     tokens: ["input", "icon", "icon-button", "spinner"],
-    client: ["password-field/password-field.tsx"],
+    client: [
+      "field/field-description.tsx",
+      "field/field-error.tsx",
+      "field/field-label.tsx",
+      "field/field-root.tsx",
+      "password-field/password-field-control.tsx",
+    ],
     html: 'aria-label="Show password"',
   },
   {
@@ -252,7 +265,7 @@ export const componentRoutes = [
   {
     name: "date-field",
     tokens: ["input", "date-field"],
-    client: ["date-field/date-field.tsx"],
+    client: ["date-field/date-field-root.tsx"],
     html: 'role="spinbutton"',
   },
   {
