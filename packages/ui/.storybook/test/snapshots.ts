@@ -1,17 +1,24 @@
 /// <reference types="@vitest/browser-playwright" />
 import type { StoryContext } from "@storybook/react-vite";
 
+let canvas: HTMLElement | undefined;
+
+/**
+ * The canvas of the story that last rendered. The screenshot projects capture it in their own
+ * afterEach, which runs after Storybook resumes the animations it pauses around this one.
+ */
+export const renderedCanvas = () => canvas;
+
 interface AriaSnapshotParameters {
   readonly ariaSnapshot?: { readonly disable?: boolean };
 }
 
 /**
- * Records each rendered story under Vitest: its screenshot in the screenshot projects, its aria
- * snapshot in the chromium instance. `parameters: { ariaSnapshot: { disable: true } }` skips the
+ * Records each rendered story under Vitest: its aria snapshot in the chromium instance, and its
+ * canvas for the screenshot projects. `parameters: { ariaSnapshot: { disable: true } }` skips the
  * aria snapshot of a story whose accessibility tree is empty, which would match any tree.
  */
 export async function snapshotStory({
-  id,
   canvasElement,
   tags,
   parameters,
@@ -26,18 +33,14 @@ export async function snapshotStory({
 
   const { page } = browser;
   const { expect, inject } = await import("vitest");
-  const variant = inject("screenshotVariant");
 
-  if (variant !== undefined) {
-    const topLayer = document.querySelector(":modal, :popover-open") !== null;
-    const height = document.documentElement.scrollHeight;
+  if (inject("screenshotVariant") !== undefined) {
+    canvas = canvasElement;
 
-    if (!topLayer && height > innerHeight) await page.viewport(innerWidth, height);
+    return;
+  }
 
-    await expect(
-      page.elementLocator(topLayer ? document.documentElement : canvasElement),
-    ).toMatchScreenshot(`${id}-${variant.name}`);
-  } else if (inject("reducedMotion") === false && parameters.ariaSnapshot?.disable !== true) {
+  if (inject("reducedMotion") === false && parameters.ariaSnapshot?.disable !== true) {
     await expect.element(page.elementLocator(canvasElement)).toMatchAriaSnapshot();
   }
 }
