@@ -32,7 +32,7 @@ Status: draft for brand-owner review (phase 4). Source guide: `components/Toolti
 
 ## Anatomy
 
-Root (no DOM) → Trigger (the control) + Content (Floating layer: text, then an optional Kbd).
+Root (no DOM) → Trigger (the control) + Content (Overlay: text, then an optional Kbd).
 
 - **Root.** Holds the open state and the generated Content `id`. Renders no element.
 - **Trigger.** The control the Tooltip describes. By default a `<button type="button">`; with `asChild` the consumer's Button, IconButton or Link (Radix Slot). It receives `aria-describedby` and the event handlers.

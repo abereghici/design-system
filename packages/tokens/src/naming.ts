@@ -36,7 +36,7 @@ const COLOR_WORDS = new Set([
   "default",
   "raised",
   "nested",
-  "floating",
+  "overlay",
   "neutral",
   "accent",
   "selected",

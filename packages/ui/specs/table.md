@@ -164,5 +164,5 @@ None. Sorting and selection are the consumer's handlers on a native button and C
 - Adrian Roselli, Under-Engineered Responsive Tables: https://adrianroselli.com/2020/11/under-engineered-responsive-tables.html
 - Base stylesheet: `packages/ui/src/base/base.css` ("Tabular figures wherever numbers are compared." `:where(table, time, output, data) { font-variant-numeric: tabular-nums; }`).
 - Baseline (webstatus.dev, 2026-10-24): `table` widely available (low 2015-07-29); `font-variant-numeric` widely available (low 2020-01-15).
-- Brand book: principles ("Quiet.", "Compact. Linear-class density on a fine pointer."), principle 5 ("Flat in flow, lifted when floating."), Accessibility exemptions.
+- Brand book: principles ("Quiet.", "Compact. Linear-class density on a fine pointer."), principle 5 ("Flat in flow, lifted in overlays."), Accessibility exemptions.
 - Radix Themes Table: https://www.radix-ui.com/themes/docs/components/table · shadcn Table: https://ui.shadcn.com/docs/components/table · React Aria Table: https://react-aria.adobe.com/Table · Mantine Table: https://mantine.dev/core/table/ · MUI Table: https://mui.com/material-ui/react-table/

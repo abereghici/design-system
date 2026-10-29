@@ -82,7 +82,7 @@
     },
     "button-secondary-background-color": {
       "$type": "color",
-      "$value": "{semantic.color-surface-floating}"
+      "$value": "{semantic.color-surface-overlay}"
     },
     "button-secondary-background-color-hovered": {
       "$type": "color",
@@ -386,7 +386,7 @@
     },
     "input-background-color": {
       "$type": "color",
-      "$value": "{semantic.color-surface-floating}"
+      "$value": "{semantic.color-surface-overlay}"
     },
     "input-text-color": {
       "$type": "color",
@@ -462,7 +462,7 @@
     },
     "checkbox-background-color": {
       "$type": "color",
-      "$value": "{semantic.color-surface-floating}"
+      "$value": "{semantic.color-surface-overlay}"
     },
     "checkbox-border-color": {
       "$type": "color",
@@ -510,7 +510,7 @@
     },
     "radio-background-color": {
       "$type": "color",
-      "$value": "{semantic.color-surface-floating}"
+      "$value": "{semantic.color-surface-overlay}"
     },
     "radio-border-color": {
       "$type": "color",
@@ -578,7 +578,7 @@
     },
     "switch-thumb-background-color": {
       "$type": "color",
-      "$value": "{semantic.color-surface-floating}"
+      "$value": "{semantic.color-surface-overlay}"
     },
     "switch-thumb-shadow": {
       "$type": "shadow",
@@ -738,7 +738,7 @@
     },
     "segmented-control-indicator-background-color": {
       "$type": "color",
-      "$value": "{semantic.color-surface-floating}"
+      "$value": "{semantic.color-surface-overlay}"
     },
     "segmented-control-indicator-shadow": {
       "$type": "shadow",
@@ -874,7 +874,7 @@
     },
     "toast-background-color": {
       "$type": "color",
-      "$value": "{semantic.color-surface-floating}"
+      "$value": "{semantic.color-surface-overlay}"
     },
     "toast-shadow": {
       "$type": "shadow",
@@ -1494,7 +1494,7 @@
     },
     "dialog-background-color": {
       "$type": "color",
-      "$value": "{semantic.color-surface-floating}"
+      "$value": "{semantic.color-surface-overlay}"
     },
     "dialog-shadow": {
       "$type": "shadow",
@@ -1566,7 +1566,7 @@
     },
     "sheet-background-color": {
       "$type": "color",
-      "$value": "{semantic.color-surface-floating}"
+      "$value": "{semantic.color-surface-overlay}"
     },
     "sheet-shadow": {
       "$type": "shadow",
@@ -2178,7 +2178,7 @@
     },
     "slider-thumb-background-color": {
       "$type": "color",
-      "$value": "{semantic.color-surface-floating}"
+      "$value": "{semantic.color-surface-overlay}"
     },
     "slider-thumb-border-color": {
       "$type": "color",

@@ -84,7 +84,7 @@ APG pattern: **Switch** (https://www.w3.org/WAI/ARIA/apg/patterns/switch/).
 - No mixed state. MDN: "The `switch` role does not support the value `mixed` for the `aria-checked` attribute". Switch has no `indeterminate` prop.
 - APG: "Important: it is critical the label on a switch does not change when its state changes."
 - **Groups:** Fieldset. APG: "The set is contained in an HTML fieldset and the label for the set is contained in an HTML legend element."
-- **Contrast.** Off: the track (`color-border-default`) is 3:1 on the surfaces (matrix), and the thumb (`surface-floating`) against it is 3.67:1 light / 3.29:1 dark (measured; inference until the pair is in the matrix). On: `background-accent-bold` against surfaces and `surface-floating` against `background-accent-bold` are added to the matrix at 3:1 (measured 13.40:1 light, 14.25:1 dark).
+- **Contrast.** Off: the track (`color-border-default`) is 3:1 on the surfaces (matrix), and the thumb (`surface-overlay`) against it is 3.67:1 light / 3.29:1 dark (measured; inference until the pair is in the matrix). On: `background-accent-bold` against surfaces and `surface-overlay` against `background-accent-bold` are added to the matrix at 3:1 (measured 13.40:1 light, 14.25:1 dark).
 - **More contrast:** no change needed.
 - **Forced colors:** track `ButtonBorder` outline, thumb `ButtonText`; on fills the track with `Highlight` and the thumb `HighlightText`. Disabled: `GrayText`.
 - **Reduced transparency:** not affected.
@@ -103,7 +103,7 @@ Proposed new:
 | ---------------------------- | -------------- | --------- | -------------------------------------------------------- |
 | `switch-thumb-width-pressed` | `size-icon-md` | dimension | The held stretch: 16 → 20 (the source's "stretches 4px") |
 
-Contrast matrix additions: `surface-floating` on `background-accent-bold`, and `background-accent-bold` on the four surfaces (shared with Checkbox and Slider).
+Contrast matrix additions: `surface-overlay` on `background-accent-bold`, and `background-accent-bold` on the four surfaces (shared with Checkbox and Slider).
 
 ## Author-written text
 

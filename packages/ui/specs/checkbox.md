@@ -119,7 +119,7 @@ Proposed new:
 | ------------------------------- | --------------------- | ------- | ------------------------------ |
 | `checkbox-border-color-invalid` | `color-border-danger` | color   | Invalid state (Field contract) |
 
-Contrast matrix additions (`packages/tokens/src/contrast.ts`, non-text 3:1): `background-accent-bold` on `surface-default`, `surface-raised`, `surface-nested`, `surface-floating`.
+Contrast matrix additions (`packages/tokens/src/contrast.ts`, non-text 3:1): `background-accent-bold` on `surface-default`, `surface-raised`, `surface-nested`, `surface-overlay`.
 
 The label text colour is `color-text-default` (semantic, directly; no source token).
 

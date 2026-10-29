@@ -1,6 +1,6 @@
 # Card
 
-Groups content about one subject so it can be scanned and compared: a report, a project, a settings area. Don't nest cards, and don't use a card as a page section; in-flow content separates with space, hairlines and surface steps (brand book, "Flat in flow, lifted when floating").
+Groups content about one subject so it can be scanned and compared: a report, a project, a settings area. Don't nest cards, and don't use a card as a page section; in-flow content separates with space, hairlines and surface steps (brand book, "Flat in flow, lifted in overlays").
 
 ```tsx
 import { Button } from "@platform/ui/button";

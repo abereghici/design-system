@@ -1,6 +1,6 @@
 # AlertDialog
 
-A modal Floating layer that interrupts with an irreversible or destructive decision and waits for an explicit answer: "Delete project?", "Discard unsaved changes?". It has exactly two ways forward, Cancel and the Action, and never closes on an outside press. Use it only when the action cannot be undone; a reversible action runs at once and offers Undo in a Toast (brand book: "Reversible actions run immediately and offer Undo in a toast. Dialogs are reserved for irreversible ones."). For a task with fields, use Dialog; for a message that needs no answer, use Alert or a Toast.
+A modal Overlay that interrupts with an irreversible or destructive decision and waits for an explicit answer: "Delete project?", "Discard unsaved changes?". It has exactly two ways forward, Cancel and the Action, and never closes on an outside press. Use it only when the action cannot be undone; a reversible action runs at once and offers Undo in a Toast (brand book: "Reversible actions run immediately and offer Undo in a toast. Dialogs are reserved for irreversible ones."). For a task with fields, use Dialog; for a message that needs no answer, use Alert or a Toast.
 
 ```tsx
 import { AlertDialog } from "@platform/ui/alert-dialog";

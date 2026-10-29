@@ -261,16 +261,16 @@ test("the checked accent fill is checked at 3:1 against each surface", async () 
 
   tokens.semantic["color-background-accent-bold"] = themed("palette-moss-900", "palette-night-900");
   await expect(buildTokens({ tokens })).rejects.toThrow(
-    "[dark] --ab-color-background-accent-bold on --ab-color-surface-floating: 1.00:1, needs 3:1",
+    "[dark] --ab-color-background-accent-bold on --ab-color-surface-overlay: 1.00:1, needs 3:1",
   );
 });
 
 test("the Switch and Slider thumb is checked at 3:1 against the accent fill", async () => {
   const tokens = validTokens();
 
-  tokens.semantic["color-surface-floating"] = themed("palette-sage-0", "palette-night-50");
+  tokens.semantic["color-surface-overlay"] = themed("palette-sage-0", "palette-night-50");
   await expect(buildTokens({ tokens })).rejects.toThrow(
-    "[dark] --ab-color-surface-floating on --ab-color-background-accent-bold:",
+    "[dark] --ab-color-surface-overlay on --ab-color-background-accent-bold:",
   );
 });
 

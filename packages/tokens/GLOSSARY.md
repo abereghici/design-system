@@ -32,7 +32,7 @@ No theme chosen: the interface follows the operating system's light or dark pref
 _Avoid_: Auto, default theme
 
 **Surface**:
-A page layer that content sits on: default, raised, nested or floating.
+A page layer that content sits on: default, raised, nested or overlay.
 _Avoid_: Layer, canvas
 
 **Background**:
@@ -60,11 +60,11 @@ A fixed identity hue for the Logo, imagery and print, never used for interface r
 ### Depth
 
 **Elevation**:
-The composite shadow (hairline ring, inner highlight, soft shadow) given to a floating layer: raised, overlay, toast or modal.
+The composite shadow (hairline ring, inner highlight, soft shadow) given to an overlay: raised, overlay, toast or modal.
 _Avoid_: Shadow, z-depth
 
 **Material**:
-A translucent, blurred fill reserved for floating chrome above content.
+A translucent, blurred fill reserved for overlay chrome above content.
 _Avoid_: Glass, frosted, blur
 
 ### Type

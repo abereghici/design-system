@@ -12,7 +12,7 @@ export const semantic = (family, prefix = "") =>
 
 # Elevation
 
-Content in the flow of the page stays flat and separates with space, hairlines and surface steps. Only floating layers are lifted.
+Content in the flow of the page stays flat and separates with space, hairlines and surface steps. Only overlays are lifted.
 
 ## Elevations
 
@@ -25,7 +25,7 @@ Each Elevation separates the layer from any background in both Themes, with soft
 
 ## Materials
 
-Translucent fills with a backdrop blur, for floating chrome above content such as menus and the command palette. Never use them for content in the flow, or under long text. Under `prefers-reduced-transparency: reduce` every material becomes the solid floating surface.
+Translucent fills with a backdrop blur, for overlay chrome above content such as menus and the command palette. Never use them for content in the flow, or under long text. Under `prefers-reduced-transparency: reduce` every material becomes the solid overlay surface.
 
 <TokenTable
   tokens={[
@@ -37,6 +37,6 @@ Translucent fills with a backdrop blur, for floating chrome above content such a
 
 ## Layering
 
-The stacking order, lowest to highest. Floating layers that use the top layer (`popover`, `<dialog>`) need none of these.
+The stacking order, lowest to highest. Overlays that use the top layer (`popover`, `<dialog>`) need none of these.
 
 <TokenTable tokens={semantic("zIndex")} />

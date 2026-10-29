@@ -43,7 +43,7 @@ Status: draft for brand-owner review (phase 5). Source guide: `components/Combob
 
 ## Anatomy
 
-Label → field box (search icon, input) → list (Floating layer: Groups, Items, empty row) → description or error. A hidden input carries the form value; a visually hidden status region announces "No results".
+Label → field box (search icon, input) → list (Overlay: Groups, Items, empty row) → description or error. A hidden input carries the form value; a visually hidden status region announces "No results".
 
 - **Label, description, error.** The Field Parts, built in (Field spec), as Select.
 - **Field box.** TextField's container chrome (`input-*`: height 32 / 40, radius 8, hairline, raised elevation) holding a decorative `search` Icon at the inline start (TextField's start Icon, `input-icon-color`, `aria-hidden`) and the input, as the source's `<Combobox>` (`ab-input-group` + `search`; Q46-1). A pointer press anywhere on the box focuses the input and opens the list.
@@ -158,7 +158,7 @@ Names, checked against the reference libraries:
 
 ## Motion
 
-Same Floating-layer motion as Select's picker and the menus (Menu source: "Scales from .97 at its trigger corner + fades, 200ms in / 150ms out (ease-out). Highlight follows the pointer instantly — no transition on hover inside menus.").
+Same Overlay motion as Select's picker and the menus (Menu source: "Scales from .97 at its trigger corner + fades, 200ms in / 150ms out (ease-out). Highlight follows the pointer instantly — no transition on hover inside menus.").
 
 - **Pointer opens** (`data-pointer`, set on the field box's `pointerdown`, cleared on `keydown`, the Accordion rule): `opacity` 0 → 1 and scale from `combobox-list-enter-scale` (`motion-scale-enter`, 0.97) over `combobox-list-enter-duration` (`motion-duration-popover`, 200 ms), `combobox-list-easing` (`motion-easing-enter`), with `@starting-style`, `transform-origin` at the field box's block-start inline-start corner (mirrored with `:dir(rtl)`). Brand book: "Popovers and tooltips grow from their trigger".
 - **Keyboard opens** (typing, arrow keys): no transition at all. Typing opens the list many times a day (brand book: "No motion on keyboard-initiated or high-frequency (100+ per day) actions."), and a fade on each keystroke would delay the results.
@@ -194,7 +194,7 @@ APG: "IMPORTANT: Ensure JavaScript does not interfere with browser-provided text
 - **Names.** The input from `<label for>` (APG: "it is labeled using the label element"); the listbox through `aria-labelledby` → the same label (the APG example names its listbox, `aria-label="States"`); Groups through their label (a `role="presentation"` label element, so the group holds only options in the accessibility tree: inference from WAI-ARIA's "group with accessibility child option"; the screen-reader pass records the group name being read). Options take their name from their text; decorative Icons are `aria-hidden`.
 - **Required and value.** Native `required` on the input; APG: "Comboboxes and listboxes can be marked as required with aria-required="true", and they have an accessible name that is distinct from their value." The hidden input is not in the accessibility tree.
 - **"No results".** Announced through the always-rendered `role="status"` region: MDN live regions: "Establish the live region before updating its content." and "The most reliable way to ensure that live regions are registered is to include them in the initial markup." The region is a sibling of the input, outside the popover, so it exists before the list opens; the visible row is `aria-hidden` so it is not read twice (judgement call against Base UI's `Empty` inside the popup).
-- **Contrast.** Option text `color-text-default`, group label `color-text-subtlest`, empty text `color-text-subtle`, icons `color-icon-subtle` / `color-icon-accent`, all in the contrast matrix on `surface-floating` and on `background-selected` (the highlight; `background-neutral-subtle-hovered` equals the dark Material, so it would vanish); the Material is a 90 % fill of the floating surface (DropdownMenu spec, inference). Disabled text is exempt (WCAG 2.2 1.4.3).
+- **Contrast.** Option text `color-text-default`, group label `color-text-subtlest`, empty text `color-text-subtle`, icons `color-icon-subtle` / `color-icon-accent`, all in the contrast matrix on `surface-overlay` and on `background-selected` (the highlight; `background-neutral-subtle-hovered` equals the dark Material, so it would vanish); the Material is a 90 % fill of the overlay surface (DropdownMenu spec, inference). Disabled text is exempt (WCAG 2.2 1.4.3).
 - **Targets.** Options are `size-control-sm` tall (28, larger on coarse pointers); the field box follows `size-control-md|lg`.
 - **More contrast:** `color-text-subtlest` steps up to `color-text-subtle` (token media override); the field box is TextField's. One rule steps option icons from `color-icon-subtle` to `color-icon-default`, as DropdownMenu.
 - **Forced colors:** the field box draws TextField's 1 px `CanvasText` border; the list gets a 1 px `CanvasText` border (Material and shadow disappear); the highlighted option sets `Highlight` / `HighlightText` explicitly and its ring takes `HighlightText`; disabled options use `GrayText`; the check and icons use `currentColor`.

@@ -2,7 +2,7 @@
   "primitive": {
     "palette-sage-0": {
       "$type": "color",
-      "$description": "Sage · light-theme neutrals, step 0 · identity anchor (a fixed brand value). Feeds `ab-color-surface-default` (light), `ab-color-surface-floating` (light), `ab-color-text-on-accent` (light), `ab-color-text-on-success` (light), `ab-color-text-on-danger` (light), `ab-color-icon-on-accent` (light), `ab-color-material-thin` under `(prefers-reduced-transparency: reduce)`, `ab-color-material-regular` under `(prefers-reduced-transparency: reduce)`, `ab-color-material-thick` under `(prefers-reduced-transparency: reduce)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$description": "Sage · light-theme neutrals, step 0 · identity anchor (a fixed brand value). Feeds `ab-color-surface-default` (light), `ab-color-surface-overlay` (light), `ab-color-text-on-accent` (light), `ab-color-text-on-success` (light), `ab-color-text-on-danger` (light), `ab-color-icon-on-accent` (light), `ab-color-material-thin` under `(prefers-reduced-transparency: reduce)`, `ab-color-material-regular` under `(prefers-reduced-transparency: reduce)`, `ab-color-material-thick` under `(prefers-reduced-transparency: reduce)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "colorSpace": "srgb",
         "components": [1, 1, 1],
@@ -191,7 +191,7 @@
     },
     "palette-night-900": {
       "$type": "color",
-      "$description": "Night · dark-theme neutrals, step 900 · identity anchor (a fixed brand value). Feeds `ab-color-surface-raised` (dark), `ab-color-surface-floating` (dark), `ab-color-background-neutral-subtle-hovered` (dark), `ab-color-material-thin` under `(prefers-reduced-transparency: reduce)`, `ab-color-material-regular` under `(prefers-reduced-transparency: reduce)`, `ab-color-material-thick` under `(prefers-reduced-transparency: reduce)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
+      "$description": "Night · dark-theme neutrals, step 900 · identity anchor (a fixed brand value). Feeds `ab-color-surface-raised` (dark), `ab-color-surface-overlay` (dark), `ab-color-background-neutral-subtle-hovered` (dark), `ab-color-material-thin` under `(prefers-reduced-transparency: reduce)`, `ab-color-material-regular` under `(prefers-reduced-transparency: reduce)`, `ab-color-material-thick` under `(prefers-reduced-transparency: reduce)`. Tier 1: product code uses the tier-2 tokens, never this (R4).",
       "$value": {
         "colorSpace": "srgb",
         "components": [0.0941, 0.1059, 0.0784],
