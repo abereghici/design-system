@@ -2,10 +2,8 @@
 
 import type { ComponentProps, KeyboardEvent } from "react";
 
-import { focusLast, itemsOf } from "../menu/menu.tsx";
+import { focusLast, itemsOf, useMenu } from "../menu/menu.tsx";
 import { Slot } from "../slot/slot.tsx";
-
-import { useDropdownMenu } from "./dropdown-menu-root.tsx";
 
 export interface TriggerProps extends ComponentProps<"button"> {
   /** Makes its one child (a Button or IconButton) the Trigger. */
@@ -14,7 +12,7 @@ export interface TriggerProps extends ComponentProps<"button"> {
 
 /** Opens the menu on press, Enter, Space or Down Arrow, and at its last item on Up Arrow. */
 export function Trigger({ asChild = false, ...props }: TriggerProps) {
-  const { floating } = useDropdownMenu();
+  const { floating } = useMenu();
   const Element = asChild ? Slot : "button";
   const trigger = floating.triggerProps(props);
 

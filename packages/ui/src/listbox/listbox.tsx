@@ -30,7 +30,7 @@ export const optionAt = (target: EventTarget) =>
   target instanceof Element ? target.closest<HTMLElement>('[role="option"]') : null;
 
 /** The shown options in the order they are drawn: CSS `order` within each parent. */
-export function shownOf(parent: Element | null): HTMLElement[] {
+function shownOf(parent: Element | null): HTMLElement[] {
   return [...(parent?.children ?? [])]
     .flatMap((child) => (child instanceof HTMLElement && child.hidden === false ? [child] : []))
     .toSorted((a, b) => Number(a.style.order) - Number(b.style.order))

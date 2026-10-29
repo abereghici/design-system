@@ -3,10 +3,11 @@
 import type { ComponentProps, MouseEvent, PointerEvent as ReactPointerEvent } from "react";
 
 import { rememberFocus } from "../floating/floating.ts";
+import { useMenu } from "../menu/menu.tsx";
 import type { Menu } from "../menu/menu.tsx";
 import { Slot, mergeProps } from "../slot/slot.tsx";
 
-import { place, useContextMenu } from "./context-menu-root.tsx";
+import { place } from "./context-menu-root.tsx";
 
 const LONG_PRESS = 700;
 
@@ -126,7 +127,7 @@ function openFromContextMenu(event: MouseEvent<HTMLDivElement>, floating: Menu["
 
 /** The area that opens the menu. It keeps its own look. */
 export function Trigger({ disabled = false, asChild = false, ...props }: TriggerProps) {
-  const { floating } = useContextMenu();
+  const { floating } = useMenu();
   const Area = asChild ? Slot : "div";
   const end = (event: ReactPointerEvent<HTMLDivElement>) => {
     endPress(event, (x, y) => {

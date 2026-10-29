@@ -5,7 +5,7 @@ import { composeEventHandlers, dispatchFeedback, requestChange } from "../events
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { getDocument, useEvent } from "../events/use-event.ts";
 
-export type ChangeReason =
+type ChangeReason =
   | "trigger-press"
   | "outside-press"
   | "escape-key"

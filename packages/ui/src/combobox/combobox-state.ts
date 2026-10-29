@@ -189,7 +189,7 @@ export function dismiss(c: Combobox, reason: InputReason, event: Event) {
   }
 }
 
-export function choose(c: Combobox, option: HTMLElement, event: Event) {
+function choose(c: Combobox, option: HTMLElement, event: Event) {
   if (!enabled(option)) return;
 
   if (!changeValue(c, option.dataset["value"] ?? null, "item-press", event)) return;
@@ -207,7 +207,7 @@ function open(c: Combobox, event: KeyboardEvent<HTMLInputElement>) {
   }
 }
 
-export function keyDown(c: Combobox, event: KeyboardEvent<HTMLInputElement>) {
+function keyDown(c: Combobox, event: KeyboardEvent<HTMLInputElement>) {
   memoryOf(c).pointer = false;
 
   const list = listOf(c);
@@ -240,7 +240,7 @@ export function keyDown(c: Combobox, event: KeyboardEvent<HTMLInputElement>) {
   }
 }
 
-export function inputChange(c: Combobox, event: ChangeEvent<HTMLInputElement>) {
+function inputChange(c: Combobox, event: ChangeEvent<HTMLInputElement>) {
   const native = event.nativeEvent;
   const next = event.currentTarget.value;
 
@@ -254,7 +254,7 @@ export function inputChange(c: Combobox, event: ChangeEvent<HTMLInputElement>) {
   changeOpen(c, true, "input-change", native);
 }
 
-export function blur(c: Combobox, event: FocusEvent<HTMLInputElement>) {
+function blur(c: Combobox, event: FocusEvent<HTMLInputElement>) {
   const next = event.relatedTarget;
   const inside =
     next instanceof Node && document.getElementById(part(c, "root"))?.contains(next) === true;

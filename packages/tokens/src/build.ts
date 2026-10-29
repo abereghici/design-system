@@ -9,8 +9,6 @@ import { stylesheets } from "./css-format.ts";
 
 export { TokenCheckError };
 
-export type { ArtifactTokens };
-
 export const SOURCE_GLOB = `${import.meta.dirname}/tokens/*.tokens.json`;
 
 interface BuildInput {

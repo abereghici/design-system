@@ -6,10 +6,11 @@ import type { ComponentProps, KeyboardEvent, ReactNode, SyntheticEvent } from "r
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useEvent } from "../events/use-event.ts";
+import { Frame, splitFrame } from "../field/field-frame.tsx";
+import type { Naming, SizedFrameProps } from "../field/field-frame.tsx";
 import * as Field from "../field/field.tsx";
 import { useField } from "../field/use-field.ts";
 import { InputGroup } from "../text-field/text-field.tsx";
-import type { TextFieldProps } from "../text-field/text-field.tsx";
 
 import { StepButtons } from "./number-field-step-buttons.tsx";
 import type { Direction } from "./number-field-step-buttons.tsx";
@@ -20,11 +21,6 @@ export type NumberFieldChangeEventDetails = Details<
   "input-blur" | "increment-press" | "decrement-press" | "keyboard",
   SyntheticEvent
 >;
-
-type Naming =
-  | { label: ReactNode }
-  | { label?: undefined; "aria-label": string }
-  | { label?: undefined; "aria-labelledby": string };
 
 type Bounds = { min?: number | undefined; max?: number | undefined; step: number };
 
@@ -76,9 +72,7 @@ type ControlProps = Omit<
   disabled?: boolean;
 };
 
-export type NumberFieldProps = Naming &
-  ControlProps &
-  Pick<TextFieldProps, "description" | "errorMessage" | "invalid" | "validate" | "size">;
+export type NumberFieldProps = Naming & SizedFrameProps & ControlProps;
 
 function buildNumberFormat(
   locale: Intl.LocalesArgument,
@@ -295,31 +289,12 @@ function Control({ startElement, incrementLabel, decrementLabel, ...options }: C
  * A number people type or step, such as a quantity or a price. For digit codes use TextField; to
  * pick by feel, Slider.
  */
-export function NumberField({
-  label,
-  description,
-  errorMessage,
-  invalid,
-  validate,
-  size = "md",
-  className,
-  style,
-  ...props
-}: NumberFieldProps) {
+export function NumberField(props: NumberFieldProps) {
+  const [frame, control] = splitFrame(props);
+
   return (
-    <Field.Root
-      className={className}
-      style={style}
-      data-size={size}
-      name={props.name}
-      invalid={invalid}
-      validate={validate}
-      disabled={props.disabled}
-    >
-      {label !== undefined && <Field.Label>{label}</Field.Label>}
-      <Control {...props} />
-      {description !== undefined && <Field.Description>{description}</Field.Description>}
-      <Field.Error>{errorMessage}</Field.Error>
-    </Field.Root>
+    <Frame {...frame}>
+      <Control {...control} />
+    </Frame>
   );
 }

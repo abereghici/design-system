@@ -1,12 +1,10 @@
 "use client";
 
-import { use } from "react";
 import type { ReactNode } from "react";
 
 import { useFloating } from "../floating/floating.ts";
 import type { ChangeEventDetails as Details, FloatingOptions } from "../floating/floating.ts";
 import { MenuContext } from "../menu/menu.tsx";
-import type { Menu } from "../menu/menu.tsx";
 
 export type ChangeReason =
   | "trigger-press"
@@ -17,14 +15,6 @@ export type ChangeReason =
   | "none";
 
 export type ChangeEventDetails = Details<ChangeReason>;
-
-export function useDropdownMenu(): Menu {
-  const menu = use(MenuContext);
-
-  if (menu === null) throw new Error("DropdownMenu parts must be inside DropdownMenu.Root");
-
-  return menu;
-}
 
 export interface RootProps extends FloatingOptions<ChangeReason> {
   /** The Trigger and Content. */

@@ -21,7 +21,7 @@ export interface Menu {
 
 export const MenuContext = createContext<Menu | null>(null);
 
-function useMenu(): Menu {
+export function useMenu(): Menu {
   const menu = use(MenuContext);
 
   if (menu === null) throw new Error("Menu parts must be inside their menu's Root");

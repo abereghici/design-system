@@ -1,7 +1,6 @@
 import { expect, fn } from "storybook/test";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
-import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -18,7 +17,11 @@ const meta = preview.meta({
   title: "Components/PasswordField",
   component: PasswordField,
   argTypes: {
-    ...textFieldArgTypes,
+    disabled: {
+      control: "boolean",
+      description:
+        "Blocks interaction but keeps it focusable and announced, so everyone can still find it; say nearby why it is unavailable.",
+    },
     onValueChange: { control: false, description: "Called as the user types, with the new text." },
   },
   args: {

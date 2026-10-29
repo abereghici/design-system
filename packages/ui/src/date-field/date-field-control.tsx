@@ -136,12 +136,8 @@ function useControl(options: ControlOptions, onValidity: (validity: Validity) =>
 }
 
 const isFirstInvalid = (input: HTMLInputElement) =>
-  [...(input.form?.elements ?? [])].find((element) =>
-    element instanceof HTMLInputElement ||
-    element instanceof HTMLSelectElement ||
-    element instanceof HTMLTextAreaElement
-      ? element.willValidate && !element.validity.valid
-      : false,
+  [...(input.form?.elements ?? [])].find(
+    (element) => !(element instanceof HTMLFieldSetElement) && element.matches(":invalid"),
   ) === input;
 
 function HiddenInput({

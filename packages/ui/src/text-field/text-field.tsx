@@ -2,6 +2,8 @@
 
 import type { ComponentProps, ReactNode } from "react";
 
+import { Frame, splitFrame } from "../field/field-frame.tsx";
+import type { Naming, SizedFrameProps } from "../field/field-frame.tsx";
 import * as Field from "../field/field.tsx";
 
 import fieldStyles from "../field/field.module.css";
@@ -9,29 +11,9 @@ import styles from "./text-field.module.css";
 
 export type TextFieldChangeEventDetails = Field.ChangeEventDetails;
 
-type Naming =
-  | { label: ReactNode }
-  | { label?: undefined; "aria-label": string }
-  | { label?: undefined; "aria-labelledby": string };
-
 export type TextFieldProps = Naming &
+  SizedFrameProps &
   Omit<ComponentProps<"input">, "size"> & {
-    /**
-     * Helper text under the field, such as a format hint; the error message takes its place while
-     * invalid.
-     */
-    description?: ReactNode;
-    /**
-     * What to fix, shown once the user has interacted and the value is invalid. Without it the
-     * browser's own message is shown.
-     */
-    errorMessage?: ReactNode | ((validity: ValidityState) => ReactNode);
-    /** Marks the value invalid from outside, such as a server or validation library result. */
-    invalid?: boolean;
-    /** Your own rule: return a message to mark the value invalid, or nothing when it is valid. */
-    validate?: Field.RootProps["validate"];
-    /** `lg` for prominent or spacious forms. Touch screens get larger targets on their own. */
-    size?: "md" | "lg";
     /** Content before the input, such as a decorative search icon. */
     startElement?: ReactNode;
     /** Content after the input, such as a Clear IconButton or a shortcut hint. */
@@ -50,36 +32,15 @@ export type TextFieldProps = Naming &
  * after the user has interacted. Use TextArea for more than one line, PasswordField for secrets,
  * NumberField for numbers and Select to choose from a short known list.
  */
-export function TextField({
-  label,
-  description,
-  errorMessage,
-  invalid,
-  validate,
-  size = "md",
-  startElement,
-  endElement,
-  className,
-  style,
-  ...props
-}: TextFieldProps) {
+export function TextField({ startElement, endElement, ...props }: TextFieldProps) {
+  const [frame, control] = splitFrame(props);
+
   return (
-    <Field.Root
-      className={className}
-      style={style}
-      data-size={size}
-      name={props.name}
-      invalid={invalid}
-      validate={validate}
-      disabled={props.disabled}
-    >
-      {label !== undefined && <Field.Label>{label}</Field.Label>}
+    <Frame {...frame}>
       <InputGroup start={startElement} end={endElement}>
-        <TextInput {...props} />
+        <TextInput {...control} />
       </InputGroup>
-      {description !== undefined && <Field.Description>{description}</Field.Description>}
-      <Field.Error>{errorMessage}</Field.Error>
-    </Field.Root>
+    </Frame>
   );
 }
 

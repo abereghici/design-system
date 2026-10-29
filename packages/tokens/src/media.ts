@@ -1,6 +1,6 @@
 import type { TransformedToken } from "style-dictionary/types";
 
-export const MEDIA_EXTENSION = "com.bereghici.media";
+const MEDIA_EXTENSION = "com.bereghici.media";
 
 interface MediaOverride {
   readonly query: string;
