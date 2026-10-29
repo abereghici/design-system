@@ -183,7 +183,6 @@ Detail: `{ component: "ContextMenu", reason }`, from the Item (`ab-press`, `ab-t
 
 - Source guide: artifact `project/components/Menu/README.md` (shared with DropdownMenu; quotes in `dropdown-menu.md`). Brand book: Motion ("Popovers and tooltips grow from their trigger"; "No motion on keyboard-initiated or high-frequency (100+ per day) actions."), Interaction principles ("Esc closes only the topmost popover or dialog, then focus returns to its invoker.").
 - `dropdown-menu.md` (shared Item Parts, keyboard, accessibility, focus handler).
-- Spike #4: `docs/research/floating-platform.md`.
 - HTML Living Standard, popover (show popover with `source`, hide popover, light dismiss): https://html.spec.whatwg.org/multipage/popover.html
 - Pointer Events (click, auxclick and contextmenu from non-pointing devices; ordering of contextmenu and pointerup; pointercancel): https://w3c.github.io/pointerevents/
 - MDN `contextmenu` event: https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event · BCD `api.Element.contextmenu_event` (Safari iOS not supported, https://webkit.org/b/213953)

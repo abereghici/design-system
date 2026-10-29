@@ -21,7 +21,7 @@ Two source exports exist for documentation (the Storybook foundations pages in `
 
 Apps import none of these by hand. `UIProvider` from `@platform/ui/ui-provider` brings the layer order (`ab.reset, ab.tokens, ab.base, ab.components`), `tokens.css`, `fonts.css` and the base stylesheet, and each component brings its own `components/<component>.css`. Unlayered app CSS always wins over the design system, including over component tokens set on `:root` or on a subtree.
 
-Apps must target the Baseline newly available floor (ADR-0002), for example `"browserslist": ["baseline newly available"]` in a Next.js app's `package.json`. With Next's default targets, Lightning CSS lowers `light-dark()` into `--lightningcss-light` toggles, and `data-theme` subtrees stop switching (`docs/research/turbopack-tree-shaking-react-compiler.md`).
+Apps must target the Baseline newly available floor (ADR-0002), for example `"browserslist": ["baseline newly available"]` in a Next.js app's `package.json`. With Next's default targets, Lightning CSS lowers `light-dark()` into `--lightningcss-light` toggles, and `data-theme` subtrees stop switching.
 
 ## Theme contract
 
@@ -30,7 +30,7 @@ Apps must target the Baseline newly available floor (ADR-0002), for example `"br
 - **Themed colors resolve where they are used.** `--ab-color-surface-default: light-dark(var(--ab-palette-sage-0), var(--ab-palette-night-950))` is declared once on `:root`. An unregistered custom property's computed value is its "specified value with variables substituted" (CSS Variables 1), so the `light-dark()` is inherited unresolved and picks its branch from the `color-scheme` of the element that uses it. Component tokens (`--ab-card-background-color: var(--ab-color-surface-default)`) therefore follow the Theme too.
 - **Don't register themed tokens with `@property` and `syntax: "<color>"`.** A registered color property computes to one color on `:root`, and subtrees would no longer switch.
 - **Brand colors (`color-brand-*`) are fixed** in every Theme.
-- **The package exports nothing for switching.** Apps own the choice and its persistence: they set `data-theme` only for an explicit light or dark choice, and leave it off for System. `docs/research/theme-switching.md` has a recipe for Next.js.
+- **The package exports nothing for switching.** Apps own the choice and its persistence: they set `data-theme` only for an explicit light or dark choice, and leave it off for System.
 
 ## Authoring tokens
 
@@ -81,7 +81,7 @@ Value types:
   }
   ```
 
-- **Animated tokens** are component tokens marked `"$extensions": { "com.bereghici.animated": true }`. The build registers each with `@property { syntax; inherits: false; initial-value }`, because an unregistered custom property can't interpolate and an inherited one restyles its whole subtree when it changes (`docs/research/performance.md`). The value must be the same in every Theme and computationally independent (`px`, `ms`, a number or an opaque color; no `rem`). With `inherits: false` the token is read from the element itself, so override it on the component's element, not on an ancestor. No source token is animated yet.
+- **Animated tokens** are component tokens marked `"$extensions": { "com.bereghici.animated": true }`. The build registers each with `@property { syntax; inherits: false; initial-value }`, because an unregistered custom property can't interpolate and an inherited one restyles its whole subtree when it changes. The value must be the same in every Theme and computationally independent (`px`, `ms`, a number or an opaque color; no `rem`). With `inherits: false` the token is read from the element itself, so override it on the component's element, not on an ancestor. No source token is animated yet.
 
 ## Checks
 
@@ -113,8 +113,6 @@ Code uses the system monospace stack, with no webfont.
 - **`UIProvider` preloads exactly one file: Figtree latin**, with React's `preload()`. It is the body text face, and it is the file almost every page needs. The other files, the italics among them, are not preloaded: a preload ignores `unicode-range`, so it would download them on every page. The preload and the `@font-face` request the same hashed URL, so the file is fetched once.
 - **Licence.** Both families are under the SIL Open Font License 1.1. The licence texts ship next to the files (`fonts/Figtree-OFL.txt`, `fonts/NotoSerif-OFL.txt`).
 - **Rebuilding.** `pnpm fonts` downloads the pinned upstream files (the commit and release google/fonts ships), checks their sha256, subsets them with HarfBuzz and rewrites `fonts/`. Run it only to move to a new upstream release, then commit the result. The subset ranges and descriptors live in `src/fonts.ts`.
-
-The evidence for these choices, and for leaving `font-size-adjust` out, is in `docs/research/variable-fonts.md`.
 
 ## Scripts
 

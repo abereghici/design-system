@@ -74,5 +74,5 @@ The job a piece of text does (heading, display, body, label, data, code, overlin
 _Avoid_: Text style, font style, type scale step
 
 **Subset**:
-One file of a family that covers one `unicode-range` (`latin` or `latin-ext`). The browser fetches a subset only when the page uses a character in its range.
+One file of a typeface that covers one script range (Latin or Latin Extended), fetched only when the page uses a character in it.
 _Avoid_: Font slice, charset

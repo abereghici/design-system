@@ -112,7 +112,7 @@ None. Scrolling is not a feedback moment.
 
 ## Sources
 
-- Base stylesheet: `packages/ui/src/base/base.css` (`scrollbar-gutter: stable; scrollbar-color: var(--ab-color-border-default) transparent;` on `:root`) and `docs/research/base-stylesheet.md`.
+- Base stylesheet: `packages/ui/src/base/base.css` (`scrollbar-gutter: stable; scrollbar-color: var(--ab-color-border-default) transparent;` on `:root`).
 - MDN `scrollbar-color`: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/scrollbar-color · `scrollbar-width`: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/scrollbar-width · `scrollbar-gutter`: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/scrollbar-gutter
 - Baseline (webstatus.dev, 2026-10-24): `scrollbar-color` newly available (low 2025-12-12); `scrollbar-width` newly available (low 2024-12-11); `scrollbar-gutter` newly available (low 2024-12-11); `tabindex` widely available; `scroll-driven-animations` limited (an enhancement under `@supports`); `overscroll-behavior` limited (not used).
 - Chrome for Developers, Keyboard focusable scrollers: https://developer.chrome.com/blog/keyboard-focusable-scrollers
