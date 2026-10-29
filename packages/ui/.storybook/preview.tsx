@@ -6,14 +6,14 @@ import { withGlobals } from "./decorators/with-globals.tsx";
 import { meaningfulControls } from "./docs/arg-types.ts";
 import { transform } from "./docs/source.ts";
 import { directions, DocsContainer, DocsPage, mdx, themes } from "./globals.tsx";
-import { rememberStoryCanvas } from "./screenshots/canvas.ts";
+import { snapshotStory } from "./test/snapshots.ts";
 
 export { partsOf } from "./docs/arg-types.ts";
 
 export default definePreview({
   addons: [addonDocs(), addonA11y()],
-  tags: ["autodocs", "screenshot", "aria-snapshot"],
-  beforeEach: rememberStoryCanvas,
+  tags: ["autodocs", "screenshot"],
+  afterEach: snapshotStory,
   argTypesEnhancers: [meaningfulControls],
   parameters: {
     a11y: {

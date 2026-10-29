@@ -62,14 +62,10 @@
     "svgo": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vitest": "catalog:",
-    "web-features": "catalog:"
+    "vitest": "catalog:"
   },
   "peerDependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
-  },
-  "browserslist": [
-    "baseline newly available"
-  ]
+  }
 }

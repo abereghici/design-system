@@ -16,6 +16,7 @@
     },
     "test:screenshots": {
       "dependsOn": ["^build"],
+      "passThroughEnv": ["PLAYWRIGHT_BROWSERS_PATH"],
       "cache": false
     }
   }

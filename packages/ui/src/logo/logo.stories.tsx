@@ -8,7 +8,7 @@ const meta = preview.meta({
   title: "Components/Logo",
   component: Logo,
   // Decorative by default, so its tree is empty, and an empty aria snapshot matches anything.
-  tags: ["!aria-snapshot"],
+  parameters: { ariaSnapshot: { disable: true } },
 });
 
 export const Default = meta.story({});

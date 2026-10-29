@@ -28,23 +28,14 @@ export default mergeConfig(
           plugins: [storybookTest()],
           test: {
             name: "storybook",
-            setupFiles: [
-              "./.storybook/test/focus.setup.ts",
-              "./.storybook/test/reduced-motion.setup.ts",
-            ],
+            setupFiles: ["./.storybook/test/reduced-motion.setup.ts"],
             provide: { reducedMotion: false },
             browser: {
               enabled: true,
               headless: true,
               provider: playwright(),
               instances: [
-                {
-                  browser: "chromium",
-                  // An instance's setupFiles join the parent's resolved ones unresolved, so this one is absolute.
-                  setupFiles: [
-                    resolve(import.meta.dirname, ".storybook/test/aria-snapshot.setup.ts"),
-                  ],
-                },
+                { browser: "chromium" },
                 {
                   browser: "chromium",
                   name: "chromium-reduced-motion",

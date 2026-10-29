@@ -1,4 +1,7 @@
+import type { ComponentProps } from "react";
 import { expect } from "storybook/test";
+
+import type { StoryContext } from "@storybook/react-vite";
 
 import { Button } from "@platform/ui/button";
 
@@ -6,7 +9,7 @@ import preview from "#.storybook/preview.tsx";
 
 import { Kbd } from "./kbd.tsx";
 
-type Context = Parameters<Parameters<typeof Default.test>[2]>[0];
+type Context = StoryContext<ComponentProps<typeof Kbd>>;
 
 function onPlatform(platform: string) {
   return () => {

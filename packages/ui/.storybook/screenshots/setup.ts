@@ -1,17 +1,16 @@
 /// <reference types="@vitest/browser-playwright" />
-import { afterEach, beforeAll, beforeEach, expect, inject } from "vitest";
-import { cdp, page } from "vitest/browser";
+import { beforeAll, beforeEach, expect, inject } from "vitest";
+import { cdp } from "vitest/browser";
 
-import { storyCanvas } from "./canvas.ts";
 import type { ScreenshotVariant } from "./projects.ts";
 
 declare module "vitest" {
   export interface ProvidedContext {
-    screenshotVariant: ScreenshotVariant;
+    screenshotVariant?: ScreenshotVariant;
   }
 }
 
-const { emulatedMedia, defaultFontSize } = inject("screenshotVariant");
+const { emulatedMedia, defaultFontSize } = inject("screenshotVariant") ?? {};
 
 beforeAll(async () => {
   if (emulatedMedia) {
@@ -42,17 +41,4 @@ beforeEach(async () => {
     x: innerWidth - 1,
     y: innerHeight - 1,
   });
-});
-
-afterEach(async ({ story, task }) => {
-  if (!story || task.result?.state === "fail") return;
-
-  const topLayer = document.querySelector(":modal, :popover-open") !== null;
-  const height = document.documentElement.scrollHeight;
-
-  if (!topLayer && height > innerHeight) await page.viewport(innerWidth, height);
-
-  await expect(
-    page.elementLocator(topLayer ? document.documentElement : storyCanvas()),
-  ).toMatchScreenshot(story.id);
 });
