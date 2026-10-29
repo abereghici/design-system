@@ -1,3 +1,5 @@
+import { getReferences } from "style-dictionary/utils";
+
 import type { Dictionary, TransformedToken } from "style-dictionary/types";
 
 export const THEME_EXTENSION = "com.bereghici.theme";
@@ -24,10 +26,17 @@ export const resolvedDark = (token: TransformedToken): unknown => darkOf(token["
 
 export const isThemed = (token: TransformedToken): boolean => authoredDark(token) !== undefined;
 
-const WHOLE_REFERENCE = /^\{[^\{\}]+\}$/v;
+/** The token `value` references when the whole value is one reference, such as `{semantic.color-text}`. */
+export const referencedToken = (
+  value: unknown,
+  dictionary: Dictionary,
+): TransformedToken | undefined => {
+  if (typeof value !== "string") return undefined;
 
-export const isWholeReference = (value: unknown): value is string =>
-  typeof value === "string" && WHOLE_REFERENCE.test(value);
+  const [target, ...more] = getReferences(value, dictionary.tokens, { warnImmediately: false });
+
+  return more.length === 0 && value === `{${target?.path.join(".")}}` ? target : undefined;
+};
 
 export const valueIn = (
   token: TransformedToken,
@@ -36,7 +45,7 @@ export const valueIn = (
 ): unknown => {
   const ownDark = theme === "dark" && isThemed(token);
   const authored: unknown = ownDark ? authoredDark(token) : token.original.$value;
-  const target = isWholeReference(authored) ? dictionary.tokenMap.get(authored) : undefined;
+  const target = referencedToken(authored, dictionary);
 
   if (target !== undefined) return valueIn(target, theme, dictionary);
 

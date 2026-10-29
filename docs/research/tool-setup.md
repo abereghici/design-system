@@ -81,7 +81,7 @@ Every option the old config set was the default (https://oxc.rs/docs/guide/usage
 ## Style Dictionary 5.7.0
 
 - `usesDtcg` is detected: `if (... this.usesDtcg === undefined) { this.usesDtcg = detectDtcgSyntax(this.tokens); }` (`lib/StyleDictionary.js:240-241`). The output with the flag removed is byte-identical (`cmp dist/tokens.css`).
-- The custom `ab/duration` transform stays. The built-in `time/seconds` returns `durationToSeconds(...)`, which would turn the authored `70ms` into `0.07s` (`lib/common/transforms.js:1239-1250`).
+- Durations use the built-in `time/seconds` transform, which outputs seconds (`70ms` becomes `0.07s`); CSS and the Toaster read both units.
 
 ## Next 16.4.3
 

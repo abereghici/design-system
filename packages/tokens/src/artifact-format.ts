@@ -1,7 +1,7 @@
 import type { Dictionary, TransformedToken } from "style-dictionary/types";
 
 import { FONT_FAMILIES, FONT_STYLES, FONT_SUBSETS, fontFileName } from "./fonts.ts";
-import { THEMES, isWholeReference, valueIn } from "./theme.ts";
+import { THEMES, referencedToken, valueIn } from "./theme.ts";
 import type { ThemeId } from "./theme.ts";
 import { inTierOrder, tierOf } from "./tiers.ts";
 
@@ -128,7 +128,7 @@ const memberOf = (value: unknown, key: string): unknown =>
 const layerCss = (layer: unknown, theme: ThemeId, dictionary: Dictionary): string => {
   const member = (key: string) => {
     const value = memberOf(layer, key);
-    const target = isWholeReference(value) ? dictionary.tokenMap.get(value) : undefined;
+    const target = referencedToken(value, dictionary);
 
     return String(target === undefined ? value : valueIn(target, theme, dictionary));
   };
@@ -149,16 +149,13 @@ const shadowLayers = (
   const css: string[] = [];
 
   for (const layer of layers) {
-    if (!isWholeReference(layer)) {
-      css.push(layerCss(layer, theme, dictionary));
-      continue;
-    }
+    const target = referencedToken(layer, dictionary);
 
-    const target = dictionary.tokenMap.get(layer);
-
-    if (target === undefined) throw new Error(`--${token.name}: ${layer} does not exist`);
-
-    css.push(...shadowLayers(target, theme, dictionary));
+    css.push(
+      ...(target === undefined
+        ? [layerCss(layer, theme, dictionary)]
+        : shadowLayers(target, theme, dictionary)),
+    );
   }
 
   return css;

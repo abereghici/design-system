@@ -11,9 +11,6 @@ export { TokenCheckError };
 
 export type { ArtifactTokens };
 
-const isDurationObject = (value: unknown): value is { value: unknown; unit: unknown } =>
-  typeof value === "object" && value !== null && "value" in value && "unit" in value;
-
 export const SOURCE_GLOB = `${import.meta.dirname}/tokens/*.tokens.json`;
 
 interface BuildInput {
@@ -31,24 +28,12 @@ export async function buildTokens(input: BuildInput): Promise<BuildOutput> {
   const sd = new StyleDictionary({
     ...(input.tokens === undefined ? {} : { tokens: input.tokens }),
     ...(input.source === undefined ? {} : { source: [...input.source] }),
-    log: { verbosity: "silent", errors: { brokenReferences: "throw" } },
+    log: { verbosity: "silent", warnings: "error" },
     hooks: {
       transforms: {
         "ab/name": {
           type: "name",
           transform: (token) => `ab-${token.path.slice(1).join("-")}`,
-        },
-        // The built-in time/seconds would rewrite an authored 70ms as 0.07s.
-        "ab/duration": {
-          type: "value",
-          filter: (token) => token.$type === "duration" && isDurationObject(token.$value),
-          transform: (token) => {
-            const duration: unknown = token.$value;
-
-            return isDurationObject(duration)
-              ? `${String(duration.value)}${String(duration.unit)}`
-              : String(duration);
-          },
         },
       },
     },
@@ -58,7 +43,7 @@ export async function buildTokens(input: BuildInput): Promise<BuildOutput> {
           "ab/name",
           "color/css",
           "size/rem",
-          "ab/duration",
+          "time/seconds",
           "cubicBezier/css",
           "fontFamily/css",
         ],

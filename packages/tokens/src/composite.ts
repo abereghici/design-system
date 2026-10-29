@@ -1,6 +1,6 @@
 import type { Dictionary } from "style-dictionary/types";
 
-import { isWholeReference } from "./theme.ts";
+import { referencedToken } from "./theme.ts";
 
 const SEMANTIC_MEMBERS: Readonly<Record<string, RegExp>> = {
   typography: /^type-[a-z]+-[a-z0-9]+-font-size$/v,
@@ -30,7 +30,7 @@ const shadowLayer = (layer: unknown, ref: Ref): string => {
 
 export const compositeCss = (type: unknown, authored: object, dictionary: Dictionary): string => {
   const ref: Ref = (reference) => {
-    const target = isWholeReference(reference) ? dictionary.tokenMap.get(reference) : undefined;
+    const target = referencedToken(reference, dictionary);
 
     if (target === undefined) throw new Error(`unresolvable composite member ${String(reference)}`);
 
