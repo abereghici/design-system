@@ -27,7 +27,7 @@ function NarrowingMax(args: CalendarProps) {
       <button
         type="button"
         onClick={() => {
-          setMax(date("2026-09-15"));
+          setMax(date("2015-09-15"));
         }}
       >
         Book by September 15
@@ -42,7 +42,7 @@ const meta = preview.meta({
   args: {
     "aria-label": "Delivery date",
     ...names,
-    defaultValue: date("2026-10-24"),
+    defaultValue: date("2015-10-24"),
     locale: "en-US",
     onValueChange: fn<(value: Temporal.PlainDate, details: CalendarChangeEventDetails) => void>(),
   },
@@ -53,7 +53,7 @@ export const Default = meta.story({});
 Default.test("names the grid by its month and selects the value", async ({ canvas }) => {
   await expect(canvas.getByRole("group", { name: "Delivery date" })).toBeVisible();
 
-  const grid = canvas.getByRole("grid", { name: "October 2026" });
+  const grid = canvas.getByRole("grid", { name: "October 2015" });
 
   await expect(grid).toBeVisible();
   await expect(canvas.getAllByRole("columnheader").map((header) => header.textContent)).toEqual([
@@ -65,7 +65,7 @@ Default.test("names the grid by its month and selects the value", async ({ canva
     "Fri",
     "Sat",
   ]);
-  await expect(canvas.getByLabelText("Saturday, October 24, 2026")).toHaveAttribute(
+  await expect(canvas.getByLabelText("Saturday, October 24, 2015")).toHaveAttribute(
     "aria-selected",
     "true",
   );
@@ -77,7 +77,7 @@ Default.test("tabs through Previous, Next and the selected day", async ({ canvas
   await userEvent.tab();
   await expect(canvas.getByRole("button", { name: "Next month" })).toHaveFocus();
   await userEvent.tab();
-  await expect(canvas.getByLabelText("Saturday, October 24, 2026")).toHaveFocus();
+  await expect(canvas.getByLabelText("Saturday, October 24, 2015")).toHaveFocus();
 });
 
 Default.test(
@@ -85,32 +85,32 @@ Default.test(
   async ({ canvas, userEvent }) => {
     const cell = (name: string) => canvas.getByLabelText(name);
 
-    cell("Saturday, October 24, 2026").focus();
+    cell("Saturday, October 24, 2015").focus();
     await userEvent.keyboard("{ArrowLeft}");
-    await expect(cell("Friday, October 23, 2026")).toHaveFocus();
+    await expect(cell("Friday, October 23, 2015")).toHaveFocus();
     await userEvent.keyboard("{Home}");
-    await expect(cell("Sunday, October 18, 2026")).toHaveFocus();
+    await expect(cell("Sunday, October 18, 2015")).toHaveFocus();
     await userEvent.keyboard("{End}");
-    await expect(cell("Saturday, October 24, 2026")).toHaveFocus();
+    await expect(cell("Saturday, October 24, 2015")).toHaveFocus();
     await userEvent.keyboard("{ArrowDown}{ArrowDown}");
-    await expect(cell("Saturday, November 7, 2026")).toHaveFocus();
-    await expect(canvas.getByRole("heading", { name: "November 2026" })).toBeVisible();
+    await expect(cell("Saturday, November 7, 2015")).toHaveFocus();
+    await expect(canvas.getByRole("heading", { name: "November 2015" })).toBeVisible();
     await userEvent.keyboard("{PageUp}");
-    await expect(cell("Wednesday, October 7, 2026")).toHaveFocus();
+    await expect(cell("Wednesday, October 7, 2015")).toHaveFocus();
     await userEvent.keyboard("{Shift>}{PageDown}{/Shift}");
-    await expect(cell("Thursday, October 7, 2027")).toHaveFocus();
+    await expect(cell("Friday, October 7, 2016")).toHaveFocus();
     await userEvent.keyboard("{ArrowUp}{ArrowRight}");
-    await expect(cell("Friday, October 1, 2027")).toHaveFocus();
+    await expect(cell("Saturday, October 1, 2016")).toHaveFocus();
   },
 );
 
 Default.test(
   "takes the last day of a shorter month on Page Down",
-  { args: { defaultValue: date("2026-01-31") } },
+  { args: { defaultValue: date("2015-01-31") } },
   async ({ canvas, userEvent }) => {
-    canvas.getByLabelText("Saturday, January 31, 2026").focus();
+    canvas.getByLabelText("Saturday, January 31, 2015").focus();
     await userEvent.keyboard("{PageDown}");
-    await expect(canvas.getByLabelText("Saturday, February 28, 2026")).toHaveFocus();
+    await expect(canvas.getByLabelText("Saturday, February 28, 2015")).toHaveFocus();
   },
 );
 
@@ -118,24 +118,24 @@ Default.test(
   "swaps Left and Right in RTL",
   { globals: { dir: "rtl" } },
   async ({ canvas, userEvent }) => {
-    canvas.getByLabelText("Saturday, October 24, 2026").focus();
+    canvas.getByLabelText("Saturday, October 24, 2015").focus();
     await userEvent.keyboard("{ArrowLeft}");
-    await expect(canvas.getByLabelText("Sunday, October 25, 2026")).toHaveFocus();
+    await expect(canvas.getByLabelText("Sunday, October 25, 2015")).toHaveFocus();
   },
 );
 
 Default.test("chooses a day on click and on Enter", async ({ args, canvas, userEvent }) => {
-  await userEvent.click(canvas.getByLabelText("Monday, October 12, 2026"));
+  await userEvent.click(canvas.getByLabelText("Monday, October 12, 2015"));
   await expect(args.onValueChange).toHaveBeenLastCalledWith(
-    date("2026-10-12"),
+    date("2015-10-12"),
     expect.objectContaining({ reason: "day-press" }),
   );
-  await expect(canvas.getByLabelText("Monday, October 12, 2026")).toHaveAttribute(
+  await expect(canvas.getByLabelText("Monday, October 12, 2015")).toHaveAttribute(
     "aria-selected",
     "true",
   );
   await userEvent.keyboard("{ArrowRight}{Enter}");
-  await expect(args.onValueChange).toHaveBeenLastCalledWith(date("2026-10-13"), expect.anything());
+  await expect(args.onValueChange).toHaveBeenLastCalledWith(date("2015-10-13"), expect.anything());
 });
 
 Default.test(
@@ -144,11 +144,11 @@ Default.test(
     const next = canvas.getByRole("button", { name: "Next month" });
 
     await userEvent.click(next);
-    await expect(canvas.getByRole("grid", { name: "November 2026" })).toBeVisible();
+    await expect(canvas.getByRole("grid", { name: "November 2015" })).toBeVisible();
     await expect(next).toHaveFocus();
     await userEvent.click(canvas.getByRole("button", { name: "Previous month" }));
     await userEvent.click(canvas.getByRole("button", { name: "Previous month" }));
-    await expect(canvas.getByRole("heading", { name: "September 2026" })).toBeVisible();
+    await expect(canvas.getByRole("heading", { name: "September 2015" })).toBeVisible();
   },
 );
 
@@ -156,8 +156,8 @@ Default.test(
   "stops at min and max, and refuses unavailable days",
   {
     args: {
-      min: date("2026-10-05"),
-      max: date("2026-10-28"),
+      min: date("2015-10-05"),
+      max: date("2015-10-28"),
       isDateUnavailable: (day: Temporal.PlainDate) => day.dayOfWeek > 5,
     },
   },
@@ -167,13 +167,13 @@ Default.test(
       "true",
     );
 
-    const sunday = canvas.getByLabelText("Sunday, October 4, 2026");
+    const sunday = canvas.getByLabelText("Sunday, October 4, 2015");
 
     await expect(sunday).toHaveAttribute("aria-disabled", "true");
-    canvas.getByLabelText("Monday, October 5, 2026").focus();
+    canvas.getByLabelText("Monday, October 5, 2015").focus();
     await userEvent.keyboard("{ArrowLeft}");
-    await expect(canvas.getByLabelText("Monday, October 5, 2026")).toHaveFocus();
-    await userEvent.click(canvas.getByLabelText("Saturday, October 10, 2026"));
+    await expect(canvas.getByLabelText("Monday, October 5, 2015")).toHaveFocus();
+    await userEvent.click(canvas.getByLabelText("Saturday, October 10, 2015"));
     await expect(args.onValueChange).not.toHaveBeenCalled();
   },
 );
@@ -183,7 +183,7 @@ Default.test(
   { render: NarrowingMax },
   async ({ canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Book by September 15" }));
-    await expect(canvas.getByRole("grid", { name: "September 2026" })).toBeVisible();
+    await expect(canvas.getByRole("grid", { name: "September 2015" })).toBeVisible();
     await expect(canvas.getByRole("button", { name: "Previous month" })).not.toHaveAttribute(
       "aria-disabled",
     );
@@ -200,8 +200,8 @@ Default.test(
     },
   },
   async ({ canvas, userEvent }) => {
-    await userEvent.click(canvas.getByLabelText("Monday, October 12, 2026"));
-    await expect(canvas.getByLabelText("Saturday, October 24, 2026")).toHaveAttribute(
+    await userEvent.click(canvas.getByLabelText("Monday, October 12, 2015"));
+    await expect(canvas.getByLabelText("Saturday, October 24, 2015")).toHaveAttribute(
       "aria-selected",
       "true",
     );
@@ -218,7 +218,7 @@ Default.test(
   "starts the week on Monday for ro-RO, in Romanian",
   { args: { locale: "ro-RO" } },
   async ({ canvas }) => {
-    await expect(canvas.getByRole("grid", { name: "octombrie 2026" })).toBeVisible();
+    await expect(canvas.getByRole("grid", { name: "octombrie 2015" })).toBeVisible();
     await expect(canvas.getAllByRole("columnheader")[0]).toHaveTextContent("lun.");
   },
 );

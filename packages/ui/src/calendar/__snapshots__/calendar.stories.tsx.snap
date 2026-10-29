@@ -3,9 +3,9 @@
 exports[`Default   > base story 1`] = `
 - group "Delivery date":
   - button "Previous month"
-  - heading "October 2026" [level=2]
+  - heading "October 2015" [level=2]
   - button "Next month"
-  - grid "October 2026":
+  - grid "October 2015":
     - rowgroup:
       - row "Sun Mon Tue Wed Thu Fri Sat":
         - columnheader "Sun"
@@ -16,41 +16,41 @@ exports[`Default   > base story 1`] = `
         - columnheader "Fri"
         - columnheader "Sat"
     - rowgroup:
-      - row "Thursday, October 1, 2026 Friday, October 2, 2026 Saturday, October 3, 2026":
-        - gridcell "Thursday, October 1, 2026": "1"
-        - gridcell "Friday, October 2, 2026": "2"
-        - gridcell "Saturday, October 3, 2026": "3"
-      - row "Sunday, October 4, 2026 Monday, October 5, 2026 Tuesday, October 6, 2026 Wednesday, October 7, 2026 Thursday, October 8, 2026 Friday, October 9, 2026 Saturday, October 10, 2026":
-        - gridcell "Sunday, October 4, 2026": "4"
-        - gridcell "Monday, October 5, 2026": "5"
-        - gridcell "Tuesday, October 6, 2026": "6"
-        - gridcell "Wednesday, October 7, 2026": "7"
-        - gridcell "Thursday, October 8, 2026": "8"
-        - gridcell "Friday, October 9, 2026": "9"
-        - gridcell "Saturday, October 10, 2026": "10"
-      - row "Sunday, October 11, 2026 Monday, October 12, 2026 Tuesday, October 13, 2026 Wednesday, October 14, 2026 Thursday, October 15, 2026 Friday, October 16, 2026 Saturday, October 17, 2026":
-        - gridcell "Sunday, October 11, 2026": "11"
-        - gridcell "Monday, October 12, 2026": "12"
-        - gridcell "Tuesday, October 13, 2026": "13"
-        - gridcell "Wednesday, October 14, 2026": "14"
-        - gridcell "Thursday, October 15, 2026": "15"
-        - gridcell "Friday, October 16, 2026": "16"
-        - gridcell "Saturday, October 17, 2026": "17"
-      - row "Sunday, October 18, 2026 Monday, October 19, 2026 Tuesday, October 20, 2026 Wednesday, October 21, 2026 Thursday, October 22, 2026 Friday, October 23, 2026 Saturday, October 24, 2026":
-        - gridcell "Sunday, October 18, 2026": "18"
-        - gridcell "Monday, October 19, 2026": "19"
-        - gridcell "Tuesday, October 20, 2026": "20"
-        - gridcell "Wednesday, October 21, 2026": "21"
-        - gridcell "Thursday, October 22, 2026": "22"
-        - gridcell "Friday, October 23, 2026": "23"
-        - gridcell "Saturday, October 24, 2026" [selected]: "24"
-      - row "Sunday, October 25, 2026 Monday, October 26, 2026 Tuesday, October 27, 2026 Wednesday, October 28, 2026 Thursday, October 29, 2026 Friday, October 30, 2026 Saturday, October 31, 2026":
-        - gridcell "Sunday, October 25, 2026": "25"
-        - gridcell "Monday, October 26, 2026": "26"
-        - gridcell "Tuesday, October 27, 2026": "27"
-        - gridcell "Wednesday, October 28, 2026": "28"
-        - gridcell "Thursday, October 29, 2026": "29"
-        - gridcell "Friday, October 30, 2026": "30"
-        - gridcell "Saturday, October 31, 2026": "31"
+      - row "Thursday, October 1, 2015 Friday, October 2, 2015 Saturday, October 3, 2015":
+        - gridcell "Thursday, October 1, 2015": "1"
+        - gridcell "Friday, October 2, 2015": "2"
+        - gridcell "Saturday, October 3, 2015": "3"
+      - row "Sunday, October 4, 2015 Monday, October 5, 2015 Tuesday, October 6, 2015 Wednesday, October 7, 2015 Thursday, October 8, 2015 Friday, October 9, 2015 Saturday, October 10, 2015":
+        - gridcell "Sunday, October 4, 2015": "4"
+        - gridcell "Monday, October 5, 2015": "5"
+        - gridcell "Tuesday, October 6, 2015": "6"
+        - gridcell "Wednesday, October 7, 2015": "7"
+        - gridcell "Thursday, October 8, 2015": "8"
+        - gridcell "Friday, October 9, 2015": "9"
+        - gridcell "Saturday, October 10, 2015": "10"
+      - row "Sunday, October 11, 2015 Monday, October 12, 2015 Tuesday, October 13, 2015 Wednesday, October 14, 2015 Thursday, October 15, 2015 Friday, October 16, 2015 Saturday, October 17, 2015":
+        - gridcell "Sunday, October 11, 2015": "11"
+        - gridcell "Monday, October 12, 2015": "12"
+        - gridcell "Tuesday, October 13, 2015": "13"
+        - gridcell "Wednesday, October 14, 2015": "14"
+        - gridcell "Thursday, October 15, 2015": "15"
+        - gridcell "Friday, October 16, 2015": "16"
+        - gridcell "Saturday, October 17, 2015": "17"
+      - row "Sunday, October 18, 2015 Monday, October 19, 2015 Tuesday, October 20, 2015 Wednesday, October 21, 2015 Thursday, October 22, 2015 Friday, October 23, 2015 Saturday, October 24, 2015":
+        - gridcell "Sunday, October 18, 2015": "18"
+        - gridcell "Monday, October 19, 2015": "19"
+        - gridcell "Tuesday, October 20, 2015": "20"
+        - gridcell "Wednesday, October 21, 2015": "21"
+        - gridcell "Thursday, October 22, 2015": "22"
+        - gridcell "Friday, October 23, 2015": "23"
+        - gridcell "Saturday, October 24, 2015" [selected]: "24"
+      - row "Sunday, October 25, 2015 Monday, October 26, 2015 Tuesday, October 27, 2015 Wednesday, October 28, 2015 Thursday, October 29, 2015 Friday, October 30, 2015 Saturday, October 31, 2015":
+        - gridcell "Sunday, October 25, 2015": "25"
+        - gridcell "Monday, October 26, 2015": "26"
+        - gridcell "Tuesday, October 27, 2015": "27"
+        - gridcell "Wednesday, October 28, 2015": "28"
+        - gridcell "Thursday, October 29, 2015": "29"
+        - gridcell "Friday, October 30, 2015": "30"
+        - gridcell "Saturday, October 31, 2015": "31"
       - row
 `;
