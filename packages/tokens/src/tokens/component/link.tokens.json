@@ -1,0 +1,24 @@
+{
+  "component": {
+    "link-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "link-underline-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default}"
+    },
+    "link-underline-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-border-accent}"
+    },
+    "link-underline-thickness": {
+      "$type": "dimension",
+      "$value": "{semantic.underline-thickness}"
+    },
+    "link-underline-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.underline-offset}"
+    }
+  }
+}

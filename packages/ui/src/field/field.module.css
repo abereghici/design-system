@@ -1,15 +1,15 @@
-@import "@platform/tokens/components/input.css";
+@import "@platform/tokens/components/field.css";
 
 @layer ab.components {
   .root {
     display: grid;
-    gap: var(--ab-input-gap);
+    gap: var(--ab-field-gap);
     min-inline-size: 0;
   }
 
   .label {
-    color: var(--ab-input-label-text-color);
-    font: var(--ab-input-label-font);
+    color: var(--ab-field-label-text-color);
+    font: var(--ab-field-label-font);
   }
 
   .root:where([data-disabled], :disabled *) .label {
@@ -18,17 +18,17 @@
 
   .root:has(:required) .label::after {
     content: " *" / "";
-    color: var(--ab-input-error-text-color);
+    color: var(--ab-field-error-text-color);
   }
 
   .description,
   .error {
     margin: 0;
-    font: var(--ab-input-helper-font);
+    font: var(--ab-field-helper-font);
   }
 
   .description {
-    color: var(--ab-input-helper-text-color);
+    color: var(--ab-field-helper-text-color);
     text-wrap: pretty;
   }
 
@@ -36,7 +36,7 @@
     display: flex;
     align-items: center;
     gap: var(--ab-space-inline-xs);
-    color: var(--ab-input-error-text-color);
+    color: var(--ab-field-error-text-color);
   }
 
   .error:empty {
@@ -47,28 +47,28 @@
     box-sizing: border-box;
     inline-size: 100%;
     min-inline-size: 0;
-    block-size: var(--ab-input-height);
+    block-size: var(--ab-field-height);
     margin: 0;
     padding-block: 0;
-    padding-inline: var(--ab-input-padding-inline);
-    border: var(--ab-input-border-width) solid var(--ab-input-border-color);
-    border-radius: var(--ab-input-border-radius);
-    background-color: var(--ab-input-background-color);
-    box-shadow: var(--ab-input-shadow);
-    color: var(--ab-input-text-color);
-    font: var(--ab-input-font);
+    padding-inline: var(--ab-field-padding-inline);
+    border: var(--ab-field-border-width) solid var(--ab-field-border-color);
+    border-radius: var(--ab-field-border-radius);
+    background-color: var(--ab-field-background-color);
+    box-shadow: var(--ab-field-shadow);
+    color: var(--ab-field-text-color);
+    font: var(--ab-field-font);
     transition:
       border-color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color),
       outline-color var(--ab-motion-duration-hover-in) var(--ab-motion-easing-color);
   }
 
   [data-size="lg"] .control {
-    block-size: var(--ab-input-lg-height);
+    block-size: var(--ab-field-lg-height);
   }
 
   .control::placeholder,
   .control ::placeholder {
-    color: var(--ab-input-placeholder-color);
+    color: var(--ab-field-placeholder-color);
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -79,14 +79,14 @@
         :has(> [aria-disabled="true"]),
         :disabled *
       ) {
-      border-color: var(--ab-input-border-color-hovered);
+      border-color: var(--ab-field-border-color-hovered);
       transition-duration: var(--ab-motion-duration-hover-in);
     }
   }
 
   .control:is(:focus-visible, :has(> :focus-visible)) {
-    border-color: var(--ab-input-border-color-focused);
-    outline: var(--ab-focus-ring-width) solid var(--ab-input-border-color-focused);
+    border-color: var(--ab-field-border-color-focused);
+    outline: var(--ab-focus-ring-width) solid var(--ab-field-border-color-focused);
     outline-offset: 0;
   }
 
@@ -95,16 +95,16 @@
     [aria-invalid="true"],
     :has(> :is(:user-invalid, [aria-invalid="true"]))
   ) {
-    border-color: var(--ab-input-border-color-invalid);
-    outline-color: var(--ab-input-border-color-invalid);
+    border-color: var(--ab-field-border-color-invalid);
+    outline-color: var(--ab-field-border-color-invalid);
   }
 
   .control:is(:disabled, [aria-disabled="true"], :has(> [aria-disabled="true"])),
   :disabled .control {
-    border-color: var(--ab-input-border-color-disabled);
-    background-color: var(--ab-input-background-color-disabled);
+    border-color: var(--ab-field-border-color-disabled);
+    background-color: var(--ab-field-background-color-disabled);
     box-shadow: none;
-    color: var(--ab-input-text-color-disabled);
+    color: var(--ab-field-text-color-disabled);
     cursor: not-allowed;
   }
 }

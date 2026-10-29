@@ -1,0 +1,60 @@
+{
+  "component": {
+    "tooltip-max-width": {
+      "$type": "dimension",
+      "$value": "{semantic.size-container-2xs}"
+    },
+    "tooltip-padding-block": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xs}"
+    },
+    "tooltip-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "tooltip-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-xs}"
+    },
+    "tooltip-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-bold}"
+    },
+    "tooltip-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-inverse}"
+    },
+    "tooltip-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "tooltip-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "tooltip-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "tooltip-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-tooltip}"
+    },
+    "tooltip-delay": {
+      "$type": "duration",
+      "$value": "{semantic.motion-delay-tooltip}"
+    },
+    "tooltip-enter-scale": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-enter}"
+    },
+    "tooltip-exit-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-exit}"
+    },
+    "tooltip-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-enter}"
+    }
+  }
+}

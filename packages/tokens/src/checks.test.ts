@@ -2,7 +2,10 @@ import { expect, test } from "vitest";
 
 import { buildTokens, TokenCheckError } from "./build.ts";
 import { setMember, srgb, themed, validTokens } from "./test-fixtures.ts";
-import componentTokens from "./tokens/component.tokens.json" with { type: "json" };
+import command from "./tokens/component/command.tokens.json" with { type: "json" };
+import contextMenu from "./tokens/component/context-menu.tokens.json" with { type: "json" };
+import dropdownMenu from "./tokens/component/dropdown-menu.tokens.json" with { type: "json" };
+import segmentedControl from "./tokens/component/segmented-control.tokens.json" with { type: "json" };
 import primitiveTokens from "./tokens/primitive.tokens.json" with { type: "json" };
 import semanticTokens from "./tokens/semantic.tokens.json" with { type: "json" };
 
@@ -287,7 +290,12 @@ test("an on-{role} pair is checked against its bold fill", async () => {
 const tiers: Record<string, Record<string, { $value: unknown }>> = {
   primitive: primitiveTokens.primitive,
   semantic: semanticTokens.semantic,
-  component: componentTokens.component,
+  component: {
+    ...command.component,
+    ...contextMenu.component,
+    ...dropdownMenu.component,
+    ...segmentedControl.component,
+  },
 };
 
 function px(reference: string): number {

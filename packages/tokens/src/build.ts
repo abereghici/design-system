@@ -9,7 +9,7 @@ import { stylesheets } from "./css-format.ts";
 
 export { TokenCheckError };
 
-export const SOURCE_GLOB = `${import.meta.dirname}/tokens/*.tokens.json`;
+export const SOURCE_GLOB = `${import.meta.dirname}/tokens/**/*.tokens.json`;
 
 interface BuildInput {
   readonly tokens?: DesignTokens;

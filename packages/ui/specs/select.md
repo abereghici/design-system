@@ -63,11 +63,11 @@ Names, checked against the reference libraries:
 
 | State                   | How it shows                                                                                     | Exposed as                                                        |
 | ----------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| rest                    | Trigger as TextField at rest; the selected text, or the placeholder in `input-placeholder-color` | `data-size`, `:has(option[value=""]:checked)` for the placeholder |
-| hovered                 | Border `input-border-color-hovered`; fine pointers only                                          | `:hover`                                                          |
+| rest                    | Trigger as TextField at rest; the selected text, or the placeholder in `field-placeholder-color` | `data-size`, `:has(option[value=""]:checked)` for the placeholder |
+| hovered                 | Border `field-border-color-hovered`; fine pointers only                                          | `:hover`                                                          |
 | open                    | Chevron rotates 180° (`motion-duration-swap`, `motion-easing-enter`); picker shown               | `:open`                                                           |
 | focus-visible           | Focus ring with no offset, as TextField                                                          | `:focus-visible`                                                  |
-| invalid                 | Border `input-border-color-invalid`                                                              | `aria-invalid="true"` (Field contract)                            |
+| invalid                 | Border `field-border-color-invalid`                                                              | `aria-invalid="true"` (Field contract)                            |
 | disabled                | TextField's disabled colours                                                                     | `aria-disabled="true"` or `:disabled`                             |
 | option hovered / active | Fill `select-option-background-color-hovered`                                                    | `option:hover`, `option:focus-visible`                            |
 | option chosen           | `::checkmark` in `select-option-icon-color-selected`                                             | `option:checked`                                                  |

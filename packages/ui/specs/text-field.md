@@ -33,9 +33,9 @@ Status: draft for brand-owner review (phase 2). Source guide: `components/TextFi
 Label → container (start element, input, end element) → description or error.
 
 - **Label, description, error.** The Field Parts, built in (Field spec): `<label for>` in 13/500, description and error in 14 below the container.
-- **Container.** A `<div>` drawn as the field: height `input-height` (32; `lg` 40), radius 8, `input-border-color` hairline, `input-shadow` (raised elevation), `input-background-color`. It holds the start element, the input and the end element in a row, with `input-padding-inline` at both ends.
+- **Container.** A `<div>` drawn as the field: height `field-height` (32; `lg` 40), radius 8, `field-border-color` hairline, `field-shadow` (raised elevation), `field-background-color`. It holds the start element, the input and the end element in a row, with `field-padding-inline` at both ends.
 - **Input.** A native `<input>` with no border or background of its own, filling the container. `dir="auto"` by default.
-- **Start / end elements.** Optional decorative or interactive content: a leading icon (`input-icon-size` 16, `input-icon-color`), a trailing Kbd hint, an IconButton (PasswordField's reveal, a clear button). Icons are decorative; interactive elements are the consumer's and keep their own names.
+- **Start / end elements.** Optional decorative or interactive content: a leading icon (`field-icon-size` 16, `field-icon-color`), a trailing Kbd hint, an IconButton (PasswordField's reveal, a clear button). Icons are decorative; interactive elements are the consumer's and keep their own names.
 
 ## API
 
@@ -70,11 +70,11 @@ Names, checked against the reference libraries:
 
 | State     | How it shows                                                                                            | Exposed as                                    |
 | --------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| rest      | Hairline `input-border-color`, raised elevation                                                         | `data-size`                                   |
-| hovered   | Border `input-border-color-hovered`; fine pointers only (`@media (hover: hover)`)                       | `:hover`                                      |
-| focused   | Border `input-border-color-focused` and a 2 px focus ring with no offset, on the container              | `:focus-within` / input `:focus-visible`      |
-| invalid   | Border `input-border-color-invalid`; error text replaces the description                                | `aria-invalid="true"`, Field's `data-invalid` |
-| disabled  | `input-background-color-disabled`, `input-text-color-disabled`, `input-border-color-disabled`; no hover | `aria-disabled="true"` or `:disabled`         |
+| rest      | Hairline `field-border-color`, raised elevation                                                         | `data-size`                                   |
+| hovered   | Border `field-border-color-hovered`; fine pointers only (`@media (hover: hover)`)                       | `:hover`                                      |
+| focused   | Border `field-border-color-focused` and a 2 px focus ring with no offset, on the container              | `:focus-within` / input `:focus-visible`      |
+| invalid   | Border `field-border-color-invalid`; error text replaces the description                                | `aria-invalid="true"`, Field's `data-invalid` |
+| disabled  | `field-background-color-disabled`, `field-text-color-disabled`, `field-border-color-disabled`; no hover | `aria-disabled="true"` or `:disabled`         |
 | read-only | Rest look, no hover border                                                                              | `:read-only` (native `readOnly`)              |
 
 The focus ring is drawn on the container with `:has(input:focus-visible)` so the start and end elements sit inside it (source: "focused (2px moss ring, no offset)"). Browsers' `:focus-visible` heuristics also match a text input focused by the mouse, so the ring shows on every focus, which is what the source asks for (inference; the build ticket asserts it in three engines).
@@ -82,7 +82,7 @@ The focus ring is drawn on the container with `:has(input:focus-visible)` so the
 ## Behaviour
 
 - Follows the Field contract: errors only after interaction (`:user-invalid`), replacing the description, linked through `aria-describedby`, cleared as soon as the value is valid.
-- Labels sit above, always visible. "placeholders are examples, never labels" (source guide). Placeholder text uses `input-placeholder-color`.
+- Labels sit above, always visible. "placeholders are examples, never labels" (source guide). Placeholder text uses `field-placeholder-color`.
 - `dir="auto"` by default (spec #1 story 55). MDN: "The `auto` value should be used for data with an unknown directionality, like data coming from user input or external data." Pass `dirname` to submit the detected direction (MDN: "describes the directionality of the element's text content during form submission").
 - Disabled: `aria-disabled="true"` and `readOnly`, so the value can be read and copied but not changed, and no `input` event fires. A read-only control is barred from constraint validation, so a disabled field never blocks submission; its value is still submitted (Field contract, step 7).
 - `autoComplete`, `inputMode` and `enterKeyHint` are the consumer's to set; the docs page lists the common tokens (MDN: autocomplete "lets web developers specify what if any permission the user agent has to provide automated assistance in filling out form field values").
@@ -124,13 +124,13 @@ Logical properties only. `startElement` sits at the inline start in both directi
 
 ## Component tokens
 
-Existing (ported from the source, shared with TextArea, PasswordField, NumberField and Select): `input-height`, `input-lg-height`, `input-padding-inline`, `input-padding-block`, `input-gap`, `input-border-radius`, `input-border-width`, `input-font`, `input-label-font`, `input-helper-font`, `input-shadow`, `input-background-color`, `input-text-color`, `input-label-text-color`, `input-placeholder-color`, `input-helper-text-color`, `input-error-text-color`, `input-icon-color`, `input-border-color`, `input-border-color-hovered`, `input-border-color-focused`, `input-border-color-invalid`, `input-background-color-disabled`, `input-text-color-disabled`, `input-border-color-disabled`.
+Existing (ported from the source, shared with TextArea, PasswordField, NumberField and Select): `field-height`, `field-lg-height`, `field-padding-inline`, `field-padding-block`, `field-gap`, `field-border-radius`, `field-border-width`, `field-font`, `field-label-font`, `field-helper-font`, `field-shadow`, `field-background-color`, `field-text-color`, `field-label-text-color`, `field-placeholder-color`, `field-helper-text-color`, `field-error-text-color`, `field-icon-color`, `field-border-color`, `field-border-color-hovered`, `field-border-color-focused`, `field-border-color-invalid`, `field-background-color-disabled`, `field-text-color-disabled`, `field-border-color-disabled`.
 
 Proposed new:
 
 | Token             | References     | `$type`   | Why                                                      |
 | ----------------- | -------------- | --------- | -------------------------------------------------------- |
-| `input-icon-size` | `size-icon-sm` | dimension | Size of a start or end icon (16), as `button-icon-size`. |
+| `field-icon-size` | `size-icon-sm` | dimension | Size of a start or end icon (16), as `button-icon-size`. |
 
 The focus ring uses `focus-ring-width` and `color-border-focused` directly (R6), with `outline-offset: 0` (the source's "no offset").
 

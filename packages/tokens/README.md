@@ -34,7 +34,7 @@ Apps must target the Baseline newly available floor (ADR-0002), for example `"br
 
 ## Authoring tokens
 
-Source files live in `src/tokens/`, one per tier: `primitive.tokens.json`, `semantic.tokens.json` and `component.tokens.json`. The top-level group is the tier. The rest of the path is the token name, and the CSS name is `--ab-` plus the path joined with `-` (`semantic` → `color-text-subtle` → `--ab-color-text-subtle`).
+Source files live in `src/tokens/`: `primitive.tokens.json`, `semantic.tokens.json`, and one `component/<component>.tokens.json` per component, matching its `dist/components/<component>.css`. The top-level group is the tier. The rest of the path is the token name, and the CSS name is `--ab-` plus the path joined with `-` (`semantic` → `color-text-subtle` → `--ab-color-text-subtle`).
 
 - **Primitive tokens** hold literals only: DTCG 2025.10 color objects (`{ "colorSpace": "srgb", "components": [...], "hex": "#263316" }`) and dimension objects (`{ "value": 16, "unit": "px" }`).
 - **Semantic tokens** hold exactly one reference to a primitive token (`"{primitive.palette-moss-900}"`).

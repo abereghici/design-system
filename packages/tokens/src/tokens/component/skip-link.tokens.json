@@ -1,0 +1,32 @@
+{
+  "component": {
+    "skip-link-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-bold}"
+    },
+    "skip-link-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-inverse}"
+    },
+    "skip-link-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "skip-link-padding-block": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "skip-link-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "skip-link-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-md}"
+    },
+    "skip-link-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    }
+  }
+}

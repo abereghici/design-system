@@ -1,0 +1,88 @@
+{
+  "component": {
+    "select-option-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-sm}"
+    },
+    "select-option-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-selected}"
+    },
+    "select-option-icon-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-accent}"
+    },
+    "select-picker-max-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-container-xs}"
+    },
+    "select-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "select-picker-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xs}"
+    },
+    "select-picker-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-lg}"
+    },
+    "select-picker-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-material-thick}"
+    },
+    "select-picker-blur": {
+      "$type": "dimension",
+      "$value": "{semantic.material-blur-regular}"
+    },
+    "select-picker-saturate": {
+      "$type": "number",
+      "$value": "{semantic.material-saturate-regular}"
+    },
+    "select-picker-shadow": {
+      "$type": "shadow",
+      "$value": "{semantic.elevation-overlay}"
+    },
+    "select-picker-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-xs}"
+    },
+    "select-picker-enter-scale": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-enter}"
+    },
+    "select-picker-enter-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-popover}"
+    },
+    "select-picker-exit-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-exit}"
+    },
+    "select-picker-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-enter}"
+    },
+    "select-option-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "select-option-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "select-option-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "select-option-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "select-option-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    }
+  }
+}

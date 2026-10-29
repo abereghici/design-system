@@ -1,0 +1,16 @@
+{
+  "component": {
+    "logo-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-accent}"
+    },
+    "logo-min-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-logo-min}"
+    },
+    "logo-stroke-width": {
+      "$type": "number",
+      "$value": "{semantic.stroke-width-2xl}"
+    }
+  }
+}

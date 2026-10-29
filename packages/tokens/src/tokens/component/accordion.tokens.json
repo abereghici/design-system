@@ -1,0 +1,60 @@
+{
+  "component": {
+    "accordion-trigger-padding-block": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "accordion-trigger-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-md}"
+    },
+    "accordion-trigger-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "accordion-trigger-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "accordion-trigger-icon-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-default}"
+    },
+    "accordion-panel-padding-block": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "accordion-panel-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-sm}"
+    },
+    "accordion-panel-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "accordion-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-subtle}"
+    },
+    "accordion-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-default}"
+    },
+    "accordion-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-expand}"
+    },
+    "accordion-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-move}"
+    },
+    "accordion-exit-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-exit}"
+    },
+    "accordion-trigger-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-md}"
+    }
+  }
+}

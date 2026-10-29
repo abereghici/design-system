@@ -103,7 +103,7 @@ Logical properties only (`padding-inline`, `margin-inline-start`). Directional i
 
 ## Component tokens
 
-All exist (ported from the source, `packages/tokens/src/tokens/component.tokens.json`): `button-{sm,md,lg}-height`, `button-{sm,md,lg}-padding-inline`, `button-gap`, `button-border-radius`, `button-lg-border-radius`, `button-border-width`, `button-font`, `button-lg-font`, `button-icon-size`, `button-scale-pressed`, `button-shadow`, `button-{primary,secondary,tertiary,danger}-*` colours (background rest/hovered/pressed, text, icon, secondary border rest/hovered, tertiary text hovered), and `button-{background-color,text-color,border-color}-disabled`.
+All exist (ported from the source, `packages/tokens/src/tokens/component/button.tokens.json`): `button-{sm,md,lg}-height`, `button-{sm,md,lg}-padding-inline`, `button-gap`, `button-border-radius`, `button-lg-border-radius`, `button-border-width`, `button-font`, `button-lg-font`, `button-icon-size`, `button-scale-pressed`, `button-shadow`, `button-{primary,secondary,tertiary,danger}-*` colours (background rest/hovered/pressed, text, icon, secondary border rest/hovered, tertiary text hovered), and `button-{background-color,text-color,border-color}-disabled`.
 
 No new tokens. The focus ring uses semantic `focus-ring-width`, `focus-ring-offset` and `color-border-focused` directly (R6: focus is a pattern, not a component).
 

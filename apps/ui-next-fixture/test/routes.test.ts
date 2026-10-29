@@ -4,17 +4,21 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, test } from "vitest";
 
-import component from "@platform/tokens/source/component.tokens.json";
-
 import { componentRoutes } from "./component-routes.ts";
 
 const next = join(import.meta.dirname, "..", ".next");
 const out = join(import.meta.dirname, "..", "out");
-const componentTokens = Object.keys(component.component).map((name) => `--ab-${name}:`);
+const componentSheets = dirname(
+  fileURLToPath(import.meta.resolve("@platform/tokens/components/button.css")),
+);
+// Every token a component sheet declares, as `--ab-<name>:`.
+const componentTokens = readdirSync(componentSheets).flatMap((file) =>
+  [...readFileSync(join(componentSheets, file), "utf8").matchAll(/^\s+(--ab-[\w\-]+):/gmv)].map(
+    ([, name]) => `${String(name)}:`,
+  ),
+);
 // Longest name first, so `--ab-icon-button-*` belongs to icon-button, not icon.
-const components = readdirSync(
-  dirname(fileURLToPath(import.meta.resolve("@platform/tokens/components/button.css"))),
-)
+const components = readdirSync(componentSheets)
   .map((file) => file.replace(/\.css$/v, ""))
   .toSorted((a, b) => b.length - a.length);
 const ownerOf = (token: string) => components.find((name) => token.startsWith(`--ab-${name}-`));

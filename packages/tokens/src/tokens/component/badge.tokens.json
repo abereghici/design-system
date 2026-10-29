@@ -1,0 +1,52 @@
+{
+  "component": {
+    "badge-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "badge-min-width": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "badge-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xs}"
+    },
+    "badge-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-full}"
+    },
+    "badge-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-data-sm}"
+    },
+    "badge-font-variant-numeric": {
+      "$type": "string",
+      "$value": "{semantic.type-data-sm-font-variant-numeric}"
+    },
+    "badge-neutral-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-nested}"
+    },
+    "badge-neutral-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "badge-accent-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold}"
+    },
+    "badge-accent-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-on-accent}"
+    },
+    "badge-danger-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-danger-bold}"
+    },
+    "badge-danger-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-on-danger}"
+    }
+  }
+}

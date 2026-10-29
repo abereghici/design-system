@@ -86,7 +86,7 @@ Logical properties only (`padding-inline`, `min-inline-size`). The overflow read
 
 ## Component tokens
 
-All exist (`packages/tokens/src/tokens/component.tokens.json`): `badge-height`, `badge-min-width`, `badge-padding-inline`, `badge-border-radius`, `badge-font`, `badge-font-variant-numeric`, `badge-{neutral,accent,danger}-background-color`, `badge-{neutral,accent,danger}-text-color`.
+All exist (`packages/tokens/src/tokens/component/badge.tokens.json`): `badge-height`, `badge-min-width`, `badge-padding-inline`, `badge-border-radius`, `badge-font`, `badge-font-variant-numeric`, `badge-{neutral,accent,danger}-background-color`, `badge-{neutral,accent,danger}-text-color`.
 
 No new tokens. `badge-height` is a minimum (`min-block-size`), so the pill grows with larger text. The forced-colors outline uses `border-width-default` with a system colour.
 

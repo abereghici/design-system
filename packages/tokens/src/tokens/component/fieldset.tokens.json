@@ -1,0 +1,16 @@
+{
+  "component": {
+    "fieldset-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-sm}"
+    },
+    "fieldset-legend-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "fieldset-legend-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    }
+  }
+}

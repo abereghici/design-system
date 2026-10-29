@@ -1,0 +1,60 @@
+{
+  "component": {
+    "icon-button-sm-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-sm}"
+    },
+    "icon-button-md-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-md}"
+    },
+    "icon-button-lg-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-lg}"
+    },
+    "icon-button-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "icon-button-lg-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-md}"
+    },
+    "icon-button-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "icon-button-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "icon-button-icon-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-default}"
+    },
+    "icon-button-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+    },
+    "icon-button-background-color-pressed": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-pressed}"
+    },
+    "icon-button-icon-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-selected}"
+    },
+    "icon-button-background-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-background-selected}"
+    },
+    "icon-button-scale-pressed": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-pressed}"
+    },
+    "icon-button-border-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-border-selected}"
+    }
+  }
+}

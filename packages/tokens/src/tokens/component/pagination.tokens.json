@@ -1,0 +1,52 @@
+{
+  "component": {
+    "pagination-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-xs}"
+    },
+    "pagination-item-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-md}"
+    },
+    "pagination-item-min-width": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-md}"
+    },
+    "pagination-item-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xs}"
+    },
+    "pagination-item-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "pagination-item-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-data-md}"
+    },
+    "pagination-item-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "pagination-item-text-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "pagination-item-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+    },
+    "pagination-item-text-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-text-selected}"
+    },
+    "pagination-item-background-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-background-selected}"
+    },
+    "pagination-item-border-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-border-selected}"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "component": {
+    "breadcrumbs-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-xs}"
+    },
+    "breadcrumbs-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-xs}"
+    },
+    "breadcrumbs-item-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "breadcrumbs-separator-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtlest}"
+    }
+  }
+}

@@ -90,7 +90,7 @@ New component word `fieldset` and element word `legend` (Dictionary change).
 | Token                        | References           | Why                                       |
 | ---------------------------- | -------------------- | ----------------------------------------- |
 | `fieldset-gap`               | `space-stack-sm`     | Gap between the Legend and each control   |
-| `fieldset-legend-font`       | `type-label-sm`      | The field label type (`input-label-font`) |
+| `fieldset-legend-font`       | `type-label-sm`      | The field label type (`field-label-font`) |
 | `fieldset-legend-text-color` | `color-text-default` |                                           |
 
 ## Author-written text

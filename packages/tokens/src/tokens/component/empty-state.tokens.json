@@ -1,0 +1,40 @@
+{
+  "component": {
+    "empty-state-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xl}"
+    },
+    "empty-state-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-md}"
+    },
+    "empty-state-max-width": {
+      "$type": "dimension",
+      "$value": "{semantic.size-container-xs}"
+    },
+    "empty-state-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-xl}"
+    },
+    "empty-state-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "empty-state-title-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-heading-xs}"
+    },
+    "empty-state-title-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "empty-state-description-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-sm}"
+    },
+    "empty-state-description-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    }
+  }
+}

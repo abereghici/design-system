@@ -1,0 +1,48 @@
+{
+  "component": {
+    "progress-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-sm}"
+    },
+    "progress-label-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "progress-label-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "progress-value-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-data-sm}"
+    },
+    "progress-value-font-variant-numeric": {
+      "$type": "string",
+      "$value": "{semantic.type-data-sm-font-variant-numeric}"
+    },
+    "progress-value-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "progress-track-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-indicator}"
+    },
+    "progress-track-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-full}"
+    },
+    "progress-track-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-subtle}"
+    },
+    "progress-indicator-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-accent}"
+    },
+    "progress-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-loop}"
+    }
+  }
+}

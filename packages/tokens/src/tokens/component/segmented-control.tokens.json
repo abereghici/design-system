@@ -1,0 +1,60 @@
+{
+  "component": {
+    "segmented-control-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-md}"
+    },
+    "segmented-control-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-2xs}"
+    },
+    "segmented-control-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-md}"
+    },
+    "segmented-control-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-nested}"
+    },
+    "segmented-control-item-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "segmented-control-item-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "segmented-control-item-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "segmented-control-item-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "segmented-control-item-text-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "segmented-control-item-text-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "segmented-control-indicator-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-overlay}"
+    },
+    "segmented-control-indicator-shadow": {
+      "$type": "shadow",
+      "$value": "{semantic.elevation-raised}"
+    },
+    "segmented-control-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-spring}"
+    },
+    "segmented-control-easing": {
+      "$type": "string",
+      "$value": "{semantic.motion-easing-spring}"
+    }
+  }
+}

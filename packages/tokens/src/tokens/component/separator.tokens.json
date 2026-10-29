@@ -1,0 +1,24 @@
+{
+  "component": {
+    "separator-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-subtle}"
+    },
+    "separator-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-default}"
+    },
+    "separator-dot-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-indicator}"
+    },
+    "separator-dot-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default}"
+    },
+    "separator-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    }
+  }
+}

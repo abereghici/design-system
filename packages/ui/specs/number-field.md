@@ -104,7 +104,7 @@ Logical properties only: step buttons at the inline end. The formatted number fo
 
 ## Component tokens
 
-None new. TextField's `input-*` set and IconButton's `icon-button-*` set. The input keeps `input-font` (not the `type-data-*` role) so it lines up with the other fields, and adds only `font-variant-numeric: tabular-nums` so digits don't shift while stepping (judgement call).
+None new. TextField's `input-*` set and IconButton's `icon-button-*` set. The input keeps `field-font` (not the `type-data-*` role) so it lines up with the other fields, and adds only `font-variant-numeric: tabular-nums` so digits don't shift while stepping (judgement call).
 
 ## Author-written text
 

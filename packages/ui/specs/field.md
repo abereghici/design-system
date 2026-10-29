@@ -28,11 +28,11 @@ Status: draft for brand-owner review (phase 2). Source guide: the label, helper 
 
 Root → Label → control → Description → Error.
 
-- **Root.** A `<div>` that stacks its children with `input-gap` (4). It provides the ids and the field state to its children through context. It renders no role: the control carries the semantics.
-- **Label.** A native `<label for>` pointing at the control's id, in `input-label-font` (13/500). MDN: "we recommend using explicit association with the `for` attribute … In fact, you can simultaneously nest _and_ provide `id`/`for` for maximum compatibility." Required controls show a decorative `*` after the text (`aria-hidden`; the `required` attribute is what is announced). It also carries an id from Root, so a control whose visible part is not the native element (FileTrigger's button) can name itself with `aria-labelledby`.
+- **Root.** A `<div>` that stacks its children with `field-gap` (4). It provides the ids and the field state to its children through context. It renders no role: the control carries the semantics.
+- **Label.** A native `<label for>` pointing at the control's id, in `field-label-font` (13/500). MDN: "we recommend using explicit association with the `for` attribute … In fact, you can simultaneously nest _and_ provide `id`/`for` for maximum compatibility." Required controls show a decorative `*` after the text (`aria-hidden`; the `required` attribute is what is announced). It also carries an id from Root, so a control whose visible part is not the native element (FileTrigger's button) can name itself with `aria-labelledby`.
 - **Control.** `Field.Control` renders a native `<input>` drawn as the source's `.ab-input`. Any other control placed inside Root (Checkbox, Switch, RadioGroup, Slider, FileTrigger, and the built-in Fields of TextField, TextArea, PasswordField, NumberField and Select) uses the `useFieldControl` hook instead (see **Control contract**), so it gets the id, `name`, `disabled` and the describedby list from Root.
-- **Description.** A `<p>` in `input-helper-font`, `input-helper-text-color`. Hidden while the error shows (see Behaviour).
-- **Error.** A `<div>` in `input-helper-font`, `input-error-text-color`. Empty until the field is invalid after interaction. With no children it shows the browser's `validationMessage`.
+- **Description.** A `<p>` in `field-helper-font`, `field-helper-text-color`. Hidden while the error shows (see Behaviour).
+- **Error.** A `<div>` in `field-helper-font`, `field-error-text-color`. Empty until the field is invalid after interaction. With no children it shows the browser's `validationMessage`.
 
 ## API
 
@@ -109,7 +109,7 @@ No pattern of its own; Field adds no focusable element. APG, Names and Descripti
 - **Announcement (spec #1 story 41).** The Error element is always rendered (empty when valid) with `aria-live="assertive"`, so its text is announced when it appears after a blur or a change. web.dev: "use aria-live="assertive" for the error message ... aria-live will usually only announce the first error in the case of multiple errors." MDN's live-region guide asks for the region to exist before its content changes, which is why the element is never unmounted. On a failed submit, Form also focuses the first invalid control, whose description is then the error. The source asked for `role="alert"`; an always-present assertive region is the same politeness without re-inserting a role (judgement call).
 - **`aria-errormessage` is not used.** MDN: "The `aria-errormessage` attribute should only be used when the value of an object is not valid". `aria-describedby` works everywhere and the description slot is already free while the error shows, so one attribute covers both (judgement call).
 - **Required:** native `required`; the `*` is `aria-hidden`.
-- **More contrast:** Description uses `input-helper-text-color` (`color-text-subtle`), which already passes 4.5:1; nothing changes.
+- **More contrast:** Description uses `field-helper-text-color` (`color-text-subtle`), which already passes 4.5:1; nothing changes.
 - **Forced colors:** text only; system colours apply. The error is never shown by colour alone: it is text, and the control's border also changes.
 - **Reduced transparency:** not affected.
 
@@ -119,7 +119,7 @@ Logical properties only. Label, Description and Error align to the inline start 
 
 ## Component tokens
 
-All exist (the source's `input-*` set, shared by every field): `input-gap`, `input-label-font`, `input-label-text-color`, `input-helper-font`, `input-helper-text-color`, `input-error-text-color`.
+All exist (the source's `input-*` set, shared by every field): `field-gap`, `field-label-font`, `field-label-text-color`, `field-helper-font`, `field-helper-text-color`, `field-error-text-color`.
 
 No new tokens. Field reuses the `input` component word instead of adding `field`, because the source designed label, helper and error once for all its form controls (judgement call).
 
