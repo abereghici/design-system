@@ -236,7 +236,7 @@ None. Item text is the consumer's, and the menu is named by its Trigger.
 | `ab-toggle`  | After a CheckboxItem or RadioItem change commits (not cancelled) | `"user"` |
 | `ab-dismiss` | When the user closes the menu with Escape or an outside press    | `"user"` |
 
-Detail: `{ component: "DropdownMenu", reason }`. `ab-press` and `ab-toggle` are dispatched from the Item, `ab-dismiss` from the Content; all bubble through the app tree (rendered in place). Nothing for an Item press that closes the menu (the `ab-press` is the feedback), a focus-out, a Trigger press, a controlled `open` change or a disabled Item. A Button or IconButton Trigger dispatches its own `ab-press`. `src/events/events.ts` widens `PressEvent`'s component union with `"DropdownMenu"`, and the `ab-toggle` and `ab-dismiss` unions (Checkbox and Alert add them) with `"DropdownMenu"`.
+Detail: `{ component: "DropdownMenu", reason }`. `ab-press` and `ab-toggle` are dispatched from the Item, `ab-dismiss` from the Content; all bubble through the app tree (rendered in place). Nothing for an Item press that closes the menu (the `ab-press` is the feedback), a focus-out, a Trigger press, a controlled `open` change or a disabled Item. A Button or IconButton Trigger dispatches its own `ab-press`. `src/events/events.ts` widens `PressFeedbackEvent`'s component union with `"DropdownMenu"`, and the `ab-toggle` and `ab-dismiss` unions (Checkbox and Alert add them) with `"DropdownMenu"`.
 
 ## Sources
 

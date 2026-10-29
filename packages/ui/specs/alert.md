@@ -156,7 +156,7 @@ None. `Alert.Close` requires its `aria-label` by type, so a nameless button is a
 | ------------ | -------------------------------------------------------- | -------- |
 | `ab-dismiss` | After `Alert.Close`'s `onClick` runs on an enabled Close | `"user"` |
 
-Detail: `{ component: "Alert", reason }`, dispatched from the Close button and bubbling. Adds `"ab-dismiss": DismissEvent` with `FeedbackEventDetail<"Alert">` to `src/events/events.ts` (Toast and Dialog widen the union later). Not dispatched when Close is disabled. No `ab-appear`: an Alert is not a system-initiated feedback moment in the way a toast is.
+Detail: `{ component: "Alert", reason }`, dispatched from the Close button and bubbling. Adds `"ab-dismiss": DismissFeedbackEvent` with `FeedbackEventDetail<"Alert">` to `src/events/events.ts` (Toast and Dialog widen the union later). Not dispatched when Close is disabled. No `ab-appear`: an Alert is not a system-initiated feedback moment in the way a toast is.
 
 ## Sources
 

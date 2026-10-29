@@ -164,7 +164,7 @@ None. The icon-only `Sheet.Close` requires its `aria-label` by type, as Dialog's
 | ------------ | --------------------------------------------------------------------------------------- | -------- |
 | `ab-dismiss` | After a close the user caused commits: Escape, an outside press, or the icon-only Close | `"user"` |
 
-Detail: `{ component: "Sheet", reason }`, dispatched as Dialog's (from the icon-only Close, or from the Content for Escape and outside press). A Close with `asChild` dispatches nothing of its own (the child Button's `ab-press` is the gesture's one event; judgement call, as Dialog). `src/events/events.ts`: widen `DismissEvent`'s union with `"Sheet"`.
+Detail: `{ component: "Sheet", reason }`, dispatched as Dialog's (from the icon-only Close, or from the Content for Escape and outside press). A Close with `asChild` dispatches nothing of its own (the child Button's `ab-press` is the gesture's one event; judgement call, as Dialog). `src/events/events.ts`: widen `DismissFeedbackEvent`'s union with `"Sheet"`.
 
 ## Sources
 

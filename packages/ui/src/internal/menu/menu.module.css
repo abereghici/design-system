@@ -55,7 +55,7 @@
 
   .item {
     --ab-icon-size: var(--ab-icon-sm-size);
-    --ab-icon-ink: var(--item-icon-color);
+    --ab-icon-color: var(--item-icon-color);
     --ab-kbd-text-color: var(--item-shortcut-text-color);
     --ab-kbd-margin-inline-start: auto;
 
@@ -91,13 +91,13 @@
   }
 
   .item:where([data-variant="danger"]) {
-    --ab-icon-ink: var(--item-danger-icon-color);
+    --ab-icon-color: var(--item-danger-icon-color);
 
     color: var(--item-danger-text-color);
   }
 
   .item:where([aria-disabled="true"]) {
-    --ab-icon-ink: var(--ab-color-icon-disabled);
+    --ab-icon-color: var(--ab-color-icon-disabled);
     --ab-kbd-text-color: var(--ab-color-text-disabled);
     --item-icon-color-selected: var(--ab-color-icon-disabled);
 
@@ -112,7 +112,7 @@
     block-size: var(--ab-icon-sm-size);
     color: var(--item-icon-color-selected);
 
-    --ab-icon-ink: currentColor;
+    --ab-icon-color: currentColor;
   }
 
   .diamond {
@@ -147,7 +147,7 @@
 
   @media (prefers-contrast: more) {
     .item {
-      --ab-icon-ink: var(--ab-color-icon-default);
+      --ab-icon-color: var(--ab-color-icon-default);
     }
   }
 
@@ -173,7 +173,7 @@
 
     .item,
     .indicator {
-      --ab-icon-ink: currentColor;
+      --ab-icon-color: currentColor;
     }
   }
 }

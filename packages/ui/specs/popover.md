@@ -175,7 +175,7 @@ None. The icon-only `Popover.Close` requires its `aria-label` by type; a Close w
 | ------------ | -------------------------------------------------------------------------------------- | -------- |
 | `ab-dismiss` | After a close with reason `"escape-key"`, `"outside-press"` or `"close-press"` commits | `"user"` |
 
-Detail: `{ component: "Popover", reason }`, dispatched from the icon-only Close for `"close-press"` (a Close with `asChild` dispatches nothing of its own: its Button already dispatches `ab-press` for the click) and from the Content for Escape and outside presses, bubbling. Widens the `"ab-dismiss"` entry in `src/events/events.ts` (`DismissEvent` to `FeedbackEventDetail<"Alert" | "Popover">`). Not dispatched for `"trigger-press"`, `"focus-out"` (moving focus on is not a dismiss gesture), `"none"`, a cancelled close, or when the app closes it through `open`.
+Detail: `{ component: "Popover", reason }`, dispatched from the icon-only Close for `"close-press"` (a Close with `asChild` dispatches nothing of its own: its Button already dispatches `ab-press` for the click) and from the Content for Escape and outside presses, bubbling. Widens the `"ab-dismiss"` entry in `src/events/events.ts` (`DismissFeedbackEvent` to `FeedbackEventDetail<"Alert" | "Popover">`). Not dispatched for `"trigger-press"`, `"focus-out"` (moving focus on is not a dismiss gesture), `"none"`, a cancelled close, or when the app closes it through `open`.
 
 ## Sources
 

@@ -177,7 +177,7 @@ None. The menu's name is the consumer's `aria-label` (required).
 | `ab-toggle`  | After a CheckboxItem or RadioItem change commits (not cancelled) | `"user"` |
 | `ab-dismiss` | When the user closes the menu with Escape or an outside press    | `"user"` |
 
-Detail: `{ component: "ContextMenu", reason }`, from the Item (`ab-press`, `ab-toggle`) or the Content (`ab-dismiss`), bubbling through the app tree. A right click that repositions an open menu dispatches `ab-dismiss` for the close it is made of (judgement call: one rule for every outside press). Nothing for an Item press that closes the menu, a focus-out, a controlled `open` change or a disabled Item. `src/events/events.ts` widens `PressEvent`'s component union and the `ab-toggle` and `ab-dismiss` unions with `"ContextMenu"`.
+Detail: `{ component: "ContextMenu", reason }`, from the Item (`ab-press`, `ab-toggle`) or the Content (`ab-dismiss`), bubbling through the app tree. A right click that repositions an open menu dispatches `ab-dismiss` for the close it is made of (judgement call: one rule for every outside press). Nothing for an Item press that closes the menu, a focus-out, a controlled `open` change or a disabled Item. `src/events/events.ts` widens `PressFeedbackEvent`'s component union and the `ab-toggle` and `ab-dismiss` unions with `"ContextMenu"`.
 
 ## Sources
 

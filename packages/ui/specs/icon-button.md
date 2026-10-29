@@ -129,7 +129,7 @@ None. The name comes from `aria-label` / `aria-labelledby`.
 | `ab-press`  | After `onClick` runs on an enabled, not loading, non-toggle IconButton | `"user"` |
 | `ab-toggle` | After a toggle IconButton's state change commits (not cancelled)       | `"user"` |
 
-Detail: `{ component: "IconButton", reason }`. One event per gesture: a toggle fires `ab-toggle` instead of `ab-press`, so an app never plays two sounds for one click. A listener that needs the new state reads `aria-pressed` from `event.target`. A controlled `pressed` changed by the parent fires nothing (the design system did not cause it). Neither fires when disabled or loading. `events.ts` widens `PressEvent` to `"Button" | "IconButton"` and adds `ab-toggle` (`ToggleFeedbackEvent`, so it does not shadow the DOM's `ToggleEvent`) to `GlobalEventHandlersEventMap`.
+Detail: `{ component: "IconButton", reason }`. One event per gesture: a toggle fires `ab-toggle` instead of `ab-press`, so an app never plays two sounds for one click. A listener that needs the new state reads `aria-pressed` from `event.target`. A controlled `pressed` changed by the parent fires nothing (the design system did not cause it). Neither fires when disabled or loading. `events.ts` widens `PressFeedbackEvent` to `"Button" | "IconButton"` and adds `ab-toggle` (`ToggleFeedbackEvent`, so it does not shadow the DOM's `ToggleEvent`) to `GlobalEventHandlersEventMap`.
 
 ## Sources
 

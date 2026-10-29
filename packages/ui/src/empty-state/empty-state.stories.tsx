@@ -15,9 +15,9 @@ const meta = preview.meta({
   args: {
     children: (
       <>
-        <EmptyState.Indicator>
+        <EmptyState.Media>
           <FilesIcon />
-        </EmptyState.Indicator>
+        </EmptyState.Media>
         <EmptyState.Title>No files yet</EmptyState.Title>
         <EmptyState.Description>Upload a file or create one to get started.</EmptyState.Description>
         <Button>New file</Button>

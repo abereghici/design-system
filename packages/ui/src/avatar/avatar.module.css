@@ -38,7 +38,7 @@
 
   .fallback {
     --ab-icon-size: var(--ab-avatar-icon-size);
-    --ab-icon-ink: var(--ab-avatar-icon-color);
+    --ab-icon-color: var(--ab-avatar-icon-color);
 
     display: grid;
     place-items: center;

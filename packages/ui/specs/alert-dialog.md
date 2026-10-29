@@ -166,7 +166,7 @@ None. Cancel and Action labels are the consumer's text (they name the answer, so
 | `ab-confirm` | After the Action's `onClick` runs (whether or not the close is cancelled) | `"user"` |
 | `ab-dismiss` | After a Cancel press or Escape closes the dialog                          | `"user"` |
 
-Detail: `{ component: "AlertDialog", reason }`, `ab-confirm` dispatched from the Action, `ab-dismiss` from Cancel or (Escape) from the Content; both bubble through the app tree. One event per gesture: Cancel and Action draw Button's visuals themselves instead of composing Button, so no `ab-press` fires alongside (judgement call, Pagination precedent). `ab-confirm` marks the user's decision, so it fires even when `cancel()` keeps the dialog open for an async action. Not dispatched when the app closes the dialog through `open`, or for `"none"`. `src/events/events.ts`: add `"ab-confirm": ConfirmEvent` with `FeedbackEventDetail<"AlertDialog">`, and widen `DismissEvent`'s union with `"AlertDialog"`.
+Detail: `{ component: "AlertDialog", reason }`, `ab-confirm` dispatched from the Action, `ab-dismiss` from Cancel or (Escape) from the Content; both bubble through the app tree. One event per gesture: Cancel and Action draw Button's visuals themselves instead of composing Button, so no `ab-press` fires alongside (judgement call, Pagination precedent). `ab-confirm` marks the user's decision, so it fires even when `cancel()` keeps the dialog open for an async action. Not dispatched when the app closes the dialog through `open`, or for `"none"`. `src/events/events.ts`: add `"ab-confirm": ConfirmFeedbackEvent` with `FeedbackEventDetail<"AlertDialog">`, and widen `DismissFeedbackEvent`'s union with `"AlertDialog"`.
 
 ## Sources
 

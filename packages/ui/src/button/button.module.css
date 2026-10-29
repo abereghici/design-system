@@ -4,7 +4,7 @@
   .root {
     --ab-icon-size: var(--ab-button-icon-size);
     --ab-icon-stroke-width: var(--ab-stroke-width-lg);
-    --ab-icon-ink: var(--ab-button-secondary-icon-color);
+    --ab-icon-color: var(--ab-button-secondary-icon-color);
     --ab-kbd-background-color: transparent;
     --ab-kbd-text-color: currentColor;
     --ab-kbd-border-color: color-mix(
@@ -69,7 +69,7 @@
   }
 
   .root:where([data-variant="primary"]) {
-    --ab-icon-ink: var(--ab-button-primary-icon-color);
+    --ab-icon-color: var(--ab-button-primary-icon-color);
     --background-color-hovered: var(--ab-button-primary-background-color-hovered);
     --background-color-pressed: var(--ab-button-primary-background-color-pressed);
     --text-color-hovered: var(--ab-button-primary-text-color);
@@ -80,7 +80,7 @@
   }
 
   .root:where([data-variant="tertiary"]) {
-    --ab-icon-ink: var(--ab-button-tertiary-icon-color);
+    --ab-icon-color: var(--ab-button-tertiary-icon-color);
     --border-color-hovered: transparent;
     --background-color-hovered: var(--ab-button-tertiary-background-color-hovered);
     --background-color-pressed: var(--ab-button-tertiary-background-color-pressed);
@@ -93,7 +93,7 @@
   }
 
   .root:where([data-variant="danger"]) {
-    --ab-icon-ink: var(--ab-button-danger-icon-color);
+    --ab-icon-color: var(--ab-button-danger-icon-color);
     --background-color-hovered: var(--ab-button-danger-background-color-hovered);
     --background-color-pressed: var(--ab-button-danger-background-color-pressed);
     --text-color-hovered: var(--ab-button-danger-text-color);
@@ -120,7 +120,7 @@
   }
 
   .root:where([aria-disabled="true"], :disabled):where(:not([aria-busy="true"])) {
-    --ab-icon-ink: currentColor;
+    --ab-icon-color: currentColor;
 
     border-color: var(--ab-button-border-color-disabled);
     background-color: var(--ab-button-background-color-disabled);

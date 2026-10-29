@@ -21,7 +21,7 @@
   }
 
   .trigger {
-    --ab-icon-ink: var(--ab-accordion-trigger-icon-color);
+    --ab-icon-color: var(--ab-accordion-trigger-icon-color);
 
     display: flex;
     align-items: center;
@@ -50,7 +50,7 @@
 
   @media (hover: hover) and (pointer: fine) {
     .trigger:hover {
-      --ab-icon-ink: var(--ab-accordion-trigger-icon-color-hovered);
+      --ab-icon-color: var(--ab-accordion-trigger-icon-color-hovered);
     }
   }
 
@@ -89,7 +89,7 @@
 
   @media (prefers-contrast: more) {
     .trigger {
-      --ab-icon-ink: var(--ab-accordion-trigger-icon-color-hovered);
+      --ab-icon-color: var(--ab-accordion-trigger-icon-color-hovered);
     }
 
     .content {

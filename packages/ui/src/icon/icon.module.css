@@ -1,7 +1,7 @@
 @import "@platform/tokens/components/icon.css";
 
 @layer ab.components {
-  /* Hosts size and tint the icons they hold by setting --ab-icon-size, --ab-icon-stroke-width and --ab-icon-ink on themselves; the values inherit, so no host reaches into the svg. */
+  /* Hosts size and tint the icons they hold by setting --ab-icon-size, --ab-icon-stroke-width and --ab-icon-color on themselves; the values inherit, so no host reaches into the svg. */
   .root {
     display: inline-block;
     flex-shrink: 0;
@@ -9,7 +9,7 @@
     inline-size: var(--ab-icon-size, var(--ab-icon-md-size));
     block-size: var(--ab-icon-size, var(--ab-icon-md-size));
     stroke-width: var(--ab-icon-stroke-width, var(--ab-icon-md-stroke-width));
-    color: var(--ab-icon-ink, currentColor);
+    color: var(--ab-icon-color, currentColor);
   }
 
   .root:where([data-size="sm"]) {
@@ -34,7 +34,7 @@
     scale: -1 1;
   }
 
-  /* An explicit ink stops the UA's preserve-parent-color on svg from forcing it, so forced colors
+  /* An explicit color stops the UA's preserve-parent-color on svg from forcing it, so forced colors
      take the host's system text colour back: https://www.w3.org/TR/css-color-adjust-1/#forced-color-adjust-prop */
   @media (forced-colors: active) {
     .root {

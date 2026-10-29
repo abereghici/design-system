@@ -1,6 +1,6 @@
 export { Root } from "./empty-state-root.tsx";
 
-export { Indicator } from "./empty-state-indicator.tsx";
+export { Media } from "./empty-state-media.tsx";
 
 export { Title } from "./empty-state-title.tsx";
 
