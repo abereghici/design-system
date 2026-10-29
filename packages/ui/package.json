@@ -11,6 +11,7 @@
   },
   "exports": {
     "./*": "./src/*/index.ts",
+    "./internal/*": null,
     "./icons/*": "./src/icon/icons/*.tsx"
   },
   "scripts": {

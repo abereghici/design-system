@@ -43,6 +43,15 @@ describe("@platform/ui exports", () => {
     );
   });
 
+  test("the shared internals are not exported", () => {
+    expect(() => resolve("@platform/ui/internal/slot")).toThrow(
+      expect.objectContaining({ code: "ERR_PACKAGE_PATH_NOT_EXPORTED" }),
+    );
+    expect(() => resolve("@platform/ui/internal/slot/slot.tsx")).toThrow(
+      expect.objectContaining({ code: "ERR_PACKAGE_PATH_NOT_EXPORTED" }),
+    );
+  });
+
   test("the package root is not importable (Vite, through Vitest)", async () => {
     const root = "@platform/ui";
 

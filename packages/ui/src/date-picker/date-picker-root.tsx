@@ -5,11 +5,11 @@ import type { ReactNode } from "react";
 
 import { DateFieldFrame } from "../date-field/date-field.tsx";
 import type { DateFieldChangeEventDetails, DateFieldProps } from "../date-field/date-field.tsx";
-import type { DatePickerContextValue, Temporal } from "../date/date.ts";
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useFloating } from "../floating/floating.ts";
-import type { ChangeEventDetails as FloatingDetails, Floating } from "../floating/floating.ts";
+import type { DatePickerContextValue, Temporal } from "../internal/date/date.ts";
+import { useOverlay } from "../internal/overlay/overlay.ts";
+import type { ChangeEventDetails as OverlayDetails, Overlay } from "../internal/overlay/overlay.ts";
 
 import { PanelContext } from "./date-picker-panel.tsx";
 import { Trigger } from "./date-picker-trigger.tsx";
@@ -17,7 +17,7 @@ import { Trigger } from "./date-picker-trigger.tsx";
 /** `cancel()`: keeps the previous value; after a day press the panel stays open. */
 export type ChangeEventDetails = Details<DateFieldChangeEventDetails["reason"] | "day-press">;
 
-export type OpenChangeEventDetails = FloatingDetails<
+export type OpenChangeEventDetails = OverlayDetails<
   "trigger-press" | "outside-press" | "escape-key" | "focus-out" | "day-press" | "none"
 >;
 
@@ -77,12 +77,12 @@ function useValue({ value, defaultValue = null, onValueChange }: RootProps) {
 }
 
 function pickerOf(
-  floating: Floating,
+  overlay: Overlay,
   date: ReturnType<typeof useValue>,
   { min, max, isDateUnavailable, locale }: RootProps,
 ): DatePickerContextValue {
   return {
-    open: floating.open,
+    open: overlay.open,
     locale,
     value: date.current,
     min,
@@ -90,7 +90,7 @@ function pickerOf(
     isDateUnavailable,
     choose: (day, event) => {
       if (date.current?.equals(day) === true || date.change(day, "day-press", event)) {
-        floating.toggle(false, "day-press", event);
+        overlay.toggle(false, "day-press", event);
       }
     },
     canFocus: () => {
@@ -98,8 +98,8 @@ function pickerOf(
 
       return (
         focus === document.body ||
-        focus?.getAttribute("commandfor") === floating.contentId ||
-        document.getElementById(floating.contentId)?.contains(focus) === true
+        focus?.getAttribute("commandfor") === overlay.contentId ||
+        document.getElementById(overlay.contentId)?.contains(focus) === true
       );
     },
   };
@@ -115,8 +115,8 @@ export function Root(props: RootProps) {
   const { triggerLabel: name, disabled, children, ...field } = rest;
   const date = useValue(props);
   const trigger = useRef<HTMLButtonElement>(null);
-  const floating = useFloating("Popover", { open, defaultOpen, onOpenChange });
-  const panel = { floating, name, trigger };
+  const overlay = useOverlay("Popover", { open, defaultOpen, onOpenChange });
+  const panel = { overlay, name, trigger };
 
   return (
     <DateFieldFrame
@@ -138,7 +138,7 @@ export function Root(props: RootProps) {
         />
       }
     >
-      <PanelContext value={{ ...panel, picker: pickerOf(floating, date, props) }}>
+      <PanelContext value={{ ...panel, picker: pickerOf(overlay, date, props) }}>
         {children}
       </PanelContext>
     </DateFieldFrame>

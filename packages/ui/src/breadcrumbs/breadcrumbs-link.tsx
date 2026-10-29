@@ -1,6 +1,6 @@
+import { mergeProps } from "../internal/slot/slot.tsx";
 import { Link as BaseLink } from "../link/link.tsx";
 import type { LinkProps as BaseLinkProps } from "../link/link.tsx";
-import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./breadcrumbs.module.css";
 

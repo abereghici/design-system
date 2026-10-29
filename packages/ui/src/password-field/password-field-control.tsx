@@ -9,7 +9,8 @@ import type { FormControl } from "../field/use-field.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { EyeOffIcon } from "../icon/icons/eye-off.tsx";
 import { EyeIcon } from "../icon/icons/eye.tsx";
-import { InputGroup, TextInput } from "../text-field/text-field.tsx";
+import { InputGroup } from "../text-field/text-field-input-group.tsx";
+import { Input as TextInput } from "../text-field/text-field-input.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
 
 /** `cancel()`: keeps the current visibility. */

@@ -34,8 +34,8 @@ export default defineConfig({
         "src/context-menu/context-menu-trigger.tsx",
         "src/date-picker/date-picker-root.tsx",
         "src/dropdown-menu/dropdown-menu-trigger.tsx",
-        "src/floating/floating.ts",
-        "src/menu/menu.tsx",
+        "src/internal/overlay/overlay.ts",
+        "src/internal/menu/menu.tsx",
         "src/tooltip/tooltip-root.tsx",
         "src/tooltip/tooltip-trigger.tsx",
       ],
@@ -50,7 +50,7 @@ export default defineConfig({
     {
       // HTML allows <option> only inside select, datalist or optgroup, and rich options in a select
       // need customizable select, which is below the Baseline floor (no Firefox). See docs/open-questions.md.
-      files: ["src/listbox/listbox.tsx"],
+      files: ["src/internal/listbox/listbox.tsx"],
       rules: { "jsx-a11y/prefer-tag-over-role": "off" },
     },
   ],

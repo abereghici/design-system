@@ -1,16 +1,17 @@
 import { useLayoutEffect } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { dateFormats } from "../date/date.ts";
-import type { DatePart, Temporal } from "../date/date.ts";
 import { useField } from "../field/use-field.ts";
+import { dateFormats } from "../internal/date/date.ts";
+import type { DatePart, Temporal } from "../internal/date/date.ts";
 
-import { useDate, useSegmentEditing } from "./date-field-editing.ts";
-import type { DateValueOptions } from "./date-field-editing.ts";
-import { useValidity } from "./date-field-validity.ts";
-import type { Validity } from "./date-field-validity.ts";
 import { bounds, display } from "./segments.ts";
 import type { Segments } from "./segments.ts";
+import { useDateValue } from "./use-date-value.ts";
+import type { DateValueOptions } from "./use-date-value.ts";
+import { useSegmentEditing } from "./use-segment-editing.ts";
+import { useValidity } from "./use-validity.ts";
+import type { Validity } from "./use-validity.ts";
 import fieldStyles from "../field/field.module.css";
 import visuallyHidden from "../visually-hidden/visually-hidden.module.css";
 import styles from "./date-field.module.css";
@@ -111,7 +112,7 @@ function filledAround(formats: Formats, index: number, segments: Segments) {
 function useControl(options: ControlOptions, onValidity: (validity: Validity) => void) {
   const { field, blocked, invalid } = useField(options.disabled);
   const formats = dateFormats(options.locale);
-  const date = useDate(options);
+  const date = useDateValue(options);
   const name = field?.name ?? options.name;
   const validity = useValidity(options, {
     incomplete: options.incompleteMessage,

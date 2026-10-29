@@ -4,10 +4,10 @@ import { createContext, useId, useState } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
 import { dispatchFeedback, pointerMarker, requestChange } from "../events/events.ts";
-import { mergeProps } from "../slot/slot.tsx";
-import type { ChangeEventDetails } from "../toggle/toggle.ts";
+import { followVisualDirection } from "../internal/follow-visual-direction/follow-visual-direction.ts";
+import { mergeProps } from "../internal/slot/slot.tsx";
+import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
 
-import { followVisualDirection } from "./follow-visual-direction.ts";
 import styles from "./radio-group.module.css";
 
 interface Group {

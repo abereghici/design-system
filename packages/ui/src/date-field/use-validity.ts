@@ -1,9 +1,9 @@
 import { useRef } from "react";
 
-import type { Temporal } from "../date/date.ts";
 import { useEvent } from "../events/use-event.ts";
 import { setValidity, useField } from "../field/use-field.ts";
 import type { Validate } from "../field/use-field.ts";
+import type { Temporal } from "../internal/date/date.ts";
 
 import type { Segments } from "./segments.ts";
 

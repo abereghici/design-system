@@ -1,7 +1,7 @@
 import type { MouseEventHandler } from "react";
 
-import { composeEventHandlers, dispatchFeedback, requestChange } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { composeEventHandlers, dispatchFeedback, requestChange } from "../../events/events.ts";
+import type { ChangeEventDetails as Details } from "../../events/events.ts";
 
 /** `cancel()`: keeps the previous state: the browser restores it once the click is cancelled. */
 export type ChangeEventDetails = Details<"none">;

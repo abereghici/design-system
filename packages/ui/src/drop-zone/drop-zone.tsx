@@ -6,8 +6,8 @@ import type { ComponentProps, DragEvent, RefObject } from "react";
 import { requestChange } from "../events/events.ts";
 import { useEvent } from "../events/use-event.ts";
 import { useField } from "../field/use-field.ts";
-import { FileInput, PickerContext } from "../file-trigger/file-trigger.tsx";
-import { mergeProps } from "../slot/slot.tsx";
+import { Input as FileInput, PickerContext } from "../file-trigger/file-trigger-input.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./drop-zone.module.css";
 

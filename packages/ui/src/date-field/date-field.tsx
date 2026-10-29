@@ -4,14 +4,14 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 
 import * as Field from "../field/field.tsx";
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { Control } from "./date-field-control.tsx";
 import type { ControlProps, DateFieldOptions } from "./date-field-control.tsx";
-import type { Validity } from "./date-field-validity.ts";
+import type { Validity } from "./use-validity.ts";
 import styles from "./date-field.module.css";
 
-export type { DateFieldChangeEventDetails } from "./date-field-editing.ts";
+export type { DateFieldChangeEventDetails } from "./use-date-value.ts";
 
 export type DateFieldProps = DateFieldOptions &
   Omit<ControlProps, "options" | "onValidity" | "end"> & {

@@ -28,7 +28,7 @@ export const platform = () =>
 
 const serverPlatform = () => "other" as const;
 
-export function KbdKey({
+export function Key({
   apple,
   other,
   keyLabels,

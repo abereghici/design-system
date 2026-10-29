@@ -1,6 +1,6 @@
 import type { FocusEvent, KeyboardEvent, MouseEvent, RefObject } from "react";
 
-import type { dateFormats, Temporal } from "../date/date.ts";
+import type { dateFormats, Temporal } from "../internal/date/date.ts";
 
 import styles from "./calendar.module.css";
 

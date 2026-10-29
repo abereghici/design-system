@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckIcon } from "../icon/icons/check.tsx";
+import { CheckIcon } from "../../icon/icons/check.tsx";
 
 import styles from "./menu.module.css";
 

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback, requestChange } from "../../events/events.ts";
 
 import { Indicator } from "./menu-item-indicator.tsx";
 import { useItem } from "./menu.tsx";

@@ -1,5 +1,5 @@
-import { Temporal } from "../date/date.ts";
-import type { DatePart } from "../date/date.ts";
+import { Temporal } from "../internal/date/date.ts";
+import type { DatePart } from "../internal/date/date.ts";
 
 export type Segments = Readonly<Partial<Record<DatePart, number>>>;
 

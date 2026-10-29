@@ -1,8 +1,8 @@
 import type { ComponentProps, ReactNode } from "react";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
-import { KbdKey } from "./kbd-key.tsx";
+import { Key } from "./kbd-key.tsx";
 import type { KbdFace, KeyLabel } from "./kbd-key.tsx";
 import styles from "./kbd.module.css";
 
@@ -58,12 +58,12 @@ function key(
   const glyph = glyphs[id];
 
   if (modifier !== undefined && platform === undefined) {
-    return <KbdKey apple={modifier.apple} other={modifier.other} keyLabels={keyLabels} />;
+    return <Key apple={modifier.apple} other={modifier.other} keyLabels={keyLabels} />;
   }
 
   const face = modifier?.[platform ?? "other"] ?? glyph;
 
-  if (face?.label !== undefined) return <KbdKey apple={face} other={face} keyLabels={keyLabels} />;
+  if (face?.label !== undefined) return <Key apple={face} other={face} keyLabels={keyLabels} />;
 
   return face?.text ?? words[id] ?? (name.length === 1 ? name.toUpperCase() : name);
 }

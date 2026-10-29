@@ -2,8 +2,8 @@
 
 import type { ComponentProps, KeyboardEvent } from "react";
 
-import { focusLast, itemsOf, useMenu } from "../menu/menu.tsx";
-import { Slot } from "../slot/slot.tsx";
+import { focusLast, itemsOf, useMenu } from "../internal/menu/menu.tsx";
+import { Slot } from "../internal/slot/slot.tsx";
 
 export interface TriggerProps extends ComponentProps<"button"> {
   /** Makes its one child (a Button or IconButton) the Trigger. */
@@ -12,15 +12,15 @@ export interface TriggerProps extends ComponentProps<"button"> {
 
 /** Opens the menu on press, Enter, Space or Down Arrow, and at its last item on Up Arrow. */
 export function Trigger({ asChild = false, ...props }: TriggerProps) {
-  const { floating } = useMenu();
+  const { overlay } = useMenu();
   const Element = asChild ? Slot : "button";
-  const trigger = floating.triggerProps(props);
+  const trigger = overlay.triggerProps(props);
 
   return (
     <Element
       type={asChild ? undefined : "button"}
       {...trigger}
-      id={`${floating.contentId}-trigger`}
+      id={`${overlay.contentId}-trigger`}
       aria-haspopup="menu"
       onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
         props.onKeyDown?.(event);
@@ -31,11 +31,11 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
 
         event.preventDefault();
 
-        const content = document.getElementById(floating.contentId);
+        const content = document.getElementById(overlay.contentId);
 
         if (content === null) return;
 
-        if (floating.open) {
+        if (overlay.open) {
           itemsOf(content)
             .at(event.key === "ArrowUp" ? -1 : 0)
             ?.focus();
@@ -45,7 +45,7 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
 
         if (event.key === "ArrowUp") focusLast.add(content);
 
-        floating.toggle(true, "trigger-press", event.nativeEvent);
+        overlay.toggle(true, "trigger-press", event.nativeEvent);
       }}
     />
   );

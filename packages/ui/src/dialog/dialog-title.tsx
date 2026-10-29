@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from "react";
 
-import { Slot, mergeProps, presenceRef } from "../slot/slot.tsx";
+import { Slot, mergeProps, presenceRef } from "../internal/slot/slot.tsx";
 
 import { useModal } from "./dialog-modal.tsx";
 

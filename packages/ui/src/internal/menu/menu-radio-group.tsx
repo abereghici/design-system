@@ -3,7 +3,7 @@
 import { createContext, useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
-import { requestChange } from "../events/events.ts";
+import { requestChange } from "../../events/events.ts";
 
 import { Group } from "./menu-group.tsx";
 import type { ItemChangeEventDetails } from "./menu.tsx";

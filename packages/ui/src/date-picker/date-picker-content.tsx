@@ -3,9 +3,9 @@
 import { use, useState } from "react";
 import type { ComponentProps } from "react";
 
-import { DatePickerContext } from "../date/date.ts";
-import { rememberFocus } from "../floating/floating.ts";
-import { mergeProps } from "../slot/slot.tsx";
+import { DatePickerContext } from "../internal/date/date.ts";
+import { rememberFocus } from "../internal/overlay/overlay.ts";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { PanelContext } from "./date-picker-panel.tsx";
 import popoverStyles from "../popover/popover.module.css";
@@ -22,10 +22,10 @@ export function Content({ children, ...props }: ContentProps) {
 
   if (panel === null) throw new Error("DatePicker.Content must be inside DatePicker.Root");
 
-  const { floating, picker, name, trigger } = panel;
+  const { overlay, picker, name, trigger } = panel;
   const [mounted, setMounted] = useState(false);
 
-  if (floating.open && !mounted) setMounted(true);
+  if (overlay.open && !mounted) setMounted(true);
 
   const base = `${popoverStyles["content"]} ${styles["content"]}`;
 
@@ -34,9 +34,9 @@ export function Content({ children, ...props }: ContentProps) {
       {...mergeProps(
         {
           className: base,
-          ...floating.contentProps({
+          ...overlay.contentProps({
             onBeforeToggle: (event) => {
-              if (event.newState === "open") rememberFocus(floating.contentId, trigger.current);
+              if (event.newState === "open") rememberFocus(overlay.contentId, trigger.current);
             },
           }),
         },

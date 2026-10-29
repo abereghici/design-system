@@ -2,10 +2,10 @@
 
 import type { ComponentProps } from "react";
 
-import { menuContentProps, useMenu } from "../menu/menu.tsx";
-import { mergeProps } from "../slot/slot.tsx";
+import { menuContentProps, useMenu } from "../internal/menu/menu.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
-import menuStyles from "../menu/menu.module.css";
+import menuStyles from "../internal/menu/menu.module.css";
 import styles from "./dropdown-menu.module.css";
 
 export interface ContentProps extends Omit<ComponentProps<"div">, "id" | "role" | "popover"> {
@@ -25,7 +25,7 @@ export function Content({ side = "bottom", align = "start", ...props }: ContentP
         { className: `${menuStyles["content"]} ${styles["content"]}`, ...menuContentProps(menu) },
         props,
       )}
-      aria-labelledby={`${menu.floating.contentId}-trigger`}
+      aria-labelledby={`${menu.overlay.contentId}-trigger`}
       data-side={side}
       data-align={align}
     />

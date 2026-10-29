@@ -5,8 +5,8 @@ import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction
 
 import { isComposing, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { filterOptions, enabled, navigate, reveal } from "../listbox/listbox.tsx";
-import { mergeProps } from "../slot/slot.tsx";
+import { filterOptions, enabled, navigate, reveal } from "../internal/listbox/listbox.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./command.module.css";
 

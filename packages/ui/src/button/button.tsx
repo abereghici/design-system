@@ -4,7 +4,7 @@ import { cloneElement, isValidElement } from "react";
 import type { ComponentProps, MouseEvent, MouseEventHandler, ReactNode } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
-import { Slot, mergeProps } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./button.module.css";

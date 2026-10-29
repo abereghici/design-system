@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from "react";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { useFieldControl } from "./use-field.ts";
 import type { ChangeEventDetails } from "./use-field.ts";

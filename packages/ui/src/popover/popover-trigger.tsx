@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from "react";
 
-import { Slot } from "../slot/slot.tsx";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import { usePopover } from "./popover-root.tsx";
 

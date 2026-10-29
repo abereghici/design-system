@@ -8,7 +8,7 @@ import { XIcon } from "../icon/icons/x.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
 import type { ToastRecord } from "../toast/toast.ts";
 
-import { keyNames } from "./toaster-keys.ts";
+import { keyNames } from "./use-shortcut.ts";
 import styles from "./toaster.module.css";
 
 const icons = {

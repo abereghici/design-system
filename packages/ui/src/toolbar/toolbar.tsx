@@ -2,7 +2,7 @@
 
 import type { ComponentProps, FocusEvent, KeyboardEvent } from "react";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./toolbar.module.css";
 

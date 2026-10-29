@@ -3,7 +3,7 @@
 import { use } from "react";
 import type { ComponentProps } from "react";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { FieldContext } from "./use-field.ts";
 import styles from "./field.module.css";

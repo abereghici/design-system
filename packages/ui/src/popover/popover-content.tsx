@@ -2,7 +2,7 @@
 
 import type { ComponentProps, RefObject } from "react";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { usePopover } from "./popover-root.tsx";
 import styles from "./popover.module.css";

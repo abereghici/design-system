@@ -4,12 +4,12 @@ import type { ComponentProps, ReactNode } from "react";
 
 import * as Field from "../field/field.tsx";
 import { SearchIcon } from "../icon/icons/search.tsx";
-import { Listbox } from "../listbox/listbox.tsx";
-import { InputGroup } from "../text-field/text-field.tsx";
+import { Listbox } from "../internal/listbox/listbox.tsx";
+import { InputGroup } from "../text-field/text-field-input-group.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import { inputProps, listProps, part, press } from "./combobox-state.ts";
-import type { Combobox, Options } from "./combobox-state.ts";
+import type { ComboboxState, Options } from "./combobox-state.ts";
 import { ValueContext, useCombobox } from "./use-combobox.ts";
 import textFieldStyles from "../text-field/text-field.module.css";
 import styles from "./combobox.module.css";
@@ -88,7 +88,7 @@ function Input({ readOnly, ...props }: Field.ControlProps) {
   );
 }
 
-function Control({ c, input }: { c: Combobox; input: Field.ControlProps }) {
+function Control({ c, input }: { c: ComboboxState; input: Field.ControlProps }) {
   return (
     <InputGroup
       id={part(c, "box")}
@@ -104,7 +104,7 @@ function Control({ c, input }: { c: Combobox; input: Field.ControlProps }) {
 }
 
 interface ListProps {
-  c: Combobox;
+  c: ComboboxState;
   labelledBy: string | undefined;
   label: string | undefined;
   children: ReactNode;

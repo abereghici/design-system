@@ -1,6 +1,6 @@
 "use client";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback } from "../../events/events.ts";
 
 import type { ItemBaseProps } from "./menu.tsx";
 import { useItem } from "./menu.tsx";

@@ -3,11 +3,11 @@
 import { createContext } from "react";
 import type { RefObject } from "react";
 
-import type { DatePickerContextValue } from "../date/date.ts";
-import type { Floating } from "../floating/floating.ts";
+import type { DatePickerContextValue } from "../internal/date/date.ts";
+import type { Overlay } from "../internal/overlay/overlay.ts";
 
 export interface Panel {
-  readonly floating: Floating;
+  readonly overlay: Overlay;
   readonly picker: DatePickerContextValue;
   readonly name: string;
   readonly trigger: RefObject<HTMLButtonElement | null>;

@@ -1,9 +1,9 @@
 import { useId, useLayoutEffect, useState } from "react";
 import type { ComponentProps, FocusEvent, MouseEvent, ToggleEvent } from "react";
 
-import { composeEventHandlers, dispatchFeedback, requestChange } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { getDocument, useEvent } from "../events/use-event.ts";
+import { composeEventHandlers, dispatchFeedback, requestChange } from "../../events/events.ts";
+import type { ChangeEventDetails as Details } from "../../events/events.ts";
+import { getDocument, useEvent } from "../../events/use-event.ts";
 
 type ChangeReason =
   | "trigger-press"
@@ -24,7 +24,7 @@ export type ChangeEventDetails<Reason extends ChangeReason = ChangeReason> = Det
   Event | undefined
 >;
 
-export interface FloatingOptions<Reason extends ChangeReason> {
+export interface OverlayOptions<Reason extends ChangeReason> {
   /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
   open?: boolean | undefined;
   /** Opens it on the first render when it holds its own state. */
@@ -306,7 +306,7 @@ function controlsOf(
  * and Content spread `triggerProps()` and `contentProps()`. A layer anchored to something other
  * than its Trigger passes `anchor`; the Trigger then shows it with that element as the source.
  */
-export function useFloating(
+export function useOverlay(
   component: Component,
   options: Options,
   anchor?: (contentId: string) => Element | null,
@@ -336,4 +336,4 @@ export function useFloating(
   };
 }
 
-export type Floating = ReturnType<typeof useFloating>;
+export type Overlay = ReturnType<typeof useOverlay>;

@@ -5,8 +5,8 @@ import type { ComponentProps } from "react";
 
 import { composeEventHandlers } from "../events/events.ts";
 import { useFieldControl } from "../field/use-field.ts";
-import { mergeProps } from "../slot/slot.tsx";
-import { preventDefault } from "../toggle/toggle.ts";
+import { mergeProps } from "../internal/slot/slot.tsx";
+import { preventDefault } from "../internal/toggle/toggle.ts";
 
 import { GroupContext } from "./radio-group-root.tsx";
 import styles from "./radio-group.module.css";

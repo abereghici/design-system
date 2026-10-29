@@ -3,12 +3,12 @@
 import { createContext, use } from "react";
 import type { ReactNode } from "react";
 
-import { useFloating } from "../floating/floating.ts";
+import { useOverlay } from "../internal/overlay/overlay.ts";
 import type {
   ChangeEventDetails as Details,
-  Floating,
-  FloatingOptions,
-} from "../floating/floating.ts";
+  Overlay,
+  OverlayOptions,
+} from "../internal/overlay/overlay.ts";
 
 export type ChangeReason =
   | "trigger-press"
@@ -20,9 +20,9 @@ export type ChangeReason =
 
 export type ChangeEventDetails = Details<ChangeReason>;
 
-const PopoverContext = createContext<Floating | null>(null);
+const PopoverContext = createContext<Overlay | null>(null);
 
-export function usePopover(): Floating {
+export function usePopover(): Overlay {
   const popover = use(PopoverContext);
 
   if (popover === null) throw new Error("Popover parts must be inside Popover.Root");
@@ -30,7 +30,7 @@ export function usePopover(): Floating {
   return popover;
 }
 
-export interface RootProps extends FloatingOptions<ChangeReason> {
+export interface RootProps extends OverlayOptions<ChangeReason> {
   /** The Trigger and Content. */
   children?: ReactNode;
 }
@@ -41,5 +41,5 @@ export interface RootProps extends FloatingOptions<ChangeReason> {
  * DropdownMenu, for a one-line hint Tooltip, for a blocking task Dialog.
  */
 export function Root({ children, ...options }: RootProps) {
-  return <PopoverContext value={useFloating("Popover", options)}>{children}</PopoverContext>;
+  return <PopoverContext value={useOverlay("Popover", options)}>{children}</PopoverContext>;
 }

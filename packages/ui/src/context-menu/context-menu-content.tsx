@@ -2,10 +2,10 @@
 
 import type { ComponentProps } from "react";
 
-import { menuContentProps, useMenu } from "../menu/menu.tsx";
-import { mergeProps } from "../slot/slot.tsx";
+import { menuContentProps, useMenu } from "../internal/menu/menu.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
-import menuStyles from "../menu/menu.module.css";
+import menuStyles from "../internal/menu/menu.module.css";
 import styles from "./context-menu.module.css";
 
 type Naming = { "aria-label": string } | { "aria-labelledby": string };
@@ -18,7 +18,7 @@ export function Content(props: ContentProps) {
 
   return (
     <>
-      <span id={`${menu.floating.contentId}-anchor`} aria-hidden className={styles["anchor"]} />
+      <span id={`${menu.overlay.contentId}-anchor`} aria-hidden className={styles["anchor"]} />
       <div
         {...mergeProps(
           { className: `${menuStyles["content"]} ${styles["content"]}`, ...menuContentProps(menu) },

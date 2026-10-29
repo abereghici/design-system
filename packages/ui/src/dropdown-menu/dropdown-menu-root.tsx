@@ -2,9 +2,9 @@
 
 import type { ReactNode } from "react";
 
-import { useFloating } from "../floating/floating.ts";
-import type { ChangeEventDetails as Details, FloatingOptions } from "../floating/floating.ts";
-import { MenuContext } from "../menu/menu.tsx";
+import { MenuContext } from "../internal/menu/menu.tsx";
+import { useOverlay } from "../internal/overlay/overlay.ts";
+import type { ChangeEventDetails as Details, OverlayOptions } from "../internal/overlay/overlay.ts";
 
 export type ChangeReason =
   | "trigger-press"
@@ -16,7 +16,7 @@ export type ChangeReason =
 
 export type ChangeEventDetails = Details<ChangeReason>;
 
-export interface RootProps extends FloatingOptions<ChangeReason> {
+export interface RootProps extends OverlayOptions<ChangeReason> {
   /** The Trigger and Content. */
   children?: ReactNode;
 }
@@ -28,7 +28,7 @@ export interface RootProps extends FloatingOptions<ChangeReason> {
  * content, Popover.
  */
 export function Root({ children, ...options }: RootProps) {
-  const floating = useFloating("DropdownMenu", options);
+  const overlay = useOverlay("DropdownMenu", options);
 
-  return <MenuContext value={{ floating, component: "DropdownMenu" }}>{children}</MenuContext>;
+  return <MenuContext value={{ overlay, component: "DropdownMenu" }}>{children}</MenuContext>;
 }

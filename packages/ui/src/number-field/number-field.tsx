@@ -10,7 +10,7 @@ import { Frame, splitFrame } from "../field/field-frame.tsx";
 import type { Naming, SizedFrameProps } from "../field/field-frame.tsx";
 import * as Field from "../field/field.tsx";
 import { useField } from "../field/use-field.ts";
-import { InputGroup } from "../text-field/text-field.tsx";
+import { InputGroup } from "../text-field/text-field-input-group.tsx";
 
 import { StepButtons } from "./number-field-step-buttons.tsx";
 import type { Direction } from "./number-field-step-buttons.tsx";

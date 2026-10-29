@@ -4,8 +4,8 @@ import { use } from "react";
 import type { ComponentProps, MouseEvent, PointerEvent } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
-import { Listbox, enabled, optionAt } from "../listbox/listbox.tsx";
-import { mergeProps } from "../slot/slot.tsx";
+import { Listbox, enabled, optionAt } from "../internal/listbox/listbox.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { DialogContext, useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";

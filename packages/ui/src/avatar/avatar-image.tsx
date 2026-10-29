@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import type { ComponentProps } from "react";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./avatar.module.css";
 

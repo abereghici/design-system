@@ -1,6 +1,6 @@
 "use client";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import type { ButtonProps } from "./alert-dialog-root.tsx";
 import { useClose } from "./alert-dialog-root.tsx";

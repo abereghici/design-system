@@ -3,10 +3,10 @@
 import { createContext, use } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { returnFocus } from "../floating/floating.ts";
-import type { Floating } from "../floating/floating.ts";
+import type { ChangeEventDetails as Details } from "../../events/events.ts";
 import { textOf } from "../listbox/listbox.tsx";
+import { returnFocus } from "../overlay/overlay.ts";
+import type { Overlay } from "../overlay/overlay.ts";
 import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./menu.module.css";
@@ -15,7 +15,7 @@ import styles from "./menu.module.css";
 export type ItemChangeEventDetails = Details<"item-press">;
 
 export interface Menu {
-  readonly floating: Floating;
+  readonly overlay: Overlay;
   readonly component: "DropdownMenu" | "ContextMenu";
 }
 
@@ -82,7 +82,7 @@ function navigate(event: KeyboardEvent<HTMLElement>) {
  */
 export function menuContentProps(menu: Menu) {
   return {
-    ...menu.floating.contentProps({
+    ...menu.overlay.contentProps({
       onToggle: (event) => {
         if (event.newState !== "open") return;
 
@@ -98,7 +98,7 @@ export function menuContentProps(menu: Menu) {
         event.preventDefault();
       } else if (event.key === "Tab") {
         setTimeout(() => {
-          menu.floating.toggle(false, "focus-out", event.nativeEvent);
+          menu.overlay.toggle(false, "focus-out", event.nativeEvent);
         });
       } else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
         typeahead(
@@ -134,9 +134,9 @@ function close(menu: Menu, event: MouseEvent<HTMLElement>, always: boolean) {
 
   if (!always && !entered) return;
 
-  const content = document.getElementById(menu.floating.contentId);
+  const content = document.getElementById(menu.overlay.contentId);
 
-  if (content !== null && menu.floating.toggle(false, "item-press", event.nativeEvent)) {
+  if (content !== null && menu.overlay.toggle(false, "item-press", event.nativeEvent)) {
     returnFocus(content);
   }
 }

@@ -3,12 +3,12 @@ import { flushSync } from "react-dom";
 import type { PointerEvent, RefObject } from "react";
 
 import { dispatchFeedback } from "../events/events.ts";
-import { composeRefs } from "../slot/slot.tsx";
+import { composeRefs } from "../internal/slot/slot.tsx";
 import { close, mark, progressOf, remove } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
 
-import { useShortcut } from "./toaster-keys.ts";
 import { ToastContent } from "./toaster-toast-content.tsx";
+import { useShortcut } from "./use-shortcut.ts";
 import styles from "./toaster.module.css";
 
 const VISIBLE = 3;

@@ -5,13 +5,13 @@ import { createPortal } from "react-dom";
 import type { ComponentProps, RefObject } from "react";
 
 import { sharedListener } from "../events/events.ts";
-import { composeRefs, mergeProps } from "../slot/slot.tsx";
+import { composeRefs, mergeProps } from "../internal/slot/slot.tsx";
 import { close, mark, progressOf, snapshot, subscribe } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
-import { useFocusReturn } from "./toaster-keys.ts";
 import { Toast } from "./toaster-toast.tsx";
+import { useFocusReturn } from "./use-focus-return.ts";
 import styles from "./toaster.module.css";
 
 export interface ToasterProps extends Omit<

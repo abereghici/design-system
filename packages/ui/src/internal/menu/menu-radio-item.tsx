@@ -2,7 +2,7 @@
 
 import { use } from "react";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback } from "../../events/events.ts";
 
 import { Indicator } from "./menu-item-indicator.tsx";
 import { RadioGroupContext } from "./menu-radio-group.tsx";

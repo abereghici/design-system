@@ -3,8 +3,8 @@
 import { useId } from "react";
 import type { ComponentProps } from "react";
 
-import { Option } from "../listbox/listbox.tsx";
-import { mergeProps } from "../slot/slot.tsx";
+import { Option } from "../internal/listbox/listbox.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";
