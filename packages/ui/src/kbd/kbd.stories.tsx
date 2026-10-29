@@ -33,7 +33,10 @@ const meta = preview.meta({
   args: { keys: "mod+k" },
 });
 
-export const Default = meta.story({});
+export const Default = meta.story({
+  // Its text follows the viewer's platform (⌘ K or Ctrl K); the platform proofs below pin both.
+  parameters: { ariaSnapshot: { disable: true } },
+});
 
 Default.test("shows ⌘ K on Apple platforms", { args: { platform: "apple" } }, reads("⌘", "K"));
 
