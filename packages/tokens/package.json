@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build": "node scripts/build.ts",
-    "check-types": "tsc --noEmit",
+    "check-types": "tsc",
     "fonts": "node scripts/fonts.ts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",

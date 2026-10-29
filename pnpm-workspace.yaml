@@ -6,15 +6,16 @@ catalogMode: strict
 catalogPrune: true
 trustPolicy: no-downgrade
 
-# semver@6 fails `trustPolicy: no-downgrade` (via react-docgen > @babel/core), so pin the trusted 7.x line.
-overrides:
-  "semver@^6": 7.8.5
+# semver 6.3.1 (via react-docgen > @babel/core) fails `trustPolicy: no-downgrade`.
+trustPolicyExclude:
+  - semver@6.3.1
 
 # pnpm already installs esbuild's platform binary; its postinstall only re-checks it.
 allowBuilds:
   esbuild: false
 
 catalog:
+  "@stylistic/eslint-plugin": 5.10.0
   "@size-limit/esbuild": 14.3.0
   "@size-limit/file": 14.3.0
   "@storybook/addon-a11y": 10.6.3
@@ -40,7 +41,6 @@ catalog:
   next: 16.4.3
   oxfmt: 0.74.0
   oxlint: 1.89.0
-  oxlint-plugin-eslint: 1.89.0
   oxlint-tsgolint: 7.0.2004
   playwright: 1.64.1
   react: 19.3.1

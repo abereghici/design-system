@@ -4,7 +4,6 @@
   "compilerOptions": {
     "lib": ["es2025", "esnext.intl", "dom"],
     "module": "preserve",
-    "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "noEmit": true
   }

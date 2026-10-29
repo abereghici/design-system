@@ -16,7 +16,7 @@
   "scripts": {
     "storybook": "storybook dev --port 6006",
     "build-storybook": "storybook build",
-    "check-types": "tsc --noEmit && tsc --noEmit -p scripts",
+    "check-types": "tsc && tsc -p scripts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "size": "size-limit",
