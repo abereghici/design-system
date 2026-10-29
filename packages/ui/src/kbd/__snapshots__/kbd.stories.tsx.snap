@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Default   > base story 1`] = `
-- text: ⌘ K
+- text: Ctrl K
 `;
 
 exports[`In A Button   > base story 1`] = `
