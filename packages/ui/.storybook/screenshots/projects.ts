@@ -23,7 +23,9 @@ const variants: ScreenshotVariant[] = [
     emulatedMedia: [{ name: "prefers-reduced-transparency", value: "reduce" }],
   },
   { name: "rtl", initialGlobals: { dir: "rtl" } },
-  { name: "text-200", defaultFontSize: 32 },
+  // After a scale-in under backdrop-filter, Chromium snaps 200% text a pixel either way from launch to
+  // launch (Combobox Open); light already covers the end state of motion.
+  { name: "text-200", defaultFontSize: 32, contextOptions: { reducedMotion: "reduce" } },
   { name: "w320", initialGlobals: { viewport: { value: "mobile1" } } },
 ];
 
