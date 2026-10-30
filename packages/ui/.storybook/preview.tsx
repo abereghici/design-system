@@ -36,17 +36,10 @@ export default definePreview({
         order: [
           "Introduction",
           "Guides",
-          [
-            "Getting started",
-            "Theming",
-            "Styling and overrides",
-            "Internationalization",
-            "Right-to-left",
-          ],
+          ["Getting started", "Theming", "Styling", "Internationalization"],
           "Foundations",
           [
-            "Principles",
-            "Tokens",
+            "Design tokens",
             "Color",
             "Typography",
             "Space and shape",
@@ -55,6 +48,8 @@ export default definePreview({
             "Iconography",
             "Accessibility",
           ],
+          "Reference",
+          ["Tokens", "Icons"],
           "Components",
         ],
         method: "alphabetical",

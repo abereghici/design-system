@@ -1,42 +1,40 @@
 import { Meta } from "@storybook/addon-docs/blocks";
-import tokens from "@abereghici/tokens/tokens.json";
 
-import { TokenTable } from "../blocks/token-table.tsx";
+import { Do, Dont, Guidance } from "../blocks/prose.tsx";
+import { ElevationScale } from "../blocks/specimens.tsx";
 
 <Meta title="Foundations/Elevation" />
 
-export const semantic = (family, prefix = "") =>
-  tokens[family].tokens.filter(
-    ({ name }) => name.startsWith(`ab-${prefix}`) && !/-\d+$/v.test(name),
-  );
-
 # Elevation
 
-Content in the flow of the page stays flat and separates with space, hairlines and surface steps. Controls (Button, the fields, the Switch and Slider thumbs, the SegmentedControl indicator) and a hovered linked Card take `raised`; overlays take the rest.
+Content in the page stays flat. Shadows are for things you can press and things that float above the page.
 
-## Elevations
+## Levels
 
-Each Elevation is a hairline ring, an inner highlight in the dark Theme, and soft shadows tinted with Moss (light) or Night (dark) rather than neutral grey.
+<ElevationScale />
 
-<TokenTable
-  tokens={semantic("shadow")}
-  preview={(value) => ({ boxShadow: value, borderRadius: "var(--ab-radius-md)" })}
-/>
+Each level is a hairline ring plus soft shadows. In light, the ring and shadows are tinted with Moss. In dark, the ring is a faint white, the shadows are Night, and a faint inner highlight sits on the top edge.
 
 ## Materials
 
-Translucent fills with a backdrop blur, for overlay chrome above content such as menus and the command palette. Never use them for content in the flow, or under long text. Under `prefers-reduced-transparency: reduce` every material becomes the solid overlay surface.
-
-<TokenTable
-  tokens={[
-    ...semantic("blur", "material-"),
-    ...semantic("saturate", "material-"),
-    ...semantic("opacity", "opacity-disabled"),
-  ]}
-/>
+Translucent fills with a backdrop blur, for overlay chrome you build. No component uses them yet. Use a `color-material-*` fill with its matching `material-blur-*`. With reduced transparency, every material becomes solid.
 
 ## Layering
 
-The stacking order, lowest to highest. Overlays that use the top layer (`popover`, `<dialog>`) need none of these.
+Popovers and dialogs use the browser's top layer and need no `z-index`. For anything else, use the `z-index-*` tokens, which keep a fixed order from `base` to `tooltip`.
 
-<TokenTable tokens={semantic("zIndex")} />
+<Guidance>
+<Do>
+
+- Separate in-page content with space, hairlines and surfaces.
+- Use the level of the component you are building: `overlay` for a custom menu, `modal` for a custom dialog.
+
+</Do>
+<Dont>
+
+- Put a shadow on static content, such as a card that is not a link.
+- Put long text on a material.
+- Invent a `z-index` value.
+
+</Dont>
+</Guidance>

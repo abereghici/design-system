@@ -24,15 +24,18 @@ const cssValue = (
   return String(literal);
 };
 
-const declaration = (token: TransformedToken, dictionary: Dictionary): string => {
+/** The value a token is declared with in the shipped CSS. */
+export const declaredValue = (token: TransformedToken, dictionary: Dictionary): string => {
   const light = cssValue(token, token.original.$value, token.$value, dictionary);
   const dark = isThemed(token)
     ? cssValue(token, authoredDark(token), resolvedDark(token), dictionary)
     : light;
-  const value = dark === light ? light : `light-dark(${light}, ${dark})`;
 
-  return `    --${token.name}: ${value};`;
+  return dark === light ? light : `light-dark(${light}, ${dark})`;
 };
+
+const declaration = (token: TransformedToken, dictionary: Dictionary): string =>
+  `    --${token.name}: ${declaredValue(token, dictionary)};`;
 
 interface MediaEntry {
   readonly token: TransformedToken;
@@ -40,13 +43,20 @@ interface MediaEntry {
   readonly value: unknown;
 }
 
-const overrideCss = (entry: MediaEntry, dictionary: Dictionary): string => {
-  const ref = (value: unknown) => cssValue(entry.token, value, value, dictionary);
-  const themes = perTheme(entry.value);
-  const css = themes ? `light-dark(${ref(themes.light)}, ${ref(themes.dark)})` : ref(entry.value);
+/** The value a token is declared with inside one of its media queries. */
+export const overrideValue = (
+  token: TransformedToken,
+  value: unknown,
+  dictionary: Dictionary,
+): string => {
+  const ref = (part: unknown) => cssValue(token, part, part, dictionary);
+  const themes = perTheme(value);
 
-  return `      --${entry.token.name}: ${css};`;
+  return themes ? `light-dark(${ref(themes.light)}, ${ref(themes.dark)})` : ref(value);
 };
+
+const overrideCss = (entry: MediaEntry, dictionary: Dictionary): string =>
+  `      --${entry.token.name}: ${overrideValue(entry.token, entry.value, dictionary)};`;
 
 const mediaBlocks = (tokens: readonly TransformedToken[], dictionary: Dictionary): string[] => {
   const entries: MediaEntry[] = tokens.flatMap((token) =>

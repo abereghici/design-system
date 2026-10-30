@@ -1,0 +1,71 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+import { TierFlow } from "../blocks/specimens.tsx";
+
+<Meta title="Foundations/Design tokens" />
+
+# Design tokens
+
+Design tokens are the named decisions behind every color, size, type style and motion in the system, shipped as CSS custom properties named `--ab-*`. Change a decision once and every component that uses it follows.
+
+## Three tiers
+
+Tokens are built in three tiers, and each builds on the one before it. The token build fails if a primitive references another token, if a semantic token references a component token, or if a component token references anything but a semantic token.
+
+<TierFlow of="button-primary-background-color" />
+
+| Tier          | Holds                                     | Example                                | Use it                                      |
+| ------------- | ----------------------------------------- | -------------------------------------- | ------------------------------------------- |
+| 1 · Primitive | A raw value                               | `--ab-palette-moss-900`                | Never directly; semantic tokens point at it |
+| 2 · Semantic  | A purpose, resolved per Theme and setting | `--ab-color-background-accent-bold`    | In app code, for everything you build       |
+| 3 · Component | One decision of one component             | `--ab-button-primary-background-color` | To restyle that one component               |
+
+### Primitive
+
+The palette and the scales: every color step, size, duration and easing the system may use. A primitive says what a value **is** (`palette-moss-900`, `dimension-16`, `duration-200`), not what it is for, so the same primitive can serve many purposes. Primitives are the only tokens that hold literal values.
+
+### Semantic
+
+What a value is **for**: the page surface, secondary text, a danger border, the gap between fields. Semantic tokens are the only tier that changes with context:
+
+- **Theme.** Each themed color resolves to a different primitive in light and in dark.
+- **User settings.** Increased contrast, reduced transparency and reduced motion swap in other primitives.
+- **Screen.** Control heights grow on touch screens, and section spacing shrinks on narrow windows.
+
+So code that uses a semantic token is right in every Theme and setting, with no extra work.
+
+### Component
+
+One decision of one component, such as the primary Button's fill. A component token always points at a semantic token, so it follows the Theme and settings too. Override it on `:root` or on a region to restyle that component without touching anything else; see [Styling](?path=/docs/guides-styling--docs).
+
+## Which tier to use
+
+| You are                                     | Use                                                   |
+| ------------------------------------------- | ----------------------------------------------------- |
+| Building a screen or your own component     | Semantic tokens                                       |
+| Restyling one design system component       | That component's tokens                               |
+| Picking a value no semantic token describes | Ask for a semantic token; don't reach for a primitive |
+
+## Reading a name
+
+Names read from general to specific, and leave out the default:
+
+| Family | Pattern                                      | Example                                |
+| ------ | -------------------------------------------- | -------------------------------------- |
+| Color  | `color-{property}-{role}-{emphasis}-{state}` | `color-background-danger-bold-hovered` |
+| Type   | `type-{role}-{size}`                         | `type-body-md`                         |
+| Space  | `space-{direction}-{size}`                   | `space-inset-md`                       |
+| Size   | `size-{element}-{size}`                      | `size-control-sm`                      |
+| Motion | `motion-{property}-{use}`                    | `motion-duration-exit`                 |
+
+| Segment  | Words                                                                                            |
+| -------- | ------------------------------------------------------------------------------------------------ |
+| Property | `surface`, `background`, `text`, `icon`, `border`                                                |
+| Role     | neutral (left out), `accent`, `selected`, `success`, `warning`, `danger`, `highlight`, `inverse` |
+| Emphasis | `subtlest`, `subtle`, default (left out), `bold`, and `on-{role}` for content on a bold fill     |
+| State    | rest (left out), `hovered`, `pressed`, `focused`, `selected`, `checked`, `invalid`, `disabled`   |
+| Size     | `2xs` to `2xl`, always ascending                                                                 |
+
+## Browse them
+
+The [token explorer](?path=/docs/reference-tokens--docs) lists every token with its value in each Theme. Select one to see what it points at, when it changes and what uses it.

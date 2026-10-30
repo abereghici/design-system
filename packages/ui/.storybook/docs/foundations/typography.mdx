@@ -1,56 +1,63 @@
-import { Meta, Typeset } from "@storybook/addon-docs/blocks";
-import tokens from "@abereghici/tokens/tokens.json";
+import { Meta } from "@storybook/addon-docs/blocks";
 
-import { TokenTable } from "../blocks/token-table.tsx";
+import { Do, Dont, Guidance } from "../blocks/prose.tsx";
+import { TypeScale } from "../blocks/specimens.tsx";
+import { Typeface } from "../blocks/values.tsx";
 
 <Meta title="Foundations/Typography" />
 
-export const family = (key) => {
-  const styles = tokens.type.groups
-    .filter((group) => group.family === key)
-    .flatMap((group) => group.styles);
-  return {
-    fontFamily: tokens.type.families[key],
-    fontSizes: [...new Set(styles.map((style) => style.fontSize))],
-    fontWeight: styles[0].fontWeight,
-    sampleText: "Sphinx of black quartz, judge my vow",
-  };
-};
-
 # Typography
 
-Noto Serif sets headings and display statements, Figtree sets everything people read and operate, and code uses the system monospace stack. Both families include a true italic. The UIProvider loads the fonts, so apps add nothing.
+A serif for headings and statements, a sans for everything people read and operate, and the system monospace for code.
 
-Set text with a type role: `font: var(--ab-type-body-md)` plus `letter-spacing: var(--ab-type-body-md-letter-spacing)`, because the `font` shorthand can't carry letter spacing. The roles keep size, weight and line height in step.
+## Choosing a role
 
-- Sizes are in `rem`, so text follows the reader's default size.
-- Line heights are unitless.
-- The larger steps grow a little with the window and still follow the reader's text size, as WCAG 1.4.4 asks.
+| Role       | Typeface                                       | Use for                                           |
+| ---------- | ---------------------------------------------- | ------------------------------------------------- |
+| `heading`  | <Typeface of="type-heading-md-font-family" />  | Page and section titles                           |
+| `display`  | <Typeface of="type-display-md-font-family" />  | A short statement that opens a page               |
+| `body`     | <Typeface of="type-body-md-font-family" />     | Paragraphs and descriptions                       |
+| `label`    | <Typeface of="type-label-md-font-family" />    | Buttons, inputs, menus, tabs and other controls   |
+| `data`     | <Typeface of="type-data-md-font-family" />     | Numbers in tables and stats, with tabular figures |
+| `overline` | <Typeface of="type-overline-sm-font-family" /> | A small uppercase label above a group             |
+| `kbd`      | <Typeface of="type-kbd-sm-font-family" />      | Keyboard shortcut hints                           |
+| `code`     | <Typeface of="type-code-md-font-family" />     | Code                                              |
 
-## Noto Serif
+## Scale
 
-<Typeset {...family("noto-serif")} />
+<TypeScale />
 
-<Typeset {...family("noto-serif")} style={{ fontStyle: "italic" }} />
+Sizes are in `rem`, so text follows the reader's default size. The larger steps also grow a little with the window.
 
-## Figtree
+## Applying a role
 
-<Typeset {...family("figtree")} />
+A role takes at least two declarations, because the `font` shorthand can't carry letter spacing. `data` roles add `font-variant-numeric`, and `overline` roles add `text-transform`.
 
-<Typeset {...family("figtree")} style={{ fontStyle: "italic" }} />
+```css
+.intro {
+  font: var(--ab-type-body-lg);
+  letter-spacing: var(--ab-type-body-lg-letter-spacing);
+}
+```
 
-## System monospace
+In React, use `Heading` and `Text`, which apply them all.
 
-<Typeset {...family("system-mono")} />
+<Guidance>
+<Do>
 
-## Roles
+- Use one `h1` per page, and keep heading levels in order.
+- Keep reading text within `--ab-layout-column-width`.
+- Use `data` for numbers that line up in columns.
 
-<TokenTable
-  tokens={tokens.type.groups.flatMap((group) =>
-    group.styles.map(({ name, fontSize, lineHeight, fontWeight, letterSpacing, usage }) => ({
-      name,
-      value: `${fontSize} / ${lineHeight} · ${fontWeight} · ${letterSpacing ?? "0"}`,
-      usage,
-    })),
-  )}
-/>
+</Do>
+<Dont>
+
+- Pick a heading level for its size; `Heading` takes `size` separately.
+- Set `font-size` or `line-height` on their own; they drift from the role.
+
+</Dont>
+</Guidance>
+
+## Fonts
+
+`UIProvider` loads both families and preloads Figtree's latin file, the one almost every page needs. A browser downloads another file only when the page uses one of its characters or its italic. Both families are under the SIL Open Font License 1.1.

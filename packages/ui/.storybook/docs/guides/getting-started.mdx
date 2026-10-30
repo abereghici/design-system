@@ -1,16 +1,27 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
+import { Peer } from "../blocks/prose.tsx";
+
 <Meta title="Guides/Getting started" />
 
 # Getting started
 
-## Install
+Three steps: install the package, wrap the app in `UIProvider`, import components one at a time.
 
-Install `@abereghici/ui` from npm (it brings `@abereghici/tokens` with it), and set the app's browser targets:
+## Requirements
+
+| Requirement     | Version                                                                                                                                   |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| React           | <Peer name="react" />                                                                                                                     |
+| Browser targets | [Baseline newly available](https://web.dev/baseline); nothing to polyfill, as the date components bring their own Temporal implementation |
+
+## 1. Install
 
 ```sh
 pnpm add @abereghici/ui
 ```
+
+`@abereghici/tokens` comes with it. Then set the app's browser targets in `package.json`:
 
 ```json
 {
@@ -18,11 +29,11 @@ pnpm add @abereghici/ui
 }
 ```
 
-The system targets Baseline newly available and uses those features directly, with no fallbacks. The `browserslist` entry matters: with Next.js's default targets, Lightning CSS lowers `light-dark()` and `data-theme` subtrees stop switching.
+Without this, Next.js lowers `light-dark()` for older browsers and `data-theme` regions stop switching.
 
-## Mount the UIProvider
+## 2. Add the provider
 
-Render `UIProvider` once, at the root of the app. It brings the cascade layer order, the tokens, the fonts (preloading Figtree latin) and the base stylesheet, so the app imports no CSS from the design system. Give it the same language as `<html lang>`, so numbers and dates read the same on the server and in the browser ([Internationalization](?path=/docs/guides-internationalization--docs)).
+Render `UIProvider` once, at the root. It brings the tokens, fonts and base styles, so the app imports no CSS from the design system.
 
 ```tsx
 // app/layout.tsx
@@ -39,9 +50,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-## Import components one by one
+Give `locale` the same value as `<html lang>`, so dates and numbers match between server and browser.
 
-Each component has its own entry point, and importing it brings only its JavaScript, its CSS and its component tokens.
+## 3. Use a component
+
+Each component has its own entry point. Importing one brings its own code, CSS and tokens, and those of the components it uses.
 
 ```tsx
 import { Button } from "@abereghici/ui/button";
@@ -53,14 +66,15 @@ import { PlusIcon } from "@abereghici/ui/icons/plus";
 </Button>;
 ```
 
-Static components are Server Components, and interactive ones are client components. Compound components are namespaces: `import { Card } from "@abereghici/ui/card"`, then `<Card.Root>`, `<Card.Title>`.
+Compound components are namespaces: `import { Card } from "@abereghici/ui/card"`, then `<Card.Root>` and `<Card.Title>`.
 
-## Next.js and CSS chunks
+## Next.js
 
-Next.js merges small stylesheets into shared chunks by default (`experimental.cssChunking: true`), so a route can load CSS for components it never imported. The library still splits per component. For strict per-route CSS, set Turbopack's `cssChunking: { type: "graph", requestCost: 0 }`: each route then loads exactly what it imports, at the cost of more requests ([Next.js `cssChunking`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cssChunking)).
+- **Server Components.** Static components render on the server; interactive ones are client components and need no `"use client"` from you.
+- **CSS per route.** Next.js merges small stylesheets into shared chunks, so a route can load CSS for components it never imports. For strictly per-route CSS, set `cssChunking: { type: "graph", requestCost: 0 }` ([docs](https://nextjs.org/docs/app/api-reference/config/next-config-js/cssChunking)), at the cost of more requests.
 
-## Next
+## Next steps
 
-- [Theming](?path=/docs/guides-theming--docs) to offer light and dark.
-- [Styling and overrides](?path=/docs/guides-styling-and-overrides--docs) before restyling anything.
-- [Internationalization](?path=/docs/guides-internationalization--docs) for a language other than English.
+- [Theming](?path=/docs/guides-theming--docs): light, dark and following the system.
+- [Styling](?path=/docs/guides-styling--docs): restyle components with tokens and your own CSS.
+- [Internationalization](?path=/docs/guides-internationalization--docs): languages, formatting and right-to-left.

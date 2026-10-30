@@ -2,32 +2,32 @@
   "semantic": {
     "color-brand-moss": {
       "$type": "color",
-      "$description": "Identity hue Moss, fixed in both themes. For the Logo, imagery and print only; never an interface role. Ink of `packages/ui/assets/logo/logo-moss.svg`.",
+      "$description": "Brand artwork on light grounds. Fixed in both Themes; for brand imagery and print, never an interface role.",
       "$value": "{primitive.palette-moss-900}"
     },
     "color-brand-lichen": {
       "$type": "color",
-      "$description": "Identity hue Lichen, fixed in both themes. For the Logo, imagery and print only; never an interface role. Ink of `packages/ui/assets/logo/logo-lichen.svg`.",
+      "$description": "Brand artwork on dark grounds. Fixed in both Themes; for brand imagery and print, never an interface role.",
       "$value": "{primitive.palette-lichen-100}"
     },
     "color-brand-sage": {
       "$type": "color",
-      "$description": "Identity hue Sage, fixed in both themes. For the mark, imagery and print only; never an interface role.",
+      "$description": "Identity hue for imagery and print. Fixed in both Themes; never an interface role.",
       "$value": "{primitive.palette-sage-50}"
     },
     "color-brand-peach": {
       "$type": "color",
-      "$description": "Identity hue Peach, fixed in both themes. For the mark, imagery and print only; never an interface role.",
+      "$description": "Identity hue for imagery and print. Fixed in both Themes; never an interface role.",
       "$value": "{primitive.palette-ember-100}"
     },
     "color-brand-ember": {
       "$type": "color",
-      "$description": "Identity hue Ember, fixed in both themes. For the mark, imagery and print only; never an interface role.",
+      "$description": "Identity hue for imagery and print. Fixed in both Themes; never an interface role.",
       "$value": "{primitive.palette-ember-400}"
     },
     "color-surface-default": {
       "$type": "color",
-      "$description": "The page. Every text role from `ab-color-text-default` to `-danger` reads on it: lowest 5.48 light, 5.22 dark.",
+      "$description": "The page.",
       "$value": "{primitive.palette-sage-0}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -37,7 +37,7 @@
     },
     "color-surface-raised": {
       "$type": "color",
-      "$description": "One step from the page. Every text role from `ab-color-text-default` to `-danger` reads on it: lowest 4.98 light, 4.93 dark.",
+      "$description": "A panel one step up from the page.",
       "$value": "{primitive.palette-sage-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -47,7 +47,7 @@
     },
     "color-surface-nested": {
       "$type": "color",
-      "$description": "A panel inside a raised panel. Every text role from `ab-color-text-default` to `-danger` reads on it: lowest 4.56 light, 4.58 dark.",
+      "$description": "A panel inside a raised panel.",
       "$value": "{primitive.palette-sage-100}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -57,7 +57,7 @@
     },
     "color-surface-overlay": {
       "$type": "color",
-      "$description": "Menus, popovers and dialogs. Every text role from `ab-color-text-default` to `-danger` reads on it: lowest 5.48 light, 4.93 dark.",
+      "$description": "Dialogs, sheets and toasts, and the fill of controls such as buttons and fields.",
       "$value": "{primitive.palette-sage-0}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -72,11 +72,12 @@
         "com.bereghici.theme": {
           "dark": "{primitive.palette-transparent}"
         }
-      }
+      },
+      "$description": "Rest fill of quiet controls, rows and menu items (transparent)."
     },
     "color-background-neutral-subtle-hovered": {
       "$type": "color",
-      "$description": "Hover fill of quiet controls, rows and menu items (the rest state is transparent).",
+      "$description": "Hover fill of quiet controls, rows and menu items.",
       "$value": "{primitive.palette-sage-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -96,7 +97,7 @@
     },
     "color-background-selected": {
       "$type": "color",
-      "$description": "Fill of the current item in a set.",
+      "$description": "The current item in a set, such as a menu item or a table row.",
       "$value": "{primitive.palette-sage-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -106,7 +107,7 @@
     },
     "color-background-accent-bold": {
       "$type": "color",
-      "$description": "The single brand action fill (primary button, checked controls). Text on it is `ab-color-text-on-accent` (13.40 light, 10.96 dark).",
+      "$description": "The primary action and checked controls. Put text-on-accent on it.",
       "$value": "{primitive.palette-moss-900}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -116,7 +117,7 @@
     },
     "color-background-accent-bold-hovered": {
       "$type": "color",
-      "$description": "Hovered state of `ab-color-background-accent-bold`.",
+      "$description": "Hovered state of background-accent-bold.",
       "$value": "{primitive.palette-moss-800}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -126,7 +127,7 @@
     },
     "color-background-accent-bold-pressed": {
       "$type": "color",
-      "$description": "Pressed state of `ab-color-background-accent-bold`.",
+      "$description": "Pressed state of background-accent-bold.",
       "$value": "{primitive.palette-moss-950}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -136,7 +137,7 @@
     },
     "color-background-accent-subtle": {
       "$type": "color",
-      "$description": "Subtle accent fill; text roles read on it.",
+      "$description": "A quiet accent fill that every text role reads on.",
       "$value": "{primitive.palette-lichen-100}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -146,7 +147,7 @@
     },
     "color-background-success-bold": {
       "$type": "color",
-      "$description": "Filled success state. Text on it is `ab-color-text-on-success` (7.74 light, 10.85 dark).",
+      "$description": "A filled success state. Put text-on-success on it.",
       "$value": "{primitive.palette-fern-700}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -156,7 +157,7 @@
     },
     "color-background-success-subtle": {
       "$type": "color",
-      "$description": "Tinted success fill (tags, toasts). Text on it is `ab-color-text-success` (7.27 light, 10.51 dark).",
+      "$description": "A tinted success fill, as in alerts and tags. Put text-success on it.",
       "$value": "{primitive.palette-fern-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -166,7 +167,7 @@
     },
     "color-background-warning-bold": {
       "$type": "color",
-      "$description": "Filled warning state. Text on it is `ab-color-text-on-warning` (8.00 light, 11.06 dark).",
+      "$description": "A filled warning state. Put text-on-warning on it.",
       "$value": "{primitive.palette-ember-400}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -176,7 +177,7 @@
     },
     "color-background-warning-subtle": {
       "$type": "color",
-      "$description": "Tinted warning fill (tags, toasts). Text on it is `ab-color-text-warning` (8.58 light, 10.91 dark).",
+      "$description": "A tinted warning fill, as in alerts and tags. Put text-warning on it.",
       "$value": "{primitive.palette-ember-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -186,7 +187,7 @@
     },
     "color-background-danger-bold": {
       "$type": "color",
-      "$description": "Filled danger state (danger button). Text on it is `ab-color-text-on-danger` (5.76 light, 8.23 dark).",
+      "$description": "A filled danger state, such as the danger button. Put text-on-danger on it.",
       "$value": "{primitive.palette-clay-600}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -196,7 +197,7 @@
     },
     "color-background-danger-bold-hovered": {
       "$type": "color",
-      "$description": "Hovered state of `ab-color-background-danger-bold`.",
+      "$description": "Hovered state of background-danger-bold.",
       "$value": "{primitive.palette-clay-700}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -206,7 +207,7 @@
     },
     "color-background-danger-bold-pressed": {
       "$type": "color",
-      "$description": "Pressed state of `ab-color-background-danger-bold`.",
+      "$description": "Pressed state of background-danger-bold.",
       "$value": "{primitive.palette-clay-800}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -216,7 +217,7 @@
     },
     "color-background-danger-subtle": {
       "$type": "color",
-      "$description": "Tinted danger fill (tags, toasts). Text on it is `ab-color-text-danger` (5.34 light, 8.20 dark).",
+      "$description": "A tinted danger fill, as in alerts and tags. Put text-danger on it.",
       "$value": "{primitive.palette-clay-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -226,7 +227,7 @@
     },
     "color-background-neutral-bold": {
       "$type": "color",
-      "$description": "Inverse fill for tooltips; content on it uses `ab-color-text-inverse`. Text on it is `ab-color-text-inverse` (13.98 light, 15.93 dark).",
+      "$description": "Tooltips and the skip link. Put text-inverse on it.",
       "$value": "{primitive.palette-night-800}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -236,7 +237,7 @@
     },
     "color-background-highlight": {
       "$type": "color",
-      "$description": "Behind one marked phrase per page. Text on it is `ab-color-text-on-highlight` (13.22 light, 13.22 dark).",
+      "$description": "Behind the one marked phrase on a page. Put text-on-highlight on it.",
       "$value": "{primitive.palette-ember-100}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -246,7 +247,7 @@
     },
     "color-background-disabled": {
       "$type": "color",
-      "$description": "Fill of an unavailable control (exempt from contrast).",
+      "$description": "An unavailable control.",
       "$value": "{primitive.palette-sage-100}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -256,7 +257,7 @@
     },
     "color-backdrop": {
       "$type": "color",
-      "$description": "The dimming layer behind a modal (Dialog, Sheet, Command).",
+      "$description": "The dimming layer behind a modal.",
       "$value": "{primitive.palette-night-950-a64}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -266,7 +267,7 @@
     },
     "color-text-default": {
       "$type": "color",
-      "$description": "Primary copy and headings, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 14.75 light, 13.98 dark (needs 4.5:1).",
+      "$description": "Body copy and headings.",
       "$value": "{primitive.palette-sage-950}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -276,7 +277,7 @@
     },
     "color-text-subtle": {
       "$type": "color",
-      "$description": "Secondary text, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 6.14 light, 6.53 dark (needs 4.5:1).",
+      "$description": "Secondary text.",
       "$value": "{primitive.palette-sage-700}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -286,7 +287,7 @@
     },
     "color-text-subtlest": {
       "$type": "color",
-      "$description": "Lowest-contrast text that still passes AA (helper text, hints), on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 4.56 light, 4.58 dark (needs 4.5:1).",
+      "$description": "The quietest text that still meets 4.5:1.",
       "$value": "{primitive.palette-sage-600}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -299,7 +300,7 @@
     },
     "color-text-accent": {
       "$type": "color",
-      "$description": "Accent text and links, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 4.5:1).",
+      "$description": "Accent text, as in accent tags.",
       "$value": "{primitive.palette-moss-900}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -309,7 +310,7 @@
     },
     "color-text-selected": {
       "$type": "color",
-      "$description": "The current item in a set, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 4.5:1).",
+      "$description": "The current item in a set.",
       "$value": "{primitive.palette-moss-900}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -319,7 +320,7 @@
     },
     "color-text-success": {
       "$type": "color",
-      "$description": "Success state, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 6.44 light, 9.52 dark (needs 4.5:1).",
+      "$description": "Success state.",
       "$value": "{primitive.palette-fern-700}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -329,7 +330,7 @@
     },
     "color-text-warning": {
       "$type": "color",
-      "$description": "Warning state, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 7.70 light, 9.70 dark (needs 4.5:1).",
+      "$description": "Warning state.",
       "$value": "{primitive.palette-ember-800}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -339,7 +340,7 @@
     },
     "color-text-danger": {
       "$type": "color",
-      "$description": "Danger state and errors, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 4.80 light, 7.22 dark (needs 4.5:1).",
+      "$description": "Errors and danger states.",
       "$value": "{primitive.palette-clay-600}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -349,7 +350,7 @@
     },
     "color-text-disabled": {
       "$type": "color",
-      "$description": "An unavailable control (exempt from contrast); pair with `aria-disabled` and an explanation.",
+      "$description": "An unavailable control. Exempt from contrast, so say nearby why it is unavailable.",
       "$value": "{primitive.palette-sage-400}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -359,7 +360,7 @@
     },
     "color-text-inverse": {
       "$type": "color",
-      "$description": "Content on `ab-color-background-neutral-bold` (tooltips): 13.98 light, 15.93 dark.",
+      "$description": "Content on background-neutral-bold.",
       "$value": "{primitive.palette-night-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -369,7 +370,7 @@
     },
     "color-text-on-accent": {
       "$type": "color",
-      "$description": "Content on `ab-color-background-accent-bold` (rest, hovered, pressed): lowest 9.93 light, 8.39 dark.",
+      "$description": "Content on background-accent-bold.",
       "$value": "{primitive.palette-sage-0}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -379,7 +380,7 @@
     },
     "color-text-on-success": {
       "$type": "color",
-      "$description": "Content on `ab-color-background-success-bold`: lowest 7.74 light, 10.85 dark.",
+      "$description": "Content on background-success-bold.",
       "$value": "{primitive.palette-sage-0}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -389,7 +390,7 @@
     },
     "color-text-on-warning": {
       "$type": "color",
-      "$description": "Content on `ab-color-background-warning-bold`: lowest 8.00 light, 11.06 dark.",
+      "$description": "Content on background-warning-bold.",
       "$value": "{primitive.palette-sage-950}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -399,7 +400,7 @@
     },
     "color-text-on-danger": {
       "$type": "color",
-      "$description": "Content on `ab-color-background-danger-bold` (rest, hovered, pressed): lowest 5.76 light, 6.12 dark.",
+      "$description": "Content on background-danger-bold.",
       "$value": "{primitive.palette-sage-0}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -409,7 +410,7 @@
     },
     "color-text-on-highlight": {
       "$type": "color",
-      "$description": "Content on `ab-color-background-highlight`: lowest 13.22 light, 13.22 dark.",
+      "$description": "Content on background-highlight.",
       "$value": "{primitive.palette-sage-950}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -419,7 +420,7 @@
     },
     "color-icon-default": {
       "$type": "color",
-      "$description": "Primary glyphs, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 14.75 light, 13.98 dark (needs 3:1).",
+      "$description": "Primary glyphs.",
       "$value": "{primitive.palette-sage-950}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -429,7 +430,7 @@
     },
     "color-icon-subtle": {
       "$type": "color",
-      "$description": "Secondary glyphs, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 6.14 light, 6.53 dark (needs 3:1).",
+      "$description": "Secondary glyphs.",
       "$value": "{primitive.palette-sage-700}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -439,7 +440,7 @@
     },
     "color-icon-subtlest": {
       "$type": "color",
-      "$description": "Lowest-contrast glyphs that still passes AA (helper text, hints), on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 4.56 light, 4.58 dark (needs 3:1).",
+      "$description": "The quietest glyphs that still meet 3:1.",
       "$value": "{primitive.palette-sage-600}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -452,7 +453,7 @@
     },
     "color-icon-accent": {
       "$type": "color",
-      "$description": "Accent glyphs, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 3:1).",
+      "$description": "Accent glyphs.",
       "$value": "{primitive.palette-moss-900}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -462,7 +463,7 @@
     },
     "color-icon-selected": {
       "$type": "color",
-      "$description": "The current item in a set, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 3:1).",
+      "$description": "The current item in a set.",
       "$value": "{primitive.palette-moss-900}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -472,7 +473,7 @@
     },
     "color-icon-success": {
       "$type": "color",
-      "$description": "Success state, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 6.44 light, 9.52 dark (needs 3:1).",
+      "$description": "Success state.",
       "$value": "{primitive.palette-fern-700}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -482,7 +483,7 @@
     },
     "color-icon-warning": {
       "$type": "color",
-      "$description": "Warning state, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 3.05 light, 9.70 dark (needs 3:1).",
+      "$description": "Warning state.",
       "$value": "{primitive.palette-ember-600}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -492,7 +493,7 @@
     },
     "color-icon-danger": {
       "$type": "color",
-      "$description": "Danger state and errors, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 4.80 light, 7.22 dark (needs 3:1).",
+      "$description": "Danger state and errors.",
       "$value": "{primitive.palette-clay-600}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -502,7 +503,7 @@
     },
     "color-icon-disabled": {
       "$type": "color",
-      "$description": "An unavailable control (exempt from contrast); pair with `aria-disabled` and an explanation.",
+      "$description": "An unavailable control. Exempt from contrast.",
       "$value": "{primitive.palette-sage-400}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -512,7 +513,7 @@
     },
     "color-icon-on-accent": {
       "$type": "color",
-      "$description": "Content on `ab-color-background-accent-bold` (rest, hovered, pressed): lowest 9.93 light, 8.39 dark.",
+      "$description": "Content on background-accent-bold.",
       "$value": "{primitive.palette-sage-0}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -522,7 +523,7 @@
     },
     "color-border-subtle": {
       "$type": "color",
-      "$description": "Decorative hairline between rows and sections (1.29 light, 1.41 dark on the page, below 3:1 by rule): never the only boundary of a control. Steps up to `ab-color-border-default` under increased contrast.",
+      "$description": "A decorative hairline between rows and sections. Below 3:1, so never a control's only edge.",
       "$value": "{primitive.palette-sage-200}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -535,7 +536,7 @@
     },
     "color-border-default": {
       "$type": "color",
-      "$description": "Control edges that must be seen, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 3.06 light, 3.06 dark (needs 3:1).",
+      "$description": "Control edges that must be seen.",
       "$value": "{primitive.palette-sage-500}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -545,7 +546,7 @@
     },
     "color-border-default-hovered": {
       "$type": "color",
-      "$description": "Hovered control edge, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 4.56 light, 4.58 dark (needs 3:1).",
+      "$description": "Hovered control edge.",
       "$value": "{primitive.palette-sage-600}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -555,7 +556,7 @@
     },
     "color-border-accent": {
       "$type": "color",
-      "$description": "Accent edge, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 3:1).",
+      "$description": "Accent edge.",
       "$value": "{primitive.palette-moss-900}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -565,7 +566,7 @@
     },
     "color-border-focused": {
       "$type": "color",
-      "$description": "The 2px focus ring (`ab-focus-ring-width`, offset `ab-focus-ring-offset`) on every interactive element, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 3:1).",
+      "$description": "The focus ring on every interactive element.",
       "$value": "{primitive.palette-moss-900}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -575,7 +576,7 @@
     },
     "color-border-selected": {
       "$type": "color",
-      "$description": "Edge of the current item in a set, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 11.16 light, 13.23 dark (needs 3:1).",
+      "$description": "Edge of the current item in a set.",
       "$value": "{primitive.palette-moss-900}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -585,7 +586,7 @@
     },
     "color-border-success": {
       "$type": "color",
-      "$description": "Success edge, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 6.44 light, 9.52 dark (needs 3:1).",
+      "$description": "Success edge.",
       "$value": "{primitive.palette-fern-700}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -595,7 +596,7 @@
     },
     "color-border-warning": {
       "$type": "color",
-      "$description": "Warning edge, on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 3.05 light, 9.70 dark (needs 3:1).",
+      "$description": "Warning edge.",
       "$value": "{primitive.palette-ember-600}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -605,7 +606,7 @@
     },
     "color-border-danger": {
       "$type": "color",
-      "$description": "Danger edge (invalid fields), on `ab-color-surface-default`, `-raised`, `-nested`, `ab-color-background-selected` and `ab-color-background-accent-subtle`: lowest 4.80 light, 7.22 dark (needs 3:1).",
+      "$description": "Invalid fields and danger edges.",
       "$value": "{primitive.palette-clay-600}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -615,7 +616,7 @@
     },
     "color-border-disabled": {
       "$type": "color",
-      "$description": "Edge of an unavailable control (exempt from contrast).",
+      "$description": "An unavailable control. Exempt from contrast.",
       "$value": "{primitive.palette-sage-200}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -625,7 +626,7 @@
     },
     "color-material-thin": {
       "$type": "color",
-      "$description": "Translucent thin fill for overlay chrome (menus, the command palette), always with `ab-material-blur-thin`; never for in-flow content or long text. Solid overlay surface under reduced transparency.",
+      "$description": "Translucent fill for overlay chrome, with material-blur-thin. Solid under reduced transparency.",
       "$value": "{primitive.palette-sage-0-a56}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -641,7 +642,7 @@
     },
     "color-material-regular": {
       "$type": "color",
-      "$description": "Translucent regular fill for overlay chrome (menus, the command palette), always with `ab-material-blur-regular`; never for in-flow content or long text. Solid overlay surface under reduced transparency.",
+      "$description": "Translucent fill for overlay chrome, with material-blur-regular. Solid under reduced transparency.",
       "$value": "{primitive.palette-sage-0-a72}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -657,7 +658,7 @@
     },
     "color-material-thick": {
       "$type": "color",
-      "$description": "Translucent thick fill for overlay chrome (menus, the command palette), always with `ab-material-blur-thick`; never for in-flow content or long text. Solid overlay surface under reduced transparency.",
+      "$description": "Translucent fill for overlay chrome, with material-blur-thick. Solid under reduced transparency.",
       "$value": "{primitive.palette-sage-0-a90}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -673,7 +674,7 @@
     },
     "color-shadow-ring": {
       "$type": "color",
-      "$description": "Hairline ring colour inside `ab-elevation-*`; separates an overlay on any background. Moss-tinted in light, deep night in dark.",
+      "$description": "The hairline ring inside every elevation.",
       "$value": "{primitive.palette-moss-950-a10}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -688,11 +689,12 @@
         "com.bereghici.theme": {
           "dark": "{primitive.palette-sage-0-a06}"
         }
-      }
+      },
+      "$description": "The inner top highlight of every elevation, in the dark Theme only."
     },
     "color-shadow-ambient": {
       "$type": "color",
-      "$description": "Contact-shadow colour inside `ab-elevation-*`. Moss-tinted in light, deep night in dark.",
+      "$description": "The contact shadow inside every elevation.",
       "$value": "{primitive.palette-moss-950-a06}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -702,7 +704,7 @@
     },
     "color-shadow-key": {
       "$type": "color",
-      "$description": "Key-shadow colour inside `ab-elevation-overlay` and `ab-elevation-toast`. Moss-tinted in light, deep night in dark.",
+      "$description": "The key shadow of overlays and toasts.",
       "$value": "{primitive.palette-moss-950-a10}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -712,7 +714,7 @@
     },
     "color-shadow-deep": {
       "$type": "color",
-      "$description": "Key-shadow colour inside `ab-elevation-modal`. Moss-tinted in light, deep night in dark.",
+      "$description": "The key shadow of modals.",
       "$value": "{primitive.palette-moss-950-a14}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -746,16 +748,17 @@
     },
     "opacity-disabled": {
       "$type": "number",
-      "$value": "{primitive.opacity-40}"
+      "$value": "{primitive.opacity-40}",
+      "$description": "An unavailable control's opacity."
     },
     "opacity-subtle": {
       "$type": "number",
-      "$description": "A faint trace of the current colour, such as a keycap border on a coloured host or a pulse's low point.",
+      "$description": "A faint trace of the current color, such as a keycap border on a colored host.",
       "$value": "{primitive.opacity-40}"
     },
     "opacity-bold": {
       "$type": "number",
-      "$description": "A slightly softened current colour, such as keycap text on a coloured host.",
+      "$description": "A slightly softened current color, such as keycap text on a colored host.",
       "$value": "{primitive.opacity-80}"
     },
     "elevation-ring": {
@@ -791,7 +794,8 @@
           "blur": "{primitive.dimension-2}",
           "spread": "{primitive.dimension-0}"
         }
-      ]
+      ],
+      "$description": "Controls: buttons, fields, switch and slider thumbs, and a hovered linked card."
     },
     "elevation-overlay": {
       "$type": "shadow",
@@ -812,7 +816,8 @@
           "blur": "{primitive.dimension-24}",
           "spread": "{primitive.dimension-0}"
         }
-      ]
+      ],
+      "$description": "Menus, popovers, selects and comboboxes."
     },
     "elevation-toast": {
       "$type": "shadow",
@@ -833,7 +838,8 @@
           "blur": "{primitive.dimension-32}",
           "spread": "{primitive.dimension-0}"
         }
-      ]
+      ],
+      "$description": "Toasts."
     },
     "elevation-modal": {
       "$type": "shadow",
@@ -854,7 +860,8 @@
           "blur": "{primitive.dimension-64}",
           "spread": "{primitive.dimension-0}"
         }
-      ]
+      ],
+      "$description": "Dialogs, sheets and the command palette."
     },
     "type-heading-lg-font-family": {
       "$type": "fontFamily",
@@ -878,7 +885,7 @@
     },
     "type-heading-lg": {
       "$type": "typography",
-      "$description": "Serif title. Fluid 29→33px between 360px and 1280px viewports (`ab-font-size-29-33`); the size shown is the 1280px end. In CSS: `font: var(--ab-type-heading-lg)` plus `letter-spacing: var(--ab-type-heading-lg-letter-spacing)`.",
+      "$description": "Serif heading. Grows from 29px to 33px with the viewport.",
       "$value": {
         "fontFamily": "{primitive.font-family-noto-serif}",
         "fontSize": "{primitive.font-size-29-33}",
@@ -909,7 +916,7 @@
     },
     "type-heading-md": {
       "$type": "typography",
-      "$description": "Serif title. Fluid 24→26px between 360px and 1280px viewports (`ab-font-size-24-26`); the size shown is the 1280px end. In CSS: `font: var(--ab-type-heading-md)` plus `letter-spacing: var(--ab-type-heading-md-letter-spacing)`.",
+      "$description": "Serif heading. Grows from 24px to 26px with the viewport.",
       "$value": {
         "fontFamily": "{primitive.font-family-noto-serif}",
         "fontSize": "{primitive.font-size-24-26}",
@@ -940,7 +947,7 @@
     },
     "type-heading-sm": {
       "$type": "typography",
-      "$description": "Serif title. Fluid 19→21px between 360px and 1280px viewports (`ab-font-size-19-21`); the size shown is the 1280px end. In CSS: `font: var(--ab-type-heading-sm)` plus `letter-spacing: var(--ab-type-heading-sm-letter-spacing)`.",
+      "$description": "Serif heading. Grows from 19px to 21px with the viewport.",
       "$value": {
         "fontFamily": "{primitive.font-family-noto-serif}",
         "fontSize": "{primitive.font-size-19-21}",
@@ -971,7 +978,7 @@
     },
     "type-heading-xs": {
       "$type": "typography",
-      "$description": "Serif title. In CSS: `font: var(--ab-type-heading-xs)` plus `letter-spacing: var(--ab-type-heading-xs-letter-spacing)`.",
+      "$description": "Serif heading.",
       "$value": {
         "fontFamily": "{primitive.font-family-noto-serif}",
         "fontSize": "{primitive.font-size-17}",
@@ -1002,7 +1009,7 @@
     },
     "type-display-md": {
       "$type": "typography",
-      "$description": "Serif statement. Fluid 24→26px between 360px and 1280px viewports (`ab-font-size-24-26`); the size shown is the 1280px end. In CSS: `font: var(--ab-type-display-md)` plus `letter-spacing: var(--ab-type-display-md-letter-spacing)`.",
+      "$description": "Serif display statement. Grows from 24px to 26px with the viewport.",
       "$value": {
         "fontFamily": "{primitive.font-family-noto-serif}",
         "fontSize": "{primitive.font-size-24-26}",
@@ -1033,7 +1040,7 @@
     },
     "type-body-lg": {
       "$type": "typography",
-      "$description": "Sans reading text. Fluid 19→21px between 360px and 1280px viewports (`ab-font-size-19-21`); the size shown is the 1280px end. In CSS: `font: var(--ab-type-body-lg)` plus `letter-spacing: var(--ab-type-body-lg-letter-spacing)`.",
+      "$description": "Reading text. Grows from 19px to 21px with the viewport.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{primitive.font-size-19-21}",
@@ -1064,7 +1071,7 @@
     },
     "type-body-md": {
       "$type": "typography",
-      "$description": "Sans reading text. In CSS: `font: var(--ab-type-body-md)` plus `letter-spacing: var(--ab-type-body-md-letter-spacing)`.",
+      "$description": "Reading text.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{primitive.font-size-17}",
@@ -1095,7 +1102,7 @@
     },
     "type-body-sm": {
       "$type": "typography",
-      "$description": "Sans reading text. In CSS: `font: var(--ab-type-body-sm)` plus `letter-spacing: var(--ab-type-body-sm-letter-spacing)`.",
+      "$description": "Reading text.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{primitive.font-size-15}",
@@ -1126,7 +1133,7 @@
     },
     "type-body-xs": {
       "$type": "typography",
-      "$description": "Sans reading text. In CSS: `font: var(--ab-type-body-xs)` plus `letter-spacing: var(--ab-type-body-xs-letter-spacing)`.",
+      "$description": "Reading text.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{primitive.font-size-14}",
@@ -1157,7 +1164,7 @@
     },
     "type-label-lg": {
       "$type": "typography",
-      "$description": "Sans control text. In CSS: `font: var(--ab-type-label-lg)` plus `letter-spacing: var(--ab-type-label-lg-letter-spacing)`.",
+      "$description": "Control and UI text.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{primitive.font-size-15}",
@@ -1188,7 +1195,7 @@
     },
     "type-label-sm": {
       "$type": "typography",
-      "$description": "Dense UI text: menus, tabs, inputs, buttons. In CSS: `font: var(--ab-type-label-sm)` plus `letter-spacing: var(--ab-type-label-sm-letter-spacing)`.",
+      "$description": "Control and UI text.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{semantic.type-label-sm-font-size}",
@@ -1223,7 +1230,7 @@
     },
     "type-kbd-sm": {
       "$type": "typography",
-      "$description": "Shortcut hints (Kbd). Set with tabular figures. In CSS: `font: var(--ab-type-kbd-sm)` plus `letter-spacing: var(--ab-type-kbd-sm-letter-spacing)`.",
+      "$description": "Shortcut hints.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{semantic.type-kbd-sm-font-size}",
@@ -1254,7 +1261,7 @@
     },
     "type-label-md": {
       "$type": "typography",
-      "$description": "Sans control text. In CSS: `font: var(--ab-type-label-md)` plus `letter-spacing: var(--ab-type-label-md-letter-spacing)`.",
+      "$description": "Control and UI text.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{primitive.font-size-14}",
@@ -1289,7 +1296,7 @@
     },
     "type-data-md": {
       "$type": "typography",
-      "$description": "Tabular figures. Set with tabular figures. In CSS: `font: var(--ab-type-data-md)` plus `letter-spacing: var(--ab-type-data-md-letter-spacing)`.",
+      "$description": "Numbers in meters, sliders and stats, with tabular figures.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{primitive.font-size-13}",
@@ -1324,7 +1331,7 @@
     },
     "type-data-sm": {
       "$type": "typography",
-      "$description": "Tabular figures. Set with tabular figures. In CSS: `font: var(--ab-type-data-sm)` plus `letter-spacing: var(--ab-type-data-sm-letter-spacing)`.",
+      "$description": "Numbers in meters, sliders and stats, with tabular figures.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{primitive.font-size-12}",
@@ -1355,7 +1362,7 @@
     },
     "type-code-md": {
       "$type": "typography",
-      "$description": "Monospace code. In CSS: `font: var(--ab-type-code-md)` plus `letter-spacing: var(--ab-type-code-md-letter-spacing)`.",
+      "$description": "Monospace code.",
       "$value": {
         "fontFamily": "{primitive.font-family-system-mono}",
         "fontSize": "{primitive.font-size-13}",
@@ -1394,7 +1401,7 @@
     },
     "type-overline-sm": {
       "$type": "typography",
-      "$description": "Uppercase group label. Set with tabular figures and uppercase. In CSS: `font: var(--ab-type-overline-sm)` plus `letter-spacing: var(--ab-type-overline-sm-letter-spacing)`.",
+      "$description": "Uppercase group label.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{primitive.font-size-11}",
@@ -1542,7 +1549,8 @@
     },
     "size-indicator": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-6}"
+      "$value": "{primitive.dimension-6}",
+      "$description": "Small marks, such as status dots and meter tracks."
     },
     "size-logo-min": {
       "$type": "dimension",
@@ -1550,11 +1558,13 @@
     },
     "size-target-min": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-24}"
+      "$value": "{primitive.dimension-24}",
+      "$description": "The smallest pointer target WCAG 2.5.8 allows."
     },
     "size-target-recommended": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-44}"
+      "$value": "{primitive.dimension-44}",
+      "$description": "A comfortable touch target."
     },
     "size-container-2xs": {
       "$type": "dimension",
@@ -1610,11 +1620,13 @@
     },
     "focus-ring-width": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-2}"
+      "$value": "{primitive.dimension-2}",
+      "$description": "The width of the focus ring."
     },
     "focus-ring-offset": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-3}"
+      "$value": "{primitive.dimension-3}",
+      "$description": "The gap between an element and its focus ring."
     },
     "underline-thickness": {
       "$type": "dimension",
@@ -1654,7 +1666,8 @@
     },
     "z-index-sticky": {
       "$type": "number",
-      "$value": "{primitive.z-index-200}"
+      "$value": "{primitive.z-index-200}",
+      "$description": "Sticky headers and toolbars."
     },
     "z-index-dropdown": {
       "$type": "number",
@@ -1674,11 +1687,13 @@
     },
     "z-index-tooltip": {
       "$type": "number",
-      "$value": "{primitive.z-index-700}"
+      "$value": "{primitive.z-index-700}",
+      "$description": "The highest layer. Overlays in the top layer, such as popovers and dialogs, need no z-index."
     },
     "layout-column-width": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-680}"
+      "$value": "{primitive.dimension-680}",
+      "$description": "The longest comfortable line of reading text."
     },
     "layout-gutter": {
       "$type": "dimension",
@@ -1691,87 +1706,108 @@
     },
     "layout-label-column-width": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-112}"
+      "$value": "{primitive.dimension-112}",
+      "$description": "The label column of a form laid out side by side."
     },
     "breakpoint-md": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-760}"
+      "$value": "{primitive.dimension-760}",
+      "$description": "Below it, space-section and the layout gutter shrink. Write its value in media queries; CSS can't read a custom property there."
     },
     "motion-easing-enter": {
       "$type": "cubicBezier",
-      "$value": "{primitive.easing-ease-out-strong}"
+      "$value": "{primitive.easing-ease-out-strong}",
+      "$description": "Things appearing or responding."
     },
     "motion-easing-exit": {
       "$type": "cubicBezier",
-      "$value": "{primitive.easing-ease-out-strong}"
+      "$value": "{primitive.easing-ease-out-strong}",
+      "$description": "Things leaving."
     },
     "motion-easing-move": {
       "$type": "cubicBezier",
-      "$value": "{primitive.easing-ease-in-out-strong}"
+      "$value": "{primitive.easing-ease-in-out-strong}",
+      "$description": "Something moving from one place on screen to another."
     },
     "motion-easing-drawer": {
       "$type": "cubicBezier",
-      "$value": "{primitive.easing-ease-out-ios}"
+      "$value": "{primitive.easing-ease-out-ios}",
+      "$description": "A sheet sliding in."
     },
     "motion-easing-color": {
       "$type": "string",
-      "$value": "{primitive.easing-ease}"
+      "$value": "{primitive.easing-ease}",
+      "$description": "Color and opacity changes."
     },
     "motion-easing-constant": {
       "$type": "string",
-      "$value": "{primitive.easing-linear}"
+      "$value": "{primitive.easing-linear}",
+      "$description": "Linear progress, such as an indeterminate progress bar."
     },
     "motion-easing-spring": {
       "$type": "string",
-      "$value": "{primitive.easing-spring-snappy}"
+      "$value": "{primitive.easing-spring-snappy}",
+      "$description": "A selection settling into place."
     },
     "motion-easing-spring-gentle": {
       "$type": "string",
-      "$value": "{primitive.easing-spring-gentle}"
+      "$value": "{primitive.easing-spring-gentle}",
+      "$description": "A toast arriving."
     },
     "motion-easing-spring-bouncy": {
       "$type": "string",
-      "$value": "{primitive.easing-spring-bouncy}"
+      "$value": "{primitive.easing-spring-bouncy}",
+      "$description": "The radio dot."
     },
     "motion-duration-press": {
       "$type": "duration",
-      "$value": "{primitive.duration-100}"
+      "$value": "{primitive.duration-100}",
+      "$description": "The press feedback of buttons and controls."
     },
     "motion-duration-hover-in": {
       "$type": "duration",
-      "$value": "{primitive.duration-120}"
+      "$value": "{primitive.duration-120}",
+      "$description": "Color change as the pointer arrives."
     },
     "motion-duration-hover-out": {
       "$type": "duration",
-      "$value": "{primitive.duration-250}"
+      "$value": "{primitive.duration-250}",
+      "$description": "Color change as the pointer leaves."
     },
     "motion-duration-tooltip": {
       "$type": "duration",
-      "$value": "{primitive.duration-125}"
+      "$value": "{primitive.duration-125}",
+      "$description": "A tooltip appearing."
     },
     "motion-duration-exit": {
       "$type": "duration",
-      "$value": "{primitive.duration-150}"
+      "$value": "{primitive.duration-150}",
+      "$description": "An overlay leaving."
     },
     "motion-duration-swap": {
       "$type": "duration",
-      "$value": "{primitive.duration-200}"
+      "$value": "{primitive.duration-200}",
+      "$description": "Content swapping in place."
     },
     "motion-duration-popover": {
       "$type": "duration",
-      "$value": "{primitive.duration-200}"
+      "$value": "{primitive.duration-200}",
+      "$description": "Menus, popovers and selects opening."
     },
     "motion-duration-expand": {
       "$type": "duration",
-      "$value": "{primitive.duration-250}"
+      "$value": "{primitive.duration-250}",
+      "$description": "Content growing open, such as an accordion panel."
     },
     "motion-duration-modal": {
       "$type": "duration",
-      "$value": "{primitive.duration-250}"
+      "$value": "{primitive.duration-250}",
+      "$description": "A dialog opening."
     },
     "motion-duration-drawer": {
       "$type": "duration",
-      "$value": "{primitive.duration-300}"
+      "$value": "{primitive.duration-300}",
+      "$description": "A sheet sliding in."
     },
     "motion-duration-entrance": {
       "$type": "duration",
@@ -1784,7 +1820,8 @@
     },
     "motion-duration-spring": {
       "$type": "duration",
-      "$value": "{primitive.duration-400}"
+      "$value": "{primitive.duration-400}",
+      "$description": "A selection settling into place, such as a switch thumb or a tab indicator."
     },
     "motion-duration-spring-gentle": {
       "$type": "duration",
@@ -1792,15 +1829,18 @@
     },
     "motion-duration-toggle": {
       "$type": "duration",
-      "$value": "{primitive.duration-180}"
+      "$value": "{primitive.duration-180}",
+      "$description": "A checkbox, radio or switch changing state."
     },
     "motion-duration-toast": {
       "$type": "duration",
-      "$value": "{primitive.duration-4000}"
+      "$value": "{primitive.duration-4000}",
+      "$description": "How long a toast stays before it dismisses itself. Not an animation."
     },
     "motion-duration-toast-persistent": {
       "$type": "duration",
-      "$value": "{primitive.duration-6000}"
+      "$value": "{primitive.duration-6000}",
+      "$description": "How long a danger toast stays before it dismisses itself. Not an animation."
     },
     "motion-delay-stagger": {
       "$type": "duration",
@@ -1813,11 +1853,13 @@
     },
     "motion-delay-tooltip": {
       "$type": "duration",
-      "$value": "{primitive.duration-500}"
+      "$value": "{primitive.duration-500}",
+      "$description": "The wait before a tooltip shows."
     },
     "motion-duration-loop": {
       "$type": "duration",
-      "$value": "{primitive.duration-700}"
+      "$value": "{primitive.duration-700}",
+      "$description": "One cycle of a loading indicator."
     },
     "motion-scale-pressed": {
       "$type": "number",
@@ -1826,7 +1868,8 @@
         "com.bereghici.media": {
           "(prefers-reduced-motion: reduce)": "{primitive.scale-100}"
         }
-      }
+      },
+      "$description": "How far a control shrinks while pressed. Neutral under reduced motion."
     },
     "motion-scale-enter": {
       "$type": "number",
@@ -1835,7 +1878,8 @@
         "com.bereghici.media": {
           "(prefers-reduced-motion: reduce)": "{primitive.scale-100}"
         }
-      }
+      },
+      "$description": "The scale an overlay grows from. Neutral under reduced motion."
     },
     "motion-scale-enter-modal": {
       "$type": "number",
@@ -1844,7 +1888,8 @@
         "com.bereghici.media": {
           "(prefers-reduced-motion: reduce)": "{primitive.scale-100}"
         }
-      }
+      },
+      "$description": "The scale a dialog grows from. Neutral under reduced motion."
     },
     "motion-distance-swap": {
       "$type": "dimension",

@@ -1,20 +1,47 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
+import { LinkCard, LinkCards } from "./blocks/prose.tsx";
+
 <Meta title="Introduction" />
 
 # Bereghici Design System
 
-React components, design tokens, type and iconography for Alexandru Bereghici's products. Every component is built on native HTML, styled from a three-tier token set, and meets WCAG 2.2 Level AA in both Themes.
+React components and design tokens for Alexandru Bereghici's products, built on native HTML, styled from tokens, and targeting WCAG 2.2 Level AA in light and dark.
 
-- **Packages:** `@abereghici/ui` (components, icons) and `@abereghici/tokens` (CSS custom properties, fonts).
-- **Themes:** System, Light and Dark. The tokens also adapt to increased contrast, reduced transparency, reduced motion and forced colors.
-- **Platform:** Baseline newly available. Native elements and CSS first; script adds only what the platform can't.
-- **Status:** Unreleased. Components ship phase by phase, and a component appears here once it is built.
+<LinkCards>
+  <LinkCard href="?path=/docs/guides-getting-started--docs" title="Getting started">
+    Install the package, add the provider, render a component.
+  </LinkCard>
+  <LinkCard href="?path=/docs/foundations-design-tokens--docs" title="Foundations">
+    Color, type, space, elevation and motion, and when to use each.
+  </LinkCard>
+  <LinkCard href="?path=/docs/components-accordion--docs" title="Components">
+    Every component with live examples, code and props.
+  </LinkCard>
+  <LinkCard href="?path=/docs/reference-tokens--docs" title="Tokens">
+    Search every token and inspect what it resolves to.
+  </LinkCard>
+  <LinkCard href="?path=/docs/reference-icons--docs" title="Icons">
+    Search the icon set and copy an import.
+  </LinkCard>
+</LinkCards>
 
-## Start here
+## Packages
 
-- [Getting started](?path=/docs/guides-getting-started--docs): install, mount the UIProvider, import a component.
-- [Foundations](?path=/docs/foundations-principles--docs): the principles, then the tokens behind color, type, space, elevation and motion.
-- [Components](?path=/docs/components-accordion--docs): A to Z. Each page says when to use the component, shows a live example with the code to copy, and lists its props.
+| Package              | Contains                                                                     |
+| -------------------- | ---------------------------------------------------------------------------- |
+| `@abereghici/ui`     | React components, one entry point each, and icons                            |
+| `@abereghici/tokens` | Design tokens as CSS custom properties, and the Figtree and Noto Serif fonts |
 
-The toolbar's **Theme** and **Direction** apply to this whole Storybook: the sidebar, these pages and every example.
+## Principles
+
+- **Accessible by default.** Color pairings are checked for WCAG AA contrast when the tokens build, and every story is checked with axe in CI.
+- **Platform first.** Native elements and CSS before script.
+- **Semantic tokens.** Code names an intent, such as `--ab-color-text-subtle`, never a raw value.
+- **Quiet surfaces.** Surfaces stay neutral; color marks an action, a state or a highlight.
+- **Flat in the flow, lifted above it.** Content separates with space and hairlines; shadows mark what you can press and what floats above the page.
+- **Pay for what you use.** Importing a component brings its own code, CSS and tokens, and those of the components it uses.
+
+## In this Storybook
+
+The toolbar's **Theme**, **Direction** and **Locale** apply to every page and example, so you can check any component in dark, right-to-left or another language.

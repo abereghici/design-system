@@ -1,0 +1,65 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+  gap: var(--ab-space-inline-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: var(--ab-space-stack-sm);
+  inline-size: 100%;
+  min-block-size: 6rem;
+  padding: var(--ab-space-inset-sm);
+  border: var(--ab-border-width-default) solid var(--ab-color-border-subtle);
+  border-radius: var(--ab-radius-md);
+  background-color: var(--ab-color-surface-default);
+  color: var(--ab-color-icon-default);
+  cursor: pointer;
+  transition: background-color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color);
+
+  &:hover {
+    background-color: var(--ab-color-background-neutral-subtle-hovered);
+    transition-duration: var(--ab-motion-duration-hover-in);
+  }
+}
+
+.name {
+  font: var(--ab-type-body-xs);
+  color: var(--ab-color-text-subtle);
+  overflow-wrap: anywhere;
+}
+
+.sizes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--ab-space-inline-lg);
+}
+
+.size {
+  display: grid;
+  justify-items: center;
+  gap: var(--ab-space-stack-xs);
+  margin: 0;
+
+  & figcaption {
+    font: var(--ab-type-body-xs);
+    color: var(--ab-color-text-subtle);
+  }
+}
+
+.source {
+  margin-block-start: var(--ab-space-stack-lg);
+
+  /* Storybook's Source sets white-space: pre on each highlighted token. */
+  & pre,
+  & pre * {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}

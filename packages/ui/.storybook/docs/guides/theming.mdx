@@ -1,30 +1,52 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
+import { Changes } from "../blocks/values.tsx";
+
 <Meta title="Guides/Theming" />
 
 # Theming
 
-There are three Themes: **System**, **Light** and **Dark**. CSS does the switching; the design system ships no script for it.
+Light and dark are built in, and CSS does the switching. The design system ships no theme script.
 
-- **System is the default.** With no `data-theme` attribute, every themed color follows the operating system's light or dark preference, live.
-- **`data-theme="light"` or `"dark"` forces a Theme** on that element and everything inside it. Set it on `<html>` for the whole page, or on any element for one region. Nesting works: a light region inside a dark one is light again.
-- **Brand colors stay the same** in every Theme.
+## Themes
+
+| Theme  | How to get it                                   | Result                                                 |
+| ------ | ----------------------------------------------- | ------------------------------------------------------ |
+| System | No `data-theme` attribute (the default)         | Follows the operating system, and changes with it live |
+| Light  | `data-theme="light"` on `<html>` or any element | Light on that element and everything inside it         |
+| Dark   | `data-theme="dark"` on `<html>` or any element  | Dark on that element and everything inside it          |
+
+Themes nest, so one region can differ from the page:
 
 ```html
 <html data-theme="dark">
-  …
   <aside data-theme="light">This panel is always light.</aside>
 </html>
 ```
 
-This works because each themed token is a `light-dark()` value that resolves where it is used, against that element's `color-scheme`. Don't register themed tokens with `@property` and `syntax: "<color>"`: a registered color computes once on `:root`, and regions stop switching.
+Brand colors (`--ab-color-brand-*`) stay the same in every Theme.
 
-## Letting the user choose
+## Let the user choose
 
-The app owns the choice and where it is stored. Set `data-theme` only for an explicit light or dark choice, and remove it for System. To paint the right Theme before the page hydrates, follow the Next.js guide [How to prevent flash before hydration](https://nextjs.org/docs/app/guides/preventing-flash-before-hydration): store the choice in a cookie, set the attribute from a small inline script in `<head>`, and declare `viewport.colorScheme = "light dark"` so the browser paints the right canvas.
+The app owns the choice and where it is stored:
 
-## User preferences
+1. Store the choice (System, Light or Dark) in a cookie.
+2. Set `data-theme` for Light or Dark from a small inline script in `<head>`, before the page paints, and leave it off for System.
+3. Declare `viewport.colorScheme = "light dark"`, so the browser paints the right background first.
 
-The tokens also follow increased contrast, reduced transparency, reduced motion and forced colors, through media queries. Apps need no code for these.
+Next.js describes this setup in [How to prevent flash before hydration](https://nextjs.org/docs/app/guides/preventing-flash-before-hydration).
 
-In this Storybook, the toolbar's Theme sets `data-theme` on the pages and examples, and the sidebar follows it.
+## User settings
+
+These follow the operating system on their own, with no code in the app:
+
+| Setting              | What changes                                                                      |
+| -------------------- | --------------------------------------------------------------------------------- |
+| Increased contrast   | <Changes when="(prefers-contrast: more)" /> step up one level                     |
+| Reduced transparency | <Changes when="(prefers-reduced-transparency: reduce)" /> become solid            |
+| Reduced motion       | Movement stops and fades stay; see [Motion](?path=/docs/foundations-motion--docs) |
+| Forced colors        | Components redraw their edges in system colors                                    |
+
+## Custom tokens and themes
+
+Themed tokens are `light-dark()` values that resolve on each element. If you register one of them with `@property` and `syntax: "<color>"`, it resolves once on `:root` and regions stop switching, so don't.

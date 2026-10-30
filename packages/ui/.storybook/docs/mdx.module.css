@@ -1,0 +1,15 @@
+.h1 {
+  margin-block: 0 var(--ab-space-stack-md);
+}
+
+.h2 {
+  margin-block: var(--ab-space-stack-2xl) var(--ab-space-stack-sm);
+}
+
+.h3 {
+  margin-block: var(--ab-space-stack-xl) var(--ab-space-stack-xs);
+}
+
+.table {
+  margin-block: var(--ab-space-stack-md) var(--ab-space-stack-lg);
+}

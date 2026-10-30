@@ -1,46 +1,62 @@
 import { Meta } from "@storybook/addon-docs/blocks";
-import tokens from "@abereghici/tokens/tokens.json";
 
-import { TokenTable } from "../blocks/token-table.tsx";
+import { Do, Dont, Guidance } from "../blocks/prose.tsx";
+import { RadiusScale, SpaceScale } from "../blocks/specimens.tsx";
+import { Value } from "../blocks/values.tsx";
 
 <Meta title="Foundations/Space and shape" />
 
-export const semantic = (family, prefix = "") =>
-  tokens[family].tokens.filter(
-    ({ name }) => name.startsWith(`ab-${prefix}`) && !/-\d+$/v.test(name),
-  );
-
 # Space and shape
 
-The system is compact with a mouse. On touch screens the same size tokens grow, so no component needs a touch variant.
+Compact with a mouse, comfortable on touch: the same tokens grow on touch screens, so no component needs a touch variant.
 
 ## Space
 
-`inline` is a horizontal gap, `inset` is padding, `stack` is a vertical gap, and `section` separates page sections.
+Pick the kind of space first, then the size.
 
-<TokenTable
-  tokens={semantic("spacing", "space-")}
-  preview={(value) => ({ inlineSize: value, blockSize: "0.5rem" })}
-/>
+| Kind      | Use for                          | Example                    |
+| --------- | -------------------------------- | -------------------------- |
+| `inline`  | Gaps between items in a row      | Icon and label in a button |
+| `inset`   | Padding inside a container       | Card padding               |
+| `stack`   | Gaps between items in a column   | Fields in a form           |
+| `section` | Separation between page sections | Blocks of a landing page   |
+
+<SpaceScale />
+
+Below <Value of="breakpoint-md" /> wide, `space-section` and `layout-gutter` shrink.
 
 ## Size
 
-Icons, controls, containers and targets. `size-target-min` is the WCAG 2.5.8 minimum and `size-target-recommended` the comfortable touch target.
+Controls share four heights, so a button, a field and a select line up in a row. On touch screens every control height grows to a comfortable target.
 
-<TokenTable tokens={semantic("size", "size-")} />
+| Control height | Mouse                          | Touch                                                   |
+| -------------- | ------------------------------ | ------------------------------------------------------- |
+| `xs`           | <Value of="size-control-xs" /> | <Value of="size-control-xs" when="(pointer: coarse)" /> |
+| `sm`           | <Value of="size-control-sm" /> | <Value of="size-control-sm" when="(pointer: coarse)" /> |
+| `md`           | <Value of="size-control-md" /> | <Value of="size-control-md" when="(pointer: coarse)" /> |
+| `lg`           | <Value of="size-control-lg" /> | <Value of="size-control-lg" when="(pointer: coarse)" /> |
 
 ## Radius
 
-Nested corners share a centre: the inner radius is the outer radius minus the padding between them. Pick the token pair that satisfies the equation, never one that looks close.
+Nested corners share a centre: the inner radius is the outer radius minus the padding between them.
 
-<TokenTable tokens={semantic("radius", "radius-")} preview={(value) => ({ borderRadius: value })} />
+<RadiusScale />
 
-## Lines and strokes
+<Guidance>
+<Do>
 
-<TokenTable tokens={[...semantic("line"), ...semantic("strokeWidth")]} />
+- Use `space-inset-*` for padding and `space-stack-*` or `space-inline-*` for gaps.
+- Match the inner radius to the outer radius minus the padding.
+- Use logical properties (`padding-inline`, `margin-block`), so layouts mirror in right-to-left.
 
-## Layout
+</Do>
+<Dont>
 
-CSS can't read a custom property in a media query, so write the breakpoint's value from this table, as in `@media (width < …)`.
+- Use `dimension-*` primitives for spacing.
+- Give touch screens their own component variant; the tokens already grow.
+- Read a custom property in a media query; CSS can't. Write the breakpoint's value.
 
-<TokenTable tokens={semantic("layout")} />
+</Dont>
+</Guidance>
+
+Lines, strokes and the layout widths are in the [token explorer](?path=/docs/reference-tokens--docs) under Shape and Layout.

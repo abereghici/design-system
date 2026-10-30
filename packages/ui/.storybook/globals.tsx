@@ -5,9 +5,11 @@ import {
   Controls,
   Description,
   Primary,
+  Source,
   Stories,
   Subtitle,
   Title,
+  useOf,
 } from "@storybook/addon-docs/blocks";
 import { GLOBALS_UPDATED, SET_GLOBALS } from "storybook/internal/core-events";
 import { addons } from "storybook/preview-api";
@@ -16,8 +18,10 @@ import type { DocsContainerProps } from "@storybook/addon-docs/blocks";
 import type { Globals } from "storybook/internal/types";
 
 import { Heading } from "@abereghici/ui/heading";
+import { Table } from "@abereghici/ui/table";
 
 import { themes as storybookThemes } from "./theme.ts";
+import styles from "./docs/mdx.module.css";
 
 export const themes = ["system", "light", "dark"] as const;
 
@@ -67,33 +71,69 @@ function subscribe(listener: () => void) {
 
 const scheme = () => (theme === "system" ? (prefersDark.matches ? "dark" : "light") : theme);
 
+/** The Theme the docs pages show, resolving System to the operating system's preference. */
+export const useScheme = () => useSyncExternalStore(subscribe, scheme);
+
 export function DocsContainer(props: DocsContainerProps) {
-  return (
-    <BaseDocsContainer
-      {...props}
-      theme={storybookThemes[useSyncExternalStore(subscribe, scheme)]}
-    />
-  );
+  return <BaseDocsContainer {...props} theme={storybookThemes[useScheme()]} />;
 }
 
 const heading = (as: "h1" | "h2" | "h3") =>
   function DocsHeading({ className, ...props }: ComponentProps<"h1">) {
-    return <Heading {...props} as={as} className={`sb-unstyled ${className ?? ""}`} />;
+    return (
+      <Heading {...props} as={as} className={`sb-unstyled ${styles[as]} ${className ?? ""}`} />
+    );
   };
 
-/** MDX headings in the serif heading type; `sb-unstyled` keeps the Storybook prose CSS off them. */
-export const mdx = { components: { h1: heading("h1"), h2: heading("h2"), h3: heading("h3") } };
+/**
+ * MDX headings in the serif heading type and Markdown tables as the Table component; `sb-unstyled`
+ * keeps the Storybook prose CSS off them.
+ */
+export const mdx = {
+  components: {
+    h1: heading("h1"),
+    h2: heading("h2"),
+    h3: heading("h3"),
+    table: ({ className, ...props }: ComponentProps<"table">) => (
+      <Table.Root {...props} className={`sb-unstyled ${styles["table"]} ${className ?? ""}`} />
+    ),
+    thead: Table.Header,
+    tbody: Table.Body,
+    tr: Table.Row,
+    th: Table.ColumnHeader,
+    td: Table.Cell,
+  },
+};
 
 /**
  * Storybook's default page, except that Stories leaves out the primary story: the default counts
  * `.test()` proofs as stories, so it would repeat Default on a page with one story.
  */
+/** The import for the page's component, from its title, or `parameters.import` where that differs. */
+function Import() {
+  const { preparedMeta } = useOf("meta", ["meta"]);
+  const name = preparedMeta.title.split("/").at(-1) ?? "";
+  const custom: unknown = preparedMeta.parameters["import"];
+  const path = name.replaceAll(/(?<=[a-z])(?=[A-Z])/gv, "-").toLowerCase();
+
+  return (
+    <Source
+      language="tsx"
+      dark={useScheme() === "dark"}
+      code={
+        typeof custom === "string" ? custom : `import { ${name} } from "@abereghici/ui/${path}";`
+      }
+    />
+  );
+}
+
 export function DocsPage() {
   return (
     <>
       <Title />
       <Subtitle />
       <Description />
+      <Import />
       <Primary />
       <Controls />
       <Stories includePrimary={false} />

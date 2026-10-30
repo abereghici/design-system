@@ -4,22 +4,11 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # Internationalization
 
-The library ships no interface text. Every label, button name and message is yours, so your app's wording and translation pipeline stay in your hands. Numbers and dates are formatted by `Intl` in the language you give the UIProvider.
+The library ships no interface text. You write every label, and formatting follows the language you set.
 
-## Write the text
+## Set the language and direction once
 
-Pass text as `children` or as a named prop. Where a part would otherwise have no accessible name (an icon-only Close, the step and navigation buttons, a landmark, a live status), TypeScript requires the text, so a nameless control is a type error:
-
-```tsx
-<Dialog.Close aria-label={t("close")} />
-<NumberField label={t("seats")} incrementLabel={t("increase")} decrementLabel={t("decrease")} />
-<Toaster aria-label={t("notifications")} closeLabel={t("dismiss")} />
-<Spinner>{t("loading")}</Spinner>
-```
-
-## Set the language once
-
-Give `UIProvider` the same BCP 47 tag as `<html lang>`. Every component that formats follows it: month and weekday names, date segments, percentages, grouped numbers and typed-text matching all come from `Intl` in that language. The server and the browser then format alike, so hydration matches; without it, each uses its own default language and the text can differ.
+Give `UIProvider` the same language as `<html lang>`, and set `dir` for right-to-left languages:
 
 ```tsx
 // app/[lang]/layout.tsx
@@ -39,8 +28,30 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
 }
 ```
 
-Dates are Gregorian in every language, so a locale whose default calendar differs (`th-TH`) shows the same year in a DateField and its Calendar.
+| What                                   | Follows                                     |
+| -------------------------------------- | ------------------------------------------- |
+| Month and weekday names, date segments | `locale`, through `Intl`                    |
+| Numbers and percentages                | `locale`, through `Intl`                    |
+| Typing to jump in lists                | `locale`, through `Intl`                    |
+| Layout direction                       | `dir`; `getDirection` reads it from the tag |
 
-## Direction
+The server and the browser then format alike, so hydration matches. Dates are Gregorian in every language.
 
-Right-to-left languages also need `dir` on `<html>`, as above. `getDirection` from `@abereghici/ui/direction` reads it from the tag and is safe on the server. See [Right-to-left](?path=/docs/guides-right-to-left--docs).
+## Write the text
+
+Pass text as `children` or as a named prop. Where a control would otherwise have no name, TypeScript requires the text:
+
+```tsx
+<Dialog.Close aria-label={t("close")} />
+<NumberField label={t("seats")} incrementLabel={t("increase")} decrementLabel={t("decrease")} />
+<Toaster aria-label={t("notifications")} closeLabel={t("dismiss")} />
+<Spinner>{t("loading")}</Spinner>
+```
+
+## Right-to-left
+
+Set `dir="rtl"` on `<html>`, or on one region, and every component mirrors.
+
+- **Icons in labels** stay in source order, so they keep their place in either direction.
+- **Only icons that point mirror:** arrows, chevrons and log-out. Every other icon, and the Logo, keeps its drawing.
+- **Your own CSS** should use logical properties (`padding-inline`, `inset-inline-start`), so it mirrors too.
