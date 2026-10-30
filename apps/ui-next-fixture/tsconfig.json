@@ -9,6 +9,7 @@
     "next-env.d.ts",
     "src",
     "test",
+    "scripts",
     "next.config.ts",
     "oxlint.config.ts",
     "vitest.config.ts"

@@ -22,4 +22,4 @@ jobs:
       - run: pnpm format
       - run: pnpm check-types
       - run: pnpm test
-      - run: pnpm turbo run build --filter='@abereghici/*'
+      - run: pnpm turbo run test:packed

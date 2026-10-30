@@ -52,17 +52,27 @@ const logo = route("logo");
 const iconButton = route("icon-button");
 
 // UIProvider, in the root layout, hands its locale to client components; every route carries it.
-const localeProvider = "internal/locale/locale-provider.tsx";
-const formattedNumber = "internal/locale/formatted-number.tsx";
+const localeProvider = "internal/locale/locale-provider";
+const formattedNumber = "internal/locale/formatted-number";
 
+// Source modules in the workspace, built ones once installed from the packed package (`test:packed`); compared without extension.
 const allClientModules = (r: Route) =>
-  [...new Set(r.clientModules.match(/(?<=packages\/ui\/src\/)[\w.\/\-]+(?=")/gv))].toSorted();
+  [
+    ...new Set(
+      r.clientModules
+        .match(/(?<=packages\/ui\/src\/|@abereghici\/ui\/dist\/)[\w.\/\-]+(?=")/gv)
+        ?.map((path) => path.replace(/\.[jt]sx?$/v, "")),
+    ),
+  ].toSorted();
 
 const uiClientModules = (r: Route) => allClientModules(r).filter((m) => m !== localeProvider);
 
 // A token ships when its sheet defines it or a component rule reads it. A component redefining another's token on itself (Button restyles Kbd hints) does neither.
+const tokenSheets = (css: string) =>
+  css.match(/@layer ab\.tokens\{:root\{[^\}]*\}\}/gv)?.join("") ?? "";
+
 const shippedComponentTokens = (css: string) => {
-  const sheets = css.match(/@layer ab\.tokens\{:root\{[^\}]*\}\}/gv)?.join("") ?? "";
+  const sheets = tokenSheets(css);
 
   return componentTokens.filter(
     (token) => sheets.includes(token) || css.includes(`var(${token.slice(0, -1)})`),
@@ -149,6 +159,17 @@ describe("each component route ships only its own CSS, tokens and client code", 
   });
 });
 
+// Field's sheet serves six components: a route using several of them still loads it once.
+describe("each component route loads every component token sheet once", () => {
+  test.each(componentRoutes)("$name", ({ name }) => {
+    const declared = [...tokenSheets(route(name).css).matchAll(/--ab-[\w\-]+:/gv)].map(
+      ([token]) => token,
+    );
+
+    expect(declared.filter((token, index) => declared.indexOf(token) !== index)).toEqual([]);
+  });
+});
+
 describe("toast() and the Toaster", () => {
   test("a route that only calls toast() loads none of the Toaster's code", () => {
     expect(route("toast").js).not.toContain("Alt+T");
@@ -165,12 +186,12 @@ describe("DatePicker and Calendar", () => {
 
 describe("per-component JS", () => {
   test("only the Button route loads Button's client code", () => {
-    expect(uiClientModules(button)).toEqual(["button/button.tsx"]);
+    expect(uiClientModules(button)).toEqual(["button/button"]);
     expect(button.js).toContain("ab-press");
     expect(uiClientModules(logo)).toEqual([]);
     expect(allClientModules(logo)).toEqual([localeProvider]);
     expect(logo.js).not.toContain("ab-press");
-    expect(uiClientModules(iconButton)).toEqual(["icon-button/icon-button.tsx"]);
+    expect(uiClientModules(iconButton)).toEqual(["icon-button/icon-button"]);
   });
 
   test.each([
@@ -250,7 +271,7 @@ describe("a client leaf inside a Server Component", () => {
   test("Kbd renders its platform keys as Ctrl on the server and resolves them on the client", () => {
     const kbd = route("kbd");
 
-    expect(uiClientModules(kbd)).toEqual(["kbd/kbd-key.tsx"]);
+    expect(uiClientModules(kbd)).toEqual(["kbd/kbd-key"]);
     expect(kbd.html).toContain("Ctrl");
     expect(kbd.html).toContain("Enter");
 

@@ -2,14 +2,21 @@
   "name": "@repo/ui-next-fixture",
   "version": "0.0.0",
   "private": true,
-  "description": "Next 16 app that consumes @abereghici/ui as source and checks its subpath exports, tree-shaking and React Compiler output.",
+  "description": "Next 16 app that consumes @abereghici/ui as source, and as the packed npm packages in test:packed, and checks its subpath exports, tree-shaking and React Compiler output.",
+  "files": [
+    "src",
+    "test",
+    "next.config.ts",
+    "vitest.config.ts"
+  ],
   "type": "module",
   "scripts": {
     "build": "next build",
     "check-types": "next typegen && tsc",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:packed": "node scripts/test-packed.ts"
   },
   "dependencies": {
     "@abereghici/tokens": "workspace:*",
