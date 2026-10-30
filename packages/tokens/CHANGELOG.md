@@ -1,5 +1,11 @@
 # @abereghici/tokens
 
+## 0.1.3
+
+### Patch Changes
+
+- 2d154db: Rewrite the semantic token descriptions in `tokens.json` as one line on what each token is for, and drop the generated descriptions of primitive tokens.
+
 ## 0.1.2
 
 ### Patch Changes
