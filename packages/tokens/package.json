@@ -1,8 +1,25 @@
 {
   "name": "@abereghici/tokens",
   "version": "0.1.1",
-  "description": "Design tokens, CSS custom properties and fonts of the abereghici design system.",
+  "description": "Design tokens as CSS custom properties, and fonts, for the Bereghici Design System.",
+  "keywords": [
+    "css-custom-properties",
+    "css-variables",
+    "dark-mode",
+    "design-system",
+    "design-tokens",
+    "dtcg",
+    "fonts",
+    "light-dark",
+    "style-dictionary",
+    "theming"
+  ],
+  "homepage": "https://github.com/abereghici/design-system/tree/main/packages/tokens#readme",
+  "bugs": {
+    "url": "https://github.com/abereghici/design-system/issues"
+  },
   "license": "MIT",
+  "author": "Alexandru Bereghici",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abereghici/design-system.git",
