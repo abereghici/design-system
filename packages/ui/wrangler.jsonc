@@ -1,0 +1,9 @@
+{
+  "name": "bereghici-ui",
+  "compatibility_date": "2026-10-29",
+  "assets": { "directory": "./storybook-static" },
+  "routes": [{ "pattern": "ui.bereghici.dev", "custom_domain": true }],
+  "workers_dev": false,
+  "preview_urls": true,
+  "previews": {},
+}

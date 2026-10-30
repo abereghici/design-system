@@ -51,20 +51,9 @@ The app must target Baseline newly available, for example with `"browserslist": 
 import { SearchIcon } from "@abereghici/ui/icons/search";
 ```
 
-### Components
+## Documentation
 
-The Storybook documentation has a page for each component. The entry points:
-
-| Group                   | Components                                                                                                                                                                 |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Actions**             | `button`, `icon-button`, `link`, `file-trigger`, `segmented-control`, `toolbar`                                                                                            |
-| **Forms**               | `form`, `field`, `fieldset`, `text-field`, `text-area`, `number-field`, `password-field`, `checkbox`, `radio-group`, `switch`, `slider`, `select`, `combobox`, `drop-zone` |
-| **Dates**               | `calendar`, `date-field`, `date-picker`                                                                                                                                    |
-| **Overlays**            | `dialog`, `alert-dialog`, `sheet`, `popover`, `tooltip`, `dropdown-menu`, `context-menu`, `command`                                                                        |
-| **Navigation & layout** | `navbar`, `sidebar`, `breadcrumbs`, `pagination`, `tabs`, `accordion`, `table`, `card`, `scroll-area`, `separator`, `skip-link`                                            |
-| **Feedback & status**   | `alert`, `toast`, `toaster`, `progress`, `meter`, `spinner`, `skeleton`, `empty-state`, `status-dot`, `badge`, `tag`                                                       |
-| **Content**             | `heading`, `text`, `kbd`, `avatar`, `icon`, `logo`, `visually-hidden`                                                                                                      |
-| **App**                 | `ui-provider`, `direction`, `events`                                                                                                                                       |
+Every component is `@abereghici/ui/<component>`, and every icon is `@abereghici/ui/icons/<icon>`. Read the documentation, with a page for each component, at **[ui.bereghici.dev](https://ui.bereghici.dev)**.
 
 ## Contributing
 

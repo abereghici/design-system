@@ -27,6 +27,8 @@ pnpm lint && pnpm format && pnpm check-types
 pnpm --filter @abereghici/ui storybook  # Storybook on http://localhost:6006
 ```
 
+Storybook is deployed to Cloudflare Workers: `main` to [ui.bereghici.dev](https://ui.bereghici.dev), and every pull request from this repository to its own preview, linked from the pull request and deleted when it closes.
+
 Screenshot tests run on Linux only. `pnpm --filter @abereghici/ui test:screenshots:docker` runs them in the Playwright container image that CI uses.
 
 ## Releasing

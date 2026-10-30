@@ -1,0 +1,15 @@
+name: Feature request
+description: A new component, prop, token or behavior.
+labels: [enhancement, needs-triage]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What do you need, and why?
+    validations:
+      required: true
+  - type: textarea
+    id: precedent
+    attributes:
+      label: Precedent
+      description: How the platform or other design systems handle it, with links.

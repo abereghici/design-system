@@ -4,6 +4,7 @@ dist
 .next/
 coverage
 storybook-static
+.wrangler
 
 .turbo
 
