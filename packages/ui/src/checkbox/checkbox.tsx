@@ -3,6 +3,8 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
+import "@abereghici/tokens/components/checkbox.css";
+
 import { pointerMarker } from "../events/events.ts";
 import { useFieldControl } from "../field/use-field.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";

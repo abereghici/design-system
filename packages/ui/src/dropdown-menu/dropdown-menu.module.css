@@ -1,5 +1,3 @@
-@import "@platform/tokens/components/dropdown-menu.css";
-
 @layer ab.components {
   .content {
     --min-width: var(--ab-dropdown-menu-min-width);

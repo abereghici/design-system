@@ -1,5 +1,3 @@
-@import "@platform/tokens/components/link.css";
-
 @layer ab.components {
   .root {
     color: var(--ab-link-text-color);

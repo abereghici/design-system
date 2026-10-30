@@ -2,12 +2,12 @@ import { useState } from "react";
 import type { KeyboardEvent } from "react";
 import { expect, fn } from "storybook/test";
 
-import { Button } from "@platform/ui/button";
-import { IconButton } from "@platform/ui/icon-button";
-import { CopyIcon } from "@platform/ui/icons/copy";
-import { DownloadIcon } from "@platform/ui/icons/download";
-import { PinIcon } from "@platform/ui/icons/pin";
-import { Separator } from "@platform/ui/separator";
+import { Button } from "@abereghici/ui/button";
+import { IconButton } from "@abereghici/ui/icon-button";
+import { CopyIcon } from "@abereghici/ui/icons/copy";
+import { DownloadIcon } from "@abereghici/ui/icons/download";
+import { PinIcon } from "@abereghici/ui/icons/pin";
+import { Separator } from "@abereghici/ui/separator";
 
 import preview from "#.storybook/preview.tsx";
 

@@ -1,7 +1,7 @@
 import { defineConfig } from "oxlint";
 
-import base from "@platform/oxlint-config/base";
-import react from "@platform/oxlint-config/react";
+import base from "@repo/oxlint-config/base";
+import react from "@repo/oxlint-config/react";
 
 export default defineConfig({
   extends: [base, react],

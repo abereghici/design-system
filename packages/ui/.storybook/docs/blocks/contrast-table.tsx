@@ -1,5 +1,5 @@
-import { CONTRAST_REQUIREMENTS, contrastRatio } from "@platform/tokens/contrast-matrix";
-import tokens from "@platform/tokens/tokens.json";
+import { CONTRAST_REQUIREMENTS, contrastRatio } from "@abereghici/tokens/contrast-matrix";
+import tokens from "@abereghici/tokens/tokens.json";
 
 const colors = new Map(tokens.color.tokens.map(({ name, value }) => [name, value]));
 const schemes = ["light", "dark"] as const;

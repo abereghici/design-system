@@ -1,4 +1,4 @@
-import { Card } from "@platform/ui/card";
+import { Card } from "@abereghici/ui/card";
 
 export default function Page() {
   return (

@@ -1,7 +1,7 @@
 import { defineMain } from "@storybook/react-vite/node";
 import remarkGfm from "remark-gfm";
 
-import { fontFaceCss } from "@platform/tokens/font-faces";
+import { fontFaceCss } from "@abereghici/tokens/font-faces";
 
 export default defineMain({
   framework: "@storybook/react-vite",

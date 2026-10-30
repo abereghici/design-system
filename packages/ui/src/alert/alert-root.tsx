@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/alert.css";
+
 import { CheckCircleIcon } from "../icon/icons/check-circle.tsx";
 import { DangerIcon } from "../icon/icons/danger.tsx";
 import { InfoIcon } from "../icon/icons/info.tsx";

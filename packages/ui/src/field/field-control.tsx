@@ -2,6 +2,8 @@
 
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/field.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { useFieldControl } from "./use-field.ts";

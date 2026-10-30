@@ -1,5 +1,3 @@
-@import "@platform/tokens/components/logo.css";
-
 @layer ab.components {
   .root {
     flex-shrink: 0;

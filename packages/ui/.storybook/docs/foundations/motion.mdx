@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/addon-docs/blocks";
-import primitive from "@platform/tokens/source/primitive.tokens.json";
-import semantic from "@platform/tokens/source/semantic.tokens.json";
+import primitive from "@abereghici/tokens/source/primitive.tokens.json";
+import semantic from "@abereghici/tokens/source/semantic.tokens.json";
 
 import { TokenTable } from "../blocks/token-table.tsx";
 
@@ -33,7 +33,7 @@ Motion is fast, eased out, interruptible and optional. It confirms what the user
 - **Let motion reverse** from where it is when it is triggered again before it ends.
 - **Don't animate keyboard-initiated or very frequent actions** (more than about 100 a day).
 - **Grow from the trigger,** never from nothing. Modals stay centred.
-- **Springs only for what the user moves directly,** such as a switch thumb. Everything the system starts eases out.
+- **Springs only for a pointer-chosen selection settling into place** (the Switch thumb, the Radio dot, the Tabs and SegmentedControl indicators) **and a Toast arriving.** Everything else eases out.
 
 ## Reduced motion
 

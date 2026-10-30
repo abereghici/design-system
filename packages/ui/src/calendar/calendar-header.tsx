@@ -1,3 +1,5 @@
+import "@abereghici/tokens/components/calendar.css";
+
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 

@@ -1,6 +1,6 @@
 # Namespaced client Parts from a Server Component (Next 16)
 
-Spike for ticket #2, run 2026-10-23. It fixes the export shape of every compound component in `@platform/ui`.
+Spike for ticket #2, run 2026-10-23. It fixes the export shape of every compound component in `@abereghici/ui`.
 
 Every claim carries a short quote and its source. Text marked **(inference)** is our reading and is not quoted.
 
@@ -10,7 +10,7 @@ Can a Server Component in a Next 16 App Router app write `<Disclosure.Root>`, `<
 
 ## Decision
 
-**Namespaced Parts.** Every compound component is consumed as `import { Dialog } from "@platform/ui/dialog"` and used as `<Dialog.Root>`, `<Dialog.Trigger>`, `<Dialog.Content>`. The shape is the one Base UI 1.9.0 ships:
+**Namespaced Parts.** Every compound component is consumed as `import { Dialog } from "@abereghici/ui/dialog"` and used as `<Dialog.Root>`, `<Dialog.Trigger>`, `<Dialog.Content>`. The shape is the one Base UI 1.9.0 ships:
 
 ```
 dialog/
@@ -111,13 +111,13 @@ The tests confirm both readings empirically.
 - `aria-expanded` and `aria-controls`, MDN `aria-expanded`: "A button that toggles a widget should have `aria-controls` set to the id of the toggled widget and `aria-expanded` set to the current state of the widget."
 - `hidden`, MDN: "The `hidden` attribute indicates that the content of an element should not be presented to the user." It is plain HTML, well below the ADR-0002 floor. webstatus.dev lists no standalone feature for the bare attribute, only `input-hidden` and `hidden-until-found`.
 
-## Consequences for `@platform/ui`
+## Consequences for `@abereghici/ui`
 
-- A compound component's subpath (`@platform/ui/dialog`) exports one namespace (`Dialog`), plus types and data-attribute enums as separate named exports, following Base UI's `index.mjs`.
+- A compound component's subpath (`@abereghici/ui/dialog`) exports one namespace (`Dialog`), plus types and data-attribute enums as separate named exports, following Base UI's `index.mjs`.
 - Single-part components (Button, Badge) stay flat named exports. They have no Parts, so this is not "mixed" naming. The rule only governs compound components.
 - Prop types follow the namespace too. Base UI does `export type * from './root/DialogRoot'` next to the namespace, and its docs reference `Dialog.Root.ChangeEventDetails` (see `docs/research/feedback-events-and-i18n.md`). How we expose types (`Dialog.Root.Props` vs `DialogRootProps`) is left to the first compound-component ticket. **(Not tested here.)**
 - **Not measured here:** client bundle size. We have not checked whether a namespace whose Parts are not all rendered ships only the Parts used. The size-budget ticket should measure it.
 
 ## Throwaway code
 
-`apps/spike-rsc-namespace` was deleted in R1 (2026-10-24), once `apps/ui-next-fixture` consumed `@platform/ui`. It remains in the repository history at commit `b7cb122`. Its last run that day (Next 16.4.3, Playwright 1.64.1 Chromium, `next build && playwright test` against both `next dev` and `next start`) passed 10 of 10: `namespace-import` and `namespace-reexport` rendered dotted client Parts that hydrated and shared state, `namespace-reexport` mixed a `server-only` Part with client Parts, and `object-in-client` and `static-props-in-client` answered 500 with "Element type is invalid: expected a string … but got: undefined".
+`apps/spike-rsc-namespace` was deleted in R1 (2026-10-24), once `apps/ui-next-fixture` consumed `@abereghici/ui`. It remains in the repository history at commit `b7cb122`. Its last run that day (Next 16.4.3, Playwright 1.64.1 Chromium, `next build && playwright test` against both `next dev` and `next start`) passed 10 of 10: `namespace-import` and `namespace-reexport` rendered dotted client Parts that hydrated and shared state, `namespace-reexport` mixed a `server-only` Part with client Parts, and `object-in-client` and `static-props-in-client` answered 500 with "Element type is invalid: expected a string … but got: undefined".

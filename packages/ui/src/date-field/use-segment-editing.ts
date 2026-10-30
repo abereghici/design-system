@@ -2,14 +2,14 @@ import { useEffectEvent, useLayoutEffect, useRef } from "react";
 import type { ChangeEvent, FocusEvent, KeyboardEvent, PointerEvent, RefObject } from "react";
 
 import { isComposing, trackComposition } from "../events/events.ts";
-import type { DatePart, dateFormats, Temporal } from "../internal/date/date.ts";
+import type { DatePart, Temporal, useDateFormats } from "../internal/date/date.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { stepKey, typeDigit } from "./segments.ts";
 import type { Segments } from "./segments.ts";
 import type { Buffer, Reason, useDateValue } from "./use-date-value.ts";
 
-type Formats = ReturnType<typeof dateFormats>;
+type Formats = ReturnType<typeof useDateFormats>;
 
 interface Editing {
   readonly date: ReturnType<typeof useDateValue>;

@@ -1,5 +1,3 @@
-@import "@platform/tokens/components/navbar.css";
-
 @layer ab.components {
   .list {
     display: flex;

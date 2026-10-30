@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/tag.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./tag.module.css";

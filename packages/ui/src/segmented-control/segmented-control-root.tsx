@@ -3,6 +3,8 @@
 import { createContext, useId, useState } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
+import "@abereghici/tokens/components/segmented-control.css";
+
 import { dispatchFeedback, pointerMarker, requestChange } from "../events/events.ts";
 import { followVisualDirection } from "../internal/follow-visual-direction/follow-visual-direction.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";

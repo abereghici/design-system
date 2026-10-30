@@ -1,5 +1,3 @@
-@import "@platform/tokens/components/calendar.css";
-
 @layer ab.components {
   .root {
     display: grid;

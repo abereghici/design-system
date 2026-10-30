@@ -1,6 +1,3 @@
-@import "@platform/tokens/components/toast.css";
-@import "@platform/tokens/components/kbd.css";
-
 @layer ab.components {
   .region {
     position: fixed;

@@ -1,4 +1,4 @@
-import { Accordion } from "@platform/ui/accordion";
+import { Accordion } from "@abereghici/ui/accordion";
 
 export default function Page() {
   return (

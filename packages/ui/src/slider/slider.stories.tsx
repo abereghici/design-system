@@ -44,7 +44,6 @@ const meta = preview.meta({
   args: {
     defaultValue: 40,
     children: volume,
-    locale: "en-US",
     onValueChange: fn<(value: number | number[], details: Slider.ChangeEventDetails) => void>(),
     onValueCommitted: fn<(value: number | number[], details: Slider.CommitEventDetails) => void>(),
   },
@@ -186,8 +185,11 @@ Default.test(
 );
 
 Default.test(
-  "formats its value in its locale",
-  { args: { locale: "ro-RO", defaultValue: 0.5, max: 1, step: 0.1, format: { style: "percent" } } },
+  "formats its value in the app's locale",
+  {
+    globals: { locale: "ro-RO" },
+    args: { defaultValue: 0.5, max: 1, step: 0.1, format: { style: "percent" } },
+  },
   async ({ canvas }) => {
     await expect(canvas.getByRole("slider", { name: "Volume" })).toHaveAttribute(
       "aria-valuetext",

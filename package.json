@@ -1,5 +1,5 @@
 {
-  "name": "platform",
+  "name": "design-system",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,10 +12,12 @@
     "lint:root": "oxlint --disable-nested-config",
     "lint:root:fix": "oxlint --disable-nested-config --fix",
     "format": "oxfmt --check",
-    "format:fix": "oxfmt"
+    "format:fix": "oxfmt",
+    "release": "turbo run build --filter='@abereghici/*' && changeset publish"
   },
   "devDependencies": {
-    "@platform/oxlint-config": "workspace:*",
+    "@changesets/cli": "catalog:",
+    "@repo/oxlint-config": "workspace:*",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",

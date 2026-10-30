@@ -1,5 +1,3 @@
-@import "@platform/tokens/components/breadcrumbs.css";
-
 @layer ab.components {
   .list {
     display: flex;

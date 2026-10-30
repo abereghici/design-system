@@ -1,4 +1,4 @@
-import { Heading } from "@platform/ui/heading";
+import { Heading } from "@abereghici/ui/heading";
 
 export default function Page() {
   return (

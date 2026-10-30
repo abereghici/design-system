@@ -129,6 +129,10 @@
     border: 0;
   }
 
+  .group:not(:first-child, .separator + .group) {
+    margin-block-start: var(--ab-space-stack-sm);
+  }
+
   .label {
     padding: var(--ab-space-inset-sm) var(--item-padding-inline) var(--ab-space-inset-xs);
     color: var(--group-label-text-color);

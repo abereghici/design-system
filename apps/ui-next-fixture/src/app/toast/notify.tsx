@@ -1,6 +1,6 @@
 "use client";
 
-import { toast } from "@platform/ui/toast";
+import { toast } from "@abereghici/ui/toast";
 
 export function Notify() {
   return (

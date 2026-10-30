@@ -2,6 +2,9 @@
 
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/fieldset.css";
+import "@abereghici/tokens/components/radio-group.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./radio-group.module.css";

@@ -3,6 +3,8 @@
 import { use } from "react";
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/command.css";
+
 import { trackComposition } from "../events/events.ts";
 import { SearchIcon } from "../icon/icons/search.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";

@@ -1,8 +1,8 @@
 import { expect, fn } from "storybook/test";
 
-import { MoonIcon } from "@platform/ui/icons/moon";
-import { SunIcon } from "@platform/ui/icons/sun";
-import { Toolbar } from "@platform/ui/toolbar";
+import { MoonIcon } from "@abereghici/ui/icons/moon";
+import { SunIcon } from "@abereghici/ui/icons/sun";
+import { Toolbar } from "@abereghici/ui/toolbar";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";

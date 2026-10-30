@@ -1,5 +1,3 @@
-@import "@platform/tokens/components/separator.css";
-
 @layer ab.components {
   .root {
     flex-shrink: 0;

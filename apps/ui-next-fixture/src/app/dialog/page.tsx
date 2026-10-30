@@ -1,4 +1,4 @@
-import { Dialog } from "@platform/ui/dialog";
+import { Dialog } from "@abereghici/ui/dialog";
 
 export default function Page() {
   return (

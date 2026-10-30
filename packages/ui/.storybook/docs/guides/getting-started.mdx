@@ -6,14 +6,14 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 ## Install
 
-Both packages live in this monorepo. Add them to an app's `package.json` as workspace dependencies:
+Install `@abereghici/ui` from npm (it brings `@abereghici/tokens` with it), and set the app's browser targets:
+
+```sh
+pnpm add @abereghici/ui
+```
 
 ```json
 {
-  "dependencies": {
-    "@platform/ui": "workspace:*",
-    "@platform/tokens": "workspace:*"
-  },
   "browserslist": ["baseline newly available"]
 }
 ```
@@ -22,32 +22,30 @@ The system targets Baseline newly available and uses those features directly, wi
 
 ## Mount the UIProvider
 
-Render `UIProvider` once, at the root of the app. It brings the cascade layer order, the tokens, the fonts (preloading Figtree latin) and the base stylesheet, so the app imports no CSS from the design system.
+Render `UIProvider` once, at the root of the app. It brings the cascade layer order, the tokens, the fonts (preloading Figtree latin) and the base stylesheet, so the app imports no CSS from the design system. Give it the same language as `<html lang>`, so numbers and dates read the same on the server and in the browser ([Internationalization](?path=/docs/guides-internationalization--docs)).
 
 ```tsx
 // app/layout.tsx
-import { UIProvider } from "@platform/ui/ui-provider";
+import { UIProvider } from "@abereghici/ui/ui-provider";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en-US">
       <body>
-        <UIProvider>{children}</UIProvider>
+        <UIProvider locale="en-US">{children}</UIProvider>
       </body>
     </html>
   );
 }
 ```
 
-`UIProvider` used to be imported from `@platform/ui/provider`. That entry is gone: change the import to `@platform/ui/ui-provider`, which matches the component's name like every other entry.
-
 ## Import components one by one
 
 Each component has its own entry point, and importing it brings only its JavaScript, its CSS and its component tokens.
 
 ```tsx
-import { Button } from "@platform/ui/button";
-import { PlusIcon } from "@platform/ui/icons/plus";
+import { Button } from "@abereghici/ui/button";
+import { PlusIcon } from "@abereghici/ui/icons/plus";
 
 <Button variant="primary">
   <PlusIcon />
@@ -55,7 +53,7 @@ import { PlusIcon } from "@platform/ui/icons/plus";
 </Button>;
 ```
 
-Static components are Server Components, and interactive ones are client components. Compound components are namespaces: `import { Card } from "@platform/ui/card"`, then `<Card.Root>`, `<Card.Title>`.
+Static components are Server Components, and interactive ones are client components. Compound components are namespaces: `import { Card } from "@abereghici/ui/card"`, then `<Card.Root>`, `<Card.Title>`.
 
 ## Next.js and CSS chunks
 

@@ -3,6 +3,8 @@
 import { useId } from "react";
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/combobox.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./combobox.module.css";

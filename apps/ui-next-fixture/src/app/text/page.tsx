@@ -1,4 +1,4 @@
-import { Text } from "@platform/ui/text";
+import { Text } from "@abereghici/ui/text";
 
 export default function Page() {
   return (

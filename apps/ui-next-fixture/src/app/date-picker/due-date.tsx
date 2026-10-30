@@ -2,9 +2,9 @@
 
 import { lazy, Suspense } from "react";
 
-import { DatePicker } from "@platform/ui/date-picker";
+import { DatePicker } from "@abereghici/ui/date-picker";
 
-const loadCalendar = () => import("@platform/ui/calendar");
+const loadCalendar = () => import("@abereghici/ui/calendar");
 const Calendar = lazy(() => loadCalendar().then((module) => ({ default: module.Calendar })));
 const warmCalendar = () => {
   void loadCalendar();

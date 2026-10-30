@@ -43,7 +43,6 @@ const meta = preview.meta({
     "aria-label": "Delivery date",
     ...names,
     defaultValue: date("2026-10-24"),
-    locale: "en-US",
     onValueChange: fn<(value: Temporal.PlainDate, details: CalendarChangeEventDetails) => void>(),
   },
   // Today is marked in the grid, so screenshots and the today proof need a fixed date.
@@ -225,9 +224,17 @@ Default.test("marks today", { args: { defaultValue: null } }, async ({ canvas })
 
 Default.test(
   "starts the week on Monday for ro-RO, in Romanian",
-  { args: { locale: "ro-RO" } },
+  { globals: { locale: "ro-RO" } },
   async ({ canvas }) => {
     await expect(canvas.getByRole("grid", { name: "octombrie 2026" })).toBeVisible();
     await expect(canvas.getAllByRole("columnheader")[0]).toHaveTextContent("lun.");
+  },
+);
+
+Default.test(
+  "names the Gregorian year for th-TH, whose default calendar is Buddhist",
+  { globals: { locale: "th-TH" } },
+  async ({ canvas }) => {
+    await expect(canvas.getByRole("grid", { name: "ตุลาคม 2026" })).toBeVisible();
   },
 );

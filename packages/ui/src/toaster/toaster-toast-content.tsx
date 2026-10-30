@@ -1,5 +1,8 @@
 import type { KeyboardEvent, MouseEvent, RefObject } from "react";
 
+import "@abereghici/tokens/components/toast.css";
+import "@abereghici/tokens/components/kbd.css";
+
 import { CheckCircleIcon } from "../icon/icons/check-circle.tsx";
 import { DangerIcon } from "../icon/icons/danger.tsx";
 import { InfoIcon } from "../icon/icons/info.tsx";

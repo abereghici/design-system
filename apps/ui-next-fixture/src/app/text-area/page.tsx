@@ -1,4 +1,4 @@
-import { TextArea } from "@platform/ui/text-area";
+import { TextArea } from "@abereghici/ui/text-area";
 
 export default function Page() {
   return (

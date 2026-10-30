@@ -12,9 +12,11 @@ import {
 import { flushSync } from "react-dom";
 import type { ComponentProps, FocusEvent, KeyboardEvent, MouseEvent } from "react";
 
+import "@abereghici/tokens/components/calendar.css";
+
 import { requestChange, sharedListener } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { DatePickerContext, dateFormats, Temporal } from "../internal/date/date.ts";
+import { DatePickerContext, Temporal, useDateFormats } from "../internal/date/date.ts";
 import type { DatePickerContextValue } from "../internal/date/date.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
@@ -42,12 +44,6 @@ export interface CalendarProps extends Omit<
   max?: Temporal.PlainDate | undefined;
   /** Days that can't be chosen, such as weekends or booked dates. They stay readable. */
   isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
-  /**
-   * The language of the month, weekday and day names, and the first day of the week, such as
-   * "ro-RO". Pass the same one on the server and in the browser; without it, the runtime's default
-   * language is used. Inside a DatePicker, the DatePicker's `locale` is used.
-   */
-  locale?: Intl.LocalesArgument;
   /** The name of the previous-month button, such as "Previous month": it shows only an icon. */
   previousMonthLabel: string;
   /** The name of the next-month button, such as "Next month": it shows only an icon. */
@@ -197,7 +193,6 @@ function useGrid(
 export function Calendar({
   previousMonthLabel,
   nextMonthLabel,
-  locale,
   value,
   defaultValue,
   onValueChange,
@@ -207,7 +202,7 @@ export function Calendar({
   ...rest
 }: CalendarProps) {
   const picker = use(DatePickerContext);
-  const formats = dateFormats(picker === null ? locale : picker.locale);
+  const formats = useDateFormats();
   const limits = picker ?? { value, min, max, isDateUnavailable };
   const calendar = useCalendar({ defaultValue, onValueChange, ...limits }, picker);
   const { focused, setFocused, outside } = calendar;

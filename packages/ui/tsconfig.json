@@ -1,5 +1,5 @@
 {
-  "extends": "@platform/typescript-config/react.json",
+  "extends": "@repo/typescript-config/react.json",
   "compilerOptions": {
     "types": ["vite/client"],
     "allowImportingTsExtensions": true
@@ -8,6 +8,7 @@
     "src",
     ".storybook/**/*",
     ".size-limit.ts",
+    "tsdown.config.ts",
     "vite.config.ts",
     "vitest.config.ts",
     "oxlint.config.ts"

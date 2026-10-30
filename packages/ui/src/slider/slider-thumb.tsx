@@ -2,6 +2,8 @@
 
 import type { ComponentProps, KeyboardEvent } from "react";
 
+import "@abereghici/tokens/components/slider.css";
+
 import { useFieldControl } from "../field/use-field.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 

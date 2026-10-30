@@ -10,7 +10,7 @@ Set `dir="rtl"` on `<html>` (or on a region) and every component mirrors. There 
 <html lang="ar" dir="rtl"></html>
 ```
 
-To derive `dir` from the page's language on the server, use `getDirection(tag)` from `@platform/ui/direction` (`Intl.Locale` text info; `"ltr"` for an invalid tag).
+To derive `dir` from the page's language on the server, use `getDirection(tag)` from `@abereghici/ui/direction` (`Intl.Locale` text info; `"ltr"` for an invalid tag).
 
 - **Logical properties throughout.** Components use `inline-start` and `inline-end`, `padding-inline` and `inset-inline`, never `left` and `right`, so layout follows the writing direction.
 - **Icons in a label** go before or after the text in source order, and the component's `gap` spaces them, so they keep their place in either direction.

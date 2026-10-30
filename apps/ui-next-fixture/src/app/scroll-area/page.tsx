@@ -1,4 +1,4 @@
-import { ScrollArea } from "@platform/ui/scroll-area";
+import { ScrollArea } from "@abereghici/ui/scroll-area";
 
 export default function Page() {
   return (

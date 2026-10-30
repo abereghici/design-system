@@ -1,4 +1,4 @@
-import { RadioGroup } from "@platform/ui/radio-group";
+import { RadioGroup } from "@abereghici/ui/radio-group";
 
 export default function Page() {
   return (

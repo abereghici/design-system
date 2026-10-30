@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 
-import { getDirection } from "@platform/ui/direction";
+import { getDirection } from "@abereghici/ui/direction";
 
 test.each([
   ["ar", "rtl"],

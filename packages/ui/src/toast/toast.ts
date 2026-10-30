@@ -74,7 +74,13 @@ function add(options: ToastOptions): string {
   return id;
 }
 
-/** Shows a toast in the app's Toaster and returns its id. Does nothing on the server. */
+/**
+ * Shows a brief, non-blocking confirmation of something the user just did, such as "Link copied", in
+ * the app's Toaster, and returns its id. It is announced without taking focus and leaves on its own,
+ * so it must never be the only place information or an action lives. Show errors that need action inline
+ * with an Alert or Field error, and a decision that must interrupt with an AlertDialog. Does nothing
+ * on the server.
+ */
 export const toast = Object.assign(add, {
   /** Closes that toast as if it timed out. */
   dismiss: (id: string): void => {

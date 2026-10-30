@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/logo.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./logo.module.css";
@@ -13,7 +15,7 @@ export interface LogoProps extends Omit<ComponentProps<"svg">, "children"> {
 }
 
 /**
- * Stâlpul cerului, the Bereghici Logo. It scales with the text it sits in; size it with CSS, and
+ * The Bereghici Logo. It scales with the text it sits in; size it with CSS, and
  * it never shrinks below the smallest size that stays legible. For an interface glyph, use an icon.
  */
 export function Logo({ label, ...props }: LogoProps) {

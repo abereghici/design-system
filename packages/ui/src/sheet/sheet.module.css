@@ -1,5 +1,3 @@
-@import "@platform/tokens/components/sheet.css";
-
 @layer ab.components {
   :root:has(.content:modal) {
     overflow: hidden;

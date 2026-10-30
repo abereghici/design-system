@@ -75,11 +75,6 @@ export interface Options {
   onOpenChange?: Callback<boolean, OpenReason> | undefined;
   /** `null` turns the built-in filtering off: every Item shows, in your order (server search). */
   filter?: null | undefined;
-  /**
-   * The language that matching typed text follows, such as "ro-RO"; without it, the runtime's
-   * default language is used.
-   */
-  locale?: Intl.LocalesArgument;
   disabled?: boolean | undefined;
 }
 

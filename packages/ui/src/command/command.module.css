@@ -1,5 +1,3 @@
-@import "@platform/tokens/components/command.css";
-
 @layer ab.components {
   :root:has(.content:modal) {
     overflow: hidden;
@@ -110,8 +108,8 @@
     display: none;
   }
 
-  .group + .group {
-    margin-block-start: var(--ab-space-stack-xs);
+  .group:not(:first-child) {
+    margin-block-start: var(--ab-space-stack-sm);
   }
 
   .heading {

@@ -1,6 +1,6 @@
 import { expect } from "storybook/test";
 
-import { TextField } from "@platform/ui/text-field";
+import { TextField } from "@abereghici/ui/text-field";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";

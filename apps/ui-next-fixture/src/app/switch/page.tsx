@@ -1,4 +1,4 @@
-import { Switch } from "@platform/ui/switch";
+import { Switch } from "@abereghici/ui/switch";
 
 export default function Page() {
   return (

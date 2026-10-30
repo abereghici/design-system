@@ -1,5 +1,3 @@
-@import "@platform/tokens/components/checkbox.css";
-
 @layer ab.components {
   .root {
     display: inline-flex;
@@ -84,7 +82,7 @@
     background-color: var(--ab-color-icon-disabled);
   }
 
-  /* The draw is the pointer's: keyboard toggles only fade (brand book, no keyboard motion). */
+  /* The draw is the pointer's: keyboard toggles only fade (Foundations/Motion: no keyboard motion). */
   @media (prefers-reduced-motion: no-preference) {
     .root[data-pointer] .input::before {
       transition:

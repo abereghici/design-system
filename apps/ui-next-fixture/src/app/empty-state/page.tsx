@@ -1,5 +1,5 @@
-import { EmptyState } from "@platform/ui/empty-state";
-import { FilesIcon } from "@platform/ui/icons/files";
+import { EmptyState } from "@abereghici/ui/empty-state";
+import { FilesIcon } from "@abereghici/ui/icons/files";
 
 export default function Page() {
   return (

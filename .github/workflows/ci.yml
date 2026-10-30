@@ -13,12 +13,15 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
         with:
           require-lockfile: true
           cache: true
-      - run: pnpm --filter @platform/ui exec playwright install --with-deps --only-shell chromium
+      - run: pnpm --filter @abereghici/ui exec playwright install --with-deps --only-shell chromium
       - run: pnpm lint
       - run: pnpm format
       - run: pnpm check-types
       - run: pnpm test
+      - run: pnpm turbo run test:packed

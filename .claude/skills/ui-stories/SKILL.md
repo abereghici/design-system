@@ -8,9 +8,9 @@ A story file has three readers: the docs page, the Vitest run (every story is a 
 ## Where things live
 
 - `src/<name>/<name>.stories.tsx` sits beside the component. `src/` holds no MDX and no story helpers.
-- The introduction, guides and foundations are unattached MDX in `.storybook/docs/` (`introduction.mdx`, `guides/`, `foundations/`) with `<Meta title>` and no story file. Token visuals use the `ColorPalette`, `Typeset` and `IconGallery` Doc Blocks, otherwise `TokenTable` or `ContrastTable` from `.storybook/docs/blocks/`. Values come from `@platform/tokens/tokens.json` (motion from the token source), never typed by hand. A live example is `<Canvas of={…}>` of an existing component story.
+- The introduction, guides and foundations are unattached MDX in `.storybook/docs/` (`introduction.mdx`, `guides/`, `foundations/`) with `<Meta title>` and no story file. Token visuals use the `ColorPalette`, `Typeset` and `IconGallery` Doc Blocks, otherwise `TokenTable` or `ContrastTable` from `.storybook/docs/blocks/`. Values come from `@abereghici/tokens/tokens.json` (motion from the token source), never typed by hand. A live example is `<Canvas of={…}>` of an existing component story.
 - Shared helpers live under `.storybook/` by purpose: `test/` (proof helpers, setup files), `screenshots/`, `docs/`, `decorators/` (any decorator that isn't tied to one story's content, even with a single consumer) and `components/` once a second story needs one. `src/` imports them as `#.storybook/<path>.<ext>`, extension included. Lint rejects relative paths into `.storybook`.
-- Harness code imports components as a consumer does: `@platform/ui/<name>`.
+- Harness code imports components as a consumer does: `@abereghici/ui/<name>`.
 - Titles are `Introduction`, `Guides/<Page>`, `Foundations/<Page>` and `Components/<Name>`, with no category level: components sort A to Z (`storySort` `method: "alphabetical"`). A new guide or foundation page gets its place in `storySort.order` (`.storybook/preview.tsx`) in the same change.
 
 ## File order
@@ -35,7 +35,6 @@ A story file has three readers: the docs page, the Vitest run (every story is a 
 - A prop's meaning: its TSDoc, which the props table shows. Every public prop gets one short line on why or when to use it, in plain words: no element names, ARIA attributes, token names, pixel values or browser-engine notes. Where react-docgen can't read a prop (taken through `Pick<>` or a union of object types), the meta's `argTypes` gives the row (`textFieldArgTypes` in `.storybook/docs/arg-types.ts`).
 - The component: one paragraph of TSDoc on the exported component (`Root` for a compound): what it is for, what a consumer must provide (a name, a label), the keyboard behaviour a user perceives, and when to use a sibling instead. The `Description` block renders it; never set `parameters.docs.description.component`.
 - A structural docs story: one line in `parameters.docs.description.story`.
-- `packages/ui/specs/<kebab-name>.md` is the internal design record (anatomy, states, keyboard map, screen-reader pass). Docs pages never render it: what a consumer needs moves into the component's TSDoc.
 
 ## Controls
 

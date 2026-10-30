@@ -1,4 +1,4 @@
-import { NumberField } from "@platform/ui/number-field";
+import { NumberField } from "@abereghici/ui/number-field";
 
 export default function Page() {
   return (

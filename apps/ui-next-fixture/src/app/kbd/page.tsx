@@ -1,4 +1,4 @@
-import { Kbd } from "@platform/ui/kbd";
+import { Kbd } from "@abereghici/ui/kbd";
 
 export default function Page() {
   return (

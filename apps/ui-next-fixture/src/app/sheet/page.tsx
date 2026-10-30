@@ -1,4 +1,4 @@
-import { Sheet } from "@platform/ui/sheet";
+import { Sheet } from "@abereghici/ui/sheet";
 
 export default function Page() {
   return (

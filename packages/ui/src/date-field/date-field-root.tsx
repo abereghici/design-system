@@ -3,6 +3,9 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 
+import "@abereghici/tokens/components/field.css";
+import "@abereghici/tokens/components/date-field.css";
+
 import { Wrapper } from "../field/field-wrapper.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
@@ -37,7 +40,6 @@ export function Root({
   required,
   disabled,
   validate,
-  locale,
   incompleteMessage,
   placeholders,
   isDateUnavailable,
@@ -47,7 +49,7 @@ export function Root({
   ...props
 }: RootProps) {
   const [validity, setValidity] = useState<Validity>({ invalid: false, message: "" });
-  const options = { value, defaultValue, onValueChange, min, max, name, form, required, locale };
+  const options = { value, defaultValue, onValueChange, min, max, name, form, required };
   const messages = { incompleteMessage, unavailableMessage, placeholders };
 
   return (

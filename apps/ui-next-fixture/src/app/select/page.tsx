@@ -1,4 +1,4 @@
-import { Select } from "@platform/ui/select";
+import { Select } from "@abereghici/ui/select";
 
 export default function Page() {
   return (

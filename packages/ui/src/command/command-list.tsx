@@ -3,6 +3,8 @@
 import { use } from "react";
 import type { ComponentProps, MouseEvent, PointerEvent } from "react";
 
+import "@abereghici/tokens/components/command.css";
+
 import { dispatchFeedback } from "../events/events.ts";
 import { Listbox, enabled, optionAt } from "../internal/listbox/listbox.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";

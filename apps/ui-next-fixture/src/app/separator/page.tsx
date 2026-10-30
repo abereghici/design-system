@@ -1,4 +1,4 @@
-import { Separator } from "@platform/ui/separator";
+import { Separator } from "@abereghici/ui/separator";
 
 export default function Page() {
   return (

@@ -2,6 +2,8 @@
 
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/accordion.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./accordion.module.css";

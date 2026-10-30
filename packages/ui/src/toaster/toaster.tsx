@@ -4,6 +4,9 @@ import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } fr
 import { createPortal } from "react-dom";
 import type { ComponentProps, RefObject } from "react";
 
+import "@abereghici/tokens/components/toast.css";
+import "@abereghici/tokens/components/kbd.css";
+
 import { sharedListener } from "../events/events.ts";
 import { composeRefs, mergeProps } from "../internal/slot/slot.tsx";
 import { close, mark, progressOf, snapshot, subscribe } from "../toast/toast.ts";
@@ -235,7 +238,7 @@ function Layer({ closeLabel, ref, ...props }: ToasterProps) {
 }
 
 /**
- * Shows the toasts added with `toast()` from `@platform/ui/toast`, stacked at the bottom of the
+ * Shows the toasts added with `toast()` from `@abereghici/ui/toast`, stacked at the bottom of the
  * screen, timed and announced to screen readers. Mount exactly one, near the root inside the
  * UIProvider. Toasts stay usable while a dialog is open.
  */

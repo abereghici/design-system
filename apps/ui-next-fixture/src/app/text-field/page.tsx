@@ -1,4 +1,4 @@
-import { TextField } from "@platform/ui/text-field";
+import { TextField } from "@abereghici/ui/text-field";
 
 export default function Page() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { Command } from "@platform/ui/command";
+import { Command } from "@abereghici/ui/command";
 
 export function CommandMenu() {
   return (

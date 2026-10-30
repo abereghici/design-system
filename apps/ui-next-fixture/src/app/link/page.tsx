@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 
-import { Link } from "@platform/ui/link";
+import { Link } from "@abereghici/ui/link";
 
 export default function Page() {
   return (

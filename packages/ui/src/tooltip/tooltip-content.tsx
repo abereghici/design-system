@@ -2,6 +2,8 @@
 
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/tooltip.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { outside, seen, triggerOf, useTooltip } from "./tooltip-root.tsx";

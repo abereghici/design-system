@@ -7,6 +7,10 @@
     },
     "test": {
       "dependsOn": ["build"]
+    },
+    "test:packed": {
+      "dependsOn": ["^build"],
+      "cache": false
     }
   }
 }

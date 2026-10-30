@@ -1,4 +1,4 @@
-# Performance: delivering `@platform/tokens` and `@platform/ui` to Next.js 16 apps
+# Performance: delivering `@abereghici/tokens` and `@abereghici/ui` to Next.js 16 apps
 
 Researched 2026-10-23. Sources:
 
@@ -358,7 +358,7 @@ These follow from the findings. They are proposals, not decisions.
 ### CSS delivery
 
 1. **Don't set `transpilePackages`** for the two workspace packages, and leave `cssChunking` at its default. Consider `'graph'` only after `next analyze` or Coverage shows unused CSS crossing routes.
-2. **Ship `@platform/tokens/layers.css`** containing only `@layer ab.reset, ab.tokens, ab.base, ab.components;`. Import it first in the app's root layout, before the tokens and base CSS. Disable import auto-sorting for that file.
+2. **Ship `@abereghici/tokens/layers.css`** containing only `@layer ab.reset, ab.tokens, ab.base, ab.components;`. Import it first in the app's root layout, before the tokens and base CSS. Disable import auto-sorting for that file.
 3. **One `.module.css` per component, imported only by that component.** Wrap each module's rules in `@layer ab.components`. Never import component CSS from a barrel.
 4. **Keep the `:root` tokens static.**
    - Switch theme only through `color-scheme`, which `light-dark()` follows.
@@ -374,7 +374,7 @@ These follow from the findings. They are proposals, not decisions.
    - `Figtree[wght]` 300–900, roman plus italic if needed;
    - `NotoSerif[wght]`. Drop the `wdth` axis unless it is used; it would need instancing, which is a build-tool step outside these sources.
    - Keep the latin and latin-ext subsets as separate files.
-2. **Ship a package stylesheet** (`@platform/tokens/fonts.css`) with one `@font-face` per family × style × subset. Each carries a `unicode-range` matching the Google Fonts ranges, a `font-weight` range (`300 900` / `100 900`), and `font-display: swap`. Put the `@font-face` rules in `ab.base` or unlayered (layers don't affect `@font-face`; inference).
+2. **Ship a package stylesheet** (`@abereghici/tokens/fonts.css`) with one `@font-face` per family × style × subset. Each carries a `unicode-range` matching the Google Fonts ranges, a `font-weight` range (`300 900` / `100 900`), and `font-display: swap`. Put the `@font-face` rules in `ab.base` or unlayered (layers don't affect `@font-face`; inference).
 3. **Stabilise the fallback.** Use `font-size-adjust: from-font` on the root font stack, which is newly available. Optionally, add a metric-matched local fallback `@font-face` (`src: local("Arial")` / `local("Times New Roman")` with `size-adjust`, plus `ascent-override`/`descent-override` as progressive enhancement). Fontaine or next/font's fontkit approach can generate the numbers.
 4. **Preload exactly one file**, the Figtree latin roman, from the root layout. Use `preload(url, { as: "font", type: "font/woff2", crossOrigin: "anonymous" })` from `react-dom`. Never preload latin-ext.
 5. **Don't adopt `next/font/local` for now.** It would preload every listed file, put one `unicode-range` on all files, and need a relative path into the package. Reconsider it if the apps value its automatic fallback more than per-subset ranges. The untested option is two calls per family (latin preloaded, latin-ext `preload: false`), which needs both family names in the stack.
@@ -382,9 +382,9 @@ These follow from the findings. They are proposals, not decisions.
 ### JS and React
 
 1. **Put `'use client'` only in files that use state, effects, refs or event handlers.** Keep `Icon`, `Text`, `Stack`, `Card` and similar components server-safe. Let client components accept `children` so server content can pass through.
-2. **Add per-component `exports` subpaths** (`"./button": "./src/button/index.ts"`, or a `./*` pattern), plus `"sideEffects": ["*.css"]` in both packages. Keep a root barrel only for convenience, and list `@platform/ui` in `optimizePackageImports` if the barrel is kept.
-3. **React Compiler:** let the app compile the source; no library-side pre-compile is needed. Add a CI check that a built client chunk contains compiler output for `@platform/ui`. Use `"use no memo"` only with a comment explaining why.
-4. **Command palette:** a small client trigger handles the shortcut and the button. The heavy palette is `dynamic(() => import('@platform/ui/command').then(m => m.CommandPalette))`, rendered only when open. Warm it with `import('@platform/ui/command')` on `pointerenter`/`focus` of the trigger.
+2. **Add per-component `exports` subpaths** (`"./button": "./src/button/index.ts"`, or a `./*` pattern), plus `"sideEffects": ["*.css"]` in both packages. Keep a root barrel only for convenience, and list `@abereghici/ui` in `optimizePackageImports` if the barrel is kept.
+3. **React Compiler:** let the app compile the source; no library-side pre-compile is needed. Add a CI check that a built client chunk contains compiler output for `@abereghici/ui`. Use `"use no memo"` only with a comment explaining why.
+4. **Command palette:** a small client trigger handles the shortcut and the button. The heavy palette is `dynamic(() => import('@abereghici/ui/command').then(m => m.CommandPalette))`, rendered only when open. Warm it with `import('@abereghici/ui/command')` on `pointerenter`/`focus` of the trigger.
 5. **DatePicker:** the input field renders eagerly. The calendar grid, and any Temporal-dependent code, load the same way when the popover opens.
 
 ### Motion

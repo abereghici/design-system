@@ -1,5 +1,3 @@
-@import "@platform/tokens/components/icon-button.css";
-
 @layer ab.components {
   .root {
     --ab-icon-size: var(--ab-icon-button-icon-size);

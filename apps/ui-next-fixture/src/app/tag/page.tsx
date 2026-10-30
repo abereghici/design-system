@@ -1,4 +1,4 @@
-import { Tag } from "@platform/ui/tag";
+import { Tag } from "@abereghici/ui/tag";
 
 export default function Page() {
   return (

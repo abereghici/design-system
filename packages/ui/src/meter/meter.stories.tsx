@@ -11,7 +11,7 @@ import type { MeterProps } from "./meter.tsx";
 const meta = preview.meta({
   title: "Components/Meter",
   component: Meter,
-  args: { value: 42, label: "Storage", locale: "en-US" },
+  args: { value: 42, label: "Storage" },
 });
 
 export const Default = meta.story({});
@@ -68,8 +68,8 @@ Default.test(
 );
 
 Default.test(
-  "formats its value in the given locale",
-  { args: { locale: "ro-RO", label: "Spațiu" } },
+  "formats its value in the app's locale",
+  { globals: { locale: "ro-RO" }, args: { label: "Spațiu" } },
   async ({ canvas }) => {
     await expect(canvas.getByText("42 %")).toBeVisible();
   },

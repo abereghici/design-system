@@ -1,4 +1,4 @@
-import { SegmentedControl } from "@platform/ui/segmented-control";
+import { SegmentedControl } from "@abereghici/ui/segmented-control";
 
 export default function Page() {
   return (

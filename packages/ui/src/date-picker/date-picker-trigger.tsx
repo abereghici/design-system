@@ -4,7 +4,7 @@ import { useId } from "react";
 
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { CalendarIcon } from "../icon/icons/calendar.tsx";
-import { dateFormats } from "../internal/date/date.ts";
+import { useDateFormats } from "../internal/date/date.ts";
 import type { Temporal } from "../internal/date/date.ts";
 
 import type { Panel } from "./date-picker-panel.tsx";
@@ -13,13 +13,13 @@ import styles from "./date-picker.module.css";
 interface TriggerProps {
   readonly panel: Omit<Panel, "picker">;
   readonly value: Temporal.PlainDate | null;
-  readonly locale: Intl.LocalesArgument;
   readonly disabled: boolean;
 }
 
-export function Trigger({ panel, value, locale, disabled }: TriggerProps) {
+export function Trigger({ panel, value, disabled }: TriggerProps) {
   const { overlay, name, trigger } = panel;
   const descriptionId = useId();
+  const formats = useDateFormats();
 
   return (
     <>
@@ -38,7 +38,7 @@ export function Trigger({ panel, value, locale, disabled }: TriggerProps) {
       </IconButton>
       {value !== null && (
         <span id={descriptionId} hidden>
-          {dateFormats(locale).full(value)}
+          {formats.full(value)}
         </span>
       )}
     </>

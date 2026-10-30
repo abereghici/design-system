@@ -2,12 +2,12 @@
   "semantic": {
     "color-brand-moss": {
       "$type": "color",
-      "$description": "Identity hue Moss, fixed in both themes. For the mark, imagery and print only; never an interface role. Ink of `assets/marks/stalpul-cerului-moss.svg`.",
+      "$description": "Identity hue Moss, fixed in both themes. For the Logo, imagery and print only; never an interface role. Ink of `packages/ui/assets/logo/logo-moss.svg`.",
       "$value": "{primitive.palette-moss-900}"
     },
     "color-brand-lichen": {
       "$type": "color",
-      "$description": "Identity hue Lichen, fixed in both themes. For the mark, imagery and print only; never an interface role. Ink of `assets/marks/stalpul-cerului-lichen.svg`, and the ground behind the moss mark in avatars.",
+      "$description": "Identity hue Lichen, fixed in both themes. For the Logo, imagery and print only; never an interface role. Ink of `packages/ui/assets/logo/logo-lichen.svg`.",
       "$value": "{primitive.palette-lichen-100}"
     },
     "color-brand-sage": {

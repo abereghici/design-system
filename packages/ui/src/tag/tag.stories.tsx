@@ -1,6 +1,6 @@
 import { expect } from "storybook/test";
 
-import { CheckIcon } from "@platform/ui/icons/check";
+import { CheckIcon } from "@abereghici/ui/icons/check";
 
 import preview from "#.storybook/preview.tsx";
 

@@ -1,8 +1,8 @@
 import { expect, fn } from "storybook/test";
 
-import { Button } from "@platform/ui/button";
-import { DateField } from "@platform/ui/date-field";
-import { TextField } from "@platform/ui/text-field";
+import { Button } from "@abereghici/ui/button";
+import { DateField } from "@abereghici/ui/date-field";
+import { TextField } from "@abereghici/ui/text-field";
 
 import preview from "#.storybook/preview.tsx";
 

@@ -1,3 +1,5 @@
+import "@abereghici/tokens/components/breadcrumbs.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { Link as BaseLink } from "../link/link.tsx";
 import type { LinkProps as BaseLinkProps } from "../link/link.tsx";

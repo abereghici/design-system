@@ -6,7 +6,7 @@ import type { SizeLimitConfig } from "size-limit";
 const budgets: Readonly<Record<string, string>> = {
   alert: "2.55 kB",
   avatar: "1.8 kB",
-  badge: "980 B",
+  badge: "1.05 kB",
   breadcrumbs: "1.7 kB",
   button: "2.5 kB",
   calendar: "24.5 kB",
@@ -32,16 +32,16 @@ const budgets: Readonly<Record<string, string>> = {
   link: "820 B",
   logo: "770 B",
   "number-field": "6.25 kB",
-  meter: "1.3 kB",
+  meter: "1.35 kB",
   navbar: "1.2 kB",
   pagination: "3.4 kB",
-  progress: "1.4 kB",
+  progress: "1.45 kB",
   "scroll-area": "800 B",
   "password-field": "5.3 kB",
   popover: "4.45 kB",
   "radio-group": "2.5 kB",
   "ui-provider": "5.4 kB",
-  select: "4.4 kB",
+  select: "4.45 kB",
   separator: "990 B",
   skeleton: "900 B",
   sidebar: "1.8 kB",
@@ -74,10 +74,10 @@ const checks = (pattern: string, subpath: (path: string) => string, limit?: stri
     const name = subpath(path);
     const budget = limit ?? budgets[name];
 
-    if (budget === undefined) throw new Error(`No size budget for @platform/ui/${name}`);
+    if (budget === undefined) throw new Error(`No size budget for @abereghici/ui/${name}`);
 
     return {
-      name: `@platform/ui/${name}`,
+      name: `@abereghici/ui/${name}`,
       path,
       import: "*",
       ignore: ["react", "react-dom", "*.woff2"],

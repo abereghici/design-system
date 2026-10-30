@@ -2,6 +2,9 @@ import { useEffect, useRef } from "react";
 import { flushSync } from "react-dom";
 import type { PointerEvent, RefObject } from "react";
 
+import "@abereghici/tokens/components/toast.css";
+import "@abereghici/tokens/components/kbd.css";
+
 import { dispatchFeedback } from "../events/events.ts";
 import { composeRefs } from "../internal/slot/slot.tsx";
 import { close, mark, progressOf, remove } from "../toast/toast.ts";

@@ -1,5 +1,5 @@
 import { Meta, Typeset } from "@storybook/addon-docs/blocks";
-import tokens from "@platform/tokens/tokens.json";
+import tokens from "@abereghici/tokens/tokens.json";
 
 import { TokenTable } from "../blocks/token-table.tsx";
 
@@ -13,7 +13,7 @@ export const family = (key) => {
     fontFamily: tokens.type.families[key],
     fontSizes: [...new Set(styles.map((style) => style.fontSize))],
     fontWeight: styles[0].fontWeight,
-    sampleText: "Stâlpul cerului holds the sky",
+    sampleText: "Sphinx of black quartz, judge my vow",
   };
 };
 

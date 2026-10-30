@@ -1,7 +1,17 @@
 {
-  "name": "@platform/tokens",
+  "name": "@abereghici/tokens",
   "version": "0.0.0",
-  "private": true,
+  "description": "Design tokens, CSS custom properties and fonts of the abereghici design system.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abereghici/design-system.git",
+    "directory": "packages/tokens"
+  },
+  "files": [
+    "dist",
+    "fonts"
+  ],
   "type": "module",
   "exports": {
     "./tokens.css": "./dist/tokens.css",
@@ -13,6 +23,16 @@
     "./contrast-matrix": "./src/contrast-matrix.ts",
     "./source/*.tokens.json": "./src/tokens/*.tokens.json"
   },
+  "publishConfig": {
+    "exports": {
+      "./tokens.css": "./dist/tokens.css",
+      "./components/*.css": "./dist/components/*.css",
+      "./tokens.json": "./dist/tokens.json",
+      "./fonts.css": "./dist/fonts.css",
+      "./fonts/*": "./fonts/*"
+    },
+    "access": "public"
+  },
   "scripts": {
     "build": "node scripts/build.ts",
     "check-types": "tsc",
@@ -22,8 +42,8 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@platform/oxlint-config": "workspace:*",
-    "@platform/typescript-config": "workspace:*",
+    "@repo/oxlint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@types/fontkit": "catalog:",
     "@types/node": "catalog:",
     "@types/subset-font": "catalog:",

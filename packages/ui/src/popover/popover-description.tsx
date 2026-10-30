@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/popover.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./popover.module.css";

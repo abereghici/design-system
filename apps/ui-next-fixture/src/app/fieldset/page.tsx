@@ -1,4 +1,4 @@
-import { Fieldset } from "@platform/ui/fieldset";
+import { Fieldset } from "@abereghici/ui/fieldset";
 
 export default function Page() {
   return (

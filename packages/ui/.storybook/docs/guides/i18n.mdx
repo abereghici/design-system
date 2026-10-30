@@ -4,7 +4,7 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # Internationalization
 
-The library ships no interface text. Every label, button name and message is yours, so your app's wording and translation pipeline stay in your hands. Numbers and dates are formatted by `Intl` in the language you pass.
+The library ships no interface text. Every label, button name and message is yours, so your app's wording and translation pipeline stay in your hands. Numbers and dates are formatted by `Intl` in the language you give the UIProvider.
 
 ## Write the text
 
@@ -17,48 +17,30 @@ Pass text as `children` or as a named prop. Where a part would otherwise have no
 <Spinner>{t("loading")}</Spinner>
 ```
 
-## Formatting
+## Set the language once
 
-Components that format numbers or dates (Badge, Calendar, Combobox and Command matching, DateField, DatePicker, Meter, NumberField, Pagination, Progress, Slider) take an optional `locale`, a BCP 47 tag such as `"ro-RO"`, which they pass to `Intl`. Month and weekday names, date segment names, percentages and grouped numbers all come from `Intl`. Without `locale`, `Intl` uses the runtime's default language, which can differ between your server and the browser, so a server-rendered app passes the same `locale` everywhere:
-
-```tsx
-<Meter value={42} label="Spațiu" locale="ro-RO" />
-```
-
-## Migrate from locale objects
-
-The `enUS` and `roRO` objects, the `@platform/ui/locales/*` entries, UIProvider's `locale` prop and every `labels` prop are gone. Move each string to the component that shows it, and pass the tag as `locale` where a component formats:
+Give `UIProvider` the same BCP 47 tag as `<html lang>`. Every component that formats follows it: month and weekday names, date segments, percentages, grouped numbers and typed-text matching all come from `Intl` in that language. The server and the browser then format alike, so hydration matches; without it, each uses its own default language and the text can differ.
 
 ```tsx
-// Before
-<UIProvider locale={roRO}>
-  <Dialog.Close labels={{ close: "Închide" }} />
-  <Pagination page={2} count={9} getPageUrl={url} />
-</UIProvider>
+// app/[lang]/layout.tsx
+import { getDirection } from "@abereghici/ui/direction";
+import { UIProvider } from "@abereghici/ui/ui-provider";
 
-// After
-<UIProvider>
-  <Dialog.Close aria-label="Închide" />
-  <Pagination
-    page={2}
-    count={9}
-    getPageUrl={url}
-    locale="ro-RO"
-    aria-label="Paginare"
-    previousLabel="Pagina anterioară"
-    nextLabel="Pagina următoare"
-  />
-</UIProvider>
+export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {
+  const { lang } = await params;
+
+  return (
+    <html lang={lang} dir={getDirection(lang)}>
+      <body>
+        <UIProvider locale={lang}>{children}</UIProvider>
+      </body>
+    </html>
+  );
+}
 ```
+
+Dates are Gregorian in every language, so a locale whose default calendar differs (`th-TH`) shows the same year in a DateField and its Calendar.
 
 ## Direction
 
-Right-to-left languages also need `dir` on `<html>`. `getDirection` from `@platform/ui/direction` reads it from the tag and is safe on the server:
-
-```tsx
-import { getDirection } from "@platform/ui/direction";
-
-<html lang={tag} dir={getDirection(tag)}>
-```
-
-See [Right-to-left](?path=/docs/guides-right-to-left--docs).
+Right-to-left languages also need `dir` on `<html>`, as above. `getDirection` from `@abereghici/ui/direction` reads it from the tag and is safe on the server. See [Right-to-left](?path=/docs/guides-right-to-left--docs).

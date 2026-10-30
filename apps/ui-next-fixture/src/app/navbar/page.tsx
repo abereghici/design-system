@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 
-import { Navbar } from "@platform/ui/navbar";
+import { Navbar } from "@abereghici/ui/navbar";
 
 export default function Page() {
   return (

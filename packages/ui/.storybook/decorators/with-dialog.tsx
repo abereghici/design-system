@@ -1,6 +1,6 @@
 import type { Decorator } from "@storybook/react-vite";
 
-import { Dialog } from "@platform/ui/dialog";
+import { Dialog } from "@abereghici/ui/dialog";
 
 /** Puts the story in an open modal Dialog named "Edit". */
 export const withDialog: Decorator = (Story) => (

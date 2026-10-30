@@ -1,6 +1,6 @@
 import type { Decorator } from "@storybook/react-vite";
 
-import { Field } from "@platform/ui/field";
+import { Field } from "@abereghici/ui/field";
 
 /** Puts the story in an invalid Field that shows `error`, as after a blocked submit. */
 export const withInvalidField = (error: string): Decorator =>

@@ -16,4 +16,4 @@ for (const name of await readdir(new URL("src/icon/icons/", root))) {
 
 for (const [path, text] of modules) await writeFile(new URL(path, root), text);
 
-console.log(`@platform/ui: wrote ${modules.size} glyph modules`);
+console.log(`@abereghici/ui: wrote ${modules.size} glyph modules`);

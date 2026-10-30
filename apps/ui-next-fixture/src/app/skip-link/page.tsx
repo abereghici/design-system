@@ -1,5 +1,5 @@
-import { SkipLink } from "@platform/ui/skip-link";
-import { VisuallyHidden } from "@platform/ui/visually-hidden";
+import { SkipLink } from "@abereghici/ui/skip-link";
+import { VisuallyHidden } from "@abereghici/ui/visually-hidden";
 
 export default function Page() {
   return (

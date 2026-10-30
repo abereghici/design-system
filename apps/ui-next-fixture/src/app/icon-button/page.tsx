@@ -1,5 +1,5 @@
-import { IconButton } from "@platform/ui/icon-button";
-import { PinIcon } from "@platform/ui/icons/pin";
+import { IconButton } from "@abereghici/ui/icon-button";
+import { PinIcon } from "@abereghici/ui/icons/pin";
 
 export default function Page() {
   return (

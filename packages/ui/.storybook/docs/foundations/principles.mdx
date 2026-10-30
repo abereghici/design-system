@@ -10,24 +10,24 @@ Eight rules decide every token and component. When two options both work, pick t
 2. **Semantic first.** Product code names an intent (`--ab-color-text-subtle`), never a raw value (`--ab-palette-sage-700`).
 3. **Predictable names.** Primitive names state their value; semantic and component names use only words from the Dictionary.
 4. **Rationed color.** Surfaces stay neutral. Color marks an action, a state, or the one highlight on a page.
-5. **Flat in flow, lifted in overlays.** In-flow content separates with space, hairlines and surface steps. Only overlays (menus, popovers, toasts, dialogs) get elevation and material.
-6. **Purposeful motion.** Fast, eased out, interruptible and optional. Springs only where the user moves something directly.
+5. **Flat in flow, lifted in overlays.** In-flow content separates with space, hairlines and surface steps. Controls get a faint lift; only overlays (menus, popovers, toasts, dialogs) get the higher Elevations and material.
+6. **Purposeful motion.** Fast, eased out, interruptible and optional. Springs only where a selection settles into place, and for a Toast arriving.
 7. **Keyboard first, pointer friendly.** Every action is reachable from the keyboard, and every control is comfortable to touch.
 8. **Platform before script.** Native elements and CSS do the work, so components behave the way people expect from the browser.
 
 ## Interaction
 
-How components place and behave, and the research behind each rule.
+How components place and behave, and the source behind each rule.
 
-| Rule                                | Basis                 | In the components                                                                              |
-| ----------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------- |
-| Shorten the way to frequent targets | Fitts's law           | Shortcut hints, whole-row hit areas, larger targets on touch                                   |
-| Cut the choices at each step        | Hick's law            | One primary button per view; destructive menu items last, behind a separator                   |
-| Answer within 400ms                 | Doherty threshold     | Instant press feedback, short motion, spinners only for waits over 400ms                       |
-| Stay where users already are        | Jakob's law           | Esc, arrow keys and ⌘K behave as everywhere else; native controls wherever they fit            |
-| Keep the reference point still      | Apple HIG             | Busy buttons keep their width; scroll locks keep a stable gutter                               |
-| Teach shortcuts in place            | Linear, Raycast       | Tooltips and menu items show the key; nothing needs memorising                                 |
-| Validate after intent               | NN/g error prevention | Errors show after interaction and replace the help text instead of stacking on it              |
-| Prefer undo to confirm              | NN/g                  | Reversible actions run at once and offer Undo; dialogs are for irreversible ones               |
-| Close one layer at a time           | The top layer         | Esc closes only the topmost layer, and focus returns to what opened it                         |
-| Honour system settings              | Apple HIG             | Reduced motion, reduced transparency, color scheme and touch screens all change the components |
+| Rule                                | Basis                                                                                                 | In the components                                                                              |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Shorten the way to frequent targets | [Fitts's law](https://lawsofux.com/fittss-law/)                                                       | Shortcut hints, whole-row hit areas, larger targets on touch                                   |
+| Cut the choices at each step        | [Hick's law](https://lawsofux.com/hicks-law/)                                                         | One primary button per view; destructive menu items last, behind a separator                   |
+| Answer within 400ms                 | [Doherty threshold](https://lawsofux.com/doherty-threshold/)                                          | Instant press feedback, short motion; show a Spinner only once a wait passes 400ms             |
+| Stay where users already are        | [Jakob's law](https://lawsofux.com/jakobs-law/)                                                       | Esc and arrow keys behave as everywhere else; native controls wherever they fit                |
+| Keep the reference point still      | [Layout shift](https://web.dev/articles/cls)                                                          | Busy buttons keep their width; the page keeps a stable scrollbar gutter                        |
+| Teach shortcuts in place            | [NN/g heuristic 7](https://www.nngroup.com/articles/ten-usability-heuristics/), accelerators          | Tooltips and menu items show the key; nothing needs memorising                                 |
+| Validate after intent               | [`:user-invalid`](https://developer.mozilla.org/en-US/docs/Web/CSS/:user-invalid)                     | Errors show after interaction and replace the help text instead of stacking on it              |
+| Prefer undo to confirm              | [NN/g heuristic 3](https://www.nngroup.com/articles/ten-usability-heuristics/), user control          | Reversible actions run at once and offer Undo; dialogs are for irreversible ones               |
+| Close one layer at a time           | [APG Dialog pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)                          | Esc closes only the topmost layer, and focus returns to what opened it                         |
+| Honour system settings              | [Media Queries 5](https://www.w3.org/TR/mediaqueries-5/#mf-user-preferences), user preference queries | Reduced motion, reduced transparency, color scheme and touch screens all change the components |

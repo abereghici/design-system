@@ -2,6 +2,8 @@
 
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/field.css";
+
 import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
 import type { WrapperProps, Naming } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";

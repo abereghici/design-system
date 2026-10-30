@@ -1,4 +1,4 @@
-import { Table } from "@platform/ui/table";
+import { Table } from "@abereghici/ui/table";
 
 export default function Page() {
   return (

@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
-import { Button } from "@platform/ui/button";
-import { TextField } from "@platform/ui/text-field";
+import { Button } from "@abereghici/ui/button";
+import { TextField } from "@abereghici/ui/text-field";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";

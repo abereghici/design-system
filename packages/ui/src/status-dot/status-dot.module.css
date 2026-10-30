@@ -1,5 +1,3 @@
-@import "@platform/tokens/components/status-dot.css";
-
 @layer ab.components {
   .root {
     display: inline-block;

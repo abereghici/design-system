@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { expect, fn } from "storybook/test";
 
-import { Button } from "@platform/ui/button";
-import { Field } from "@platform/ui/field";
-import { FileTrigger } from "@platform/ui/file-trigger";
+import { Button } from "@abereghici/ui/button";
+import { Field } from "@abereghici/ui/field";
+import { FileTrigger } from "@abereghici/ui/file-trigger";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview from "#.storybook/preview.tsx";

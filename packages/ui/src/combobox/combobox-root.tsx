@@ -2,6 +2,8 @@
 
 import type { ComponentProps, ReactNode } from "react";
 
+import "@abereghici/tokens/components/combobox.css";
+
 import { Wrapper } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import { Listbox } from "../internal/listbox/listbox.tsx";
@@ -81,7 +83,6 @@ const split = ({
   defaultOpen,
   onOpenChange,
   filter,
-  locale,
   ...rest
 }: Omit<RootProps, "label" | "description" | "errorMessage" | "invalid" | "validate">) =>
   [
@@ -96,7 +97,6 @@ const split = ({
       defaultOpen,
       onOpenChange,
       filter,
-      locale,
       // Read-only blocks the same presses and keys as disabled; only the look and announcement differ.
       disabled: rest.disabled === true || rest.readOnly === true,
     },

@@ -1,7 +1,7 @@
 import { defineConfig } from "oxfmt";
 
 const react = ["react", "react/**", "react-dom", "react-dom/**"];
-const platform = ["@platform/**"];
+const workspace = ["@abereghici/**", "@repo/**"];
 
 export default defineConfig({
   ignorePatterns: [".claude/"],
@@ -9,8 +9,8 @@ export default defineConfig({
     customGroups: [
       { groupName: "react", elementNamePattern: react, modifiers: ["value"] },
       { groupName: "react-type", elementNamePattern: react, modifiers: ["type"] },
-      { groupName: "platform", elementNamePattern: platform, modifiers: ["value"] },
-      { groupName: "platform-type", elementNamePattern: platform, modifiers: ["type"] },
+      { groupName: "workspace", elementNamePattern: workspace, modifiers: ["value"] },
+      { groupName: "workspace-type", elementNamePattern: workspace, modifiers: ["type"] },
     ],
     groups: [
       "builtin",
@@ -21,9 +21,9 @@ export default defineConfig({
       { newlinesBetween: false },
       "external",
       ["type-builtin", "type-external"],
-      "platform",
+      "workspace",
       { newlinesBetween: false },
-      "platform-type",
+      "workspace-type",
       ["internal", "subpath"],
       ["type-internal", "type-subpath"],
       ["parent", "type-parent"],

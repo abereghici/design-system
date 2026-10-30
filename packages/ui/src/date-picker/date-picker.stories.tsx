@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
-import { Calendar } from "@platform/ui/calendar";
+import { Calendar } from "@abereghici/ui/calendar";
 
 import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
 import { dateFieldArgTypes } from "#.storybook/docs/arg-types.ts";
@@ -23,7 +23,7 @@ const months = { previousMonthLabel: "Previous month", nextMonthLabel: "Next mon
 ({ label: "Due date", incompleteMessage: "Enter a complete date" }) satisfies DatePicker.RootProps;
 
 const LoadedCalendar = lazy(() =>
-  import("@platform/ui/calendar").then((module) => ({ default: module.Calendar })),
+  import("@abereghici/ui/calendar").then((module) => ({ default: module.Calendar })),
 );
 
 const meta = preview.meta({
@@ -35,7 +35,6 @@ const meta = preview.meta({
     label: "Due date",
     name: "due",
     defaultValue: date("2025-03-12"),
-    locale: "en-US",
     triggerLabel: "Choose date",
     incompleteMessage: "Enter a complete date",
     onValueChange,
@@ -72,8 +71,8 @@ Default.test("has a trigger named Choose date that describes the value", async (
 });
 
 Default.test(
-  "formats the value and its Calendar in its locale",
-  { args: { locale: "ro-RO" } },
+  "formats the value and its Calendar in the app's locale",
+  { globals: { locale: "ro-RO" } },
   async ({ canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Choose date" });
@@ -261,10 +260,10 @@ export const LazyCalendar = meta.story({
       description: { story: "The Calendar loads with `lazy()` on the first open." },
       source: {
         code: `import { lazy, Suspense } from "react";
-import { DatePicker } from "@platform/ui/date-picker";
+import { DatePicker } from "@abereghici/ui/date-picker";
 
 const Calendar = lazy(() =>
-  import("@platform/ui/calendar").then((module) => ({ default: module.Calendar })),
+  import("@abereghici/ui/calendar").then((module) => ({ default: module.Calendar })),
 );
 
 <DatePicker.Root label="Due date" name="due" triggerLabel="Choose date" incompleteMessage="Enter a complete date">

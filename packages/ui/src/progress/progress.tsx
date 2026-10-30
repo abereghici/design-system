@@ -1,6 +1,9 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
+import "@abereghici/tokens/components/progress.css";
+
+import { FormattedNumber } from "../internal/locale/formatted-number.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./progress.module.css";
@@ -20,11 +23,6 @@ export type ProgressProps = Omit<ComponentProps<"progress">, "children" | "value
     valueLabel?: ReactNode;
     /** How the value reads, such as a percent or a unit. */
     formatOptions?: Intl.NumberFormatOptions;
-    /**
-     * The language the value is formatted in, such as "ro-RO". Pass the same one on the server and
-     * in the browser; without it, the runtime's default language is used.
-     */
-    locale?: Intl.LocalesArgument;
   };
 
 /**
@@ -38,7 +36,6 @@ export function Progress({
   label,
   valueLabel,
   formatOptions = { style: "percent" },
-  locale,
   className,
   style,
   ...props
@@ -48,9 +45,11 @@ export function Progress({
   const text =
     now === undefined
       ? undefined
-      : (valueLabel ??
-        new Intl.NumberFormat(locale, formatOptions).format(
-          formatOptions.style === "percent" ? now / max : now,
+      : (valueLabel ?? (
+          <FormattedNumber
+            {...formatOptions}
+            value={formatOptions.style === "percent" ? now / max : now}
+          />
         ));
 
   return (

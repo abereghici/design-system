@@ -1,4 +1,4 @@
-import { StatusDot } from "@platform/ui/status-dot";
+import { StatusDot } from "@abereghici/ui/status-dot";
 
 export default function Page() {
   return (

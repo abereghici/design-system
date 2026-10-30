@@ -3,6 +3,8 @@
 import { useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
+import "@abereghici/tokens/components/icon-button.css";
+
 import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { Slot, mergeProps } from "../internal/slot/slot.tsx";

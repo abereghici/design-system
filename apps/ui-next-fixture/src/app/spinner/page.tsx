@@ -1,4 +1,4 @@
-import { Spinner } from "@platform/ui/spinner";
+import { Spinner } from "@abereghici/ui/spinner";
 
 export default function Page() {
   return (

@@ -60,7 +60,7 @@ export const pointerMarker = {
   },
 };
 
-interface Targeted {
+export interface Targeted {
   readonly currentTarget: EventTarget;
 }
 

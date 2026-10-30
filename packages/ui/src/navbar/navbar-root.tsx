@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/navbar.css";
+
 import styles from "./navbar.module.css";
 
 type AccessibleName =

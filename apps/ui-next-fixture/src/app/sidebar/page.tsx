@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 
-import { Sidebar } from "@platform/ui/sidebar";
+import { Sidebar } from "@abereghici/ui/sidebar";
 
 export default function Page() {
   return (

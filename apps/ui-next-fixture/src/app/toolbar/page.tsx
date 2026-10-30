@@ -1,8 +1,8 @@
-import { IconButton } from "@platform/ui/icon-button";
-import { CopyIcon } from "@platform/ui/icons/copy";
-import { DownloadIcon } from "@platform/ui/icons/download";
-import { PinIcon } from "@platform/ui/icons/pin";
-import { Toolbar } from "@platform/ui/toolbar";
+import { IconButton } from "@abereghici/ui/icon-button";
+import { CopyIcon } from "@abereghici/ui/icons/copy";
+import { DownloadIcon } from "@abereghici/ui/icons/download";
+import { PinIcon } from "@abereghici/ui/icons/pin";
+import { Toolbar } from "@abereghici/ui/toolbar";
 
 export default function Page() {
   return (
