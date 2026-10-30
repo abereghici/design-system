@@ -74,10 +74,10 @@ const checks = (pattern: string, subpath: (path: string) => string, limit?: stri
     const name = subpath(path);
     const budget = limit ?? budgets[name];
 
-    if (budget === undefined) throw new Error(`No size budget for @abereghici/ui/${name}`);
+    if (budget === undefined) throw new Error(`No size budget for @platform/ui/${name}`);
 
     return {
-      name: `@abereghici/ui/${name}`,
+      name: `@platform/ui/${name}`,
       path,
       import: "*",
       ignore: ["react", "react-dom", "*.woff2"],
