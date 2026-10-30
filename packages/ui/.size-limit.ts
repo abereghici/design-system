@@ -50,7 +50,7 @@ const budgets: Readonly<Record<string, string>> = {
   spinner: "1.1 kB",
   switch: "1.95 kB",
   "status-dot": "790 B",
-  table: "1.45 kB",
+  table: "4.3 kB",
   tabs: "2.3 kB",
   "segmented-control": "2.25 kB",
   accordion: "2.25 kB",
