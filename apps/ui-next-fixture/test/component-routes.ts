@@ -175,6 +175,18 @@ export const componentRoutes = [
     html: 'href="/pagination?page=3">3</a>',
   },
   {
+    name: "code-block",
+    tokens: ["code-block"],
+    client: ["code-block/code-block"],
+    html: "<pre class",
+  },
+  {
+    name: "copy-button",
+    tokens: ["button", "spinner"],
+    client: ["copy-button/copy-button"],
+    html: 'role="status"',
+  },
+  {
     name: "toggle-button",
     tokens: ["toggle-button"],
     client: ["toggle-button/toggle-button"],
