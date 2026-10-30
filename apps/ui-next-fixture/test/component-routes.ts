@@ -14,6 +14,9 @@ export const componentRoutes = [
     html: 'alt="Ana Popescu"',
   },
   { name: "card", tokens: ["card"], client: [], html: "<h1" },
+  { name: "stack", tokens: [], client: [], html: 'style="--gap:var(--ab-space-stack-lg)' },
+  { name: "inline", tokens: [], client: [], html: 'style="--gap:var(--ab-space-inline-md)' },
+  { name: "grid", tokens: [], client: [], html: "--min:var(--ab-size-container-xs)" },
   { name: "separator", tokens: ["separator"], client: [], html: "<hr" },
   {
     name: "alert",
