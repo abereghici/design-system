@@ -1,0 +1,37 @@
+@layer ab.components {
+  .root {
+    container-type: inline-size;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--ab-description-list-gap) var(--ab-description-list-item-gap);
+    margin: 0;
+  }
+
+  .item {
+    display: grid;
+    grid-column: span 2;
+    /* Subgrid takes the list's two tracks, so every term and every value line up down the list:
+       https://www.w3.org/TR/css-grid-2/#subgrids */
+    grid-template-columns: subgrid;
+  }
+
+  .term {
+    font: var(--ab-description-list-term-font);
+    color: var(--ab-description-list-term-text-color);
+  }
+
+  .details {
+    margin: 0;
+    font: var(--ab-description-list-details-font);
+    color: var(--ab-description-list-details-text-color);
+  }
+
+  /* A container query styles the container's descendants, never the container itself, so the items
+     drop their columns rather than the list: https://www.w3.org/TR/css-contain-3/#container-queries */
+  @container (inline-size < 20em) {
+    .item {
+      grid-template-columns: 1fr;
+      gap: var(--ab-description-list-gap);
+    }
+  }
+}

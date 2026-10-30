@@ -54,6 +54,14 @@
     font-synthesis-small-caps: none;
   }
 
+  [data-density="compact"] {
+    --ab-density: compact;
+  }
+
+  [data-density="comfortable"] {
+    --ab-density: comfortable;
+  }
+
   :where(table, time, output, data) {
     font-variant-numeric: tabular-nums;
   }

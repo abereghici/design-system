@@ -66,6 +66,14 @@
     font: var(--ab-button-lg-font);
   }
 
+  @container style(--ab-density: compact) {
+    .root {
+      --ab-button-sm-height: var(--ab-size-control-compact-sm);
+      --ab-button-md-height: var(--ab-size-control-compact-md);
+      --ab-button-lg-height: var(--ab-size-control-compact-lg);
+    }
+  }
+
   .root:where([data-variant="primary"]) {
     --ab-icon-color: var(--ab-button-primary-icon-color);
     --background-color-hovered: var(--ab-button-primary-background-color-hovered);

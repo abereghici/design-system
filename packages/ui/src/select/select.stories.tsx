@@ -249,6 +249,24 @@ Default.test(
   },
 );
 
+export const Open = meta.story({
+  args: { defaultValue: "eu" },
+  parameters: {
+    docs: {
+      description: { story: "Open, with focus on the chosen option and the pointer over another." },
+    },
+  },
+  play: async ({ canvas }) => {
+    const user = await trusted().catch(() => null);
+
+    if (user === null || !basePicker()) return;
+
+    await user.tab();
+    await user.keyboard(" ");
+    await user.hover(canvas.getByRole("option", { name: "Japan" }));
+  },
+});
+
 export const Controlled = meta.story({
   args: {
     label: "Sort by",

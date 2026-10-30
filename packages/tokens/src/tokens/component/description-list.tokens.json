@@ -1,0 +1,28 @@
+{
+  "component": {
+    "description-list-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-sm}"
+    },
+    "description-list-item-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-lg}"
+    },
+    "description-list-term-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "description-list-term-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "description-list-details-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-sm}"
+    },
+    "description-list-details-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    }
+  }
+}
