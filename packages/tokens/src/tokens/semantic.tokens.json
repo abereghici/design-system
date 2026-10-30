@@ -2,12 +2,12 @@
   "semantic": {
     "color-brand-moss": {
       "$type": "color",
-      "$description": "Logo ink on light grounds. Fixed in both Themes; for the Logo, imagery and print, never an interface role.",
+      "$description": "Brand artwork on light grounds. Fixed in both Themes; for brand imagery and print, never an interface role.",
       "$value": "{primitive.palette-moss-900}"
     },
     "color-brand-lichen": {
       "$type": "color",
-      "$description": "Logo ink on dark grounds. Fixed in both Themes; for the Logo, imagery and print, never an interface role.",
+      "$description": "Brand artwork on dark grounds. Fixed in both Themes; for brand imagery and print, never an interface role.",
       "$value": "{primitive.palette-lichen-100}"
     },
     "color-brand-sage": {
@@ -157,7 +157,7 @@
     },
     "color-background-success-subtle": {
       "$type": "color",
-      "$description": "A tinted success fill, as in tags and toasts. Put text-success on it.",
+      "$description": "A tinted success fill, as in alerts and tags. Put text-success on it.",
       "$value": "{primitive.palette-fern-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -177,7 +177,7 @@
     },
     "color-background-warning-subtle": {
       "$type": "color",
-      "$description": "A tinted warning fill, as in tags and toasts. Put text-warning on it.",
+      "$description": "A tinted warning fill, as in alerts and tags. Put text-warning on it.",
       "$value": "{primitive.palette-ember-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -217,7 +217,7 @@
     },
     "color-background-danger-subtle": {
       "$type": "color",
-      "$description": "A tinted danger fill, as in tags and toasts. Put text-danger on it.",
+      "$description": "A tinted danger fill, as in alerts and tags. Put text-danger on it.",
       "$value": "{primitive.palette-clay-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -300,7 +300,7 @@
     },
     "color-text-accent": {
       "$type": "color",
-      "$description": "Links and accent text.",
+      "$description": "Accent text, as in accent tags.",
       "$value": "{primitive.palette-moss-900}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -1296,7 +1296,7 @@
     },
     "type-data-md": {
       "$type": "typography",
-      "$description": "Numbers in tables and stats, with tabular figures.",
+      "$description": "Numbers in meters, sliders and stats, with tabular figures.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{primitive.font-size-13}",
@@ -1331,7 +1331,7 @@
     },
     "type-data-sm": {
       "$type": "typography",
-      "$description": "Numbers in tables and stats, with tabular figures.",
+      "$description": "Numbers in meters, sliders and stats, with tabular figures.",
       "$value": {
         "fontFamily": "{primitive.font-family-figtree}",
         "fontSize": "{primitive.font-size-12}",

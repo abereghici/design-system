@@ -5,9 +5,11 @@ import {
   Controls,
   Description,
   Primary,
+  Source,
   Stories,
   Subtitle,
   Title,
+  useOf,
 } from "@storybook/addon-docs/blocks";
 import { GLOBALS_UPDATED, SET_GLOBALS } from "storybook/internal/core-events";
 import { addons } from "storybook/preview-api";
@@ -107,12 +109,31 @@ export const mdx = {
  * Storybook's default page, except that Stories leaves out the primary story: the default counts
  * `.test()` proofs as stories, so it would repeat Default on a page with one story.
  */
+/** The import for the page's component, from its title, or `parameters.import` where that differs. */
+function Import() {
+  const { preparedMeta } = useOf("meta", ["meta"]);
+  const name = preparedMeta.title.split("/").at(-1) ?? "";
+  const custom: unknown = preparedMeta.parameters["import"];
+  const path = name.replaceAll(/(?<=[a-z])(?=[A-Z])/gv, "-").toLowerCase();
+
+  return (
+    <Source
+      language="tsx"
+      dark={useScheme() === "dark"}
+      code={
+        typeof custom === "string" ? custom : `import { ${name} } from "@abereghici/ui/${path}";`
+      }
+    />
+  );
+}
+
 export function DocsPage() {
   return (
     <>
       <Title />
       <Subtitle />
       <Description />
+      <Import />
       <Primary />
       <Controls />
       <Stories includePrimary={false} />

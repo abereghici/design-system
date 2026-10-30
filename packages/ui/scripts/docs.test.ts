@@ -26,7 +26,14 @@ const families = new Set(
 );
 
 // CSS properties the pages name, which share a first word with a token family.
-const cssProperties = new Set(["font-size", "line-height", "color-scheme", "z-index"]);
+const cssProperties = new Set([
+  "font-size",
+  "line-height",
+  "color-scheme",
+  "z-index",
+  "font-variant-numeric",
+  "text-transform",
+]);
 
 /** A token name as the pages write it, with `*` and `{a, b}` placeholders, as a pattern. */
 function referencePattern(reference: string) {

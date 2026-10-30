@@ -49,6 +49,10 @@ const withTextField: Decorator = (Story) => (
 const meta = preview.meta({
   title: "Components/Toast",
   component: Toaster,
+  parameters: {
+    import:
+      'import { toast } from "@abereghici/ui/toast";\nimport { Toaster } from "@abereghici/ui/toaster";',
+  },
   args: { "aria-label": "Notifications", closeLabel: "Dismiss" },
   beforeEach: () => clear,
 });

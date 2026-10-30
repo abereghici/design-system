@@ -27,7 +27,7 @@ Surfaces stay neutral. Color marks an action, a state, or the one highlight on a
 
 ## Surfaces
 
-Pages are built from four surfaces, each sitting on the one before it. Overlays also cast a shadow.
+Three surfaces nest in the page, each on the one before it. Overlays float above the page and cast a shadow.
 
 <Surfaces />
 
@@ -37,15 +37,15 @@ Pages are built from four surfaces, each sitting on the one before it. Overlays 
 
 Pick the token by the property you are setting (`background`, `text`, `icon`, `border`), then the role.
 
-| Role        | Use for                                     | Example tokens                                  |
-| ----------- | ------------------------------------------- | ----------------------------------------------- |
-| Neutral     | Most text, icons and borders                | `text-default`, `text-subtle`, `border-default` |
-| `accent`    | The primary action, links, checked controls | `background-accent-bold`, `text-accent`         |
-| `selected`  | The current item in a set                   | `background-selected`, `text-selected`          |
-| `success`   | Completed, valid, positive                  | `background-success-subtle`, `text-success`     |
-| `warning`   | Needs attention, may cause problems         | `background-warning-subtle`, `text-warning`     |
-| `danger`    | Errors, destructive actions                 | `background-danger-bold`, `border-danger`       |
-| `highlight` | The one marked phrase on a page             | `background-highlight`, `text-on-highlight`     |
+| Role        | Use for                              | Example tokens                                  |
+| ----------- | ------------------------------------ | ----------------------------------------------- |
+| Neutral     | Most text, icons and borders         | `text-default`, `text-subtle`, `border-default` |
+| `accent`    | The primary action, checked controls | `background-accent-bold`, `text-accent`         |
+| `selected`  | The current item in a set            | `background-selected`, `text-selected`          |
+| `success`   | Completed, valid, positive           | `background-success-subtle`, `text-success`     |
+| `warning`   | Needs attention, may cause problems  | `background-warning-subtle`, `text-warning`     |
+| `danger`    | Errors, destructive actions          | `background-danger-bold`, `border-danger`       |
+| `highlight` | Selected text                        | `background-highlight`, `text-on-highlight`     |
 
 ## Pairing text with fills
 
@@ -65,7 +65,7 @@ The token build checks every one of these pairs and fails if one drops below WCA
 
 - Use a palette step (`--ab-palette-*`) in product code.
 - Use a text token as a fill, or a fill as text.
-- Use brand colors (`color-brand-*`) for interface roles; they are for the Logo, imagery and print.
+- Use brand colors (`color-brand-*`) for interface roles; they are for brand imagery and print.
 
 </Dont>
 </Guidance>

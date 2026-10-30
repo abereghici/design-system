@@ -31,7 +31,7 @@ Sizes are in `rem`, so text follows the reader's default size. The larger steps 
 
 ## Applying a role
 
-A role is two declarations, because the `font` shorthand can't carry letter spacing:
+A role takes at least two declarations, because the `font` shorthand can't carry letter spacing. `data` roles add `font-variant-numeric`, and `overline` roles add `text-transform`.
 
 ```css
 .intro {
@@ -40,7 +40,7 @@ A role is two declarations, because the `font` shorthand can't carry letter spac
 }
 ```
 
-In React, use `Heading` and `Text`, which apply both.
+In React, use `Heading` and `Text`, which apply them all.
 
 <Guidance>
 <Do>

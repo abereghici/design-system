@@ -26,8 +26,6 @@ To find a component's tokens, filter the [token explorer](?path=/docs/reference-
 }
 ```
 
-A few component tokens drive animations and are registered with `@property` without inheritance. Set those on the component's own element, not on an ancestor.
-
 ## Your own elements
 
 ```css
@@ -41,7 +39,7 @@ A few component tokens drive animations and are registered with `@property` with
 }
 ```
 
-The `font` shorthand can't carry letter spacing, so a type role is always two declarations.
+The `font` shorthand can't carry letter spacing, so a type role takes at least two declarations; `data` roles add `font-variant-numeric`, and `overline` roles add `text-transform`.
 
 ## Why your CSS wins
 
