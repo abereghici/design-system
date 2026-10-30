@@ -1,4 +1,4 @@
-import { expect, fn } from "storybook/test";
+import { expect, fn, waitFor } from "storybook/test";
 
 import preview from "#.storybook/preview.tsx";
 import { trusted } from "#.storybook/test/trusted.ts";
@@ -19,18 +19,20 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
+const announced = (canvas: { getByRole: (role: string) => HTMLElement }, message: string) =>
+  waitFor(() => expect(canvas.getByRole("status")).toHaveTextContent(message));
+
 Default.test("copies its text and says so", async ({ canvas, args }) => {
   const user = await trusted();
-
   const copy = canvas.getByRole("button", { name: "Copy invoice number" });
 
   await user.click(copy);
-  await expect(canvas.getByRole("status")).toHaveTextContent("Copied");
+  await announced(canvas, "Copied");
   await expect(args.onClick).toHaveBeenCalledOnce();
   // The clipboard answers only a focused document, which the press above made this one.
   await navigator.clipboard.writeText("something else");
   await user.click(copy);
-  await expect(await navigator.clipboard.readText()).toBe("INV-2026-0042");
+  await waitFor(async () => expect(await navigator.clipboard.readText()).toBe("INV-2026-0042"));
 });
 
 Default.test("says so when copying fails", async ({ canvas, userEvent }) => {
@@ -40,7 +42,7 @@ Default.test("says so when copying fails", async ({ canvas, userEvent }) => {
 
   try {
     await userEvent.click(canvas.getByRole("button", { name: "Copy invoice number" }));
-    await expect(canvas.getByRole("status")).toHaveTextContent("Copying failed");
+    await announced(canvas, "Copying failed");
   } finally {
     navigator.clipboard.writeText = clipboard;
   }

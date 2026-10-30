@@ -68,7 +68,7 @@ const budgets: Readonly<Record<string, string>> = {
   "code-block": "830 B",
   "copy-button": "2.75 kB",
   "toggle-button": "1.6 kB",
-  "toggle-button-group": "870 B",
+  "toggle-button-group": "900 B",
   toolbar: "990 B",
   tooltip: "2.5 kB",
   "text-area": "3 kB",

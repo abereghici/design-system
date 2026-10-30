@@ -188,7 +188,7 @@ export const componentRoutes = [
     name: "copy-button",
     tokens: ["button", "spinner"],
     client: ["copy-button/copy-button"],
-    html: 'role="status"',
+    html: "Copy invoice number</button><output",
   },
   {
     name: "toggle-button",
