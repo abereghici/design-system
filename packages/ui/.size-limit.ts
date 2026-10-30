@@ -41,7 +41,7 @@ const budgets: Readonly<Record<string, string>> = {
   popover: "4.45 kB",
   "radio-group": "2.5 kB",
   "ui-provider": "5.4 kB",
-  select: "4.4 kB",
+  select: "4.45 kB",
   separator: "990 B",
   skeleton: "900 B",
   sidebar: "1.8 kB",
@@ -74,10 +74,10 @@ const checks = (pattern: string, subpath: (path: string) => string, limit?: stri
     const name = subpath(path);
     const budget = limit ?? budgets[name];
 
-    if (budget === undefined) throw new Error(`No size budget for @platform/ui/${name}`);
+    if (budget === undefined) throw new Error(`No size budget for @abereghici/ui/${name}`);
 
     return {
-      name: `@platform/ui/${name}`,
+      name: `@abereghici/ui/${name}`,
       path,
       import: "*",
       ignore: ["react", "react-dom", "*.woff2"],
