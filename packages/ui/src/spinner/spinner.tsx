@@ -1,8 +1,8 @@
 import type { ComponentProps, ReactNode } from "react";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
+import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
-import visuallyHidden from "../visually-hidden/visually-hidden.module.css";
 import styles from "./spinner.module.css";
 
 type Message =
@@ -32,7 +32,7 @@ export function Spinner({ size = "sm", children, ...props }: SpinnerProps) {
       {...mergeProps({ className: styles["root"] }, props)}
       data-size={size}
     >
-      {children !== undefined && <span className={visuallyHidden["root"]}>{children}</span>}
+      {children !== undefined && <VisuallyHidden>{children}</VisuallyHidden>}
     </span>
   );
 }

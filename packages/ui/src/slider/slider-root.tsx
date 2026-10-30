@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./slider.module.css";
 

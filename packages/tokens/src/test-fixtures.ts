@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { globSync, readFileSync } from "node:fs";
 
 export const srgb = (hex: string) => ({
   colorSpace: "srgb",
@@ -15,21 +15,25 @@ export const themed = (light: string, dark: string) => ({
 const isGroup = (value: unknown): value is Record<string, object> =>
   typeof value === "object" && value !== null;
 
-const sourceTier = (tier: string): Record<string, object> => {
-  const file: unknown = JSON.parse(
-    readFileSync(new URL(`tokens/${tier}.tokens.json`, import.meta.url), "utf8"),
-  );
+const groupOf = (path: string, tier: string): Record<string, object> => {
+  const file: unknown = JSON.parse(readFileSync(path, "utf8"));
   const group: unknown = isGroup(file) ? Reflect.get(file, tier) : undefined;
 
-  if (!isGroup(group)) throw new Error(`src/tokens/${tier}.tokens.json has no "${tier}" group`);
+  if (!isGroup(group)) throw new Error(`${path} has no "${tier}" group`);
 
   return group;
 };
 
+const source = `${import.meta.dirname}/tokens`;
+
 export const validTokens = () => ({
-  primitive: sourceTier("primitive"),
-  semantic: sourceTier("semantic"),
-  component: sourceTier("component"),
+  primitive: groupOf(`${source}/primitive.tokens.json`, "primitive"),
+  semantic: groupOf(`${source}/semantic.tokens.json`, "semantic"),
+  component: Object.fromEntries(
+    globSync(`${source}/component/*.tokens.json`).flatMap((path) =>
+      Object.entries(groupOf(path, "component")),
+    ),
+  ),
 });
 
 export const setMember = (

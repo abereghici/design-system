@@ -2,16 +2,22 @@
 import { afterEach, beforeAll, beforeEach, expect, inject } from "vitest";
 import { cdp, page } from "vitest/browser";
 
-import { storyCanvas } from "./canvas.ts";
+import { renderedCanvas } from "../test/snapshots.ts";
+
 import type { ScreenshotVariant } from "./projects.ts";
 
 declare module "vitest" {
+  export interface TestContext {
+    story?: { id: string };
+  }
+
   export interface ProvidedContext {
-    screenshotVariant: ScreenshotVariant;
+    screenshotVariant?: ScreenshotVariant;
   }
 }
 
-const { emulatedMedia, defaultFontSize } = inject("screenshotVariant");
+const variant = inject("screenshotVariant");
+const { emulatedMedia, defaultFontSize } = variant ?? {};
 
 beforeAll(async () => {
   if (emulatedMedia) {
@@ -45,14 +51,16 @@ beforeEach(async () => {
 });
 
 afterEach(async ({ story, task }) => {
-  if (!story || task.result?.state === "fail") return;
+  const canvas = renderedCanvas();
+
+  if (!story || !variant || canvas === undefined || task.result?.state === "fail") return;
 
   const topLayer = document.querySelector(":modal, :popover-open") !== null;
   const height = document.documentElement.scrollHeight;
 
   if (!topLayer && height > innerHeight) await page.viewport(innerWidth, height);
 
-  await expect(
-    page.elementLocator(topLayer ? document.documentElement : storyCanvas()),
-  ).toMatchScreenshot(story.id);
+  await expect(page.elementLocator(topLayer ? document.documentElement : canvas)).toMatchScreenshot(
+    `${story.id}-${variant.name}`,
+  );
 });

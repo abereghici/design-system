@@ -1,0 +1,80 @@
+{
+  "component": {
+    "dialog-width": {
+      "$type": "dimension",
+      "$value": "{semantic.size-container-sm}"
+    },
+    "dialog-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xl}"
+    },
+    "dialog-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-md}"
+    },
+    "dialog-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-xl}"
+    },
+    "dialog-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-overlay}"
+    },
+    "dialog-shadow": {
+      "$type": "shadow",
+      "$value": "{semantic.elevation-modal}"
+    },
+    "dialog-title-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-heading-sm}"
+    },
+    "dialog-title-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "dialog-description-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-sm}"
+    },
+    "dialog-description-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "dialog-footer-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "dialog-backdrop-color": {
+      "$type": "color",
+      "$value": "{semantic.color-backdrop}"
+    },
+    "dialog-backdrop-blur": {
+      "$type": "dimension",
+      "$value": "{semantic.material-blur-thin}"
+    },
+    "dialog-enter-scale": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-enter-modal}"
+    },
+    "dialog-enter-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-modal}"
+    },
+    "dialog-exit-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-exit}"
+    },
+    "dialog-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-enter}"
+    },
+    "dialog-close-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "dialog-title-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-xs}"
+    }
+  }
+}

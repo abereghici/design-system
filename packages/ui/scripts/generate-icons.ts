@@ -23,19 +23,24 @@ const mirrored = new Set(["arrow-right", "arrow-up-right", "chevron-right", "log
 const iconPathAttributes = new Set(["d", "fill", "stroke"]);
 
 function optimise(svg: string, file: string): XastElement {
-  const { data } = optimize(svg, {
-    multipass: true,
-    plugins: ["preset-default", "convertStyleToAttrs", "removeDimensions", "removeXMLNS"],
-  });
   let element: XastElement | undefined;
 
-  optimize(data, {
+  optimize(svg, {
+    multipass: true,
     plugins: [
+      "preset-default",
+      "convertStyleToAttrs",
+      "removeDimensions",
+      "removeXMLNS",
       {
         name: "collect",
-        fn: (tree: XastRoot) => {
-          element = tree.children.find((node) => node.type === "element");
-        },
+        fn: () => ({
+          root: {
+            exit: (tree: XastRoot) => {
+              element = tree.children.find((node) => node.type === "element");
+            },
+          },
+        }),
       },
     ],
   });

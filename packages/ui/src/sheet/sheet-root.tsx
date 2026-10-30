@@ -1,4 +1,4 @@
-import { ModalRoot } from "../dialog/dialog-modal.tsx";
+import { Modal } from "../dialog/dialog-modal.tsx";
 import type { RootProps } from "../dialog/dialog-modal.tsx";
 
 import styles from "./sheet.module.css";
@@ -8,5 +8,5 @@ import styles from "./sheet.module.css";
  * item, filters. Same focus and dismissal as Dialog. For a short interruptive task, use Dialog.
  */
 export function Root(props: RootProps) {
-  return <ModalRoot {...props} styles={styles} component="Sheet" />;
+  return <Modal {...props} styles={styles} component="Sheet" />;
 }

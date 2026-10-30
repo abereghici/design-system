@@ -1,6 +1,6 @@
 import type { ComponentProps, ElementType, Ref } from "react";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./text.module.css";
 

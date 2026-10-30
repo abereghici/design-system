@@ -1,15 +1,15 @@
 import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "react";
 
 import { getDocument, useEvent } from "../events/use-event.ts";
-import { isOpen, sourceOf } from "../floating/floating.ts";
-import { filterOptions, enabled, textOf } from "../listbox/listbox.tsx";
+import { filterOptions, enabled, textOf } from "../internal/listbox/listbox.tsx";
+import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 
 import { chosenOf, dismiss, highlight, inputOf, listOf, memoryOf, part } from "./combobox-state.ts";
-import type { Combobox, Options } from "./combobox-state.ts";
+import type { ComboboxState, Options } from "./combobox-state.ts";
 
 export const ValueContext = createContext<string | null>(null);
 
-function applyText(c: Combobox, list: Element, input: HTMLInputElement) {
+function applyText(c: ComboboxState, list: Element, input: HTMLInputElement) {
   const { inputValue, defaultInputValue } = c.options;
   const memory = memoryOf(c);
 
@@ -22,7 +22,7 @@ function applyText(c: Combobox, list: Element, input: HTMLInputElement) {
   memory.text = input.value;
 }
 
-function placePopover(c: Combobox, list: HTMLElement) {
+function placePopover(c: ComboboxState, list: HTMLElement) {
   if (c.open === isOpen(list)) return;
 
   list.toggleAttribute("data-pointer", memoryOf(c).pointer);
@@ -31,7 +31,7 @@ function placePopover(c: Combobox, list: HTMLElement) {
   else list.hidePopover();
 }
 
-function showEmpty(c: Combobox, list: HTMLElement, empty: boolean, text: string) {
+function showEmpty(c: ComboboxState, list: HTMLElement, empty: boolean, text: string) {
   list.toggleAttribute("data-empty", empty);
 
   const row = document.getElementById(part(c, "empty"));
@@ -43,7 +43,7 @@ function showEmpty(c: Combobox, list: HTMLElement, empty: boolean, text: string)
   if (status !== null) status.textContent = c.open && empty ? text : "";
 }
 
-function sync(c: Combobox, emptyText: string) {
+function sync(c: ComboboxState, emptyText: string) {
   const list = listOf(c);
   const input = inputOf(c);
 
@@ -74,7 +74,7 @@ function sync(c: Combobox, emptyText: string) {
   else highlight(list, input, from === "chosen" ? (chosen ?? choices[0]) : choices[0], true);
 }
 
-function useListeners(c: Combobox) {
+function useListeners(c: ComboboxState) {
   // A form control reports a committed value with a native change, which the Field validates on.
   const reread = useEffectEvent((value: string | null) => {
     const memory = memoryOf(c);
@@ -128,11 +128,11 @@ function useListeners(c: Combobox) {
 }
 
 /** The Combobox's state, given its empty-list text. The open list, the input's text and the highlight live in the DOM. */
-export function useCombobox(options: Options, empty: string): Combobox {
+export function useCombobox(options: Options, empty: string): ComboboxState {
   const [ownValue, setValue] = useState(options.defaultValue ?? null);
   const [ownOpen, setOpen] = useState(options.defaultOpen ?? false);
   const [query, setQuery] = useState("");
-  const c: Combobox = {
+  const c: ComboboxState = {
     options,
     id: useId(),
     value: options.value === undefined ? ownValue : options.value,

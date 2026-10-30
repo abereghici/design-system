@@ -1,11 +1,8 @@
-import { resolve } from "node:path";
-
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { playwright } from "@vitest/browser-playwright";
 
 import type { BrowserContextOptions } from "playwright";
 import type { TestProjectInlineConfiguration } from "vitest/config";
-import type { ToMatchScreenshotOptions } from "vitest/node";
 
 export interface ScreenshotVariant {
   name: string;
@@ -14,8 +11,6 @@ export interface ScreenshotVariant {
   emulatedMedia?: { name: string; value: string }[];
   defaultFontSize?: number;
 }
-
-type ScreenshotPath = Parameters<NonNullable<ToMatchScreenshotOptions["resolveDiffPath"]>>[0];
 
 const variants: ScreenshotVariant[] = [
   { name: "light", contextOptions: { colorScheme: "light" } },
@@ -32,58 +27,49 @@ const variants: ScreenshotVariant[] = [
   { name: "w320", initialGlobals: { viewport: { value: "mobile1" } } },
 ];
 
-const screenshotProject = (variant: ScreenshotVariant): TestProjectInlineConfiguration => {
-  const fileName = (path: ScreenshotPath) =>
-    `${path.arg}-${variant.name}-${path.browserName}-${path.platform}${path.ext}`;
+const instance = (variant: ScreenshotVariant) => ({
+  browser: "chromium" as const,
+  name: `screenshot:${variant.name}`,
+  provide: { screenshotVariant: variant },
+  provider: playwright({ contextOptions: { ...variant.contextOptions, deviceScaleFactor: 1 } }),
+});
 
-  return {
-    plugins: [
-      storybookTest({
-        tags: { include: ["screenshot"], skip: ["test-fn"] },
-        initialGlobals: variant.initialGlobals ?? {},
-      }),
-    ],
-    test: {
-      name: `screenshot:${variant.name}`,
-      setupFiles: ["./.storybook/screenshots/setup.ts"],
-      provide: { screenshotVariant: variant },
-      browser: {
-        enabled: true,
-        headless: true,
-        ui: false,
-        provider: playwright({
-          contextOptions: { ...variant.contextOptions, deviceScaleFactor: 1 },
-        }),
-        instances: [{ browser: "chromium" }],
-        expect: {
-          toMatchScreenshot: {
-            timeout: 15_000,
-            resolveScreenshotPath: (path) =>
-              resolve(
-                path.root,
-                path.testFileDirectory,
-                path.screenshotDirectory,
-                path.testFileName,
-                fileName(path),
-              ),
-            resolveDiffPath: (path) =>
-              resolve(
-                path.root,
-                path.attachmentsDir,
-                path.testFileDirectory,
-                path.testFileName,
-                fileName(path),
-              ),
-          },
-        },
-      },
+// Variants that differ only in their browser context share a project, so one Vite server serves
+// them all; a variant with its own initialGlobals needs its own storybookTest plugin.
+const screenshotProject = (
+  name: string,
+  group: readonly ScreenshotVariant[],
+  initialGlobals: Record<string, unknown> = {},
+): TestProjectInlineConfiguration => ({
+  plugins: [
+    storybookTest({ tags: { include: ["screenshot"], skip: ["test-fn"] }, initialGlobals }),
+  ],
+  test: {
+    name,
+    setupFiles: ["./.storybook/screenshots/setup.ts"],
+    browser: {
+      enabled: true,
+      headless: true,
+      ui: false,
+      instances: group.map((variant) => instance(variant)),
+      expect: { toMatchScreenshot: { timeout: 15_000 } },
     },
-  };
-};
+  },
+});
 
 // addon-vitest names every storybookTest project `storybook:<configDir>` when it runs Vitest for
 // the Storybook UI (VITEST_STORYBOOK), so a second one would clash with the interaction project.
 export const screenshotProjects = () =>
   process.platform === "linux" && process.env["VITEST_STORYBOOK"] !== "true"
-    ? variants.map((variant) => screenshotProject(variant))
+    ? [
+        screenshotProject(
+          "screenshots",
+          variants.filter((variant) => variant.initialGlobals === undefined),
+        ),
+        ...variants
+          .filter((variant) => variant.initialGlobals !== undefined)
+          .map((variant) =>
+            screenshotProject(`screenshots-${variant.name}`, [variant], variant.initialGlobals),
+          ),
+      ]
     : [];

@@ -26,9 +26,9 @@ Root (fieldset) → Label (legend) → Items (label → radio → diamond → te
 
 - **Root.** A native `<fieldset role="radiogroup">`, UA chrome reset. Items stack with `fieldset-gap` (vertical) or sit in a wrapping row `space-inline-lg` (20) apart (horizontal).
 - **Label.** A native `<legend>`, the group's name, in the field label type (`fieldset-legend-font`).
-- **Item.** A native `<label>` around a native `<input type="radio">` and the text; the whole row is the hit target. Gap `radio-gap` (8), text in `radio-label-font`.
-- **Radio.** The input with `appearance: none`, drawn as a 16 px circle (`radio-size`, `radio-border-radius` full), `radio-border-width` hairline in `radio-border-color`, fill `radio-background-color`.
-- **Diamond.** The radio's `::before` (as the source CSS): a 6 px square rotated 45°, the _ochi_ (`radio-indicator-size`, `radio-indicator-color-checked`), centred in the accent-filled circle; decorative. The brand book places the bob motif here ("The radio's selected indicator").
+- **Item.** A native `<label>` around a native `<input type="radio">` and the text; the whole row is the hit target. Gap `radio-group-gap` (8), text in `radio-group-label-font`.
+- **Radio.** The input with `appearance: none`, drawn as a 16 px circle (`radio-group-size`, `radio-group-border-radius` full), `radio-group-border-width` hairline in `radio-group-border-color`, fill `radio-group-background-color`.
+- **Diamond.** The radio's `::before` (as the source CSS): a 6 px square rotated 45°, the _ochi_ (`radio-group-indicator-size`, `radio-group-indicator-color-checked`), centred in the accent-filled circle; decorative. The brand book places the bob motif here ("The radio's selected indicator").
 
 ## API
 
@@ -71,10 +71,10 @@ Names, checked against the reference libraries:
 | State         | How it shows                                                                                                                                                | Exposed as                                           |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | unchecked     | Hairline circle                                                                                                                                             | —                                                    |
-| hovered       | Border `radio-border-color-hovered`; fine pointers only                                                                                                     | `:hover` on the item                                 |
-| checked       | Accent fill `radio-background-color-checked` with the diamond                                                                                               | `:checked`                                           |
+| hovered       | Border `radio-group-border-color-hovered`; fine pointers only                                                                                               | `:hover` on the item                                 |
+| checked       | Accent fill `radio-group-background-color-checked` with the diamond                                                                                         | `:checked`                                           |
 | focus-visible | 2 px ring, 3 px offset around the circle                                                                                                                    | `:focus-visible`                                     |
-| invalid       | Border `radio-border-color-invalid` on every radio                                                                                                          | `aria-invalid="true"` on the radios (Field contract) |
+| invalid       | Border `radio-group-border-color-invalid` on every radio                                                                                                    | `aria-invalid="true"` on the radios (Field contract) |
 | disabled      | radio `color-border-disabled` / `color-background-disabled`, diamond `color-icon-disabled`, label `color-text-disabled` (Disabled look, GLOSSARY); no hover | `aria-disabled="true"` or `:disabled`                |
 
 ## Behaviour
@@ -87,7 +87,7 @@ Names, checked against the reference libraries:
 
 ## Motion
 
-- **The diamond settles with a light spring** (source: "settles with a light spring"): `scale` from 0 to 1 over `motion-duration-spring` (400 ms) with `radio-easing` (`motion-easing-spring-bouncy`), and back to 0 over `motion-duration-exit` with `motion-easing-exit` (source CSS). Press scales the circle to `motion-scale-pressed`. Brand book: springs only for direct manipulation and toggles, "the radio diamond" by name.
+- **The diamond settles with a light spring** (source: "settles with a light spring"): `scale` from 0 to 1 over `motion-duration-spring` (400 ms) with `radio-group-easing` (`motion-easing-spring-bouncy`), and back to 0 over `motion-duration-exit` with `motion-easing-exit` (source CSS). Press scales the circle to `motion-scale-pressed`. Brand book: springs only for direct manipulation and toggles, "the radio diamond" by name.
 - Fill: colour fade over the same duration, `motion-easing-color`. The previously checked radio fades out over `motion-duration-exit` (150 ms) with no spring.
 - **Reduced motion:** the diamond appears at full size with the fill fade; no scale.
 - **Instant exit:** the old diamond disappears in the frame the new one is checked; nothing waits for it.
@@ -124,14 +124,14 @@ Logical properties only: the circle at the inline start of each item; horizontal
 
 ## Component tokens
 
-Existing (ported from the source): `radio-size`, `radio-indicator-size`, `radio-border-width`, `radio-gap`, `radio-label-font`, `radio-background-color`, `radio-border-color`, `radio-border-color-hovered`, `radio-background-color-checked`, `radio-indicator-color-checked`, `radio-duration`, `radio-easing`.
+Existing (ported from the source): `radio-group-size`, `radio-group-indicator-size`, `radio-group-border-width`, `radio-group-gap`, `radio-group-label-font`, `radio-group-background-color`, `radio-group-border-color`, `radio-group-border-color-hovered`, `radio-group-background-color-checked`, `radio-group-indicator-color-checked`, `radio-group-duration`, `radio-group-easing`.
 
 Proposed new:
 
-| Token                        | References            | `$type`   | Why                                               |
-| ---------------------------- | --------------------- | --------- | ------------------------------------------------- |
-| `radio-border-radius`        | `radius-full`         | dimension | The circle; the source has no radius token for it |
-| `radio-border-color-invalid` | `color-border-danger` | color     | Invalid state (Field contract)                    |
+| Token                              | References            | `$type`   | Why                                               |
+| ---------------------------------- | --------------------- | --------- | ------------------------------------------------- |
+| `radio-group-border-radius`        | `radius-full`         | dimension | The circle; the source has no radius token for it |
+| `radio-group-border-color-invalid` | `color-border-danger` | color     | Invalid state (Field contract)                    |
 
 The Label reuses Fieldset's `fieldset-legend-font` and `fieldset-legend-text-color`; the vertical gap reuses `fieldset-gap`.
 

@@ -1,0 +1,56 @@
+{
+  "component": {
+    "meter-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-sm}"
+    },
+    "meter-label-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "meter-label-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "meter-value-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-data-sm}"
+    },
+    "meter-value-font-variant-numeric": {
+      "$type": "string",
+      "$value": "{semantic.type-data-sm-font-variant-numeric}"
+    },
+    "meter-value-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "meter-track-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-indicator}"
+    },
+    "meter-track-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-full}"
+    },
+    "meter-track-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-subtle}"
+    },
+    "meter-indicator-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-accent}"
+    },
+    "meter-success-indicator-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-success}"
+    },
+    "meter-warning-indicator-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-warning}"
+    },
+    "meter-danger-indicator-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-danger}"
+    }
+  }
+}

@@ -20,7 +20,7 @@
   }
 
   .separator {
-    --ab-icon-ink: var(--ab-breadcrumbs-separator-icon-color);
+    --ab-icon-color: var(--ab-breadcrumbs-separator-icon-color);
   }
 
   .item:first-child > .separator {

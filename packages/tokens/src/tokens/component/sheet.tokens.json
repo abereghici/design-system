@@ -1,0 +1,80 @@
+{
+  "component": {
+    "sheet-width": {
+      "$type": "dimension",
+      "$value": "{semantic.size-container-sm}"
+    },
+    "sheet-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "sheet-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xl}"
+    },
+    "sheet-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-md}"
+    },
+    "sheet-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-xl}"
+    },
+    "sheet-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-overlay}"
+    },
+    "sheet-shadow": {
+      "$type": "shadow",
+      "$value": "{semantic.elevation-modal}"
+    },
+    "sheet-title-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-heading-sm}"
+    },
+    "sheet-backdrop-color": {
+      "$type": "color",
+      "$value": "{semantic.color-backdrop}"
+    },
+    "sheet-backdrop-blur": {
+      "$type": "dimension",
+      "$value": "{semantic.material-blur-thin}"
+    },
+    "sheet-enter-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-drawer}"
+    },
+    "sheet-exit-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-expand}"
+    },
+    "sheet-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-drawer}"
+    },
+    "sheet-title-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "sheet-description-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-sm}"
+    },
+    "sheet-description-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "sheet-title-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-xs}"
+    },
+    "sheet-footer-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "sheet-close-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    }
+  }
+}

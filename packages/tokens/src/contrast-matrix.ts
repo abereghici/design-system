@@ -2,7 +2,7 @@ export const CONTRAST_BACKGROUNDS = [
   "surface-default",
   "surface-raised",
   "surface-nested",
-  "surface-floating",
+  "surface-overlay",
   "background-neutral-subtle-hovered",
   "background-neutral-subtle-pressed",
   "background-selected",
@@ -67,8 +67,8 @@ export const CONTRAST_NON_TEXT_PAIRS = [
   ["background-accent-bold", "surface-default"],
   ["background-accent-bold", "surface-raised"],
   ["background-accent-bold", "surface-nested"],
-  ["background-accent-bold", "surface-floating"],
-  ["surface-floating", "background-accent-bold"],
+  ["background-accent-bold", "surface-overlay"],
+  ["surface-overlay", "background-accent-bold"],
 ] as const;
 
 export interface ContrastRequirement {

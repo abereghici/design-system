@@ -1,6 +1,8 @@
 import { useState } from "react";
-import type { MouseEvent } from "react";
+import type { ComponentProps, MouseEvent } from "react";
 import { expect, fn } from "storybook/test";
+
+import type { StoryContext } from "@storybook/react-vite";
 
 import { PinIcon } from "@platform/ui/icons/pin";
 
@@ -10,7 +12,7 @@ import { listen } from "#.storybook/test/listen.ts";
 import { IconButton } from "./icon-button.tsx";
 import type { IconButtonChangeEventDetails, IconButtonProps } from "./icon-button.tsx";
 
-type Context = Parameters<Parameters<typeof Default.test>[2]>[0];
+type Context = StoryContext<ComponentProps<typeof IconButton>>;
 
 async function blocksActivation({ canvas, userEvent, args }: Context) {
   const button = canvas.getByRole("button", { name: "Pin" });

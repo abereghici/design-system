@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 
 import styles from "./token-table.module.css";
 
-export interface TokenRow {
+interface TokenRow {
   readonly name: string;
   readonly value: string | { readonly light: string; readonly dark: string };
   readonly usage?: string;

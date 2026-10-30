@@ -1,0 +1,72 @@
+{
+  "component": {
+    "alert-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "alert-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-md}"
+    },
+    "alert-body-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-xs}"
+    },
+    "alert-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-lg}"
+    },
+    "alert-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "alert-title-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-md}"
+    },
+    "alert-title-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "alert-description-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-xs}"
+    },
+    "alert-description-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "alert-neutral-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-raised}"
+    },
+    "alert-success-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-success-subtle}"
+    },
+    "alert-warning-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-warning-subtle}"
+    },
+    "alert-danger-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-danger-subtle}"
+    },
+    "alert-neutral-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-accent}"
+    },
+    "alert-success-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-success}"
+    },
+    "alert-warning-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-warning}"
+    },
+    "alert-danger-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-danger}"
+    }
+  }
+}

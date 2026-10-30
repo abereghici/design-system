@@ -1,7 +1,7 @@
 @layer ab.components {
   .trigger {
     flex: none;
-    margin-inline: auto calc(var(--ab-input-border-width) * -1);
+    margin-inline: auto calc(var(--ab-field-border-width) * -1);
   }
 
   .content {

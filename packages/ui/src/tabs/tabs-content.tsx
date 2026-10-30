@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from "react";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { useTabs } from "./tabs-root.tsx";
 import styles from "./tabs.module.css";

@@ -1,7 +1,9 @@
 "use client";
 
-import type { ComponentProps, KeyboardEvent, ReactNode } from "react";
+import type { ComponentProps, KeyboardEvent } from "react";
 
+import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
+import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
 
@@ -9,11 +11,6 @@ import fieldStyles from "../field/field.module.css";
 import styles from "./select.module.css";
 
 export type ChangeEventDetails = Field.ChangeEventDetails<HTMLSelectElement>;
-
-type Naming =
-  | { label: ReactNode }
-  | { label?: undefined; "aria-label": string }
-  | { label?: undefined; "aria-labelledby": string };
 
 type ControlProps = Omit<
   ComponentProps<"select">,
@@ -34,25 +31,7 @@ type ControlProps = Omit<
   disabled?: boolean;
 };
 
-export type RootProps = Naming &
-  ControlProps & {
-    /**
-     * Helper text under the field, such as a format hint; the error message takes its place while
-     * invalid.
-     */
-    description?: ReactNode;
-    /**
-     * What to fix, shown once the user has interacted and the value is invalid. Without it the
-     * browser's own message is shown.
-     */
-    errorMessage?: ReactNode | ((validity: ValidityState) => ReactNode);
-    /** Marks the value invalid from outside, such as a server or validation library result. */
-    invalid?: boolean;
-    /** Your own rule: return a message to mark the value invalid, or nothing when it is valid. */
-    validate?: Field.RootProps["validate"];
-    /** `lg` for prominent or spacious forms. Touch screens get larger targets on their own. */
-    size?: "md" | "lg";
-  };
+export type RootProps = Naming & SizedWrapperProps & ControlProps;
 
 const blocked = (event: KeyboardEvent) =>
   /^(?:Arrow|Page|Home|End|Enter)/v.test(event.key) ||
@@ -101,31 +80,12 @@ function Control({ placeholder, defaultValue, children, ...props }: ControlProps
  * list show the system one. For a long or searchable list use Combobox; for 2–6 options that should
  * stay visible, RadioGroup.
  */
-export function Root({
-  label,
-  description,
-  errorMessage,
-  invalid,
-  validate,
-  size = "md",
-  className,
-  style,
-  ...props
-}: RootProps) {
+export function Root(props: RootProps) {
+  const [wrapper, control] = splitWrapperProps(props);
+
   return (
-    <Field.Root
-      className={className}
-      style={style}
-      data-size={size}
-      name={props.name}
-      invalid={invalid}
-      validate={validate}
-      disabled={props.disabled}
-    >
-      {label !== undefined && <Field.Label>{label}</Field.Label>}
-      <Control {...props} />
-      {description !== undefined && <Field.Description>{description}</Field.Description>}
-      <Field.Error>{errorMessage}</Field.Error>
-    </Field.Root>
+    <Wrapper {...wrapper}>
+      <Control {...control} />
+    </Wrapper>
   );
 }

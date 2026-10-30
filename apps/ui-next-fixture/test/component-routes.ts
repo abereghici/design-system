@@ -26,7 +26,7 @@ export const componentRoutes = [
   { name: "switch", tokens: ["switch"], client: ["switch/switch.tsx"], html: 'role="switch"' },
   {
     name: "radio-group",
-    tokens: ["fieldset", "radio"],
+    tokens: ["fieldset", "radio-group"],
     client: [
       "radio-group/radio-group-item.tsx",
       "radio-group/radio-group-label.tsx",
@@ -48,13 +48,13 @@ export const componentRoutes = [
   },
   {
     name: "select",
-    tokens: ["input", "select", "icon"],
+    tokens: ["field", "select", "icon"],
     client: ["select/select-root.tsx"],
     html: 'label="Asia Pacific"',
   },
   {
     name: "combobox",
-    tokens: ["input", "combobox", "icon"],
+    tokens: ["field", "combobox", "icon"],
     client: [
       "combobox/combobox-group.tsx",
       "combobox/combobox-item.tsx",
@@ -66,26 +66,39 @@ export const componentRoutes = [
   { name: "fieldset", tokens: ["fieldset"], client: [], html: "<legend" },
   {
     name: "field",
-    tokens: ["input"],
+    tokens: ["field"],
     client: ["field/field.tsx"],
     html: "Letters and digits.",
   },
   {
     name: "text-field",
-    tokens: ["input"],
-    client: ["text-field/text-field.tsx"],
+    tokens: ["field"],
+    client: [
+      "field/field-description.tsx",
+      "field/field-error.tsx",
+      "field/field-label.tsx",
+      "field/field-root.tsx",
+      "text-field/text-field-input-group.tsx",
+      "text-field/text-field-input.tsx",
+    ],
     html: 'dir="auto"',
   },
   {
     name: "text-area",
-    tokens: ["input"],
+    tokens: ["field"],
     client: ["text-area/text-area.tsx"],
     html: "<textarea",
   },
   {
     name: "password-field",
-    tokens: ["input", "icon", "icon-button", "spinner"],
-    client: ["password-field/password-field.tsx"],
+    tokens: ["field", "icon", "icon-button", "spinner"],
+    client: [
+      "field/field-description.tsx",
+      "field/field-error.tsx",
+      "field/field-label.tsx",
+      "field/field-root.tsx",
+      "password-field/password-field-control.tsx",
+    ],
     html: 'aria-label="Show password"',
   },
   {
@@ -102,7 +115,7 @@ export const componentRoutes = [
   },
   {
     name: "number-field",
-    tokens: ["input", "icon", "icon-button", "spinner"],
+    tokens: ["field", "icon", "icon-button", "spinner"],
     client: ["number-field/number-field.tsx"],
     html: 'aria-label="Increase"',
   },
@@ -226,8 +239,8 @@ export const componentRoutes = [
       "dropdown-menu/dropdown-menu-content.tsx",
       "dropdown-menu/dropdown-menu-root.tsx",
       "dropdown-menu/dropdown-menu-trigger.tsx",
-      "menu/menu-checkbox-item.tsx",
-      "menu/menu-item.tsx",
+      "internal/menu/menu-checkbox-item.tsx",
+      "internal/menu/menu-item.tsx",
     ],
     html: 'aria-haspopup="menu"',
   },
@@ -238,7 +251,7 @@ export const componentRoutes = [
       "context-menu/context-menu-content.tsx",
       "context-menu/context-menu-root.tsx",
       "context-menu/context-menu-trigger.tsx",
-      "menu/menu-item.tsx",
+      "internal/menu/menu-item.tsx",
     ],
     html: 'role="menu"',
   },
@@ -251,8 +264,8 @@ export const componentRoutes = [
   },
   {
     name: "date-field",
-    tokens: ["input", "date-field"],
-    client: ["date-field/date-field.tsx"],
+    tokens: ["field", "date-field"],
+    client: ["date-field/date-field-root.tsx"],
     html: 'role="spinbutton"',
   },
   {
@@ -263,7 +276,7 @@ export const componentRoutes = [
   },
   {
     name: "date-picker",
-    tokens: ["input", "date-field", "popover", "icon", "icon-button", "spinner"],
+    tokens: ["field", "date-field", "popover", "icon", "icon-button", "spinner"],
     client: [],
     html: 'aria-haspopup="dialog"',
   },

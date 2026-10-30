@@ -9,7 +9,7 @@ const meta = preview.meta({
   component: Icon,
   args: { children: <path d="M5 12h14" /> },
   // Decorative by default, so its tree is empty, and an empty aria snapshot matches anything.
-  tags: ["!aria-snapshot"],
+  parameters: { ariaSnapshot: { disable: true } },
 });
 
 export const Default = meta.story({});

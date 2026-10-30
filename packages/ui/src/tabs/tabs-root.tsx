@@ -4,8 +4,8 @@ import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback, requestChange } from "../events/events.ts";
-import { mergeProps } from "../slot/slot.tsx";
-import type { ChangeEventDetails } from "../toggle/toggle.ts";
+import { mergeProps } from "../internal/slot/slot.tsx";
+import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
 
 import styles from "./tabs.module.css";
 

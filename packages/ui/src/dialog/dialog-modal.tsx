@@ -38,14 +38,14 @@ export function useModal(): ModalContext {
   return context;
 }
 
-type ModalRootProps = Omit<RootProps, "onOpenChange"> &
+type ModalProps = Omit<RootProps, "onOpenChange"> &
   Pick<ModalContext, "styles" | "component"> & {
     // Method syntax stays bivariant, so a narrower reason set fits:
     // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html#strict-function-types
     onOpenChange?(open: boolean, details: ChangeEventDetails): void;
   };
 
-export function ModalRoot(props: ModalRootProps) {
+export function Modal(props: ModalProps) {
   const { open, defaultOpen = false, styles, component, children } = props;
   const id = useId();
   const [title, setTitle] = useState(false);

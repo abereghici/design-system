@@ -1,0 +1,44 @@
+{
+  "component": {
+    "avatar-sm-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-lg}"
+    },
+    "avatar-md-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-xl}"
+    },
+    "avatar-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-full}"
+    },
+    "avatar-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-nested}"
+    },
+    "avatar-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "avatar-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "avatar-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "avatar-sm-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-data-sm}"
+    },
+    "avatar-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "avatar-sm-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-xs}"
+    }
+  }
+}

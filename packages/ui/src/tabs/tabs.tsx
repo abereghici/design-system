@@ -14,4 +14,4 @@ export { Content } from "./tabs-content.tsx";
 
 export type { ContentProps } from "./tabs-content.tsx";
 
-export type { ChangeEventDetails } from "../toggle/toggle.ts";
+export type { ChangeEventDetails } from "../internal/toggle/toggle.ts";

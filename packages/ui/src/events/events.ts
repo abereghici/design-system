@@ -94,7 +94,7 @@ export interface FeedbackEventDetail<Component extends string = string> {
   readonly reason: FeedbackReason;
 }
 
-export type PressEvent = CustomEvent<
+export type PressFeedbackEvent = CustomEvent<
   FeedbackEventDetail<"Button" | "IconButton" | "DropdownMenu" | "ContextMenu">
 >;
 
@@ -113,7 +113,7 @@ export type ToggleFeedbackEvent = CustomEvent<
   >
 >;
 
-export type DismissEvent = CustomEvent<
+export type DismissFeedbackEvent = CustomEvent<
   FeedbackEventDetail<
     | "Alert"
     | "Dialog"
@@ -126,18 +126,20 @@ export type DismissEvent = CustomEvent<
   >
 >;
 
-export type AppearEvent = CustomEvent<FeedbackEventDetail<"Toast">>;
+export type AppearFeedbackEvent = CustomEvent<FeedbackEventDetail<"Toast">>;
 
-export type ConfirmEvent = CustomEvent<FeedbackEventDetail<"AlertDialog" | "Toast" | "Command">>;
+export type ConfirmFeedbackEvent = CustomEvent<
+  FeedbackEventDetail<"AlertDialog" | "Toast" | "Command">
+>;
 
 declare global {
   // lib.dom's Document, Window and HTMLElement event maps extend this one, so every target is typed.
   interface GlobalEventHandlersEventMap {
-    "ab-press": PressEvent;
+    "ab-press": PressFeedbackEvent;
     "ab-toggle": ToggleFeedbackEvent;
-    "ab-dismiss": DismissEvent;
-    "ab-appear": AppearEvent;
-    "ab-confirm": ConfirmEvent;
+    "ab-dismiss": DismissFeedbackEvent;
+    "ab-appear": AppearFeedbackEvent;
+    "ab-confirm": ConfirmFeedbackEvent;
   }
 }
 

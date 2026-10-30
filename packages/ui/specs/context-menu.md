@@ -177,13 +177,12 @@ None. The menu's name is the consumer's `aria-label` (required).
 | `ab-toggle`  | After a CheckboxItem or RadioItem change commits (not cancelled) | `"user"` |
 | `ab-dismiss` | When the user closes the menu with Escape or an outside press    | `"user"` |
 
-Detail: `{ component: "ContextMenu", reason }`, from the Item (`ab-press`, `ab-toggle`) or the Content (`ab-dismiss`), bubbling through the app tree. A right click that repositions an open menu dispatches `ab-dismiss` for the close it is made of (judgement call: one rule for every outside press). Nothing for an Item press that closes the menu, a focus-out, a controlled `open` change or a disabled Item. `src/events/events.ts` widens `PressEvent`'s component union and the `ab-toggle` and `ab-dismiss` unions with `"ContextMenu"`.
+Detail: `{ component: "ContextMenu", reason }`, from the Item (`ab-press`, `ab-toggle`) or the Content (`ab-dismiss`), bubbling through the app tree. A right click that repositions an open menu dispatches `ab-dismiss` for the close it is made of (judgement call: one rule for every outside press). Nothing for an Item press that closes the menu, a focus-out, a controlled `open` change or a disabled Item. `src/events/events.ts` widens `PressFeedbackEvent`'s component union and the `ab-toggle` and `ab-dismiss` unions with `"ContextMenu"`.
 
 ## Sources
 
 - Source guide: artifact `project/components/Menu/README.md` (shared with DropdownMenu; quotes in `dropdown-menu.md`). Brand book: Motion ("Popovers and tooltips grow from their trigger"; "No motion on keyboard-initiated or high-frequency (100+ per day) actions."), Interaction principles ("Esc closes only the topmost popover or dialog, then focus returns to its invoker.").
 - `dropdown-menu.md` (shared Item Parts, keyboard, accessibility, focus handler).
-- Spike #4: `docs/research/floating-platform.md`.
 - HTML Living Standard, popover (show popover with `source`, hide popover, light dismiss): https://html.spec.whatwg.org/multipage/popover.html
 - Pointer Events (click, auxclick and contextmenu from non-pointing devices; ordering of contextmenu and pointerup; pointercancel): https://w3c.github.io/pointerevents/
 - MDN `contextmenu` event: https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event · BCD `api.Element.contextmenu_event` (Safari iOS not supported, https://webkit.org/b/213953)

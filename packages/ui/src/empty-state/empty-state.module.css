@@ -10,13 +10,13 @@
     text-align: center;
   }
 
-  .root > :not(.indicator) {
+  .root > :not(.media) {
     max-inline-size: var(--ab-empty-state-max-width);
   }
 
-  .indicator {
+  .media {
     --ab-icon-size: var(--ab-empty-state-icon-size);
-    --ab-icon-ink: var(--ab-empty-state-icon-color);
+    --ab-icon-color: var(--ab-empty-state-icon-color);
   }
 
   .title {

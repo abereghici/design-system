@@ -10,12 +10,12 @@
     "./react": "./src/react.ts"
   },
   "scripts": {
-    "check-types": "tsc --noEmit",
+    "check-types": "tsc",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix"
   },
   "dependencies": {
-    "oxlint-plugin-eslint": "catalog:"
+    "@stylistic/eslint-plugin": "catalog:"
   },
   "devDependencies": {
     "@platform/typescript-config": "workspace:*",

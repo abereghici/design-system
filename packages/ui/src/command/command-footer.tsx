@@ -3,8 +3,8 @@
 import { use } from "react";
 import type { ComponentProps } from "react";
 
+import { mergeProps } from "../internal/slot/slot.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
-import { mergeProps } from "../slot/slot.tsx";
 
 import { DialogContext } from "./command-root.tsx";
 import styles from "./command.module.css";

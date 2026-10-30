@@ -2,11 +2,12 @@
 
 import type { ComponentProps, MouseEvent, PointerEvent as ReactPointerEvent } from "react";
 
-import { rememberFocus } from "../floating/floating.ts";
-import type { Menu } from "../menu/menu.tsx";
-import { Slot, mergeProps } from "../slot/slot.tsx";
+import { useMenu } from "../internal/menu/menu.tsx";
+import type { Menu } from "../internal/menu/menu.tsx";
+import { rememberFocus } from "../internal/overlay/overlay.ts";
+import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 
-import { place, useContextMenu } from "./context-menu-root.tsx";
+import { place } from "./context-menu-root.tsx";
 
 const LONG_PRESS = 700;
 
@@ -101,16 +102,16 @@ function anchorAt(contentId: string, x: number, y: number) {
 }
 
 /** Opens at the pointer, or below the focused element for the context-menu key, after release. */
-function openFromContextMenu(event: MouseEvent<HTMLDivElement>, floating: Menu["floating"]) {
+function openFromContextMenu(event: MouseEvent<HTMLDivElement>, overlay: Menu["overlay"]) {
   const native = event.nativeEvent;
   const keyboard = isKeyboard(native);
 
-  if (keyboard) rememberFocus(floating.contentId);
+  if (keyboard) rememberFocus(overlay.contentId);
 
   const target = event.target instanceof Element ? event.target : null;
-  const source = keyboard ? target : anchorAt(floating.contentId, event.clientX, event.clientY);
+  const source = keyboard ? target : anchorAt(overlay.contentId, event.clientX, event.clientY);
   const show = () => {
-    floating.toggle(true, "trigger-press", native, source);
+    overlay.toggle(true, "trigger-press", native, source);
   };
 
   if (event.buttons === 0) {
@@ -126,11 +127,11 @@ function openFromContextMenu(event: MouseEvent<HTMLDivElement>, floating: Menu["
 
 /** The area that opens the menu. It keeps its own look. */
 export function Trigger({ disabled = false, asChild = false, ...props }: TriggerProps) {
-  const { floating } = useContextMenu();
+  const { overlay } = useMenu();
   const Area = asChild ? Slot : "div";
   const end = (event: ReactPointerEvent<HTMLDivElement>) => {
     endPress(event, (x, y) => {
-      floating.toggle(true, "trigger-press", event.nativeEvent, anchorAt(floating.contentId, x, y));
+      overlay.toggle(true, "trigger-press", event.nativeEvent, anchorAt(overlay.contentId, x, y));
     });
   };
 
@@ -144,12 +145,12 @@ export function Trigger({ disabled = false, asChild = false, ...props }: Trigger
             event.preventDefault();
 
             if (presses.get(event.currentTarget)?.long !== true)
-              openFromContextMenu(event, floating);
+              openFromContextMenu(event, overlay);
           },
           onPointerDown: (event: ReactPointerEvent<HTMLDivElement>) => {
             if (disabled) return;
 
-            if (!floating.open) rememberFocus(floating.contentId);
+            if (!overlay.open) rememberFocus(overlay.contentId);
 
             if (event.pointerType !== "mouse") startPress(event);
           },
@@ -159,8 +160,8 @@ export function Trigger({ disabled = false, asChild = false, ...props }: Trigger
         },
         props,
       )}
-      id={`${floating.contentId}-area`}
-      data-popup-open={floating.open ? "" : undefined}
+      id={`${overlay.contentId}-area`}
+      data-popup-open={overlay.open ? "" : undefined}
     />
   );
 }

@@ -4,7 +4,7 @@ import { compositeCss } from "./composite.ts";
 import { mediaOverrides, perTheme } from "./media.ts";
 import { componentOf } from "./naming.ts";
 import { propertyRules } from "./property.ts";
-import { authoredDark, isThemed, isWholeReference, resolvedDark } from "./theme.ts";
+import { authoredDark, isThemed, referencedToken, resolvedDark } from "./theme.ts";
 import { inTierOrder, tierOf } from "./tiers.ts";
 
 const cssValue = (
@@ -13,7 +13,7 @@ const cssValue = (
   literal: unknown,
   dictionary: Dictionary,
 ): string => {
-  const target = isWholeReference(authored) ? dictionary.tokenMap.get(authored) : undefined;
+  const target = referencedToken(authored, dictionary);
 
   if (target) return `var(--${target.name})`;
 

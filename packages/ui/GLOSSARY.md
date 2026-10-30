@@ -13,19 +13,19 @@ A named piece of a compound component that the consumer composes (`Dialog.Trigge
 _Avoid_: Slot, sub-component, child
 
 **Variant**:
-One of a component's enumerated visual treatments (primary, secondary, tertiary, danger).
-_Avoid_: Kind, type, appearance
+One of a component's enumerated visual treatments (primary, secondary, tertiary, danger), or the Role a status component shows (neutral, success, warning, danger).
+_Avoid_: Kind, type, appearance, tone, intent
 
-**Floating layer**:
+**Overlay**:
 UI that renders above the page flow: menus, popovers, tooltips, toasts, dialogs and sheets. The only UI that takes elevation or material.
-_Avoid_: Overlay (as a generic term), portal, modal (unless it blocks the page)
+_Avoid_: Floating layer, popup (as a generic term), portal, modal (unless it blocks the page)
 
 **Feedback event**:
-A bubbling, `ab-`-prefixed DOM event (`ab-press`, `ab-toggle`, `ab-confirm`, `ab-dismiss`, `ab-appear`) a component dispatches at a moment an app may want to answer with sound or haptics. Carries the component name and a `reason`. It fires after the consumer's handler for that moment has run, and only once a change request is accepted.
+A bubbling DOM event (press, toggle, confirm, dismiss or appear) a component dispatches at a moment an app may want to answer with sound or haptics. It names the component and whether the user or the app caused it, and fires only after a change request is accepted. Not to be confused with the reason of a change request, which names what triggered the change.
 _Avoid_: Sound event, haptic event, callback
 
 **Change request**:
-A state change a component asks its consumer about before committing: the `on…Change` callback receives the value and `details` (`reason`, `event`, `cancel()`), and calling `cancel()` keeps the previous state. A consumer's `preventDefault()` in its own handler keeps just its native meaning. Where the event's native default is the change itself (an input's checkedness, a `<summary>` toggle, a `commandfor` command), it cancels that default, so the component neither reports nor applies the change (HTML runs no activation behavior for a canceled click; `composeEventHandlers` in `events.ts`, as Radix's). Where there is no native default (a Tab's button click, a Tabs arrow key, whose default is only scrolling), it stops nothing the component does itself, and `cancel()` is the only way to stop the change (Base UI: `preventBaseUIHandler()`, not `preventDefault()`).
+A state change a component asks its consumer about before committing it. The consumer receives the new value and the reason for it, and may cancel it, which keeps the previous state.
 _Avoid_: Change event, veto, controlled change
 
 **Listbox navigator**:
@@ -33,19 +33,19 @@ The active-descendant keyboard both listbox popups share (Combobox, Command): fo
 _Avoid_: Roving focus (that is Menu's), list navigation
 
 **Field control**:
-The one seam between a Field and the control inside it: `useFieldControl` for a native input, `useField` for a composite control (DateField segments, a FileTrigger, a DropZone), giving the Field's ids, blocked state, `aria-invalid` and server error, and `useFormReset` for a form reset.
-_Avoid_: Field context (as an API), input binding
+The control a Field labels, describes and validates: a native input, or a composite control such as DateField's segments, a FileTrigger or a DropZone.
+_Avoid_: Field context, input binding
 
 **Disabled look**:
-The one treatment every disabled control gets: its parts swap to the `*-disabled` colour roles (`text-disabled` ink, `icon-disabled` glyphs and marks, `background-disabled` fill, `border-disabled` edge), the label next to it takes `text-disabled`, and the description that says why stays readable. Never `opacity`: a disabled control stays focusable (`aria-disabled`), and opacity on it fades its focus ring below WCAG 1.4.11's 3:1, then fades again in any disabled ancestor. Button, Field, Command and Calendar set the precedent; Primer (`fgColor-disabled`, `bgColor-disabled`), Carbon (`$text-disabled`, `$icon-disabled`) and Atlassian (`color.text.disabled`) do the same.
+The one treatment every disabled control gets: its text, icons, fill and edge take the disabled colour roles, its label dims with it, and the description that says why stays readable. A disabled control is never faded as a whole, because it stays focusable.
 _Avoid_: Dimmed, greyed out, faded, inactive
 
 **State attribute**:
-A `data-*` attribute a component sets on its own element so CSS can style a state. A yes/no state is present with the empty string while it holds and absent otherwise (`data-selected=""`), as HTML boolean attributes are; an enumerated one carries its value (`data-variant="danger"`, `data-side="top"`). Never `"true"` or `"false"`.
+A `data-*` attribute a component sets on its own element to expose a state for styling: present while a yes/no state holds, or carrying the value of an enumerated one.
 _Avoid_: Data flag, state class
 
 **Uncontrolled state**:
-The state a component holds itself when the consumer passes only the `default…` prop, named `uncontrolled` in the code (`const [uncontrolled, setUncontrolled] = useState(defaultValue)`); the controlled prop wins whenever it is defined. React's controlled and uncontrolled components, Radix's `useControllableState`.
+The state a component holds itself when the consumer gives only a starting value; a value the consumer controls always wins.
 _Avoid_: Own state, internal state, local value
 
 **Icon**:
@@ -61,7 +61,7 @@ A thin line dividing content or groups of items.
 _Avoid_: Divider, rule, hr
 
 **UIProvider**:
-The component an app mounts once at its root. It brings the global stylesheets (layer order, shared tokens, fonts, base), so apps import no CSS. It holds no state and no text.
+The component an app mounts once at its root. It brings every global style the design system needs, so apps add none; it holds no state and no text.
 _Avoid_: Root, app shell, LocaleProvider, ThemeProvider
 
 **Locale**:

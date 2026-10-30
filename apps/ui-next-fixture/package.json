@@ -9,7 +9,7 @@
     "check-types": "next typegen && tsc",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
-    "test": "pnpm run build && vitest run"
+    "test": "vitest run"
   },
   "dependencies": {
     "@platform/tokens": "workspace:*",

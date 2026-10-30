@@ -1,11 +1,11 @@
 // Re-exporting from events.ts brings its GlobalEventHandlersEventMap augmentation to consumers.
 export type {
-  AppearEvent,
+  AppearFeedbackEvent,
   ChangeEventDetails,
-  ConfirmEvent,
-  DismissEvent,
+  ConfirmFeedbackEvent,
+  DismissFeedbackEvent,
   FeedbackEventDetail,
   FeedbackReason,
-  PressEvent,
+  PressFeedbackEvent,
   ToggleFeedbackEvent,
 } from "./events.ts";

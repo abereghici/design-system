@@ -1,7 +1,9 @@
 "use client";
 
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps } from "react";
 
+import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
+import type { WrapperProps, Naming } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
 
 import fieldStyles from "../field/field.module.css";
@@ -15,11 +17,6 @@ declare module "react" {
 }
 
 export type TextAreaChangeEventDetails = Field.ChangeEventDetails<HTMLTextAreaElement>;
-
-type Naming =
-  | { label: ReactNode }
-  | { label?: undefined; "aria-label": string }
-  | { label?: undefined; "aria-labelledby": string };
 
 type ControlProps = Omit<ComponentProps<"textarea">, "rows" | "cols"> & {
   /** The height, in lines, it starts at. */
@@ -37,23 +34,7 @@ type ControlProps = Omit<ComponentProps<"textarea">, "rows" | "cols"> & {
   disabled?: boolean;
 };
 
-export type TextAreaProps = Naming &
-  ControlProps & {
-    /**
-     * Helper text under the field, such as a format hint; the error message takes its place while
-     * invalid.
-     */
-    description?: ReactNode;
-    /**
-     * What to fix, shown once the user has interacted and the value is invalid. Without it the
-     * browser's own message is shown.
-     */
-    errorMessage?: ReactNode | ((validity: ValidityState) => ReactNode);
-    /** Marks the value invalid from outside, such as a server or validation library result. */
-    invalid?: boolean;
-    /** Your own rule: return a message to mark the value invalid, or nothing when it is valid. */
-    validate?: Field.RootProps["validate"];
-  };
+export type TextAreaProps = Naming & WrapperProps & ControlProps;
 
 function Control({ minRows = 3, maxRows = 12, readOnly, ...props }: ControlProps) {
   const bindings = Field.useFieldControl<HTMLTextAreaElement, typeof props>(props);
@@ -73,29 +54,12 @@ function Control({ minRows = 3, maxRows = 12, readOnly, ...props }: ControlProps
  * Text that may run over several lines, such as a comment. It grows with its content, then scrolls.
  * Use TextField for a single line.
  */
-export function TextArea({
-  label,
-  description,
-  errorMessage,
-  invalid,
-  validate,
-  className,
-  style,
-  ...props
-}: TextAreaProps) {
+export function TextArea(props: TextAreaProps) {
+  const [wrapper, control] = splitWrapperProps(props);
+
   return (
-    <Field.Root
-      className={className}
-      style={style}
-      name={props.name}
-      invalid={invalid}
-      validate={validate}
-      disabled={props.disabled}
-    >
-      {label !== undefined && <Field.Label>{label}</Field.Label>}
-      <Control {...props} />
-      {description !== undefined && <Field.Description>{description}</Field.Description>}
-      <Field.Error>{errorMessage}</Field.Error>
-    </Field.Root>
+    <Wrapper {...wrapper}>
+      <Control {...control} />
+    </Wrapper>
   );
 }

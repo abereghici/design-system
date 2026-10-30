@@ -8,7 +8,7 @@ import type {
   SyntheticEvent,
 } from "react";
 
-import { Slot, mergeProps } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 
 import { outside, useTooltip } from "./tooltip-root.tsx";
 

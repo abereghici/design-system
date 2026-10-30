@@ -1,12 +1,10 @@
 "use client";
 
-import { use } from "react";
 import type { ReactNode } from "react";
 
-import { useFloating } from "../floating/floating.ts";
-import type { ChangeEventDetails as Details, FloatingOptions } from "../floating/floating.ts";
-import { MenuContext } from "../menu/menu.tsx";
-import type { Menu } from "../menu/menu.tsx";
+import { MenuContext } from "../internal/menu/menu.tsx";
+import { useOverlay } from "../internal/overlay/overlay.ts";
+import type { ChangeEventDetails as Details, OverlayOptions } from "../internal/overlay/overlay.ts";
 
 export type ChangeReason =
   | "trigger-press"
@@ -17,14 +15,6 @@ export type ChangeReason =
   | "none";
 
 export type ChangeEventDetails = Details<ChangeReason>;
-
-export function useContextMenu(): Menu {
-  const menu = use(MenuContext);
-
-  if (menu === null) throw new Error("ContextMenu parts must be inside ContextMenu.Root");
-
-  return menu;
-}
 
 /**
  * Moves the fixed anchor to a viewport point, measured so a transformed ancestor cannot offset it.
@@ -53,7 +43,7 @@ function cornerAnchor(contentId: string) {
   return place(anchor, area.matches(":dir(rtl)") ? rect.right : rect.left, rect.top, false);
 }
 
-export interface RootProps extends FloatingOptions<ChangeReason> {
+export interface RootProps extends OverlayOptions<ChangeReason> {
   /** The Trigger and Content. */
   children?: ReactNode;
 }
@@ -64,7 +54,7 @@ export interface RootProps extends FloatingOptions<ChangeReason> {
  * in a visible control too.
  */
 export function Root({ children, ...options }: RootProps) {
-  const floating = useFloating("ContextMenu", options, cornerAnchor);
+  const overlay = useOverlay("ContextMenu", options, cornerAnchor);
 
-  return <MenuContext value={{ floating, component: "ContextMenu" }}>{children}</MenuContext>;
+  return <MenuContext value={{ overlay, component: "ContextMenu" }}>{children}</MenuContext>;
 }

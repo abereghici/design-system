@@ -1,0 +1,156 @@
+{
+  "component": {
+    "toast-width": {
+      "$type": "dimension",
+      "$value": "{semantic.size-container-xs}"
+    },
+    "toast-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "toast-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-md}"
+    },
+    "toast-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-lg}"
+    },
+    "toast-stack-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-sm}"
+    },
+    "toast-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-lg}"
+    },
+    "toast-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-overlay}"
+    },
+    "toast-shadow": {
+      "$type": "shadow",
+      "$value": "{semantic.elevation-toast}"
+    },
+    "toast-title-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "toast-title-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "toast-description-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-xs}"
+    },
+    "toast-description-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "toast-success-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-success}"
+    },
+    "toast-warning-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-warning}"
+    },
+    "toast-danger-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-danger}"
+    },
+    "toast-neutral-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-accent}"
+    },
+    "toast-action-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-xs}"
+    },
+    "toast-action-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "toast-action-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "toast-action-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-xs}"
+    },
+    "toast-action-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "toast-action-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "toast-action-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+    },
+    "toast-action-background-color-pressed": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-pressed}"
+    },
+    "toast-action-shortcut-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtlest}"
+    },
+    "toast-close-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtlest}"
+    },
+    "toast-close-icon-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-default}"
+    },
+    "toast-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-toast}"
+    },
+    "toast-danger-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-toast-persistent}"
+    },
+    "toast-enter-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-spring}"
+    },
+    "toast-enter-easing": {
+      "$type": "string",
+      "$value": "{semantic.motion-easing-spring-gentle}"
+    },
+    "toast-exit-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-exit}"
+    },
+    "toast-exit-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-exit}"
+    },
+    "toast-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "toast-body-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-xs}"
+    },
+    "toast-stack-scale": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-enter-modal}"
+    },
+    "toast-stack-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-expand}"
+    },
+    "toast-stack-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-enter}"
+    }
+  }
+}

@@ -5,9 +5,9 @@ export default function Page() {
   return (
     <main>
       <EmptyState.Root>
-        <EmptyState.Indicator>
+        <EmptyState.Media>
           <FilesIcon />
-        </EmptyState.Indicator>
+        </EmptyState.Media>
         <EmptyState.Title>No files yet</EmptyState.Title>
       </EmptyState.Root>
     </main>

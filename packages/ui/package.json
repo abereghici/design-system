@@ -11,12 +11,13 @@
   },
   "exports": {
     "./*": "./src/*/index.ts",
+    "./internal/*": null,
     "./icons/*": "./src/icon/icons/*.tsx"
   },
   "scripts": {
     "storybook": "storybook dev --port 6006",
     "build-storybook": "storybook build",
-    "check-types": "tsc --noEmit && tsc --noEmit -p scripts",
+    "check-types": "tsc && tsc -p scripts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "size": "size-limit",
@@ -62,14 +63,10 @@
     "svgo": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vitest": "catalog:",
-    "web-features": "catalog:"
+    "vitest": "catalog:"
   },
   "peerDependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
-  },
-  "browserslist": [
-    "baseline newly available"
-  ]
+  }
 }

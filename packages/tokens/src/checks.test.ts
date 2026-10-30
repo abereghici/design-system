@@ -2,7 +2,10 @@ import { expect, test } from "vitest";
 
 import { buildTokens, TokenCheckError } from "./build.ts";
 import { setMember, srgb, themed, validTokens } from "./test-fixtures.ts";
-import componentTokens from "./tokens/component.tokens.json" with { type: "json" };
+import command from "./tokens/component/command.tokens.json" with { type: "json" };
+import contextMenu from "./tokens/component/context-menu.tokens.json" with { type: "json" };
+import dropdownMenu from "./tokens/component/dropdown-menu.tokens.json" with { type: "json" };
+import segmentedControl from "./tokens/component/segmented-control.tokens.json" with { type: "json" };
 import primitiveTokens from "./tokens/primitive.tokens.json" with { type: "json" };
 import semanticTokens from "./tokens/semantic.tokens.json" with { type: "json" };
 
@@ -261,16 +264,16 @@ test("the checked accent fill is checked at 3:1 against each surface", async () 
 
   tokens.semantic["color-background-accent-bold"] = themed("palette-moss-900", "palette-night-900");
   await expect(buildTokens({ tokens })).rejects.toThrow(
-    "[dark] --ab-color-background-accent-bold on --ab-color-surface-floating: 1.00:1, needs 3:1",
+    "[dark] --ab-color-background-accent-bold on --ab-color-surface-overlay: 1.00:1, needs 3:1",
   );
 });
 
 test("the Switch and Slider thumb is checked at 3:1 against the accent fill", async () => {
   const tokens = validTokens();
 
-  tokens.semantic["color-surface-floating"] = themed("palette-sage-0", "palette-night-50");
+  tokens.semantic["color-surface-overlay"] = themed("palette-sage-0", "palette-night-50");
   await expect(buildTokens({ tokens })).rejects.toThrow(
-    "[dark] --ab-color-surface-floating on --ab-color-background-accent-bold:",
+    "[dark] --ab-color-surface-overlay on --ab-color-background-accent-bold:",
   );
 });
 
@@ -287,7 +290,12 @@ test("an on-{role} pair is checked against its bold fill", async () => {
 const tiers: Record<string, Record<string, { $value: unknown }>> = {
   primitive: primitiveTokens.primitive,
   semantic: semanticTokens.semantic,
-  component: componentTokens.component,
+  component: {
+    ...command.component,
+    ...contextMenu.component,
+    ...dropdownMenu.component,
+    ...segmentedControl.component,
+  },
 };
 
 function px(reference: string): number {

@@ -1,0 +1,80 @@
+{
+  "component": {
+    "sidebar-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "sidebar-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-md}"
+    },
+    "sidebar-group-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-xs}"
+    },
+    "sidebar-group-label-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "sidebar-group-label-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtlest}"
+    },
+    "sidebar-group-label-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "sidebar-item-min-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-md}"
+    },
+    "sidebar-item-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "sidebar-item-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "sidebar-item-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "sidebar-item-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "sidebar-item-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "sidebar-item-text-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "sidebar-item-text-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-text-selected}"
+    },
+    "sidebar-item-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+    },
+    "sidebar-item-background-color-pressed": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-pressed}"
+    },
+    "sidebar-item-background-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-background-selected}"
+    },
+    "sidebar-indicator-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-selected}"
+    },
+    "sidebar-indicator-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-thick}"
+    }
+  }
+}

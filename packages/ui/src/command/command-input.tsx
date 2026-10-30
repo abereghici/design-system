@@ -5,8 +5,8 @@ import type { ComponentProps } from "react";
 
 import { trackComposition } from "../events/events.ts";
 import { SearchIcon } from "../icon/icons/search.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
-import { mergeProps } from "../slot/slot.tsx";
 
 import { DialogContext, useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";

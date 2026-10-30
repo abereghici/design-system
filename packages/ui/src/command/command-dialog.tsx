@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { ComponentProps, RefObject, SyntheticEvent } from "react";
 
 import { Content } from "../dialog/dialog-content.tsx";
-import { ModalRoot } from "../dialog/dialog-modal.tsx";
+import { Modal } from "../dialog/dialog-modal.tsx";
 import { requestChange } from "../events/events.ts";
 
 import { DialogContext, Root } from "./command-root.tsx";
@@ -66,7 +66,7 @@ export function Dialog(props: DialogProps) {
   };
 
   return (
-    <ModalRoot
+    <Modal
       open={open ?? uncontrolled}
       styles={styles}
       component="Dialog"
@@ -101,6 +101,6 @@ export function Dialog(props: DialogProps) {
           </Root>
         </DialogContext>
       </Content>
-    </ModalRoot>
+    </Modal>
   );
 }

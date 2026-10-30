@@ -21,7 +21,7 @@ Status: draft for brand-owner review (phase 1). Source guide: `components/Button
 
 Container → leading icon (optional) → label → trailing icon (optional) → Kbd hint (optional).
 
-- **Container.** A native `<button>`. Radius 8 (lg: 10). Primary and danger are filled. Secondary is the floating surface with a subtle hairline and raised elevation. Tertiary has no fill at rest.
+- **Container.** A native `<button>`. Radius 8 (lg: 10). Primary and danger are filled. Secondary is the overlay surface with a subtle hairline and raised elevation. Tertiary has no fill at rest.
 - **Icons** are children, not props. Button spaces them with its `gap`, so an icon needs no marker and keeps its side in either direction. Icons are decorative (`aria-hidden`); the label names the button.
 - **Kbd hint** is an optional child Kbd, passed `aria-hidden`. The consumer sets `aria-keyshortcuts` on the button, because the Kbd text would otherwise join the accessible name (see Accessibility). Its keycap border is the Button's colour at `opacity-subtle`, and on filled variants its text at `opacity-bold`.
 - **Spinner** is centred over the content while `loading`, rendered `<Spinner aria-hidden />` (inside the child with `asChild`) (decorative; Spinner spec), as the artifact's `.ab-button[aria-busy]`. The label and icons are hidden but stay in the accessible name and the layout, so the width never changes (brand book: "Busy buttons keep their width").
@@ -103,7 +103,7 @@ Logical properties only (`padding-inline`, `margin-inline-start`). Directional i
 
 ## Component tokens
 
-All exist (ported from the source, `packages/tokens/src/tokens/component.tokens.json`): `button-{sm,md,lg}-height`, `button-{sm,md,lg}-padding-inline`, `button-gap`, `button-border-radius`, `button-lg-border-radius`, `button-border-width`, `button-font`, `button-lg-font`, `button-icon-size`, `button-scale-pressed`, `button-shadow`, `button-{primary,secondary,tertiary,danger}-*` colours (background rest/hovered/pressed, text, icon, secondary border rest/hovered, tertiary text hovered), and `button-{background-color,text-color,border-color}-disabled`.
+All exist (ported from the source, `packages/tokens/src/tokens/component/button.tokens.json`): `button-{sm,md,lg}-height`, `button-{sm,md,lg}-padding-inline`, `button-gap`, `button-border-radius`, `button-lg-border-radius`, `button-border-width`, `button-font`, `button-lg-font`, `button-icon-size`, `button-scale-pressed`, `button-shadow`, `button-{primary,secondary,tertiary,danger}-*` colours (background rest/hovered/pressed, text, icon, secondary border rest/hovered, tertiary text hovered), and `button-{background-color,text-color,border-color}-disabled`.
 
 No new tokens. The focus ring uses semantic `focus-ring-width`, `focus-ring-offset` and `color-border-focused` directly (R6: focus is a pattern, not a component).
 

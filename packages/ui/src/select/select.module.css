@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/input.css";
+@import "@platform/tokens/components/field.css";
 @import "@platform/tokens/components/select.css";
 
 @layer ab.components {
@@ -14,17 +14,17 @@
   }
 
   .control > .select {
-    padding-inline: var(--ab-input-padding-inline)
-      calc(var(--ab-input-padding-inline) * 2 + var(--ab-icon-sm-size));
+    padding-inline: var(--ab-field-padding-inline)
+      calc(var(--ab-field-padding-inline) * 2 + var(--ab-icon-sm-size));
   }
 
   .select:has(.placeholder:checked) {
-    color: var(--ab-input-placeholder-color);
+    color: var(--ab-field-placeholder-color);
   }
 
   .icon {
     position: absolute;
-    inset-inline-end: var(--ab-input-padding-inline);
+    inset-inline-end: var(--ab-field-padding-inline);
     color: var(--ab-select-icon-color);
     pointer-events: none;
     transition: rotate var(--ab-motion-duration-swap) var(--ab-motion-easing-enter);

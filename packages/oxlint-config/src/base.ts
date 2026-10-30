@@ -2,8 +2,8 @@ import { defineConfig } from "oxlint";
 
 export default defineConfig({
   plugins: ["eslint", "typescript", "unicorn", "oxc", "import", "promise"],
-  // Oxc's own package of ESLint's JS rules, for rules Oxlint has no native port of yet.
-  jsPlugins: [{ name: "eslint-js", specifier: "oxlint-plugin-eslint" }],
+  // ESLint Stylistic maintains the formatting rules ESLint deprecated; Oxlint has no native port.
+  jsPlugins: ["@stylistic/eslint-plugin"],
   categories: {
     correctness: "error",
     suspicious: "error",
@@ -25,7 +25,7 @@ export default defineConfig({
     // Pedantic's defaults, minus the blank lines that padding-line-between-statements requires.
     "max-lines": ["error", { max: 300, skipBlankLines: true }],
     "max-lines-per-function": ["error", { max: 50, skipBlankLines: true }],
-    "eslint-js/padding-line-between-statements": [
+    "@stylistic/padding-line-between-statements": [
       "error",
       { blankLine: "always", prev: "*", next: "return" },
       { blankLine: "always", prev: ["const", "let"], next: "*" },

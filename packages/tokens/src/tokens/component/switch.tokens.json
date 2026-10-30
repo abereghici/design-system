@@ -1,0 +1,64 @@
+{
+  "component": {
+    "switch-track-width": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-md}"
+    },
+    "switch-track-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-md}"
+    },
+    "switch-thumb-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "switch-track-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-2xs}"
+    },
+    "switch-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-full}"
+    },
+    "switch-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "switch-label-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "switch-track-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default}"
+    },
+    "switch-track-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default-hovered}"
+    },
+    "switch-track-background-color-checked": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold}"
+    },
+    "switch-thumb-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-overlay}"
+    },
+    "switch-thumb-shadow": {
+      "$type": "shadow",
+      "$value": "{semantic.elevation-raised}"
+    },
+    "switch-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-toggle}"
+    },
+    "switch-easing": {
+      "$type": "string",
+      "$value": "{semantic.motion-easing-spring}"
+    },
+    "switch-thumb-width-pressed": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-md}"
+    }
+  }
+}

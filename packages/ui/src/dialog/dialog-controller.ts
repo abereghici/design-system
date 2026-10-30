@@ -2,7 +2,7 @@ import type { RefObject } from "react";
 
 import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { returnFocus } from "../floating/floating.ts";
+import { returnFocus } from "../internal/overlay/overlay.ts";
 
 declare global {
   // Baseline newly available (2026-05-11) but not yet in TypeScript's DOM lib:

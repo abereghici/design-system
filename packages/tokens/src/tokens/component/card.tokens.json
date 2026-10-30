@@ -1,0 +1,56 @@
+{
+  "component": {
+    "card-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-lg}"
+    },
+    "card-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-sm}"
+    },
+    "card-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-lg}"
+    },
+    "card-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-default}"
+    },
+    "card-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-default}"
+    },
+    "card-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-subtle}"
+    },
+    "card-border-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default}"
+    },
+    "card-shadow-hovered": {
+      "$type": "shadow",
+      "$value": "{semantic.elevation-raised}"
+    },
+    "card-title-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-heading-xs}"
+    },
+    "card-title-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "card-description-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-xs}"
+    },
+    "card-description-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "card-footer-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    }
+  }
+}

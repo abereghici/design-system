@@ -73,7 +73,7 @@ test("durations, easings, font stacks and CSS-only values compile to CSS literal
     "font-family-noto-serif": { $type: "fontFamily", $value: ["Noto Serif", "Georgia", "serif"] },
     "font-size-17": { $type: "dimension", $value: { value: 1.0625, unit: "rem" } },
     "font-size-29-33": {
-      $type: "dimension",
+      $type: "string",
       $value: "clamp(1.8125rem, 1.7147rem + 0.4348vi, 2.0625rem)",
     },
     "letter-spacing-minus-20": { $type: "dimension", $value: "-0.02em" },
@@ -82,7 +82,7 @@ test("durations, easings, font stacks and CSS-only values compile to CSS literal
 
   const { css } = await buildTokens({ tokens });
 
-  expect(css).toContain("--ab-duration-70: 70ms;");
+  expect(css).toContain("--ab-duration-70: 0.07s;");
   expect(css).toContain("--ab-easing-ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);");
   expect(css).toContain("--ab-easing-spring-gentle: linear(0, 0.5 50%, 1);");
   expect(css).toContain("--ab-font-family-noto-serif: 'Noto Serif', Georgia, serif;");

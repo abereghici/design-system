@@ -45,7 +45,7 @@ Shared behaviour is specified once in `dialog.md` (native modal `<dialog>`, stat
 Root (no element) → Trigger → Content (`<dialog>` + `::backdrop`) → Title + Description → Body → Footer · Close.
 
 - **Root, Trigger.** As Dialog.
-- **Content.** A native `<dialog>`, opened with `showModal()`, placed at one inline edge instead of centred: `margin: 0`, `inset-block: sheet-offset`, `inset-inline-end: sheet-offset` (`side="end"`) or `inset-inline-start: sheet-offset` (`side="start"`), the other inline inset `auto`. `block-size: auto` and `max-block-size: none` replace the UA's `fit-content` / `max-height`, so it runs the full height minus the two offsets. `inline-size: sheet-width` (420), capped at `100vw - 2 × sheet-offset` (`min()`, as the artifact's `.ab-sheet`). Surface `sheet-background-color` (`color-surface-floating`, solid), radius `sheet-border-radius` (16) on every corner (it floats, source "Floats 8px inset from the right edge with 16px corners"), `sheet-shadow` (modal elevation), padding `sheet-padding` (24). A flex column: Title and Description at the top, the Body taking the remaining height, the Footer at the bottom, `sheet-gap` (16) between them. The UA `border` is removed.
+- **Content.** A native `<dialog>`, opened with `showModal()`, placed at one inline edge instead of centred: `margin: 0`, `inset-block: sheet-offset`, `inset-inline-end: sheet-offset` (`side="end"`) or `inset-inline-start: sheet-offset` (`side="start"`), the other inline inset `auto`. `block-size: auto` and `max-block-size: none` replace the UA's `fit-content` / `max-height`, so it runs the full height minus the two offsets. `inline-size: sheet-width` (420), capped at `100vw - 2 × sheet-offset` (`min()`, as the artifact's `.ab-sheet`). Surface `sheet-background-color` (`color-surface-overlay`, solid), radius `sheet-border-radius` (16) on every corner (it floats, source "Floats 8px inset from the right edge with 16px corners"), `sheet-shadow` (modal elevation), padding `sheet-padding` (24). A flex column: Title and Description at the top, the Body taking the remaining height, the Footer at the bottom, `sheet-gap` (16) between them. The UA `border` is removed.
 - **Backdrop.** The dialog's `::backdrop` in `sheet-backdrop-color` (`color-backdrop`) with `backdrop-filter: blur(sheet-backdrop-blur)`: the artifact's `overlays.css` draws Dialog, Sheet and CommandPalette backdrops with one rule that includes the blur (exact-fidelity rule).
 - **Title.** An `<h2>` in `sheet-title-font` (`type-heading-sm`) and `sheet-title-text-color`, with room reserved at its inline end for the icon-only Close, as Dialog.
 - **Description.** A `<p>` in `sheet-description-font` / `sheet-description-text-color`, `sheet-title-gap` (4) below the Title. Title and Description reserve `space-inline-xl` at their inline end for the Close, as Dialog.
@@ -126,7 +126,7 @@ APG pattern: **Dialog (Modal)** (https://www.w3.org/WAI/ARIA/apg/patterns/dialog
 
 - **Role, modality, name, description, visible close:** as Dialog (`dialog` role, `aria-modal` mapped from `showModal()` by HTML-AAM, `aria-labelledby` → Title, `aria-describedby` → Description when present, the icon-only Close or a Footer Close in every Sheet).
 - **Body** has no role and no name (ScrollArea precedent); the Sheet's name already says what it holds.
-- **Contrast:** Title `color-text-default`, Description `color-text-subtle`, Close icon `color-icon-subtle` on `color-surface-floating`, all in the contrast matrix.
+- **Contrast:** Title `color-text-default`, Description `color-text-subtle`, Close icon `color-icon-subtle` on `color-surface-overlay`, all in the contrast matrix.
 - **Targets:** as Dialog.
 - **More contrast:** the Description takes `sheet-title-text-color`, and the Content draws a 1 px `color-border-default` border (`@media (prefers-contrast: more)`).
 - **Forced colors:** the shadow disappears, so the Content draws a 1 px `CanvasText` border; the Close icon is `currentColor`.
@@ -164,7 +164,7 @@ None. The icon-only `Sheet.Close` requires its `aria-label` by type, as Dialog's
 | ------------ | --------------------------------------------------------------------------------------- | -------- |
 | `ab-dismiss` | After a close the user caused commits: Escape, an outside press, or the icon-only Close | `"user"` |
 
-Detail: `{ component: "Sheet", reason }`, dispatched as Dialog's (from the icon-only Close, or from the Content for Escape and outside press). A Close with `asChild` dispatches nothing of its own (the child Button's `ab-press` is the gesture's one event; judgement call, as Dialog). `src/events/events.ts`: widen `DismissEvent`'s union with `"Sheet"`.
+Detail: `{ component: "Sheet", reason }`, dispatched as Dialog's (from the icon-only Close, or from the Content for Escape and outside press). A Close with `asChild` dispatches nothing of its own (the child Button's `ab-press` is the gesture's one event; judgement call, as Dialog). `src/events/events.ts`: widen `DismissFeedbackEvent`'s union with `"Sheet"`.
 
 ## Sources
 
@@ -173,5 +173,4 @@ Detail: `{ component: "Sheet", reason }`, dispatched as Dialog's (from the icon-
 - HTML Living Standard, dialog element and UA styles: https://html.spec.whatwg.org/multipage/interactive-elements.html, https://html.spec.whatwg.org/multipage/rendering.html · focus delegate: https://html.spec.whatwg.org/multipage/interaction.html
 - WAI-ARIA APG Dialog (Modal): https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/ · Button: https://www.w3.org/WAI/ARIA/apg/patterns/button/
 - Baseline (webstatus.dev, 2026-10-24): as Dialog; `translate` widely available (low 2023-03-14); `dir-pseudo` widely available (low 2023-12-07); `scroll-driven-animations` limited (not used).
-- Spike #4: `docs/research/floating-platform.md`.
 - shadcn Sheet: https://ui.shadcn.com/docs/components/sheet · React Aria Sheet: https://react-aria.adobe.com/Sheet · Base UI Drawer: https://base-ui.com/react/components/drawer.md and Dialog: https://base-ui.com/react/components/dialog.md · Ark Drawer: https://ark-ui.com/react/docs/components/drawer · Chakra Drawer: https://chakra-ui.com/docs/components/drawer · Mantine Drawer: https://mantine.dev/core/drawer/ · MUI Drawer: https://mui.com/material-ui/api/drawer/

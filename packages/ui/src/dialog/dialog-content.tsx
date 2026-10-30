@@ -11,7 +11,7 @@ import type {
   ToggleEvent,
 } from "react";
 
-import { composeRefs, mergeProps } from "../slot/slot.tsx";
+import { composeRefs, mergeProps } from "../internal/slot/slot.tsx";
 
 import type { Options } from "./dialog-controller.ts";
 import { useModal } from "./dialog-modal.tsx";

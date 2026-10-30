@@ -2,10 +2,10 @@
 
 import { useId } from "react";
 
-import { dateFormats } from "../date/date.ts";
-import type { Temporal } from "../date/date.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { CalendarIcon } from "../icon/icons/calendar.tsx";
+import { dateFormats } from "../internal/date/date.ts";
+import type { Temporal } from "../internal/date/date.ts";
 
 import type { Panel } from "./date-picker-panel.tsx";
 import styles from "./date-picker.module.css";
@@ -18,7 +18,7 @@ interface TriggerProps {
 }
 
 export function Trigger({ panel, value, locale, disabled }: TriggerProps) {
-  const { floating, name, trigger } = panel;
+  const { overlay, name, trigger } = panel;
   const descriptionId = useId();
 
   return (
@@ -27,8 +27,8 @@ export function Trigger({ panel, value, locale, disabled }: TriggerProps) {
         ref={trigger}
         size="sm"
         aria-label={name}
-        {...floating.triggerProps({})}
-        aria-controls={floating.contentId}
+        {...overlay.triggerProps({})}
+        aria-controls={overlay.contentId}
         aria-haspopup="dialog"
         aria-describedby={value === null ? undefined : descriptionId}
         disabled={disabled}

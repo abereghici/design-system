@@ -2,7 +2,7 @@ import { beforeAll, expect, inject } from "vitest";
 
 declare module "vitest" {
   export interface ProvidedContext {
-    reducedMotion: boolean;
+    reducedMotion?: boolean;
   }
 }
 

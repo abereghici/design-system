@@ -35,7 +35,7 @@
 
   .icon {
     --ab-icon-size: var(--ab-alert-icon-size);
-    --ab-icon-ink: var(--icon-color);
+    --ab-icon-color: var(--icon-color);
 
     grid-row: 1;
     grid-column: 1;
@@ -82,7 +82,7 @@
     }
 
     .icon {
-      --ab-icon-ink: CanvasText;
+      --ab-icon-color: CanvasText;
     }
   }
 }

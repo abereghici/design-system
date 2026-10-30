@@ -55,7 +55,7 @@
         }
       }
     },
-    "color-surface-floating": {
+    "color-surface-overlay": {
       "$type": "color",
       "$description": "Menus, popovers and dialogs. Every text role from `ab-color-text-default` to `-danger` reads on it: lowest 5.48 light, 4.93 dark.",
       "$value": "{primitive.palette-sage-0}",
@@ -625,7 +625,7 @@
     },
     "color-material-thin": {
       "$type": "color",
-      "$description": "Translucent thin fill for floating chrome (menus, the command palette), always with `ab-material-blur-thin`; never for in-flow content or long text. Solid floating surface under reduced transparency.",
+      "$description": "Translucent thin fill for overlay chrome (menus, the command palette), always with `ab-material-blur-thin`; never for in-flow content or long text. Solid overlay surface under reduced transparency.",
       "$value": "{primitive.palette-sage-0-a56}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -641,7 +641,7 @@
     },
     "color-material-regular": {
       "$type": "color",
-      "$description": "Translucent regular fill for floating chrome (menus, the command palette), always with `ab-material-blur-regular`; never for in-flow content or long text. Solid floating surface under reduced transparency.",
+      "$description": "Translucent regular fill for overlay chrome (menus, the command palette), always with `ab-material-blur-regular`; never for in-flow content or long text. Solid overlay surface under reduced transparency.",
       "$value": "{primitive.palette-sage-0-a72}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -657,7 +657,7 @@
     },
     "color-material-thick": {
       "$type": "color",
-      "$description": "Translucent thick fill for floating chrome (menus, the command palette), always with `ab-material-blur-thick`; never for in-flow content or long text. Solid floating surface under reduced transparency.",
+      "$description": "Translucent thick fill for overlay chrome (menus, the command palette), always with `ab-material-blur-thick`; never for in-flow content or long text. Solid overlay surface under reduced transparency.",
       "$value": "{primitive.palette-sage-0-a90}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -673,7 +673,7 @@
     },
     "color-shadow-ring": {
       "$type": "color",
-      "$description": "Hairline ring colour inside `ab-elevation-*`; separates a floating layer on any background. Moss-tinted in light, deep night in dark.",
+      "$description": "Hairline ring colour inside `ab-elevation-*`; separates an overlay on any background. Moss-tinted in light, deep night in dark.",
       "$value": "{primitive.palette-moss-950-a10}",
       "$extensions": {
         "com.bereghici.theme": {

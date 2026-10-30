@@ -5,7 +5,7 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { Slot, mergeProps } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./icon-button.module.css";

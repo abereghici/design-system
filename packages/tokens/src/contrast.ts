@@ -2,7 +2,7 @@ import type { Dictionary } from "style-dictionary/types";
 
 import { CONTRAST_REQUIREMENTS, contrastRatio } from "./contrast-matrix.ts";
 import type { ContrastRequirement } from "./contrast-matrix.ts";
-import { THEMES, valueIn } from "./theme.ts";
+import { referencedToken, THEMES, valueIn } from "./theme.ts";
 import type { ThemeId } from "./theme.ts";
 
 const OPAQUE_HEX = /^#[0-9a-f]{6}$/iv;
@@ -13,8 +13,8 @@ const checkPair = (
   dictionary: Dictionary,
 ): string[] => {
   const { foreground, background, minimum } = requirement;
-  const fg = dictionary.tokenMap.get(`{semantic.color-${foreground}}`);
-  const bg = dictionary.tokenMap.get(`{semantic.color-${background}}`);
+  const fg = referencedToken(`{semantic.color-${foreground}}`, dictionary);
+  const bg = referencedToken(`{semantic.color-${background}}`, dictionary);
 
   if (fg === undefined || bg === undefined) {
     // As in the source validator, a pair that can't be resolved is a failure.

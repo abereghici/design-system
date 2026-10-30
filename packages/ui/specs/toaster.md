@@ -1,6 +1,6 @@
 # Toaster
 
-The region that shows toasts: a "Notifications" landmark at the bottom centre of the viewport that stacks, times, announces and positions every toast the app adds with `toast()`. Mount it once, near the root. It stays above Floating layers, including an open modal Dialog, Sheet, AlertDialog or Command dialog, and stays usable there. What one toast looks like and does is in `toast.md`.
+The region that shows toasts: a "Notifications" landmark at the bottom centre of the viewport that stacks, times, announces and positions every toast the app adds with `toast()`. Mount it once, near the root. It stays above Overlays, including an open modal Dialog, Sheet, AlertDialog or Command dialog, and stays usable there. What one toast looks like and does is in `toast.md`.
 
 ```tsx
 import { Toaster } from "@platform/ui/toaster";
@@ -146,4 +146,3 @@ Stated as what a user, assistive technology or consumer perceives (user-centric 
 - React: `useSyncExternalStore` https://react.dev/reference/react/useSyncExternalStore · `createPortal` https://react.dev/reference/react-dom/createPortal
 - Baseline (webstatus.dev, 2026-10-24): `popover` newly (low 2025-01-27); `dialog` widely (low 2022-03-14); `modal` (`:modal`) widely (low 2022-09-02); `inert` widely (low 2023-04-11); dialog `beforetoggle` / `toggle` newly (low 2025-09-15, phase-4 Dialog spec); `page-visibility` widely; `focus-within` widely (low 2020-01-15); `sibling-count` newly (low 2026-08-18; not used); `move-before` limited (not used); `overlay` limited (not used by the Region); `popover-hint` limited (not used). MDN: `KeyboardEvent.code` limited (progressive enhancement, see Behaviour).
 - Sonner: https://sonner.emilkowal.ski/toaster and `src/index.tsx` (https://github.com/emilkowalski/sonner) · Radix Toast: https://www.radix-ui.com/primitives/docs/components/toast and `packages/react/toast/src/toast.tsx` · Base UI Toast: https://base-ui.com/react/components/toast.md and `packages/react/src/toast/viewport/ToastViewport.tsx` · React Aria Toast: https://react-aria.adobe.com/Toast and `packages/react-aria/src/toast/useToastRegion.ts`, `useToast.ts` · Ark Toast: https://ark-ui.com/react/docs/components/toast · Mantine notifications: https://mantine.dev/x/notifications/ · shadcn Toast: https://ui.shadcn.com/docs/components/sonner · Sonner author's skill (`.claude/skills/ask-sonner/SKILL.md`, troubleshooting table).
-- Spike #4: `docs/research/floating-platform.md` (§4 `dir` in the top layer, exit per engine).

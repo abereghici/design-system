@@ -87,7 +87,7 @@
 
   .option {
     --ab-icon-size: var(--ab-icon-sm-size);
-    --ab-icon-ink: var(--ab-combobox-option-icon-color);
+    --ab-icon-color: var(--ab-combobox-option-icon-color);
 
     gap: var(--ab-combobox-option-gap);
     border-radius: var(--ab-combobox-option-border-radius);
@@ -112,13 +112,13 @@
   }
 
   .option:where([aria-disabled="true"]) {
-    --ab-icon-ink: var(--ab-color-icon-disabled);
+    --ab-icon-color: var(--ab-color-icon-disabled);
 
     color: var(--ab-color-text-disabled);
   }
 
   .indicator {
-    --ab-icon-ink: var(--ab-combobox-option-icon-color-selected);
+    --ab-icon-color: var(--ab-combobox-option-icon-color-selected);
 
     display: grid;
     flex: none;
@@ -135,7 +135,7 @@
 
   @media (prefers-contrast: more) {
     .option {
-      --ab-icon-ink: var(--ab-color-icon-default);
+      --ab-icon-color: var(--ab-color-icon-default);
     }
   }
 
@@ -152,7 +152,7 @@
     }
 
     .option:where([data-highlighted]) {
-      --ab-icon-ink: HighlightText;
+      --ab-icon-color: HighlightText;
 
       forced-color-adjust: none;
       background-color: Highlight;
@@ -160,7 +160,7 @@
     }
 
     .indicator {
-      --ab-icon-ink: currentColor;
+      --ab-icon-color: currentColor;
     }
   }
 }

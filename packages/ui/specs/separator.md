@@ -87,11 +87,11 @@ Existing (ported from the source `divider-*`, renamed): `separator-border-color`
 
 Proposed new tokens, for the ornament (the source drew it with no tokens of its own):
 
-| Token                 | References                        | `$type`   | Why                                                                                       |
-| --------------------- | --------------------------------- | --------- | ----------------------------------------------------------------------------------------- |
-| `separator-dot-size`  | `{semantic.size-indicator}`       | dimension | The diamond's side, 6 px: the same bob as the radio indicator (`radio-indicator-size`).   |
-| `separator-dot-color` | `{semantic.color-border-default}` | color     | The diamond's edge, as the artifact draws it (`border … var(--ab-color-border-default)`). |
-| `separator-gap`       | `{semantic.space-inline-sm}`      | dimension | Empty line on each side of the diamond, 8 px.                                             |
+| Token                 | References                        | `$type`   | Why                                                                                           |
+| --------------------- | --------------------------------- | --------- | --------------------------------------------------------------------------------------------- |
+| `separator-dot-size`  | `{semantic.size-indicator}`       | dimension | The diamond's side, 6 px: the same bob as the radio indicator (`radio-group-indicator-size`). |
+| `separator-dot-color` | `{semantic.color-border-default}` | color     | The diamond's edge, as the artifact draws it (`border … var(--ab-color-border-default)`).     |
+| `separator-gap`       | `{semantic.space-inline-sm}`      | dimension | Empty line on each side of the diamond, 8 px.                                                 |
 
 All words are in the Dictionary (`separator`, element `dot`, properties `size`, `color`, `gap`). No new Dictionary words.
 

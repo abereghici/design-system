@@ -3,7 +3,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
 import { SearchIcon } from "../icon/icons/search.tsx";
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";

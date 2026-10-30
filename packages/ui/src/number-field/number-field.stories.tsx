@@ -1,7 +1,6 @@
 import { expect, fn } from "storybook/test";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
-import { textFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -14,7 +13,6 @@ import type { NumberFieldChangeEventDetails, NumberFieldProps } from "./number-f
 const meta = preview.meta({
   title: "Components/NumberField",
   component: NumberField,
-  argTypes: textFieldArgTypes,
   args: {
     label: "Seats",
     name: "seats",

@@ -12,11 +12,11 @@ import {
 import { flushSync } from "react-dom";
 import type { ComponentProps, FocusEvent, KeyboardEvent, MouseEvent } from "react";
 
-import { DatePickerContext, dateFormats, Temporal } from "../date/date.ts";
-import type { DatePickerContextValue } from "../date/date.ts";
 import { requestChange, sharedListener } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { mergeProps } from "../slot/slot.tsx";
+import { DatePickerContext, dateFormats, Temporal } from "../internal/date/date.ts";
+import type { DatePickerContextValue } from "../internal/date/date.ts";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { Grid, keyTarget } from "./calendar-grid.tsx";
 import { Header } from "./calendar-header.tsx";

@@ -1,0 +1,68 @@
+{
+  "component": {
+    "tag-padding-block": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xs}"
+    },
+    "tag-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "tag-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-xs}"
+    },
+    "tag-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-xs}"
+    },
+    "tag-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "tag-neutral-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-nested}"
+    },
+    "tag-neutral-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "tag-accent-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-subtle}"
+    },
+    "tag-accent-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-accent}"
+    },
+    "tag-success-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-success-subtle}"
+    },
+    "tag-success-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-success}"
+    },
+    "tag-warning-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-warning-subtle}"
+    },
+    "tag-warning-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-warning}"
+    },
+    "tag-danger-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-danger-subtle}"
+    },
+    "tag-danger-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-danger}"
+    },
+    "tag-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-xs}"
+    }
+  }
+}

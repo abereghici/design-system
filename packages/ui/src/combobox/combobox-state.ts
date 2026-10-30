@@ -9,8 +9,8 @@ import type {
 
 import { isComposing, requestChange, trackComposition } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { enabled, navigate, optionAt, textOf } from "../listbox/listbox.tsx";
-import { mergeProps } from "../slot/slot.tsx";
+import { enabled, navigate, optionAt, textOf } from "../internal/listbox/listbox.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 export const chosenOf = (list: Element, value: string | null) =>
   value === null ? null : list.querySelector(`[role="option"][data-value="${CSS.escape(value)}"]`);
@@ -94,7 +94,7 @@ interface Memory {
 }
 
 /** One render's state; element ids are derived from `id`. */
-export interface Combobox {
+export interface ComboboxState {
   readonly options: Options;
   readonly id: string;
   readonly value: string | null;
@@ -107,16 +107,18 @@ export interface Combobox {
 
 const memories = new WeakMap<Element, Memory>();
 
-export const part = (c: Combobox, name: "root" | "box" | "list" | "label" | "empty" | "status") =>
-  `${c.id}${name}`;
+export const part = (
+  c: ComboboxState,
+  name: "root" | "box" | "list" | "label" | "empty" | "status",
+) => `${c.id}${name}`;
 
-export const listOf = (c: Combobox) => document.getElementById(part(c, "list"));
+export const listOf = (c: ComboboxState) => document.getElementById(part(c, "list"));
 
-export const inputOf = (c: Combobox) =>
+export const inputOf = (c: ComboboxState) =>
   document.getElementById(part(c, "root"))?.querySelector<HTMLInputElement>('[role="combobox"]') ??
   null;
 
-export function memoryOf(c: Combobox): Memory {
+export function memoryOf(c: ComboboxState): Memory {
   const root = document.getElementById(part(c, "root"));
   const memory = (root && memories.get(root)) ?? {
     pointer: false,
@@ -131,7 +133,7 @@ export function memoryOf(c: Combobox): Memory {
   return memory;
 }
 
-function changeText(c: Combobox, next: string, reason: InputReason, event?: Event) {
+function changeText(c: ComboboxState, next: string, reason: InputReason, event?: Event) {
   const input = inputOf(c);
   const memory = memoryOf(c);
   const previous = memory.text ?? "";
@@ -151,7 +153,7 @@ function changeText(c: Combobox, next: string, reason: InputReason, event?: Even
   return true;
 }
 
-function changeValue(c: Combobox, next: string | null, reason: ValueReason, event?: Event) {
+function changeValue(c: ComboboxState, next: string | null, reason: ValueReason, event?: Event) {
   if (next === c.value) return true;
 
   if (!requestChange(c.options.onValueChange, next, reason, event)) return false;
@@ -161,7 +163,7 @@ function changeValue(c: Combobox, next: string | null, reason: ValueReason, even
   return true;
 }
 
-function changeOpen(c: Combobox, next: boolean, reason: OpenReason, event?: Event) {
+function changeOpen(c: ComboboxState, next: boolean, reason: OpenReason, event?: Event) {
   if (next === c.open || (next && c.options.disabled === true)) return false;
 
   if (!requestChange(c.options.onOpenChange, next, reason, event)) return false;
@@ -172,7 +174,7 @@ function changeOpen(c: Combobox, next: boolean, reason: OpenReason, event?: Even
 }
 
 /** A primary press anywhere on the field box opens the list; the motion is the pointer's. */
-export function press(c: Combobox, event: PointerEvent) {
+export function press(c: ComboboxState, event: PointerEvent) {
   memoryOf(c).pointer = true;
 
   if (event.button !== 0 || !changeOpen(c, true, "input-press", event)) return;
@@ -181,7 +183,7 @@ export function press(c: Combobox, event: PointerEvent) {
   c.setQuery("");
 }
 
-export function dismiss(c: Combobox, reason: InputReason, event: Event) {
+export function dismiss(c: ComboboxState, reason: InputReason, event: Event) {
   const list = listOf(c);
 
   if (list !== null && changeOpen(c, false, reason, event)) {
@@ -189,7 +191,7 @@ export function dismiss(c: Combobox, reason: InputReason, event: Event) {
   }
 }
 
-export function choose(c: Combobox, option: HTMLElement, event: Event) {
+function choose(c: ComboboxState, option: HTMLElement, event: Event) {
   if (!enabled(option)) return;
 
   if (!changeValue(c, option.dataset["value"] ?? null, "item-press", event)) return;
@@ -198,7 +200,7 @@ export function choose(c: Combobox, option: HTMLElement, event: Event) {
   changeOpen(c, false, "item-press", event);
 }
 
-function open(c: Combobox, event: KeyboardEvent<HTMLInputElement>) {
+function open(c: ComboboxState, event: KeyboardEvent<HTMLInputElement>) {
   event.preventDefault();
 
   if (changeOpen(c, true, "list-navigation", event.nativeEvent)) {
@@ -207,7 +209,7 @@ function open(c: Combobox, event: KeyboardEvent<HTMLInputElement>) {
   }
 }
 
-export function keyDown(c: Combobox, event: KeyboardEvent<HTMLInputElement>) {
+function keyDown(c: ComboboxState, event: KeyboardEvent<HTMLInputElement>) {
   memoryOf(c).pointer = false;
 
   const list = listOf(c);
@@ -240,7 +242,7 @@ export function keyDown(c: Combobox, event: KeyboardEvent<HTMLInputElement>) {
   }
 }
 
-export function inputChange(c: Combobox, event: ChangeEvent<HTMLInputElement>) {
+function inputChange(c: ComboboxState, event: ChangeEvent<HTMLInputElement>) {
   const native = event.nativeEvent;
   const next = event.currentTarget.value;
 
@@ -254,7 +256,7 @@ export function inputChange(c: Combobox, event: ChangeEvent<HTMLInputElement>) {
   changeOpen(c, true, "input-change", native);
 }
 
-export function blur(c: Combobox, event: FocusEvent<HTMLInputElement>) {
+function blur(c: ComboboxState, event: FocusEvent<HTMLInputElement>) {
   const next = event.relatedTarget;
   const inside =
     next instanceof Node && document.getElementById(part(c, "root"))?.contains(next) === true;
@@ -268,7 +270,7 @@ export function blur(c: Combobox, event: FocusEvent<HTMLInputElement>) {
 }
 
 /** The input: keys navigate and choose, typing filters, leaving closes; composed with the consumer's props. */
-export function inputProps<Props extends object>(c: Combobox, consumer: Props) {
+export function inputProps<Props extends object>(c: ComboboxState, consumer: Props) {
   return mergeProps(
     {
       onCompositionEnd: trackComposition(),
@@ -287,7 +289,7 @@ export function inputProps<Props extends object>(c: Combobox, consumer: Props) {
 }
 
 /** The listbox: presses choose without taking focus from the input; the pointer highlights. */
-export function listProps(c: Combobox) {
+export function listProps(c: ComboboxState) {
   return {
     id: part(c, "list"),
     popover: "manual",

@@ -1,0 +1,80 @@
+{
+  "component": {
+    "popover-max-width": {
+      "$type": "dimension",
+      "$value": "{semantic.size-container-xs}"
+    },
+    "popover-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "popover-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-lg}"
+    },
+    "popover-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-material-thick}"
+    },
+    "popover-blur": {
+      "$type": "dimension",
+      "$value": "{semantic.material-blur-regular}"
+    },
+    "popover-saturate": {
+      "$type": "number",
+      "$value": "{semantic.material-saturate-regular}"
+    },
+    "popover-shadow": {
+      "$type": "shadow",
+      "$value": "{semantic.elevation-overlay}"
+    },
+    "popover-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "popover-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-xs}"
+    },
+    "popover-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "popover-enter-scale": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-enter}"
+    },
+    "popover-enter-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-popover}"
+    },
+    "popover-exit-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-exit}"
+    },
+    "popover-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-enter}"
+    },
+    "popover-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-sm}"
+    },
+    "popover-title-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-md}"
+    },
+    "popover-title-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "popover-description-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "popover-close-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xs}"
+    }
+  }
+}

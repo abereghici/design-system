@@ -1,0 +1,20 @@
+{
+  "component": {
+    "spinner-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "spinner-lg-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-lg}"
+    },
+    "spinner-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "spinner-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-loop}"
+    }
+  }
+}

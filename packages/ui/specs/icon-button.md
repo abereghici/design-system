@@ -52,15 +52,15 @@ Names, checked against the reference libraries:
 
 ## States
 
-| State            | How it shows                                                                                                                                             | Exposed as                                      |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| rest             | Transparent, icon `icon-button-icon-color`                                                                                                               | `data-size`                                     |
-| hovered          | Fill `icon-button-background-color-hovered`, icon `icon-button-icon-color-hovered`; fine pointers only (`@media (hover: hover)`)                         | `:hover`                                        |
-| pressed (active) | Scale 0.97 and fill `icon-button-background-color-pressed`, 100 ms                                                                                       | `:active`                                       |
-| selected         | Fill `icon-button-background-color-selected`, icon `icon-button-icon-color-selected`. Applies when toggled on or when it controls an open Floating layer | `aria-pressed="true"` or `aria-expanded="true"` |
-| focus-visible    | 2 px focus ring, 3 px offset, `color-border-focused`                                                                                                     | `:focus-visible`                                |
-| disabled         | icon `color-icon-disabled` (Disabled look, GLOSSARY); the source's 40% opacity faded the focus ring below 3:1; no hover or press                         | `aria-disabled="true"`                          |
-| loading          | Spinner in place of the icon; no hover or press                                                                                                          | `aria-busy="true"`, `data-loading`              |
+| State            | How it shows                                                                                                                                      | Exposed as                                      |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| rest             | Transparent, icon `icon-button-icon-color`                                                                                                        | `data-size`                                     |
+| hovered          | Fill `icon-button-background-color-hovered`, icon `icon-button-icon-color-hovered`; fine pointers only (`@media (hover: hover)`)                  | `:hover`                                        |
+| pressed (active) | Scale 0.97 and fill `icon-button-background-color-pressed`, 100 ms                                                                                | `:active`                                       |
+| selected         | Fill `icon-button-background-color-selected`, icon `icon-button-icon-color-selected`. Applies when toggled on or when it controls an open Overlay | `aria-pressed="true"` or `aria-expanded="true"` |
+| focus-visible    | 2 px focus ring, 3 px offset, `color-border-focused`                                                                                              | `:focus-visible`                                |
+| disabled         | icon `color-icon-disabled` (Disabled look, GLOSSARY); the source's 40% opacity faded the focus ring below 3:1; no hover or press                  | `aria-disabled="true"`                          |
+| loading          | Spinner in place of the icon; no hover or press                                                                                                   | `aria-busy="true"`, `data-loading`              |
 
 ## Behaviour
 
@@ -94,7 +94,7 @@ Native `<button>` provides Space and Enter; no key handler is added. In a Toolba
 
 - Role `button` from the native element. APG: the accessible name "can also be provided with aria-labelledby or aria-label." The type requires one.
 - Toggle: APG "If the button is a toggle button, it has an aria-pressed state. When the button is toggled on, the value of this state is true, and when toggled off, the state is false." IconButton renders `aria-pressed` only when `pressed` or `defaultPressed` is set, so a plain IconButton is not announced as a toggle.
-- `aria-expanded` is passed through by the Floating-layer triggers that wrap IconButton (DropdownMenu, Popover); IconButton only styles it as selected.
+- `aria-expanded` is passed through by the Overlay triggers that wrap IconButton (DropdownMenu, Popover); IconButton only styles it as selected.
 - Disabled: pair with an explanation (`aria-describedby`), as Button.
 - Targets: `size-control-*` heights reach 40/44/48 under `(pointer: coarse)`; sm (28) meets the 24 px minimum on fine pointers (brand book: "icon-only controls keep at least the minimum target size").
 - **Selected vs rest contrast:** the fill step alone measures 1.10:1 (light) and 1.14:1 (dark) against the surface, under WCAG 1.4.11's 3:1, so the selected state always draws a 1 px inset `icon-button-border-color-selected` ring: 13.40:1 (light) and 15.07:1 (dark) (user decision 2026-10-25).
@@ -129,7 +129,7 @@ None. The name comes from `aria-label` / `aria-labelledby`.
 | `ab-press`  | After `onClick` runs on an enabled, not loading, non-toggle IconButton | `"user"` |
 | `ab-toggle` | After a toggle IconButton's state change commits (not cancelled)       | `"user"` |
 
-Detail: `{ component: "IconButton", reason }`. One event per gesture: a toggle fires `ab-toggle` instead of `ab-press`, so an app never plays two sounds for one click. A listener that needs the new state reads `aria-pressed` from `event.target`. A controlled `pressed` changed by the parent fires nothing (the design system did not cause it). Neither fires when disabled or loading. `events.ts` widens `PressEvent` to `"Button" | "IconButton"` and adds `ab-toggle` (`ToggleFeedbackEvent`, so it does not shadow the DOM's `ToggleEvent`) to `GlobalEventHandlersEventMap`.
+Detail: `{ component: "IconButton", reason }`. One event per gesture: a toggle fires `ab-toggle` instead of `ab-press`, so an app never plays two sounds for one click. A listener that needs the new state reads `aria-pressed` from `event.target`. A controlled `pressed` changed by the parent fires nothing (the design system did not cause it). Neither fires when disabled or loading. `events.ts` widens `PressFeedbackEvent` to `"Button" | "IconButton"` and adds `ab-toggle` (`ToggleFeedbackEvent`, so it does not shadow the DOM's `ToggleEvent`) to `GlobalEventHandlersEventMap`.
 
 ## Sources
 

@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/input.css";
+@import "@platform/tokens/components/field.css";
 @import "@platform/tokens/components/date-field.css";
 
 @layer ab.components {
@@ -25,7 +25,7 @@
     font: inherit;
     padding-inline: var(--ab-space-inset-xs);
     border-radius: var(--ab-date-field-segment-border-radius);
-    color: var(--ab-input-text-color);
+    color: var(--ab-field-text-color);
     font-variant-numeric: tabular-nums;
     text-align: center;
     caret-color: transparent;
@@ -43,15 +43,15 @@
   }
 
   .separator {
-    color: var(--ab-input-placeholder-color);
+    color: var(--ab-field-placeholder-color);
   }
 
   .separator[data-filled] {
-    color: var(--ab-input-text-color);
+    color: var(--ab-field-text-color);
   }
 
   [aria-disabled="true"] > :is(.segment, .separator) {
-    color: var(--ab-input-text-color-disabled);
+    color: var(--ab-field-text-color-disabled);
   }
 
   @media (forced-colors: active) {

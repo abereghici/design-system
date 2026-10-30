@@ -22,13 +22,13 @@
   }
 
   @container (inline-size >= 480px) {
-    .root[data-layout="row"] > .layout {
+    .root[data-orientation="horizontal"] > .layout {
       flex-direction: row;
       align-items: center;
       column-gap: var(--ab-space-inline-lg);
     }
 
-    .root[data-layout="row"] > .layout > :not(.footer) {
+    .root[data-orientation="horizontal"] > .layout > :not(.footer) {
       flex: 1;
     }
   }

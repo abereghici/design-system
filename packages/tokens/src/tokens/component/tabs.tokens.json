@@ -1,0 +1,52 @@
+{
+  "component": {
+    "tabs-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-lg}"
+    },
+    "tabs-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-lg}"
+    },
+    "tabs-item-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "tabs-item-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "tabs-item-text-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "tabs-item-text-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "tabs-indicator-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-selected}"
+    },
+    "tabs-indicator-height": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-thick}"
+    },
+    "tabs-list-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-subtle}"
+    },
+    "tabs-list-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-default}"
+    },
+    "tabs-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-spring}"
+    },
+    "tabs-easing": {
+      "$type": "string",
+      "$value": "{semantic.motion-easing-spring}"
+    }
+  }
+}

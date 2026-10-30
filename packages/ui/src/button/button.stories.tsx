@@ -1,5 +1,7 @@
-import type { MouseEvent } from "react";
+import type { ComponentProps, MouseEvent } from "react";
 import { expect, fn } from "storybook/test";
+
+import type { StoryContext } from "@storybook/react-vite";
 
 import { PlusIcon } from "@platform/ui/icons/plus";
 
@@ -8,7 +10,7 @@ import { listen } from "#.storybook/test/listen.ts";
 
 import { Button } from "./button.tsx";
 
-type Context = Parameters<Parameters<typeof Default.test>[2]>[0];
+type Context = StoryContext<ComponentProps<typeof Button>>;
 
 async function isNamed({ canvas }: Context) {
   await expect(canvas.getByRole("button", { name: "Save changes" })).toBeVisible();

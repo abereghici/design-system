@@ -6,7 +6,7 @@ import type { ReactNode, SyntheticEvent } from "react";
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { getDocument, useEvent } from "../events/use-event.ts";
-import { isOpen, sourceOf } from "../floating/floating.ts";
+import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 
 export type ChangeReason =
   | "trigger-hover"

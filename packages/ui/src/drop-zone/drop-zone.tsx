@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { ComponentProps, DragEvent, RefObject } from "react";
 
-import { requestChange, sharedListener } from "../events/events.ts";
+import { requestChange } from "../events/events.ts";
+import { useEvent } from "../events/use-event.ts";
 import { useField } from "../field/use-field.ts";
-import { FileInput, PickerContext } from "../file-trigger/file-trigger.tsx";
-import { mergeProps } from "../slot/slot.tsx";
+import { Input as FileInput, PickerContext } from "../file-trigger/file-trigger-input.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./drop-zone.module.css";
 
@@ -69,25 +70,13 @@ const preventDrop = (event: globalThis.DragEvent) => {
   if (hasFiles(event)) event.preventDefault();
 };
 
-const windowDragOver = sharedListener("dragover", () => window);
-const windowDrop = sharedListener("drop", () => window);
+const getWindow = () => window;
 
-// Without these, a file dropped outside a zone replaces the page; one pair serves every zone:
+// Without these, a file dropped outside a zone replaces the page:
 // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop
 function usePreventDocumentDrop() {
-  useEffect(() => {
-    const stopDragOver = windowDragOver((event) => {
-      if (event instanceof DragEvent) preventDragOver(event);
-    });
-    const stopDrop = windowDrop((event) => {
-      if (event instanceof DragEvent) preventDrop(event);
-    });
-
-    return () => {
-      stopDragOver();
-      stopDrop();
-    };
-  }, []);
+  useEvent("dragover", preventDragOver, getWindow);
+  useEvent("drop", preventDrop, getWindow);
 }
 
 function setFiles(input: HTMLInputElement, files: File[]) {

@@ -1,0 +1,20 @@
+{
+  "component": {
+    "skeleton-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-nested}"
+    },
+    "skeleton-pulse-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-raised}"
+    },
+    "skeleton-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-xs}"
+    },
+    "skeleton-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-loop}"
+    }
+  }
+}

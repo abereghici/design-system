@@ -16,7 +16,7 @@ Status: draft for brand-owner review (phase 2). Source guide: `components/Textar
 Label → container (textarea) → description or error.
 
 - **Label, description, error.** The Field Parts, built in (Field spec).
-- **Container.** Drawn exactly as TextField's (radius 8, hairline, raised elevation), with `input-padding-block` above and below the text. No start or end elements: a multi-line field has no single line to align them to (judgement call).
+- **Container.** Drawn exactly as TextField's (radius 8, hairline, raised elevation), with `field-padding-block` above and below the text. No start or end elements: a multi-line field has no single line to align them to (judgement call).
 - **Textarea.** A native `<textarea>` with `field-sizing: content`, `dir="auto"` and `resize: vertical`.
 
 ## API
@@ -42,7 +42,7 @@ As TextField: rest, hovered, focused (border plus 2 px ring with no offset), inv
 
 ## Behaviour
 
-- **Growth is CSS.** `field-sizing: content` with `min-block-size: calc(minRows * 1lh + 2 * var(--ab-input-padding-block) + 2 * var(--ab-input-border-width))` and `max-block-size: calc(maxRows * 1lh + 2 * var(--ab-input-padding-block) + 2 * var(--ab-input-border-width))` (the source's formula, line height `type-body-xs-line-height`). MDN: "`field-sizing: content` overrides the default preferred sizing of form elements. This setting provides a way to configure text inputs to shrinkwrap their content and grow as more text is entered. They stop expanding when they reach maximum size limits (defined by the size of their containing element or set via CSS), at which point scrolling is required to view all the content." and "`rows`/`cols` have no effect on `<textarea>` elements with `field-sizing: content` set." So the row limits are CSS lengths in `lh`, not attributes.
+- **Growth is CSS.** `field-sizing: content` with `min-block-size: calc(minRows * 1lh + 2 * var(--ab-field-padding-block) + 2 * var(--ab-field-border-width))` and `max-block-size: calc(maxRows * 1lh + 2 * var(--ab-field-padding-block) + 2 * var(--ab-field-border-width))` (the source's formula, line height `type-body-xs-line-height`). MDN: "`field-sizing: content` overrides the default preferred sizing of form elements. This setting provides a way to configure text inputs to shrinkwrap their content and grow as more text is entered. They stop expanding when they reach maximum size limits (defined by the size of their containing element or set via CSS), at which point scrolling is required to view all the content." and "`rows`/`cols` have no effect on `<textarea>` elements with `field-sizing: content` set." So the row limits are CSS lengths in `lh`, not attributes.
 - **Manual resize** stays available vertically (source: "manual vertical resize stays available"), with `resize: vertical`. The logical `resize: block` was not used because its Baseline status was not verified.
 - Follows the Field contract (errors after interaction, replacing the description).
 - `dir="auto"` by default. MDN: "For textarea and pre, the rendering direction is determined separately for each paragraph of text."
@@ -78,7 +78,7 @@ Logical properties only. Text direction per paragraph from `dir="auto"`. The res
 
 ## Component tokens
 
-None new. The `input-*` set, as TextField: container chrome, `input-padding-block`, `input-font`, label, helper, error, placeholder, border states and disabled colours.
+None new. The `input-*` set, as TextField: container chrome, `field-padding-block`, `field-font`, label, helper, error, placeholder, border states and disabled colours.
 
 ## Author-written text
 

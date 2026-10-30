@@ -1,7 +1,7 @@
 import { cloneElement, isValidElement } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { Slot, mergeProps } from "../slot/slot.tsx";
+import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./card.module.css";
 
@@ -9,9 +9,10 @@ const withLayout = (content: ReactNode) => <div className={styles["layout"]}>{co
 
 export interface RootProps extends ComponentProps<"div"> {
   /**
-   * `"row"` moves the Footer beside the content once the card is wide enough, for list-like cards.
+   * `"horizontal"` moves the Footer beside the content once the card is wide enough, for list-like
+   * cards.
    */
-  layout?: "column" | "row";
+  orientation?: "vertical" | "horizontal";
   /** Makes its one child the card, such as an `<article>` or an `<li>` in a list of cards. */
   asChild?: boolean;
 }
@@ -22,8 +23,11 @@ export interface RootProps extends ComponentProps<"div"> {
  * clickable. Don't nest cards or use one as a page section: separate other content with space or a
  * Separator.
  */
-export function Root({ layout = "column", asChild = false, children, ...props }: RootProps) {
-  const root = { ...mergeProps({ className: styles["root"] }, props), "data-layout": layout };
+export function Root({ orientation = "vertical", asChild = false, children, ...props }: RootProps) {
+  const root = {
+    ...mergeProps({ className: styles["root"] }, props),
+    "data-orientation": orientation,
+  };
 
   if (!asChild) return <div {...root}>{withLayout(children)}</div>;
 

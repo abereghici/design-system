@@ -3,7 +3,7 @@
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import { useFieldControl } from "../field/use-field.ts";
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { useSlider } from "./slider-root.tsx";
 import type { Slider } from "./slider-root.tsx";

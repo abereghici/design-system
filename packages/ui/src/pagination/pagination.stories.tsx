@@ -36,33 +36,13 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test(
-  "shows the first, last and neighbouring pages around the current one",
-  async ({ canvas, canvasElement }) => {
-    await expect(controls(canvasElement)).toEqual([
-      "Previous page",
-      "Page 1",
-      "Page 4",
-      "Page 5",
-      "Page 6",
-      "Page 10",
-      "Next page",
-    ]);
-
-    const current = canvas.getByRole("link", { name: "Page 5" });
-
-    await expect(current).toHaveAttribute("aria-current", "page");
-    await expect(current).toHaveTextContent("5");
-    await expect(canvas.getByRole("link", { name: "Next page" })).toHaveAttribute(
-      "href",
-      "#page-6",
-    );
-    await expect(canvas.getByRole("link", { name: "Previous page" })).toHaveAttribute(
-      "href",
-      "#page-4",
-    );
-  },
-);
+// The aria snapshot holds the pages shown, their names and URLs; it doesn't record aria-current.
+Default.test("marks the current page", async ({ canvas }) => {
+  await expect(canvas.getByRole("link", { name: "Page 5" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+});
 
 Default.test(
   "on the first page, Previous is a disabled button that stays focusable and does nothing",

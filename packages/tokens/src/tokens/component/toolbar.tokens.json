@@ -1,0 +1,8 @@
+{
+  "component": {
+    "toolbar-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-xs}"
+    }
+  }
+}

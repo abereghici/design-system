@@ -1,0 +1,168 @@
+{
+  "component": {
+    "button-sm-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-sm}"
+    },
+    "button-md-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-md}"
+    },
+    "button-lg-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-lg}"
+    },
+    "button-sm-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "button-md-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "button-lg-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-lg}"
+    },
+    "button-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "button-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "button-lg-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-md}"
+    },
+    "button-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-default}"
+    },
+    "button-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "button-lg-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-md}"
+    },
+    "button-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "button-scale-pressed": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-pressed}"
+    },
+    "button-shadow": {
+      "$type": "shadow",
+      "$value": "{semantic.elevation-raised}"
+    },
+    "button-primary-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold}"
+    },
+    "button-primary-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold-hovered}"
+    },
+    "button-primary-background-color-pressed": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold-pressed}"
+    },
+    "button-primary-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-on-accent}"
+    },
+    "button-primary-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-on-accent}"
+    },
+    "button-secondary-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-overlay}"
+    },
+    "button-secondary-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+    },
+    "button-secondary-background-color-pressed": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-pressed}"
+    },
+    "button-secondary-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "button-secondary-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "button-secondary-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-subtle}"
+    },
+    "button-secondary-border-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default}"
+    },
+    "button-tertiary-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle}"
+    },
+    "button-tertiary-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+    },
+    "button-tertiary-background-color-pressed": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-pressed}"
+    },
+    "button-tertiary-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "button-tertiary-text-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "button-tertiary-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "button-danger-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-danger-bold}"
+    },
+    "button-danger-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-danger-bold-hovered}"
+    },
+    "button-danger-background-color-pressed": {
+      "$type": "color",
+      "$value": "{semantic.color-background-danger-bold-pressed}"
+    },
+    "button-danger-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-on-danger}"
+    },
+    "button-danger-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-on-danger}"
+    },
+    "button-background-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-background-disabled}"
+    },
+    "button-text-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-text-disabled}"
+    },
+    "button-border-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-border-disabled}"
+    }
+  }
+}

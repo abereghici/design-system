@@ -1,18 +1,19 @@
 import { useLayoutEffect } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { dateFormats } from "../date/date.ts";
-import type { DatePart, Temporal } from "../date/date.ts";
 import { useField } from "../field/use-field.ts";
+import { dateFormats } from "../internal/date/date.ts";
+import type { DatePart, Temporal } from "../internal/date/date.ts";
+import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
-import { useDate, useSegmentEditing } from "./date-field-editing.ts";
-import type { DateValueOptions } from "./date-field-editing.ts";
-import { useValidity } from "./date-field-validity.ts";
-import type { Validity } from "./date-field-validity.ts";
 import { bounds, display } from "./segments.ts";
 import type { Segments } from "./segments.ts";
+import { useDateValue } from "./use-date-value.ts";
+import type { DateValueOptions } from "./use-date-value.ts";
+import { useSegmentEditing } from "./use-segment-editing.ts";
+import { useValidity } from "./use-validity.ts";
+import type { Validity } from "./use-validity.ts";
 import fieldStyles from "../field/field.module.css";
-import visuallyHidden from "../visually-hidden/visually-hidden.module.css";
 import styles from "./date-field.module.css";
 
 export interface DateFieldOptions extends DateValueOptions {
@@ -111,7 +112,7 @@ function filledAround(formats: Formats, index: number, segments: Segments) {
 function useControl(options: ControlOptions, onValidity: (validity: Validity) => void) {
   const { field, blocked, invalid } = useField(options.disabled);
   const formats = dateFormats(options.locale);
-  const date = useDate(options);
+  const date = useDateValue(options);
   const name = field?.name ?? options.name;
   const validity = useValidity(options, {
     incomplete: options.incompleteMessage,
@@ -136,12 +137,8 @@ function useControl(options: ControlOptions, onValidity: (validity: Validity) =>
 }
 
 const isFirstInvalid = (input: HTMLInputElement) =>
-  [...(input.form?.elements ?? [])].find((element) =>
-    element instanceof HTMLInputElement ||
-    element instanceof HTMLSelectElement ||
-    element instanceof HTMLTextAreaElement
-      ? element.willValidate && !element.validity.valid
-      : false,
+  [...(input.form?.elements ?? [])].find(
+    (element) => !(element instanceof HTMLFieldSetElement) && element.matches(":invalid"),
   ) === input;
 
 function HiddenInput({
@@ -154,28 +151,29 @@ function HiddenInput({
   const { field, name, date, editing, validity } = control;
 
   return (
-    <input
-      type="date"
-      tabIndex={-1}
-      aria-hidden="true"
-      id={field?.controlId}
-      ref={field?.register}
-      name={name}
-      form={options.form}
-      required={options.required}
-      min={options.min?.toString()}
-      max={options.max?.toString()}
-      defaultValue={date.committed?.toString() ?? ""}
-      className={visuallyHidden["root"]}
-      onFocus={editing.focusFirstEmpty}
-      onClick={editing.focusFirstEmpty}
-      onInvalid={(event) => {
-        validity.report(true);
+    <VisuallyHidden asChild>
+      <input
+        type="date"
+        tabIndex={-1}
+        aria-hidden="true"
+        id={field?.controlId}
+        ref={field?.register}
+        name={name}
+        form={options.form}
+        required={options.required}
+        min={options.min?.toString()}
+        max={options.max?.toString()}
+        defaultValue={date.committed?.toString() ?? ""}
+        onFocus={editing.focusFirstEmpty}
+        onClick={editing.focusFirstEmpty}
+        onInvalid={(event) => {
+          validity.report(true);
 
-        // The control is visually hidden, so the user lands on the first segment they can fill in.
-        if (isFirstInvalid(event.currentTarget)) setTimeout(editing.focusFirstEmpty);
-      }}
-    />
+          // The control is visually hidden, so the user lands on the first segment they can fill in.
+          if (isFirstInvalid(event.currentTarget)) setTimeout(editing.focusFirstEmpty);
+        }}
+      />
+    </VisuallyHidden>
   );
 }
 

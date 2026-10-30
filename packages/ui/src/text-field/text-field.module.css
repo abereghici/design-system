@@ -1,10 +1,10 @@
-@import "@platform/tokens/components/input.css";
+@import "@platform/tokens/components/field.css";
 
 @layer ab.components {
   .group {
     display: flex;
     align-items: center;
-    gap: var(--ab-input-padding-inline);
+    gap: var(--ab-field-padding-inline);
     cursor: text;
   }
 
@@ -31,13 +31,13 @@
 
   /* The source measures start and end content from the border edge, the text from the padding edge. */
   .start {
-    --ab-icon-size: var(--ab-input-icon-size);
+    --ab-icon-size: var(--ab-field-icon-size);
 
-    margin-inline: calc(var(--ab-input-border-width) * -1) var(--ab-input-border-width);
-    color: var(--ab-input-icon-color);
+    margin-inline: calc(var(--ab-field-border-width) * -1) var(--ab-field-border-width);
+    color: var(--ab-field-icon-color);
   }
 
   .end {
-    margin-inline-end: calc(var(--ab-input-border-width) * -1);
+    margin-inline-end: calc(var(--ab-field-border-width) * -1);
   }
 }

@@ -1,0 +1,60 @@
+{
+  "component": {
+    "radio-group-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "radio-group-indicator-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-indicator}"
+    },
+    "radio-group-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-default}"
+    },
+    "radio-group-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "radio-group-label-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "radio-group-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-overlay}"
+    },
+    "radio-group-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default}"
+    },
+    "radio-group-border-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default-hovered}"
+    },
+    "radio-group-background-color-checked": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold}"
+    },
+    "radio-group-indicator-color-checked": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-on-accent}"
+    },
+    "radio-group-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-toggle}"
+    },
+    "radio-group-easing": {
+      "$type": "string",
+      "$value": "{semantic.motion-easing-spring-bouncy}"
+    },
+    "radio-group-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-full}"
+    },
+    "radio-group-border-color-invalid": {
+      "$type": "color",
+      "$value": "{semantic.color-border-danger}"
+    }
+  }
+}

@@ -70,8 +70,8 @@ Default.test(
 );
 
 Default.test(
-  "puts the footer beside the header in row layout when 480 px or wider",
-  { args: { layout: "row" }, decorators: [withWidth("36rem")] },
+  "puts the footer beside the header horizontally when 480 px or wider",
+  { args: { orientation: "horizontal" }, decorators: [withWidth("36rem")] },
   async ({ canvas }) => {
     const title = canvas.getByRole("heading", { name: "API keys" }).getBoundingClientRect();
     const action = canvas.getByRole("button", { name: "Manage" }).getBoundingClientRect();
@@ -81,8 +81,8 @@ Default.test(
 );
 
 Default.test(
-  "stacks in row layout when narrower than 480 px",
-  { args: { layout: "row" }, decorators: [withWidth("20rem")] },
+  "stacks when horizontal but narrower than 480 px",
+  { args: { orientation: "horizontal" }, decorators: [withWidth("20rem")] },
   async ({ canvas }) => {
     const title = canvas.getByRole("heading", { name: "API keys" }).getBoundingClientRect();
     const action = canvas.getByRole("button", { name: "Manage" }).getBoundingClientRect();

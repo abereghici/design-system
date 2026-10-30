@@ -3,7 +3,7 @@ import { Card } from "@platform/ui/card";
 export default function Page() {
   return (
     <main>
-      <Card.Root layout="row">
+      <Card.Root orientation="horizontal">
         <Card.Header>
           <Card.Title asChild>
             <h1>API keys</h1>

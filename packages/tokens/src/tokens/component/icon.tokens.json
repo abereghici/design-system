@@ -1,0 +1,36 @@
+{
+  "component": {
+    "icon-sm-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "icon-md-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-md}"
+    },
+    "icon-lg-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-lg}"
+    },
+    "icon-xl-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-xl}"
+    },
+    "icon-sm-stroke-width": {
+      "$type": "number",
+      "$value": "{semantic.stroke-width-lg}"
+    },
+    "icon-md-stroke-width": {
+      "$type": "number",
+      "$value": "{semantic.stroke-width-md}"
+    },
+    "icon-lg-stroke-width": {
+      "$type": "number",
+      "$value": "{semantic.stroke-width-md}"
+    },
+    "icon-xl-stroke-width": {
+      "$type": "number",
+      "$value": "{semantic.stroke-width-sm}"
+    }
+  }
+}

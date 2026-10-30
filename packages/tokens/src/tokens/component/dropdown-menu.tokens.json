@@ -1,0 +1,112 @@
+{
+  "component": {
+    "dropdown-menu-min-width": {
+      "$type": "dimension",
+      "$value": "{semantic.size-container-2xs}"
+    },
+    "dropdown-menu-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xs}"
+    },
+    "dropdown-menu-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-lg}"
+    },
+    "dropdown-menu-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-material-thick}"
+    },
+    "dropdown-menu-blur": {
+      "$type": "dimension",
+      "$value": "{semantic.material-blur-regular}"
+    },
+    "dropdown-menu-saturate": {
+      "$type": "number",
+      "$value": "{semantic.material-saturate-regular}"
+    },
+    "dropdown-menu-shadow": {
+      "$type": "shadow",
+      "$value": "{semantic.elevation-overlay}"
+    },
+    "dropdown-menu-offset": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-xs}"
+    },
+    "dropdown-menu-item-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-sm}"
+    },
+    "dropdown-menu-item-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "dropdown-menu-item-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "dropdown-menu-item-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "dropdown-menu-item-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "dropdown-menu-item-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "dropdown-menu-item-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "dropdown-menu-item-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-selected}"
+    },
+    "dropdown-menu-item-icon-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-accent}"
+    },
+    "dropdown-menu-item-danger-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-danger}"
+    },
+    "dropdown-menu-item-danger-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-danger}"
+    },
+    "dropdown-menu-item-shortcut-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtlest}"
+    },
+    "dropdown-menu-group-label-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-overline-sm}"
+    },
+    "dropdown-menu-group-label-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtlest}"
+    },
+    "dropdown-menu-separator-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-subtle}"
+    },
+    "dropdown-menu-enter-scale": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-enter}"
+    },
+    "dropdown-menu-enter-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-popover}"
+    },
+    "dropdown-menu-exit-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-exit}"
+    },
+    "dropdown-menu-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-enter}"
+    }
+  }
+}

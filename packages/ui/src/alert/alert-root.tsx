@@ -4,7 +4,7 @@ import { CheckCircleIcon } from "../icon/icons/check-circle.tsx";
 import { DangerIcon } from "../icon/icons/danger.tsx";
 import { InfoIcon } from "../icon/icons/info.tsx";
 import { WarningIcon } from "../icon/icons/warning.tsx";
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./alert.module.css";
 

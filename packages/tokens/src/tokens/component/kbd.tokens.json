@@ -1,0 +1,44 @@
+{
+  "component": {
+    "kbd-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-md}"
+    },
+    "kbd-min-width": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-md}"
+    },
+    "kbd-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xs}"
+    },
+    "kbd-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-xs}"
+    },
+    "kbd-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-kbd-sm}"
+    },
+    "kbd-font-variant-numeric": {
+      "$type": "string",
+      "$value": "{semantic.type-kbd-sm-font-variant-numeric}"
+    },
+    "kbd-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-nested}"
+    },
+    "kbd-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "kbd-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-subtle}"
+    },
+    "kbd-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-xs}"
+    }
+  }
+}

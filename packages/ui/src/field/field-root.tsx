@@ -5,7 +5,7 @@ import type { ComponentProps, SyntheticEvent } from "react";
 
 import { useEvent } from "../events/use-event.ts";
 import { FormErrorsContext } from "../form/form.tsx";
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { FieldContext, setValidity } from "./use-field.ts";
 import type { FormControl } from "./use-field.ts";

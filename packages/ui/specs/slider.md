@@ -126,7 +126,7 @@ APG: "Focus is placed on the slider (the visual object that the mouse user would
 - Role `slider` per thumb (native), value from the native `value`, `aria-valuetext` formatted.
 - **Name:** a single thumb is named by `Field.Label` (`for` the input). Each thumb of a range needs its own `aria-label` (Minimum / Maximum); the type requires it when `value` is an array (props union). APG: "If a slider has a visible label, it is referenced by aria-labelledby on the slider element. Otherwise, the slider element has a label provided by aria-label."
 - MDN, `slider` role: "When `aria-valuetext` is an important feature for a slider, consider using select with option elements instead." Documented on the docs page for named steps (Low / Medium / High).
-- **Contrast.** Track `color-border-default` (matrix, 3:1 on surfaces), range `background-accent-bold` (added to the matrix on every surface), thumb border `color-border-accent` (matrix) and thumb fill `surface-floating` against the range (added, 3:1).
+- **Contrast.** Track `color-border-default` (matrix, 3:1 on surfaces), range `background-accent-bold` (added to the matrix on every surface), thumb border `color-border-accent` (matrix) and thumb fill `surface-overlay` against the range (added, 3:1).
 - Targets: the Root is 24 px tall (32 on coarse pointers), so the thumb's hit area meets WCAG 2.5.8 even though the circle is 16 px.
 - **More contrast:** no change needed.
 - **Forced colors:** track `CanvasText` outline, range `Highlight`, thumb `ButtonFace` with a `ButtonText` border; focus ring as `outline`. Disabled `GrayText`.
@@ -149,7 +149,7 @@ New component word `slider` and element word `range` (Dictionary change).
 | `slider-range-background-color`     | `color-background-accent-bold`      | color              | The chosen part, as the checked Checkbox fill                                                                      |
 | `slider-thumb-size`                 | `size-icon-sm`                      | dimension          | 16, as the Switch thumb                                                                                            |
 | `slider-thumb-border-width`         | `border-width-thick`                | dimension          | 2                                                                                                                  |
-| `slider-thumb-background-color`     | `color-surface-floating`            | color              | As the Switch thumb                                                                                                |
+| `slider-thumb-background-color`     | `color-surface-overlay`             | color              | As the Switch thumb                                                                                                |
 | `slider-thumb-border-color`         | `color-border-accent`               | color              | Thumb edge on any surface                                                                                          |
 | `slider-thumb-shadow`               | `elevation-raised`                  | shadow             | As the Switch thumb                                                                                                |
 | `slider-value-font`                 | `type-data-sm`                      | typography         | As Progress's value                                                                                                |

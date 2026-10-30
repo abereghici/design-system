@@ -1,3 +1,5 @@
+import { usesReferences } from "style-dictionary/utils";
+
 import type { Dictionary, TransformedToken } from "style-dictionary/types";
 
 import { allowsSemanticMember, isComposite, leavesOf } from "./composite.ts";
@@ -5,7 +7,7 @@ import { checkContrast } from "./contrast.ts";
 import { mediaOverrides, perTheme } from "./media.ts";
 import { checkName } from "./naming.ts";
 import { checkAnimated } from "./property.ts";
-import { authoredDark, isThemed, isWholeReference, THEME_EXTENSION } from "./theme.ts";
+import { authoredDark, isThemed, referencedToken, THEME_EXTENSION } from "./theme.ts";
 import { TIERS, tierOf } from "./tiers.ts";
 import type { Tier } from "./tiers.ts";
 
@@ -27,18 +29,6 @@ const REFERENCES: Record<Tier, Tier | undefined> = {
   component: "semantic",
 };
 
-const REFERENCE = /\{[^\{\}]+\}/v;
-
-const containsReference = (value: unknown): boolean => {
-  if (typeof value === "string") return REFERENCE.test(value);
-
-  if (typeof value === "object" && value !== null) {
-    return Object.values(value).some((child) => containsReference(child));
-  }
-
-  return false;
-};
-
 const checkTier = (token: TransformedToken, dictionary: Dictionary): string[] => {
   const tier = tierOf(token);
   const label = `--${token.name}`;
@@ -57,7 +47,7 @@ const checkTier = (token: TransformedToken, dictionary: Dictionary): string[] =>
 
   return authored.flatMap((value) => {
     if (allowed === undefined) {
-      return containsReference(value)
+      return usesReferences(value)
         ? [`${label}: a primitive token must hold a literal, not reference another token`]
         : [];
     }
@@ -80,18 +70,19 @@ const checkReference = (
   const allowed = tier === undefined ? undefined : REFERENCES[tier];
   const label = `--${token.name}`;
 
-  if (!isWholeReference(value)) {
+  const target = referencedToken(value, dictionary);
+
+  if (target === undefined) {
     return [
       `${label}: a ${String(tier)} token must reference a ${String(allowed)} token, not hold a literal`,
     ];
   }
 
-  const target = dictionary.tokenMap.get(value);
-  const targetTier = target === undefined ? undefined : tierOf(target);
+  const targetTier = tierOf(target);
 
   if (targetTier === allowed) return [];
 
-  const targetName = target?.path.slice(1).join("-") ?? "";
+  const targetName = target.path.slice(1).join("-");
 
   if (targetTier === "semantic" && allowsSemanticMember(token.$type, targetName)) return [];
 
@@ -163,10 +154,11 @@ const checkMedia = (token: TransformedToken, dictionary: Dictionary): string[] =
         references.flatMap((reference) => {
           const prefix = `${label}: the ${query} override must reference a primitive or semantic token`;
 
-          if (!isWholeReference(reference)) return [`${prefix}, not hold a literal`];
+          const target = referencedToken(reference, dictionary);
 
-          const target = dictionary.tokenMap.get(reference);
-          const targetTier = target === undefined ? undefined : tierOf(target);
+          if (target === undefined) return [`${prefix}, not hold a literal`];
+
+          const targetTier = tierOf(target);
 
           return targetTier === "primitive" || targetTier === "semantic"
             ? []

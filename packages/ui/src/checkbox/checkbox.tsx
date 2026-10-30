@@ -5,9 +5,9 @@ import type { ComponentProps, ReactNode } from "react";
 
 import { pointerMarker } from "../events/events.ts";
 import { useFieldControl } from "../field/use-field.ts";
-import { mergeProps } from "../slot/slot.tsx";
-import { toggleClick } from "../toggle/toggle.ts";
-import type { ChangeEventDetails } from "../toggle/toggle.ts";
+import { mergeProps } from "../internal/slot/slot.tsx";
+import { toggleClick } from "../internal/toggle/toggle.ts";
+import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
 
 import styles from "./checkbox.module.css";
 

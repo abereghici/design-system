@@ -1,6 +1,6 @@
 # Alert
 
-An inline message about the page or a task, in the flow of content: "Your trial ends in 3 days", "Couldn't save: the file is read-only". Use it for information that stays relevant until the situation changes. For brief, non-blocking confirmation of something the user just did, use a Toast; for a decision that must interrupt, use an AlertDialog. An Alert is not a Floating layer.
+An inline message about the page or a task, in the flow of content: "Your trial ends in 3 days", "Couldn't save: the file is read-only". Use it for information that stays relevant until the situation changes. For brief, non-blocking confirmation of something the user just did, use a Toast; for a decision that must interrupt, use an AlertDialog. An Alert is not an Overlay.
 
 ```tsx
 import { Alert } from "@platform/ui/alert";
@@ -27,7 +27,7 @@ Status: draft for brand-owner review (phase 1). Source guide: none. Drafted from
 
 Root → status icon → Title (optional) + Description (optional) → Close (optional).
 
-- **Root.** A `<div>` laid out as a grid: icon column, text column, close column. Radius 12, padding 12, a subtle fill per Variant. No elevation and no Material: the brand's principle 5 is "Flat in flow, lifted when floating. In-flow content separates with space, hairlines and surface steps. Only floating layers (menus, popovers, toasts, dialogs) get elevation and material."
+- **Root.** A `<div>` laid out as a grid: icon column, text column, close column. Radius 12, padding 12, a subtle fill per Variant. No elevation and no Material: the brand's principle 5 is "Flat in flow, lifted in overlays. In-flow content separates with space, hairlines and surface steps. Only overlays (menus, popovers, toasts, dialogs) get elevation and material."
 - **Status icon.** Rendered by Root from `variant`, decorative (`aria-hidden`): `info` for neutral, `check-circle` for success, `warning` for warning, `danger` for danger (glyphs from the icon set; the info and warning glyphs carry the bob diamond, the one motif on this surface). Not a Part and not replaceable in phase 1.
 - **Title.** A `<div>` in label type. Not a heading: an Alert is a message, not a section of the outline (design decision; shadcn and Chakra also render a `div`, see API).
 - **Description.** A `<div>` in body type. May hold Links, inline code or a short list.
@@ -98,7 +98,7 @@ APG pattern: **Alert** (https://www.w3.org/WAI/ARIA/apg/patterns/alert/). Keyboa
 | Tab / Shift+Tab          | Moves to / from Close and to any Link or Button inside Description. Root, Title and Description are not focusable. |
 | Space / Enter (on Close) | APG Button: "Activates the button." Dismisses.                                                                     |
 
-Alert never moves focus when it appears. There is no Escape binding: Escape belongs to Floating layers ("Esc closes only the topmost popover or dialog").
+Alert never moves focus when it appears. There is no Escape binding: Escape belongs to Overlays ("Esc closes only the topmost popover or dialog").
 
 ## Accessibility
 
@@ -156,7 +156,7 @@ None. `Alert.Close` requires its `aria-label` by type, so a nameless button is a
 | ------------ | -------------------------------------------------------- | -------- |
 | `ab-dismiss` | After `Alert.Close`'s `onClick` runs on an enabled Close | `"user"` |
 
-Detail: `{ component: "Alert", reason }`, dispatched from the Close button and bubbling. Adds `"ab-dismiss": DismissEvent` with `FeedbackEventDetail<"Alert">` to `src/events/events.ts` (Toast and Dialog widen the union later). Not dispatched when Close is disabled. No `ab-appear`: an Alert is not a system-initiated feedback moment in the way a toast is.
+Detail: `{ component: "Alert", reason }`, dispatched from the Close button and bubbling. Adds `"ab-dismiss": DismissFeedbackEvent` with `FeedbackEventDetail<"Alert">` to `src/events/events.ts` (Toast and Dialog widen the union later). Not dispatched when Close is disabled. No `ab-appear`: an Alert is not a system-initiated feedback moment in the way a toast is.
 
 ## Sources
 

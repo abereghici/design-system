@@ -2,7 +2,7 @@
 
 How the engineering skills should consume this repo's domain documentation when exploring the codebase.
 
-This repo is **multi-context**. A context is a workspace package under `apps/<name>/` or `packages/<name>/`. Tooling-config packages in `packages/` (`typescript-config`, `oxlint-config`) are not contexts and have no domain docs.
+This repo is **multi-context**. A context is a workspace package under `apps/<name>/` or `packages/<name>/`. Tooling-config packages in `packages/` (`typescript-config`, `oxlint-config`) and the consumer fixture `apps/ui-next-fixture` are not contexts and have no domain docs.
 
 ## Before exploring, read these
 
