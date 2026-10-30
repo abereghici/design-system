@@ -6,6 +6,12 @@ export const componentRoutes = [
     html: "12.345",
   },
   { name: "tag", tokens: ["tag"], client: [], html: "Live" },
+  {
+    name: "tag-group",
+    tokens: ["icon", "tag", "tag-group"],
+    client: ["tag-group/tag-group-root", "tag-group/tag-group-tag"],
+    html: 'aria-label="Remove"',
+  },
   { name: "status-dot", tokens: ["status-dot"], client: [], html: "Operational" },
   {
     name: "avatar",
@@ -14,7 +20,11 @@ export const componentRoutes = [
     html: 'alt="Ana Popescu"',
   },
   { name: "card", tokens: ["card"], client: [], html: "<h1" },
+  { name: "stack", tokens: [], client: [], html: 'style="--gap:var(--ab-space-stack-lg)' },
+  { name: "inline", tokens: [], client: [], html: 'style="--gap:var(--ab-space-inline-md)' },
+  { name: "grid", tokens: [], client: [], html: "--min:var(--ab-size-container-xs)" },
   { name: "separator", tokens: ["separator"], client: [], html: "<hr" },
+  { name: "description-list", tokens: ["description-list"], client: [], html: "<dt class=" },
   {
     name: "alert",
     tokens: ["alert", "icon", "icon-button"],
@@ -140,7 +150,7 @@ export const componentRoutes = [
     name: "tabs",
     tokens: ["tabs"],
     client: ["tabs/tabs-content", "tabs/tabs-list", "tabs/tabs-root", "tabs/tabs-trigger"],
-    html: 'role="tablist"',
+    html: 'hidden="">Settings</div>',
   },
   {
     name: "segmented-control",
@@ -173,6 +183,30 @@ export const componentRoutes = [
     tokens: ["pagination", "icon", "icon-button"],
     client: ["internal/locale/formatted-number"],
     html: 'href="/pagination?page=3">3</a>',
+  },
+  {
+    name: "code-block",
+    tokens: ["code-block"],
+    client: ["code-block/code-block"],
+    html: "<pre class",
+  },
+  {
+    name: "copy-button",
+    tokens: ["button", "spinner"],
+    client: ["copy-button/copy-button"],
+    html: "Copy invoice number</button><output",
+  },
+  {
+    name: "toggle-button",
+    tokens: ["toggle-button"],
+    client: ["toggle-button/toggle-button"],
+    html: 'aria-pressed="true"',
+  },
+  {
+    name: "toggle-button-group",
+    tokens: ["toggle-button", "toggle-button-group"],
+    client: ["toggle-button-group/toggle-button-group", "toggle-button/toggle-button"],
+    html: 'aria-label="Text style"',
   },
   {
     name: "toolbar",
@@ -220,6 +254,19 @@ export const componentRoutes = [
     html: 'data-side="end"',
   },
   { name: "navbar", tokens: ["navbar"], client: [], html: '<nav aria-label="Main">' },
+  { name: "page-layout", tokens: ["navbar", "sidebar"], client: [], html: "<aside" },
+  {
+    name: "splitter",
+    tokens: ["splitter"],
+    client: ["splitter/splitter-handle", "splitter/splitter-root"],
+    html: 'aria-valuenow="30"',
+  },
+  {
+    name: "stepper",
+    tokens: ["stepper", "icon"],
+    client: [],
+    html: 'aria-current="step"',
+  },
   { name: "sidebar", tokens: ["sidebar"], client: [], html: "Settings</summary>" },
   {
     name: "tooltip",
@@ -291,5 +338,11 @@ export const componentRoutes = [
     tokens: ["field", "date-field", "popover", "icon", "icon-button", "spinner"],
     client: [],
     html: 'aria-haspopup="dialog"',
+  },
+  {
+    name: "tree",
+    tokens: ["icon", "spinner", "tree"],
+    client: ["tree/tree-item", "tree/tree-root"],
+    html: 'role="tree"',
   },
 ];

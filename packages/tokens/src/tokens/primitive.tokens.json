@@ -978,10 +978,7 @@
     },
     "dimension-760": {
       "$type": "dimension",
-      "$value": {
-        "value": 760,
-        "unit": "px"
-      }
+      "$value": "47.5em"
     },
     "dimension-7": {
       "$type": "dimension",

@@ -1,0 +1,48 @@
+{
+  "component": {
+    "tree-item-min-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-sm}"
+    },
+    "tree-item-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xs}"
+    },
+    "tree-item-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-xs}"
+    },
+    "tree-item-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "tree-item-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-sm}"
+    },
+    "tree-item-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "tree-item-text-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-text-selected}"
+    },
+    "tree-item-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "tree-item-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "tree-item-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+    },
+    "tree-item-background-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-background-selected}"
+    }
+  }
+}

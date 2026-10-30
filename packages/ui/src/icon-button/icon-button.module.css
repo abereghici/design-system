@@ -36,6 +36,14 @@
     block-size: var(--ab-icon-button-lg-size);
   }
 
+  @container style(--ab-density: compact) {
+    .root {
+      --ab-icon-button-sm-size: var(--ab-size-control-compact-sm);
+      --ab-icon-button-md-size: var(--ab-size-control-compact-md);
+      --ab-icon-button-lg-size: var(--ab-size-control-compact-lg);
+    }
+  }
+
   @media (hover: hover) and (pointer: fine) {
     .root:where(
         :not(

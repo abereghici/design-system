@@ -1,0 +1,40 @@
+@layer ab.components {
+  .root {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ab-tag-group-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* The button fills the Tag's end, so its 24px target reaches the Tag's edges. */
+  .remove {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    inline-size: var(--ab-tag-group-remove-size);
+    block-size: var(--ab-tag-group-remove-size);
+    margin-block: calc(-1 * var(--ab-tag-padding-block));
+    margin-inline-end: calc(-1 * var(--ab-tag-padding-inline));
+    padding: 0;
+    border: 0;
+    border-radius: var(--ab-tag-border-radius);
+    background-color: transparent;
+    color: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .remove:where([aria-disabled="true"]) {
+    color: var(--ab-color-icon-disabled);
+    cursor: not-allowed;
+  }
+
+  /* Removing needs script: without it the Tags stay readable but offer no button that does nothing. */
+  @media (scripting: none) {
+    .remove {
+      display: none;
+    }
+  }
+}

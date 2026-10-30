@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- text: Folders
+- separator "Resize folders"
+- text: Preview
+`;
+
+exports[`Nested   > base story 1`] = `
+- text: Folders
+- separator "Resize folders"
+- text: Editor
+- separator "Resize editor"
+- text: Terminal
+`;

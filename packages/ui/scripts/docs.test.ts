@@ -25,14 +25,18 @@ const families = new Set(
     .flatMap(({ name }) => [name.split("-")[1], name.replace("ab-color-", "").split("-")[0]]),
 );
 
-// CSS properties the pages name, which share a first word with a token family.
-const cssProperties = new Set([
+// Names the pages write that share a first word with a token family: CSS properties, a meta name
+// and screenshot variants.
+const notTokens = new Set([
   "font-size",
   "line-height",
   "color-scheme",
   "z-index",
   "font-variant-numeric",
   "text-transform",
+  "text-scale",
+  "text-200",
+  "text-spacing",
 ]);
 
 /** A token name as the pages write it, with `*` and `{a, b}` placeholders, as a pattern. */
@@ -59,7 +63,7 @@ function referencesIn(page: string) {
     ...captures(text, /\bof="([^"]+)"/gv),
   ].filter(
     (name) =>
-      !cssProperties.has(name) &&
+      !notTokens.has(name) &&
       name.includes("-") &&
       families.has(name.replace(/^--ab-|^ab-/v, "").split("-")[0]),
   );

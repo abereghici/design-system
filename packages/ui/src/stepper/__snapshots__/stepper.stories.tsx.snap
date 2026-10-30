@@ -1,0 +1,21 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- list "Checkout":
+  - listitem: Account Completed
+  - listitem: Shipping
+  - listitem: Payment
+  - listitem: Review
+`;
+
+exports[`Linked   > base story 1`] = `
+- list "Checkout":
+  - listitem:
+    - link "Account Completed":
+      - /url: "#account"
+  - listitem:
+    - link "Shipping Completed":
+      - /url: "#shipping"
+  - listitem: Payment
+  - listitem: Review
+`;

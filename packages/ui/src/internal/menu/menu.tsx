@@ -4,7 +4,7 @@ import { createContext, use } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
 import type { ChangeEventDetails as Details } from "../../events/events.ts";
-import { textOf } from "../listbox/listbox.tsx";
+import { typeahead } from "../listbox/listbox.tsx";
 import { returnFocus } from "../overlay/overlay.ts";
 import type { Overlay } from "../overlay/overlay.ts";
 import { mergeProps } from "../slot/slot.tsx";
@@ -33,30 +33,11 @@ export const focusLast = new WeakSet<Element>();
 
 const enterPressed = new WeakSet<Element>();
 
-const typed = new WeakMap<Element, { text: string; at: number }>();
-
-const TYPEAHEAD_WINDOW = 500;
-
 const isDisabled = (item: Element) => item.getAttribute("aria-disabled") === "true";
 
 export const itemsOf = (menu: Element) => [
   ...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]'),
 ];
-
-function typeahead(menu: HTMLElement, key: string, from: Element | null) {
-  const last = typed.get(menu);
-  const now = performance.now();
-  const text = last !== undefined && now - last.at < TYPEAHEAD_WINDOW ? last.text + key : key;
-
-  typed.set(menu, { text, at: now });
-
-  const items = itemsOf(menu).filter((item) => !isDisabled(item));
-  const start = from instanceof HTMLElement ? items.indexOf(from) : -1;
-  const repeat = text === key.repeat(text.length) ? key : text;
-  const order = [...items.slice(start + 1), ...items.slice(0, start + 1)];
-
-  order.find((item) => textOf(item).toLowerCase().startsWith(repeat.toLowerCase()))?.focus();
-}
 
 function navigate(event: KeyboardEvent<HTMLElement>) {
   const items = itemsOf(event.currentTarget);
@@ -101,11 +82,10 @@ export function menuContentProps(menu: Menu) {
           menu.overlay.toggle(false, "focus-out", event.nativeEvent);
         });
       } else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-        typeahead(
-          event.currentTarget,
-          event.key,
-          event.target instanceof Element ? event.target : null,
-        );
+        const from = event.target instanceof Element ? event.target : null;
+        const items = itemsOf(event.currentTarget).filter((item) => !isDisabled(item));
+
+        typeahead(event.currentTarget, event.key, items, from)?.focus();
       }
     },
     onPointerMove: (event: PointerEvent<HTMLElement>) => {

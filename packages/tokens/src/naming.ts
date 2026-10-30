@@ -17,6 +17,7 @@ const SEMANTIC = [
   /^space-(inline|inset|stack)-(2xs|xs|sm|md|lg|xl|2xl)$/v,
   /^space-section$/v,
   /^size-(icon|control)-(xs|sm|md|lg|xl)$/v,
+  /^size-control-compact-(sm|md|lg)$/v,
   /^size-target-(min|recommended)$/v,
   /^size-container-(2xs|xs|sm|md|lg)$/v,
   /^size-(toggle|indicator)$/v,
@@ -71,10 +72,14 @@ const COLOR_WORDS = new Set([
 
 const COMPONENTS = [
   "status-dot",
+  "code-block",
+  "toggle-button-group",
+  "toggle-button",
   "icon-button",
   "button",
   "field",
   "link",
+  "tag-group",
   "tag",
   "separator",
   "icon",
@@ -117,6 +122,10 @@ const COMPONENTS = [
   "table",
   "date-field",
   "calendar",
+  "description-list",
+  "stepper",
+  "splitter",
+  "tree",
 ];
 
 const PROPERTIES = [
@@ -155,7 +164,17 @@ const PROPERTIES = [
   "color",
 ];
 
-const STATES = ["hovered", "pressed", "focused", "selected", "checked", "invalid", "disabled"];
+const STATES = [
+  "hovered",
+  "pressed",
+  "focused",
+  "selected",
+  "checked",
+  "invalid",
+  "disabled",
+  "current",
+  "complete",
+];
 
 const MODIFIERS = new Set([
   "primary",
@@ -211,6 +230,11 @@ const MODIFIERS = new Set([
   "today",
   "row",
   "sort",
+  "term",
+  "details",
+  "connector",
+  "handle",
+  "remove",
 ]);
 
 const outsideDictionary = (words: readonly string[]) =>
