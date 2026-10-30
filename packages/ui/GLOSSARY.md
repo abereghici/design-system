@@ -61,12 +61,12 @@ A thin line dividing content or groups of items.
 _Avoid_: Divider, rule, hr
 
 **UIProvider**:
-The component an app mounts once at its root. It brings every global style the design system needs, so apps add none; it holds no state and no text.
+The component an app mounts once at its root. It brings every global style the design system needs, so apps add none, and the app's Locale; it holds no other state and no text.
 _Avoid_: Root, app shell, LocaleProvider, ThemeProvider
 
 **Locale**:
-The optional `locale` prop (a BCP 47 tag such as `"ro-RO"`) of a component that formats numbers or dates; it goes straight to `Intl`, and without it `Intl` uses the runtime's default.
-_Avoid_: Locale object, translations, i18n bundle
+The language an app formats numbers and dates in, a BCP 47 tag such as `"ro-RO"`, set once on the UIProvider; every component that formats follows it. Dates are Gregorian in every Locale.
+_Avoid_: Per-component locale, locale object, translations, i18n bundle
 
 **Author-written text**:
 Every name, label and message a component shows or announces comes from the app, as children or a named prop (`aria-label`, `closeLabel`, `noOptionsText`); the library ships none. Where a part would otherwise have no accessible name, its prop type requires the text.

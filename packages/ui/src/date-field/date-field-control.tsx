@@ -2,7 +2,7 @@ import { useLayoutEffect } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import { useField } from "../field/use-field.ts";
-import { dateFormats } from "../internal/date/date.ts";
+import { useDateFormats } from "../internal/date/date.ts";
 import type { DatePart, Temporal } from "../internal/date/date.ts";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
@@ -37,11 +37,6 @@ export interface DateFieldOptions extends DateValueOptions {
    * invalid.
    */
   validate?: ((value: string, formData: FormData) => string | null | undefined) | undefined;
-  /**
-   * The language of the segment order, separators and names, such as "ro-RO". Pass the same one on
-   * the server and in the browser; without it, the runtime's default language is used.
-   */
-  locale?: Intl.LocalesArgument;
   /** The error for a date typed only in part, such as "Enter a complete date". */
   incompleteMessage: string;
   /** Hints shown in the empty segments, such as `{ day: "dd", month: "mm", year: "yyyy" }`. */
@@ -54,7 +49,7 @@ interface ControlOptions extends DateFieldOptions {
   readonly onFormReset?: (() => void) | undefined;
 }
 
-type Formats = ReturnType<typeof dateFormats>;
+type Formats = ReturnType<typeof useDateFormats>;
 
 interface SegmentProps {
   readonly part: DatePart;
@@ -111,7 +106,7 @@ function filledAround(formats: Formats, index: number, segments: Segments) {
 
 function useControl(options: ControlOptions, onValidity: (validity: Validity) => void) {
   const { field, blocked, invalid } = useField(options.disabled);
-  const formats = dateFormats(options.locale);
+  const formats = useDateFormats();
   const date = useDateValue(options);
   const name = field?.name ?? options.name;
   const validity = useValidity(options, {

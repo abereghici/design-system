@@ -37,7 +37,6 @@ export function Root({
   required,
   disabled,
   validate,
-  locale,
   incompleteMessage,
   placeholders,
   isDateUnavailable,
@@ -47,7 +46,7 @@ export function Root({
   ...props
 }: RootProps) {
   const [validity, setValidity] = useState<Validity>({ invalid: false, message: "" });
-  const options = { value, defaultValue, onValueChange, min, max, name, form, required, locale };
+  const options = { value, defaultValue, onValueChange, min, max, name, form, required };
   const messages = { incompleteMessage, unavailableMessage, placeholders };
 
   return (

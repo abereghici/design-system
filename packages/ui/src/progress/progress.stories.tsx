@@ -8,7 +8,7 @@ import { Progress } from "./progress.tsx";
 const meta = preview.meta({
   title: "Components/Progress",
   component: Progress,
-  args: { value: 40, label: "Uploading 3 files", locale: "en-US" },
+  args: { value: 40, label: "Uploading 3 files" },
 });
 
 export const Default = meta.story({});
@@ -63,8 +63,8 @@ Default.test("clamps its value to the range", { args: { value: 140 } }, async ({
 });
 
 Default.test(
-  "formats its value in the given locale",
-  { args: { locale: "ro-RO", label: "Se încarcă 3 fișiere" } },
+  "formats its value in the app's locale",
+  { globals: { locale: "ro-RO" }, args: { label: "Se încarcă 3 fișiere" } },
   async ({ canvas }) => {
     await expect(canvas.getByText("40 %")).toBeVisible();
   },

@@ -21,7 +21,6 @@ const meta = preview.meta({
   args: {
     label: "Date of birth",
     name: "birthDate",
-    locale: "en-US",
     incompleteMessage: "Enter a complete date",
     placeholders: { day: "dd", month: "mm", year: "yyyy" },
     onValueChange:
@@ -33,7 +32,10 @@ export const Default = meta.story({});
 
 Default.test(
   "orders and names the segments for ro-RO, with the author's placeholders",
-  { args: { locale: "ro-RO", placeholders: { day: "zz", month: "ll", year: "aaaa" } } },
+  {
+    globals: { locale: "ro-RO" },
+    args: { placeholders: { day: "zz", month: "ll", year: "aaaa" } },
+  },
   async ({ canvas }) => {
     await expect(names()).toEqual(["zi", "lună", "an"]);
     await expect(canvas.getByRole("spinbutton", { name: "zi" })).toHaveAttribute(

@@ -1,10 +1,10 @@
 import type { FocusEvent, KeyboardEvent, MouseEvent, RefObject } from "react";
 
-import type { dateFormats, Temporal } from "../internal/date/date.ts";
+import type { Temporal, useDateFormats } from "../internal/date/date.ts";
 
 import styles from "./calendar.module.css";
 
-type Formats = ReturnType<typeof dateFormats>;
+type Formats = ReturnType<typeof useDateFormats>;
 
 const startOfWeek = (date: Temporal.PlainDate, firstDay: number) =>
   date.subtract({ days: (date.dayOfWeek - firstDay + 7) % 7 });

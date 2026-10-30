@@ -6,6 +6,7 @@ import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction
 import { isComposing, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { filterOptions, enabled, navigate, reveal } from "../internal/listbox/listbox.tsx";
+import { useLocale } from "../internal/locale/use-locale.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./command.module.css";
@@ -132,11 +133,6 @@ export interface RootProps extends ComponentProps<"div"> {
    * results.
    */
   filter?: null | undefined;
-  /**
-   * The language that matching typed text follows, such as "ro-RO"; without it, the runtime's
-   * default language is used.
-   */
-  locale?: Intl.LocalesArgument;
 }
 
 /**
@@ -147,7 +143,6 @@ export function Root({
   defaultInputValue = "",
   onInputValueChange,
   filter: filtering,
-  locale,
   children,
   ...props
 }: RootProps) {
@@ -155,6 +150,7 @@ export function Root({
   const query = inputValue ?? uncontrolled;
   const [highlighted, setHighlighted] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
   const empty = useFilter(list, query, filtering === null ? null : locale, setHighlighted);
   const context: CommandContext = {
     query,

@@ -35,7 +35,6 @@ const meta = preview.meta({
     label: "Due date",
     name: "due",
     defaultValue: date("2025-03-12"),
-    locale: "en-US",
     triggerLabel: "Choose date",
     incompleteMessage: "Enter a complete date",
     onValueChange,
@@ -72,8 +71,8 @@ Default.test("has a trigger named Choose date that describes the value", async (
 });
 
 Default.test(
-  "formats the value and its Calendar in its locale",
-  { args: { locale: "ro-RO" } },
+  "formats the value and its Calendar in the app's locale",
+  { globals: { locale: "ro-RO" } },
   async ({ canvas }) => {
     const user = await trusted();
     const trigger = canvas.getByRole("button", { name: "Choose date" });

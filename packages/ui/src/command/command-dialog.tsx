@@ -16,10 +16,7 @@ type Reason = "outside-press" | "escape-key" | "item-press" | "none";
 export interface DialogProps
   extends
     Omit<ComponentProps<"dialog">, "open" | "id" | "aria-label">,
-    Pick<
-      RootProps,
-      "inputValue" | "defaultInputValue" | "onInputValueChange" | "filter" | "locale"
-    > {
+    Pick<RootProps, "inputValue" | "defaultInputValue" | "onInputValueChange" | "filter"> {
   /** The palette's name, such as "Command palette". */
   "aria-label": string;
   /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
@@ -53,8 +50,7 @@ function handleClose(
 /** The ⌘K palette: a top-anchored modal Command. The app binds ⌘K / Ctrl K and holds `open`. */
 export function Dialog(props: DialogProps) {
   const { open, defaultOpen = false, onOpenChange, finalFocus: _, ...rest } = props;
-  const { inputValue, defaultInputValue, onInputValueChange, filter, locale, children, ...native } =
-    rest;
+  const { inputValue, defaultInputValue, onInputValueChange, filter, children, ...native } = rest;
   const [uncontrolled, setUncontrolled] = useState(defaultOpen);
   const [closes, setCloses] = useState(0);
   const close = (reason: Exclude<Reason, "none">, event: Event) => {
@@ -95,7 +91,6 @@ export function Dialog(props: DialogProps) {
             defaultInputValue={closes === 0 ? defaultInputValue : ""}
             onInputValueChange={onInputValueChange}
             filter={filter}
-            locale={locale}
           >
             {children}
           </Root>

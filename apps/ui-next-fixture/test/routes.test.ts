@@ -51,8 +51,14 @@ const button = route("index");
 const logo = route("logo");
 const iconButton = route("icon-button");
 
-const uiClientModules = (r: Route) =>
+// UIProvider, in the root layout, hands its locale to client components; every route carries it.
+const localeProvider = "internal/locale/locale-provider.tsx";
+const formattedNumber = "internal/locale/formatted-number.tsx";
+
+const allClientModules = (r: Route) =>
   [...new Set(r.clientModules.match(/(?<=packages\/ui\/src\/)[\w.\/\-]+(?=")/gv))].toSorted();
+
+const uiClientModules = (r: Route) => allClientModules(r).filter((m) => m !== localeProvider);
 
 // A token ships when its sheet defines it or a component rule reads it. A component redefining another's token on itself (Button restyles Kbd hints) does neither.
 const shippedComponentTokens = (css: string) => {
@@ -162,27 +168,28 @@ describe("per-component JS", () => {
     expect(uiClientModules(button)).toEqual(["button/button.tsx"]);
     expect(button.js).toContain("ab-press");
     expect(uiClientModules(logo)).toEqual([]);
+    expect(allClientModules(logo)).toEqual([localeProvider]);
     expect(logo.js).not.toContain("ab-press");
     expect(uiClientModules(iconButton)).toEqual(["icon-button/icon-button.tsx"]);
   });
 
   test.each([
-    ["heading", "var(--ab-type-heading-lg)", 0],
-    ["text", "var(--ab-type-body-md)", 0],
-    ["scroll-area", "animation-timeline:scroll(self)", 0],
-    ["spinner", "var(--ab-spinner-color)", 4],
-    ["table", "var(--ab-table-body-font)", 12],
-    ["skeleton", "var(--ab-skeleton-background-color)", 4],
-    ["progress", "var(--ab-progress-indicator-background-color)", 11],
-    ["meter", "var(--ab-meter-indicator-background-color)", 13],
-    ["link", "var(--ab-link-underline-color)", 5],
-    ["skip-link", "var(--ab-skip-link-background-color)", 7],
+    ["heading", "var(--ab-type-heading-lg)", 0, []],
+    ["text", "var(--ab-type-body-md)", 0, []],
+    ["scroll-area", "animation-timeline:scroll(self)", 0, []],
+    ["spinner", "var(--ab-spinner-color)", 4, []],
+    ["table", "var(--ab-table-body-font)", 12, []],
+    ["skeleton", "var(--ab-skeleton-background-color)", 4, []],
+    ["progress", "var(--ab-progress-indicator-background-color)", 11, [formattedNumber]],
+    ["meter", "var(--ab-meter-indicator-background-color)", 13, [formattedNumber]],
+    ["link", "var(--ab-link-underline-color)", 5, []],
+    ["skip-link", "var(--ab-skip-link-background-color)", 7, []],
   ])(
-    "the %s route renders on the server and ships its CSS and tokens only",
-    (name, rule, count) => {
+    "the %s route renders on the server and ships its CSS, tokens and client leaves only",
+    (name, rule, count, client) => {
       const r = route(name);
 
-      expect(uiClientModules(r)).toEqual([]);
+      expect(uiClientModules(r)).toEqual(client);
       expect(r.css).toContain(rule);
 
       const tokens = shippedComponentTokens(r.css);
@@ -196,7 +203,7 @@ describe("per-component JS", () => {
     expect(route("spinner").html).toContain(">Loading</span></span>");
     expect(route("pagination").html).toContain('aria-label="Next page"');
     expect(route("progress").html).toContain("40\u00A0%");
-    expect(route("meter").html).toContain("42%");
+    expect(route("meter").html).toContain("42\u00A0%");
     expect(route("skip-link").html).toContain(">Skip to main content</a>");
     expect(route("link").html).toMatch(/<a class="[^"]+" href="\/">Home<\/a>/v);
   });
@@ -204,7 +211,7 @@ describe("per-component JS", () => {
 
 describe("interface text and direction", () => {
   test("the root layout sets dir from getDirection on the server", () => {
-    expect(button.html).toContain('<html lang="en" dir="ltr"');
+    expect(button.html).toContain('<html lang="ro-RO" dir="ltr"');
   });
 
   test("a sorted Table header renders aria-sort and its button on the server", () => {

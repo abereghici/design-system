@@ -26,11 +26,10 @@ const meta = preview.meta({
     "aria-label": "Pagination",
     previousLabel: "Previous page",
     nextLabel: "Next page",
-    getPageLabel: (page: string) => `Page ${page}`,
+    getPageLabel: (page: number) => `Page ${page}`,
     page: 5,
     count: 10,
     getPageUrl: (page: number) => `#page-${page}`,
-    locale: "en-US",
   },
 });
 
@@ -109,13 +108,13 @@ Default.test(
 );
 
 Default.test(
-  "formats page numbers in its locale, and names page links with getPageLabel",
+  "formats page numbers in the app's locale, and names page links with getPageLabel",
   {
+    globals: { locale: "ro-RO" },
     args: {
       page: 1200,
       count: 1500,
-      locale: "ro-RO",
-      getPageLabel: (page: string) => `Pagina ${page}`,
+      getPageLabel: (page: number) => `Pagina ${page.toLocaleString("ro-RO")}`,
     },
   },
   async ({ canvas }) => {

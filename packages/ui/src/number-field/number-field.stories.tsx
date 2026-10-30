@@ -21,7 +21,6 @@ const meta = preview.meta({
     max: 50,
     incrementLabel: "Increase",
     decrementLabel: "Decrease",
-    locale: "en-US",
     onValueChange: fn(),
   },
 });
@@ -150,8 +149,9 @@ Default.test(
 );
 
 Default.test(
-  "formats and parses in its locale",
+  "formats and parses in the app's locale",
   {
+    globals: { locale: "ro-RO" },
     args: {
       label: "Preț",
       name: "price",
@@ -159,7 +159,6 @@ Default.test(
       min: 0,
       max: 1e6,
       step: 0.1,
-      locale: "ro-RO",
     },
   },
   async ({ canvas, userEvent }) => {

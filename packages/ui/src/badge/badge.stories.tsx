@@ -9,7 +9,7 @@ import { Badge } from "./badge.tsx";
 const meta = preview.meta({
   title: "Components/Badge",
   component: Badge,
-  args: { children: 3, locale: "en-US" },
+  args: { children: 3 },
 });
 
 export const Default = meta.story({});
@@ -35,15 +35,15 @@ Default.test("caps a count above max", { args: { children: 1280 } }, async ({ ca
 });
 
 Default.test(
-  "formats the count and the cap in its locale",
-  { args: { children: 1280, max: 1000, locale: "ro-RO" } },
+  "formats the count and the cap in the app's locale",
+  { globals: { locale: "ro-RO" }, args: { children: 1280, max: 1000 } },
   async ({ canvas }) => {
     await expect(canvas.getByText("1.000+")).toBeVisible();
   },
 );
 
 Default.test(
-  "formats a count in its locale",
+  "formats a count in the app's locale",
   { args: { children: 1280, max: 9999 } },
   async ({ canvas }) => {
     await expect(canvas.getByText("1,280")).toBeVisible();

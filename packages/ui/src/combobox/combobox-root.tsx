@@ -81,7 +81,6 @@ const split = ({
   defaultOpen,
   onOpenChange,
   filter,
-  locale,
   ...rest
 }: Omit<RootProps, "label" | "description" | "errorMessage" | "invalid" | "validate">) =>
   [
@@ -96,7 +95,6 @@ const split = ({
       defaultOpen,
       onOpenChange,
       filter,
-      locale,
       // Read-only blocks the same presses and keys as disabled; only the look and announcement differ.
       disabled: rest.disabled === true || rest.readOnly === true,
     },

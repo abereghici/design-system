@@ -1,6 +1,8 @@
 import { createContext } from "react";
 import { Temporal } from "temporal-polyfill";
 
+import { useLocale } from "../locale/use-locale.ts";
+
 export { Temporal };
 
 export type DatePart = "year" | "month" | "day";
@@ -10,9 +12,11 @@ const isPart = (type: string): type is DatePart =>
 
 const utc = (date: Temporal.PlainDate) => Date.UTC(date.year, date.month - 1, date.day);
 
-function build(locale: Intl.LocalesArgument) {
+function build(locale: string | undefined) {
+  // Dates are Gregorian (ADR-0004); a locale whose default calendar differs, such as th-TH's
+  // Buddhist one, would otherwise head the Calendar with another year than the DateField shows.
   const format = (options: Intl.DateTimeFormatOptions) =>
-    new Intl.DateTimeFormat(locale, { ...options, timeZone: "UTC" });
+    new Intl.DateTimeFormat(locale, { ...options, calendar: "gregory", timeZone: "UTC" });
   const numeric = format({ year: "numeric", month: "2-digit", day: "2-digit" });
   const tag = numeric.resolvedOptions().locale;
   const names = new Intl.DisplayNames(tag, { type: "dateTimeField" });
@@ -39,8 +43,9 @@ function build(locale: Intl.LocalesArgument) {
 
 const cache = new Map<string, ReturnType<typeof build>>();
 
-/** Intl formatters for one locale (the runtime's default when `undefined`), created on first use. */
-export function dateFormats(locale: Intl.LocalesArgument) {
+/** Intl formatters in the app's locale, created on first use. */
+export function useDateFormats() {
+  const locale = useLocale();
   const key = String(locale);
   const cached = cache.get(key) ?? build(locale);
 
@@ -52,7 +57,6 @@ export function dateFormats(locale: Intl.LocalesArgument) {
 /** What a Calendar inside a DatePicker reads instead of its own props. */
 export interface DatePickerContextValue {
   readonly open: boolean;
-  readonly locale: Intl.LocalesArgument;
   readonly value: Temporal.PlainDate | null;
   readonly min: Temporal.PlainDate | undefined;
   readonly max: Temporal.PlainDate | undefined;

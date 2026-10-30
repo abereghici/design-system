@@ -2,6 +2,7 @@ import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useSt
 
 import { getDocument, useEvent } from "../events/use-event.ts";
 import { filterOptions, enabled, textOf } from "../internal/listbox/listbox.tsx";
+import { useLocale } from "../internal/locale/use-locale.ts";
 import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 
 import { chosenOf, dismiss, highlight, inputOf, listOf, memoryOf, part } from "./combobox-state.ts";
@@ -43,7 +44,7 @@ function showEmpty(c: ComboboxState, list: HTMLElement, empty: boolean, text: st
   if (status !== null) status.textContent = c.open && empty ? text : "";
 }
 
-function sync(c: ComboboxState, emptyText: string) {
+function sync(c: ComboboxState, emptyText: string, locale: string | undefined) {
   const list = listOf(c);
   const input = inputOf(c);
 
@@ -52,7 +53,7 @@ function sync(c: ComboboxState, emptyText: string) {
   applyText(c, list, input);
   placePopover(c, list);
 
-  const shown = filterOptions(list, c.options.filter === null ? "" : c.query, c.options.locale);
+  const shown = filterOptions(list, c.options.filter === null ? "" : c.query, locale);
 
   showEmpty(c, list, shown.length === 0, emptyText);
 
@@ -132,6 +133,7 @@ export function useCombobox(options: Options, empty: string): ComboboxState {
   const [ownValue, setValue] = useState(options.defaultValue ?? null);
   const [ownOpen, setOpen] = useState(options.defaultOpen ?? false);
   const [query, setQuery] = useState("");
+  const locale = useLocale();
   const c: ComboboxState = {
     options,
     id: useId(),
@@ -144,7 +146,7 @@ export function useCombobox(options: Options, empty: string): ComboboxState {
   };
 
   useLayoutEffect(() => {
-    sync(c, empty);
+    sync(c, empty, locale);
   });
   useListeners(c);
 

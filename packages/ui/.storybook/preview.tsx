@@ -5,7 +5,7 @@ import { definePreview } from "@storybook/react-vite";
 import { withGlobals } from "./decorators/with-globals.tsx";
 import { meaningfulControls } from "./docs/arg-types.ts";
 import { transform } from "./docs/source.ts";
-import { directions, DocsContainer, DocsPage, mdx, themes } from "./globals.tsx";
+import { directions, DocsContainer, DocsPage, locales, mdx, themes } from "./globals.tsx";
 import { snapshotStory } from "./test/snapshots.ts";
 
 export { partsOf } from "./docs/arg-types.ts";
@@ -72,7 +72,11 @@ export default definePreview({
       description: "Text direction (dir on <html>)",
       toolbar: { title: "Direction", icon: "transfer", items: [...directions], dynamicTitle: true },
     },
+    locale: {
+      description: "Locale (lang on <html>, locale on UIProvider)",
+      toolbar: { title: "Locale", icon: "globe", items: [...locales], dynamicTitle: true },
+    },
   },
-  initialGlobals: { theme: "system", dir: "ltr" },
+  initialGlobals: { theme: "system", dir: "ltr", locale: "en-US" },
   decorators: [withGlobals],
 });

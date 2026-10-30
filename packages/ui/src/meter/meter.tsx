@@ -1,6 +1,7 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
+import { FormattedNumber } from "../internal/locale/formatted-number.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./meter.module.css";
@@ -31,11 +32,6 @@ export type MeterProps = Omit<
     optimum?: number;
     /** How the value reads, such as a percent or a unit ("12 GB"). */
     formatOptions?: Intl.NumberFormatOptions;
-    /**
-     * The language the value is formatted in, such as "ro-RO". Pass the same one on the server and
-     * in the browser; without it, the runtime's default language is used.
-     */
-    locale?: Intl.LocalesArgument;
   };
 
 /**
@@ -52,18 +48,18 @@ export function Meter({
   label,
   valueLabel,
   formatOptions = { style: "percent" },
-  locale,
   className,
   style,
   ...props
 }: MeterProps) {
   const id = useId();
   const now = Math.min(Math.max(value, min), max);
-  const text =
-    valueLabel ??
-    new Intl.NumberFormat(locale, formatOptions).format(
-      formatOptions.style === "percent" ? (now - min) / (max - min) : now,
-    );
+  const text = valueLabel ?? (
+    <FormattedNumber
+      {...formatOptions}
+      value={formatOptions.style === "percent" ? (now - min) / (max - min) : now}
+    />
+  );
 
   return (
     <div

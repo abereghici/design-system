@@ -2,6 +2,7 @@ import type { ComponentProps, ElementType, ReactElement } from "react";
 
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { MoreIcon } from "../icon/icons/more.tsx";
+import { FormattedNumber } from "../internal/locale/formatted-number.tsx";
 
 import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./pagination.module.css";
@@ -20,17 +21,12 @@ export type PaginationProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-l
     getPageUrl: (page: number) => string;
     /** Your router's link component, used for every link so navigation stays client-side. */
     linkComponent?: ElementType;
-    /**
-     * The language page numbers are formatted in, such as "ro-RO". Pass the same one on the server
-     * and in the browser; without it, the runtime's default language is used.
-     */
-    locale?: Intl.LocalesArgument;
     /** The name of the Previous button, such as "Previous page": it shows only an icon. */
     previousLabel: string;
     /** The name of the Next button, such as "Next page": it shows only an icon. */
     nextLabel: string;
-    /** A page link's name, given its formatted number ("Page 3"); without it the number names it. */
-    getPageLabel?: (page: string) => string;
+    /** A page link's name, given its number ("Page 3"); without it the number names it. */
+    getPageLabel?: (page: number) => string;
   };
 
 function range(page: number, count: number) {
@@ -85,13 +81,11 @@ export function Pagination({
   count,
   getPageUrl,
   linkComponent: Anchor = "a",
-  locale,
   previousLabel,
   nextLabel,
   getPageLabel,
   ...props
 }: PaginationProps) {
-  const formatter = new Intl.NumberFormat(locale);
   const url = (target: number) => (target < 1 || target > count ? undefined : getPageUrl(target));
 
   return (
@@ -109,11 +103,11 @@ export function Pagination({
             <li key={item}>
               <Anchor
                 href={getPageUrl(item)}
-                aria-label={getPageLabel?.(formatter.format(item))}
+                aria-label={getPageLabel?.(item)}
                 aria-current={item === page ? "page" : undefined}
                 className={styles["page"]}
               >
-                {formatter.format(item)}
+                <FormattedNumber value={item} />
               </Anchor>
             </li>
           ),

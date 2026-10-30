@@ -1,5 +1,10 @@
 export const componentRoutes = [
-  { name: "badge", tokens: ["badge"], client: [], html: "12.345" },
+  {
+    name: "badge",
+    tokens: ["badge"],
+    client: ["internal/locale/formatted-number.tsx"],
+    html: "12.345",
+  },
   { name: "tag", tokens: ["tag"], client: [], html: "Live" },
   { name: "status-dot", tokens: ["status-dot"], client: [], html: "Operational" },
   {
@@ -159,7 +164,7 @@ export const componentRoutes = [
   {
     name: "pagination",
     tokens: ["pagination", "icon", "icon-button"],
-    client: [],
+    client: ["internal/locale/formatted-number.tsx"],
     html: 'href="/pagination?page=3">3</a>',
   },
   {

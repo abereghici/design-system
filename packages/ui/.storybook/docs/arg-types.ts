@@ -85,10 +85,6 @@ export const partsOf = (namespace: Record<string, unknown>) =>
 
 /** Rows for the DateField props DatePicker takes through `Omit<>`, which react-docgen skips. */
 export const dateFieldArgTypes = {
-  locale: {
-    control: "text",
-    description: "The language of the field and its Calendar, such as `ro-RO`.",
-  },
   incompleteMessage: {
     control: "text",
     description: "The error for a date typed only in part, such as “Enter a complete date”.",
