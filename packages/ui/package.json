@@ -1,8 +1,26 @@
 {
   "name": "@abereghici/ui",
   "version": "0.1.1",
-  "description": "React components of the abereghici design system.",
+  "description": "React components for the Bereghici Design System.",
+  "keywords": [
+    "accessibility",
+    "anchor-positioning",
+    "component-library",
+    "dark-mode",
+    "design-system",
+    "nextjs",
+    "popover-api",
+    "react",
+    "react-components",
+    "react-server-components",
+    "ui-components"
+  ],
+  "homepage": "https://github.com/abereghici/design-system/tree/main/packages/ui#readme",
+  "bugs": {
+    "url": "https://github.com/abereghici/design-system/issues"
+  },
   "license": "MIT",
+  "author": "Alexandru Bereghici",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abereghici/design-system.git",
