@@ -226,6 +226,7 @@ describe("per-component JS", () => {
     expect(route("progress").html).toContain("40\u00A0%");
     expect(route("meter").html).toContain("42\u00A0%");
     expect(route("skip-link").html).toContain(">Skip to main content</a>");
+    expect(route("stepper").html).toContain(">Completed</span></a>");
     expect(route("link").html).toMatch(/<a class="[^"]+" href="\/">Home<\/a>/v);
   });
 });

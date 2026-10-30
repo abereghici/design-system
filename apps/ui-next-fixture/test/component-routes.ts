@@ -220,6 +220,12 @@ export const componentRoutes = [
     html: 'data-side="end"',
   },
   { name: "navbar", tokens: ["navbar"], client: [], html: '<nav aria-label="Main">' },
+  {
+    name: "stepper",
+    tokens: ["stepper", "icon"],
+    client: [],
+    html: 'aria-current="step"',
+  },
   { name: "sidebar", tokens: ["sidebar"], client: [], html: "Settings</summary>" },
   {
     name: "tooltip",
