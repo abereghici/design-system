@@ -35,7 +35,6 @@ A story file has three readers: the docs page, the Vitest run (every story is a 
 - A prop's meaning: its TSDoc, which the props table shows. Every public prop gets one short line on why or when to use it, in plain words: no element names, ARIA attributes, token names, pixel values or browser-engine notes. Where react-docgen can't read a prop (taken through `Pick<>` or a union of object types), the meta's `argTypes` gives the row (`textFieldArgTypes` in `.storybook/docs/arg-types.ts`).
 - The component: one paragraph of TSDoc on the exported component (`Root` for a compound): what it is for, what a consumer must provide (a name, a label), the keyboard behaviour a user perceives, and when to use a sibling instead. The `Description` block renders it; never set `parameters.docs.description.component`.
 - A structural docs story: one line in `parameters.docs.description.story`.
-- `packages/ui/specs/<kebab-name>.md` is the internal design record (anatomy, states, keyboard map, screen-reader pass). Docs pages never render it: what a consumer needs moves into the component's TSDoc.
 
 ## Controls
 
