@@ -82,11 +82,11 @@ With no `data-theme`, colors follow the operating system's light or dark setting
 
 ## How it's built
 
-- **Platform first.** `<dialog>`, the Popover API, anchor positioning, `light-dark()`, cascade layers and container queries, with no headless UI library.
-- **Server Components ready.** Only interactive modules are `"use client"`, and they're compiled with the React Compiler.
-- **Tested.** Components have interaction tests in the browser, every story fails on an axe violation, and every story is screenshot-tested in nine variants: light, dark, forced colors, more contrast, reduced motion, reduced transparency, RTL, 200% text and 320px wide.
-- **Size-budgeted.** Each entry point has a Brotli budget, checked in CI.
-- **Published with provenance** from GitHub Actions through npm trusted publishing.
+- **Platform first.** `<dialog>`, the Popover API, CSS anchor positioning, `light-dark()`, cascade layers and container queries, with no headless UI library.
+- **Server Components ready.** Components without interaction, such as Spinner, Progress, Meter and Link, have no `"use client"`, and the Next.js fixture checks they render on the server. Client modules are compiled with the React Compiler.
+- **Tested.** Interaction tests run in a real browser, every story runs axe and fails on a violation, and stories are screenshot-tested in nine variants (light, dark, forced colors, more contrast, reduced motion, reduced transparency, RTL, 200% text and 320px wide), with no allowance for mismatched pixels: one pixel that differs fails the test.
+- **Size-budgeted.** Every entry point and icon has a Brotli size budget, checked in CI.
+- **Published with provenance.** From 0.1.1 on, versions are published from GitHub Actions through npm trusted publishing, which attaches a provenance attestation.
 
 ## License
 

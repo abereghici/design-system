@@ -17,11 +17,16 @@ Apps that use `@abereghici/ui` get these tokens through it and never import them
 pnpm add @abereghici/tokens
 ```
 
-```css
-@layer ab.reset, ab.tokens, ab.base, ab.components;
-@import "@abereghici/tokens/fonts.css";
-@import "@abereghici/tokens/tokens.css";
+Import the sheets once from the app's JavaScript entry:
 
+```ts
+import "@abereghici/tokens/fonts.css";
+import "@abereghici/tokens/tokens.css";
+```
+
+Then use the custom properties anywhere:
+
+```css
 .callout {
   padding: var(--ab-space-inset-md);
   border-radius: var(--ab-radius-lg);
