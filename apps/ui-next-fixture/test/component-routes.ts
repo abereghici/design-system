@@ -223,6 +223,7 @@ export const componentRoutes = [
     html: 'data-side="end"',
   },
   { name: "navbar", tokens: ["navbar"], client: [], html: '<nav aria-label="Main">' },
+  { name: "page-layout", tokens: ["navbar", "sidebar"], client: [], html: "<aside" },
   { name: "sidebar", tokens: ["sidebar"], client: [], html: "Settings</summary>" },
   {
     name: "tooltip",

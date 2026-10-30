@@ -37,6 +37,7 @@ const budgets: Readonly<Record<string, string>> = {
   meter: "1.35 kB",
   navbar: "1.2 kB",
   pagination: "3.4 kB",
+  "page-layout": "1.2 kB",
   progress: "1.45 kB",
   "scroll-area": "800 B",
   "password-field": "5.3 kB",
