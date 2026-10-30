@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
-import { LinkCards } from "./blocks/specimens.tsx";
+import { LinkCards } from "./blocks/prose.tsx";
 
 <Meta title="Introduction" />
 
@@ -8,35 +8,15 @@ import { LinkCards } from "./blocks/specimens.tsx";
 
 React components and design tokens for Alexandru Bereghici's products, built on native HTML, styled from tokens, and targeting WCAG 2.2 Level AA in light and dark.
 
-<LinkCards
-  links={[
-    {
-      title: "Getting started",
-      href: "?path=/docs/guides-getting-started--docs",
-      children: "Install the package, add the provider, render a component.",
-    },
-    {
-      title: "Foundations",
-      href: "?path=/docs/foundations-design-tokens--docs",
-      children: "Color, type, space, elevation and motion, and when to use each.",
-    },
-    {
-      title: "Components",
-      href: "?path=/docs/components-accordion--docs",
-      children: "Every component with live examples, code and props.",
-    },
-    {
-      title: "Tokens",
-      href: "?path=/docs/reference-tokens--docs",
-      children: "Search every token and inspect what it resolves to.",
-    },
-    {
-      title: "Icons",
-      href: "?path=/docs/reference-icons--docs",
-      children: "Search the icon set and copy an import.",
-    },
-  ]}
-/>
+<LinkCards>
+
+- [Getting started](?path=/docs/guides-getting-started--docs) Install the package, add the provider, render a component.
+- [Foundations](?path=/docs/foundations-design-tokens--docs) Color, type, space, elevation and motion, and when to use each.
+- [Components](?path=/docs/components-accordion--docs) Every component with live examples, code and props.
+- [Tokens](?path=/docs/reference-tokens--docs) Search every token and inspect what it resolves to.
+- [Icons](?path=/docs/reference-icons--docs) Search the icon set and copy an import.
+
+</LinkCards>
 
 ## Packages
 

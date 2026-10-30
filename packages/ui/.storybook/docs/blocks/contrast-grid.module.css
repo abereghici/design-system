@@ -61,10 +61,6 @@
   min-inline-size: 3.5rem;
   padding-block: var(--ab-space-inset-xs);
   border-radius: var(--ab-radius-xs);
-
-  &[data-fails] {
-    outline: var(--ab-border-width-thick) solid var(--ab-color-border-danger);
-  }
 }
 
 .text {
@@ -78,9 +74,15 @@
   border-radius: var(--ab-radius-xs);
 }
 
+.fill {
+  inline-size: 1.25rem;
+  block-size: 1rem;
+  border-radius: var(--ab-radius-xs);
+  background-color: currentcolor;
+}
+
 .ratio {
   font: var(--ab-type-data-sm);
-  color: var(--ab-color-text-subtle);
 }
 
 .pairs {

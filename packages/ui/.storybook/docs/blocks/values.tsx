@@ -1,10 +1,9 @@
 import { CONTRAST_BACKGROUNDS, CONTRAST_PAIRS } from "@abereghici/tokens/contrast-matrix";
 import { Table } from "@abereghici/ui/table";
 
-import packageJson from "../../../package.json" with { type: "json" };
-
-import { findToken, isThemed, resolve, tokens } from "./tokens.ts";
+import { findToken, resolve, semantic, shown, tokens } from "./tokens.ts";
 import type { Token } from "./tokens.ts";
+import mdx from "../mdx.module.css";
 import styles from "./specimens.module.css";
 
 const token = (name: string): Token => {
@@ -15,37 +14,27 @@ const token = (name: string): Token => {
   return found;
 };
 
-const display = (value: string) => {
-  if (value.startsWith("clamp(")) return "fluid";
-
-  if (/^[\d.]+s$/v.test(value)) return `${Math.round(Number(value.replace("s", "")) * 1000)}ms`;
-
-  return value.endsWith("rem") ? `${Number(value.replace("rem", "")) * 16}px` : value;
-};
-
-/** A token's value, read from the shipped CSS, under a media query when `when` is given. */
+/** A token's value, under a media query when `when` is given. */
 export function Value({ of, when }: { of: string; when?: string }) {
   const found = token(of);
-  const value =
-    when === undefined
-      ? found.value
-      : found.conditions.find((condition) => condition.when === when)?.value;
+
+  if (when === undefined) return shown(found.light);
+
+  const value = found.conditions.find(({ query }) => query === when)?.value;
 
   if (value === undefined) throw new Error(`ab-${of} does not change under ${when}`);
 
-  return display(resolve(value, "light"));
+  return shown(resolve(value, "light"));
 }
 
 /** The first family of a font stack token. */
 export function Typeface({ of }: { of: string }) {
-  return resolve(token(of).value, "light").split(",")[0];
+  return token(of).light.split(",")[0];
 }
 
 /** The tokens a media query changes, as short names. */
 export function Changes({ when }: { when: string }) {
-  const changed = tokens.filter(({ conditions }) =>
-    conditions.some((condition) => condition.when === when),
-  );
+  const changed = tokens.filter(({ conditions }) => conditions.some(({ query }) => query === when));
 
   if (changed.length === 0) throw new Error(`No token changes under ${when}`);
 
@@ -63,13 +52,12 @@ export function Changes({ when }: { when: string }) {
 
 /** Each matching semantic token with its value and what it is for, from the token source. */
 export function TokenRows({ match }: { match: string }) {
-  const pattern = new RegExp(match, "v");
-  const rows = tokens.filter(({ tier, name }) => tier === "semantic" && pattern.test(name));
+  const rows = semantic(new RegExp(match, "v"));
 
   if (rows.length === 0) throw new Error(`No token matches ${match}`);
 
   return (
-    <Table.Root className={`sb-unstyled ${styles["matrix"]}`}>
+    <Table.Root className={`sb-unstyled ${mdx["table"]}`}>
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeader>Token</Table.ColumnHeader>
@@ -84,9 +72,7 @@ export function TokenRows({ match }: { match: string }) {
               <code>{row.name.replace(/^ab-/v, "")}</code>
             </Table.RowHeader>
             <Table.Cell>
-              {isThemed(row)
-                ? `${display(resolve(row.value, "light"))} / ${display(resolve(row.value, "dark"))}`
-                : display(resolve(row.value, "light"))}
+              {row.themed ? `${shown(row.light)} / ${shown(row.dark)}` : shown(row.light)}
             </Table.Cell>
             <Table.Cell>{row.description}</Table.Cell>
           </Table.Row>
@@ -112,7 +98,7 @@ export function FillPairs() {
   );
 
   return (
-    <Table.Root className={`sb-unstyled ${styles["matrix"]}`}>
+    <Table.Root className={`sb-unstyled ${mdx["table"]}`}>
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeader>On these fills</Table.ColumnHeader>
@@ -139,9 +125,4 @@ export function FillPairs() {
       </Table.Body>
     </Table.Root>
   );
-}
-
-/** The range of a peer dependency, from the package's own manifest. */
-export function Peer({ name }: { name: keyof typeof packageJson.peerDependencies }) {
-  return <code>{packageJson.peerDependencies[name]}</code>;
 }

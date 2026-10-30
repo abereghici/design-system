@@ -1,0 +1,60 @@
+.guidance {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--ab-space-inline-md);
+  margin: var(--ab-space-stack-lg) 0;
+}
+
+.do,
+.dont {
+  padding: var(--ab-space-inset-md) var(--ab-space-inset-lg);
+  border-block-start: var(--ab-border-width-thick) solid;
+  border-radius: var(--ab-radius-sm);
+  background-color: var(--ab-color-surface-raised);
+
+  & ul {
+    margin-block-end: 0;
+  }
+}
+
+.do {
+  border-color: var(--ab-color-border-success);
+}
+
+.dont {
+  border-color: var(--ab-color-border-danger);
+}
+
+.verdict {
+  margin: 0;
+  font: var(--ab-type-overline-sm);
+  letter-spacing: var(--ab-type-overline-sm-letter-spacing);
+  text-transform: uppercase;
+  color: var(--ab-color-text-subtle);
+}
+
+.cards ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: var(--ab-space-inline-md);
+  margin: var(--ab-space-stack-lg) 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Markdown renders the items, so they take no classes of their own. */
+.cards li {
+  display: grid;
+  align-content: start;
+  gap: var(--ab-space-stack-xs);
+  margin: 0;
+  padding: var(--ab-space-inset-lg);
+  border: var(--ab-border-width-default) solid var(--ab-color-border-subtle);
+  border-radius: var(--ab-radius-lg);
+  font: var(--ab-type-body-sm);
+  color: var(--ab-color-text-subtle);
+}
+
+.cards a {
+  font: var(--ab-type-label-lg);
+}

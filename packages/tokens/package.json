@@ -27,6 +27,7 @@
   },
   "files": [
     "dist",
+    "!dist/catalog.ts",
     "fonts"
   ],
   "type": "module",
@@ -34,11 +35,11 @@
     "./tokens.css": "./dist/tokens.css",
     "./components/*.css": "./dist/components/*.css",
     "./tokens.json": "./dist/tokens.json",
+    "./catalog": "./dist/catalog.ts",
     "./fonts.css": "./dist/fonts.css",
     "./fonts/*": "./fonts/*",
     "./font-faces": "./src/fonts.ts",
-    "./contrast-matrix": "./src/contrast-matrix.ts",
-    "./source/*.tokens.json": "./src/tokens/*.tokens.json"
+    "./contrast-matrix": "./src/contrast-matrix.ts"
   },
   "publishConfig": {
     "exports": {

@@ -1,36 +1,26 @@
 import type { CSSProperties } from "react";
 
-import { isThemed, resolve } from "./tokens.ts";
+import { themes } from "./tokens.ts";
 import type { Scheme, Token } from "./tokens.ts";
 import styles from "./token-explorer.module.css";
 
-export const schemes = ["light", "dark"] as const satisfies readonly Scheme[];
-
-export const schemeLabel = (scheme: Scheme) => (scheme === "light" ? "Light" : "Dark");
-
 export type Inspect = (token: Token) => void;
 
-/** A sample of the value, for the kinds of token that have a visible one. */
-function previewOf({ name }: Token, value: string): CSSProperties | undefined {
-  if (/shadow$|^ab-elevation-/v.test(name)) return { boxShadow: value };
+const samples: Partial<Record<string, (value: string) => CSSProperties>> = {
+  color: (value) => ({ backgroundColor: value }),
+  shadow: (value) => ({ boxShadow: value }),
+  typography: (value) => ({ font: value }),
+  fontFamily: (value) => ({ fontFamily: value }),
+  dimension: (value) => ({ inlineSize: `min(${value}, 100%)` }),
+};
 
-  if (/radius/v.test(name)) return { borderRadius: value };
-
-  if (CSS.supports("color", value) && !/^\d/v.test(value)) return { backgroundColor: value };
-
-  if (/^ab-type-[a-z]+-[a-z0-9]+$|-font$/v.test(name)) return { font: value };
-
-  if (/font-family/v.test(name)) return { fontFamily: value };
-
-  if (/space|dimension|size|gap|padding|width|height/v.test(name) && CSS.supports("width", value))
-    return { inlineSize: `min(${value}, 100%)` };
-
-  return undefined;
-}
+/** A sample of the value, for the types of token that have a visible one. */
+const previewOf = ({ name, type }: Token, value: string) =>
+  name.includes("radius") ? { borderRadius: value } : samples[type]?.(value);
 
 /** A preview in the page's Theme, or in the given one for a themed token. */
 function Preview({ token, scheme }: { token: Token; scheme?: Scheme }) {
-  const style = previewOf(token, resolve(token.value, scheme ?? "light"));
+  const style = previewOf(token, token[scheme ?? "light"]);
 
   if (style === undefined) return null;
 
@@ -48,8 +38,8 @@ function Preview({ token, scheme }: { token: Token; scheme?: Scheme }) {
 export function Previews({ token }: { token: Token }) {
   return (
     <span className={styles["previews"]}>
-      {isThemed(token) ? (
-        schemes.map((scheme) => <Preview key={scheme} token={token} scheme={scheme} />)
+      {token.themed ? (
+        themes.map(({ id }) => <Preview key={id} token={token} scheme={id} />)
       ) : (
         <Preview token={token} />
       )}
@@ -58,16 +48,15 @@ export function Previews({ token }: { token: Token }) {
 }
 
 export function Values({ token }: { token: Token }) {
-  if (!isThemed(token))
-    return <code className={styles["value"]}>{resolve(token.value, "light")}</code>;
+  if (!token.themed) return <code className={styles["value"]}>{token.light}</code>;
 
   return (
     <dl className={styles["values"]}>
-      {schemes.map((scheme) => (
-        <div key={scheme}>
-          <dt>{schemeLabel(scheme)}</dt>
+      {themes.map(({ id, name }) => (
+        <div key={id}>
+          <dt>{name}</dt>
           <dd>
-            <code className={styles["value"]}>{resolve(token.value, scheme)}</code>
+            <code className={styles["value"]}>{token[id]}</code>
           </dd>
         </div>
       ))}

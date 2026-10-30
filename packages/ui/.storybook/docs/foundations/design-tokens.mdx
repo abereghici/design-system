@@ -1,24 +1,54 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
+import { TierFlow } from "../blocks/specimens.tsx";
+
 <Meta title="Foundations/Design tokens" />
 
 # Design tokens
 
-Every visual decision is a CSS custom property named `--ab-*`. Use the token that names your intent, and the value follows the Theme and the user's settings.
+Design tokens are the named decisions behind every color, size, type style and motion in the system, shipped as CSS custom properties named `--ab-*`. Change a decision once and every component that uses it follows.
 
-## Tiers
+## Three tiers
 
-| Tier      | Names                       | Example                                | Use it in                              |
-| --------- | --------------------------- | -------------------------------------- | -------------------------------------- |
-| Semantic  | What it is for              | `--ab-color-text-subtle`               | App code                               |
-| Component | One decision of a component | `--ab-button-primary-background-color` | Restyling that component               |
-| Primitive | The raw value               | `--ab-palette-sage-700`                | Nothing; semantic tokens point at them |
+Tokens are built in three tiers. Each one references only the tier before it, and the token build fails on anything else.
 
-Each tier points only at the tier below it, so changing a primitive reaches every intent and component built on it.
+<TierFlow of="button-primary-background-color" />
+
+| Tier          | Holds                                     | Example                                | Use it                                      |
+| ------------- | ----------------------------------------- | -------------------------------------- | ------------------------------------------- |
+| 1 · Primitive | A raw value                               | `--ab-palette-moss-900`                | Never directly; semantic tokens point at it |
+| 2 · Semantic  | A purpose, resolved per Theme and setting | `--ab-color-background-accent-bold`    | In app code, for everything you build       |
+| 3 · Component | One decision of one component             | `--ab-button-primary-background-color` | To restyle that one component               |
+
+### Primitive
+
+The palette and the scales: every color step, size, duration and easing the system may use. A primitive says what a value **is** (`palette-moss-900`, `dimension-16`, `duration-200`), not what it is for, so the same primitive can serve many purposes. Primitives are the only tokens that hold literal values.
+
+### Semantic
+
+What a value is **for**: the page surface, secondary text, a danger border, the gap between fields. Semantic tokens are the only tier that changes with context:
+
+- **Theme.** Each themed color resolves to a different primitive in light and in dark.
+- **User settings.** Increased contrast, reduced transparency and reduced motion swap in other primitives.
+- **Screen.** Control heights grow on touch screens, and section spacing shrinks on narrow windows.
+
+So code that uses a semantic token is right in every Theme and setting, with no extra work.
+
+### Component
+
+One decision of one component, such as the primary Button's fill. A component token always points at a semantic token, so it follows the Theme and settings too. Override it on `:root` or on a region to restyle that component without touching anything else; see [Styling](?path=/docs/guides-styling--docs).
+
+## Which tier to use
+
+| You are                                     | Use                                                   |
+| ------------------------------------------- | ----------------------------------------------------- |
+| Building a screen or your own component     | Semantic tokens                                       |
+| Restyling one design system component       | That component's tokens                               |
+| Picking a value no semantic token describes | Ask for a semantic token; don't reach for a primitive |
 
 ## Reading a name
 
-Semantic names read from general to specific, and leave out the default:
+Names read from general to specific, and leave out the default:
 
 | Family | Pattern                                      | Example                                |
 | ------ | -------------------------------------------- | -------------------------------------- |

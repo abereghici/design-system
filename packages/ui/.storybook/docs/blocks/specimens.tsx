@@ -1,23 +1,14 @@
 import type { ReactNode } from "react";
-import { NAVIGATE_URL } from "storybook/internal/core-events";
-import { addons } from "storybook/preview-api";
 
 import { Table } from "@abereghici/ui/table";
 
-import { findToken, resolve, tokens } from "./tokens.ts";
+import { Previews } from "./token-values.tsx";
+import { chain, findToken, semantic, shown, themes } from "./tokens.ts";
 import type { Token } from "./tokens.ts";
+import mdx from "../mdx.module.css";
 import styles from "./specimens.module.css";
 
-const semantic = (pattern: RegExp) =>
-  tokens.filter(({ tier, name }) => tier === "semantic" && pattern.test(name));
-
-const px = (value: string) => {
-  if (value.startsWith("clamp(")) return "fluid";
-
-  return value.endsWith("rem") ? `${Number(value.replace("rem", "")) * 16}px` : value;
-};
-
-function Label({ token, children }: { token: Token; children?: ReactNode }) {
+function Label({ token, children }: { token: Token; children: ReactNode }) {
   return (
     <span className={styles["label"]}>
       <code>--{token.name}</code>
@@ -31,8 +22,8 @@ export function TypeScale() {
   return (
     <ul className={`sb-unstyled ${styles["list"]}`}>
       {semantic(/^ab-type-[a-z]+-[a-z0-9]+$/v).map((token) => {
-        const size = resolve(`var(--${token.name}-font-size)`, "light");
-        const leading = resolve(`var(--${token.name}-line-height)`, "light");
+        const size = findToken(`${token.name}-font-size`)?.light ?? "";
+        const leading = findToken(`${token.name}-line-height`)?.light;
 
         return (
           <li key={token.name} className={styles["type"]}>
@@ -41,7 +32,7 @@ export function TypeScale() {
               style={{
                 font: `var(--${token.name})`,
                 letterSpacing: `var(--${token.name}-letter-spacing)`,
-                textTransform: token.name.includes("overline") ? "uppercase" : undefined,
+                textTransform: `var(--${token.name}-text-transform)`,
               }}
             >
               {token.name.includes("code")
@@ -50,7 +41,7 @@ export function TypeScale() {
             </span>
             <Label token={token}>
               <span>
-                {px(size)} / {leading}
+                {shown(size)} / {leading}
               </span>
               <span>{token.description}</span>
             </Label>
@@ -72,7 +63,7 @@ export function SpaceScale() {
   );
 
   return (
-    <Table.Root className={`sb-unstyled ${styles["matrix"]}`}>
+    <Table.Root className={`sb-unstyled ${mdx["table"]}`}>
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeader>Size</Table.ColumnHeader>
@@ -104,7 +95,7 @@ export function SpaceScale() {
                           blockSize: `var(--${token.name})`,
                         }}
                       />
-                      {px(resolve(token.value, "light"))}
+                      {shown(token.light)}
                     </span>
                   )}
                 </Table.Cell>
@@ -129,7 +120,7 @@ export function RadiusScale() {
             style={{ borderRadius: `var(--${token.name})` }}
           />
           <Label token={token}>
-            <span>{px(resolve(token.value, "light"))}</span>
+            <span>{shown(token.light)}</span>
           </Label>
         </li>
       ))}
@@ -174,57 +165,34 @@ export function Surfaces() {
   );
 }
 
-/** What to do and what to avoid, side by side; write a Markdown list inside each. */
-export function Guidance({ children }: { children: ReactNode }) {
-  return <div className={styles["guidance"]}>{children}</div>;
-}
+/** One component token traced to the semantic and primitive tokens behind it, in tier order. */
+export function TierFlow({ of }: { of: string }) {
+  const component = findToken(`ab-${of}`);
 
-export function Do({ children }: { children: ReactNode }) {
+  if (component === undefined) throw new Error(`No token ab-${of}`);
+
+  const steps = [
+    ["Primitive", [...new Set(themes.map(({ id }) => chain(component, id).at(-1)))]],
+    ["Semantic", [chain(component, "light")[0]]],
+    ["Component", [component]],
+  ] as const;
+
   return (
-    <div className={styles["do"]}>
-      <p className={styles["verdict"]}>Do</p>
-      {children}
-    </div>
-  );
-}
-
-export function Dont({ children }: { children: ReactNode }) {
-  return (
-    <div className={styles["dont"]}>
-      <p className={styles["verdict"]}>Don’t</p>
-      {children}
-    </div>
-  );
-}
-
-interface LinkCard {
-  readonly title: string;
-  readonly href: string;
-  readonly children: ReactNode;
-}
-
-/** A grid of links to other pages, given as `?path=…`, each with a line on what is there. */
-export function LinkCards({ links }: { links: readonly LinkCard[] }) {
-  return (
-    <ul className={`sb-unstyled ${styles["cards"]}`}>
-      {links.map(({ title, href, children }) => (
-        <li key={href}>
-          <a
-            href={`./${href}`}
-            target="_top"
-            className={styles["link"]}
-            onClick={(event) => {
-              if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey) return;
-
-              event.preventDefault();
-              addons.getChannel().emit(NAVIGATE_URL, href);
-            }}
-          >
-            <strong>{title}</strong>
-            <span>{children}</span>
-          </a>
+    <ol className={`sb-unstyled ${styles["flow"]}`}>
+      {steps.map(([tier, members]) => (
+        <li key={tier} className={styles["step"]}>
+          <span className={styles["tier"]}>{tier}</span>
+          {members.map(
+            (token) =>
+              token && (
+                <span key={token.name} className={styles["member"]}>
+                  <Previews token={token} />
+                  <code>--{token.name}</code>
+                </span>
+              ),
+          )}
         </li>
       ))}
-    </ul>
+    </ol>
   );
 }

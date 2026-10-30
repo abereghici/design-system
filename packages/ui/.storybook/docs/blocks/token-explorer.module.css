@@ -1,26 +1,3 @@
-.root {
-  display: grid;
-  gap: var(--ab-space-stack-md);
-  margin-block: var(--ab-space-stack-lg);
-}
-
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: var(--ab-space-inline-md);
-}
-
-.search {
-  flex: 1 1 16rem;
-}
-
-.count {
-  margin: 0;
-  font: var(--ab-type-body-sm);
-  color: var(--ab-color-text-subtle);
-}
-
 .table {
   inline-size: 100%;
 
@@ -110,7 +87,7 @@
   margin-block: var(--ab-space-stack-lg) var(--ab-space-stack-xs);
   font: var(--ab-type-overline-sm);
   letter-spacing: var(--ab-type-overline-sm-letter-spacing);
-  text-transform: uppercase;
+  text-transform: var(--ab-type-overline-sm-text-transform);
   color: var(--ab-color-text-subtle);
 }
 

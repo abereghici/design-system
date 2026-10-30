@@ -1,12 +1,11 @@
 import { useDeferredValue, useState } from "react";
 import type { ComponentType } from "react";
 
-import { SearchIcon } from "@abereghici/ui/icons/search";
 import { SegmentedControl } from "@abereghici/ui/segmented-control";
 import { Sheet } from "@abereghici/ui/sheet";
-import { TextField } from "@abereghici/ui/text-field";
 import type { IconProps } from "@abereghici/ui/icon";
 
+import { Count, explorer, Search } from "./explorer.tsx";
 import { Details, sizes } from "./icon-details.tsx";
 import type { Glyph } from "./icon-details.tsx";
 import styles from "./icon-explorer.module.css";
@@ -19,7 +18,7 @@ const icons: readonly Glyph[] = Object.entries(
   }),
 ).flatMap(([file, module]) =>
   Object.entries(module).map(([name, Icon]) => ({
-    path: file.split("/").at(-1)?.replace(".tsx", "") ?? "",
+    path: file.slice(file.lastIndexOf("/") + 1, -".tsx".length),
     name,
     Icon,
   })),
@@ -63,16 +62,13 @@ export function IconExplorer() {
   const shown = icons.filter(({ path }) => path.includes(search));
 
   return (
-    <div className={`sb-unstyled ${styles["root"]}`}>
-      <div className={styles["filters"]}>
-        <TextField
-          aria-label="Search icons"
-          type="search"
+    <div className={`sb-unstyled ${explorer["root"]}`}>
+      <div className={explorer["filters"]}>
+        <Search
+          label="Search icons"
           placeholder="Search by name"
-          startElement={<SearchIcon size="sm" />}
           value={query}
           onValueChange={setQuery}
-          className={styles["search"]}
         />
         <SegmentedControl.Root
           aria-label="Size"
@@ -88,9 +84,7 @@ export function IconExplorer() {
           ))}
         </SegmentedControl.Root>
       </div>
-      <output className={styles["count"]}>
-        {shown.length === 1 ? "1 icon" : `${shown.length} icons`}
-      </output>
+      <Count count={shown.length} noun="icon" />
       <Grid icons={shown} size={size} onSelect={setSelected} />
       <Sheet.Root
         open={selected !== undefined}

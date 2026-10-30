@@ -4,6 +4,8 @@ import type { DesignTokens } from "style-dictionary/types";
 
 import { toArtifactTokens } from "./artifact-format.ts";
 import type { ArtifactTokens } from "./artifact-format.ts";
+import { catalogOf } from "./catalog.ts";
+import type { CatalogToken } from "./catalog.ts";
 import { checkTokens, TokenCheckError } from "./checks.ts";
 import { stylesheets } from "./css-format.ts";
 
@@ -20,6 +22,7 @@ interface BuildOutput {
   readonly css: string;
   readonly components: Readonly<Record<string, string>>;
   readonly artifact: ArtifactTokens;
+  readonly catalog: readonly CatalogToken[];
 }
 
 export async function buildTokens(input: BuildInput): Promise<BuildOutput> {
@@ -57,5 +60,6 @@ export async function buildTokens(input: BuildInput): Promise<BuildOutput> {
   return {
     ...stylesheets(dictionary),
     artifact: toArtifactTokens(dictionary),
+    catalog: catalogOf(dictionary),
   };
 }

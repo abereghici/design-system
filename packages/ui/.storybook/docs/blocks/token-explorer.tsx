@@ -1,22 +1,21 @@
 import { useDeferredValue, useState } from "react";
 
-import { SearchIcon } from "@abereghici/ui/icons/search";
 import { Select } from "@abereghici/ui/select";
 import { Sheet } from "@abereghici/ui/sheet";
 import { Table } from "@abereghici/ui/table";
-import { TextField } from "@abereghici/ui/text-field";
 
+import { Count, explorer, Search } from "./explorer.tsx";
 import { Inspector } from "./token-inspector.tsx";
-import { Previews, schemes, TokenLink, Values } from "./token-values.tsx";
+import { Previews, TokenLink, Values } from "./token-values.tsx";
 import type { Inspect } from "./token-values.tsx";
-import { resolve, tokens } from "./tokens.ts";
+import { tokens } from "./tokens.ts";
 import type { Tier, Token } from "./tokens.ts";
 import styles from "./token-explorer.module.css";
 
 const tiers = [
+  ["primitive", "Primitive"],
   ["semantic", "Semantic"],
   ["component", "Component"],
-  ["primitive", "Primitive"],
 ] as const satisfies readonly (readonly [Tier, string])[];
 
 const groupsOf = (tier: Tier) => [
@@ -66,15 +65,12 @@ interface FiltersProps {
 
 function Filters({ query, tier, group, onQueryChange, onTierChange, onGroupChange }: FiltersProps) {
   return (
-    <div className={styles["filters"]}>
-      <TextField
-        aria-label="Search tokens"
-        type="search"
+    <div className={explorer["filters"]}>
+      <Search
+        label="Search tokens"
         placeholder="Search by name, value or usage"
-        startElement={<SearchIcon size="sm" />}
         value={query}
         onValueChange={onQueryChange}
-        className={styles["search"]}
       />
       <Select.Root
         label="Tier"
@@ -105,14 +101,7 @@ function Filters({ query, tier, group, onQueryChange, onTierChange, onGroupChang
   );
 }
 
-const matches = (token: Token, search: string) =>
-  search === "" ||
-  [token.name, token.description, ...schemes.map((scheme) => resolve(token.value, scheme))]
-    .join(" ")
-    .toLowerCase()
-    .includes(search);
-
-/** Searches, filters and inspects every token the packages ship, read from the shipped CSS. */
+/** Searches, filters and inspects every token the packages ship. */
 export function TokenExplorer() {
   const [query, setQuery] = useState("");
   const [tier, setTier] = useState<Tier>("semantic");
@@ -121,11 +110,13 @@ export function TokenExplorer() {
   const search = useDeferredValue(query.trim().toLowerCase());
   const rows = tokens.filter(
     (token) =>
-      token.tier === tier && (group === "" || token.group === group) && matches(token, search),
+      token.tier === tier &&
+      (group === "" || token.group === group) &&
+      token.search.includes(search),
   );
 
   return (
-    <div className={`sb-unstyled ${styles["root"]}`}>
+    <div className={`sb-unstyled ${explorer["root"]}`}>
       <Filters
         query={query}
         tier={tier}
@@ -137,9 +128,7 @@ export function TokenExplorer() {
         }}
         onGroupChange={setGroup}
       />
-      <output className={styles["count"]}>
-        {rows.length === 1 ? "1 token" : `${rows.length} tokens`}
-      </output>
+      <Count count={rows.length} noun="token" />
       <TokenTable rows={rows} onInspect={setInspected} />
       <Sheet.Root
         open={inspected !== undefined}
