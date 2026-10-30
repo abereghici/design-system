@@ -1,0 +1,83 @@
+@layer ab.components {
+  /* Indents each level so its chevrons line up under the parent's label. */
+  .group {
+    min-inline-size: 0;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    padding-inline-start: calc(
+      var(--ab-tree-item-padding-inline) + var(--ab-tree-item-icon-size) + var(--ab-tree-item-gap)
+    );
+  }
+
+  .item {
+    --ab-icon-size: var(--ab-tree-item-icon-size);
+    --ab-icon-color: var(--ab-tree-item-icon-color);
+
+    display: flex;
+    align-items: center;
+    gap: var(--ab-tree-item-gap);
+    min-block-size: var(--ab-tree-item-min-height);
+    padding-inline: var(--ab-tree-item-padding-inline);
+    border-radius: var(--ab-tree-item-border-radius);
+    font: var(--ab-tree-item-font);
+    color: var(--ab-tree-item-text-color);
+    overflow-wrap: anywhere;
+    -webkit-tap-highlight-color: transparent;
+    transition-property: background-color, color;
+    transition-duration: var(--ab-motion-duration-hover-out);
+    transition-timing-function: var(--ab-motion-easing-color);
+  }
+
+  /* Inset, so neighbouring rows don't cover the ring. */
+  .item:focus-visible {
+    outline-offset: calc(-1 * var(--ab-focus-ring-width));
+  }
+
+  .chevron {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    inline-size: var(--ab-tree-item-icon-size);
+    block-size: var(--ab-tree-item-icon-size);
+    transition: rotate var(--ab-motion-duration-expand) var(--ab-motion-easing-move);
+  }
+
+  .item[aria-expanded="true"] > .chevron {
+    rotate: 90deg;
+  }
+
+  /* The chevron is mirrored in right-to-left, so it turns the other way to point down. */
+  .item[aria-expanded="true"] > .chevron:dir(rtl) {
+    rotate: -90deg;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .item:hover {
+      background-color: var(--ab-tree-item-background-color-hovered);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+
+  .item[aria-selected="true"] {
+    background-color: var(--ab-tree-item-background-color-selected);
+    color: var(--ab-tree-item-text-color-selected);
+  }
+
+  @media (forced-colors: active) {
+    .item[aria-selected="true"] {
+      --ab-icon-color: HighlightText;
+
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+  }
+
+  /* Expanding needs script: without it the chevrons would offer what nothing does. */
+  @media (scripting: none) {
+    .chevron {
+      visibility: hidden;
+    }
+  }
+}

@@ -298,4 +298,10 @@ export const componentRoutes = [
     client: [],
     html: 'aria-haspopup="dialog"',
   },
+  {
+    name: "tree",
+    tokens: ["icon", "spinner", "tree"],
+    client: ["tree/tree-item", "tree/tree-root"],
+    html: 'role="tree"',
+  },
 ];

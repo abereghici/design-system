@@ -61,6 +61,7 @@ const budgets: Readonly<Record<string, string>> = {
   toaster: "7.4 kB",
   toolbar: "990 B",
   tooltip: "2.5 kB",
+  tree: "3.45 kB",
   "text-area": "2.95 kB",
   "text-field": "3.15 kB",
   "visually-hidden": "650 B",

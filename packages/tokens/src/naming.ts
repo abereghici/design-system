@@ -118,6 +118,7 @@ const COMPONENTS = [
   "table",
   "date-field",
   "calendar",
+  "tree",
 ];
 
 const PROPERTIES = [
