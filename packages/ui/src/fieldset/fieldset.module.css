@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/fieldset.css";
+@import "@abereghici/tokens/components/fieldset.css";
 
 @layer ab.components {
   .root {

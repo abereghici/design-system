@@ -1,4 +1,4 @@
-import { Badge } from "@platform/ui/badge";
+import { Badge } from "@abereghici/ui/badge";
 
 export default function Page() {
   return (

@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/icon-button.css";
+@import "@abereghici/tokens/components/icon-button.css";
 
 @layer ab.components {
   .root {

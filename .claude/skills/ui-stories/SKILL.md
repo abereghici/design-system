@@ -8,9 +8,9 @@ A story file has three readers: the docs page, the Vitest run (every story is a 
 ## Where things live
 
 - `src/<name>/<name>.stories.tsx` sits beside the component. `src/` holds no MDX and no story helpers.
-- The introduction, guides and foundations are unattached MDX in `.storybook/docs/` (`introduction.mdx`, `guides/`, `foundations/`) with `<Meta title>` and no story file. Token visuals use the `ColorPalette`, `Typeset` and `IconGallery` Doc Blocks, otherwise `TokenTable` or `ContrastTable` from `.storybook/docs/blocks/`. Values come from `@platform/tokens/tokens.json` (motion from the token source), never typed by hand. A live example is `<Canvas of={…}>` of an existing component story.
+- The introduction, guides and foundations are unattached MDX in `.storybook/docs/` (`introduction.mdx`, `guides/`, `foundations/`) with `<Meta title>` and no story file. Token visuals use the `ColorPalette`, `Typeset` and `IconGallery` Doc Blocks, otherwise `TokenTable` or `ContrastTable` from `.storybook/docs/blocks/`. Values come from `@abereghici/tokens/tokens.json` (motion from the token source), never typed by hand. A live example is `<Canvas of={…}>` of an existing component story.
 - Shared helpers live under `.storybook/` by purpose: `test/` (proof helpers, setup files), `screenshots/`, `docs/`, `decorators/` (any decorator that isn't tied to one story's content, even with a single consumer) and `components/` once a second story needs one. `src/` imports them as `#.storybook/<path>.<ext>`, extension included. Lint rejects relative paths into `.storybook`.
-- Harness code imports components as a consumer does: `@platform/ui/<name>`.
+- Harness code imports components as a consumer does: `@abereghici/ui/<name>`.
 - Titles are `Introduction`, `Guides/<Page>`, `Foundations/<Page>` and `Components/<Name>`, with no category level: components sort A to Z (`storySort` `method: "alphabetical"`). A new guide or foundation page gets its place in `storySort.order` (`.storybook/preview.tsx`) in the same change.
 
 ## File order

@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/field.css";
+@import "@abereghici/tokens/components/field.css";
 
 @layer ab.components {
   .group {

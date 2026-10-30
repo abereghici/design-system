@@ -1,4 +1,4 @@
-import { Avatar } from "@platform/ui/avatar";
+import { Avatar } from "@abereghici/ui/avatar";
 
 export default function Page() {
   return (

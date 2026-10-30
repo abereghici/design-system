@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/pagination.css";
+@import "@abereghici/tokens/components/pagination.css";
 
 @layer ab.components {
   .list {

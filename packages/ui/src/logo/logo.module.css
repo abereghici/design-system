@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/logo.css";
+@import "@abereghici/tokens/components/logo.css";
 
 @layer ab.components {
   .root {

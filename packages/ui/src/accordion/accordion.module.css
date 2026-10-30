@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/accordion.css";
+@import "@abereghici/tokens/components/accordion.css";
 
 @layer ab.components {
   .root {

@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/button.css";
+@import "@abereghici/tokens/components/button.css";
 
 @layer ab.components {
   .root {

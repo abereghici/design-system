@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/combobox.css";
+@import "@abereghici/tokens/components/combobox.css";
 
 @layer ab.components {
   .list {

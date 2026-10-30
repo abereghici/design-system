@@ -23,8 +23,8 @@ Give `UIProvider` the same BCP 47 tag as `<html lang>`. Every component that for
 
 ```tsx
 // app/[lang]/layout.tsx
-import { getDirection } from "@platform/ui/direction";
-import { UIProvider } from "@platform/ui/ui-provider";
+import { getDirection } from "@abereghici/ui/direction";
+import { UIProvider } from "@abereghici/ui/ui-provider";
 
 export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {
   const { lang } = await params;
@@ -43,4 +43,4 @@ Dates are Gregorian in every language, so a locale whose default calendar differ
 
 ## Direction
 
-Right-to-left languages also need `dir` on `<html>`, as above. `getDirection` from `@platform/ui/direction` reads it from the tag and is safe on the server. See [Right-to-left](?path=/docs/guides-right-to-left--docs).
+Right-to-left languages also need `dir` on `<html>`, as above. `getDirection` from `@abereghici/ui/direction` reads it from the tag and is safe on the server. See [Right-to-left](?path=/docs/guides-right-to-left--docs).

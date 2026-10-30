@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { expect, fn, screen, waitFor } from "storybook/test";
 
-import { UserIcon } from "@platform/ui/icons/user";
+import { UserIcon } from "@abereghici/ui/icons/user";
 
 import { withDialog } from "#.storybook/decorators/with-dialog.tsx";
 import { withForm } from "#.storybook/decorators/with-form.tsx";

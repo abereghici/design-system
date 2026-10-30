@@ -1,4 +1,4 @@
-import { Skeleton } from "@platform/ui/skeleton";
+import { Skeleton } from "@abereghici/ui/skeleton";
 
 export default function Page() {
   return (

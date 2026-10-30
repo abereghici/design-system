@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/drop-zone.css";
+@import "@abereghici/tokens/components/drop-zone.css";
 
 @layer ab.components {
   .root {

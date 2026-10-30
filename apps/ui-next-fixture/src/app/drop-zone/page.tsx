@@ -1,6 +1,6 @@
-import { Button } from "@platform/ui/button";
-import { DropZone } from "@platform/ui/drop-zone";
-import { FileTrigger } from "@platform/ui/file-trigger";
+import { Button } from "@abereghici/ui/button";
+import { DropZone } from "@abereghici/ui/drop-zone";
+import { FileTrigger } from "@abereghici/ui/file-trigger";
 
 export default function Page() {
   return (

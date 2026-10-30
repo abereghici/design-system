@@ -3,7 +3,7 @@ import { expect } from "storybook/test";
 
 import type { StoryContext } from "@storybook/react-vite";
 
-import { Button } from "@platform/ui/button";
+import { Button } from "@abereghici/ui/button";
 
 import preview from "#.storybook/preview.tsx";
 

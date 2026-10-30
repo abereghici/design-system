@@ -1,6 +1,6 @@
 import { create } from "storybook/theming";
 
-import tokens from "@platform/tokens/tokens.json";
+import tokens from "@abereghici/tokens/tokens.json";
 
 type Scheme = "light" | "dark";
 

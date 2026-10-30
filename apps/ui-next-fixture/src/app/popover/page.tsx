@@ -1,4 +1,4 @@
-import { Popover } from "@platform/ui/popover";
+import { Popover } from "@abereghici/ui/popover";
 
 export default function Page() {
   return (

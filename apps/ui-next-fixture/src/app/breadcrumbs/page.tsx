@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 
-import { Breadcrumbs } from "@platform/ui/breadcrumbs";
+import { Breadcrumbs } from "@abereghici/ui/breadcrumbs";
 
 export default function Page() {
   return (

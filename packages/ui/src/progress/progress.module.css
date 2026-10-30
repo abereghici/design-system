@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/progress.css";
+@import "@abereghici/tokens/components/progress.css";
 
 @layer ab.components {
   .root {

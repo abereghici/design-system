@@ -1,6 +1,6 @@
 # Tech stack
 
-The agreed technology stack for the platform monorepo: web apps, the design system, and Node backends. Everything is TypeScript, ESM-only.
+The agreed technology stack for the design system and the web apps and Node backends that use it. Everything is TypeScript, ESM-only.
 
 - **Policy:** always use the latest stable version that is at least one day old (pnpm's `minimumReleaseAge` supply-chain guard). Versions below are as of 2026-10-24.
 - **Upgrades:** bump this file in the same change that upgrades a dependency.
@@ -46,12 +46,12 @@ The agreed technology stack for the platform monorepo: web apps, the design syst
 ## Conventions
 
 - ESM-only packages; `"type": "module"` everywhere.
-- TS/JS is written against the latest ECMAScript edition: `target` and `lib` in `@platform/typescript-config` are the newest edition the pinned TypeScript names (`es2025` with TypeScript 7.0.2, whose options stop at `es2025` before `esnext`), raised in the same change that bumps TypeScript. Prefer the modern built-ins over hand-rolled or library equivalents (iterator helpers, `Set` methods, `Object.groupBy`, `Promise.withResolvers`, `Intl.*`). Finished-edition features only; an `esnext.*` lib is added per package for a specific shipped feature (e.g. `esnext.temporal`, see ADR-0004). Browser code is also bound by the Baseline floor (ADR-0002).
+- TS/JS is written against the latest ECMAScript edition: `target` and `lib` in `@repo/typescript-config` are the newest edition the pinned TypeScript names (`es2025` with TypeScript 7.0.2, whose options stop at `es2025` before `esnext`), raised in the same change that bumps TypeScript. Prefer the modern built-ins over hand-rolled or library equivalents (iterator helpers, `Set` methods, `Object.groupBy`, `Promise.withResolvers`, `Intl.*`). Finished-edition features only; an `esnext.*` lib is added per package for a specific shipped feature (e.g. `esnext.temporal`, see ADR-0004). Browser code is also bound by the Baseline floor (ADR-0002).
 - Shared dependency versions are pinned once in the pnpm `catalog:`.
 - `erasableSyntaxOnly`: no `enum` or `namespace`, so Node can run `.ts` files directly through type stripping.
 - ts-reset in apps only, never in libraries: each app has a `src/reset.d.ts` containing only `import "@total-typescript/ts-reset";` (browser apps import `@total-typescript/ts-reset/dom`).
-- Every package has its own `oxlint.config.ts` that `extends` the `@platform/oxlint-config` presets for its platform (`base` plus `react`, `next` or `node`), and its own `lint` script.
+- Every package has its own `oxlint.config.ts` that `extends` the `@repo/oxlint-config` presets for its platform (`base` plus `react`, `next` or `node`), and its own `lint` script.
 - No CSS-in-JS and no utility CSS framework; styling is CSS Modules plus tokens.
 - UI behaviour comes from native elements and APIs (`<dialog>`, `popover`, invoker commands, anchor positioning); there is no headless UI library (ADR-0001) and no web component layer for now.
-- Tests: every story runs as a Vitest browser test through `@storybook/addon-vitest`, with axe violations failing the run (`a11y.test: 'error'`) and a manual screen-reader pass per component. Screenshots are taken after each story inside the pinned Playwright container, with baselines in Git LFS. `vitest-browser-react` covers pure helpers that have no story. Build tooling such as `@platform/tokens` is tested with Vitest in Node.
+- Tests: every story runs as a Vitest browser test through `@storybook/addon-vitest`, with axe violations failing the run (`a11y.test: 'error'`) and a manual screen-reader pass per component. Screenshots are taken after each story inside the pinned Playwright container, with baselines in Git LFS. `vitest-browser-react` covers pure helpers that have no story. Build tooling such as `@abereghici/tokens` is tested with Vitest in Node.
 - Date components take and return Temporal types. `temporal-polyfill` is imported by those components only, as its side-effect-free entry, while Safari lacks Temporal (ADR-0004, accepted 2026-10-24).

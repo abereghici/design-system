@@ -1,4 +1,4 @@
-import { Combobox } from "@platform/ui/combobox";
+import { Combobox } from "@abereghici/ui/combobox";
 
 export default function Page() {
   return (

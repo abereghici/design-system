@@ -1,4 +1,4 @@
-import { Field } from "@platform/ui/field";
+import { Field } from "@abereghici/ui/field";
 
 export default function Page() {
   return (

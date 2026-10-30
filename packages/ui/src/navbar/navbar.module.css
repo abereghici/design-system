@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/navbar.css";
+@import "@abereghici/tokens/components/navbar.css";
 
 @layer ab.components {
   .list {

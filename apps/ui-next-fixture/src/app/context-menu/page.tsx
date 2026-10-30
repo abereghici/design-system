@@ -1,4 +1,4 @@
-import { ContextMenu } from "@platform/ui/context-menu";
+import { ContextMenu } from "@abereghici/ui/context-menu";
 
 export default function Page() {
   return (

@@ -1,4 +1,4 @@
-import { Button } from "@platform/ui/button";
+import { Button } from "@abereghici/ui/button";
 
 export default function Page() {
   return (

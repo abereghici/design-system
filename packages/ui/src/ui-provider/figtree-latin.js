@@ -1,1 +1,1 @@
-export { default as figtreeLatin } from "@platform/tokens/fonts/Figtree-latin.woff2";
+export { default as figtreeLatin } from "@abereghici/tokens/fonts/Figtree-latin.woff2";

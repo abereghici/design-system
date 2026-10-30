@@ -1,4 +1,4 @@
-import { Meter } from "@platform/ui/meter";
+import { Meter } from "@abereghici/ui/meter";
 
 export default function Page() {
   return (

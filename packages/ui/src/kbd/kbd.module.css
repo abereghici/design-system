@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/kbd.css";
+@import "@abereghici/tokens/components/kbd.css";
 
 @layer ab.components {
   .root {

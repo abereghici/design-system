@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/empty-state.css";
+@import "@abereghici/tokens/components/empty-state.css";
 
 @layer ab.components {
   .root {

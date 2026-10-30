@@ -2,7 +2,7 @@ import { expect, fn, waitFor, within } from "storybook/test";
 
 import type { Decorator } from "@storybook/react-vite";
 
-import { Toaster } from "@platform/ui/toaster";
+import { Toaster } from "@abereghici/ui/toaster";
 
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";

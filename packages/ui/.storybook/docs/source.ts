@@ -6,7 +6,7 @@ function importOf(name: string) {
   const icon = /^(?<glyph>\w+)Icon$/v.exec(name)?.groups?.["glyph"];
   const path = icon === undefined ? kebab(name) : `icons/${kebab(icon)}`;
 
-  return `import { ${name} } from "@platform/ui/${path}";`;
+  return `import { ${name} } from "@abereghici/ui/${path}";`;
 }
 
 /**

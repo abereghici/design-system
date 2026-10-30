@@ -9,7 +9,7 @@ import { componentRoutes } from "./component-routes.ts";
 const next = join(import.meta.dirname, "..", ".next");
 const out = join(import.meta.dirname, "..", "out");
 const componentSheets = dirname(
-  fileURLToPath(import.meta.resolve("@platform/tokens/components/button.css")),
+  fileURLToPath(import.meta.resolve("@abereghici/tokens/components/button.css")),
 );
 // Every token a component sheet declares, as `--ab-<name>:`.
 const componentTokens = readdirSync(componentSheets).flatMap((file) =>

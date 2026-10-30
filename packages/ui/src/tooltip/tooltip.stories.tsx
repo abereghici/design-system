@@ -1,10 +1,10 @@
 import { expect, fn, waitFor } from "storybook/test";
 
-import { Button } from "@platform/ui/button";
-import { IconButton } from "@platform/ui/icon-button";
-import { CopyIcon } from "@platform/ui/icons/copy";
-import { PinIcon } from "@platform/ui/icons/pin";
-import { Kbd } from "@platform/ui/kbd";
+import { Button } from "@abereghici/ui/button";
+import { IconButton } from "@abereghici/ui/icon-button";
+import { CopyIcon } from "@abereghici/ui/icons/copy";
+import { PinIcon } from "@abereghici/ui/icons/pin";
+import { Kbd } from "@abereghici/ui/kbd";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";

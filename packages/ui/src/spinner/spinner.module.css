@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/spinner.css";
+@import "@abereghici/tokens/components/spinner.css";
 
 @layer ab.components {
   .root {

@@ -1,4 +1,4 @@
-import { Checkbox } from "@platform/ui/checkbox";
+import { Checkbox } from "@abereghici/ui/checkbox";
 
 export default function Page() {
   return (

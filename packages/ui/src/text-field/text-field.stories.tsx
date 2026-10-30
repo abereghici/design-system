@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { expect, fn } from "storybook/test";
 
-import { SearchIcon } from "@platform/ui/icons/search";
-import { Kbd } from "@platform/ui/kbd";
+import { SearchIcon } from "@abereghici/ui/icons/search";
+import { Kbd } from "@abereghici/ui/kbd";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview from "#.storybook/preview.tsx";

@@ -1,6 +1,6 @@
 import { expect } from "storybook/test";
 
-import { Checkbox } from "@platform/ui/checkbox";
+import { Checkbox } from "@abereghici/ui/checkbox";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";

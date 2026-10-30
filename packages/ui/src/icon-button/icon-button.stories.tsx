@@ -4,7 +4,7 @@ import { expect, fn } from "storybook/test";
 
 import type { StoryContext } from "@storybook/react-vite";
 
-import { PinIcon } from "@platform/ui/icons/pin";
+import { PinIcon } from "@abereghici/ui/icons/pin";
 
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";

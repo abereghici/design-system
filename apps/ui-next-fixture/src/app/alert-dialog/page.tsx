@@ -1,4 +1,4 @@
-import { AlertDialog } from "@platform/ui/alert-dialog";
+import { AlertDialog } from "@abereghici/ui/alert-dialog";
 
 export default function Page() {
   return (

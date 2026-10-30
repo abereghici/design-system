@@ -1,10 +1,10 @@
 import { expect, fn, waitFor, within } from "storybook/test";
 
-import { Button } from "@platform/ui/button";
-import { Dialog } from "@platform/ui/dialog";
-import { CopyIcon } from "@platform/ui/icons/copy";
-import { TrashIcon } from "@platform/ui/icons/trash";
-import { Kbd } from "@platform/ui/kbd";
+import { Button } from "@abereghici/ui/button";
+import { Dialog } from "@abereghici/ui/dialog";
+import { CopyIcon } from "@abereghici/ui/icons/copy";
+import { TrashIcon } from "@abereghici/ui/icons/trash";
+import { Kbd } from "@abereghici/ui/kbd";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";

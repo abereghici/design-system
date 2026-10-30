@@ -1,8 +1,8 @@
 import { expect } from "storybook/test";
 
-import { Button } from "@platform/ui/button";
-import { FilesIcon } from "@platform/ui/icons/files";
-import { Table } from "@platform/ui/table";
+import { Button } from "@abereghici/ui/button";
+import { FilesIcon } from "@abereghici/ui/icons/files";
+import { Table } from "@abereghici/ui/table";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 

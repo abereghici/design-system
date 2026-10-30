@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/dropdown-menu.css";
+@import "@abereghici/tokens/components/dropdown-menu.css";
 
 @layer ab.components {
   .content {

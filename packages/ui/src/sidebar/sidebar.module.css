@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/sidebar.css";
+@import "@abereghici/tokens/components/sidebar.css";
 
 @layer ab.components {
   .root {

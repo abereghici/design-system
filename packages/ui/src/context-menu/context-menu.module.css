@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/context-menu.css";
+@import "@abereghici/tokens/components/context-menu.css";
 
 @layer ab.components {
   .content {

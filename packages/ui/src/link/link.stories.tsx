@@ -1,6 +1,6 @@
 import { expect } from "storybook/test";
 
-import { ArrowUpRightIcon } from "@platform/ui/icons/arrow-up-right";
+import { ArrowUpRightIcon } from "@abereghici/ui/icons/arrow-up-right";
 
 import preview from "#.storybook/preview.tsx";
 

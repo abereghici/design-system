@@ -1,6 +1,6 @@
 import { expect, fn, waitFor } from "storybook/test";
 
-import { Button } from "@platform/ui/button";
+import { Button } from "@abereghici/ui/button";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";

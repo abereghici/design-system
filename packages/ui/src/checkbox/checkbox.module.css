@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/checkbox.css";
+@import "@abereghici/tokens/components/checkbox.css";
 
 @layer ab.components {
   .root {

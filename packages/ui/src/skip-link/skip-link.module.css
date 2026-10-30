@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/skip-link.css";
+@import "@abereghici/tokens/components/skip-link.css";
 
 @layer ab.components {
   .root {

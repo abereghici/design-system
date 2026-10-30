@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/popover.css";
+@import "@abereghici/tokens/components/popover.css";
 
 @layer ab.components {
   .content {

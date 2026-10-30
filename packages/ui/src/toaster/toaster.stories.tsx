@@ -2,8 +2,8 @@ import { expect, fn, waitFor, within } from "storybook/test";
 
 import type { Decorator } from "@storybook/react-vite";
 
-import { Button } from "@platform/ui/button";
-import { toast } from "@platform/ui/toast";
+import { Button } from "@abereghici/ui/button";
+import { toast } from "@abereghici/ui/toast";
 
 import preview from "#.storybook/preview.tsx";
 import { atCentre } from "#.storybook/test/pointer.ts";

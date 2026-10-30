@@ -1,7 +1,16 @@
 {
-  "name": "@platform/ui",
+  "name": "@abereghici/ui",
   "version": "0.0.0",
-  "private": true,
+  "description": "React components of the abereghici design system.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abereghici/design-system.git",
+    "directory": "packages/ui"
+  },
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -14,7 +23,22 @@
     "./internal/*": null,
     "./icons/*": "./src/icon/icons/*.tsx"
   },
+  "publishConfig": {
+    "exports": {
+      "./*": {
+        "types": "./dist/*/index.d.ts",
+        "default": "./dist/*/index.js"
+      },
+      "./internal/*": null,
+      "./icons/*": {
+        "types": "./dist/icon/icons/*.d.ts",
+        "default": "./dist/icon/icons/*.js"
+      }
+    },
+    "access": "public"
+  },
   "scripts": {
+    "build": "tsdown",
     "storybook": "storybook dev --port 6006",
     "build-storybook": "storybook build",
     "check-types": "tsc && tsc -p scripts",
@@ -28,13 +52,13 @@
     "test:screenshots:docker": "sh scripts/screenshots-docker.sh"
   },
   "dependencies": {
-    "@platform/tokens": "workspace:*",
+    "@abereghici/tokens": "workspace:^",
     "temporal-polyfill": "catalog:"
   },
   "devDependencies": {
     "@babel/core": "catalog:",
-    "@platform/oxlint-config": "workspace:*",
-    "@platform/typescript-config": "workspace:*",
+    "@repo/oxlint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@rolldown/plugin-babel": "catalog:",
     "@size-limit/esbuild": "catalog:",
     "@size-limit/file": "catalog:",
@@ -43,6 +67,7 @@
     "@storybook/addon-mcp": "catalog:",
     "@storybook/addon-vitest": "catalog:",
     "@storybook/react-vite": "catalog:",
+    "@tsdown/css": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
@@ -58,9 +83,11 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "remark-gfm": "catalog:",
+    "rolldown": "catalog:",
     "size-limit": "catalog:",
     "storybook": "catalog:",
     "svgo": "catalog:",
+    "tsdown": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:"

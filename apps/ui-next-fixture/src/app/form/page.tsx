@@ -1,4 +1,4 @@
-import { Form } from "@platform/ui/form";
+import { Form } from "@abereghici/ui/form";
 
 export default function Page() {
   return (

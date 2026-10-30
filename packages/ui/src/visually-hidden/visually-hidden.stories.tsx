@@ -1,6 +1,6 @@
 import { expect } from "storybook/test";
 
-import { Link } from "@platform/ui/link";
+import { Link } from "@abereghici/ui/link";
 
 import preview from "#.storybook/preview.tsx";
 import { atCentre } from "#.storybook/test/pointer.ts";

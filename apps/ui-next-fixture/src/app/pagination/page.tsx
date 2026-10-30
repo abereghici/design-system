@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 
-import { Pagination } from "@platform/ui/pagination";
+import { Pagination } from "@abereghici/ui/pagination";
 
 export default function Page() {
   return (

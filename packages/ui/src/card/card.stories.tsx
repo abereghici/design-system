@@ -1,6 +1,6 @@
 import { expect } from "storybook/test";
 
-import { Button } from "@platform/ui/button";
+import { Button } from "@abereghici/ui/button";
 
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";

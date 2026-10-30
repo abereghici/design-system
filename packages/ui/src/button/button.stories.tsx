@@ -3,7 +3,7 @@ import { expect, fn } from "storybook/test";
 
 import type { StoryContext } from "@storybook/react-vite";
 
-import { PlusIcon } from "@platform/ui/icons/plus";
+import { PlusIcon } from "@abereghici/ui/icons/plus";
 
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";

@@ -3,7 +3,7 @@ import { useEffect } from "storybook/preview-api";
 
 import type { Decorator } from "@storybook/react-vite";
 
-import { UIProvider } from "@platform/ui/ui-provider";
+import { UIProvider } from "@abereghici/ui/ui-provider";
 
 import { applyGlobals, localeOf } from "../globals.tsx";
 

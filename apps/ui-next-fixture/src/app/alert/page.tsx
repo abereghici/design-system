@@ -1,4 +1,4 @@
-import { Alert } from "@platform/ui/alert";
+import { Alert } from "@abereghici/ui/alert";
 
 export default function Page() {
   return (

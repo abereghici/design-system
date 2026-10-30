@@ -1,4 +1,4 @@
-import { PasswordField } from "@platform/ui/password-field";
+import { PasswordField } from "@abereghici/ui/password-field";
 
 export default function Page() {
   return (

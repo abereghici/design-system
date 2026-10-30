@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
-import { getDirection } from "@platform/ui/direction";
-import { UIProvider } from "@platform/ui/ui-provider";
+import { getDirection } from "@abereghici/ui/direction";
+import { UIProvider } from "@abereghici/ui/ui-provider";
 
 const lang = "ro-RO";
 

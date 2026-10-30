@@ -1,6 +1,6 @@
 import { expect, fn } from "storybook/test";
 
-import { Badge } from "@platform/ui/badge";
+import { Badge } from "@abereghici/ui/badge";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";

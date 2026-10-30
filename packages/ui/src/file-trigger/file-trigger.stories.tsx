@@ -1,8 +1,8 @@
 import { expect, fn, waitFor } from "storybook/test";
 
-import { Button } from "@platform/ui/button";
-import { Field } from "@platform/ui/field";
-import { PlusIcon } from "@platform/ui/icons/plus";
+import { Button } from "@abereghici/ui/button";
+import { Field } from "@abereghici/ui/field";
+import { PlusIcon } from "@abereghici/ui/icons/plus";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview from "#.storybook/preview.tsx";

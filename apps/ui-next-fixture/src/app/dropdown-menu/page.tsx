@@ -1,4 +1,4 @@
-import { DropdownMenu } from "@platform/ui/dropdown-menu";
+import { DropdownMenu } from "@abereghici/ui/dropdown-menu";
 
 export default function Page() {
   return (

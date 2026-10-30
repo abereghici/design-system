@@ -1,5 +1,5 @@
 {
-  "name": "@platform/oxlint-config",
+  "name": "@repo/oxlint-config",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -18,7 +18,7 @@
     "@stylistic/eslint-plugin": "catalog:"
   },
   "devDependencies": {
-    "@platform/typescript-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
     "typescript": "catalog:"

@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/slider.css";
+@import "@abereghici/tokens/components/slider.css";
 
 @layer ab.components {
   .root {

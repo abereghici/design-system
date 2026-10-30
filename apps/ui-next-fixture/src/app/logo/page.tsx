@@ -1,4 +1,4 @@
-import { Logo } from "@platform/ui/logo";
+import { Logo } from "@abereghici/ui/logo";
 
 export default function Page() {
   return (

@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/tooltip.css";
+@import "@abereghici/tokens/components/tooltip.css";
 
 @layer ab.components {
   .content {

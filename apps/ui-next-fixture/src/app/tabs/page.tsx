@@ -1,4 +1,4 @@
-import { Tabs } from "@platform/ui/tabs";
+import { Tabs } from "@abereghici/ui/tabs";
 
 export default function Page() {
   return (

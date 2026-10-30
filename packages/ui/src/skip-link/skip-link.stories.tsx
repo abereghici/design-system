@@ -1,6 +1,6 @@
 import { expect } from "storybook/test";
 
-import { Button } from "@platform/ui/button";
+import { Button } from "@abereghici/ui/button";
 
 import preview from "#.storybook/preview.tsx";
 import { atCentre } from "#.storybook/test/pointer.ts";

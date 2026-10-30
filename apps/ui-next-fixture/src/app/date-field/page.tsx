@@ -1,4 +1,4 @@
-import { DateField } from "@platform/ui/date-field";
+import { DateField } from "@abereghici/ui/date-field";
 
 export default function Page() {
   return (

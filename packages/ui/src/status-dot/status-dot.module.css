@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/status-dot.css";
+@import "@abereghici/tokens/components/status-dot.css";
 
 @layer ab.components {
   .root {

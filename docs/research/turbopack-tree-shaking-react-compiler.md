@@ -8,7 +8,7 @@ Sources:
 - **Next.js and Turbopack source** at tag `v16.4.3` of `github.com/vercel/next.js` (commit `29bbeab0`). Links use `blob/v16.4.3/...`.
 - **webpack docs**, used only for the meaning of `sideEffects` that other bundlers share.
 - **Oxlint rule docs** on oxc.rs, used for the two lint options the spike needed.
-- **Empirical**: the throwaway packages `packages/spike-ui-pkg` (a stand-in for `@platform/ui`) and `apps/spike-treeshake` (a Next 16 app). Their test is `apps/spike-treeshake/test/build-output.test.ts`.
+- **Empirical**: the throwaway packages `packages/spike-ui-pkg` (a stand-in for `@abereghici/ui`) and `apps/spike-treeshake` (a Next 16 app). Their test is `apps/spike-treeshake/test/build-output.test.ts`.
 
 ## Question
 
@@ -175,7 +175,7 @@ The `transpilePackages` page, quoted in `docs/research/performance.md`, says Tur
 
 ## Lint notes for #7
 
-Two Oxlint findings came up that the real `@platform/ui` will hit too. Both are handled locally in the spike configs only:
+Two Oxlint findings came up that the real `@abereghici/ui` will hit too. Both are handled locally in the spike configs only:
 
 - `typescript/prefer-readonly-parameter-types` (pedantic) flags every `children: ReactNode` prop, even inside `Readonly<…>`, because `ReactNode` is not deeply readonly. The rule's documented `allow` option takes `{ "from": "package", "name": "ReactNode", "package": "@types/react" }` (https://oxc.rs/docs/guide/usage/linter/rules/typescript/prefer-readonly-parameter-types.html), and that entry clears the error. Spike #2 (`apps/spike-rsc-namespace`) turned the rule off instead. Keeping it on with this `allow` entry is the narrower fix.
 - `import/no-unassigned-import` flags `import "…/base.css"`. Its documented example `{ "allow": ["**/*.css"] }` (https://oxc.rs/docs/guide/usage/linter/rules/import/no-unassigned-import.html) also matches a bare package specifier ending in `.css`, as verified in the spike app.
@@ -185,12 +185,12 @@ Two Oxlint findings came up that the real `@platform/ui` will hit too. Both are 
 1. In `packages/ui` (and `packages/tokens`, for any JS it ships), keep `"sideEffects": ["*.css"]` and per-component plus per-icon `exports` with no root barrel, as the spec says. Internal barrels are safe under this declaration.
 2. Don't put real side effects in component modules (module-level DOM access, global registration). The declaration tells bundlers that JS has none, and a module with real side effects would be silently dropped. (inference)
 3. Apps set `reactCompiler: true` and add `babel-plugin-react-compiler`. Nothing else is needed for workspace source.
-4. Turn this spike's test into the CI check from `performance.md` recommendation 3, "a built client chunk contains compiler output for `@platform/ui`". Use the analyzer-graph edge to `react/compiler-runtime.js`, which doesn't depend on minified names.
+4. Turn this spike's test into the CI check from `performance.md` recommendation 3, "a built client chunk contains compiler output for `@abereghici/ui`". Use the analyzer-graph edge to `react/compiler-runtime.js`, which doesn't depend on minified names.
 5. Delete `packages/spike-ui-pkg` and `apps/spike-treeshake` once the UI scaffold (#7) and the subpath-exports and size-budget work (#13) cover the same assertions.
 
-## Applied to `@platform/ui` (#13)
+## Applied to `@abereghici/ui` (#13)
 
-The spike packages were deleted in #13. The spike app became `apps/ui-next-fixture`, which consumes the real `@platform/ui`. Its `test/build-output.test.ts` keeps the analyzer-graph checks, and `test/exports.test.ts` checks resolution.
+The spike packages were deleted in #13. The spike app became `apps/ui-next-fixture`, which consumes the real `@abereghici/ui`. Its `test/build-output.test.ts` keeps the analyzer-graph checks, and `test/exports.test.ts` checks resolution.
 
 - **Exports are two patterns, not one entry per component.** `"./*": "./src/*/index.ts"` and `"./icons/*": "./src/icons/*.tsx"`. Node's packages docs (https://nodejs.org/docs/latest-v26.x/api/packages.md, "Subpath patterns"):
 
@@ -202,7 +202,7 @@ The spike packages were deleted in #13. The spike app became `apps/ui-next-fixtu
 
 - **Without `"."`, the root cannot be imported.** In the fixture, Node's resolver throws `ERR_PACKAGE_PATH_NOT_EXPORTED`, Vite throws `"." is not exported`, and TypeScript fails to resolve the root. All three were observed.
 - **The `index.ts` re-export is pruned only with `sideEffects`.** With `"sideEffects": ["*.css"]`, `src/button/index.ts` is absent from the graph, and the page's import goes straight to `button.tsx`. With the field removed, the graph gains `[project]/packages/ui/src/button/index.ts [app-rsc] (ecmascript) <locals>`. Both were observed with Next 16.4.3.
-- **`import.meta.resolve` does not check that the target exists.** With Node 26.12.1, `@platform/ui/nope` resolves to `…/src/nope/index.ts` without throwing. So a pattern target that is missing on disk fails only when it is loaded (observed). The fixture test checks existence itself.
+- **`import.meta.resolve` does not check that the target exists.** With Node 26.12.1, `@abereghici/ui/nope` resolves to `…/src/nope/index.ts` without throwing. So a pattern target that is missing on disk fails only when it is loaded (observed). The fixture test checks existence itself.
 - **Proof the fixture checks can fail.** Each control was a temporary edit:
   - `sideEffects` removed: the index-pruning test failed.
   - `"use no memo"` in Button: the compiler-runtime test failed.
@@ -216,13 +216,13 @@ Researched and verified 2026-10-24 with `next` 16.4.3 (Turbopack), `react`/`reac
 
 ### Question
 
-Importing one component must ship only that component's JS, its CSS and its component tokens. Apps must import no CSS by hand. Before this change, `@platform/tokens/tokens.css` (67 kB) held all of the component tokens (542 before phase 3), so an app that rendered only Button still shipped `--ab-dialog-*`, `--ab-toast-*` and the rest.
+Importing one component must ship only that component's JS, its CSS and its component tokens. Apps must import no CSS by hand. Before this change, `@abereghici/tokens/tokens.css` (67 kB) held all of the component tokens (542 before phase 3), so an app that rendered only Button still shipped `--ab-dialog-*`, `--ab-toast-*` and the rest.
 
 ### What was built
 
-- **One token sheet per component.** `@platform/tokens` writes `dist/components/<component>.css`, one per Dictionary component word (45 after phase 3), each `@layer ab.tokens { :root { … } }`, with that component's `@property` rules first. `tokens.css` keeps the 504 primitive and semantic tokens (32.5 kB). The export is `"./components/*.css": "./dist/components/*.css"`.
-- **Each CSS Module `@import`s its own sheet**, as its first line: `@import "@platform/tokens/components/button.css";`. The dependency sits where the tokens are used, and it works the same in Turbopack, Vite and esbuild (below). A side-effect import in the `.tsx` would also work ("Stylesheets published by external packages can be imported anywhere in the `app` directory, including colocated components", https://nextjs.org/docs/app/getting-started/css, lastUpdated 2026-08-25), but it splits one dependency across two files.
-- **`Provider` (`@platform/ui/provider`)**, a Server Component, imports `provider.css` (the layer order, `tokens.css`, `fonts.css`, `base.css`) and preloads Figtree latin. It takes an optional `locale` from `@platform/ui/locales/<tag>` (`enUS`, `roRO`). `@platform/ui/base.css` is no longer exported.
+- **One token sheet per component.** `@abereghici/tokens` writes `dist/components/<component>.css`, one per Dictionary component word (45 after phase 3), each `@layer ab.tokens { :root { … } }`, with that component's `@property` rules first. `tokens.css` keeps the 504 primitive and semantic tokens (32.5 kB). The export is `"./components/*.css": "./dist/components/*.css"`.
+- **Each CSS Module `@import`s its own sheet**, as its first line: `@import "@abereghici/tokens/components/button.css";`. The dependency sits where the tokens are used, and it works the same in Turbopack, Vite and esbuild (below). A side-effect import in the `.tsx` would also work ("Stylesheets published by external packages can be imported anywhere in the `app` directory, including colocated components", https://nextjs.org/docs/app/getting-started/css, lastUpdated 2026-08-25), but it splits one dependency across two files.
+- **`Provider` (`@abereghici/ui/provider`)**, a Server Component, imports `provider.css` (the layer order, `tokens.css`, `fonts.css`, `base.css`) and preloads Figtree latin. It takes an optional `locale` from `@abereghici/ui/locales/<tag>` (`enUS`, `roRO`). `@abereghici/ui/base.css` is no longer exported.
 
 ### Evidence: the build output
 
@@ -233,7 +233,7 @@ Observed with the final code:
 - `/` ships `--ab-button-*` and no other component's tokens. `/logo` ships `--ab-logo-*` and no `--ab-button-`. The component-token check covers every name in `component.tokens.json`.
 - Every route's first stylesheet starts with `@layer ab.reset,ab.tokens,ab.base,ab.components;`, then the shared tokens, the `@font-face` rules and `@layer ab.base`.
 - The HTML has exactly one font preload, `<link rel="preload" href="/_next/static/media/Figtree-latin.1meowcc0_9_5r.woff2" as="font" crossorigin="" type="font/woff2"/>`. The `@font-face` asks for the same file (`src:url(../media/Figtree-latin.1meowcc0_9_5r.woff2)`), so it is fetched once.
-- The client modules from `@platform/ui` are `button/button.tsx` and `provider/locale.tsx` on `/`, and only `provider/locale.tsx` on `/logo`. Only `/` loads code that contains `ab-press`. `ro-RO` is absent from `/`'s JS.
+- The client modules from `@abereghici/ui` are `button/button.tsx` and `provider/locale.tsx` on `/`, and only `provider/locale.tsx` on `/logo`. Only `/` loads code that contains `ab-press`. `ro-RO` is absent from `/`'s JS.
 
 Controls (each a temporary edit, then reverted):
 
@@ -264,7 +264,7 @@ The leaf adds about 400 bytes of minified code to the layout chunk (`createConte
 
 ### `preload()` from a Server Component
 
-React: "In server-side rendering or when rendering Server Components, `preload` only has an effect if you call it while rendering a component or in an async context originating from rendering a component" and "Multiple equivalent calls to `preload` have the same effect as a single call" (https://react.dev/reference/react-dom/preload). The URL comes from `src/provider/figtree-latin.js`, `export { default as figtreeLatin } from "@platform/tokens/fonts/Figtree-latin.woff2"`, typed by its sibling `figtree-latin.d.ts`:
+React: "In server-side rendering or when rendering Server Components, `preload` only has an effect if you call it while rendering a component or in an async context originating from rendering a component" and "Multiple equivalent calls to `preload` have the same effect as a single call" (https://react.dev/reference/react-dom/preload). The URL comes from `src/provider/figtree-latin.js`, `export { default as figtreeLatin } from "@abereghici/tokens/fonts/Figtree-latin.woff2"`, typed by its sibling `figtree-latin.d.ts`:
 
 - Turbopack 16.4.3 resolves the `.woff2` import to the hashed `/_next/static/media/…` URL without the `turbopackModuleType: "asset"` attribute that #10 used (observed). Vite returns the URL as well: "Importing a static asset will return the resolved public URL when it is served" (https://vite.dev/guide/features).
 - A `.js` file with a `.d.ts` beside it keeps the woff2 module type out of every consumer's program. Typing the import in a `.ts` file needs `declare module "*.woff2"` in each app, or `allowArbitraryExtensions`: "By default, this import will raise an error … you can suppress the error with the new `--allowArbitraryExtensions` compiler option" (https://www.typescriptlang.org/tsconfig/#allowArbitraryExtensions). The fixture type-checks with neither (observed).
@@ -278,7 +278,7 @@ React: "In server-side rendering or when rendering Server Components, `preload` 
 
 - React Spectrum: "Provider is the container for all React Spectrum applications", "A Provider must be the root component of your application" and "It defines the theme, locale, and other application level settings" (https://react-spectrum.adobe.com/react-spectrum/Provider.html). Hence `Provider` with a `locale` prop.
 - Mantine and Radix Themes make the app import the CSS: "import '@mantine/core/styles.css'" then "Wrap your application with MantineProvider" (https://mantine.dev/getting-started/), and "Import the global CSS file at the root of your application" then "Add `Theme` to your application" (https://www.radix-ui.com/themes/docs/overview/getting-started). The user ruled that out, so ours imports its CSS itself.
-- Locale objects follow Ant Design, `import frFR from 'antd/locale/fr_FR';` with `<ConfigProvider locale={frFR}>` "for configuring antd locale text globally" (https://ant.design/docs/react/i18n), and MUI, `import { zhCN } from '@mui/material/locale';` passed to `createTheme` (https://mui.com/material-ui/guides/localization/). They are named `enUS` and `roRO` and live at `@platform/ui/locales/<BCP 47 tag>`.
+- Locale objects follow Ant Design, `import frFR from 'antd/locale/fr_FR';` with `<ConfigProvider locale={frFR}>` "for configuring antd locale text globally" (https://ant.design/docs/react/i18n), and MUI, `import { zhCN } from '@mui/material/locale';` passed to `createTheme` (https://mui.com/material-ui/guides/localization/). They are named `enUS` and `roRO` and live at `@abereghici/ui/locales/<BCP 47 tag>`.
 
 ## R1 update (2026-10-24)
 

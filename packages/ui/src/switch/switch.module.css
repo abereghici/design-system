@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/switch.css";
+@import "@abereghici/tokens/components/switch.css";
 
 @layer ab.components {
   .root {

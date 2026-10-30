@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/meter.css";
+@import "@abereghici/tokens/components/meter.css";
 
 @layer ab.components {
   .root {

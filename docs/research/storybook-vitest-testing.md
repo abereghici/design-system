@@ -228,7 +228,7 @@ How do we make Storybook the hub for docs, component tests, a11y tests and scree
   - [ColorPalette](https://storybook.js.org/docs/api/doc-blocks/doc-block-colorpalette): "The `ColorPalette` block allows you to document all color-related items". Usage: `import { Meta, ColorPalette, ColorItem } from '@storybook/addon-docs/blocks'; <Meta title="Colors" /> <ColorPalette><ColorItem title=… subtitle=… colors={{ … }} /></ColorPalette>`.
   - [Typeset](https://storybook.js.org/docs/api/doc-blocks/doc-block-typeset): "helps document the fonts used throughout your project".
   - IconGallery, Unstyled and Markdown blocks are also listed under `api/doc-blocks`.
-  - A token page can import the DTCG-generated JSON from `@platform/tokens` and map it into `colors={{…}}`. That last step is our own design, not documented.
+  - A token page can import the DTCG-generated JSON from `@abereghici/tokens` and map it into `colors={{…}}`. That last step is our own design, not documented.
 - **Code panel.** [code-panel](https://storybook.js.org/docs/writing-docs/code-panel): "To enable the Code panel, set `parameters.docs.codePanel` to `true`".
 - **MDX in tests.** The Vitest plugin excludes `**/*.mdx` ([`index.ts`](https://github.com/storybookjs/storybook/blob/v10.6.3/code/addons/vitest/src/vitest-plugin/index.ts): `join(…, '**/*.mdx')` in `exclude`), and `disableAddonDocs` defaults to `true`.
 
@@ -378,7 +378,7 @@ afterEach(async (ctx) => {
 # Generate/verify baselines on Linux so `-linux` names are stable.          [V-vrt] [V-expect] [PW-docker]
 docker run --rm --init --ipc=host -v "$PWD":/work -w /work \
   mcr.microsoft.com/playwright:v1.64.1-noble \
-  sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @platform/ui exec vitest run --project=storybook"
+  sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @abereghici/ui exec vitest run --project=storybook"
 # add `--update` only in a manual CI workflow                                [V-vrt]
 ```
 

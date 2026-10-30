@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/breadcrumbs.css";
+@import "@abereghici/tokens/components/breadcrumbs.css";
 
 @layer ab.components {
   .list {

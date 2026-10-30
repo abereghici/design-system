@@ -15,7 +15,7 @@ import { addons } from "storybook/preview-api";
 import type { DocsContainerProps } from "@storybook/addon-docs/blocks";
 import type { Globals } from "storybook/internal/types";
 
-import { Heading } from "@platform/ui/heading";
+import { Heading } from "@abereghici/ui/heading";
 
 import { themes as storybookThemes } from "./theme.ts";
 

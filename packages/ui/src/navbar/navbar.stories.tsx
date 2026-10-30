@@ -1,6 +1,6 @@
 import { expect } from "storybook/test";
 
-import { HomeIcon } from "@platform/ui/icons/home";
+import { HomeIcon } from "@abereghici/ui/icons/home";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 

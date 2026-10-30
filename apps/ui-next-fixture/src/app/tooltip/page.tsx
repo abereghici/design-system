@@ -1,6 +1,6 @@
-import { IconButton } from "@platform/ui/icon-button";
-import { CopyIcon } from "@platform/ui/icons/copy";
-import { Tooltip } from "@platform/ui/tooltip";
+import { IconButton } from "@abereghici/ui/icon-button";
+import { CopyIcon } from "@abereghici/ui/icons/copy";
+import { Tooltip } from "@abereghici/ui/tooltip";
 
 export default function Page() {
   return (

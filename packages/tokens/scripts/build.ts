@@ -18,7 +18,7 @@ try {
   await writeFile(new URL("tokens.json", dist), `${JSON.stringify(artifact, undefined, 2)}\n`);
   await writeFile(new URL("fonts.css", dist), fontFaceCss());
   console.log(
-    "@platform/tokens: wrote dist/tokens.css, dist/components/*.css, dist/tokens.json and dist/fonts.css",
+    "@abereghici/tokens: wrote dist/tokens.css, dist/components/*.css, dist/tokens.json and dist/fonts.css",
   );
 } catch (error) {
   if (!(error instanceof TokenCheckError)) throw error;

@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/dialog.css";
+@import "@abereghici/tokens/components/dialog.css";
 
 @layer ab.components {
   :root:has(.content:modal) {

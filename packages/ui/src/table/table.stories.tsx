@@ -2,8 +2,8 @@ import { useState } from "react";
 import type { CSSProperties } from "react";
 import { expect } from "storybook/test";
 
-import { Checkbox } from "@platform/ui/checkbox";
-import { ScrollArea } from "@platform/ui/scroll-area";
+import { Checkbox } from "@abereghici/ui/checkbox";
+import { ScrollArea } from "@abereghici/ui/scroll-area";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 

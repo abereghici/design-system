@@ -1,4 +1,4 @@
-import { Slider } from "@platform/ui/slider";
+import { Slider } from "@abereghici/ui/slider";
 
 export default function Page() {
   return (

@@ -1,8 +1,8 @@
 {
-  "name": "@platform/ui-next-fixture",
+  "name": "@repo/ui-next-fixture",
   "version": "0.0.0",
   "private": true,
-  "description": "Next 16 app that consumes @platform/ui as source and checks its subpath exports, tree-shaking and React Compiler output.",
+  "description": "Next 16 app that consumes @abereghici/ui as source and checks its subpath exports, tree-shaking and React Compiler output.",
   "type": "module",
   "scripts": {
     "build": "next build",
@@ -12,15 +12,15 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@platform/tokens": "workspace:*",
-    "@platform/ui": "workspace:*",
+    "@abereghici/tokens": "workspace:*",
+    "@abereghici/ui": "workspace:*",
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
   },
   "devDependencies": {
-    "@platform/oxlint-config": "workspace:*",
-    "@platform/typescript-config": "workspace:*",
+    "@repo/oxlint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@total-typescript/ts-reset": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

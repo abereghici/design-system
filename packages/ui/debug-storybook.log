@@ -4,8 +4,8 @@
 [09:12:43.163] [DEBUG] Serving static files from [36mpackages/ui/.storybook/static[39m at [36m/[39m
 [09:12:43.163] [DEBUG] Serving static files from [36mpackages/tokens/fonts[39m at [36m/fonts[39m
 [09:12:43.163] [INFO] Starting...
-[09:12:43.169] [DEBUG] readDependencyManifest: could not resolve "@platform/tokens"
-[09:12:43.169] [DEBUG] readDependencyManifest: could not resolve "@platform/oxlint-config"
+[09:12:43.169] [DEBUG] readDependencyManifest: could not resolve "@abereghici/tokens"
+[09:12:43.169] [DEBUG] readDependencyManifest: could not resolve "@repo/oxlint-config"
 [09:12:43.241] [DEBUG] Starting preview..
 [09:12:43.348] [INFO] [43mVite[49m Re-optimizing dependencies because lockfile has changed
 [09:12:43.386] [DEBUG] Change detection enabled.

@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/calendar.css";
+@import "@abereghici/tokens/components/calendar.css";
 
 @layer ab.components {
   .root {

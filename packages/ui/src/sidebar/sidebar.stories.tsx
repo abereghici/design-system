@@ -1,8 +1,8 @@
 import { expect } from "storybook/test";
 
-import { FilesIcon } from "@platform/ui/icons/files";
-import { LayersIcon } from "@platform/ui/icons/layers";
-import { MailIcon } from "@platform/ui/icons/mail";
+import { FilesIcon } from "@abereghici/ui/icons/files";
+import { LayersIcon } from "@abereghici/ui/icons/layers";
+import { MailIcon } from "@abereghici/ui/icons/mail";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { trusted } from "#.storybook/test/trusted.ts";

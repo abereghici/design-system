@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/segmented-control.css";
+@import "@abereghici/tokens/components/segmented-control.css";
 
 @layer ab.components {
   .root {

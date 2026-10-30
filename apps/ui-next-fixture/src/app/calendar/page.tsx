@@ -1,4 +1,4 @@
-import { Calendar } from "@platform/ui/calendar";
+import { Calendar } from "@abereghici/ui/calendar";
 
 export default function Page() {
   return (

@@ -1,7 +1,11 @@
+import "./layers.css";
 import "./ui-provider.css";
 
 import { preload } from "react-dom";
 import type { ReactNode } from "react";
+
+// Imported from JS, not @import-ed in CSS, so the build keeps it in the tokens package where its font URLs resolve.
+import "@abereghici/tokens/fonts.css";
 
 import { LocaleProvider } from "../internal/locale/locale-provider.tsx";
 

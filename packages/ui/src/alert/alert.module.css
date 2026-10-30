@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/alert.css";
+@import "@abereghici/tokens/components/alert.css";
 
 @layer ab.components {
   .root {

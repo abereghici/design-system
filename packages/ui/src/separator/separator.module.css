@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/separator.css";
+@import "@abereghici/tokens/components/separator.css";
 
 @layer ab.components {
   .root {

@@ -1,4 +1,4 @@
-@import "@platform/tokens/components/icon.css";
+@import "@abereghici/tokens/components/icon.css";
 
 @layer ab.components {
   /* Hosts size and tint the icons they hold by setting --ab-icon-size, --ab-icon-stroke-width and --ab-icon-color on themselves; the values inherit, so no host reaches into the svg. */
