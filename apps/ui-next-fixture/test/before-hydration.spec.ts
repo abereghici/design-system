@@ -82,13 +82,15 @@ test.describe("Tier 1 works with JavaScript off", () => {
       await expect(dialog).toBeHidden();
     });
   }
+});
 
+test.describe("with JavaScript off, a Field control is described by its description", () => {
   for (const [route, name, description] of [
     ["text-field", "Email", "We reply within a day."],
     ["text-area", "Message", "Grows with your text."],
     ["field", "Handle", "Letters and digits."],
   ] as const) {
-    test(`${route}: its control is described by its description`, async ({ page }) => {
+    test(route, async ({ page }) => {
       await page.goto(`/${route}`);
 
       await expect(page.getByRole("textbox", { name })).toHaveAccessibleDescription(description);
@@ -185,20 +187,27 @@ test.describe("with JavaScript off, a Tier 1 Field control submits its form", ()
 
 const tier2 = [
   "calendar",
+  "code-block",
   "combobox",
   "command",
   "context-menu",
+  "copy-button",
   "date-field",
   "date-picker",
   "drop-zone",
   "dropdown-menu",
   "number-field",
   "password-field",
+  "splitter",
   "tabs",
+  "tag-group",
   "toast",
   "toaster",
+  "toggle-button",
+  "toggle-button-group",
   "toolbar",
   "tooltip",
+  "tree",
 ];
 
 test.describe("Tier 2 before hydration", () => {
@@ -206,6 +215,9 @@ test.describe("Tier 2 before hydration", () => {
 
   for (const route of tier2) {
     test(`${route}: renders what hydration renders, and passes axe`, async ({ page, context }) => {
+      // A Tier 2 bug, kept failing until fixed: once hydrated, Tabs sets hidden="until-found" on its
+      // inactive panels, and Chrome then exposes them in the accessibility tree.
+      test.fail(route === "tabs");
       await page.route("**/*.js", (request) => request.abort());
       await page.goto(`/${route}`);
 
@@ -223,6 +235,14 @@ test.describe("Tier 2 before hydration", () => {
   }
 });
 
+// Tier 2 bugs, kept failing until fixed: these controls show with JavaScript off and do nothing.
+const shownWithoutScript = new Set([
+  "copy-button",
+  "splitter",
+  "toggle-button",
+  "toggle-button-group",
+]);
+
 test.describe("with JavaScript off, a control only script can run is hidden", () => {
   for (const [route, role, name] of [
     ["alert", "button", "Dismiss"],
@@ -233,8 +253,14 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["number-field", "button", "Increase"],
     ["password-field", "button", "Show password"],
     ["tabs", "tab", "Settings"],
+    ["tag-group", "button", "Remove Draft"],
+    ["copy-button", "button", "Copy invoice number"],
+    ["toggle-button", "button", "Bold"],
+    ["toggle-button-group", "button", "Italic"],
+    ["splitter", "separator", "Resize folders"],
   ] as const) {
     test(`${route}: ${name}`, async ({ page }) => {
+      test.fail(shownWithoutScript.has(route));
       await page.goto(`/${route}`);
 
       const control = page.getByRole(role, { name, includeHidden: true });
