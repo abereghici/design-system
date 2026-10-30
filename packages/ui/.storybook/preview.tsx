@@ -42,7 +42,6 @@ export default definePreview({
             "Styling and overrides",
             "Internationalization",
             "Right-to-left",
-            "Contributing",
           ],
           "Foundations",
           [
