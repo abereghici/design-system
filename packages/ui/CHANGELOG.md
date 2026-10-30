@@ -1,5 +1,13 @@
 # @abereghici/ui
 
+## 0.1.2
+
+### Patch Changes
+
+- ca9349c: The npm page shows the new README, keywords, and links to the source and the issue tracker.
+- Updated dependencies [ca9349c]
+  - @abereghici/tokens@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
