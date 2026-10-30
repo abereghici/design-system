@@ -141,6 +141,12 @@ const checkMedia = (token: TransformedToken, dictionary: Dictionary): string[] =
   return overrides.flatMap(({ query, value }) => {
     const themes = perTheme(value);
 
+    if (/\dpx\b/v.test(query)) {
+      return [
+        `${label}: the ${query} query is in px, so it ignores the reader's default text size; write it in em`,
+      ];
+    }
+
     if (themes && !isThemedColor(token)) {
       return [
         `${label}: the ${query} override has per-Theme values, but only themed colors are themed`,

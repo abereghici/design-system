@@ -61,6 +61,19 @@ test("only themed colors take a per-Theme media override", async () => {
   );
 });
 
+test("a media query in px fails the build, because it ignores the reader's default text size", async () => {
+  const tokens = validTokens();
+
+  tokens.semantic["space-section"] = {
+    $type: "dimension",
+    $value: "{primitive.dimension-88}",
+    $extensions: media({ "(width < 760px)": "{primitive.dimension-64}" }),
+  };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-space-section: the (width < 760px) query is in px, so it ignores the reader's default text size; write it in em",
+  );
+});
+
 const animated = { "com.bereghici.animated": true };
 
 test("only component tokens can be animated", async () => {

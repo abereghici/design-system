@@ -37,7 +37,10 @@ Render `UIProvider` once, at the root. It brings the tokens, fonts and base styl
 
 ```tsx
 // app/layout.tsx
+import type { Metadata } from "next";
 import { UIProvider } from "@abereghici/ui/ui-provider";
+
+export const metadata: Metadata = { other: { "text-scale": "scale" } };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -51,6 +54,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 ```
 
 Give `locale` the same value as `<html lang>`, so dates and numbers match between server and browser.
+
+The `text-scale` meta tag (`<meta name="text-scale" content="scale">` outside Next.js) lets the page follow the text size set in the operating system, in Chrome and Edge 146 and later. Components size text in `rem` and the design system never sets a root font size, so they scale with it. Don't set one yourself either.
 
 ## 3. Use a component
 

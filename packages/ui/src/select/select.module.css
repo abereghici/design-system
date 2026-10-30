@@ -98,6 +98,8 @@
       padding-block: 0;
       padding-inline: var(--ab-select-option-padding-inline);
       border-radius: var(--ab-select-option-border-radius);
+      /* The base appearance tints a hovered option on any device, so a tap would leave it tinted. */
+      background-color: transparent;
       color: var(--ab-select-option-text-color);
       font: var(--ab-select-option-font);
       letter-spacing: normal;
@@ -107,8 +109,14 @@
       outline-offset: calc(var(--ab-focus-ring-width) * -1);
     }
 
-    .item:is(:hover, :focus-visible) {
+    .item:focus-visible {
       background-color: var(--ab-select-option-background-color-hovered);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .item:hover {
+        background-color: var(--ab-select-option-background-color-hovered);
+      }
     }
 
     .item::checkmark {

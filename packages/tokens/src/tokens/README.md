@@ -32,14 +32,14 @@ The CSS declares each themed color once on `:root` with `light-dark()`. An unreg
 
 ## Value types
 
-| `$type`                                                         | Value                                                                                                                                                                     |
-| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `color`                                                         | A DTCG color object; translucent steps (`palette-*-aNN`) add `alpha`. `palette-transparent` is `alpha: 0`. CSS gets hex, or `rgba()` when translucent.                    |
-| `dimension`                                                     | `{ value, unit }` in `px` or `rem`. Three values DTCG can't express stay CSS strings: the fluid `font-size-{min}-{max}` (`clamp(… vi)`) and the `em` letter spacings.     |
-| `duration`, `cubicBezier`, `fontFamily`, `fontWeight`, `number` | DTCG values (`{ value: 70, unit: "ms" }`, `[0.23, 1, 0.32, 1]`, `["Figtree", "system-ui", "sans-serif"]`, `500`, `1.6`).                                                  |
-| `string`                                                        | CSS values DTCG has no type for: the `linear()` springs, `ease`, `linear`, `font-variant-numeric-*` and `text-transform-*`.                                               |
-| `typography`                                                    | A type style. CSS gets the `font` shorthand of `var()`s; `letterSpacing` stays its own `type-*-letter-spacing` token, because `font` can't set it.                        |
-| `shadow`                                                        | An Elevation: one layer, or a list of layers and references to `elevation-ring` / `elevation-highlight`. CSS gets a `box-shadow` list of `var()`s (always with a spread). |
+| `$type`                                                         | Value                                                                                                                                                                                |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `color`                                                         | A DTCG color object; translucent steps (`palette-*-aNN`) add `alpha`. `palette-transparent` is `alpha: 0`. CSS gets hex, or `rgba()` when translucent.                               |
+| `dimension`                                                     | `{ value, unit }` in `px` or `rem`. Values DTCG can't express stay CSS strings: the fluid `font-size-{min}-{max}` (`clamp(… vi)`), the `em` letter spacings and the `em` breakpoint. |
+| `duration`, `cubicBezier`, `fontFamily`, `fontWeight`, `number` | DTCG values (`{ value: 70, unit: "ms" }`, `[0.23, 1, 0.32, 1]`, `["Figtree", "system-ui", "sans-serif"]`, `500`, `1.6`).                                                             |
+| `string`                                                        | CSS values DTCG has no type for: the `linear()` springs, `ease`, `linear`, `font-variant-numeric-*` and `text-transform-*`.                                                          |
+| `typography`                                                    | A type style. CSS gets the `font` shorthand of `var()`s; `letterSpacing` stays its own `type-*-letter-spacing` token, because `font` can't set it.                                   |
+| `shadow`                                                        | An Elevation: one layer, or a list of layers and references to `elevation-ring` / `elevation-highlight`. CSS gets a `box-shadow` list of `var()`s (always with a spread).            |
 
 ## Extensions
 
@@ -49,7 +49,7 @@ The CSS declares each themed color once on `:root` with `light-dark()`. An unreg
   "space-section": {
     "$type": "dimension",
     "$value": "{primitive.dimension-88}",
-    "$extensions": { "com.bereghici.media": { "(width < 760px)": "{primitive.dimension-64}" } }
+    "$extensions": { "com.bereghici.media": { "(width < 47.5em)": "{primitive.dimension-64}" } }
   }
   ```
 
@@ -62,7 +62,7 @@ The build stops with a `TokenCheckError` that lists every problem when:
 1. **A tier rule is broken**: a primitive token references another token, a semantic token holds a literal or references something other than a primitive token (apart from the composite exceptions), or a component token references something other than a semantic token.
 2. **A name breaks its tier's grammar or uses a word outside the Dictionary** (`src/naming.ts`).
 3. **A themed color is missing a Theme**, or a token that isn't a themed color carries one.
-4. **A media override is malformed**: it holds a literal, points at a component token, sits on a non-semantic token, or gives per-Theme values on a token that isn't a themed color.
+4. **A media override is malformed**: it holds a literal, points at a component token, sits on a non-semantic token, gives per-Theme values on a token that isn't a themed color, or its query is in `px`, which ignores the reader's default text size (an `em` in a media query is that size).
 5. **An animated token can't be registered**: it isn't a component token, its `$type` has no `@property` syntax, it differs per Theme, or its value isn't computationally independent.
 6. **An allowed pairing is below WCAG 2.2 AA in any Theme**: text on the surfaces and backgrounds it may sit on at 4.5:1, icons and borders at 3:1, and `on-{role}` content on its `bold` fill at 4.5:1. The pairs are in `src/contrast-matrix.ts`; a pair whose token is missing, or whose color is translucent, fails too. Contrast runs only when the other checks pass.
 

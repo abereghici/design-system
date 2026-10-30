@@ -1483,7 +1483,7 @@
       "$value": "{primitive.dimension-88}",
       "$extensions": {
         "com.bereghici.media": {
-          "(width < 760px)": "{primitive.dimension-64}"
+          "(width < 47.5em)": "{primitive.dimension-64}"
         }
       }
     },
@@ -1700,7 +1700,7 @@
       "$value": "{primitive.dimension-32}",
       "$extensions": {
         "com.bereghici.media": {
-          "(width < 760px)": "{primitive.dimension-20}"
+          "(width < 47.5em)": "{primitive.dimension-20}"
         }
       }
     },

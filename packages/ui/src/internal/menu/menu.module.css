@@ -166,9 +166,16 @@
       border: var(--ab-border-width-default) solid CanvasText;
     }
 
-    .item:is(:focus-visible, :hover) {
+    .item:focus-visible {
       background-color: Highlight;
       color: HighlightText;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .item:hover {
+        background-color: Highlight;
+        color: HighlightText;
+      }
     }
 
     .item:where([aria-disabled="true"]) {
