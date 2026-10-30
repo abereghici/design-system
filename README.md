@@ -15,7 +15,7 @@
 
 ## Documentation
 
-The documentation lives in Storybook: getting started, foundations, guides and a page for every component. Run it with `pnpm --filter @abereghici/ui storybook`. Architecture decisions are recorded in [`docs/adr`](docs/adr).
+Read the documentation at **[ui.bereghici.dev](https://ui.bereghici.dev)**: getting started, foundations, guides and a page for every component. Architecture decisions are recorded in [`docs/adr`](docs/adr).
 
 ## Packages
 
@@ -26,7 +26,7 @@ The documentation lives in Storybook: getting started, foundations, guides and a
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the repository layout, development commands and how releases work.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the repository layout, development commands and how releases work. Report vulnerabilities as described in [SECURITY.md](SECURITY.md).
 
 ## License
 

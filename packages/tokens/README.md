@@ -50,6 +50,10 @@ The app must target Baseline newly available, for example with `"browserslist": 
 | `@abereghici/tokens/fonts/*`                    | The variable woff2 files and their licence texts.                                                                                                 |
 | `@abereghici/tokens/tokens.json`                | The primitive and semantic tokens as literal values, in the claude.ai Design System artifact's token shape.                                       |
 
+## Documentation
+
+The foundations (color, typography, space and shape, elevation, motion) are documented at **[ui.bereghici.dev](https://ui.bereghici.dev)**.
+
 ## Theming
 
 - **No `data-theme` means the System theme.** `:root` declares `color-scheme: light dark`, so every themed color follows the operating system's light or dark preference, live, with no JavaScript.

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a vulnerability
+    url: https://github.com/abereghici/design-system/security/advisories/new
+    about: Report security issues privately.
+  - name: Documentation
+    url: https://ui.bereghici.dev
+    about: Usage, foundations and a page for every component.

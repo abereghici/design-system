@@ -9,6 +9,10 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "!.next/dev/**", "out/**"]
     },
+    "build-storybook": {
+      "dependsOn": ["^build"],
+      "outputs": ["storybook-static/**"]
+    },
     "check-types": {
       "dependsOn": ["transit"]
     },
