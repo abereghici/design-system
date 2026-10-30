@@ -118,6 +118,7 @@ const COMPONENTS = [
   "date-field",
   "calendar",
   "stepper",
+  "splitter",
 ];
 
 const PROPERTIES = [
@@ -223,6 +224,7 @@ const MODIFIERS = new Set([
   "row",
   "sort",
   "connector",
+  "handle",
 ]);
 
 const outsideDictionary = (words: readonly string[]) =>

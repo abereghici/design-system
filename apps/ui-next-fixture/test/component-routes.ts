@@ -221,6 +221,12 @@ export const componentRoutes = [
   },
   { name: "navbar", tokens: ["navbar"], client: [], html: '<nav aria-label="Main">' },
   {
+    name: "splitter",
+    tokens: ["splitter"],
+    client: ["splitter/splitter-handle", "splitter/splitter-root"],
+    html: 'aria-valuenow="30"',
+  },
+  {
     name: "stepper",
     tokens: ["stepper", "icon"],
     client: [],
