@@ -1,0 +1,93 @@
+@layer ab.components {
+  .root {
+    --ab-icon-size: var(--ab-toggle-button-icon-size);
+    --ab-icon-stroke-width: var(--ab-stroke-width-lg);
+    --ab-icon-color: var(--ab-toggle-button-icon-color);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ab-toggle-button-gap);
+    min-block-size: var(--ab-toggle-button-md-height);
+    max-inline-size: 100%;
+    padding-block: var(--ab-space-inset-xs);
+    padding-inline: var(--ab-toggle-button-md-padding-inline);
+    border: var(--ab-toggle-button-border-width) solid var(--ab-toggle-button-border-color);
+    border-radius: var(--ab-toggle-button-border-radius);
+    background-color: var(--ab-toggle-button-background-color);
+    color: var(--ab-toggle-button-text-color);
+    font: var(--ab-toggle-button-font);
+    text-wrap: balance;
+    user-select: none;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition-property: background-color, border-color, color, scale;
+    transition-duration:
+      var(--ab-motion-duration-hover-out), var(--ab-motion-duration-hover-out),
+      var(--ab-motion-duration-hover-out), var(--ab-motion-duration-press);
+    transition-timing-function:
+      var(--ab-motion-easing-color), var(--ab-motion-easing-color), var(--ab-motion-easing-color),
+      var(--ab-motion-easing-enter);
+  }
+
+  .root:where([data-size="sm"]) {
+    min-block-size: var(--ab-toggle-button-sm-height);
+    padding-inline: var(--ab-toggle-button-sm-padding-inline);
+  }
+
+  .root:where([data-size="lg"]) {
+    min-block-size: var(--ab-toggle-button-lg-height);
+    padding-inline: var(--ab-toggle-button-lg-padding-inline);
+    font: var(--ab-toggle-button-lg-font);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .root:where(:not([aria-disabled="true"], [aria-pressed="true"])):hover {
+      background-color: var(--ab-toggle-button-background-color-hovered);
+      color: var(--ab-toggle-button-text-color-hovered);
+      transition-duration:
+        var(--ab-motion-duration-hover-in), var(--ab-motion-duration-hover-in),
+        var(--ab-motion-duration-hover-in), var(--ab-motion-duration-press);
+    }
+  }
+
+  /* The fill alone is under WCAG 1.4.11's 3:1 against the surface; the edge carries the state:
+     https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html */
+  .root:where([aria-pressed="true"]) {
+    --ab-icon-color: var(--ab-toggle-button-icon-color-selected);
+
+    border-color: var(--ab-toggle-button-border-color-selected);
+    background-color: var(--ab-toggle-button-background-color-selected);
+    color: var(--ab-toggle-button-text-color-selected);
+  }
+
+  .root:where(:not([aria-disabled="true"])):active {
+    background-color: var(--ab-toggle-button-background-color-pressed);
+    scale: var(--ab-toggle-button-scale-pressed);
+  }
+
+  .root:where([aria-disabled="true"]) {
+    --ab-icon-color: currentColor;
+
+    border-color: var(--ab-toggle-button-border-color-disabled);
+    color: var(--ab-toggle-button-text-color-disabled);
+    cursor: not-allowed;
+  }
+
+  @media (forced-colors: active) {
+    .root {
+      border-color: ButtonText;
+    }
+
+    .root:where([aria-pressed="true"]) {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .root:where([aria-disabled="true"]) {
+      border-color: GrayText;
+      color: GrayText;
+    }
+  }
+}

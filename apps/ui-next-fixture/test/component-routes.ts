@@ -175,6 +175,18 @@ export const componentRoutes = [
     html: 'href="/pagination?page=3">3</a>',
   },
   {
+    name: "toggle-button",
+    tokens: ["toggle-button"],
+    client: ["toggle-button/toggle-button"],
+    html: 'aria-pressed="true"',
+  },
+  {
+    name: "toggle-button-group",
+    tokens: ["toggle-button", "toggle-button-group"],
+    client: ["toggle-button-group/toggle-button-group", "toggle-button/toggle-button"],
+    html: 'aria-label="Text style"',
+  },
+  {
     name: "toolbar",
     tokens: ["toolbar", "icon", "icon-button", "spinner"],
     client: ["icon-button/icon-button", "toolbar/toolbar"],

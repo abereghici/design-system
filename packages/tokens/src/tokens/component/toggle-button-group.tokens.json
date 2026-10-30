@@ -1,0 +1,8 @@
+{
+  "component": {
+    "toggle-button-group-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-xs}"
+    }
+  }
+}
