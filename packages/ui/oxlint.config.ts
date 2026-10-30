@@ -48,6 +48,12 @@ export default defineConfig({
       rules: { "jsx-a11y/role-has-required-aria-props": "off" },
     },
     {
+      // A focusable separator is a widget that resizes the sections it separates, which the rule
+      // doesn't model: https://www.w3.org/TR/wai-aria-1.2/#separator
+      files: ["src/splitter/splitter-handle.tsx"],
+      rules: { "jsx-a11y/no-noninteractive-tabindex": ["error", { tags: ["hr"] }] },
+    },
+    {
       // HTML allows <option> only inside select, datalist or optgroup, and rich options in a select
       // need customizable select, which is below the Baseline floor (no Firefox).
       files: ["src/internal/listbox/listbox.tsx"],

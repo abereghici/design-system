@@ -5,7 +5,15 @@ import { definePreview } from "@storybook/react-vite";
 import { withGlobals } from "./decorators/with-globals.tsx";
 import { meaningfulControls } from "./docs/arg-types.ts";
 import { transform } from "./docs/source.ts";
-import { directions, DocsContainer, DocsPage, locales, mdx, themes } from "./globals.tsx";
+import {
+  densities,
+  directions,
+  DocsContainer,
+  DocsPage,
+  locales,
+  mdx,
+  themes,
+} from "./globals.tsx";
 import { snapshotStory } from "./test/snapshots.ts";
 
 export { partsOf } from "./docs/arg-types.ts";
@@ -69,7 +77,11 @@ export default definePreview({
       description: "Locale (lang on <html>, locale on UIProvider)",
       toolbar: { title: "Locale", icon: "globe", items: [...locales], dynamicTitle: true },
     },
+    density: {
+      description: "Density (data-density on <html>)",
+      toolbar: { title: "Density", icon: "collapse", items: [...densities], dynamicTitle: true },
+    },
   },
-  initialGlobals: { theme: "system", dir: "ltr", locale: "en-US" },
+  initialGlobals: { theme: "system", dir: "ltr", locale: "en-US", density: "comfortable" },
   decorators: [withGlobals],
 });

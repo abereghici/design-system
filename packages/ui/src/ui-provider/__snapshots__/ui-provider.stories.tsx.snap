@@ -3,3 +3,18 @@
 exports[`Default   > base story 1`] = `
 - button "Save changes"
 `;
+
+exports[`Density 1`] = `
+- text: Compact
+- textbox "Compact"
+- button "Search"
+- button "Apply"
+- text: Comfortable
+- textbox "Comfortable"
+- button "Search"
+- button "Apply"
+- text: Compact again
+- textbox "Compact again"
+- button "Search"
+- button "Apply"
+`;

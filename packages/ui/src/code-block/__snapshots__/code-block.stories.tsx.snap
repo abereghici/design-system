@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- code: "import { Button } from \\"@abereghici/ui/button\\";"
+`;
+
+exports[`Scrolling   > base story 1`] = `
+- code: "const invoice = await client.invoices.create({ customer, currency: \\"EUR\\", lines });"
+`;

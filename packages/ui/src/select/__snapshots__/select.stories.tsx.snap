@@ -13,3 +13,13 @@ exports[`Default   > base story 1`] = `
   - option "Europe"
   - option "North America"
 `;
+
+exports[`Open 1`] = `
+- text: Region
+- combobox "Region":
+  - option "Europe" [selected]
+  - option "North America"
+  - group:
+    - option "Japan"
+    - option "Singapore"
+`;

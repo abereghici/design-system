@@ -1,0 +1,9 @@
+@layer ab.components {
+  .root {
+    display: flex;
+    flex-direction: column;
+    align-items: var(--align);
+    justify-content: var(--justify);
+    gap: var(--gap);
+  }
+}

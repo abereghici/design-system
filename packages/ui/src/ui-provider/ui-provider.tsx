@@ -24,7 +24,8 @@ export interface UIProviderProps {
 /**
  * Mount it once around your app, in the root layout. It brings the styles and fonts every component
  * needs, so you import no CSS, and the language they format numbers and dates in. Interface text is
- * yours, passed to each component.
+ * yours, passed to each component. For denser screens, set `data-density="compact"` on any element
+ * to make the controls inside it compact, and `"comfortable"` to go back; the nearest one wins.
  */
 export function UIProvider({ locale, children }: UIProviderProps) {
   preload(figtreeLatin, { as: "font", type: "font/woff2" });

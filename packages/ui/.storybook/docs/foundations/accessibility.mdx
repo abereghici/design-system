@@ -2,7 +2,7 @@ import { Canvas, Meta } from "@storybook/addon-docs/blocks";
 
 import * as ButtonStories from "../../../src/button/button.stories.tsx";
 import { ContrastGrid } from "../blocks/contrast-grid.tsx";
-import { Value } from "../blocks/values.tsx";
+import { Changes, Value } from "../blocks/values.tsx";
 
 <Meta title="Foundations/Accessibility" />
 
@@ -41,6 +41,25 @@ Tab to the button to see the focus ring.
 Every foreground on every background it may sit on, in the tokens' own colors, with the measured ratio. The token build fails if any of them drops below its minimum. `border-subtle` separates content, or edges a control whose text already identifies it, where WCAG requires no boundary ([Understanding 1.4.11](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html)); `disabled` roles are exempt. Neither is shown.
 
 <ContrastGrid />
+
+## User preferences
+
+Components follow each of these with no code in the app. To check one by hand, use the Storybook toolbar, or Chrome DevTools: **Show Rendering** from the Command Menu (Command+Shift+P, or Control+Shift+P) emulates a media feature, and the device toolbar emulates a touch screen or a narrow window. The screenshot tests render the stories under each variant, and every emulated preference is checked to have reached the page before they run.
+
+| Preference             | What changes                                                                                                                                          | Check by hand                                                                                                                 | Variant                                               |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Light or dark          | Themed colors follow the operating system, unless the app sets a [Theme](?path=/docs/guides-theming--docs)                                            | **Theme** toolbar, or Rendering: `prefers-color-scheme`                                                                       | `light`, `dark`                                       |
+| More contrast          | <Changes when="(prefers-contrast: more)" /> step up one level                                                                                         | Rendering: `prefers-contrast`                                                                                                 | `contrast-more`                                       |
+| Forced colors          | Components redraw their edges in system colors                                                                                                        | Rendering: `forced-colors`                                                                                                    | `forced-colors`                                       |
+| Reduced motion         | Movement stops and fades stay; see [Motion](?path=/docs/foundations-motion--docs)                                                                     | Rendering: `prefers-reduced-motion`                                                                                           | `reduced-motion`, and the interaction tests run again |
+| Reduced transparency   | <Changes when="(prefers-reduced-transparency: reduce)" /> become solid                                                                                | Rendering: `prefers-reduced-transparency`                                                                                     | `reduced-transparency`                                |
+| Touch screen           | Controls grow (`md` from <Value of="size-control-md" /> to <Value of="size-control-md" when="(pointer: coarse)" />), and hover highlights turn off    | Device toolbar, device type Mobile                                                                                            | `touch`                                               |
+| Larger text            | Text follows the browser's font size; below <Value of="breakpoint-md" /> wide, a width that grows with it, <Changes when="(width < 47.5em)" /> shrink | Chrome **Settings**, **Appearance**, **Font size**                                                                            | `text-200`, at twice the default size                 |
+| Text spacing           | The reader's line height, letter, word and paragraph spacing replace the type styles'                                                                 | A bookmarklet or user stylesheet with the [WCAG 1.4.12](https://www.w3.org/WAI/WCAG22/Understanding/text-spacing.html) values | `text-spacing`                                        |
+| Zoom to 400%           | A 1280px window is 320 CSS pixels wide, and layouts reflow to fit                                                                                     | **Viewport** toolbar: Small mobile, or the device toolbar at 320px                                                            | `w320`                                                |
+| Right-to-left language | Layouts mirror                                                                                                                                        | **Direction** toolbar                                                                                                         | `rtl`                                                 |
+| Language and region    | Numbers, dates and the first day of the week follow the Locale                                                                                        | **Locale** toolbar                                                                                                            | None                                                  |
+| Color vision           | Nothing changes                                                                                                                                       | **Vision filter** toolbar, to see that no state relies on color alone                                                         | None                                                  |
 
 ## Testing
 

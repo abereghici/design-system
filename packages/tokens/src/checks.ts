@@ -141,6 +141,12 @@ const checkMedia = (token: TransformedToken, dictionary: Dictionary): string[] =
   return overrides.flatMap(({ query, value }) => {
     const themes = perTheme(value);
 
+    if (/\dpx\b/v.test(query)) {
+      return [
+        `${label}: the ${query} query is in px, so it ignores the reader's default text size; write it in em`,
+      ];
+    }
+
     if (themes && !isThemedColor(token)) {
       return [
         `${label}: the ${query} override has per-Theme values, but only themed colors are themed`,
@@ -169,12 +175,31 @@ const checkMedia = (token: TransformedToken, dictionary: Dictionary): string[] =
   });
 };
 
+const checkDensity = (token: TransformedToken): string[] => {
+  const step = /^size-control-compact-(?<step>\w+)$/v.exec(token.path.slice(1).join("-"))?.groups?.[
+    "step"
+  ];
+
+  if (step === undefined) return [];
+
+  const touch = `{semantic.size-control-${step}}`;
+
+  return mediaOverrides(token).some(
+    ({ query, value }) => query === "(pointer: coarse)" && value === touch,
+  )
+    ? []
+    : [
+        `--${token.name}: compact controls keep their touch size, so it needs a (pointer: coarse) override of ${touch}`,
+      ];
+};
+
 export const checkTokens = (dictionary: Dictionary): string[] => {
   const problems = dictionary.allTokens.flatMap((token) => [
     ...checkTier(token, dictionary),
     ...checkNaming(token),
     ...checkThemes(token),
     ...checkMedia(token, dictionary),
+    ...checkDensity(token),
     ...checkAnimated(token, dictionary),
   ]);
 
