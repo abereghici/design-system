@@ -56,11 +56,16 @@ afterEach(async ({ story, task }) => {
   if (!story || !variant || canvas === undefined || task.result?.state === "fail") return;
 
   // Two matching frames near the end of an eased transition aren't its end: a list still scaling
-  // in by a hair lands its lower rows a subpixel apart from run to run. Infinite ones never end.
+  // in by a hair lands its lower rows a subpixel apart from run to run. Infinite and scroll-driven
+  // animations never end.
   await Promise.allSettled(
     document
       .getAnimations()
-      .filter((animation) => animation.effect?.getComputedTiming().endTime !== Infinity)
+      .filter(
+        (animation) =>
+          animation.timeline === document.timeline &&
+          animation.effect?.getComputedTiming().endTime !== Infinity,
+      )
       .map((animation) => animation.finished),
   );
 
