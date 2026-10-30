@@ -79,7 +79,7 @@
       translate: calc(var(--sign) * (var(--travel) - var(--stretch))) 0;
     }
 
-    /* Keyboard toggles jump: the spring is for direct manipulation (brand book). */
+    /* Keyboard toggles jump: the spring is for direct manipulation (Foundations/Motion). */
     .root[data-pointer] .track::before {
       transition:
         translate var(--ab-motion-duration-spring) var(--ab-switch-easing),

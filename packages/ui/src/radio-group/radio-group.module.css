@@ -95,7 +95,7 @@
     background-color: var(--ab-color-icon-disabled);
   }
 
-  /* Arrow-key changes skip the spring (brand book, no keyboard motion). */
+  /* Arrow-key changes skip the spring (Foundations/Motion: no keyboard motion). */
   @media (prefers-reduced-motion: no-preference) {
     .root[data-pointer] .radio::before {
       transition: scale var(--ab-motion-duration-exit) var(--ab-motion-easing-exit);

@@ -12,11 +12,11 @@ export const semantic = (family, prefix = "") =>
 
 # Elevation
 
-Content in the flow of the page stays flat and separates with space, hairlines and surface steps. Only overlays are lifted.
+Content in the flow of the page stays flat and separates with space, hairlines and surface steps. Controls (Button, the fields, the Switch and Slider thumbs, the SegmentedControl indicator) and a hovered linked Card take `raised`; overlays take the rest.
 
 ## Elevations
 
-Each Elevation separates the layer from any background in both Themes, with soft shadows that read warm rather than grey.
+Each Elevation is a hairline ring, an inner highlight in the dark Theme, and soft shadows tinted with Moss (light) or Night (dark) rather than neutral grey.
 
 <TokenTable
   tokens={semantic("shadow")}

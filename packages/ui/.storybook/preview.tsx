@@ -54,7 +54,6 @@ export default definePreview({
             "Motion",
             "Iconography",
             "Accessibility",
-            "Brand",
           ],
           "Components",
         ],

@@ -53,7 +53,7 @@ A glyph from the carved icon set on the 24-unit grid, stroked in the surrounding
 _Avoid_: Glyph (as a component name), symbol, pictogram
 
 **Logo**:
-The Stâlpul cerului brand sign, rendered as a component.
+The Bereghici brand sign, rendered as a component.
 _Avoid_: Mark, brand mark
 
 **Separator**:
