@@ -17,6 +17,7 @@ const SEMANTIC = [
   /^space-(inline|inset|stack)-(2xs|xs|sm|md|lg|xl|2xl)$/v,
   /^space-section$/v,
   /^size-(icon|control)-(xs|sm|md|lg|xl)$/v,
+  /^size-control-compact-(sm|md|lg)$/v,
   /^size-target-(min|recommended)$/v,
   /^size-container-(2xs|xs|sm|md|lg)$/v,
   /^size-(toggle|indicator)$/v,

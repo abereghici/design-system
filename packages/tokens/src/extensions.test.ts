@@ -61,6 +61,32 @@ test("only themed colors take a per-Theme media override", async () => {
   );
 });
 
+test("a media query in px fails the build, because it ignores the reader's default text size", async () => {
+  const tokens = validTokens();
+
+  tokens.semantic["space-section"] = {
+    $type: "dimension",
+    $value: "{primitive.dimension-88}",
+    $extensions: media({ "(width < 760px)": "{primitive.dimension-64}" }),
+  };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-space-section: the (width < 760px) query is in px, so it ignores the reader's default text size; write it in em",
+  );
+});
+
+test("a compact control size that shrinks on touch screens fails the build", async () => {
+  const tokens = validTokens();
+
+  tokens.semantic["size-control-compact-md"] = {
+    $type: "dimension",
+    $value: "{primitive.dimension-28}",
+    $extensions: media({ "(pointer: coarse)": "{primitive.dimension-28}" }),
+  };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-size-control-compact-md: compact controls keep their touch size, so it needs a (pointer: coarse) override of {semantic.size-control-md}",
+  );
+});
+
 const animated = { "com.bereghici.animated": true };
 
 test("only component tokens can be animated", async () => {

@@ -29,6 +29,8 @@ export const directions = ["ltr", "rtl"] as const;
 
 export const locales = ["en-US", "ro-RO", "th-TH"] as const;
 
+export const densities = ["comfortable", "compact"] as const;
+
 /** The Locale global, given to UIProvider as an app passes its `<html lang>`. */
 export const localeOf = (globals: Globals) =>
   locales.find((value) => value === globals["locale"]) ?? "en-US";
@@ -37,7 +39,7 @@ const prefersDark = matchMedia("(prefers-color-scheme: dark)");
 const listeners = new Set<() => void>();
 let theme: (typeof themes)[number] = "system";
 
-/** Applies the Theme, Direction and Locale globals to `<html>`, for the canvas and every docs page. */
+/** Applies the Theme, Direction, Locale and density globals to `<html>`, for the canvas and every docs page. */
 export function applyGlobals(globals: Globals) {
   theme = themes.find((value) => value === globals["theme"]) ?? "system";
 
@@ -48,6 +50,8 @@ export function applyGlobals(globals: Globals) {
 
   root.dir = directions.find((value) => value === globals["dir"]) ?? "ltr";
   root.lang = localeOf(globals);
+  root.dataset["density"] =
+    densities.find((value) => value === globals["density"]) ?? "comfortable";
 
   for (const listener of listeners) listener();
 }

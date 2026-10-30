@@ -17,9 +17,38 @@ declare module "vitest" {
 }
 
 const variant = inject("screenshotVariant");
-const { emulatedMedia, defaultFontSize } = variant ?? {};
+const { matches = [], emulatedMedia, defaultFontSize, textSpacing } = variant ?? {};
+const px = (length: string) => Number(length.replace("px", ""));
 
 beforeAll(async () => {
+  for (const query of matches) expect(matchMedia(query).matches, query).toBe(true);
+
+  if (textSpacing === true) {
+    const sheet = new CSSStyleSheet();
+
+    // WCAG 1.4.12's minimums. Unlayered and important, as a reader's override would be, they beat
+    // every layered component rule.
+    sheet.replaceSync(`
+      * { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
+      p { margin-block-end: 2em !important; }
+    `);
+    document.adoptedStyleSheets.push(sheet);
+
+    const paragraph = document.createElement("p");
+
+    document.body.append(paragraph);
+
+    const { fontSize, lineHeight, letterSpacing, wordSpacing, marginBlockEnd } =
+      getComputedStyle(paragraph);
+
+    paragraph.remove();
+    expect(
+      [lineHeight, letterSpacing, wordSpacing, marginBlockEnd].map(
+        (length) => Math.round((px(length) / px(fontSize)) * 100) / 100,
+      ),
+    ).toEqual([1.5, 0.12, 0.16, 2]);
+  }
+
   if (emulatedMedia) {
     await cdp().send("Emulation.setEmulatedMedia", { features: emulatedMedia });
 
@@ -69,7 +98,7 @@ afterEach(async ({ story, task }) => {
       .map((animation) => animation.finished),
   );
 
-  const topLayer = document.querySelector(":modal, :popover-open") !== null;
+  const topLayer = document.querySelector(":modal, :popover-open, select:open") !== null;
   const height = document.documentElement.scrollHeight;
 
   if (!topLayer && height > innerHeight) await page.viewport(innerWidth, height);

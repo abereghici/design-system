@@ -236,6 +236,10 @@ describe("interface text and direction", () => {
     expect(button.html).toContain('<html lang="ro-RO" dir="ltr"');
   });
 
+  test("the root layout opts into the operating system's text size", () => {
+    expect(button.html).toContain('<meta name="text-scale" content="scale"/>');
+  });
+
   test("a sorted Table header renders aria-sort and its button on the server", () => {
     expect(route("table").html).toMatch(
       /<th scope="col" aria-sort="ascending" class="[^"]+"><button [^>]*type="button"/v,
