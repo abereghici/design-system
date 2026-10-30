@@ -64,7 +64,8 @@ The build stops with a `TokenCheckError` that lists every problem when:
 3. **A themed color is missing a Theme**, or a token that isn't a themed color carries one.
 4. **A media override is malformed**: it holds a literal, points at a component token, sits on a non-semantic token, gives per-Theme values on a token that isn't a themed color, or its query is in `px`, which ignores the reader's default text size (an `em` in a media query is that size).
 5. **An animated token can't be registered**: it isn't a component token, its `$type` has no `@property` syntax, it differs per Theme, or its value isn't computationally independent.
-6. **An allowed pairing is below WCAG 2.2 AA in any Theme**: text on the surfaces and backgrounds it may sit on at 4.5:1, icons and borders at 3:1, and `on-{role}` content on its `bold` fill at 4.5:1. The pairs are in `src/contrast-matrix.ts`; a pair whose token is missing, or whose color is translucent, fails too. Contrast runs only when the other checks pass.
+6. **A compact control size shrinks on touch screens**: a `size-control-compact-{step}` token has no `(pointer: coarse)` override of `size-control-{step}`.
+7. **An allowed pairing is below WCAG 2.2 AA in any Theme**: text on the surfaces and backgrounds it may sit on at 4.5:1, icons and borders at 3:1, and `on-{role}` content on its `bold` fill at 4.5:1. The pairs are in `src/contrast-matrix.ts`; a pair whose token is missing, or whose color is translucent, fails too. Contrast runs only when the other checks pass.
 
 ## `tokens.json`
 

@@ -74,6 +74,19 @@ test("a media query in px fails the build, because it ignores the reader's defau
   );
 });
 
+test("a compact control size that shrinks on touch screens fails the build", async () => {
+  const tokens = validTokens();
+
+  tokens.semantic["size-control-compact-md"] = {
+    $type: "dimension",
+    $value: "{primitive.dimension-28}",
+    $extensions: media({ "(pointer: coarse)": "{primitive.dimension-28}" }),
+  };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-size-control-compact-md: compact controls keep their touch size, so it needs a (pointer: coarse) override of {semantic.size-control-md}",
+  );
+});
+
 const animated = { "com.bereghici.animated": true };
 
 test("only component tokens can be animated", async () => {

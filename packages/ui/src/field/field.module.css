@@ -64,6 +64,13 @@
     block-size: var(--ab-field-lg-height);
   }
 
+  @container style(--ab-density: compact) {
+    .control {
+      --ab-field-height: var(--ab-size-control-compact-md);
+      --ab-field-lg-height: var(--ab-size-control-compact-lg);
+    }
+  }
+
   .control::placeholder,
   .control ::placeholder {
     color: var(--ab-field-placeholder-color);

@@ -7,7 +7,7 @@ import { UIProvider } from "@abereghici/ui/ui-provider";
 
 import { applyGlobals, localeOf } from "../globals.tsx";
 
-/** Applies the toolbar's Theme, Direction and Locale, and renders the story as an app would. */
+/** Applies the toolbar's Theme, Direction, Locale and density, and renders the story as an app would. */
 export const withGlobals: Decorator = function WithGlobals(Story, { globals }) {
   useEffect(() => {
     applyGlobals(globals);

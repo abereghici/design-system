@@ -1543,6 +1543,36 @@
         }
       }
     },
+    "size-control-compact-sm": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-24}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(pointer: coarse)": "{semantic.size-control-sm}"
+        }
+      },
+      "$description": "The sm control height in compact density. Touch screens keep the comfortable height."
+    },
+    "size-control-compact-md": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-28}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(pointer: coarse)": "{semantic.size-control-md}"
+        }
+      },
+      "$description": "The md control height in compact density. Touch screens keep the comfortable height."
+    },
+    "size-control-compact-lg": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-32}",
+      "$extensions": {
+        "com.bereghici.media": {
+          "(pointer: coarse)": "{semantic.size-control-lg}"
+        }
+      },
+      "$description": "The lg control height in compact density. Touch screens keep the comfortable height."
+    },
     "size-toggle": {
       "$type": "dimension",
       "$value": "{primitive.dimension-32}"

@@ -15,6 +15,12 @@
     isolation: isolate;
   }
 
+  @container style(--ab-density: compact) {
+    .root {
+      --ab-segmented-control-height: var(--ab-size-control-compact-md);
+    }
+  }
+
   .root::before {
     content: "";
     position: absolute;
