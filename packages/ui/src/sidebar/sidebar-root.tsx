@@ -19,6 +19,8 @@ export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelle
  * layout sizes and scrolls. Give it a name, and mark the link to the page on screen with
  * `aria-current="page"`. For a few top-level destinations, use a Navbar; for the path to this page,
  * Breadcrumbs.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root(props: RootProps) {
   return <nav {...mergeProps({ className: styles["root"] }, props)} />;

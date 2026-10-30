@@ -117,6 +117,8 @@ function useValidity(
  * after the user has interacted, in place of the description. Use it to build your own control or to
  * add a description and error to Checkbox, Switch, RadioGroup or Slider. TextField, TextArea,
  * PasswordField, NumberField and Select already contain one.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({ name, disabled = false, invalid, validate, ...props }: RootProps) {
   const ids = useId();
@@ -129,17 +131,17 @@ export function Root({ name, disabled = false, invalid, validate, ...props }: Ro
     };
   });
   const controlId = control === null || control.id === "" ? `${ids}control` : control.id;
-  const [described, describe] = useState(false);
   const { failure, sync, edit, ...server } = useValidity({ name, validate }, control);
   const shown = invalid ?? (server.serverError !== undefined || failure !== null);
   const parts = partIds(ids);
-  const describedBy = shown ? parts.errorId : described ? parts.descriptionId : undefined;
+  // Server-rendered, so the control is described before hydration; a missing description is ignored.
+  const describedBy = shown ? parts.errorId : parts.descriptionId;
   const message = server.serverError ?? failure?.message;
   const state = { controlId, ...parts, name, disabled, invalid: shown, describedBy };
   const context = { ...state, ...server, message, validity: failure?.validity, control, register };
 
   return (
-    <FieldContext value={{ ...context, describe }}>
+    <FieldContext value={context}>
       <div
         {...mergeProps(
           {

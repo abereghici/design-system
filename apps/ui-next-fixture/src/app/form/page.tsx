@@ -5,6 +5,7 @@ export default function Page() {
     <main>
       <Form aria-label="Search" action="/search">
         <input name="q" aria-label="Query" required />
+        <button>Submit</button>
       </Form>
     </main>
   );

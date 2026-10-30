@@ -132,6 +132,19 @@ Default.test(
 );
 
 Default.test(
+  "returns to its default state when its form resets",
+  { args: { name: "updates", defaultChecked: true }, decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const checkbox = canvas.getByRole("checkbox", { name: "Email me updates" });
+
+    await userEvent.click(checkbox);
+    await expect(checkbox).not.toBeChecked();
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(checkbox).toBeChecked();
+  },
+);
+
+Default.test(
   "is named by aria-label without visible text",
   { args: { children: undefined, "aria-label": "Select row" } },
   async ({ canvas }) => {

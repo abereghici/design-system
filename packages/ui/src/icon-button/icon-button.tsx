@@ -51,6 +51,8 @@ const feedback = { component: "IconButton", reason: "user" } as const;
  * (or `aria-labelledby`), since the icon says nothing to a screen reader. With `pressed` or
  * `defaultPressed` it is a toggle. A press dispatches `ab-press`, a toggle `ab-toggle`. Use a Button
  * with a visible label whenever space allows.
+ *
+ * Tier 1: works before hydration.
  */
 export function IconButton({
   size = "md",

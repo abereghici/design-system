@@ -4,9 +4,12 @@ import { FileTrigger } from "@abereghici/ui/file-trigger";
 export default function Page() {
   return (
     <main>
-      <FileTrigger accept="image/png" name="avatar">
-        <Button>Choose image</Button>
-      </FileTrigger>
+      <form>
+        <FileTrigger accept="image/png" name="avatar">
+          <Button>Choose image</Button>
+        </FileTrigger>
+        <button>Submit</button>
+      </form>
     </main>
   );
 }

@@ -17,6 +17,8 @@ export interface SkeletonProps extends ComponentProps<"span"> {
  * arrives: wrap an element to keep its size, wrap placeholder text to cover its lines, or leave it
  * empty and size it with CSS. Set `aria-busy` on the loading region, since screen readers skip the
  * Skeleton. For a wait of unknown shape use Spinner, for a measurable task Progress.
+ *
+ * Tier 1: works before hydration.
  */
 export function Skeleton({ loading = true, children, ...props }: SkeletonProps) {
   if (!loading) return children;

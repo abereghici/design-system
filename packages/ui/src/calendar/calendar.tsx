@@ -189,6 +189,8 @@ function useGrid(
 /**
  * A month grid for choosing one date while seeing the days around it. To type a known date, use
  * DateField; for a field with a calendar on demand, DatePicker.
+ *
+ * Tier 2: shows its final content before hydration and works after it.
  */
 export function Calendar({
   previousMonthLabel,

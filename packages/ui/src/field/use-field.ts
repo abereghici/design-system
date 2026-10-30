@@ -34,7 +34,6 @@ interface FieldState {
   readonly control: FormControl | null;
   /** The control's ref: the Field finds its element, id and form through it. */
   readonly register: RefCallback<FormControl>;
-  readonly describe: (described: boolean) => void;
 }
 
 export const FieldContext = createContext<FieldState | undefined>(undefined);

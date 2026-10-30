@@ -78,6 +78,8 @@ function Step({ href, label, Anchor, children }: StepProps) {
  * Links to the pages of a long, ordered list of results: Previous, a few page numbers, Next. Each
  * page is a URL, so it can be shared, bookmarked and opened in a new tab. For a short list show
  * everything; for a feed, load more on demand.
+ *
+ * Tier 1: works before hydration.
  */
 export function Pagination({
   page,

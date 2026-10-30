@@ -229,6 +229,18 @@ Default.test("submits the chosen day", async ({ canvas }) => {
   await expect(submitted.mock.calls[0]?.[0].get("due")).toBe("2025-03-20");
 });
 
+Default.test("returns to its default value when its form resets", async ({ canvas, userEvent }) => {
+  const day = canvas.getByRole("spinbutton", { name: "day" });
+
+  await userEvent.type(day, "20");
+  await expect(day).toHaveValue("20");
+  await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+  await expect(day).toHaveValue("12");
+  submitted.mockClear();
+  await userEvent.click(canvas.getByRole("button", { name: "Save" }));
+  await expect(submitted.mock.calls[0]?.[0].get("due")).toBe("2025-03-12");
+});
+
 Default.test(
   "marks a typed unavailable date invalid after leaving the field",
   {

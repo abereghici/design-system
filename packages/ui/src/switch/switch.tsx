@@ -35,6 +35,8 @@ export type SwitchProps = Omit<ComponentProps<"input">, "type" | "role" | "child
  * An on/off setting that takes effect at once, such as notifications. Its children are its label,
  * which names the setting, never the state. Every change dispatches a bubbling `ab-toggle`. Inside a
  * form that needs Save, use Checkbox.
+ *
+ * Tier 1: works before hydration.
  */
 export function Switch({
   children,

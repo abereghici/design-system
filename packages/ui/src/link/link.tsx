@@ -23,6 +23,8 @@ export type LinkProps = LinkBase & ({ href: string; asChild?: false } | { asChil
  * around it. Wrap a router link with `asChild`. To start an action, use a Button; to jump past
  * repeated navigation, a SkipLink. A link stays inline text so it can wrap, so mark an icon child
  * with `data-icon="inline-start"` or `data-icon="inline-end"` to space it from the words.
+ *
+ * Tier 1: works before hydration.
  */
 export function Link({ asChild = false, ...props }: LinkProps) {
   const Root = asChild ? Slot : "a";

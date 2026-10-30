@@ -30,6 +30,8 @@ export type TextProps = Omit<ComponentProps<"p">, "color" | "ref"> &
  * Sets a run of text in one style: body, label, data, code, overline or display, so text looks the
  * same across the product. A paragraph by default. For a section title use Heading, for a keyboard
  * key Kbd, and for a link Link.
+ *
+ * Tier 1: works before hydration.
  */
 export function Text({ variant = "body", size, color = "default", as, ...props }: TextProps) {
   const Element = (as ?? (variant === "code" ? "code" : "p")) as ElementType;

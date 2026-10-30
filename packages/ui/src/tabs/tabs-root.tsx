@@ -50,6 +50,8 @@ export type RootProps = Omit<ComponentProps<"div">, "defaultValue"> & {
  * direction), the browser's find-in-page opens the tab holding a match, and every press dispatches
  * a bubbling `ab-toggle`. For modes of the same content use SegmentedControl; to move between pages,
  * Navbar or Sidebar; for sections that open independently, Accordion.
+ *
+ * Tier 2: shows its final content before hydration and works after it.
  */
 export function Root({ value, defaultValue, onValueChange, ...props }: RootProps) {
   const id = useId();

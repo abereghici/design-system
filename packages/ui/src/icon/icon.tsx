@@ -20,6 +20,8 @@ export interface IconProps extends ComponentProps<"svg"> {
  * A glyph that takes the color of the text it sits in. Import a ready icon from
  * `@abereghici/ui/icons/<name>`, or pass your own `<path>` children for a custom one. For the brand
  * mark, use Logo.
+ *
+ * Tier 1: works before hydration.
  */
 export function Icon({ size = "md", label, ...props }: IconProps) {
   return (

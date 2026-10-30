@@ -22,6 +22,8 @@ export interface HeadingProps extends ComponentProps<"h1"> {
  * Titles a section of the page. `as` sets the level in the page outline and `size` the look, so a
  * section can sit at the right level and still look the way the design needs. For a statement that
  * isn't a section title, use Text `variant="display"`; inside a Card or Dialog, use its Title.
+ *
+ * Tier 1: works before hydration.
  */
 export function Heading({ as: Element, size = sizeOfLevel[Element], ...props }: HeadingProps) {
   return <Element {...mergeProps({ className: styles["root"] }, props)} data-size={size} />;

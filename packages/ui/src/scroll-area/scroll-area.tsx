@@ -17,6 +17,8 @@ export interface ScrollAreaProps extends ComponentProps<"div"> {
  * A box whose content scrolls inside it, with faded edges while there is more to see. Keyboard users
  * can Tab to it and scroll. Use it only for content that must stay inside a region (a wide Table, a
  * long side-panel list, a terms text); if the page can scroll instead, let it.
+ *
+ * Tier 1: works before hydration.
  */
 export function ScrollArea({ asChild = false, tabIndex = 0, ...props }: ScrollAreaProps) {
   const Root = asChild ? Slot : "div";

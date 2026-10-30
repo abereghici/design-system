@@ -67,6 +67,12 @@
     anchor-name: --ab-tabs-selected;
   }
 
+  @media (scripting: none) {
+    .trigger[aria-selected="false"] {
+      display: none;
+    }
+  }
+
   @media (hover: hover) and (pointer: fine) {
     .trigger:hover {
       color: var(--ab-tabs-item-text-color-hovered);

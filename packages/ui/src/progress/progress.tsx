@@ -29,6 +29,8 @@ export type ProgressProps = Omit<ComponentProps<"progress">, "children" | "value
  * How far a task has got, such as an upload, or that it is running when `value` is `null`. For a
  * short wait inside a control use Spinner or Button's `loading`; for a measurement that isn't
  * progress, Meter.
+ *
+ * Tier 1: works before hydration.
  */
 export function Progress({
   value = null,

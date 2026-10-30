@@ -1,14 +1,15 @@
 "use client";
 
-import { createContext, useId, useState } from "react";
+import { createContext, useId } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/fieldset.css";
 import "@abereghici/tokens/components/radio-group.css";
 
-import { dispatchFeedback, pointerMarker, requestChange } from "../events/events.ts";
+import { pointerMarker } from "../events/events.ts";
 import { followVisualDirection } from "../internal/follow-visual-direction/follow-visual-direction.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
+import { useRadioChoice } from "../internal/toggle/toggle.ts";
 import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
 
 import styles from "./radio-group.module.css";
@@ -47,6 +48,8 @@ export interface RootProps extends Omit<ComponentProps<"fieldset">, "defaultValu
  * One choice among 2–6 options that should all stay visible, under a Label. Arrow keys move and
  * choose (following the reading direction), and every change dispatches a bubbling `ab-toggle`. With
  * more options use Select; for a yes/no choice, Switch or Checkbox.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({
   value,
@@ -59,21 +62,12 @@ export function Root({
   ...props
 }: RootProps) {
   const fallbackName = useId();
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
-  const current = value === undefined ? uncontrolled : value;
-
-  function select(next: string, event: MouseEvent<HTMLInputElement>) {
-    if (next === current) return;
-
-    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) {
-      event.preventDefault();
-
-      return;
-    }
-
-    setUncontrolled(next);
-    dispatchFeedback(event.currentTarget, "ab-toggle", { component: "RadioGroup", reason: "user" });
-  }
+  const { current, select, setRoot } = useRadioChoice(
+    "RadioGroup",
+    value,
+    defaultValue,
+    onValueChange,
+  );
 
   return (
     <GroupContext
@@ -82,6 +76,7 @@ export function Root({
       <fieldset
         {...mergeProps(
           {
+            ref: setRoot,
             className: styles["root"],
             onPointerDown: pointerMarker.onPointerDown,
             onKeyDown: (event: KeyboardEvent<HTMLFieldSetElement>) => {

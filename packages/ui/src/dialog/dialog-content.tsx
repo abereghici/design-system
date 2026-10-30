@@ -37,8 +37,9 @@ export function Content({ initialFocus, ref, ...props }: ContentProps) {
 
   return (
     <dialog
-      aria-labelledby={context.titleId}
-      aria-describedby={context.descriptionId}
+      // Server-rendered, so the dialog is named and described before hydration.
+      aria-labelledby={props["aria-label"] === undefined ? `${context.id}-title` : undefined}
+      aria-describedby={`${context.id}-description`}
       {...mergeProps(
         {
           className: context.styles["content"],

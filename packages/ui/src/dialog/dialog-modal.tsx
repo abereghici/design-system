@@ -19,10 +19,6 @@ export interface RootProps<R extends Reason = Reason> {
 
 interface ModalContext extends Omit<Options, "initialFocus"> {
   readonly id: string;
-  readonly titleId: string | undefined;
-  readonly descriptionId: string | undefined;
-  readonly setTitle: (present: boolean) => void;
-  readonly setDescription: (present: boolean) => void;
   readonly defaultOpen: boolean;
   readonly styles: Readonly<Record<string, string>>;
   readonly controller: Controller;
@@ -48,16 +44,10 @@ type ModalProps = Omit<RootProps, "onOpenChange"> &
 export function Modal(props: ModalProps) {
   const { open, defaultOpen = false, styles, component, children } = props;
   const id = useId();
-  const [title, setTitle] = useState(false);
-  const [description, setDescription] = useState(false);
   const [initial] = useState(defaultOpen);
   const [controller] = useState(() => new Controller());
   const context: ModalContext = {
     id,
-    titleId: title ? `${id}-title` : undefined,
-    descriptionId: description ? `${id}-description` : undefined,
-    setTitle,
-    setDescription,
     open,
     defaultOpen: initial,
     onOpenChange: (next, details) => {

@@ -20,6 +20,12 @@
     rotate: 180deg;
   }
 
+  @media (scripting: none) {
+    .header .page {
+      display: none;
+    }
+  }
+
   .heading {
     margin: 0;
     color: var(--ab-color-text-default);

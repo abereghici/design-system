@@ -206,6 +206,18 @@ Default.test(
   },
 );
 
+Default.test(
+  "returns to its default value when its form resets",
+  { args: { defaultValue: "sg" }, decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const select = canvas.getByRole("combobox", { name: "Region" });
+
+    await userEvent.selectOptions(select, "jp");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(select).toHaveDisplayValue("Singapore");
+  },
+);
+
 function ControlledSelect(args: Select.RootProps) {
   const [value, setValue] = useState(args.value ?? "recent");
 

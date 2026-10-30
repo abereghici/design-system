@@ -120,6 +120,19 @@ Default.test(
 );
 
 Default.test(
+  "returns to its default value when its form resets",
+  { args: { defaultValue: "ana@example.com" }, decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const input = canvas.getByRole("textbox", { name: "Email" });
+
+    await userEvent.clear(input);
+    await userEvent.type(input, "bo@example.com");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(input).toHaveValue("ana@example.com");
+  },
+);
+
+Default.test(
   "shows no error before the user interacts",
   { args: { required: true, description: "Used for sign-in only." } },
   async ({ canvas }) => {

@@ -33,6 +33,8 @@ export interface RootProps extends ComponentProps<"div"> {
  * `Alert.Close` calls your `onClick`, where the app removes the Alert and moves focus to what the
  * message was about. For a brief confirmation use a Toast; for a decision that must interrupt, an
  * AlertDialog.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({ variant = "neutral", children, ...props }: RootProps) {
   const Icon = icons[variant];
