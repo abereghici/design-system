@@ -118,6 +118,8 @@ const COMPONENTS = [
   "date-field",
   "calendar",
   "description-list",
+  "stepper",
+  "splitter",
 ];
 
 const PROPERTIES = [
@@ -156,7 +158,17 @@ const PROPERTIES = [
   "color",
 ];
 
-const STATES = ["hovered", "pressed", "focused", "selected", "checked", "invalid", "disabled"];
+const STATES = [
+  "hovered",
+  "pressed",
+  "focused",
+  "selected",
+  "checked",
+  "invalid",
+  "disabled",
+  "current",
+  "complete",
+];
 
 const MODIFIERS = new Set([
   "primary",
@@ -214,6 +226,8 @@ const MODIFIERS = new Set([
   "sort",
   "term",
   "details",
+  "connector",
+  "handle",
 ]);
 
 const outsideDictionary = (words: readonly string[]) =>

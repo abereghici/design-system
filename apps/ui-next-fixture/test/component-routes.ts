@@ -225,6 +225,18 @@ export const componentRoutes = [
   },
   { name: "navbar", tokens: ["navbar"], client: [], html: '<nav aria-label="Main">' },
   { name: "page-layout", tokens: ["navbar", "sidebar"], client: [], html: "<aside" },
+  {
+    name: "splitter",
+    tokens: ["splitter"],
+    client: ["splitter/splitter-handle", "splitter/splitter-root"],
+    html: 'aria-valuenow="30"',
+  },
+  {
+    name: "stepper",
+    tokens: ["stepper", "icon"],
+    client: [],
+    html: 'aria-current="step"',
+  },
   { name: "sidebar", tokens: ["sidebar"], client: [], html: "Settings</summary>" },
   {
     name: "tooltip",
