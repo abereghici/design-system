@@ -1,0 +1,24 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Controlled   > base story 1`] = `
+- list "Filters":
+  - listitem:
+    - text: Draft
+    - button "Remove Draft"
+  - listitem:
+    - text: In review
+    - button "Remove In review"
+`;
+
+exports[`Default   > base story 1`] = `
+- list "Filters":
+  - listitem:
+    - text: Draft
+    - button "Remove Draft"
+  - listitem:
+    - text: In review
+    - button "Remove In review"
+  - listitem:
+    - text: Live
+    - button "Remove Live"
+`;

@@ -112,6 +112,7 @@ export type ToggleFeedbackEvent = CustomEvent<
     | "DropdownMenu"
     | "ContextMenu"
     | "Splitter"
+    | "Tree"
   >
 >;
 
@@ -124,6 +125,7 @@ export type DismissFeedbackEvent = CustomEvent<
     | "Popover"
     | "DropdownMenu"
     | "ContextMenu"
+    | "TagGroup"
     | "Toast"
   >
 >;

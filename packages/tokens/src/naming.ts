@@ -79,6 +79,7 @@ const COMPONENTS = [
   "button",
   "field",
   "link",
+  "tag-group",
   "tag",
   "separator",
   "icon",
@@ -124,6 +125,7 @@ const COMPONENTS = [
   "description-list",
   "stepper",
   "splitter",
+  "tree",
 ];
 
 const PROPERTIES = [
@@ -232,6 +234,7 @@ const MODIFIERS = new Set([
   "details",
   "connector",
   "handle",
+  "remove",
 ]);
 
 const outsideDictionary = (words: readonly string[]) =>

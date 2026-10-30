@@ -6,6 +6,12 @@ export const componentRoutes = [
     html: "12.345",
   },
   { name: "tag", tokens: ["tag"], client: [], html: "Live" },
+  {
+    name: "tag-group",
+    tokens: ["icon", "tag", "tag-group"],
+    client: ["tag-group/tag-group-root", "tag-group/tag-group-tag"],
+    html: 'aria-label="Remove"',
+  },
   { name: "status-dot", tokens: ["status-dot"], client: [], html: "Operational" },
   {
     name: "avatar",
@@ -332,5 +338,11 @@ export const componentRoutes = [
     tokens: ["field", "date-field", "popover", "icon", "icon-button", "spinner"],
     client: [],
     html: 'aria-haspopup="dialog"',
+  },
+  {
+    name: "tree",
+    tokens: ["icon", "spinner", "tree"],
+    client: ["tree/tree-item", "tree/tree-root"],
+    html: 'role="tree"',
   },
 ];
