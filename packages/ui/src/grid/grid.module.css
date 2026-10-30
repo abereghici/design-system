@@ -1,0 +1,7 @@
+@layer ab.components {
+  .root {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr));
+    gap: var(--gap);
+  }
+}

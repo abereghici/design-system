@@ -117,6 +117,7 @@ const COMPONENTS = [
   "table",
   "date-field",
   "calendar",
+  "description-list",
   "stepper",
   "splitter",
 ];
@@ -223,6 +224,8 @@ const MODIFIERS = new Set([
   "today",
   "row",
   "sort",
+  "term",
+  "details",
   "connector",
   "handle",
 ]);
