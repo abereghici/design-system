@@ -119,6 +119,8 @@ function Control({ startElement, incrementLabel, decrementLabel, ...options }: C
 /**
  * A number people type or step, such as a quantity or a price. For digit codes use TextField; to
  * pick by feel, Slider.
+ *
+ * Tier 2: shows its final content before hydration and works after it.
  */
 export function NumberField(props: NumberFieldProps) {
   const [wrapper, control] = splitWrapperProps(props);

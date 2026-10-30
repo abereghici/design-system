@@ -4,7 +4,7 @@
 
 ```text
 apps/
-└── ui-next-fixture/     # Next.js app built from the packed packages; checks what each route ships
+└── ui-next-fixture/     # Next.js app built from the packed packages; checks what each route ships and what works with JavaScript off
 packages/
 ├── ui/                  # @abereghici/ui: components, Storybook, tests
 ├── tokens/              # @abereghici/tokens: DTCG source, Style Dictionary build, fonts
@@ -29,7 +29,7 @@ pnpm --filter @abereghici/ui storybook  # Storybook on http://localhost:6006
 
 Storybook is deployed to Cloudflare Workers: `main` to [ui.bereghici.dev](https://ui.bereghici.dev), and every pull request from this repository to its own preview, linked from the pull request and deleted when it closes.
 
-Screenshot tests run on Linux only. `pnpm --filter @abereghici/ui test:screenshots:docker` runs them in the Playwright container image that CI uses.
+Screenshot tests run on Linux only: the stories', and each fixture route's with JavaScript off. `pnpm --filter @abereghici/ui test:screenshots:docker` runs both in the Playwright container image that CI uses.
 
 ## Releasing
 

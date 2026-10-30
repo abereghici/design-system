@@ -283,7 +283,7 @@ export const componentRoutes = [
   {
     name: "calendar",
     tokens: ["calendar", "icon", "icon-button", "spinner"],
-    client: ["calendar/calendar"],
+    client: [],
     html: 'role="grid"',
   },
   {

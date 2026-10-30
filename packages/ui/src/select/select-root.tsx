@@ -82,6 +82,8 @@ function Control({ placeholder, defaultValue, children, ...props }: ControlProps
  * autofill and phone pickers work as people expect from any select; browsers that can't style the
  * list show the system one. For a long or searchable list use Combobox; for 2–6 options that should
  * stay visible, RadioGroup.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root(props: RootProps) {
   const [wrapper, control] = splitWrapperProps(props);

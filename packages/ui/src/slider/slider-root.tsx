@@ -119,7 +119,11 @@ export function useSlider() {
   return slider;
 }
 
-/** A value or range picked by feel (volume, price). For an exact number, use NumberField. */
+/**
+ * A value or range picked by feel (volume, price). For an exact number, use NumberField.
+ *
+ * Tier 1: works before hydration.
+ */
 export function Root({
   value,
   defaultValue,

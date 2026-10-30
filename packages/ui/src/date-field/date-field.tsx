@@ -18,6 +18,8 @@ export type DateFieldProps = DateFieldOptions &
  * Types one date by keyboard, as day, month and year segments in the order of the user's language,
  * such as a birth date people know by heart. It submits with the form and validates like any input.
  * To pick from a month, use Calendar or DatePicker.
+ *
+ * Tier 2: shows its final content before hydration and works after it.
  */
 export function DateField(props: DateFieldProps) {
   return <Root {...props} />;

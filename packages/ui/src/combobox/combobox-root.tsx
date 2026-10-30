@@ -107,6 +107,8 @@ const split = ({
  * Chooses one value from a long or open-ended list by typing to narrow it. The value is always one
  * of the Items; the typed text only filters. Use Select for a short known list, RadioGroup for 2–6
  * options that should stay visible, a TextField for free text, and Command to run commands.
+ *
+ * Tier 2: shows its final content before hydration and works after it.
  */
 export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, validate, ...rest } = props;

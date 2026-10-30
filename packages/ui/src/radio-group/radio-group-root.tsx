@@ -47,6 +47,8 @@ export interface RootProps extends Omit<ComponentProps<"fieldset">, "defaultValu
  * One choice among 2–6 options that should all stay visible, under a Label. Arrow keys move and
  * choose (following the reading direction), and every change dispatches a bubbling `ab-toggle`. With
  * more options use Select; for a yes/no choice, Switch or Checkbox.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({
   value,

@@ -17,6 +17,8 @@ export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelle
  * it a name, and mark the link to the page on screen with `aria-current="page"`. For many
  * destinations in groups, use a Sidebar; for the path to this page, Breadcrumbs; for views within
  * one page, Tabs.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({ children, ...props }: RootProps) {
   return (

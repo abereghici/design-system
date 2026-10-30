@@ -71,3 +71,7 @@ _Avoid_: Per-component locale, locale object, translations, i18n bundle
 **Author-written text**:
 Every name, label and message a component shows or announces comes from the app, as children or a named prop (`aria-label`, `closeLabel`, `noOptionsText`); the library ships none. Where a part would otherwise have no accessible name, its prop type requires the text.
 _Avoid_: Built-in label, default text, i18n key
+
+**Tier**:
+What a Component does before hydration (ADR 0008). Tier 1 works from the server HTML alone, with JavaScript off too; Tier 2 shows its final content and becomes usable after hydration. A Tier 1 Component that fails before hydration has a bug; it is never moved to Tier 2.
+_Avoid_: No-JS mode, SSR support, progressive enhancement level

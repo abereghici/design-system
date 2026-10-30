@@ -15,17 +15,21 @@
     "check-types": "next typegen && tsc",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
-    "test": "vitest run",
-    "test:packed": "node scripts/test-packed.ts"
+    "test": "vitest run && playwright test --grep-invert @screenshot",
+    "test:packed": "node scripts/test-packed.ts",
+    "test:screenshots": "playwright test --grep @screenshot"
   },
   "dependencies": {
     "@abereghici/tokens": "workspace:*",
     "@abereghici/ui": "workspace:*",
     "next": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "temporal-polyfill": "catalog:"
   },
   "devDependencies": {
+    "@axe-core/playwright": "catalog:",
+    "@playwright/test": "catalog:",
     "@repo/oxlint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@total-typescript/ts-reset": "catalog:",

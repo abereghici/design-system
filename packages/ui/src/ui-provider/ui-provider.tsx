@@ -25,6 +25,8 @@ export interface UIProviderProps {
  * Mount it once around your app, in the root layout. It brings the styles and fonts every component
  * needs, so you import no CSS, and the language they format numbers and dates in. Interface text is
  * yours, passed to each component.
+ *
+ * Tier 1: works before hydration.
  */
 export function UIProvider({ locale, children }: UIProviderProps) {
   preload(figtreeLatin, { as: "font", type: "font/woff2" });

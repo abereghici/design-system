@@ -40,6 +40,8 @@ export type MeterProps = Omit<
  * A measurement within a known range: storage used, a quota, a score. With `low`, `high` and
  * `optimum` the fill turns green, amber or red, so say the same in words with `valueLabel`. For
  * progress use Progress; for a value the user sets, Slider.
+ *
+ * Tier 1: works before hydration.
  */
 export function Meter({
   value,

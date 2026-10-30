@@ -24,13 +24,14 @@ jobs:
         with:
           require-lockfile: true
           cache: true
-      - run: find packages/ui/src -name __screenshots__ -prune -exec rm -rf {} +
-      - run: pnpm turbo run test:screenshots --filter=@abereghici/ui -- --update
+      - run: find packages/ui/src apps/ui-next-fixture/test -name __screenshots__ -prune -exec rm -rf {} +
+      # Vitest and Playwright both read -u as "update the baselines".
+      - run: pnpm turbo run test:screenshots --filter=@abereghici/ui --filter=@repo/ui-next-fixture -- -u
       - run: |
           # The container's user doesn't own the checkout, so git refuses it: https://github.com/actions/checkout/issues/760
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add --all ':(glob)packages/ui/src/**/__screenshots__/**'
-          git diff --cached --quiet || git commit -m "test(ui): update story screenshot baselines" -m "Co-authored-by: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>"
+          git add --all ':(glob)packages/ui/src/**/__screenshots__/**' ':(glob)apps/ui-next-fixture/test/__screenshots__/**'
+          git diff --cached --quiet || git commit -m "test: update screenshot baselines" -m "Co-authored-by: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>"
           git push origin "HEAD:${{ github.ref_name }}"

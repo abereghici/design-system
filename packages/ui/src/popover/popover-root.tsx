@@ -39,6 +39,8 @@ export interface RootProps extends OverlayOptions<ChangeReason> {
  * A panel of interactive content (filters, a short form) next to the control that opens it, while
  * the page stays usable. A press outside, Escape or Close dismisses it. For a list of actions use
  * DropdownMenu, for a one-line hint Tooltip, for a blocking task Dialog.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({ children, ...options }: RootProps) {
   return <PopoverContext value={useOverlay("Popover", options)}>{children}</PopoverContext>;

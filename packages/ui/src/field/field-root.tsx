@@ -117,6 +117,8 @@ function useValidity(
  * after the user has interacted, in place of the description. Use it to build your own control or to
  * add a description and error to Checkbox, Switch, RadioGroup or Slider. TextField, TextArea,
  * PasswordField, NumberField and Select already contain one.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({ name, disabled = false, invalid, validate, ...props }: RootProps) {
   const ids = useId();

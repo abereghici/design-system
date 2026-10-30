@@ -55,6 +55,8 @@ function Control({ minRows = 3, maxRows = 12, readOnly, ...props }: ControlProps
 /**
  * Text that may run over several lines, such as a comment. It grows with its content, then scrolls.
  * Use TextField for a single line.
+ *
+ * Tier 1: works before hydration.
  */
 export function TextArea(props: TextAreaProps) {
   const [wrapper, control] = splitWrapperProps(props);

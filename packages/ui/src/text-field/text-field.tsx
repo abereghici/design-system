@@ -29,6 +29,8 @@ export type TextFieldProps = Naming &
  * One line of text, with a visible label, an optional description and an error that appears only
  * after the user has interacted. Use TextArea for more than one line, PasswordField for secrets,
  * NumberField for numbers and Select to choose from a short known list.
+ *
+ * Tier 1: works before hydration.
  */
 export function TextField({ startElement, endElement, ...props }: TextFieldProps) {
   const [wrapper, control] = splitWrapperProps(props);

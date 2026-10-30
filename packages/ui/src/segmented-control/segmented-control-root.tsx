@@ -35,6 +35,8 @@ export type RootProps = Omit<ComponentProps<"fieldset">, "defaultValue"> & {
  * with `aria-label`. Arrow keys move and choose (following the reading direction), and every change
  * dispatches a bubbling `ab-toggle`. For sections with their own content use Tabs; for a choice in a
  * form, RadioGroup.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({ value, defaultValue, onValueChange, ...props }: RootProps) {
   const name = useId();

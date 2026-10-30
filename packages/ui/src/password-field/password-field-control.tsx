@@ -8,12 +8,11 @@ import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useEvent } from "../events/use-event.ts";
 import { useField } from "../field/use-field.ts";
 import type { FormControl } from "../field/use-field.ts";
-import { IconButton } from "../icon-button/icon-button.tsx";
-import { EyeOffIcon } from "../icon/icons/eye-off.tsx";
-import { EyeIcon } from "../icon/icons/eye.tsx";
 import { InputGroup } from "../text-field/text-field-input-group.tsx";
 import { Input as TextInput } from "../text-field/text-field-input.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
+
+import { Toggle } from "./password-field-toggle.tsx";
 
 /** `cancel()`: keeps the current visibility. */
 export type PasswordFieldVisibleChangeEventDetails = Details<"toggle-press" | "form-submit">;
@@ -92,8 +91,7 @@ export function Control({
   const [visible, change] = useVisibility(input, controlled, defaultVisible, onVisibleChange);
 
   const toggle = (
-    <IconButton
-      size="sm"
+    <Toggle
       aria-label={toggleLabel}
       aria-controls={field?.controlId}
       pressed={visible}
@@ -104,9 +102,7 @@ export function Control({
       onClick={(event) => {
         if (event.detail > 0) input?.focus();
       }}
-    >
-      {visible ? <EyeIcon size="sm" /> : <EyeOffIcon size="sm" />}
-    </IconButton>
+    />
   );
 
   return (

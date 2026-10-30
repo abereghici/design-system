@@ -45,6 +45,8 @@ export interface ButtonProps extends Omit<ComponentProps<"button">, "onClick"> {
  * Starts an action, such as saving or opening a dialog. It never submits a form unless you pass
  * `type="submit"`, and every press dispatches a bubbling `ab-press` event after `onClick`. For an
  * icon-only action, use IconButton; to go to another page, use Link.
+ *
+ * Tier 1: works before hydration.
  */
 export function Button({
   variant = "secondary",

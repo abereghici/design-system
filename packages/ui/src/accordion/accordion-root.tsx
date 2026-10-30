@@ -44,6 +44,8 @@ export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
  * and Space toggle a section, the browser's find-in-page opens one with a match, and every press
  * dispatches a bubbling `ab-toggle`. Never hide a primary task inside one; for peer views of the
  * same place, use Tabs.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({
   multiple = false,

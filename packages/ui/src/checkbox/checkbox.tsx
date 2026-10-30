@@ -37,6 +37,8 @@ export type CheckboxProps = Omit<ComponentProps<"input">, "type" | "children"> &
  * An on/off choice in a form that is submitted, or one item of a set where any number may be
  * chosen. Its children are its label. Every change dispatches a bubbling `ab-toggle`. For a setting
  * that applies at once, use Switch; for one choice among several, RadioGroup.
+ *
+ * Tier 1: works before hydration.
  */
 export function Checkbox({
   children,

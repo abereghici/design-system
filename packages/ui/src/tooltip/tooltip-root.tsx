@@ -107,6 +107,8 @@ export interface RootProps {
  * A short label for an icon-only control, often with its shortcut, shown on hover after a short
  * delay and at once on keyboard focus. Screen readers hear it as the control's description. Touch
  * never opens it, so never put essential or interactive content in it; for that, use a Popover.
+ *
+ * Tier 2: shows its final content before hydration and works after it.
  */
 export function Root({
   open,
