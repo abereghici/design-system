@@ -13,4 +13,12 @@ export default defineConfig({
       { allow: ["**/*.css", "@total-typescript/ts-reset/dom"] },
     ],
   },
+  overrides: [
+    {
+      // One entry per Component route: the table grows with the library, and splitting it would
+      // scatter one list across files.
+      files: ["test/component-routes.ts"],
+      rules: { "max-lines": "off" },
+    },
+  ],
 });
