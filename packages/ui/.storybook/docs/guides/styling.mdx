@@ -1,37 +1,57 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
-<Meta title="Guides/Styling and overrides" />
+<Meta title="Guides/Styling" />
 
-# Styling and overrides
+# Styling
 
-## Your CSS always wins
+Restyle with tokens first and CSS second. Your CSS always wins over the design system, without `!important`.
 
-The design system puts all of its CSS in cascade layers, in this order:
+## Choose the right tool
+
+| You want to…                                | Do this                                                    |
+| ------------------------------------------- | ---------------------------------------------------------- |
+| Change one component everywhere             | Set its component tokens on `:root`                        |
+| Change one component in one region          | Set its component tokens on that region                    |
+| Change one instance                         | Pass a `className`; every component merges it with its own |
+| Style your own elements                     | Use semantic tokens, never primitives                      |
+| Change a base style, such as the focus ring | Write unlayered CSS                                        |
+
+To find a component's tokens, filter the [token explorer](?path=/docs/reference-tokens--docs) by component.
+
+## Component tokens
+
+```css
+:root {
+  --ab-button-primary-background-color: var(--ab-color-background-success-bold);
+}
+```
+
+A few component tokens drive animations and are registered with `@property` without inheritance. Set those on the component's own element, not on an ancestor.
+
+## Your own elements
+
+```css
+.callout {
+  padding: var(--ab-space-inset-md);
+  border-radius: var(--ab-radius-lg);
+  background: var(--ab-color-surface-raised);
+  color: var(--ab-color-text-default);
+  font: var(--ab-type-body-md);
+  letter-spacing: var(--ab-type-body-md-letter-spacing);
+}
+```
+
+The `font` shorthand can't carry letter spacing, so a type role is always two declarations.
+
+## Why your CSS wins
+
+The design system puts all of its CSS in cascade layers:
 
 ```css
 @layer ab.reset, ab.tokens, ab.base, ab.components;
 ```
 
-CSS outside any layer beats every layer, whatever its specificity or order. So an app's own unlayered CSS always wins over the design system, with no `!important` and no specificity games.
-
-## Restyle with tokens first
-
-- **One component everywhere:** set its component tokens, on `:root` or on a region. They are the supported surface for restyling.
-
-  ```css
-  :root {
-    --ab-button-primary-background-color: var(--ab-color-background-success-bold);
-  }
-  ```
-
-- **One instance:** pass a `className`. Every component merges it with its own.
-- **Your own elements:** use semantic tokens (`--ab-color-text-subtle`, `--ab-space-inset-md`, `font: var(--ab-type-body-md)`), never primitives.
-
-Some component tokens are animated and registered with `@property` without inheritance. Set those on the component's own element, not on an ancestor.
-
-## The base stylesheet
-
-`UIProvider` brings a small stylesheet that makes plain HTML look right from the start: a reset, body text in the `type-body-md` role, the focus ring, the selection color, transitions to and from `auto` sizes, a stable scrollbar gutter, and balanced headings and pretty paragraphs. It sits in `ab.reset` and `ab.base`, so components and your CSS override it.
+CSS outside any layer beats every layer, whatever its specificity or order.
 
 ```css
 /* Unlayered, so it wins over ab.base. */
@@ -39,3 +59,7 @@ Some component tokens are animated and registered with `@property` without inher
   outline-color: var(--ab-color-border-accent);
 }
 ```
+
+## Base styles
+
+`UIProvider` brings a small base stylesheet in `ab.reset` and `ab.base`: a reset, body text in the `body-md` role, the focus ring, selection color, a stable scrollbar gutter, and balanced headings. Components and your CSS override it.

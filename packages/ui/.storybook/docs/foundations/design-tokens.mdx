@@ -1,0 +1,41 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Foundations/Design tokens" />
+
+# Design tokens
+
+Every visual decision is a CSS custom property named `--ab-*`. Use the token that names your intent, and the value follows the Theme and the user's settings.
+
+## Tiers
+
+| Tier      | Names                       | Example                                | Use it in                              |
+| --------- | --------------------------- | -------------------------------------- | -------------------------------------- |
+| Semantic  | What it is for              | `--ab-color-text-subtle`               | App code                               |
+| Component | One decision of a component | `--ab-button-primary-background-color` | Restyling that component               |
+| Primitive | The raw value               | `--ab-palette-sage-700`                | Nothing; semantic tokens point at them |
+
+Each tier points only at the tier below it, so changing a primitive reaches every intent and component built on it.
+
+## Reading a name
+
+Semantic names read from general to specific, and leave out the default:
+
+| Family | Pattern                                      | Example                                |
+| ------ | -------------------------------------------- | -------------------------------------- |
+| Color  | `color-{property}-{role}-{emphasis}-{state}` | `color-background-danger-bold-hovered` |
+| Type   | `type-{role}-{size}`                         | `type-body-md`                         |
+| Space  | `space-{direction}-{size}`                   | `space-inset-md`                       |
+| Size   | `size-{element}-{size}`                      | `size-control-sm`                      |
+| Motion | `motion-{property}-{use}`                    | `motion-duration-exit`                 |
+
+| Segment  | Words                                                                                            |
+| -------- | ------------------------------------------------------------------------------------------------ |
+| Property | `surface`, `background`, `text`, `icon`, `border`                                                |
+| Role     | neutral (left out), `accent`, `selected`, `success`, `warning`, `danger`, `highlight`, `inverse` |
+| Emphasis | `subtlest`, `subtle`, default (left out), `bold`, and `on-{role}` for content on a bold fill     |
+| State    | rest (left out), `hovered`, `pressed`, `focused`, `selected`, `checked`, `invalid`, `disabled`   |
+| Size     | `2xs` to `2xl`, always ascending                                                                 |
+
+## Browse them
+
+The [token explorer](?path=/docs/reference-tokens--docs) lists every token with its value in each Theme. Select one to see what it points at, when it changes and what uses it.

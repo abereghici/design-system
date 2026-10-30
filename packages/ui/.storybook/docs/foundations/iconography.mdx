@@ -1,22 +1,12 @@
-import { IconGallery, IconItem, Meta } from "@storybook/addon-docs/blocks";
+import { Meta } from "@storybook/addon-docs/blocks";
+
+import { Do, Dont, Guidance } from "../blocks/specimens.tsx";
 
 <Meta title="Foundations/Iconography" />
 
-export const icons = Object.entries(
-  import.meta.glob("../../../src/icon/icons/*.tsx", { eager: true }),
-).map(([path, module]) => {
-  const name = path.split("/").at(-1).replace(".tsx", "");
-  const Glyph = Object.values(module)[0];
-  return (
-    <IconItem key={name} name={name}>
-      <Glyph size="lg" />
-    </IconItem>
-  );
-});
-
 # Iconography
 
-A custom set on a 24-unit grid: straight strokes only, with no curves or circles, and square ends, stroked in `currentColor` so an icon takes the color of the text it sits in.
+A custom set on a 24-unit grid, drawn with straight strokes and square ends. Icons take the color of the text they sit in.
 
 ```tsx
 import { BellIcon } from "@abereghici/ui/icons/bell";
@@ -24,8 +14,48 @@ import { BellIcon } from "@abereghici/ui/icons/bell";
 <BellIcon size="md" />;
 ```
 
-- **Size and stroke go together,** so lines look equally heavy at every size; match the size to the text beside the icon.
-- **An icon is decorative by default** and hidden from assistive technology. Name it only when it stands alone and carries meaning (`label`), and prefer a visible text label.
-- **Icon-only controls** need a name and a large enough target; use IconButton, which handles both.
+Browse and copy imports in the [icon explorer](?path=/docs/reference-icons--docs).
 
-<IconGallery>{icons}</IconGallery>
+## Sizes
+
+| Size | Pixels |
+| ---- | ------ |
+| `sm` | 16px   |
+| `md` | 20px   |
+| `lg` | 24px   |
+| `xl` | 32px   |
+
+Match the size to the text beside it; `md` is the default. The stroke changes with the size, so lines look equally heavy at every size.
+
+## Meaning
+
+- **Decorative by default.** An icon beside text is hidden from assistive technology.
+- **Give it a `label`** only when it stands alone and carries meaning.
+- **Icon-only buttons:** use `IconButton`, which requires a name and has a large enough target.
+
+<Guidance>
+<Do>
+
+- Pair icons with a visible text label wherever there is room.
+- Keep an icon's meaning the same everywhere it appears.
+
+</Do>
+<Dont>
+
+- Use an icon on its own for an action people need to understand at a glance.
+- Recolor parts of an icon; set `color` on the icon or its parent.
+
+</Dont>
+</Guidance>
+
+## Custom icons
+
+Pass your own paths to `Icon` to match the set: a 24 × 24 viewBox, straight lines, no curves or circles, square ends.
+
+```tsx
+import { Icon } from "@abereghici/ui/icon";
+
+<Icon>
+  <path d="M4 12h16" />
+</Icon>;
+```

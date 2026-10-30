@@ -16,8 +16,10 @@ import type { DocsContainerProps } from "@storybook/addon-docs/blocks";
 import type { Globals } from "storybook/internal/types";
 
 import { Heading } from "@abereghici/ui/heading";
+import { Table } from "@abereghici/ui/table";
 
 import { themes as storybookThemes } from "./theme.ts";
+import styles from "./docs/mdx.module.css";
 
 export const themes = ["system", "light", "dark"] as const;
 
@@ -67,22 +69,39 @@ function subscribe(listener: () => void) {
 
 const scheme = () => (theme === "system" ? (prefersDark.matches ? "dark" : "light") : theme);
 
+/** The Theme the docs pages show, resolving System to the operating system's preference. */
+export const useScheme = () => useSyncExternalStore(subscribe, scheme);
+
 export function DocsContainer(props: DocsContainerProps) {
-  return (
-    <BaseDocsContainer
-      {...props}
-      theme={storybookThemes[useSyncExternalStore(subscribe, scheme)]}
-    />
-  );
+  return <BaseDocsContainer {...props} theme={storybookThemes[useScheme()]} />;
 }
 
 const heading = (as: "h1" | "h2" | "h3") =>
   function DocsHeading({ className, ...props }: ComponentProps<"h1">) {
-    return <Heading {...props} as={as} className={`sb-unstyled ${className ?? ""}`} />;
+    return (
+      <Heading {...props} as={as} className={`sb-unstyled ${styles[as]} ${className ?? ""}`} />
+    );
   };
 
-/** MDX headings in the serif heading type; `sb-unstyled` keeps the Storybook prose CSS off them. */
-export const mdx = { components: { h1: heading("h1"), h2: heading("h2"), h3: heading("h3") } };
+/**
+ * MDX headings in the serif heading type and Markdown tables as the Table component; `sb-unstyled`
+ * keeps the Storybook prose CSS off them.
+ */
+export const mdx = {
+  components: {
+    h1: heading("h1"),
+    h2: heading("h2"),
+    h3: heading("h3"),
+    table: ({ className, ...props }: ComponentProps<"table">) => (
+      <Table.Root {...props} className={`sb-unstyled ${styles["table"]} ${className ?? ""}`} />
+    ),
+    thead: Table.Header,
+    tbody: Table.Body,
+    tr: Table.Row,
+    th: Table.ColumnHeader,
+    td: Table.Cell,
+  },
+};
 
 /**
  * Storybook's default page, except that Stories leaves out the primary story: the default counts

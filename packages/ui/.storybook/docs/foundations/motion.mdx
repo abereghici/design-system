@@ -1,54 +1,52 @@
 import { Meta } from "@storybook/addon-docs/blocks";
-import primitive from "@abereghici/tokens/source/primitive.tokens.json";
-import semantic from "@abereghici/tokens/source/semantic.tokens.json";
 
-import { TokenTable } from "../blocks/token-table.tsx";
+import { Do, Dont, Guidance } from "../blocks/specimens.tsx";
 
 <Meta title="Foundations/Motion" />
 
-export const literal = (reference) => {
-  const value = primitive.primitive[reference.slice("{primitive.".length, -1)].$value;
-  if (Array.isArray(value)) return `cubic-bezier(${value.join(", ")})`;
-  return typeof value === "object" ? `${value.value}${value.unit}` : value;
-};
-
-export const motion = (property) =>
-  Object.entries(semantic.semantic)
-    .filter(([name]) => name.startsWith(`motion-${property}`))
-    .map(([name, token]) => {
-      const reduced =
-        token.$extensions?.["com.bereghici.media"]?.["(prefers-reduced-motion: reduce)"];
-      return {
-        name: `ab-${name}`,
-        value: literal(token.$value),
-        usage: reduced === undefined ? "" : `${literal(reduced)} under reduced motion`,
-      };
-    });
-
 # Motion
 
-Motion is fast, eased out, interruptible and optional. It confirms what the user did and shows where things come from; it never decorates.
+Fast, eased out, interruptible and optional. Motion confirms what the user did and shows where things come from; it never decorates.
 
-- **Ease out to enter and exit,** never ease in. Exits are faster than entrances.
-- **Let motion reverse** from where it is when it is triggered again before it ends.
-- **Don't animate keyboard-initiated or very frequent actions** (more than about 100 a day).
-- **Grow from the trigger,** never from nothing. Modals stay centred.
-- **Springs only for a pointer-chosen selection settling into place** (the Switch thumb, the Radio dot, the Tabs and SegmentedControl indicators) **and a Toast arriving.** Everything else eases out.
+## Choosing a duration and easing
+
+| Moment                       | Duration                            | Easing                 |
+| ---------------------------- | ----------------------------------- | ---------------------- |
+| Press feedback               | `motion-duration-press`, 100ms      | `motion-easing-enter`  |
+| Hover color                  | `hover-in` 120ms, `hover-out` 250ms | `motion-easing-color`  |
+| Checkbox, radio or switch    | `motion-duration-toggle`, 180ms     | `motion-easing-enter`  |
+| Menu or popover opens        | `motion-duration-popover`, 200ms    | `motion-easing-enter`  |
+| Panel expands                | `motion-duration-expand`, 250ms     | `motion-easing-move`   |
+| Dialog opens                 | `motion-duration-modal`, 250ms      | `motion-easing-enter`  |
+| Sheet slides in              | `motion-duration-drawer`, 300ms     | `motion-easing-drawer` |
+| Selection settles into place | `motion-duration-spring`, 400ms     | `motion-easing-spring` |
+| Anything leaves              | `motion-duration-exit`, 150ms       | `motion-easing-exit`   |
+
+Every duration and easing, with what it is for, is in the [token explorer](?path=/docs/reference-tokens--docs) under Motion.
+
+## Rules
+
+- **Ease out** to enter and to leave; exits are faster than entrances.
+- **Grow from the trigger,** never from nothing. Dialogs stay centred.
+- **Reverse from where it is** when triggered again mid-way.
+- **Springs only** for a selection settling into place (switch thumb, radio dot, tab and segmented-control indicators) and a toast arriving.
 
 ## Reduced motion
 
-Under `prefers-reduced-motion: reduce` the tokens remove movement: every scale, distance and blur becomes neutral and stagger becomes 0, while opacity and color fades stay. Components read the tokens, so apps get this with no code. Anything an app animates itself should use the same tokens, or check the media query.
+With reduced motion on, the tokens remove movement: scales, distances and blurs become neutral and stagger becomes 0, while fades and color changes stay. Components read the tokens, so apps get this with no code.
 
-## Durations and delays
+<Guidance>
+<Do>
 
-The toast durations are how long a toast stays, not an animation.
+- Use the motion tokens for anything you animate, so reduced motion applies to it too.
+- Keep loading indicators as the only things that loop.
 
-<TokenTable tokens={[...motion("duration"), ...motion("delay")]} />
+</Do>
+<Dont>
 
-## Easings
+- Animate keyboard-initiated or very frequent actions.
+- Use ease-in; it feels slow to start.
+- Hard-code durations.
 
-<TokenTable tokens={motion("easing")} />
-
-## Scale, distance and blur
-
-<TokenTable tokens={[...motion("scale"), ...motion("distance"), ...motion("blur")]} />
+</Dont>
+</Guidance>

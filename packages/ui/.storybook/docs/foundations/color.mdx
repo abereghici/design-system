@@ -1,21 +1,9 @@
 import { ColorItem, ColorPalette, Meta } from "@storybook/addon-docs/blocks";
 import tokens from "@abereghici/tokens/tokens.json";
 
-<Meta title="Foundations/Color" />
+import { Do, Dont, Guidance, Surfaces } from "../blocks/specimens.tsx";
 
-export const roles = (prefix) =>
-  tokens.color.tokens
-    .filter(({ name }) => name.startsWith(`ab-color-${prefix}`))
-    .map(({ name, value, usage }) => (
-      <ColorItem
-        key={name}
-        title={`--${name}`}
-        subtitle={usage}
-        colors={
-          typeof value === "string" ? { Fixed: value } : { Light: value.light, Dark: value.dark }
-        }
-      />
-    ));
+<Meta title="Foundations/Color" />
 
 export const palettes = Object.entries(
   Object.groupBy(
@@ -33,47 +21,68 @@ export const palettes = Object.entries(
 
 # Color
 
-The palette is Moss and Lichen. Surfaces stay neutral, and color marks an action, a state or the one highlight on a page. The light and dark Themes are designed separately; neither is an inversion of the other. Every swatch below shows both Themes, whatever Theme this page uses.
+Surfaces stay neutral. Color marks an action, a state, or the one highlight on a page. Light and dark are designed separately, not inverted.
 
-Use the semantic tokens. Each one names the CSS property it is for (`surface`, `background`, `text`, `icon`, `border`), so a text color is never used as a fill.
+## Surfaces
 
-## Surface
+Pages are built from four surfaces, each sitting on the one before it. Overlays also cast a shadow.
 
-<ColorPalette>
-  {roles("surface")}
-  {roles("backdrop")}
-</ColorPalette>
+<Surfaces />
 
-## Background
+| Surface   | Use for                                        |
+| --------- | ---------------------------------------------- |
+| `default` | The page                                       |
+| `raised`  | A panel on the page, such as a sidebar or card |
+| `nested`  | A panel inside a raised panel                  |
+| `overlay` | Menus, popovers and dialogs                    |
 
-<ColorPalette>{roles("background")}</ColorPalette>
+## Roles
 
-## Text
+Pick the token by the property you are setting (`background`, `text`, `icon`, `border`), then the role.
 
-<ColorPalette>{roles("text")}</ColorPalette>
+| Role        | Use for                                     | Example tokens                                  |
+| ----------- | ------------------------------------------- | ----------------------------------------------- |
+| Neutral     | Most text, icons and borders                | `text-default`, `text-subtle`, `border-default` |
+| `accent`    | The primary action, links, checked controls | `background-accent-bold`, `text-accent`         |
+| `selected`  | The current item in a set                   | `background-selected`, `text-selected`          |
+| `success`   | Completed, valid, positive                  | `background-success-subtle`, `text-success`     |
+| `warning`   | Needs attention, may cause problems         | `background-warning-subtle`, `text-warning`     |
+| `danger`    | Errors, destructive actions                 | `background-danger-bold`, `border-danger`       |
+| `highlight` | The one marked phrase on a page             | `background-highlight`, `text-on-highlight`     |
 
-## Icon
+## Pairing text with fills
 
-<ColorPalette>{roles("icon")}</ColorPalette>
+| On this fill                                                     | Use                                                                    |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Any surface, `background-selected` or `background-accent-subtle` | Any text, icon or border role, except `*-disabled` and `border-subtle` |
+| `background-{success, warning, danger}-subtle`                   | `text-default`, `text-subtle` or that role's text                      |
+| `background-{accent, success, warning, danger}-bold`             | `text-on-{role}`                                                       |
+| `background-highlight`                                           | `text-on-highlight`                                                    |
+| `background-neutral-bold`                                        | `text-inverse`                                                         |
 
-## Border
+The token build fails if any of these pairs drops below WCAG AA in either Theme. [Accessibility](?path=/docs/foundations-accessibility--docs) lists the measured contrast.
 
-<ColorPalette>{roles("border")}</ColorPalette>
+<Guidance>
+<Do>
 
-## Material
+- Keep to one primary button per view.
+- Pair a status color with a label or an icon.
+- Use `border-default` for any edge a control needs to be seen.
 
-Translucent fills for overlay chrome, always paired with `--ab-material-blur-*` (see [Elevation](?path=/docs/foundations-elevation--docs)).
+</Do>
+<Dont>
 
-<ColorPalette>{roles("material")}</ColorPalette>
+- Use a palette step (`--ab-palette-*`) in product code.
+- Use a text token as a fill, or a fill as text.
+- Use brand colors (`color-brand-*`) for interface roles; they are for the Logo, imagery and print.
 
-## Brand
-
-Identity hues, fixed in both Themes. They are for the Logo, imagery and print, never for an interface role.
-
-<ColorPalette>{roles("brand")}</ColorPalette>
+</Dont>
+</Guidance>
 
 ## Palettes
 
-The primitives behind the roles. Sage and Night are the light and dark neutrals, Moss and Lichen the accents, Fern success, Ember highlight and warning, Clay danger. Product code never uses a palette step directly.
+The primitives behind the roles: Sage and Night are the light and dark neutrals, Moss and Lichen the accents, Fern success, Ember highlight and warning, Clay danger.
 
 <ColorPalette>{palettes}</ColorPalette>
+
+All color tokens, with their values in each Theme, are in the [token explorer](?path=/docs/reference-tokens--docs).
