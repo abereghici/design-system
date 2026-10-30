@@ -18,6 +18,7 @@ export const componentRoutes = [
   { name: "inline", tokens: [], client: [], html: 'style="--gap:var(--ab-space-inline-md)' },
   { name: "grid", tokens: [], client: [], html: "--min:var(--ab-size-container-xs)" },
   { name: "separator", tokens: ["separator"], client: [], html: "<hr" },
+  { name: "description-list", tokens: ["description-list"], client: [], html: "<dt class=" },
   {
     name: "alert",
     tokens: ["alert", "icon", "icon-button"],
