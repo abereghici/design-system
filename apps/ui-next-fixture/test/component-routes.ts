@@ -14,7 +14,11 @@ export const componentRoutes = [
     html: 'alt="Ana Popescu"',
   },
   { name: "card", tokens: ["card"], client: [], html: "<h1" },
+  { name: "stack", tokens: [], client: [], html: 'style="--gap:var(--ab-space-stack-lg)' },
+  { name: "inline", tokens: [], client: [], html: 'style="--gap:var(--ab-space-inline-md)' },
+  { name: "grid", tokens: [], client: [], html: "--min:var(--ab-size-container-xs)" },
   { name: "separator", tokens: ["separator"], client: [], html: "<hr" },
+  { name: "description-list", tokens: ["description-list"], client: [], html: "<dt class=" },
   {
     name: "alert",
     tokens: ["alert", "icon", "icon-button"],
@@ -220,6 +224,7 @@ export const componentRoutes = [
     html: 'data-side="end"',
   },
   { name: "navbar", tokens: ["navbar"], client: [], html: '<nav aria-label="Main">' },
+  { name: "page-layout", tokens: ["navbar", "sidebar"], client: [], html: "<aside" },
   { name: "sidebar", tokens: ["sidebar"], client: [], html: "Settings</summary>" },
   {
     name: "tooltip",

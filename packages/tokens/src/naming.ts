@@ -117,6 +117,7 @@ const COMPONENTS = [
   "table",
   "date-field",
   "calendar",
+  "description-list",
 ];
 
 const PROPERTIES = [
@@ -211,6 +212,8 @@ const MODIFIERS = new Set([
   "today",
   "row",
   "sort",
+  "term",
+  "details",
 ]);
 
 const outsideDictionary = (words: readonly string[]) =>
