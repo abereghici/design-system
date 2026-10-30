@@ -1,6 +1,39 @@
+<p align="center">
+  <img src="https://cdn.jsdelivr.net/gh/abereghici/design-system@main/.github/assets/tokens.svg" alt="" width="100%">
+</p>
+
 # @abereghici/tokens
 
+[![npm](https://img.shields.io/npm/v/@abereghici/tokens?color=263316)](https://www.npmjs.com/package/@abereghici/tokens)
+[![license](https://img.shields.io/badge/license-MIT-263316)](https://github.com/abereghici/design-system/blob/main/LICENSE)
+
 The Bereghici design system's tokens. The source is DTCG 2025.10 JSON in three tiers. Style Dictionary 5 compiles it into `--ab-` CSS custom properties and into an artifact-shaped `tokens.json` for the claude.ai artifact mirror. The build fails when the set breaks any of the system's rules.
+
+## Usage
+
+Apps that use `@abereghici/ui` get these tokens through it and never import them by hand. To use the tokens on their own:
+
+```sh
+pnpm add @abereghici/tokens
+```
+
+Import the sheets once from the app's JavaScript entry:
+
+```ts
+import "@abereghici/tokens/fonts.css";
+import "@abereghici/tokens/tokens.css";
+```
+
+Then use the custom properties anywhere:
+
+```css
+.callout {
+  padding: var(--ab-space-inset-md);
+  border-radius: var(--ab-radius-lg);
+  background: var(--ab-color-surface-default);
+  color: var(--ab-color-text-default);
+}
+```
 
 ## Outputs
 
