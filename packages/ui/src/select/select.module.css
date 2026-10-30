@@ -136,6 +136,10 @@
       text-indent: calc(var(--ab-select-option-padding-inline) - 0.5em);
     }
 
+    .group:not(:first-child) {
+      padding-block-start: var(--ab-space-stack-sm);
+    }
+
     @media (forced-colors: active) {
       .select::picker(select) {
         outline: 1px solid CanvasText;

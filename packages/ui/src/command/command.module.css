@@ -110,8 +110,8 @@
     display: none;
   }
 
-  .group + .group {
-    margin-block-start: var(--ab-space-stack-xs);
+  .group:not(:first-child) {
+    margin-block-start: var(--ab-space-stack-sm);
   }
 
   .heading {

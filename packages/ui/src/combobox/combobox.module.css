@@ -68,6 +68,10 @@
     flex-direction: column;
   }
 
+  .group:not(:first-child) {
+    margin-block-start: var(--ab-space-stack-sm);
+  }
+
   .label {
     padding: var(--ab-space-inset-sm) var(--ab-combobox-option-padding-inline)
       var(--ab-space-inset-xs);
