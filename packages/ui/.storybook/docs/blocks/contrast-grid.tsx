@@ -37,8 +37,16 @@ const pairs = CONTRAST_REQUIREMENTS.filter(
   ({ foreground, background }) => !inMatrix.has(key(foreground, background)),
 );
 
-const minimumOf = (foreground: string) =>
-  requirements.get(key(foreground, CONTRAST_BACKGROUNDS[0] ?? ""))?.minimum;
+const minimumOf = (foregrounds: readonly string[]) =>
+  [
+    ...new Set(
+      foregrounds.flatMap((foreground) =>
+        CONTRAST_BACKGROUNDS.flatMap(
+          (background) => requirements.get(key(foreground, background))?.minimum ?? [],
+        ),
+      ),
+    ),
+  ].join(" or ");
 
 const short = (name: string) =>
   name.replace(/^(surface|background|text|icon|border)-/v, "").replace("neutral-subtle-", "");
@@ -60,14 +68,16 @@ function Cell({
   scheme: Scheme;
 }) {
   return (
-    <div
-      className={styles["cell"]}
-      style={{
-        color: `var(--ab-color-${foreground})`,
-        backgroundColor: `var(--ab-color-${background})`,
-      }}
-    >
-      <Sample foreground={foreground} />
+    <div className={styles["cell"]}>
+      <div
+        className={styles["swatch"]}
+        style={{
+          color: `var(--ab-color-${foreground})`,
+          backgroundColor: `var(--ab-color-${background})`,
+        }}
+      >
+        <Sample foreground={foreground} />
+      </div>
       <span className={styles["ratio"]}>
         {contrastRatio(hex(foreground, scheme), hex(background, scheme)).toFixed(2)}
       </span>
@@ -133,10 +143,10 @@ export function ContrastGrid() {
         ))}
       </SegmentedControl.Root>
       <div data-theme={scheme} className={styles["theme"]}>
-        <h3 className={styles["heading"]}>Text, at least {minimumOf(CONTRAST_TEXT[0] ?? "")}:1</h3>
+        <h3 className={styles["heading"]}>Text, at least {minimumOf(CONTRAST_TEXT)}:1</h3>
         <Matrix foregrounds={CONTRAST_TEXT} scheme={scheme} />
         <h3 className={styles["heading"]}>
-          Icons and borders, at least {minimumOf(CONTRAST_NON_TEXT[0] ?? "")}:1
+          Icons and borders, at least {minimumOf(CONTRAST_NON_TEXT)}:1
         </h3>
         <Matrix foregrounds={CONTRAST_NON_TEXT} scheme={scheme} />
         <h3 className={styles["heading"]}>Content on fills, and fills on surfaces</h3>

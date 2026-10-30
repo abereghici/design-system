@@ -11,10 +11,6 @@
   border-block-start: var(--ab-border-width-thick) solid;
   border-radius: var(--ab-radius-sm);
   background-color: var(--ab-color-surface-raised);
-
-  & ul {
-    margin-block-end: 0;
-  }
 }
 
 .do {
@@ -33,7 +29,7 @@
   color: var(--ab-color-text-subtle);
 }
 
-.cards ul {
+.cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
   gap: var(--ab-space-inline-md);
@@ -42,12 +38,10 @@
   list-style: none;
 }
 
-/* Markdown renders the items, so they take no classes of their own. */
-.cards li {
+.card {
   display: grid;
   align-content: start;
   gap: var(--ab-space-stack-xs);
-  margin: 0;
   padding: var(--ab-space-inset-lg);
   border: var(--ab-border-width-default) solid var(--ab-color-border-subtle);
   border-radius: var(--ab-radius-lg);
@@ -55,6 +49,7 @@
   color: var(--ab-color-text-subtle);
 }
 
-.cards a {
+.title {
   font: var(--ab-type-label-lg);
+  color: var(--ab-color-text-default);
 }

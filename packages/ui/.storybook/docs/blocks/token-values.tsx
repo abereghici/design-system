@@ -12,11 +12,13 @@ const samples: Partial<Record<string, (value: string) => CSSProperties>> = {
   typography: (value) => ({ font: value }),
   fontFamily: (value) => ({ fontFamily: value }),
   dimension: (value) => ({ inlineSize: `min(${value}, 100%)` }),
+  radius: (value) => ({ borderRadius: value }),
+  "letter-spacing": (value) => ({ letterSpacing: value }),
 };
 
 /** A sample of the value, for the types of token that have a visible one. */
 const previewOf = ({ name, type }: Token, value: string) =>
-  name.includes("radius") ? { borderRadius: value } : samples[type]?.(value);
+  samples[/radius|letter-spacing/v.exec(name)?.[0] ?? type]?.(value);
 
 /** A preview in the page's Theme, or in the given one for a themed token. */
 function Preview({ token, scheme }: { token: Token; scheme?: Scheme }) {
@@ -24,7 +26,7 @@ function Preview({ token, scheme }: { token: Token; scheme?: Scheme }) {
 
   if (style === undefined) return null;
 
-  const text = "font" in style || "fontFamily" in style;
+  const text = "font" in style || "fontFamily" in style || "letterSpacing" in style;
 
   return (
     <span data-theme={scheme} className={styles["frame"]}>

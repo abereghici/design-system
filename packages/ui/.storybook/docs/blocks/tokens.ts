@@ -7,6 +7,13 @@ export type Scheme = (typeof themes)[number]["id"];
 
 export type Tier = CatalogToken["tier"];
 
+/** The tiers in build order, each referencing the one before it. */
+export const tiers = [
+  ["primitive", "Primitive"],
+  ["semantic", "Semantic"],
+  ["component", "Component"],
+] as const satisfies readonly (readonly [Tier, string])[];
+
 /** A catalog token with its value resolved in each Theme. */
 export interface Token extends CatalogToken {
   readonly light: string;

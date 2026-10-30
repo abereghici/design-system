@@ -123,7 +123,11 @@ describe("claims the docs make about the code", () => {
   });
 
   test("only the selections and the toast use springs (Motion)", () => {
-    const springy = catalog.filter(({ value }) => value.includes("--ab-motion-easing-spring"));
+    const springy = catalog.filter(({ value, conditions }) =>
+      [value, ...conditions.map((condition) => condition.value)].some((each) =>
+        each.includes("--ab-motion-easing-spring"),
+      ),
+    );
 
     expect(sorted(springy.map(({ group }) => group))).toEqual([
       "radio-group",

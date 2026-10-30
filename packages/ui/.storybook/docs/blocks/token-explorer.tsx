@@ -8,15 +8,9 @@ import { Count, explorer, Search } from "./explorer.tsx";
 import { Inspector } from "./token-inspector.tsx";
 import { Previews, TokenLink, Values } from "./token-values.tsx";
 import type { Inspect } from "./token-values.tsx";
-import { tokens } from "./tokens.ts";
+import { tiers, tokens } from "./tokens.ts";
 import type { Tier, Token } from "./tokens.ts";
 import styles from "./token-explorer.module.css";
-
-const tiers = [
-  ["primitive", "Primitive"],
-  ["semantic", "Semantic"],
-  ["component", "Component"],
-] as const satisfies readonly (readonly [Tier, string])[];
 
 const groupsOf = (tier: Tier) => [
   ...new Set(tokens.filter((token) => token.tier === tier).map(({ group }) => group)),

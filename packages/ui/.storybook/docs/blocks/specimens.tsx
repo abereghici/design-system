@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { Table } from "@abereghici/ui/table";
 
 import { Previews } from "./token-values.tsx";
-import { chain, findToken, semantic, shown, themes } from "./tokens.ts";
+import { chain, findToken, semantic, shown, themes, tiers } from "./tokens.ts";
 import type { Token } from "./tokens.ts";
 import mdx from "../mdx.module.css";
 import styles from "./specimens.module.css";
@@ -165,32 +165,27 @@ export function Surfaces() {
   );
 }
 
-/** One component token traced to the semantic and primitive tokens behind it, in tier order. */
+/** One component token and every token behind it in either Theme, grouped by tier. */
 export function TierFlow({ of }: { of: string }) {
   const component = findToken(`ab-${of}`);
 
   if (component === undefined) throw new Error(`No token ab-${of}`);
 
-  const steps = [
-    ["Primitive", [...new Set(themes.map(({ id }) => chain(component, id).at(-1)))]],
-    ["Semantic", [chain(component, "light")[0]]],
-    ["Component", [component]],
-  ] as const;
+  const linked = new Set([component, ...themes.flatMap(({ id }) => chain(component, id))]);
 
   return (
     <ol className={`sb-unstyled ${styles["flow"]}`}>
-      {steps.map(([tier, members]) => (
+      {tiers.map(([tier, label]) => (
         <li key={tier} className={styles["step"]}>
-          <span className={styles["tier"]}>{tier}</span>
-          {members.map(
-            (token) =>
-              token && (
-                <span key={token.name} className={styles["member"]}>
-                  <Previews token={token} />
-                  <code>--{token.name}</code>
-                </span>
-              ),
-          )}
+          <span className={styles["tier"]}>{label}</span>
+          {[...linked]
+            .filter((token) => token.tier === tier)
+            .map((token) => (
+              <span key={token.name} className={styles["member"]}>
+                <Previews token={token} />
+                <code>--{token.name}</code>
+              </span>
+            ))}
         </li>
       ))}
     </ol>

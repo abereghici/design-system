@@ -10,7 +10,7 @@ Design tokens are the named decisions behind every color, size, type style and m
 
 ## Three tiers
 
-Tokens are built in three tiers. Each one references only the tier before it, and the token build fails on anything else.
+Tokens are built in three tiers, and each builds on the one before it. The token build fails if a primitive references another token, if a semantic token references a component token, or if a component token references anything but a semantic token.
 
 <TierFlow of="button-primary-background-color" />
 

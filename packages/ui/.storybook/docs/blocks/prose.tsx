@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { AnchorMdx } from "@storybook/addon-docs/blocks";
 
 import packageJson from "../../../package.json" with { type: "json" };
 
@@ -23,9 +24,29 @@ export const Do = verdict("Do", styles["do"]);
 
 export const Dont = verdict("Don’t", styles["dont"]);
 
-/** Lays out a Markdown list of links as cards; write each item as a link and a line on what is there. */
+/** A grid of LinkCard. */
 export function LinkCards({ children }: { children: ReactNode }) {
-  return <div className={styles["cards"]}>{children}</div>;
+  return <ul className={`sb-unstyled ${styles["cards"]}`}>{children}</ul>;
+}
+
+/** A link to a docs page, `?path=` as in Markdown, and a line on what is there. */
+export function LinkCard({
+  href,
+  title,
+  children,
+}: {
+  href: string;
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <li className={styles["card"]}>
+      <AnchorMdx href={href} target="_self">
+        <span className={styles["title"]}>{title}</span>
+      </AnchorMdx>
+      {children}
+    </li>
+  );
 }
 
 /** The range of a peer dependency, from the package's own manifest. */
