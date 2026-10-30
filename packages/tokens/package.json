@@ -1,6 +1,6 @@
 {
   "name": "@abereghici/tokens",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Design tokens, CSS custom properties and fonts of the abereghici design system.",
   "license": "MIT",
   "repository": {
