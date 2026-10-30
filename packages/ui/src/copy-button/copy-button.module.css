@@ -1,0 +1,12 @@
+@layer ab.components {
+  .status {
+    margin-inline-start: var(--ab-space-inline-sm);
+    color: var(--ab-color-text-subtle);
+    font: var(--ab-type-label-sm);
+  }
+
+  /* Empty, it must stay in the accessibility tree for its announcements, so it keeps its box. */
+  .status:empty {
+    margin-inline-start: 0;
+  }
+}

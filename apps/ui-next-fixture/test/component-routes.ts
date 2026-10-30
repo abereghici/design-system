@@ -144,7 +144,7 @@ export const componentRoutes = [
     name: "tabs",
     tokens: ["tabs"],
     client: ["tabs/tabs-content", "tabs/tabs-list", "tabs/tabs-root", "tabs/tabs-trigger"],
-    html: 'role="tablist"',
+    html: 'hidden="">Settings</div>',
   },
   {
     name: "segmented-control",
@@ -177,6 +177,30 @@ export const componentRoutes = [
     tokens: ["pagination", "icon", "icon-button"],
     client: ["internal/locale/formatted-number"],
     html: 'href="/pagination?page=3">3</a>',
+  },
+  {
+    name: "code-block",
+    tokens: ["code-block"],
+    client: ["code-block/code-block"],
+    html: "<pre class",
+  },
+  {
+    name: "copy-button",
+    tokens: ["button", "spinner"],
+    client: ["copy-button/copy-button"],
+    html: "Copy invoice number</button><output",
+  },
+  {
+    name: "toggle-button",
+    tokens: ["toggle-button"],
+    client: ["toggle-button/toggle-button"],
+    html: 'aria-pressed="true"',
+  },
+  {
+    name: "toggle-button-group",
+    tokens: ["toggle-button", "toggle-button-group"],
+    client: ["toggle-button-group/toggle-button-group", "toggle-button/toggle-button"],
+    html: 'aria-label="Text style"',
   },
   {
     name: "toolbar",

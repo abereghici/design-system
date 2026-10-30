@@ -74,7 +74,8 @@
     }
   }
 
-  .content {
+  /* A panel hidden until found keeps its box, padding included: https://html.spec.whatwg.org/multipage/rendering.html#hidden-elements */
+  .content:not([hidden]) {
     padding-block: var(--ab-space-stack-md);
   }
 
@@ -84,6 +85,13 @@
     transition-timing-function: var(--ab-motion-easing-enter);
 
     @starting-style {
+      opacity: 0;
+      translate: 0 var(--ab-motion-distance-swap);
+      filter: blur(var(--ab-motion-blur-swap));
+    }
+
+    /* Kept in its box, a panel hidden until found always has a style, so @starting-style never applies to it. */
+    &[hidden] {
       opacity: 0;
       translate: 0 var(--ab-motion-distance-swap);
       filter: blur(var(--ab-motion-blur-swap));

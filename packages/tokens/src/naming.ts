@@ -72,6 +72,9 @@ const COLOR_WORDS = new Set([
 
 const COMPONENTS = [
   "status-dot",
+  "code-block",
+  "toggle-button-group",
+  "toggle-button",
   "icon-button",
   "button",
   "field",
