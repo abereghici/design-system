@@ -2,6 +2,7 @@ import { ColorItem, ColorPalette, Meta } from "@storybook/addon-docs/blocks";
 import tokens from "@abereghici/tokens/tokens.json";
 
 import { Do, Dont, Guidance, Surfaces } from "../blocks/specimens.tsx";
+import { FillPairs, TokenRows } from "../blocks/values.tsx";
 
 <Meta title="Foundations/Color" />
 
@@ -21,7 +22,7 @@ export const palettes = Object.entries(
 
 # Color
 
-Surfaces stay neutral. Color marks an action, a state, or the one highlight on a page. Light and dark are designed separately, not inverted.
+Surfaces stay neutral. Color marks an action, a state, or the one highlight on a page. Light and dark each have their own neutral palette, Sage and Night.
 
 ## Surfaces
 
@@ -29,12 +30,7 @@ Pages are built from four surfaces, each sitting on the one before it. Overlays 
 
 <Surfaces />
 
-| Surface   | Use for                                        |
-| --------- | ---------------------------------------------- |
-| `default` | The page                                       |
-| `raised`  | A panel on the page, such as a sidebar or card |
-| `nested`  | A panel inside a raised panel                  |
-| `overlay` | Menus, popovers and dialogs                    |
+<TokenRows match="^ab-color-surface-" />
 
 ## Roles
 
@@ -52,15 +48,9 @@ Pick the token by the property you are setting (`background`, `text`, `icon`, `b
 
 ## Pairing text with fills
 
-| On this fill                                                     | Use                                                                    |
-| ---------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| Any surface, `background-selected` or `background-accent-subtle` | Any text, icon or border role, except `*-disabled` and `border-subtle` |
-| `background-{success, warning, danger}-subtle`                   | `text-default`, `text-subtle` or that role's text                      |
-| `background-{accent, success, warning, danger}-bold`             | `text-on-{role}`                                                       |
-| `background-highlight`                                           | `text-on-highlight`                                                    |
-| `background-neutral-bold`                                        | `text-inverse`                                                         |
+<FillPairs />
 
-The token build fails if any of these pairs drops below WCAG AA in either Theme. [Accessibility](?path=/docs/foundations-accessibility--docs) lists the measured contrast.
+The token build checks every one of these pairs and fails if one drops below WCAG AA in either Theme. [Accessibility](?path=/docs/foundations-accessibility--docs) lists the measured contrast.
 
 <Guidance>
 <Do>

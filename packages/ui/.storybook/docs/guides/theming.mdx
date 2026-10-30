@@ -1,5 +1,7 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
+import { Changes } from "../blocks/values.tsx";
+
 <Meta title="Guides/Theming" />
 
 # Theming
@@ -38,12 +40,12 @@ Next.js describes this setup in [How to prevent flash before hydration](https://
 
 These follow the operating system on their own, with no code in the app:
 
-| Setting              | What changes                                                       |
-| -------------------- | ------------------------------------------------------------------ |
-| Increased contrast   | Subtle borders, subtlest text and subtlest icons step up one level |
-| Reduced transparency | Translucent materials become solid                                 |
-| Reduced motion       | Movement stops; fades stay                                         |
-| Forced colors        | Components redraw their edges in system colors                     |
+| Setting              | What changes                                                                      |
+| -------------------- | --------------------------------------------------------------------------------- |
+| Increased contrast   | <Changes when="(prefers-contrast: more)" /> step up one level                     |
+| Reduced transparency | <Changes when="(prefers-reduced-transparency: reduce)" /> become solid            |
+| Reduced motion       | Movement stops and fades stay; see [Motion](?path=/docs/foundations-motion--docs) |
+| Forced colors        | Components redraw their edges in system colors                                    |
 
 ## Custom tokens and themes
 

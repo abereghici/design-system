@@ -1,25 +1,26 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
 import { Do, Dont, Guidance, TypeScale } from "../blocks/specimens.tsx";
+import { Typeface } from "../blocks/values.tsx";
 
 <Meta title="Foundations/Typography" />
 
 # Typography
 
-Noto Serif for headings and statements, Figtree for everything people read and operate, and the system monospace for code.
+A serif for headings and statements, a sans for everything people read and operate, and the system monospace for code.
 
 ## Choosing a role
 
-| Role       | Typeface    | Use for                                         |
-| ---------- | ----------- | ----------------------------------------------- |
-| `heading`  | Noto Serif  | Page and section titles                         |
-| `display`  | Noto Serif  | A short statement that opens a page             |
-| `body`     | Figtree     | Paragraphs and descriptions                     |
-| `label`    | Figtree     | Buttons, inputs, menus, tabs and other controls |
-| `data`     | Figtree     | Numbers in tables and stats (tabular figures)   |
-| `overline` | Figtree     | A small uppercase label above a group           |
-| `kbd`      | Figtree     | Keyboard shortcut hints                         |
-| `code`     | System mono | Code                                            |
+| Role       | Typeface                                       | Use for                                           |
+| ---------- | ---------------------------------------------- | ------------------------------------------------- |
+| `heading`  | <Typeface of="type-heading-md-font-family" />  | Page and section titles                           |
+| `display`  | <Typeface of="type-display-md-font-family" />  | A short statement that opens a page               |
+| `body`     | <Typeface of="type-body-md-font-family" />     | Paragraphs and descriptions                       |
+| `label`    | <Typeface of="type-label-md-font-family" />    | Buttons, inputs, menus, tabs and other controls   |
+| `data`     | <Typeface of="type-data-md-font-family" />     | Numbers in tables and stats, with tabular figures |
+| `overline` | <Typeface of="type-overline-sm-font-family" /> | A small uppercase label above a group             |
+| `kbd`      | <Typeface of="type-kbd-sm-font-family" />      | Keyboard shortcut hints                           |
+| `code`     | <Typeface of="type-code-md-font-family" />     | Code                                              |
 
 ## Scale
 

@@ -1,5 +1,7 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
+import { Peer } from "../blocks/values.tsx";
+
 <Meta title="Guides/Getting started" />
 
 # Getting started
@@ -10,7 +12,7 @@ Three steps: install the package, wrap the app in `UIProvider`, import component
 
 | Requirement     | Version                                                                 |
 | --------------- | ----------------------------------------------------------------------- |
-| React           | 19.2 or later                                                           |
+| React           | <Peer name="react" />                                                   |
 | Browser targets | [Baseline newly available](https://web.dev/baseline), with no polyfills |
 
 ## 1. Install
@@ -52,7 +54,7 @@ Give `locale` the same value as `<html lang>`, so dates and numbers match betwee
 
 ## 3. Use a component
 
-Each component has its own entry point and brings only its own JavaScript, CSS and tokens.
+Each component has its own entry point. Importing one brings its own code, CSS and tokens, and those of the components it uses.
 
 ```tsx
 import { Button } from "@abereghici/ui/button";

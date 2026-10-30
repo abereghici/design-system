@@ -37,7 +37,7 @@
     },
     "color-surface-raised": {
       "$type": "color",
-      "$description": "A panel one step up from the page, such as a sidebar or a card.",
+      "$description": "A panel one step up from the page.",
       "$value": "{primitive.palette-sage-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -57,7 +57,7 @@
     },
     "color-surface-overlay": {
       "$type": "color",
-      "$description": "Menus, popovers and dialogs.",
+      "$description": "Dialogs, sheets and toasts, and the fill of controls such as buttons and fields.",
       "$value": "{primitive.palette-sage-0}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -97,7 +97,7 @@
     },
     "color-background-selected": {
       "$type": "color",
-      "$description": "The current item in a set.",
+      "$description": "The current item in a set, such as a menu item or a table row.",
       "$value": "{primitive.palette-sage-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -227,7 +227,7 @@
     },
     "color-background-neutral-bold": {
       "$type": "color",
-      "$description": "Tooltips. Put text-inverse on it.",
+      "$description": "Tooltips and the skip link. Put text-inverse on it.",
       "$value": "{primitive.palette-night-800}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -277,7 +277,7 @@
     },
     "color-text-subtle": {
       "$type": "color",
-      "$description": "Secondary text, such as descriptions and metadata.",
+      "$description": "Secondary text.",
       "$value": "{primitive.palette-sage-700}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -287,7 +287,7 @@
     },
     "color-text-subtlest": {
       "$type": "color",
-      "$description": "The quietest text that still meets 4.5:1, such as helper text and hints.",
+      "$description": "The quietest text that still meets 4.5:1.",
       "$value": "{primitive.palette-sage-600}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -360,7 +360,7 @@
     },
     "color-text-inverse": {
       "$type": "color",
-      "$description": "Content on background-neutral-bold, such as tooltips.",
+      "$description": "Content on background-neutral-bold.",
       "$value": "{primitive.palette-night-50}",
       "$extensions": {
         "com.bereghici.theme": {
@@ -749,7 +749,7 @@
     "opacity-disabled": {
       "$type": "number",
       "$value": "{primitive.opacity-40}",
-      "$description": "Fades an unavailable control that has no disabled color of its own."
+      "$description": "An unavailable control's opacity."
     },
     "opacity-subtle": {
       "$type": "number",
@@ -1712,12 +1712,12 @@
     "breakpoint-md": {
       "$type": "dimension",
       "$value": "{primitive.dimension-760}",
-      "$description": "Where layouts switch to one column. Write the value in media queries; CSS cannot read a custom property there."
+      "$description": "Below it, space-section and the layout gutter shrink. Write its value in media queries; CSS can't read a custom property there."
     },
     "motion-easing-enter": {
       "$type": "cubicBezier",
       "$value": "{primitive.easing-ease-out-strong}",
-      "$description": "Things appearing or responding: decelerates into place."
+      "$description": "Things appearing or responding."
     },
     "motion-easing-exit": {
       "$type": "cubicBezier",
@@ -1772,7 +1772,7 @@
     "motion-duration-hover-out": {
       "$type": "duration",
       "$value": "{primitive.duration-250}",
-      "$description": "Color change as the pointer leaves; slower than hover-in."
+      "$description": "Color change as the pointer leaves."
     },
     "motion-duration-tooltip": {
       "$type": "duration",
@@ -1782,12 +1782,12 @@
     "motion-duration-exit": {
       "$type": "duration",
       "$value": "{primitive.duration-150}",
-      "$description": "Any overlay leaving; faster than its entrance."
+      "$description": "An overlay leaving."
     },
     "motion-duration-swap": {
       "$type": "duration",
       "$value": "{primitive.duration-200}",
-      "$description": "Content swapping in place, such as a tab panel or a select value."
+      "$description": "Content swapping in place."
     },
     "motion-duration-popover": {
       "$type": "duration",
@@ -1854,7 +1854,7 @@
     "motion-delay-tooltip": {
       "$type": "duration",
       "$value": "{primitive.duration-500}",
-      "$description": "The wait before a tooltip shows on hover."
+      "$description": "The wait before a tooltip shows."
     },
     "motion-duration-loop": {
       "$type": "duration",

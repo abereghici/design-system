@@ -6,7 +6,7 @@ import { LinkCards } from "./blocks/specimens.tsx";
 
 # Bereghici Design System
 
-React components and design tokens for Alexandru Bereghici's products. Components are built on native HTML, styled from tokens, and meet WCAG 2.2 Level AA in light and dark.
+React components and design tokens for Alexandru Bereghici's products, built on native HTML, styled from tokens, and targeting WCAG 2.2 Level AA in light and dark.
 
 <LinkCards
   links={[
@@ -47,12 +47,12 @@ React components and design tokens for Alexandru Bereghici's products. Component
 
 ## Principles
 
-- **Accessible by default.** Every color pairing the tokens allow meets AA, every control works from the keyboard, and the user's contrast, motion and transparency settings are honoured.
-- **Platform first.** Native elements and CSS do the work, so components behave the way the browser does.
+- **Accessible by default.** Color pairings are checked for WCAG AA contrast when the tokens build, and every story is checked with axe in CI.
+- **Platform first.** Native elements and CSS before script.
 - **Semantic tokens.** Code names an intent, such as `--ab-color-text-subtle`, never a raw value.
-- **Quiet surfaces.** Surfaces stay neutral; color marks an action, a state, or the one highlight on a page.
+- **Quiet surfaces.** Surfaces stay neutral; color marks an action, a state or a highlight.
 - **Flat in the flow, lifted above it.** Content separates with space and hairlines; shadows mark what you can press and what floats above the page.
-- **Pay for what you use.** Importing a component brings only its JavaScript, CSS and tokens.
+- **Pay for what you use.** Importing a component brings its own code, CSS and tokens, and those of the components it uses.
 
 ## In this Storybook
 

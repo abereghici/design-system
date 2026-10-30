@@ -171,3 +171,17 @@
   min-inline-size: 1px;
   background-color: var(--ab-color-background-accent-bold);
 }
+
+.codes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ab-space-inline-xs);
+
+  & code {
+    padding-inline: var(--ab-space-inset-xs);
+    border-radius: var(--ab-radius-xs);
+    background-color: var(--ab-color-surface-nested);
+    font: var(--ab-type-code-md);
+    font-weight: normal;
+  }
+}

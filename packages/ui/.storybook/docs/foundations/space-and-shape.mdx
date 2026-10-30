@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
 import { Do, Dont, Guidance, RadiusScale, SpaceScale } from "../blocks/specimens.tsx";
+import { Value } from "../blocks/values.tsx";
 
 <Meta title="Foundations/Space and shape" />
 
@@ -21,18 +22,18 @@ Pick the kind of space first, then the size.
 
 <SpaceScale />
 
-On narrow windows (below 760px), `space-section` and the layout gutter shrink.
+Below <Value of="breakpoint-md" /> wide, `space-section` and `layout-gutter` shrink.
 
 ## Size
 
 Controls share four heights, so a button, a field and a select line up in a row. On touch screens every control height grows to a comfortable target.
 
-| Control height | Mouse | Touch |
-| -------------- | ----- | ----- |
-| `xs`           | 24px  | 32px  |
-| `sm`           | 28px  | 40px  |
-| `md`           | 32px  | 44px  |
-| `lg`           | 40px  | 48px  |
+| Control height | Mouse                          | Touch                                                   |
+| -------------- | ------------------------------ | ------------------------------------------------------- |
+| `xs`           | <Value of="size-control-xs" /> | <Value of="size-control-xs" when="(pointer: coarse)" /> |
+| `sm`           | <Value of="size-control-sm" /> | <Value of="size-control-sm" when="(pointer: coarse)" /> |
+| `md`           | <Value of="size-control-md" /> | <Value of="size-control-md" when="(pointer: coarse)" /> |
+| `lg`           | <Value of="size-control-lg" /> | <Value of="size-control-lg" when="(pointer: coarse)" /> |
 
 ## Radius
 

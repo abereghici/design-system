@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
 import { Do, Dont, Guidance } from "../blocks/specimens.tsx";
+import { Changes, TokenRows } from "../blocks/values.tsx";
 
 <Meta title="Foundations/Motion" />
 
@@ -8,32 +9,24 @@ import { Do, Dont, Guidance } from "../blocks/specimens.tsx";
 
 Fast, eased out, interruptible and optional. Motion confirms what the user did and shows where things come from; it never decorates.
 
-## Choosing a duration and easing
+## Durations
 
-| Moment                       | Duration                            | Easing                 |
-| ---------------------------- | ----------------------------------- | ---------------------- |
-| Press feedback               | `motion-duration-press`, 100ms      | `motion-easing-enter`  |
-| Hover color                  | `hover-in` 120ms, `hover-out` 250ms | `motion-easing-color`  |
-| Checkbox, radio or switch    | `motion-duration-toggle`, 180ms     | `motion-easing-enter`  |
-| Menu or popover opens        | `motion-duration-popover`, 200ms    | `motion-easing-enter`  |
-| Panel expands                | `motion-duration-expand`, 250ms     | `motion-easing-move`   |
-| Dialog opens                 | `motion-duration-modal`, 250ms      | `motion-easing-enter`  |
-| Sheet slides in              | `motion-duration-drawer`, 300ms     | `motion-easing-drawer` |
-| Selection settles into place | `motion-duration-spring`, 400ms     | `motion-easing-spring` |
-| Anything leaves              | `motion-duration-exit`, 150ms       | `motion-easing-exit`   |
+<TokenRows match="^ab-motion-(duration|delay)-" />
 
-Every duration and easing, with what it is for, is in the [token explorer](?path=/docs/reference-tokens--docs) under Motion.
+## Easings
+
+<TokenRows match="^ab-motion-easing-" />
 
 ## Rules
 
-- **Ease out** to enter and to leave; exits are faster than entrances.
+- **Ease out** to enter and to leave.
 - **Grow from the trigger,** never from nothing. Dialogs stay centred.
 - **Reverse from where it is** when triggered again mid-way.
 - **Springs only** for a selection settling into place (switch thumb, radio dot, tab and segmented-control indicators) and a toast arriving.
 
 ## Reduced motion
 
-With reduced motion on, the tokens remove movement: scales, distances and blurs become neutral and stagger becomes 0, while fades and color changes stay. Components read the tokens, so apps get this with no code.
+With reduced motion on, these tokens change: <Changes when="(prefers-reduced-motion: reduce)" />. Scales, distances and blurs become neutral, while fades and color changes stay. Components read the tokens, so apps get this with no code.
 
 <Guidance>
 <Do>

@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
 import { Do, Dont, Guidance } from "../blocks/specimens.tsx";
+import { Value } from "../blocks/values.tsx";
 
 <Meta title="Foundations/Iconography" />
 
@@ -18,12 +19,12 @@ Browse and copy imports in the [icon explorer](?path=/docs/reference-icons--docs
 
 ## Sizes
 
-| Size | Pixels |
-| ---- | ------ |
-| `sm` | 16px   |
-| `md` | 20px   |
-| `lg` | 24px   |
-| `xl` | 32px   |
+| Size | Pixels                      |
+| ---- | --------------------------- |
+| `sm` | <Value of="icon-sm-size" /> |
+| `md` | <Value of="icon-md-size" /> |
+| `lg` | <Value of="icon-lg-size" /> |
+| `xl` | <Value of="icon-xl-size" /> |
 
 Match the size to the text beside it; `md` is the default. The stroke changes with the size, so lines look equally heavy at every size.
 

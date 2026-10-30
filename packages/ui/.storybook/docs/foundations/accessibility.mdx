@@ -2,12 +2,13 @@ import { Canvas, Meta } from "@storybook/addon-docs/blocks";
 
 import * as ButtonStories from "../../../src/button/button.stories.tsx";
 import { ContrastGrid } from "../blocks/contrast-grid.tsx";
+import { Value } from "../blocks/values.tsx";
 
 <Meta title="Foundations/Accessibility" />
 
 # Accessibility
 
-Every component targets **WCAG 2.2 Level AA** in both Themes. Most of it is built in; this page lists what is, and what you still provide.
+Components target **WCAG 2.2 Level AA** in both Themes. This page lists what the system guarantees, and what you provide.
 
 ## What you provide
 
@@ -19,21 +20,19 @@ Every component targets **WCAG 2.2 Level AA** in both Themes. Most of it is buil
 
 ## What is built in
 
-| WCAG criterion                            | How                                                                 |
-| ----------------------------------------- | ------------------------------------------------------------------- |
-| 1.4.3 Contrast (Minimum)                  | Every text role is at least 4.5:1 on every background it may sit on |
-| 1.4.11 Non-text Contrast                  | Icons and control borders are at least 3:1                          |
-| 1.4.1 Use of Color                        | A state pairs color with a label, a shape, a weight or an underline |
-| 1.4.4 Resize Text                         | Text follows the reader's text size                                 |
-| 1.4.10, 1.4.12 Reflow, Text Spacing       | Layouts reflow, and no text has a fixed height                      |
-| 2.4.7, 2.4.11 Focus Visible, Not Obscured | One focus ring on every focusable component, never removed          |
-| 2.5.8 Target Size (Minimum)               | Every target meets the minimum, and grows on touch screens          |
-| 2.2.2 Pause, Stop, Hide                   | Only loading indicators loop: Spinner, Progress and Skeleton        |
-| 2.3.3 Animation from Interactions (AAA)   | Reduced motion removes movement; the loading loops become fades     |
+| WCAG criterion                          | How the system meets it                                                                                                                   |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.4.3 Contrast (Minimum)                | Every text role is at least 4.5:1 on every background it may sit on; the token build fails otherwise                                      |
+| 1.4.11 Non-text Contrast                | Every icon and control-border role is at least 3:1; the token build fails otherwise                                                       |
+| 1.4.4 Resize Text                       | Font sizes are in `rem`, so text follows the reader's text size                                                                           |
+| 2.4.7 Focus Visible                     | The base styles draw a focus ring on every `:focus-visible` element                                                                       |
+| 2.5.8 Target Size (Minimum)             | The smallest control is <Value of="size-control-xs" />, the minimum of <Value of="size-target-min" />, and controls grow on touch screens |
+| 2.2.2 Pause, Stop, Hide                 | Only Spinner, Progress and Skeleton loop                                                                                                  |
+| 2.3.3 Animation from Interactions (AAA) | Reduced motion removes movement; see [Motion](?path=/docs/foundations-motion--docs)                                                       |
 
 ## Focus
 
-Tab to the button. The ring is the same on every focusable component.
+Tab to the button to see the focus ring.
 
 <Canvas of={ButtonStories.Default} />
 
