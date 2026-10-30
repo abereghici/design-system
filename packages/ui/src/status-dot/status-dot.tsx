@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/status-dot.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./status-dot.module.css";

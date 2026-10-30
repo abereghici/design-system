@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/sidebar.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./sidebar.module.css";

@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/checkbox.css";
-
 @layer ab.components {
   .root {
     display: inline-flex;

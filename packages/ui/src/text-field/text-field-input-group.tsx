@@ -2,6 +2,8 @@
 
 import type { ComponentProps, ReactNode } from "react";
 
+import "@abereghici/tokens/components/field.css";
+
 import fieldStyles from "../field/field.module.css";
 import styles from "./text-field.module.css";
 

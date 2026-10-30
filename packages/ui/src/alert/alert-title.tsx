@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/alert.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./alert.module.css";

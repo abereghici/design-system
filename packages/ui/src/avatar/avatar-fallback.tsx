@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/avatar.css";
+
 import { UserIcon } from "../icon/icons/user.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 

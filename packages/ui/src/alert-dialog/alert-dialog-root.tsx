@@ -2,6 +2,8 @@
 
 import type { ComponentProps, MouseEvent } from "react";
 
+import "@abereghici/tokens/components/dialog.css";
+
 import type { Reason } from "../dialog/dialog-controller.ts";
 import { Modal, useModal } from "../dialog/dialog-modal.tsx";
 import type { RootProps as ModalProps } from "../dialog/dialog-modal.tsx";

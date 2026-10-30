@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/tooltip.css";
-
 @layer ab.components {
   .content {
     --ab-kbd-background-color: transparent;

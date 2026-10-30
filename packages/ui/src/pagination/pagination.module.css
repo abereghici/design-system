@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/pagination.css";
-
 @layer ab.components {
   .list {
     display: flex;

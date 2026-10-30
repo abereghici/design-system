@@ -2,6 +2,9 @@
 
 import type { ComponentProps, MouseEvent } from "react";
 
+import "@abereghici/tokens/components/icon-button.css";
+import "@abereghici/tokens/components/alert.css";
+
 import { dispatchFeedback } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";

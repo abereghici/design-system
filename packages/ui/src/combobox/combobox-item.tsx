@@ -3,6 +3,8 @@
 import { use, useId } from "react";
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/combobox.css";
+
 import { CheckIcon } from "../icon/icons/check.tsx";
 import { Option } from "../internal/listbox/listbox.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";

@@ -3,6 +3,8 @@
 import { use } from "react";
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/field.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { FieldContext } from "./use-field.ts";

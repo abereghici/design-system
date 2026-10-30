@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/dialog.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./dialog.module.css";

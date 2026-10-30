@@ -3,6 +3,8 @@
 import { createContext, use, useId, useState } from "react";
 import type { ComponentProps, SyntheticEvent } from "react";
 
+import "@abereghici/tokens/components/accordion.css";
+
 import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";

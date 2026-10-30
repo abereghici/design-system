@@ -2,6 +2,8 @@
 
 import type { ComponentProps, ReactNode } from "react";
 
+import "@abereghici/tokens/components/combobox.css";
+
 import { Wrapper } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import { Listbox } from "../internal/listbox/listbox.tsx";

@@ -1,5 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
+import "@abereghici/tokens/components/skip-link.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./skip-link.module.css";

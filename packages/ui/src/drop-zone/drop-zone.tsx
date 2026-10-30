@@ -3,6 +3,8 @@
 import { useRef, useState } from "react";
 import type { ComponentProps, DragEvent, RefObject } from "react";
 
+import "@abereghici/tokens/components/drop-zone.css";
+
 import { requestChange } from "../events/events.ts";
 import { useEvent } from "../events/use-event.ts";
 import { useField } from "../field/use-field.ts";

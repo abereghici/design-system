@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/button.css";
-
 @layer ab.components {
   .root {
     --ab-icon-size: var(--ab-button-icon-size);

@@ -1,6 +1,3 @@
-@import "@abereghici/tokens/components/field.css";
-@import "@abereghici/tokens/components/select.css";
-
 @layer ab.components {
   .control {
     position: relative;

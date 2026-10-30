@@ -3,6 +3,8 @@
 import { useId } from "react";
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/command.css";
+
 import { Option } from "../internal/listbox/listbox.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 

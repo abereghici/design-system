@@ -3,6 +3,8 @@
 import { createContext, use, useId, useState } from "react";
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/slider.css";
+
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";

@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/drop-zone.css";
-
 @layer ab.components {
   .root {
     position: relative;

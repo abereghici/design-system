@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/navbar.css";
+
 import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./navbar.module.css";

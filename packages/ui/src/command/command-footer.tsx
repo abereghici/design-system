@@ -3,6 +3,8 @@
 import { use } from "react";
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/command.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
 

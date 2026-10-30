@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/combobox.css";
-
 @layer ab.components {
   .list {
     position-anchor: auto;

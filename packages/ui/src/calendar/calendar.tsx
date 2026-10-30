@@ -12,6 +12,8 @@ import {
 import { flushSync } from "react-dom";
 import type { ComponentProps, FocusEvent, KeyboardEvent, MouseEvent } from "react";
 
+import "@abereghici/tokens/components/calendar.css";
+
 import { requestChange, sharedListener } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { DatePickerContext, Temporal, useDateFormats } from "../internal/date/date.ts";

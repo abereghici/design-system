@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/tabs.css";
-
 @property --fade-start {
   syntax: "<length>";
   inherits: false;

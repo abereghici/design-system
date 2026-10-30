@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/skeleton.css";
-
 @layer ab.components {
   /* Two selectors' weight, so the placeholder overrides the wrapped component's own fill and border:
      https://www.w3.org/TR/selectors-4/#specificity-rules */

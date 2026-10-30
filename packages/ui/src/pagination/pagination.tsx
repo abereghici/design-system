@@ -1,5 +1,8 @@
 import type { ComponentProps, ElementType, ReactElement } from "react";
 
+import "@abereghici/tokens/components/icon-button.css";
+import "@abereghici/tokens/components/pagination.css";
+
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { MoreIcon } from "../icon/icons/more.tsx";
 import { FormattedNumber } from "../internal/locale/formatted-number.tsx";

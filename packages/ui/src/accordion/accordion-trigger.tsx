@@ -3,6 +3,8 @@
 import { use } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
+import "@abereghici/tokens/components/accordion.css";
+
 import { composeEventHandlers, pointerMarker } from "../events/events.ts";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";

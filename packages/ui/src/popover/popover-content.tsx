@@ -2,6 +2,8 @@
 
 import type { ComponentProps, RefObject } from "react";
 
+import "@abereghici/tokens/components/popover.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { usePopover } from "./popover-root.tsx";

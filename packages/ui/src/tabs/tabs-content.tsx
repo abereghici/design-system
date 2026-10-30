@@ -2,6 +2,8 @@
 
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/tabs.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { useTabs } from "./tabs-root.tsx";

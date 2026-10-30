@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/empty-state.css";
-
 @layer ab.components {
   .root {
     display: flex;

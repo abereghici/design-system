@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/command.css";
-
 @layer ab.components {
   :root:has(.content:modal) {
     overflow: hidden;

@@ -1,3 +1,5 @@
+import "@abereghici/tokens/components/dialog.css";
+
 import { Modal } from "./dialog-modal.tsx";
 import type { RootProps } from "./dialog-modal.tsx";
 import styles from "./dialog.module.css";

@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/breadcrumbs.css";
+
 import styles from "./breadcrumbs.module.css";
 
 type AccessibleName =

@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/switch.css";
-
 @layer ab.components {
   .root {
     --travel: calc(

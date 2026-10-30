@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/context-menu.css";
-
 @layer ab.components {
   .content {
     --min-width: var(--ab-context-menu-min-width);

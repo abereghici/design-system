@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/popover.css";
-
 @layer ab.components {
   .content {
     --start: left;

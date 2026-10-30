@@ -3,6 +3,8 @@
 import { useRef } from "react";
 import type { ComponentProps, PointerEvent } from "react";
 
+import "@abereghici/tokens/components/slider.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import type { Reason } from "./slider-root.tsx";

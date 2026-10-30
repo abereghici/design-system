@@ -3,6 +3,8 @@
 import { use, useEffect, useId, useState } from "react";
 import type { ComponentProps, SyntheticEvent } from "react";
 
+import "@abereghici/tokens/components/field.css";
+
 import { useEvent } from "../events/use-event.ts";
 import { FormErrorsContext } from "../form/form.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";

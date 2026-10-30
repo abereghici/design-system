@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/separator.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./separator.module.css";

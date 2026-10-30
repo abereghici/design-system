@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/kbd.css";
-
 @layer ab.components {
   .root {
     display: inline-flex;

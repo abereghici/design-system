@@ -3,6 +3,8 @@
 import { useState } from "react";
 import type { ComponentProps, RefObject, SyntheticEvent } from "react";
 
+import "@abereghici/tokens/components/command.css";
+
 import { Content } from "../dialog/dialog-content.tsx";
 import { Modal } from "../dialog/dialog-modal.tsx";
 import { requestChange } from "../events/events.ts";

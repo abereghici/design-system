@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/field.css";
-
 @layer ab.components {
   .input {
     font-variant-numeric: tabular-nums;

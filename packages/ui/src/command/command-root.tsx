@@ -3,6 +3,8 @@
 import { createContext, use, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction } from "react";
 
+import "@abereghici/tokens/components/command.css";
+
 import { isComposing, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { filterOptions, enabled, navigate, reveal } from "../internal/listbox/listbox.tsx";

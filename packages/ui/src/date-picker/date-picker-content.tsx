@@ -3,6 +3,8 @@
 import { use, useState } from "react";
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/popover.css";
+
 import { DatePickerContext } from "../internal/date/date.ts";
 import { rememberFocus } from "../internal/overlay/overlay.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";

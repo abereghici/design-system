@@ -2,6 +2,8 @@
 
 import type { ComponentProps, ReactNode, SyntheticEvent } from "react";
 
+import "@abereghici/tokens/components/field.css";
+
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";

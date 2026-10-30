@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
 
+import "@abereghici/tokens/components/link.css";
+
 import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./link.module.css";

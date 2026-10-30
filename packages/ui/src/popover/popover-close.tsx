@@ -2,6 +2,9 @@
 
 import type { ComponentProps, MouseEvent, ReactElement } from "react";
 
+import "@abereghici/tokens/components/icon-button.css";
+import "@abereghici/tokens/components/popover.css";
+
 import { composeEventHandlers, dispatchFeedback } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { Slot, mergeProps } from "../internal/slot/slot.tsx";

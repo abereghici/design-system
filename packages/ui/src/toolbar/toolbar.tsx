@@ -2,6 +2,8 @@
 
 import type { ComponentProps, FocusEvent, KeyboardEvent } from "react";
 
+import "@abereghici/tokens/components/toolbar.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./toolbar.module.css";

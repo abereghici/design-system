@@ -1,5 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
+import "@abereghici/tokens/components/spinner.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 

@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/tag.css";
-
 @layer ab.components {
   .root {
     --ab-icon-size: var(--ab-tag-icon-size);

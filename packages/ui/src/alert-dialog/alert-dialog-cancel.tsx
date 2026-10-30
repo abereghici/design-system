@@ -1,5 +1,7 @@
 "use client";
 
+import "@abereghici/tokens/components/button.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import type { ButtonProps } from "./alert-dialog-root.tsx";

@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/sidebar.css";
-
 @layer ab.components {
   .root {
     display: flex;

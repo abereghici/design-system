@@ -1,6 +1,8 @@
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
+import "@abereghici/tokens/components/meter.css";
+
 import { FormattedNumber } from "../internal/locale/formatted-number.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 

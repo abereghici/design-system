@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/accordion.css";
-
 @layer ab.components {
   .root {
     border-block-start: var(--ab-accordion-border-width) solid var(--ab-accordion-border-color);

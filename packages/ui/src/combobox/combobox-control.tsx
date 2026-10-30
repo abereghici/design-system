@@ -1,5 +1,7 @@
 "use client";
 
+import "@abereghici/tokens/components/field.css";
+
 import * as Field from "../field/field.tsx";
 import { SearchIcon } from "../icon/icons/search.tsx";
 import { InputGroup } from "../text-field/text-field-input-group.tsx";

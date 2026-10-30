@@ -1,5 +1,3 @@
-@import "@abereghici/tokens/components/spinner.css";
-
 @layer ab.components {
   .root {
     display: inline-block;

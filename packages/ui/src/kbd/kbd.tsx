@@ -1,5 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
+import "@abereghici/tokens/components/kbd.css";
+
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { Key } from "./kbd-key.tsx";
