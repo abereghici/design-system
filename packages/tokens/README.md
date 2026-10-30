@@ -5,7 +5,6 @@
 # @abereghici/tokens
 
 [![npm](https://img.shields.io/npm/v/@abereghici/tokens?color=263316)](https://www.npmjs.com/package/@abereghici/tokens)
-[![license](https://img.shields.io/badge/license-MIT-263316)](https://github.com/abereghici/design-system/blob/main/LICENSE)
 
 The Bereghici design system's tokens. The source is DTCG 2025.10 JSON in three tiers. Style Dictionary 5 compiles it into `--ab-` CSS custom properties and into an artifact-shaped `tokens.json` for the claude.ai artifact mirror. The build fails when the set breaks any of the system's rules.
 
@@ -155,3 +154,11 @@ Code uses the system monospace stack, with no webfont.
 | `pnpm fonts`                    | Rebuilds the committed `fonts/` from the pinned upstream sources (network)                                                            |
 | `pnpm test`                     | Vitest: feeds token sets to `buildTokens()` and asserts on its outputs and failures, and checks the font files and `@font-face` sheet |
 | `pnpm lint`, `pnpm check-types` | Oxlint (`oxlint.config.ts`) and `tsc --noEmit`                                                                                        |
+
+## Contributing
+
+See the [contributing guide](https://github.com/abereghici/design-system/blob/main/CONTRIBUTING.md).
+
+## License
+
+[MIT](https://github.com/abereghici/design-system/blob/main/LICENSE) © Alexandru Bereghici. The fonts are under the SIL Open Font License 1.1.
