@@ -1,0 +1,92 @@
+{
+  "component": {
+    "stepper-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "stepper-label-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-xs}"
+    },
+    "stepper-label-font-current": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-md}"
+    },
+    "stepper-label-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "stepper-label-text-color-current": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "stepper-label-text-color-complete": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "stepper-indicator-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-lg}"
+    },
+    "stepper-indicator-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-data-sm}"
+    },
+    "stepper-indicator-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-full}"
+    },
+    "stepper-indicator-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-default}"
+    },
+    "stepper-indicator-border-width-current": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-thick}"
+    },
+    "stepper-indicator-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default}"
+    },
+    "stepper-indicator-border-color-current": {
+      "$type": "color",
+      "$value": "{semantic.color-border-accent}"
+    },
+    "stepper-indicator-border-color-complete": {
+      "$type": "color",
+      "$value": "{semantic.color-border-accent}"
+    },
+    "stepper-indicator-background-color-complete": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold}"
+    },
+    "stepper-indicator-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "stepper-indicator-text-color-current": {
+      "$type": "color",
+      "$value": "{semantic.color-text-accent}"
+    },
+    "stepper-indicator-icon-color-complete": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-on-accent}"
+    },
+    "stepper-connector-min-height": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-md}"
+    },
+    "stepper-connector-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-default}"
+    },
+    "stepper-connector-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default}"
+    },
+    "stepper-connector-border-color-complete": {
+      "$type": "color",
+      "$value": "{semantic.color-border-accent}"
+    }
+  }
+}

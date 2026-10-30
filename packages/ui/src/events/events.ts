@@ -110,6 +110,7 @@ export type ToggleFeedbackEvent = CustomEvent<
     | "Accordion"
     | "DropdownMenu"
     | "ContextMenu"
+    | "Splitter"
   >
 >;
 
