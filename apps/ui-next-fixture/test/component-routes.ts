@@ -6,6 +6,12 @@ export const componentRoutes = [
     html: "12.345",
   },
   { name: "tag", tokens: ["tag"], client: [], html: "Live" },
+  {
+    name: "tag-group",
+    tokens: ["icon", "tag", "tag-group"],
+    client: ["tag-group/tag-group-root", "tag-group/tag-group-tag"],
+    html: 'aria-label="Remove"',
+  },
   { name: "status-dot", tokens: ["status-dot"], client: [], html: "Operational" },
   {
     name: "avatar",

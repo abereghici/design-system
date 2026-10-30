@@ -122,6 +122,7 @@ export type DismissFeedbackEvent = CustomEvent<
     | "Popover"
     | "DropdownMenu"
     | "ContextMenu"
+    | "TagGroup"
     | "Toast"
   >
 >;

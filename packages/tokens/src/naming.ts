@@ -75,6 +75,7 @@ const COMPONENTS = [
   "button",
   "field",
   "link",
+  "tag-group",
   "tag",
   "separator",
   "icon",
@@ -211,6 +212,7 @@ const MODIFIERS = new Set([
   "today",
   "row",
   "sort",
+  "remove",
 ]);
 
 const outsideDictionary = (words: readonly string[]) =>
