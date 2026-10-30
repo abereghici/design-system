@@ -140,7 +140,7 @@ export const componentRoutes = [
     name: "tabs",
     tokens: ["tabs"],
     client: ["tabs/tabs-content", "tabs/tabs-list", "tabs/tabs-root", "tabs/tabs-trigger"],
-    html: 'role="tablist"',
+    html: 'hidden="">Settings</div>',
   },
   {
     name: "segmented-control",
