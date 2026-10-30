@@ -4,7 +4,7 @@ import { extname, join } from "node:path";
 import { AxeBuilder } from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-import type { BrowserContext } from "@playwright/test";
+import type { BrowserContext, Page } from "@playwright/test";
 
 const out = join(import.meta.dirname, "..", "out");
 const routes = readdirSync(out)
@@ -82,6 +82,105 @@ test.describe("Tier 1 works with JavaScript off", () => {
       await expect(dialog).toBeHidden();
     });
   }
+
+  for (const [route, name, description] of [
+    ["text-field", "Email", "We reply within a day."],
+    ["text-area", "Message", "Grows with your text."],
+    ["field", "Handle", "Letters and digits."],
+  ] as const) {
+    test(`${route}: its control is described by its description`, async ({ page }) => {
+      await page.goto(`/${route}`);
+
+      await expect(page.getByRole("textbox", { name })).toHaveAccessibleDescription(description);
+    });
+  }
+});
+
+// Each Tier 1 Field control route, what the user enters, and where its native GET form goes.
+const fields = [
+  [
+    "text-field",
+    (page: Page) => page.getByRole("textbox", { name: "Email" }).fill("ana@example.com"),
+    "/text-field?email=ana%40example.com",
+  ],
+  [
+    "text-area",
+    (page: Page) => page.getByRole("textbox", { name: "Message" }).fill("Hi"),
+    "/text-area?message=Hi",
+  ],
+  [
+    "password-field",
+    (page: Page) => page.getByLabel("Password", { exact: true }).fill("hunter2"),
+    "/password-field?password=hunter2",
+  ],
+  [
+    "checkbox",
+    (page: Page) => page.getByRole("checkbox", { name: "Email me updates" }).check(),
+    "/checkbox?updates=on",
+  ],
+  [
+    "switch",
+    (page: Page) => page.getByRole("switch", { name: "Sound" }).check(),
+    "/switch?sound=on",
+  ],
+  [
+    "radio-group",
+    (page: Page) => page.getByRole("radio", { name: "Monthly" }).check(),
+    "/radio-group?plan=monthly",
+  ],
+  [
+    "segmented-control",
+    (page: Page) => page.getByRole("radio", { name: "Board" }).check(),
+    "/segmented-control?view=board",
+  ],
+  [
+    "slider",
+    (page: Page) => page.getByRole("slider", { name: "Volume" }).press("ArrowRight"),
+    "/slider?volume=41",
+  ],
+  [
+    "select",
+    (page: Page) => page.getByRole("combobox", { name: "Region" }).selectOption("jp"),
+    "/select?region=jp",
+  ],
+  [
+    "field",
+    (page: Page) => page.getByRole("textbox", { name: "Handle" }).fill("ana"),
+    "/field?handle=ana",
+  ],
+  [
+    "form",
+    (page: Page) => page.getByRole("textbox", { name: "Query" }).fill("shoes"),
+    "/search?q=shoes",
+  ],
+] as const;
+
+test.describe("with JavaScript off, a Tier 1 Field control submits its form", () => {
+  for (const [route, fill, url] of fields) {
+    test(route, async ({ page }) => {
+      await page.goto(`/${route}`);
+      await fill(page);
+      await page.getByRole("button", { name: "Submit" }).click();
+
+      await expect(page).toHaveURL(url);
+    });
+  }
+
+  // A Tier 1 bug, kept failing until fixed: the trigger opens the file picker only through script.
+  test("file-trigger", async ({ page }) => {
+    test.fail();
+    await page.goto("/file-trigger");
+
+    const chooser = page.waitForEvent("filechooser", { timeout: 1000 });
+
+    await page.getByRole("button", { name: "Choose image" }).click();
+    await (
+      await chooser
+    ).setFiles({ name: "photo.png", mimeType: "image/png", buffer: Buffer.from("png") });
+    await page.getByRole("button", { name: "Submit" }).click();
+
+    await expect(page).toHaveURL("/file-trigger?avatar=photo.png");
+  });
 });
 
 const tier2 = [

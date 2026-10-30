@@ -259,6 +259,22 @@ Default.test(
   },
 );
 
+Default.test(
+  "returns to its default value when its form resets",
+  { args: { name: "volume" }, decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const slider = canvas.getByRole("slider", { name: "Volume" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    await userEvent.tab();
+    await userEvent.keyboard("{ArrowRight}");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(slider).toHaveValue("40");
+    await expect(canvas.getByRole("status")).toHaveTextContent("40");
+    await expect([...new FormData(form)]).toEqual([["volume", "40"]]);
+  },
+);
+
 export const Invalid = meta.story({
   decorators: [withInvalidField("Keep the volume below 30 at night.")],
   parameters: {

@@ -20,6 +20,20 @@ const meta = preview.meta({
 export const Default = meta.story({});
 
 Default.test(
+  "submits its value, and returns to its default value when its form resets",
+  { args: { defaultValue: "Hello" }, decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const input = canvas.getByRole("textbox", { name: "Message" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    await userEvent.type(input, " there");
+    await expect(new FormData(form).get("message")).toBe("Hello there");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(input).toHaveValue("Hello");
+  },
+);
+
+Default.test(
   "inserts a line break on Enter and reports each value",
   { decorators: [withForm] },
   async ({ args, canvas, userEvent }) => {

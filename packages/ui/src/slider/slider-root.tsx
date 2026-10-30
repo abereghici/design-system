@@ -103,6 +103,9 @@ function useSliderState(options: Options, scale: Scale) {
     change,
     commit,
     format: (entry: number) => formatter.format(entry),
+    reset: () => {
+      setUncontrolled(options.defaultValue ?? min);
+    },
     percent: (entry: number) => ((entry - min) / (max - min)) * 100,
   };
 }

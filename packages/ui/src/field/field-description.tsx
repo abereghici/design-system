@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/field.css";
 
-import { mergeProps, presenceRef } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { FieldContext } from "./use-field.ts";
 import styles from "./field.module.css";
@@ -18,13 +18,7 @@ export function Description(props: ComponentProps<"p">) {
     <p
       id={field?.descriptionId}
       hidden={field?.invalid}
-      {...mergeProps(
-        {
-          className: styles["description"],
-          ref: field === undefined ? undefined : presenceRef(field.describe),
-        },
-        props,
-      )}
+      {...mergeProps({ className: styles["description"] }, props)}
     />
   );
 }

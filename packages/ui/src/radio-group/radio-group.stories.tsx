@@ -165,6 +165,20 @@ Default.test(
 );
 
 Default.test(
+  "returns to its default value when its form resets, and reports the next choice",
+  { decorators: [withForm] },
+  async ({ args, canvas, userEvent }) => {
+    const yearly = canvas.getByRole("radio", { name: "Yearly" });
+
+    await userEvent.click(yearly);
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(canvas.getByRole("radio", { name: "Monthly" })).toBeChecked();
+    await userEvent.click(yearly);
+    await expect(args.onValueChange).toHaveBeenCalledTimes(2);
+  },
+);
+
+Default.test(
   "lays out horizontally",
   { args: { orientation: "horizontal" } },
   async ({ canvas }) => {

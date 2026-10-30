@@ -97,6 +97,20 @@ Default.test(
 );
 
 Default.test(
+  "submits its value, and returns to its default value when its form resets",
+  { args: { defaultValue: "hunter2", defaultVisible: true }, decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const input = canvas.getByRole("textbox", { name: "Password" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    await userEvent.type(input, "!");
+    await expect(new FormData(form).get("password")).toBe("hunter2!");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(input).toHaveValue("hunter2");
+  },
+);
+
+Default.test(
   "hides the value again when the form is submitted",
   { args: { defaultVisible: true }, decorators: [withForm] },
   async ({ args, canvas, userEvent }) => {
