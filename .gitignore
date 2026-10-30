@@ -16,3 +16,4 @@ storybook-static
 
 .claude/worktrees/
 out/
+debug-storybook.log
