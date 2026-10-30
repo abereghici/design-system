@@ -3,7 +3,7 @@ name: ui-stories
 description: Rules for packages/ui stories, docs pages and Storybook helpers. Use when writing or changing a `*.stories.tsx`, a `.storybook/docs/` page, or a `.storybook/` helper.
 ---
 
-A story file has three readers: the docs page, the Vitest run (every story is a test, axe included) and the screenshot projects. Check each story, proof, docs page and helper you add against every rule below. A need no rule covers is a new convention: log it in open-questions.md before it ships.
+A story file has three readers: the docs page, the Vitest run (every story is a test, axe included) and the screenshot projects. Check each story, proof, docs page and helper you add against every rule below. A need no rule covers is a new convention: agree it with the owner before it ships.
 
 ## Where things live
 

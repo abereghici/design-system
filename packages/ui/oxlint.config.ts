@@ -25,7 +25,7 @@ export default defineConfig({
     },
     {
       // Parts find each other by useId ids, whose «» need CSS.escape in a selector; spec #53 makes
-      // these lookups document.getElementById, which takes them as they are. See docs/open-questions.md.
+      // these lookups document.getElementById, which takes them as they are.
       files: [
         "src/combobox/combobox-state.ts",
         "src/combobox/use-combobox.ts",
@@ -49,7 +49,7 @@ export default defineConfig({
     },
     {
       // HTML allows <option> only inside select, datalist or optgroup, and rich options in a select
-      // need customizable select, which is below the Baseline floor (no Firefox). See docs/open-questions.md.
+      // need customizable select, which is below the Baseline floor (no Firefox).
       files: ["src/internal/listbox/listbox.tsx"],
       rules: { "jsx-a11y/prefer-tag-over-role": "off" },
     },
