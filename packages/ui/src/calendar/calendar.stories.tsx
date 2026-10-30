@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { expect, fn } from "storybook/test";
+import { expect, fn, spyOn } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
 import preview from "#.storybook/preview.tsx";
@@ -45,6 +45,14 @@ const meta = preview.meta({
     defaultValue: date("2026-10-24"),
     locale: "en-US",
     onValueChange: fn<(value: Temporal.PlainDate, details: CalendarChangeEventDetails) => void>(),
+  },
+  // Today is marked in the grid, so screenshots and the today proof need a fixed date.
+  beforeEach() {
+    const today = spyOn(Temporal.Now, "plainDateISO").mockReturnValue(date("2026-10-25"));
+
+    return () => {
+      today.mockRestore();
+    };
   },
 });
 
@@ -209,9 +217,10 @@ Default.test(
 );
 
 Default.test("marks today", { args: { defaultValue: null } }, async ({ canvas }) => {
-  const name = new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(new Date());
-
-  await expect(canvas.getByLabelText(name)).toHaveAttribute("aria-current", "date");
+  await expect(canvas.getByLabelText("Sunday, October 25, 2026")).toHaveAttribute(
+    "aria-current",
+    "date",
+  );
 });
 
 Default.test(
