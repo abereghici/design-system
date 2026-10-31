@@ -7,9 +7,10 @@ import "@abereghici/tokens/components/range-calendar.css";
 import { Month } from "../calendar/calendar-month.tsx";
 import type { CalendarProps } from "../calendar/calendar.tsx";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
-import { DateRangePickerContext, ordered, sameRange } from "../internal/date/date.ts";
+import { ordered, sameRange } from "../internal/date/date.ts";
 import type { DateRange } from "../internal/date/date.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { DateRangePickerContext } from "../internal/picker/picker-context.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./range-calendar.module.css";
