@@ -54,10 +54,10 @@ const variants: ScreenshotVariant[] = [
   },
   { name: "rtl", initialGlobals: { dir: "rtl" } },
   { name: "compact", initialGlobals: { density: "compact" } },
-  // After a scale-in under backdrop-filter, Chromium snaps 200% text a pixel either way from launch to
-  // launch (Combobox Open); light already covers the end state of motion.
+  // After a scale-in under backdrop-filter, Chromium snaps resized or respaced text a pixel either way
+  // from launch to launch (Combobox Open); light already covers the end state of motion.
   { name: "text-200", defaultFontSize: 32, contextOptions: { reducedMotion: "reduce" } },
-  { name: "text-spacing", textSpacing: true },
+  { name: "text-spacing", textSpacing: true, contextOptions: { reducedMotion: "reduce" } },
   { name: "w320", initialGlobals: { viewport: { value: "mobile1" } } },
 ];
 
