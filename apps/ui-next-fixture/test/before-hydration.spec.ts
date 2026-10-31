@@ -1,26 +1,9 @@
-import { existsSync, readdirSync } from "node:fs";
-import { extname, join } from "node:path";
-
 import { AxeBuilder } from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-import type { BrowserContext, Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
 
-const out = join(import.meta.dirname, "..", "out");
-const routes = readdirSync(out)
-  .filter((file) => file.endsWith(".html") && !["404.html", "_not-found.html"].includes(file))
-  .map((file) => file.slice(0, -".html".length));
-
-// The static export, answered as a static host answers it: `/name` is `name.html`.
-async function serve(context: BrowserContext) {
-  await context.route("**/*", async (route) => {
-    const { pathname } = new URL(route.request().url());
-    const page = pathname === "/" ? "/index" : pathname;
-    const file = join(out, extname(page) === "" ? `${page}.html` : page);
-
-    await (existsSync(file) ? route.fulfill({ path: file }) : route.fulfill({ status: 404 }));
-  });
-}
+import { routes, serve } from "./static-export.ts";
 
 test.beforeEach(async ({ context }) => {
   await serve(context);
@@ -33,6 +16,7 @@ test.describe("Tier 1 works with JavaScript off", () => {
     ["pagination", "Next page", "/pagination?page=3"],
     ["navbar", "Home", "/"],
     ["sidebar", "Home", "/"],
+    ["table", "Invoice", "/table?sort=invoice"],
   ] as const) {
     test(`${route}: a link navigates`, async ({ page }) => {
       await page.goto(`/${route}`);
@@ -48,17 +32,6 @@ test.describe("Tier 1 works with JavaScript off", () => {
     await page.getByRole("link", { name: "Skip to main content" }).press("Enter");
 
     await expect(page.getByRole("main")).toBeFocused();
-  });
-
-  test("accordion: an item opens and closes", async ({ page }) => {
-    await page.goto("/accordion");
-    await page.getByText("Billing").click();
-
-    await expect(page.getByText("Invoices are sent monthly.")).toBeHidden();
-
-    await page.getByText("Billing").click();
-
-    await expect(page.getByText("Invoices are sent monthly.")).toBeVisible();
   });
 
   for (const [route, trigger, overlay, close] of [
@@ -80,6 +53,42 @@ test.describe("Tier 1 works with JavaScript off", () => {
       await dialog.getByRole("button", { name: close }).click();
 
       await expect(dialog).toBeHidden();
+    });
+  }
+});
+
+test.describe("with JavaScript off, ContextualHelp opens from its button", () => {
+  test("Escape and a press outside close it", async ({ page }) => {
+    await page.goto("/contextual-help");
+
+    const button = page.getByRole("button", { name: "About billing cycles" });
+    const dialog = page.getByRole("dialog", { name: "Billing cycle" });
+
+    await button.click();
+    await expect(dialog).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await button.click();
+    await expect(dialog).toBeVisible();
+    await page.mouse.click(400, 5);
+    await expect(dialog).toBeHidden();
+  });
+});
+
+test.describe("with JavaScript off, a <details> section opens and closes", () => {
+  for (const [route, summary, content] of [
+    ["accordion", "Billing", "Invoices are sent monthly."],
+    ["disclosure", "Advanced settings", "Retries stop after five attempts."],
+  ] as const) {
+    test(route, async ({ page }) => {
+      await page.goto(`/${route}`);
+      await page.getByText(summary).click();
+
+      await expect(page.getByText(content)).toBeHidden();
+
+      await page.getByText(summary).click();
+
+      await expect(page.getByText(content)).toBeVisible();
     });
   }
 });
@@ -115,6 +124,16 @@ const fields = [
     "password-field",
     (page: Page) => page.getByLabel("Password", { exact: true }).fill("hunter2"),
     "/password-field?password=hunter2",
+  ],
+  [
+    "search-field",
+    (page: Page) => page.getByRole("searchbox", { name: "Search invoices" }).fill("april"),
+    "/search-field?q=april",
+  ],
+  [
+    "otp-field",
+    (page: Page) => page.getByRole("textbox", { name: "Verification code" }).fill("482719"),
+    "/otp-field?code=482719",
   ],
   [
     "checkbox",
@@ -187,10 +206,11 @@ test.describe("with JavaScript off, a Field control submits its form", () => {
     });
   }
 
-  // A Tier 1 bug, kept failing until fixed: the trigger opens the file picker only through script.
+  // With JavaScript off, the native file input stands in for the trigger, named by its text.
   test("file-trigger", async ({ page }) => {
-    test.fail();
     await page.goto("/file-trigger");
+    await page.keyboard.press("Tab");
+    await expect(page.getByRole("button", { name: "Choose image" })).toBeFocused();
 
     const chooser = page.waitForEvent("filechooser", { timeout: 1000 });
 
@@ -201,6 +221,50 @@ test.describe("with JavaScript off, a Field control submits its form", () => {
     await page.getByRole("button", { name: "Submit" }).click();
 
     await expect(page).toHaveURL("/file-trigger?avatar=photo.png");
+  });
+});
+
+// Each Tier 2 Field control route, what the user types, and the starting values its form submits.
+const startingValues = [
+  [
+    "combobox",
+    (page: Page) => page.getByRole("combobox", { name: "Assignee" }).fill("Erik"),
+    "/combobox?assignee=ab&reviewers=ab&reviewers=eh",
+  ],
+] as const;
+
+test.describe("with JavaScript off, a Tier 2 Field control submits its starting value", () => {
+  for (const [route, fill, url] of startingValues) {
+    test(route, async ({ page }) => {
+      await page.goto(`/${route}`);
+      await fill(page);
+      await page.getByRole("button", { name: "Submit" }).click();
+
+      await expect(page).toHaveURL(url);
+    });
+  }
+});
+
+test.describe("with JavaScript off, a Slider", () => {
+  test("moves where it is pressed", async ({ page }) => {
+    await page.goto("/slider");
+
+    const slider = page.getByRole("slider", { name: "Volume" });
+    const { width, height } = (await slider.boundingBox()) ?? { width: 0, height: 0 };
+
+    await slider.click({ position: { x: width - 1, y: height / 2 } });
+    await page.getByRole("button", { name: "Submit" }).click();
+
+    await expect(page).toHaveURL("/slider?volume=100");
+  });
+
+  test("shows no value it can't keep up with", async ({ page }) => {
+    await page.goto("/slider");
+    await page.getByRole("slider", { name: "Volume" }).press("ArrowRight");
+
+    expect(await page.getByRole("main").ariaSnapshot()).toBe(
+      '- main:\n  - slider "Volume": "41"\n  - button "Submit"',
+    );
   });
 });
 
@@ -219,7 +283,9 @@ const tier2 = [
   "number-field",
   "password-field",
   "range-calendar",
+  "search-field",
   "splitter",
+  "table",
   "tabs",
   "tag-group",
   "time-field",
@@ -237,9 +303,6 @@ test.describe("Tier 2 before hydration", () => {
 
   for (const route of tier2) {
     test(`${route}: renders what hydration renders, and passes axe`, async ({ page, context }) => {
-      // A Tier 2 bug, kept failing until fixed: once hydrated, Tabs sets hidden="until-found" on its
-      // inactive panels, and Chrome then exposes them in the accessibility tree.
-      test.fail(route === "tabs");
       await page.route("**/*.js", (request) => request.abort());
       await page.goto(`/${route}`);
 
@@ -257,18 +320,11 @@ test.describe("Tier 2 before hydration", () => {
   }
 });
 
-// Tier 2 bugs, kept failing until fixed: these controls show with JavaScript off and do nothing.
-const shownWithoutScript = new Set([
-  "copy-button",
-  "splitter",
-  "toggle-button",
-  "toggle-button-group",
-]);
-
 test.describe("with JavaScript off, a control only script can run is hidden", () => {
   for (const [route, role, name] of [
     ["alert", "button", "Dismiss"],
     ["calendar", "button", "Previous month"],
+    ["combobox", "button", "Remove Erik Halvorsen"],
     ["calendar", "button", "Next month"],
     ["date-field", "spinbutton", "lună"],
     ["date-picker", "button", "Choose date"],
@@ -277,6 +333,9 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["number-field", "button", "Increase"],
     ["password-field", "button", "Show password"],
     ["range-calendar", "button", "Previous month"],
+    ["search-field", "button", "Clear search"],
+    ["table", "checkbox", "Select all invoices"],
+    ["table", "checkbox", "INV-001"],
     ["tabs", "tab", "Settings"],
     ["tag-group", "button", "Remove Draft"],
     ["time-field", "spinbutton", "oră"],
@@ -286,7 +345,6 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["splitter", "separator", "Resize folders"],
   ] as const) {
     test(`${route}: ${name}`, async ({ page }) => {
-      test.fail(shownWithoutScript.has(route));
       await page.goto(`/${route}`);
 
       const control = page.getByRole(role, { name, includeHidden: true });

@@ -9,7 +9,8 @@ import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import { Listbox } from "../internal/listbox/listbox.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
-import { Control } from "./combobox-control.tsx";
+import { Control, Tags } from "./combobox-control.tsx";
+import { labelsOf } from "./combobox-item.tsx";
 import { listProps, part } from "./combobox-state.ts";
 import type { ComboboxState, Options } from "./combobox-state.ts";
 import { ValueContext, useCombobox } from "./use-combobox.ts";
@@ -46,79 +47,88 @@ export type RootProps = Naming &
     /** The text shown and announced while `loading`, such as "Loading…". */
     loadingText?: string | undefined;
     /**
-     * Your own rule, given the chosen Item's `value` (`""` when none): return a message when
-     * invalid.
+     * Your own rule, given the chosen Item's `value` (`""` when none, the first of several): return a
+     * message when invalid.
      */
     validate?: SizedWrapperProps["validate"];
   };
 
 interface ListProps {
   c: ComboboxState;
-  labelledBy: string | undefined;
-  label: string | undefined;
+  naming: Pick<ComponentProps<"div">, "aria-labelledby" | "aria-label">;
+  multiple: boolean;
+  empty: string;
   children: ReactNode;
 }
 
-function List({ c, labelledBy, label, children }: ListProps) {
+function List({ c, naming, multiple, empty, children }: ListProps) {
   return (
     <Listbox
       {...listProps(c)}
-      aria-labelledby={labelledBy}
-      aria-label={label}
+      {...naming}
+      aria-multiselectable={multiple || undefined}
       className={styles["list"]}
     >
-      <ValueContext value={c.value}>{children}</ValueContext>
+      <ValueContext value={{ chosen: c.value, multiple }}>{children}</ValueContext>
+      <div id={part(c, "empty")} aria-hidden className={styles["empty"]}>
+        {empty}
+      </div>
     </Listbox>
   );
 }
 
-const split = ({
-  value,
-  defaultValue,
-  onValueChange,
+/** The props left for the input once the Combobox has taken its own, and the empty-list text. */
+const inputPropsOf = ({
+  value: _value,
+  defaultValue: _defaultValue,
+  onValueChange: _onValueChange,
+  selectionMode: _selectionMode,
+  removeLabel: _removeLabel,
   inputValue,
   defaultInputValue,
-  onInputValueChange,
-  open,
-  defaultOpen,
-  onOpenChange,
-  filter,
+  onInputValueChange: _onInputValueChange,
+  open: _open,
+  defaultOpen: _defaultOpen,
+  onOpenChange: _onOpenChange,
+  filter: _filter,
+  loading,
+  loadingText,
+  noOptionsText,
   ...rest
-}: Omit<RootProps, "label" | "description" | "errorMessage" | "invalid" | "validate">) =>
-  [
-    {
-      value,
-      defaultValue,
-      onValueChange,
-      inputValue,
-      defaultInputValue,
-      onInputValueChange,
-      open,
-      defaultOpen,
-      onOpenChange,
-      filter,
-      // Read-only blocks the same presses and keys as disabled; only the look and announcement differ.
-      disabled: rest.disabled === true || rest.readOnly === true,
-    },
-    { ...rest, defaultValue: inputValue ?? defaultInputValue },
-  ] as const;
+}: Omit<RootProps, "label" | "description" | "errorMessage" | "invalid" | "validate">) => ({
+  ...rest,
+  defaultValue: inputValue ?? defaultInputValue,
+  empty: (loading === true ? loadingText : undefined) ?? noOptionsText,
+});
 
 /**
- * Chooses one value from a long or open-ended list by typing to narrow it. The value is always one
- * of the Items; the typed text only filters. Use Select for a short known list, RadioGroup for 2–6
+ * Chooses a value from a long or open-ended list by typing to narrow it, or several with
+ * `selectionMode="multiple"`, shown as tags that Backspace removes from the end. Values are always
+ * Items; the typed text only filters. Use Select for a short known list, RadioGroup for 2–6
  * options that should stay visible, a TextField for free text, and Command to run commands.
  *
- * Tier 2: shows its final content before hydration and works after it.
+ * Tier 2: shows its final content before hydration and works after it; until then, its form
+ * submits the starting value whatever is typed.
  */
 export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, validate, ...rest } = props;
-  const [
-    options,
-    { size, className, style, loading, loadingText, noOptionsText, name, form, children, ...input },
-  ] = split(rest);
-  const empty = (loading === true ? loadingText : undefined) ?? noOptionsText;
-  const c = useCombobox(options, empty);
+  const { size, className, style, name, form, children, empty, ...input } = inputPropsOf(rest);
+  // Read-only blocks the same presses and keys as disabled; only the look and announcement differ.
+  const locked = input.disabled === true || input.readOnly === true;
+  const c = useCombobox({ ...props, disabled: locked }, empty);
+  const multiple = props.selectionMode === "multiple";
   const field = { className, style, name, invalid, disabled: input.disabled, id: part(c, "root") };
+  const naming = {
+    "aria-labelledby": label === undefined ? input["aria-labelledby"] : part(c, "label"),
+    "aria-label": label === undefined ? input["aria-label"] : undefined,
+  };
+  const labels = labelsOf(children);
+  const tags =
+    props.selectionMode === "multiple" ? (
+      <Tags c={c} naming={naming} removeLabel={props.removeLabel} labels={labels} />
+    ) : undefined;
+  // The server renders the chosen Item's text as well, so hydration doesn't change the field.
+  const text = input.defaultValue ?? (multiple ? undefined : labels.get(c.value[0] ?? ""));
 
   return (
     <Wrapper
@@ -128,24 +138,19 @@ export function Root(props: RootProps) {
       labelId={part(c, "label")}
       description={description}
       errorMessage={errorMessage}
-      validate={validate && ((_text, formData) => validate(c.value ?? "", formData))}
+      validate={validate && ((_text, formData) => validate(c.value[0] ?? "", formData))}
       after={
         <VisuallyHidden asChild>
           <output id={part(c, "status")} />
         </VisuallyHidden>
       }
     >
-      <Control c={c} input={input} />
-      <input type="hidden" name={name} form={form} value={c.value ?? ""} />
-      <List
-        c={c}
-        labelledBy={label === undefined ? input["aria-labelledby"] : part(c, "label")}
-        label={label === undefined ? input["aria-label"] : undefined}
-      >
+      <Control c={c} input={{ ...input, defaultValue: text }} tags={tags} />
+      {(multiple ? c.value : [c.value[0] ?? ""]).map((value) => (
+        <input key={value} type="hidden" name={name} form={form} value={value} />
+      ))}
+      <List c={c} naming={naming} multiple={multiple} empty={empty}>
         {children}
-        <div id={part(c, "empty")} aria-hidden className={styles["empty"]}>
-          {empty}
-        </div>
       </List>
     </Wrapper>
   );

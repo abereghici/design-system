@@ -28,4 +28,23 @@
   .selection:has(.names:empty) {
     position: absolute;
   }
+
+  @media (scripting: enabled) {
+    /* Until hydration hides it from assistive technology, so it isn't announced beside the trigger. */
+    .input:not([aria-hidden]) {
+      visibility: hidden;
+    }
+  }
+
+  @media (scripting: none) {
+    /* Only script opens the picker from the trigger, so the native input shows in its place.
+       Doubled to outrank the trigger's display whichever stylesheet loads first. */
+    .input.input {
+      all: revert-layer;
+    }
+
+    .trigger.trigger {
+      display: none;
+    }
+  }
 }

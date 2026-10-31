@@ -1,5 +1,13 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Compact 1`] = `
+- list "Checkout":
+  - listitem: Account Completed
+  - listitem: Shipping
+  - listitem: Payment
+  - listitem: Review
+`;
+
 exports[`Default   > base story 1`] = `
 - list "Checkout":
   - listitem: Account Completed

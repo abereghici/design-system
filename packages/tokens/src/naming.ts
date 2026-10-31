@@ -93,6 +93,7 @@ const COMPONENTS = [
   "segmented-control",
   "tabs",
   "accordion",
+  "disclosure",
   "dropdown-menu",
   "context-menu",
   "popover",

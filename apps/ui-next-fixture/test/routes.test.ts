@@ -199,7 +199,6 @@ describe("per-component JS", () => {
     ["text", "var(--ab-type-body-md)", 0, []],
     ["scroll-area", "animation-timeline:scroll(self)", 0, []],
     ["spinner", "var(--ab-spinner-color)", 4, []],
-    ["table", "var(--ab-table-body-font)", 12, []],
     ["skeleton", "var(--ab-skeleton-background-color)", 4, []],
     ["progress", "var(--ab-progress-indicator-background-color)", 11, [formattedNumber]],
     ["meter", "var(--ab-meter-indicator-background-color)", 13, [formattedNumber]],
@@ -240,9 +239,9 @@ describe("interface text and direction", () => {
     expect(button.html).toContain('<meta name="text-scale" content="scale"/>');
   });
 
-  test("a sorted Table header renders aria-sort and its button on the server", () => {
+  test("a sorted Table header renders aria-sort and its sort link on the server", () => {
     expect(route("table").html).toMatch(
-      /<th scope="col" aria-sort="ascending" class="[^"]+"><button [^>]*type="button"/v,
+      /<th scope="col" aria-sort="ascending" class="[^"]+"><a class="[^"]+" href="\?sort=invoice">Invoice<\/a>/v,
     );
   });
 

@@ -69,9 +69,9 @@ export const componentRoutes = [
   },
   {
     name: "combobox",
-    tokens: ["field", "combobox", "icon"],
+    tokens: ["field", "combobox", "icon", "tag", "tag-group"],
     client: ["combobox/combobox-group", "combobox/combobox-item", "combobox/combobox-root"],
-    html: 'role="combobox"',
+    html: 'name="reviewers" value="eh"',
   },
   { name: "form", tokens: [], client: ["form/form"], html: "<form" },
   { name: "fieldset", tokens: ["fieldset"], client: [], html: "<legend" },
@@ -129,6 +129,30 @@ export const componentRoutes = [
     html: 'aria-label="Show password"',
   },
   {
+    name: "search-field",
+    tokens: ["field", "icon", "icon-button", "spinner"],
+    client: [
+      "field/field-description",
+      "field/field-error",
+      "field/field-label",
+      "field/field-root",
+      "search-field/search-field-control",
+    ],
+    html: 'enterKeyHint="search"',
+  },
+  {
+    name: "otp-field",
+    tokens: ["field"],
+    client: [
+      "field/field-description",
+      "field/field-error",
+      "field/field-label",
+      "field/field-root",
+      "text-field/text-field-input",
+    ],
+    html: 'autoComplete="one-time-code"',
+  },
+  {
     name: "file-trigger",
     tokens: ["button", "spinner", "icon", "icon-button"],
     client: ["button/button", "file-trigger/file-trigger"],
@@ -163,14 +187,15 @@ export const componentRoutes = [
   },
   {
     name: "accordion",
-    tokens: ["accordion", "icon"],
-    client: [
-      "accordion/accordion-content",
-      "accordion/accordion-item",
-      "accordion/accordion-root",
-      "accordion/accordion-trigger",
-    ],
+    tokens: ["accordion", "disclosure", "icon"],
+    client: ["accordion/accordion-item", "accordion/accordion-root", "accordion/accordion-trigger"],
     html: "<summary",
+  },
+  {
+    name: "disclosure",
+    tokens: ["disclosure", "icon"],
+    client: ["disclosure/disclosure-root", "disclosure/disclosure-trigger"],
+    html: "Retries stop after five attempts.</div></details>",
   },
   {
     name: "breadcrumbs",
@@ -292,6 +317,18 @@ export const componentRoutes = [
     html: 'command="toggle-popover"',
   },
   {
+    name: "contextual-help",
+    tokens: ["popover", "icon", "icon-button", "spinner"],
+    client: [
+      "icon-button/icon-button",
+      "popover/popover-content",
+      "popover/popover-root",
+      "popover/popover-title",
+      "popover/popover-trigger",
+    ],
+    html: 'Billing cycle</h2><p class="',
+  },
+  {
     name: "dropdown-menu",
     tokens: ["dropdown-menu", "icon"],
     client: [
@@ -332,6 +369,18 @@ export const componentRoutes = [
     tokens: ["field", "time-field"],
     client: ["time-field/time-field"],
     html: 'role="spinbutton"',
+  },
+  {
+    name: "table",
+    tokens: ["table", "checkbox"],
+    client: [
+      "table/table-root",
+      "table/table-row",
+      "table/table-row-header",
+      "table/table-select-all",
+      "table/table-select-row",
+    ],
+    html: 'aria-label="Select all invoices"',
   },
   {
     name: "calendar",

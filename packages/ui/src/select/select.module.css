@@ -109,6 +109,12 @@
       outline-offset: calc(var(--ab-focus-ring-width) * -1);
     }
 
+    @container style(--ab-density: compact) {
+      .item {
+        --ab-select-option-height: var(--ab-size-control-compact-sm);
+      }
+    }
+
     .item:focus-visible {
       background-color: var(--ab-select-option-background-color-hovered);
     }

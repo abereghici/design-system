@@ -1,5 +1,6 @@
 import { expect, fn } from "storybook/test";
 
+import { withDensity } from "#.storybook/decorators/with-density.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -98,3 +99,5 @@ Default.test(
     await expect(args.onPressedChange).not.toHaveBeenCalled();
   },
 );
+
+export const Compact = Default.extend({ decorators: [withDensity("compact")] });

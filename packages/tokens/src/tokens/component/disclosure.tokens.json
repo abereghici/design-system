@@ -1,0 +1,52 @@
+{
+  "component": {
+    "disclosure-trigger-padding-block": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "disclosure-trigger-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-md}"
+    },
+    "disclosure-trigger-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "disclosure-trigger-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "disclosure-trigger-icon-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-default}"
+    },
+    "disclosure-trigger-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-md}"
+    },
+    "disclosure-panel-padding-block": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "disclosure-panel-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-sm}"
+    },
+    "disclosure-panel-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "disclosure-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-expand}"
+    },
+    "disclosure-easing": {
+      "$type": "cubicBezier",
+      "$value": "{semantic.motion-easing-move}"
+    },
+    "disclosure-exit-duration": {
+      "$type": "duration",
+      "$value": "{semantic.motion-duration-exit}"
+    }
+  }
+}
