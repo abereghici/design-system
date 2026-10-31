@@ -7,11 +7,10 @@ import "@abereghici/tokens/components/table.css";
 import { Checkbox } from "../checkbox/checkbox.tsx";
 import { dispatchFeedback } from "../events/events.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
-import { toggled } from "../internal/toggle/toggle.ts";
-import { Cell } from "../table/table-cell.tsx";
 
-import { useSelection } from "./table-selection-root.tsx";
-import styles from "../table/table.module.css";
+import { Cell } from "./table-cell.tsx";
+import { useSelection } from "./table-selection.tsx";
+import styles from "./table.module.css";
 
 export interface SelectRowProps extends ComponentProps<"td"> {
   /** The row's key in `selectedKeys`. */
@@ -26,9 +25,9 @@ export function SelectRow({ value, selectRowLabel, ...props }: SelectRowProps) {
   const selected = state.selectedKeys.includes(value);
 
   function choose(event: ChangeEvent<HTMLInputElement>) {
-    if (actions.select([value], "row-press", event.nativeEvent)) {
+    if (actions.selectRow(value, event.nativeEvent)) {
       dispatchFeedback(event.currentTarget, "ab-toggle", {
-        component: "TableSelection",
+        component: "Table",
         reason: "user",
       });
     }
@@ -52,9 +51,7 @@ export function SelectRow({ value, selectRowLabel, ...props }: SelectRowProps) {
           aria-label={selectRowLabel}
           checked={selected}
           onCheckedChange={(_checked, details) => {
-            const next = toggled(state.selectedKeys, value);
-
-            if (!actions.select(next, "row-press", details.event)) details.cancel();
+            if (!actions.selectRow(value, details.event)) details.cancel();
           }}
         />
       )}

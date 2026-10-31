@@ -46,4 +46,35 @@
     /* Centres each digit in its box: half the spacing that follows it. */
     padding-inline-start: calc((100% / var(--length) - 1ch) / 2);
   }
+
+  /* After the last digit the browser's caret stands in that extra box, past the boxes: the last
+     box draws the caret instead, as wide and tall as the browser's, right after the digit. It
+     holds still, as only loading indicators loop here (WCAG 2.2.2). */
+  .input.input[data-caret-end] {
+    caret-color: transparent;
+  }
+
+  .cells::after {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: min(
+      100% / var(--length) * (var(--length) - 0.5) + 0.5ch,
+      100% - var(--ab-border-width-default)
+    );
+    margin-block: auto;
+    inline-size: var(--ab-border-width-default);
+    block-size: 1lh;
+    line-height: normal;
+    background-color: var(--ab-color-text-accent);
+  }
+
+  .cells:has(> .input[data-caret-end]:focus:read-write)::after {
+    content: "";
+  }
+
+  @media (forced-colors: active) {
+    .cells::after {
+      background-color: FieldText;
+    }
+  }
 }
