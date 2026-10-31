@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- text: Verification code
+- textbox "Verification code"
+`;
+
+exports[`Four Digits   > base story 1`] = `
+- text: Verification code
+- textbox "Verification code": "48"
+`;

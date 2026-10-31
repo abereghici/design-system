@@ -56,7 +56,8 @@ function selectOnce(input: HTMLInputElement, onSelect: FileTriggerProps["onSelec
 /**
  * Opens the system file picker from its one child (usually a Button), and the chosen files submit
  * with the form; their names show next to it with a Clear button. To also accept files dragged onto
- * an area, put it inside a DropZone.
+ * an area, put it inside a DropZone. With JavaScript off, the browser's own file input takes the
+ * trigger's place.
  *
  * Tier 1: works before hydration.
  */
@@ -73,7 +74,8 @@ export function FileTrigger({
   const trigger = useRef<HTMLElement>(null);
   const inputRef = zone?.input ?? input;
   const triggerRef = zone?.trigger ?? trigger;
-  const id = useId();
+  const ownId = useId();
+  const id = zone?.triggerId ?? ownId;
 
   function open(event: MouseEvent) {
     const target = inputRef.current;
@@ -87,7 +89,8 @@ export function FileTrigger({
   const button = (
     <Slot
       ref={triggerRef}
-      id={field === undefined ? undefined : id}
+      id={id}
+      className={styles["trigger"]}
       aria-labelledby={field === undefined ? undefined : `${field.labelId} ${id}`}
       aria-describedby={field?.describedBy}
       aria-invalid={invalid}
@@ -107,6 +110,7 @@ export function FileTrigger({
         {...props}
         inputRef={input}
         triggerRef={trigger}
+        triggerId={id}
         disabled={blocked}
         clearLabel={clearLabel}
       />

@@ -1,0 +1,13 @@
+@layer ab.components {
+  /* WebKit's and Blink's own cancel button: the clear button replaces it. */
+  .input::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
+  @media (scripting: none) {
+    /* Doubled to outrank IconButton's display whichever stylesheet loads first. */
+    .clear.clear {
+      display: none;
+    }
+  }
+}

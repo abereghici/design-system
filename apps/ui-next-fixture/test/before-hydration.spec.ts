@@ -1,26 +1,9 @@
-import { existsSync, readdirSync } from "node:fs";
-import { extname, join } from "node:path";
-
 import { AxeBuilder } from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-import type { BrowserContext, Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
 
-const out = join(import.meta.dirname, "..", "out");
-const routes = readdirSync(out)
-  .filter((file) => file.endsWith(".html") && !["404.html", "_not-found.html"].includes(file))
-  .map((file) => file.slice(0, -".html".length));
-
-// The static export, answered as a static host answers it: `/name` is `name.html`.
-async function serve(context: BrowserContext) {
-  await context.route("**/*", async (route) => {
-    const { pathname } = new URL(route.request().url());
-    const page = pathname === "/" ? "/index" : pathname;
-    const file = join(out, extname(page) === "" ? `${page}.html` : page);
-
-    await (existsSync(file) ? route.fulfill({ path: file }) : route.fulfill({ status: 404 }));
-  });
-}
+import { routes, serve } from "./static-export.ts";
 
 test.beforeEach(async ({ context }) => {
   await serve(context);
@@ -142,6 +125,16 @@ const fields = [
     "/password-field?password=hunter2",
   ],
   [
+    "search-field",
+    (page: Page) => page.getByRole("searchbox", { name: "Search invoices" }).fill("april"),
+    "/search-field?q=april",
+  ],
+  [
+    "otp-field",
+    (page: Page) => page.getByRole("textbox", { name: "Verification code" }).fill("482719"),
+    "/otp-field?code=482719",
+  ],
+  [
     "checkbox",
     (page: Page) => page.getByRole("checkbox", { name: "Email me updates" }).check(),
     "/checkbox?updates=on",
@@ -194,10 +187,11 @@ test.describe("with JavaScript off, a Tier 1 Field control submits its form", ()
     });
   }
 
-  // A Tier 1 bug, kept failing until fixed: the trigger opens the file picker only through script.
+  // With JavaScript off, the native file input stands in for the trigger, named by its text.
   test("file-trigger", async ({ page }) => {
-    test.fail();
     await page.goto("/file-trigger");
+    await page.keyboard.press("Tab");
+    await expect(page.getByRole("button", { name: "Choose image" })).toBeFocused();
 
     const chooser = page.waitForEvent("filechooser", { timeout: 1000 });
 
@@ -268,6 +262,7 @@ const tier2 = [
   "dropdown-menu",
   "number-field",
   "password-field",
+  "search-field",
   "splitter",
   "table",
   "tabs",
@@ -313,6 +308,7 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["number-field", "button", "Decrease"],
     ["number-field", "button", "Increase"],
     ["password-field", "button", "Show password"],
+    ["search-field", "button", "Clear search"],
     ["table", "checkbox", "Select all invoices"],
     ["table", "checkbox", "INV-001"],
     ["tabs", "tab", "Settings"],
