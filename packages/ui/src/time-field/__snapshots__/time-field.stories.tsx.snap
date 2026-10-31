@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- text: Start time
+- group "Start time":
+  - spinbutton "hour"
+  - spinbutton "minute"
+  - spinbutton "AM/PM"
+`;
+
+exports[`In A Form   > base story 1`] = `
+- form "Profile":
+  - text: Start time *" / "
+  - group "Start time *\\" / \\"":
+    - spinbutton "hour": "09"
+    - spinbutton "minute": "15"
+    - spinbutton "AM/PM": AM
+  - button "Save"
+  - button "Reset"
+`;

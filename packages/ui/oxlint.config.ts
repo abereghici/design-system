@@ -32,7 +32,7 @@ export default defineConfig({
         "src/command/command-root.tsx",
         "src/context-menu/context-menu-root.tsx",
         "src/context-menu/context-menu-trigger.tsx",
-        "src/date-picker/date-picker-root.tsx",
+        "src/date-picker/date-picker-panel.tsx",
         "src/dropdown-menu/dropdown-menu-trigger.tsx",
         "src/internal/overlay/overlay.ts",
         "src/internal/menu/menu.tsx",

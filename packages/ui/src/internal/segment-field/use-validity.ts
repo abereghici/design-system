@@ -1,20 +1,19 @@
 import { useRef } from "react";
 
-import { useEvent } from "../events/use-event.ts";
-import { setValidity, useField } from "../field/use-field.ts";
-import type { Validate } from "../field/use-field.ts";
-import type { Temporal } from "../internal/date/date.ts";
+import { useEvent } from "../../events/use-event.ts";
+import { setValidity, useField } from "../../field/use-field.ts";
+import type { Validate } from "../../field/use-field.ts";
 
-import type { Segments } from "./segments.ts";
+import type { SegmentModel, Segments } from "./segments.ts";
 
 export interface Validity {
   readonly invalid: boolean;
   readonly message: string;
 }
 
-interface Options {
+interface Options<Value> {
   readonly validate?: Validate | undefined;
-  readonly isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
+  readonly isUnavailable?: ((value: Value) => boolean) | undefined;
 }
 
 interface Wiring {
@@ -28,23 +27,24 @@ function write(node: { value: string }, value: string) {
   node.value = value;
 }
 
-/** Writes the value and custom validity to the hidden date input and reports its validity. */
-export function useValidity(
-  { validate, isDateUnavailable }: Options,
+/** Writes the value and custom validity to the native input and reports its validity. */
+export function useValidity<Part extends string, Value>(
+  model: SegmentModel<Part, Value>,
+  { validate, isUnavailable }: Options<Value>,
   { incomplete, unavailable, onValidity, reset }: Wiring,
 ) {
   const { field } = useField();
   const server = field?.serverError;
   const touched = useRef(false);
-  const apply = (segments: Segments, date: Temporal.PlainDate | null) => {
+  const apply = (segments: Segments<Part>, value: Value | null) => {
     const node = field?.control ?? null;
 
     if (node === null) return;
 
-    write(node, date?.toString() ?? "");
+    write(node, value === null ? "" : model.serialize(value));
 
-    const partial = date === null && Object.values(segments).some((part) => part !== undefined);
-    const rejected = date !== null && isDateUnavailable?.(date) === true;
+    const partial = value === null && Object.values(segments).some((part) => part !== undefined);
+    const rejected = value !== null && isUnavailable?.(value) === true;
 
     setValidity(node, partial ? incomplete : rejected ? unavailable : undefined, server, validate);
   };

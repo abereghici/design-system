@@ -7,6 +7,12 @@ export { Temporal };
 
 export type DatePart = "year" | "month" | "day";
 
+/** A start and an end day, in order; a one-day range has the same day as both. */
+export interface DateRange {
+  readonly start: Temporal.PlainDate;
+  readonly end: Temporal.PlainDate;
+}
+
 const isPart = (type: string): type is DatePart =>
   type === "year" || type === "month" || type === "day";
 
@@ -34,6 +40,13 @@ function build(locale: string | undefined) {
     monthName: (value: number) => month.format(Date.UTC(2001, value - 1, 1)),
     heading: (date: Temporal.PlainDate) => heading.format(utc(date)),
     full: (date: Temporal.PlainDate) => full.format(utc(date)),
+    fullRange: ({ start, end }: DateRange) => full.formatRange(utc(start), utc(end)),
+    /** The text between the two dates of a range, such as " – ". */
+    rangeSeparator: numeric
+      .formatRangeToParts(Date.UTC(2001, 1, 3), Date.UTC(2002, 1, 3))
+      .filter(({ source }) => source === "shared")
+      .map(({ value }) => value)
+      .join(""),
     weekday: (date: Temporal.PlainDate, style: "short" | "long") =>
       weekday[style].format(utc(date)),
     /** 1 (Monday) to 7 (Sunday), the numbering of `PlainDate.dayOfWeek`. */
@@ -54,16 +67,18 @@ export function useDateFormats() {
   return cached;
 }
 
-/** What a Calendar inside a DatePicker reads instead of its own props. */
-export interface DatePickerContextValue {
+/** What a Calendar inside a DatePicker, or a RangeCalendar inside a DateRangePicker, reads in place of its own props. */
+export interface PickerContextValue<Value> {
   readonly open: boolean;
-  readonly value: Temporal.PlainDate | null;
+  readonly value: Value | null;
   readonly min: Temporal.PlainDate | undefined;
   readonly max: Temporal.PlainDate | undefined;
   readonly isDateUnavailable: ((date: Temporal.PlainDate) => boolean) | undefined;
-  readonly choose: (date: Temporal.PlainDate, event: Event) => void;
+  readonly choose: (value: Value, event: Event) => void;
   /** Whether focus is still where the open left it (the trigger, the panel or nowhere). */
   readonly canFocus: () => boolean;
 }
 
-export const DatePickerContext = createContext<DatePickerContextValue | null>(null);
+export const DatePickerContext = createContext<PickerContextValue<Temporal.PlainDate> | null>(null);
+
+export const DateRangePickerContext = createContext<PickerContextValue<DateRange> | null>(null);

@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 
 import type { Page } from "@playwright/test";
 
+import { fieldRoutes } from "./field-routes.ts";
 import { routes, serve } from "./static-export.ts";
 
 test.beforeEach(async ({ context }) => {
@@ -107,77 +108,8 @@ test.describe("with JavaScript off, a Field control is described by its descript
   }
 });
 
-// Each Tier 1 Field control route, what the user enters, and where its native GET form goes.
-const fields = [
-  [
-    "text-field",
-    (page: Page) => page.getByRole("textbox", { name: "Email" }).fill("ana@example.com"),
-    "/text-field?email=ana%40example.com",
-  ],
-  [
-    "text-area",
-    (page: Page) => page.getByRole("textbox", { name: "Message" }).fill("Hi"),
-    "/text-area?message=Hi",
-  ],
-  [
-    "password-field",
-    (page: Page) => page.getByLabel("Password", { exact: true }).fill("hunter2"),
-    "/password-field?password=hunter2",
-  ],
-  [
-    "search-field",
-    (page: Page) => page.getByRole("searchbox", { name: "Search invoices" }).fill("april"),
-    "/search-field?q=april",
-  ],
-  [
-    "otp-field",
-    (page: Page) => page.getByRole("textbox", { name: "Verification code" }).fill("482719"),
-    "/otp-field?code=482719",
-  ],
-  [
-    "checkbox",
-    (page: Page) => page.getByRole("checkbox", { name: "Email me updates" }).check(),
-    "/checkbox?updates=on",
-  ],
-  [
-    "switch",
-    (page: Page) => page.getByRole("switch", { name: "Sound" }).check(),
-    "/switch?sound=on",
-  ],
-  [
-    "radio-group",
-    (page: Page) => page.getByRole("radio", { name: "Monthly" }).check(),
-    "/radio-group?plan=monthly",
-  ],
-  [
-    "segmented-control",
-    (page: Page) => page.getByRole("radio", { name: "Board" }).check(),
-    "/segmented-control?view=board",
-  ],
-  [
-    "slider",
-    (page: Page) => page.getByRole("slider", { name: "Volume" }).press("ArrowRight"),
-    "/slider?volume=41",
-  ],
-  [
-    "select",
-    (page: Page) => page.getByRole("combobox", { name: "Region" }).selectOption("jp"),
-    "/select?region=jp",
-  ],
-  [
-    "field",
-    (page: Page) => page.getByRole("textbox", { name: "Handle" }).fill("ana"),
-    "/field?handle=ana",
-  ],
-  [
-    "form",
-    (page: Page) => page.getByRole("textbox", { name: "Query" }).fill("shoes"),
-    "/search?q=shoes",
-  ],
-] as const;
-
-test.describe("with JavaScript off, a Tier 1 Field control submits its form", () => {
-  for (const [route, fill, url] of fields) {
+test.describe("with JavaScript off, a Field control submits its form", () => {
+  for (const [route, fill, url] of fieldRoutes) {
     test(route, async ({ page }) => {
       await page.goto(`/${route}`);
       await fill(page);
@@ -258,15 +190,18 @@ const tier2 = [
   "copy-button",
   "date-field",
   "date-picker",
+  "date-range-picker",
   "drop-zone",
   "dropdown-menu",
   "number-field",
   "password-field",
+  "range-calendar",
   "search-field",
   "splitter",
   "table",
   "tabs",
   "tag-group",
+  "time-field",
   "toast",
   "toaster",
   "toggle-button",
@@ -304,15 +239,19 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["calendar", "button", "Previous month"],
     ["combobox", "button", "Remove Erik Halvorsen"],
     ["calendar", "button", "Next month"],
+    ["date-field", "spinbutton", "lună"],
     ["date-picker", "button", "Choose date"],
+    ["date-range-picker", "button", "Choose dates"],
     ["number-field", "button", "Decrease"],
     ["number-field", "button", "Increase"],
     ["password-field", "button", "Show password"],
+    ["range-calendar", "button", "Previous month"],
     ["search-field", "button", "Clear search"],
     ["table", "checkbox", "Select all invoices"],
     ["table", "checkbox", "INV-001"],
     ["tabs", "tab", "Settings"],
     ["tag-group", "button", "Remove Draft"],
+    ["time-field", "spinbutton", "oră"],
     ["copy-button", "button", "Copy invoice number"],
     ["toggle-button", "button", "Bold"],
     ["toggle-button-group", "button", "Italic"],

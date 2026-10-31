@@ -78,7 +78,7 @@ Default.test(
 );
 
 Default.test(
-  "clears a DateField server error once a segment is edited",
+  "focuses a DateField with a server error, and clears the error once a segment is edited",
   {
     args: {
       errors: { birthDate: "You must be 18 or older." },
@@ -94,6 +94,7 @@ Default.test(
   async ({ canvas, userEvent }) => {
     const month = canvas.getByRole("spinbutton", { name: "month" });
 
+    await expect(month).toHaveFocus();
     await expect(month).toBeInvalid();
     await expect(canvas.getByText("You must be 18 or older.")).toBeVisible();
     await userEvent.click(month);

@@ -1,0 +1,7 @@
+@layer ab.components {
+  .group {
+    --segment-border-radius: var(--ab-time-field-segment-border-radius);
+    --segment-background-color-focused: var(--ab-time-field-segment-background-color-focused);
+    --segment-text-color-focused: var(--ab-time-field-segment-text-color-focused);
+  }
+}

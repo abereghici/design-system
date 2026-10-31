@@ -365,6 +365,12 @@ export const componentRoutes = [
     html: 'role="spinbutton"',
   },
   {
+    name: "time-field",
+    tokens: ["field", "time-field"],
+    client: ["time-field/time-field"],
+    html: 'role="spinbutton"',
+  },
+  {
     name: "table",
     tokens: ["table", "checkbox"],
     client: [
@@ -386,6 +392,31 @@ export const componentRoutes = [
     name: "date-picker",
     tokens: ["field", "date-field", "popover", "icon", "icon-button", "spinner"],
     client: [],
+    html: 'aria-haspopup="dialog"',
+  },
+  {
+    name: "range-calendar",
+    tokens: ["calendar", "range-calendar", "icon", "icon-button", "spinner"],
+    client: [],
+    html: "data-selection-start",
+  },
+  {
+    name: "date-range-picker",
+    tokens: [
+      "field",
+      "date-range-picker",
+      "popover",
+      "calendar",
+      "range-calendar",
+      "icon",
+      "icon-button",
+      "spinner",
+    ],
+    client: [
+      "date-picker/date-picker-content",
+      "date-range-picker/date-range-picker-root",
+      "range-calendar/range-calendar",
+    ],
     html: 'aria-haspopup="dialog"',
   },
   {

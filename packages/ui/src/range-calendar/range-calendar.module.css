@@ -1,0 +1,6 @@
+@layer ab.components {
+  .root {
+    --range-background-color: var(--ab-range-calendar-range-background-color);
+    --range-text-color: var(--ab-range-calendar-range-text-color);
+  }
+}
