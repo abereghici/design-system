@@ -5,6 +5,8 @@ import { sharedListener } from "../internal/dom-event/shared-listener.ts";
 import { close, mark, progressOf } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
 
+import { useInteracting } from "./use-interacting.ts";
+
 const onVisibility = sharedListener("visibilitychange", () => document);
 
 function tokenDuration(node: Element, danger: boolean) {
@@ -43,12 +45,12 @@ function startTimers(node: Element, toasts: readonly ToastRecord[]) {
   };
 }
 
-/** Closes each toast when its time runs out, paused while `interacting` or the page is hidden. */
-export function useTimers(
-  region: RefObject<HTMLElement | null>,
-  toasts: readonly ToastRecord[],
-  interacting: boolean,
-) {
+/**
+ * Closes each toast when its time runs out, paused while the pointer or focus is in the Region or
+ * the page is hidden. Spread the returned handlers on the Region.
+ */
+export function useTimers(region: RefObject<HTMLElement | null>, toasts: readonly ToastRecord[]) {
+  const { interacting, handlers } = useInteracting();
   const hidden = useSyncExternalStore(
     onVisibility,
     () => document.visibilityState === "hidden",
@@ -61,4 +63,6 @@ export function useTimers(
 
     return node === null || paused ? undefined : startTimers(node, toasts);
   }, [region, toasts, paused]);
+
+  return handlers;
 }

@@ -23,9 +23,9 @@ interface LayerProps extends ComponentProps<"section"> {
 export function Layer({ closeLabel, ref, ...props }: LayerProps) {
   const toasts = useSyncExternalStore(subscribe, snapshot, () => none);
   const region = useRef<HTMLElement>(null);
-  const { restore, interacting, handlers } = useFocusReturn(region);
+  const focusReturn = useFocusReturn(region);
+  const pause = useTimers(region, toasts);
 
-  useTimers(region, toasts, interacting);
   useRegion(region, toasts);
 
   const position = (at: number) => toasts.slice(0, at).filter(({ exiting }) => !exiting).length;
@@ -34,7 +34,10 @@ export function Layer({ closeLabel, ref, ...props }: LayerProps) {
     <>
       <Announcer toasts={toasts} />
       <section
-        {...mergeProps({ className: styles["region"], ...handlers }, props)}
+        {...mergeProps(
+          mergeProps({ className: styles["region"], ...focusReturn.handlers }, pause),
+          props,
+        )}
         ref={composeRefs(region, ref)}
         popover="manual"
         tabIndex={-1}
@@ -47,7 +50,7 @@ export function Layer({ closeLabel, ref, ...props }: LayerProps) {
               record={record}
               index={position(at)}
               closeLabel={closeLabel}
-              restore={restore}
+              restore={focusReturn.restore}
             />
           ))}
         </ol>
