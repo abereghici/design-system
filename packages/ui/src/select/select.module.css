@@ -24,7 +24,12 @@
     inset-inline-end: var(--ab-field-padding-inline);
     color: var(--ab-select-icon-color);
     pointer-events: none;
-    transition: rotate var(--ab-motion-duration-swap) var(--ab-motion-easing-enter);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .select[data-pointer] + .icon {
+      transition: rotate var(--ab-motion-duration-swap) var(--ab-motion-easing-enter);
+    }
   }
 
   .select[aria-disabled="true"] + .icon {

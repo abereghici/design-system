@@ -46,7 +46,12 @@
     place-items: center;
     inline-size: var(--ab-tree-item-icon-size);
     block-size: var(--ab-tree-item-icon-size);
-    transition: rotate var(--ab-motion-duration-expand) var(--ab-motion-easing-move);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .root[data-pointer] .chevron {
+      transition: rotate var(--ab-motion-duration-expand) var(--ab-motion-easing-move);
+    }
   }
 
   .item[aria-expanded="true"] > .chevron {

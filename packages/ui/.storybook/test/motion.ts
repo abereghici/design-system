@@ -10,6 +10,10 @@ const animations = (element: Element) =>
 /** Whether the element or anything in it is animating. */
 export const animates = (element: Element) => animations(element).length > 0;
 
+/** Whether the element or anything in it turns, as a chevron does when its section opens. */
+export const turns = (element: Element) =>
+  animations(element).some((effect) => effect.getKeyframes().some((frame) => "rotate" in frame));
+
 /** Whether the element or anything in it moves, which reduced motion must stop. */
 export const moves = (element: Element) =>
   animations(element).some((effect) =>

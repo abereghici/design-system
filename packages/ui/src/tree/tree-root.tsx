@@ -5,12 +5,14 @@ import type { ComponentProps, FocusEvent, KeyboardEvent, SyntheticEvent } from "
 
 import "@abereghici/tokens/components/tree.css";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback, pointerMarker } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useControllableState } from "../events/use-controllable-state.ts";
 import { typeahead } from "../internal/listbox/listbox.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { toggled } from "../internal/toggle/toggle.ts";
+
+import styles from "./tree.module.css";
 
 /**
  * `"arrow-key"`: Right or Left on an Item. `"item-press"`: a click on an Item's chevron, or a
@@ -209,7 +211,7 @@ export function Root({
       }}
     >
       <div
-        {...mergeProps({ onFocus: enter }, props)}
+        {...mergeProps({ className: styles["root"], onFocus: enter, ...pointerMarker }, props)}
         role="tree"
         aria-multiselectable={selectionMode === "multiple" ? true : undefined}
         tabIndex={active === null ? 0 : -1}
