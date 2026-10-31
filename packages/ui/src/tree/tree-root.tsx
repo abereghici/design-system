@@ -11,7 +11,7 @@ import { createSafeContext } from "../internal/create-safe-context/create-safe-c
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
-import { enter, keyTarget } from "./tree-navigation.ts";
+import { treeNavigation } from "./tree-navigation.ts";
 import { useTreeState } from "./use-tree-state.ts";
 import styles from "./tree.module.css";
 
@@ -66,7 +66,7 @@ function press(tree: TreeState, event: ItemEvent, item: TreeItemState) {
 }
 
 function keyDown(tree: TreeState, event: KeyboardEvent<HTMLElement>, item: TreeItemState) {
-  const target = keyTarget(event, item);
+  const target = treeNavigation.keyTarget(event, item);
 
   if (target === null) return;
 
@@ -76,6 +76,12 @@ function keyDown(tree: TreeState, event: KeyboardEvent<HTMLElement>, item: TreeI
   else if (target === "press") press(tree, event, item);
   else if (target instanceof HTMLElement) target.focus();
 }
+
+const own = {
+  className: styles["root"],
+  onFocus: treeNavigation.focusSelectedItem,
+  ...pointerMarker,
+};
 
 export type RootProps = Omit<ComponentProps<"div">, "role" | "aria-label" | "aria-labelledby"> & {
   /** The `id`s of the expanded Items, when your state holds them. */
@@ -153,7 +159,7 @@ export function Root({
       }}
     >
       <div
-        {...mergeProps({ className: styles["root"], onFocus: enter, ...pointerMarker }, props)}
+        {...mergeProps(own, props)}
         role="tree"
         aria-multiselectable={selectionMode === "multiple" ? true : undefined}
         tabIndex={active === null ? 0 : -1}
