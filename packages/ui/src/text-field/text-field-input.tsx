@@ -3,6 +3,7 @@
 import "@abereghici/tokens/components/field.css";
 
 import * as Field from "../field/field.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./text-field.module.css";
 
@@ -12,9 +13,8 @@ export function Input({ readOnly, ...props }: Field.ControlProps) {
   return (
     <input
       dir="auto"
-      {...bindings}
+      {...mergeProps({ className: styles["input"] }, bindings)}
       readOnly={bindings["aria-disabled"] ?? readOnly}
-      className={styles["input"]}
     />
   );
 }

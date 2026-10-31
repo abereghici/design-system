@@ -129,6 +129,18 @@ export const componentRoutes = [
     html: 'aria-label="Show password"',
   },
   {
+    name: "search-field",
+    tokens: ["field", "icon", "icon-button", "spinner"],
+    client: [
+      "field/field-description",
+      "field/field-error",
+      "field/field-label",
+      "field/field-root",
+      "search-field/search-field-control",
+    ],
+    html: 'enterKeyHint="search"',
+  },
+  {
     name: "file-trigger",
     tokens: ["button", "spinner", "icon", "icon-button"],
     client: ["button/button", "file-trigger/file-trigger"],

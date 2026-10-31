@@ -45,6 +45,7 @@ const budgets: Readonly<Record<string, string>> = {
   popover: "4.45 kB",
   "radio-group": "2.6 kB",
   "ui-provider": "5.4 kB",
+  "search-field": "5.35 kB",
   select: "4.5 kB",
   separator: "1 kB",
   skeleton: "900 B",

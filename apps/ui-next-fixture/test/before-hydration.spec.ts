@@ -116,6 +116,11 @@ const fields = [
     "/password-field?password=hunter2",
   ],
   [
+    "search-field",
+    (page: Page) => page.getByRole("searchbox", { name: "Search invoices" }).fill("april"),
+    "/search-field?q=april",
+  ],
+  [
     "checkbox",
     (page: Page) => page.getByRole("checkbox", { name: "Email me updates" }).check(),
     "/checkbox?updates=on",
@@ -198,6 +203,7 @@ const tier2 = [
   "dropdown-menu",
   "number-field",
   "password-field",
+  "search-field",
   "splitter",
   "tabs",
   "tag-group",
@@ -252,6 +258,7 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["number-field", "button", "Decrease"],
     ["number-field", "button", "Increase"],
     ["password-field", "button", "Show password"],
+    ["search-field", "button", "Clear search"],
     ["tabs", "tab", "Settings"],
     ["tag-group", "button", "Remove Draft"],
     ["copy-button", "button", "Copy invoice number"],
