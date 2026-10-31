@@ -2,6 +2,8 @@ export { Root } from "./table-root.tsx";
 
 export type { RootProps } from "./table-root.tsx";
 
+export type { ChangeEventDetails } from "./table-selection.tsx";
+
 export { Caption } from "./table-caption.tsx";
 
 export { Header } from "./table-header.tsx";
@@ -21,6 +23,14 @@ export type { SortLabelProps } from "./table-sort-label.tsx";
 export { RowHeader } from "./table-row-header.tsx";
 
 export { Cell } from "./table-cell.tsx";
+
+export { SelectAll } from "./table-select-all.tsx";
+
+export type { SelectAllProps } from "./table-select-all.tsx";
+
+export { SelectRow } from "./table-select-row.tsx";
+
+export type { SelectRowProps } from "./table-select-row.tsx";
 
 export { Skeleton } from "./table-skeleton.tsx";
 
