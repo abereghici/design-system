@@ -1,35 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Compact 1`] = `
-- table "Invoices, 2026":
-  - caption: Invoices, 2026
-  - rowgroup:
-    - row "Invoice Status Issued Amount":
-      - columnheader "Invoice"
-      - columnheader "Status"
-      - columnheader "Issued"
-      - columnheader "Amount"
-  - rowgroup:
-    - row "INV-001 Paid 2026-01-05 €250.00":
-      - rowheader "INV-001"
-      - cell "Paid"
-      - cell "2026-01-05":
-        - time: 2026-01-05
-      - cell "€250.00"
-    - row "INV-002 Pending 2026-02-05 €1,180.40":
-      - rowheader "INV-002"
-      - cell "Pending"
-      - cell "2026-02-05":
-        - time: 2026-02-05
-      - cell "€1,180.40"
-    - row "INV-003 Overdue 2026-03-05 €74.10":
-      - rowheader "INV-003"
-      - cell "Overdue"
-      - cell "2026-03-05":
-        - time: 2026-03-05
-      - cell "€74.10"
-`;
-
 exports[`Default   > base story 1`] = `
 - table "Invoices, 2026":
   - caption: Invoices, 2026
@@ -166,31 +136,23 @@ exports[`Sorted On The Server 1`] = `
       - cell "€74.10"
 `;
 
-exports[`Sorting And Selecting   > base story 1`] = `
+exports[`Sorting   > base story 1`] = `
 - table "Invoices, 2026":
   - caption: Invoices, 2026
   - rowgroup:
-    - row "Select all invoices Invoice Amount":
-      - columnheader "Select all invoices":
-        - checkbox "Select all invoices" [checked=mixed]
+    - row "Invoice Amount":
       - columnheader "Invoice":
         - button "Invoice"
       - columnheader "Amount":
         - button "Amount"
   - rowgroup:
     - row "INV-001 €250.00":
-      - cell "INV-001":
-        - checkbox "INV-001"
       - rowheader "INV-001"
       - cell "€250.00"
     - row "INV-002 €1,180.40":
-      - cell "INV-002":
-        - checkbox "INV-002" [checked]
       - rowheader "INV-002"
       - cell "€1,180.40"
     - row "INV-003 €74.10":
-      - cell "INV-003":
-        - checkbox "INV-003"
       - rowheader "INV-003"
       - cell "€74.10"
 `;

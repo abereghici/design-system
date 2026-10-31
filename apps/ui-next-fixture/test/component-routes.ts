@@ -372,13 +372,17 @@ export const componentRoutes = [
   },
   {
     name: "table",
+    tokens: ["table"],
+    client: [],
+    html: 'aria-sort="ascending"',
+  },
+  {
+    name: "table-selection",
     tokens: ["table", "checkbox"],
     client: [
-      "table/table-root",
-      "table/table-row",
-      "table/table-row-header",
-      "table/table-select-all",
-      "table/table-select-row",
+      "table-selection/table-selection-root",
+      "table-selection/table-selection-select-all",
+      "table-selection/table-selection-select-row",
     ],
     html: 'aria-label="Select all invoices"',
   },

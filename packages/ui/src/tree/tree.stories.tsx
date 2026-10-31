@@ -148,7 +148,7 @@ Default.test(
 
 Default.test(
   "toggles a parent with Enter or a click on its row when nothing can be selected",
-  { args: { selectionMode: "none" } },
+  { args: { selectionMode: undefined } },
   async ({ canvas }) => {
     const user = await trusted();
 

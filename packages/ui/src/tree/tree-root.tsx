@@ -12,7 +12,7 @@ import { mergeProps } from "../internal/slot/slot.tsx";
 
 /**
  * `"arrow-key"`: Right or Left on an Item. `"item-press"`: a click on an Item's chevron, or a
- * click, Enter or Space on an Item when `selectionMode` is `"none"`. `cancel()`: keeps the Items
+ * click, Enter or Space on an Item without a `selectionMode`. `cancel()`: keeps the Items
  * as they were.
  */
 export type ExpandedChangeEventDetails = Details<"arrow-key" | "item-press">;
@@ -139,8 +139,8 @@ export type RootProps = Omit<ComponentProps<"div">, "role"> & {
    * Item's children once it expands to load them lazily.
    */
   onExpandedChange?: (keys: string[], details: ExpandedChangeEventDetails) => void;
-  /** Lets people select one Item or several; with `"none"`, Items only expand and collapse. */
-  selectionMode?: "none" | "single" | "multiple";
+  /** Lets people select one Item or several; without it, Items only expand and collapse. */
+  selectionMode?: "single" | "multiple" | undefined;
   /** The `id`s of the selected Items, when your state holds them. */
   selectedKeys?: ReadonlyArray<string>;
   /** The Items selected on the first render when it holds its own state. */
@@ -171,7 +171,7 @@ export function Root({
   expandedKeys,
   defaultExpandedKeys = [],
   onExpandedChange,
-  selectionMode = "none",
+  selectionMode,
   selectedKeys,
   defaultSelectedKeys = [],
   onSelectionChange,
@@ -180,7 +180,7 @@ export function Root({
   const [expanded, setExpanded] = useKeys(expandedKeys, defaultExpandedKeys, onExpandedChange);
   const [selected, setSelected] = useKeys(selectedKeys, defaultSelectedKeys, onSelectionChange);
   const [active, setActive] = useState<string | null>(null);
-  const selectable = selectionMode === "none" ? null : selected;
+  const selectable = selectionMode === undefined ? null : selected;
 
   function press(event: ItemEvent, item: TreeItemState) {
     if (selectable === null || onChevron(event, item)) {

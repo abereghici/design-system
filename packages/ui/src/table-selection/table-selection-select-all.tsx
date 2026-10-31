@@ -6,10 +6,10 @@ import "@abereghici/tokens/components/table.css";
 
 import { Checkbox } from "../checkbox/checkbox.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
+import { ColumnHeader } from "../table/table-column-header.tsx";
 
-import { ColumnHeader } from "./table-column-header.tsx";
-import { useTable } from "./table-root.tsx";
-import styles from "./table.module.css";
+import { useSelection } from "./table-selection-root.tsx";
+import styles from "../table/table.module.css";
 
 export interface SelectAllProps extends ComponentProps<"th"> {
   /** The `id` of every row the checkbox selects, usually the rows on the page. */
@@ -23,13 +23,13 @@ export interface SelectAllProps extends ComponentProps<"th"> {
  * mixed while only some of them are selected. Needs `selectionMode="multiple"`.
  */
 export function SelectAll({ keys, selectAllLabel, ...props }: SelectAllProps) {
-  const table = useTable("SelectAll");
+  const { state, actions } = useSelection("SelectAll");
 
-  if (table.selectionMode !== "multiple") {
-    throw new Error('Table.SelectAll needs selectionMode="multiple" on Table.Root');
+  if (state.selectionMode !== "multiple") {
+    throw new Error('TableSelection.SelectAll needs selectionMode="multiple" on its Root');
   }
 
-  const selected = keys.filter((key) => table.keys.has(key)).length;
+  const selected = keys.filter((key) => state.selectedKeys.includes(key)).length;
   const all = keys.length > 0 && selected === keys.length;
 
   return (
@@ -39,10 +39,10 @@ export function SelectAll({ keys, selectAllLabel, ...props }: SelectAllProps) {
         checked={all}
         indeterminate={selected > 0 && !all}
         onCheckedChange={(checked, details) => {
-          const page = new Set(keys);
-          const next = checked ? table.keys.union(page) : table.keys.difference(page);
+          const others = state.selectedKeys.filter((key) => !keys.includes(key));
+          const next = checked ? [...others, ...keys] : others;
 
-          if (!table.select(next, "select-all-press", details.event)) details.cancel();
+          if (!actions.select(next, "select-all-press", details.event)) details.cancel();
         }}
       />
     </ColumnHeader>

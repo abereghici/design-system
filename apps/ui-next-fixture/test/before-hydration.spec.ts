@@ -1,8 +1,6 @@
 import { AxeBuilder } from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-import type { Page } from "@playwright/test";
-
 import { fieldRoutes } from "./field-routes.ts";
 import { routes, serve } from "./static-export.ts";
 
@@ -190,7 +188,7 @@ const tier2 = [
   "range-calendar",
   "search-field",
   "splitter",
-  "table",
+  "table-selection",
   "tabs",
   "tag-group",
   "time-field",
@@ -242,8 +240,8 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["password-field", "button", "Show password"],
     ["range-calendar", "button", "Previous month"],
     ["search-field", "button", "Clear search"],
-    ["table", "checkbox", "Select all invoices"],
-    ["table", "checkbox", "INV-001"],
+    ["table-selection", "checkbox", "Select all invoices"],
+    ["table-selection", "checkbox", "Select INV-001"],
     ["tabs", "tab", "Settings"],
     ["tag-group", "button", "Remove Draft"],
     ["time-field", "spinbutton", "oră"],
