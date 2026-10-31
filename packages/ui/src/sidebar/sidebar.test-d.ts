@@ -8,3 +8,8 @@ expectTypeOf<{ children: null }>().not.toExtend<Sidebar.RootProps>();
 
 // A collapsible group opens and folds from its label, so it needs one.
 expectTypeOf({ children: null }).not.toExtend<CollapsibleGroupProps>();
+
+// A collapsible group reports its open changes with Sidebar's own details type.
+expectTypeOf<NonNullable<Sidebar.CollapsibleGroupProps["onOpenChange"]>>()
+  .parameter(1)
+  .toEqualTypeOf<Sidebar.ChangeEventDetails>();
