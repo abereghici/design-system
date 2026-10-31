@@ -10,4 +10,4 @@ export { Item } from "./radio-group-item.tsx";
 
 export type { ItemProps } from "./radio-group-item.tsx";
 
-export type { ChangeEventDetails } from "../internal/toggle-click/toggle-click.ts";
+export type { ChangeEventDetails } from "./radio-group-root.tsx";

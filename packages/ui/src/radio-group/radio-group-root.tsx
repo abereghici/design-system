@@ -6,14 +6,17 @@ import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 import "@abereghici/tokens/components/fieldset.css";
 import "@abereghici/tokens/components/radio-group.css";
 
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { followVisualDirection } from "../internal/radio-choice/follow-visual-direction.ts";
 import { useRadioChoice } from "../internal/radio-choice/use-radio-choice.ts";
-import type { ChangeEventDetails } from "../internal/toggle-click/toggle-click.ts";
 
 import styles from "./radio-group.module.css";
+
+/** `cancel()`: keeps the previous choice: the browser restores it once the click is cancelled. */
+export type ChangeEventDetails = Details<"none">;
 
 interface Group {
   readonly name: string;

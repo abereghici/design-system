@@ -7,14 +7,15 @@ import "@abereghici/tokens/components/checkbox.css";
 
 import { useFieldControl } from "../field/use-field.ts";
 import type { Labelled } from "../internal/accessible-name/accessible-name.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { toggleClick } from "../internal/toggle-click/toggle-click.ts";
-import type { ChangeEventDetails } from "../internal/toggle-click/toggle-click.ts";
 
 import styles from "./checkbox.module.css";
 
-export type CheckboxChangeEventDetails = ChangeEventDetails;
+/** `cancel()`: keeps the previous state: the browser restores it once the click is cancelled. */
+export type CheckboxChangeEventDetails = Details<"none">;
 
 export type CheckboxProps = Omit<ComponentProps<"input">, "type" | "children"> &
   Labelled<"children"> & {

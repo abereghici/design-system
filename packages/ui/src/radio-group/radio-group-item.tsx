@@ -7,9 +7,11 @@ import "@abereghici/tokens/components/fieldset.css";
 import "@abereghici/tokens/components/radio-group.css";
 
 import { useFieldControl } from "../field/use-field.ts";
-import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
+import {
+  composeEventHandlers,
+  preventDefault,
+} from "../internal/compose-event-handlers/compose-event-handlers.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
-import { preventDefault } from "../internal/toggle-click/toggle-click.ts";
 
 import { useRadioGroup } from "./radio-group-root.tsx";
 import styles from "./radio-group.module.css";

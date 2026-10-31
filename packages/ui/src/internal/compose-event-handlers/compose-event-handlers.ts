@@ -14,3 +14,8 @@ export function composeEventHandlers<Cause extends { defaultPrevented: boolean }
     if (!event.defaultPrevented) own(event);
   };
 }
+
+/** Stands in for the consumer's handler on a blocked control: the event is cancelled, so ours doesn't run either. */
+export function preventDefault(event: { preventDefault: () => void }) {
+  event.preventDefault();
+}

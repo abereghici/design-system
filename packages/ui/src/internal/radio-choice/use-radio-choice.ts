@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { MouseEvent } from "react";
 
 import { dispatchFeedback } from "../../feedback-event/feedback-event.ts";
-import type { ChangeEventDetails } from "../toggle-click/toggle-click.ts";
+import type { ChangeEventDetails } from "../change-request/change-request.ts";
 import { useControllableState } from "../uncontrolled-state/use-controllable-state.ts";
 
 /**
@@ -14,7 +14,7 @@ export function useRadioChoice(
   component: "RadioGroup" | "SegmentedControl",
   value: string | null | undefined,
   defaultValue: string | null,
-  onValueChange: ((value: string, details: ChangeEventDetails) => void) | undefined,
+  onValueChange: ((value: string, details: ChangeEventDetails<"none">) => void) | undefined,
 ) {
   const [root, setRoot] = useState<HTMLFieldSetElement | null>(null);
   const [current, change] = useControllableState(

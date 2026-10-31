@@ -3,14 +3,10 @@ import type { MouseEventHandler } from "react";
 import { dispatchFeedback } from "../../feedback-event/feedback-event.ts";
 import { requestChange } from "../change-request/change-request.ts";
 import type { ChangeEventDetails as Details } from "../change-request/change-request.ts";
-import { composeEventHandlers } from "../compose-event-handlers/compose-event-handlers.ts";
-
-/** `cancel()`: keeps the previous state: the browser restores it once the click is cancelled. */
-export type ChangeEventDetails = Details<"none">;
-
-export function preventDefault(event: { preventDefault: () => void }) {
-  event.preventDefault();
-}
+import {
+  composeEventHandlers,
+  preventDefault,
+} from "../compose-event-handlers/compose-event-handlers.ts";
 
 /**
  * The input's `click` handler. The browser has already flipped the checkedness when it runs, and
@@ -20,7 +16,7 @@ export function toggleClick(
   component: "Checkbox" | "Switch",
   disabled: boolean,
   onClick: MouseEventHandler<HTMLInputElement> | undefined,
-  onCheckedChange: ((checked: boolean, details: ChangeEventDetails) => void) | undefined,
+  onCheckedChange: ((checked: boolean, details: Details<"none">) => void) | undefined,
 ): MouseEventHandler<HTMLInputElement> {
   return composeEventHandlers(disabled ? preventDefault : onClick, (event) => {
     if (requestChange(onCheckedChange, event.currentTarget.checked, "none", event.nativeEvent)) {
