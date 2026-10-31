@@ -5,7 +5,7 @@ import { getDocument, useEvent } from "../events/use-event.ts";
 import { textOf } from "../internal/listbox/text-of.ts";
 import { useListbox } from "../internal/listbox/use-listbox.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
-import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
+import { byId, isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 import { valuesOf } from "../internal/toggle/toggle.ts";
 
 import {
@@ -45,7 +45,7 @@ function placePopover(c: OwnState, list: HTMLElement) {
 
   list.toggleAttribute("data-pointer", memoryOf(c).pointer);
 
-  if (c.open) list.showPopover(sourceOf(document.getElementById(part(c, "box"))));
+  if (c.open) list.showPopover(sourceOf(byId(part(c, "box"))));
   else list.hidePopover();
 }
 
@@ -63,7 +63,7 @@ function useListeners(c: ComboboxState) {
   useEvent(
     "pointerdown",
     (event) => {
-      const root = document.getElementById(part(c, "root"));
+      const root = byId(part(c, "root"));
 
       if (event.target instanceof Node && root?.contains(event.target) !== true) {
         dismiss(c, "outside-press", event);

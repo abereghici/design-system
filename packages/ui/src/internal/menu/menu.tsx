@@ -114,7 +114,7 @@ function close(menu: Menu, event: MouseEvent<HTMLElement>, always: boolean) {
 
   if (!always && !entered) return;
 
-  const content = document.getElementById(menu.overlay.contentId);
+  const content = event.currentTarget.closest<HTMLElement>('[role="menu"]');
 
   if (content !== null && menu.overlay.toggle(false, "item-press", event.nativeEvent)) {
     returnFocus(content);
