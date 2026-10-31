@@ -4,10 +4,9 @@ import type { ComponentProps, MouseEvent, PointerEvent as ReactPointerEvent } fr
 
 import { useMenu } from "../internal/menu/menu.tsx";
 import type { Menu } from "../internal/menu/menu.tsx";
-import { rememberFocus } from "../internal/overlay/overlay.ts";
 import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 
-import { place } from "./context-menu-root.tsx";
+import { place, rememberFocus } from "./context-menu-root.tsx";
 
 const LONG_PRESS = 700;
 

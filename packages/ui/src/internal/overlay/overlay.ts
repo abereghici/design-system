@@ -105,6 +105,23 @@ export const sourceOf = (source: Element | null): ShowPopoverOptions =>
 const invokerOf = (contentId: string) =>
   document.querySelector(`[commandfor="${CSS.escape(contentId)}"]`);
 
+/**
+ * Where a layer opens from: the element it shows against, where focus returns once it closes
+ * (given the layer and the opening's source), and whether a pointer opened it, for its motion.
+ */
+export interface Anchor {
+  readonly source: (contentId: string) => Element | null;
+  readonly returnTo: (content: HTMLElement, source: Element | null) => Element | null;
+  readonly pointer: (source: Element | null) => boolean;
+}
+
+/** Its Trigger, the invoker. */
+const invoker: Anchor = {
+  source: invokerOf,
+  returnTo: (_content, source) => source,
+  pointer: (source) => source?.matches(":is(:focus-visible, :has(:focus-visible))") === false,
+};
+
 function settle(element: HTMLElement, component: Component) {
   const layer = layerOf(element);
   const { closing, focusInside } = layer;
@@ -118,16 +135,6 @@ function settle(element: HTMLElement, component: Component) {
   if (focusInside === true && closing !== "outside-press") returnFocus(element);
 
   layer.returnTo = undefined;
-}
-
-/**
- * Records where focus was before a press that may open the layer moved it (WebKit blurs on press).
- */
-export function rememberFocus(contentId: string, focus = document.activeElement) {
-  const element = document.getElementById(contentId);
-
-  if (element !== null)
-    layerOf(element).returnTo = focus instanceof HTMLElement ? focus : undefined;
 }
 
 /** Puts focus back where the layer was opened from, unless the user already moved it elsewhere. */
@@ -174,7 +181,7 @@ function useInputRecord(contentId: string, open: boolean) {
   useEvent("pointerup", record, target, true);
 }
 
-function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, component: Component) {
+function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, anchor: Anchor) {
   const element = event.currentTarget;
   const layer = layerOf(element);
   const opening = event.newState === "open";
@@ -196,16 +203,10 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, compone
       document.activeElement === document.body || element.contains(document.activeElement);
   } else if (accepted) {
     const { source } = event.nativeEvent;
-    const from = component === "ContextMenu" ? (layer.returnTo ?? document.activeElement) : source;
+    const to = anchor.returnTo(element, source);
 
-    layer.returnTo = from instanceof HTMLElement ? from : undefined;
-
-    const keyboard =
-      component === "ContextMenu"
-        ? ":not([data-pointer])"
-        : ":is(:focus-visible, :has(:focus-visible))";
-
-    element.toggleAttribute("data-pointer", source?.matches(keyboard) === false);
+    layer.returnTo = to instanceof HTMLElement ? to : undefined;
+    element.toggleAttribute("data-pointer", anchor.pointer(source));
   } else {
     event.preventDefault();
   }
@@ -231,8 +232,7 @@ function reconcile(contentId: string, open: boolean, findSource: (id: string) =>
 
 function contentPropsOf(
   id: string,
-  component: Component,
-  options: Options,
+  { component, options, anchor }: { component: Component; options: Options; anchor: Anchor },
   setOpen: (open: boolean) => void,
   focusOut: (event: globalThis.FocusEvent) => void,
   hooks: ContentHooks = {},
@@ -244,7 +244,7 @@ function contentPropsOf(
       focusOut(event.nativeEvent);
     },
     onBeforeToggle: (event: ToggleEvent<HTMLElement>) => {
-      beforeToggle(options, event, component);
+      beforeToggle(options, event, anchor);
       hooks.onBeforeToggle?.(event);
     },
     onToggle: (event: ToggleEvent<HTMLElement>) => {
@@ -303,15 +303,13 @@ function controlsOf(
 /**
  * The open state of one `popover="auto"` layer, kept in step with the browser's own opens and
  * closes (commands, light dismiss, Escape) so each change reaches `onOpenChange` once. Its Trigger
- * and Content spread `triggerProps()` and `contentProps()`. A layer anchored to something other
- * than its Trigger passes `anchor`; the Trigger then shows it with that element as the source.
+ * and Content spread `triggerProps()` and `contentProps()`. A layer that opens from something
+ * other than its Trigger passes that part of its `anchor`; with a `source`, the Trigger shows it
+ * against that element. `component` names it in its `ab-dismiss`.
  */
-export function useOverlay(
-  component: Component,
-  options: Options,
-  anchor?: (contentId: string) => Element | null,
-) {
-  const findSource = anchor ?? invokerOf;
+export function useOverlay(component: Component, options: Options, anchor: Partial<Anchor> = {}) {
+  const adapter = { ...invoker, ...anchor };
+  const findSource = adapter.source;
   const [uncontrolled, setUncontrolled] = useState(options.defaultOpen ?? false);
   const current = options.open ?? uncontrolled;
   const contentId = useId();
@@ -330,9 +328,15 @@ export function useOverlay(
     request: controls.request,
     toggle: controls.toggle,
     contentProps: (hooks?: ContentHooks) =>
-      contentPropsOf(contentId, component, options, setUncontrolled, controls.focusOut, hooks),
+      contentPropsOf(
+        contentId,
+        { component, options, anchor: adapter },
+        setUncontrolled,
+        controls.focusOut,
+        hooks,
+      ),
     triggerProps: <Props extends TriggerHandlers>(props: Props) =>
-      triggerPropsOf(props, { ...controls, open: current, anchored: anchor !== undefined }),
+      triggerPropsOf(props, { ...controls, open: current, anchored: anchor.source !== undefined }),
   };
 }
 

@@ -5,7 +5,6 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/popover.css";
 
-import { rememberFocus } from "../overlay/overlay.ts";
 import { mergeProps } from "../slot/slot.tsx";
 
 import { PanelContext } from "./picker.ts";
@@ -24,7 +23,7 @@ export function Content({ children, ...props }: ContentProps) {
   if (panel === null)
     throw new Error("Content must be inside a DatePicker or DateRangePicker Root");
 
-  const { overlay, name, trigger } = panel;
+  const { overlay, name } = panel;
   const [mounted, setMounted] = useState(false);
 
   if (overlay.open && !mounted) setMounted(true);
@@ -33,17 +32,7 @@ export function Content({ children, ...props }: ContentProps) {
 
   return (
     <dialog
-      {...mergeProps(
-        {
-          className: base,
-          ...overlay.contentProps({
-            onBeforeToggle: (event) => {
-              if (event.newState === "open") rememberFocus(overlay.contentId, trigger.current);
-            },
-          }),
-        },
-        props,
-      )}
+      {...mergeProps({ className: base, ...overlay.contentProps() }, props)}
       aria-label={name}
     >
       {mounted && children}
