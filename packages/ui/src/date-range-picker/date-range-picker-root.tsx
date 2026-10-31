@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
 
 import "@abereghici/tokens/components/date-range-picker.css";
@@ -143,8 +143,6 @@ function usePicker(
   return { panel: { overlay, name: triggerLabel, trigger }, picker };
 }
 
-const valid = { invalid: false, message: "" };
-
 /**
  * A field for a start and an end date, such as a stay, with a button that opens a RangeCalendar:
  * type both dates, or pick them. Its label names the field, `startLabel` and `endLabel` its two
@@ -159,8 +157,6 @@ export function Root(props: RootProps) {
   const trigger = useRef<HTMLButtonElement>(null);
   const range = useRange(props, () => trigger.current?.form);
   const { panel, picker } = usePicker(props, range, trigger);
-  const [validity, setValidity] = useState({ start: valid, end: valid });
-  const shown = validity.start.invalid ? validity.start : validity.end;
 
   return (
     <Wrapper
@@ -170,22 +166,15 @@ export function Root(props: RootProps) {
       size={size}
       name={props.startName}
       disabled={disabled}
-      errorMessage={errorMessage ?? (shown.invalid ? shown.message : undefined)}
-      invalid={invalid ?? (shown.invalid || undefined)}
+      errorMessage={errorMessage}
+      invalid={invalid}
       after={
         <PanelContext value={panel}>
           <DateRangePickerContext value={picker}>{props.children}</DateRangePickerContext>
         </PanelContext>
       }
     >
-      <Box
-        {...props}
-        range={range}
-        onValidity={(half, next) => {
-          setValidity((previous) => ({ ...previous, [half]: next }));
-        }}
-        panel={panel}
-      />
+      <Box {...props} range={range} panel={panel} />
     </Wrapper>
   );
 }

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffectEvent, useLayoutEffect, useRef } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/field.css";
@@ -6,16 +6,13 @@ import "@abereghici/tokens/components/field.css";
 import { Wrapper } from "../../field/field-wrapper.tsx";
 import type { SizedWrapperProps } from "../../field/field-wrapper.tsx";
 import { useField } from "../../field/use-field.ts";
-import type { Validate } from "../../field/use-field.ts";
-import { mergeProps } from "../slot/slot.tsx";
+import { composeRefs, mergeProps } from "../slot/slot.tsx";
 
 import { display } from "./segments.ts";
 import type { Comparable, SegmentModel, Segments } from "./segments.ts";
 import { useSegmentEditing } from "./use-segment-editing.ts";
 import { useSegmentValue } from "./use-segment-value.ts";
 import type { ValueOptions } from "./use-segment-value.ts";
-import { useValidity } from "./use-validity.ts";
-import type { Validity } from "./use-validity.ts";
 import fieldStyles from "../../field/field.module.css";
 import styles from "./segment-field.module.css";
 
@@ -27,33 +24,69 @@ export interface SegmentFieldOptions<Part extends string, Value> extends ValueOp
   readonly form?: string | undefined;
   readonly required?: boolean | undefined;
   readonly disabled?: boolean | undefined;
-  readonly validate?: Validate | undefined;
   readonly incompleteMessage: string;
   readonly placeholders?: Readonly<Partial<Record<Part, string>>> | undefined;
-  readonly isUnavailable?: ((value: Value) => boolean) | undefined;
-  readonly unavailableMessage?: string | undefined;
+  /** The value's own rule, such as an unavailable day: its message, or nothing when it passes. */
+  readonly check?: ((value: Value) => string | undefined) | undefined;
 }
 
+/** The message of the value's own checks: a value typed only in part, then `check`. */
+function ownMessage<Part extends string, Value>(
+  options: SegmentFieldOptions<Part, Value>,
+  segments: Segments<Part>,
+  value: Value | null,
+) {
+  if (value !== null) return options.check?.(value);
+
+  return Object.values(segments).some((part) => part !== undefined)
+    ? options.incompleteMessage
+    : undefined;
+}
+
+/**
+ * The native input holds the value for the form; the Field validates it, after this control reports
+ * its own check, and shows its error once the user has left the edited segments.
+ */
 function useControl<Part extends string, Value extends Comparable<Value>>(
   model: SegmentModel<Part, Value>,
   options: SegmentFieldOptions<Part, Value>,
-  onValidity: (validity: Validity) => void,
 ) {
   const { field, blocked, invalid } = useField(options.disabled);
-  const state = useSegmentValue(model, options, field?.control?.form ?? null);
-  const validity = useValidity(model, options, {
-    incomplete: options.incompleteMessage,
-    unavailable: options.unavailableMessage ?? "",
-    onValidity,
+  const input = useRef<HTMLInputElement>(null);
+  const state = useSegmentValue(model, options, () => input.current?.form);
+  const value = state.committed === null ? "" : model.serialize(state.committed);
+  const message = ownMessage(options, state.segments, state.committed);
+  const report = useEffectEvent((node: HTMLInputElement, own: string | undefined) => {
+    field?.report(node, own);
   });
 
   useLayoutEffect(() => {
-    validity.apply(state.segments, state.committed);
+    const node = input.current;
+
+    if (node === null) return;
+
+    node.value = value;
+    report(node, message);
+  }, [value, message]);
+
+  const editing = useSegmentEditing({
+    model,
+    state,
+    blocked,
+    field: {
+      edit: () => {
+        field?.clearServerError();
+      },
+      commit: () => {
+        if (input.current !== null) field?.commit(input.current);
+      },
+      submit: () => {
+        input.current?.form?.requestSubmit();
+      },
+    },
   });
 
-  const editing = useSegmentEditing({ model, state, validity, blocked, submit: validity.submit });
-
-  return { model, options, field, state, validity, blocked, invalid, editing };
+  return { model, options, field, input, state, blocked, invalid, editing };
 }
 
 type ControlState<Part extends string, Value extends Comparable<Value>> = ReturnType<
@@ -128,35 +161,39 @@ const isFirstInvalid = (input: HTMLInputElement) =>
     (element) => !(element instanceof HTMLFieldSetElement) && element.matches(":invalid"),
   ) === input;
 
+interface NativeInputProps<Part extends string, Value extends Comparable<Value>> {
+  readonly control: ControlState<Part, Value>;
+  readonly labelId: string | undefined;
+  readonly first: boolean;
+}
+
 /** The browser's own input: it holds the value for the form, and stands in for the segments without script. */
 function NativeInput<Part extends string, Value extends Comparable<Value>>({
   control,
-}: {
-  control: ControlState<Part, Value>;
-}) {
-  const { model, options, field, state, invalid, editing, validity } = control;
+  labelId,
+  first,
+}: NativeInputProps<Part, Value>) {
+  const { model, options, field, input, state, invalid, editing } = control;
   const serialize = (value: Value | null | undefined) =>
     value === null || value === undefined ? undefined : model.serialize(value);
 
   return (
     <input
       type={model.input}
-      id={field?.controlId}
-      ref={field?.register}
-      name={field?.name ?? options.name}
+      id={first ? field?.controlId : undefined}
+      ref={composeRefs<HTMLInputElement>(input, field?.register)}
+      name={options.name ?? field?.name}
       form={options.form}
       required={options.required}
       min={serialize(options.min)}
       max={serialize(options.max)}
       defaultValue={serialize(state.committed) ?? ""}
-      aria-labelledby={field?.labelId}
+      aria-labelledby={labelId}
       aria-describedby={field?.describedBy}
       aria-invalid={invalid}
       className={styles["native"]}
       onClick={editing.focusFirstEmpty}
       onInvalid={(event) => {
-        validity.report(true);
-
         // With script the input isn't rendered, so the user lands on the first segment to fill in.
         if (isFirstInvalid(event.currentTarget)) setTimeout(editing.focusFirstEmpty);
       }}
@@ -170,25 +207,34 @@ export interface ControlProps<Part extends string, Value> extends Omit<
 > {
   readonly model: SegmentModel<Part, Value>;
   readonly options: SegmentFieldOptions<Part, Value>;
-  readonly onValidity: (validity: Validity) => void;
   /** Rendered at the inline end of the field box (the DatePicker trigger). */
   readonly end?: ReactNode;
+}
+
+/** One of several controls in a Field, such as a DateRangePicker's dates. */
+interface Naming {
+  /** The id of this control's own name, in place of the Field's label. */
+  readonly labelId?: string | undefined;
+  /** Whether it is the Field's first control, the one the Field's label points to. */
+  readonly first?: boolean | undefined;
 }
 
 /** A value's segments in the Locale's order, on the native input the form submits. */
 export function Control<Part extends string, Value extends Comparable<Value>>({
   model,
   options,
-  onValidity,
   end,
+  labelId,
+  first = true,
   ...props
-}: ControlProps<Part, Value>) {
-  const control = useControl(model, options, onValidity);
+}: ControlProps<Part, Value> & Naming) {
+  const control = useControl(model, options);
   const { field, state, blocked, editing } = control;
+  const name = labelId ?? field?.labelId;
 
   return (
     <fieldset
-      aria-labelledby={field?.labelId}
+      aria-labelledby={name}
       aria-describedby={field?.describedBy}
       aria-disabled={blocked || undefined}
       {...editing.groupProps(styles["group"], props)}
@@ -207,15 +253,15 @@ export function Control<Part extends string, Value extends Comparable<Value>>({
           </span>
         ),
       )}
-      <NativeInput control={control} />
+      <NativeInput control={control} labelId={name} first={first} />
       {end}
     </fieldset>
   );
 }
 
 export type SegmentFieldProps<Part extends string, Value> = SegmentFieldOptions<Part, Value> &
-  Omit<SizedWrapperProps, "validate"> &
-  Omit<ControlProps<Part, Value>, "options" | "onValidity"> & {
+  SizedWrapperProps &
+  Omit<ControlProps<Part, Value>, "options"> & {
     readonly label?: ReactNode;
     /** The component's own classes, on the Field and on the field box. */
     readonly classNames: { readonly root: string | undefined; readonly group: string | undefined };
@@ -233,17 +279,14 @@ function splitOptions<Part extends string, Value, Rest>({
   form,
   required,
   disabled,
-  validate,
   incompleteMessage,
   placeholders,
-  isUnavailable,
-  unavailableMessage,
+  check,
   ...rest
 }: SegmentFieldOptions<Part, Value> & Rest) {
   const values = { value, defaultValue, onValueChange, min, max, name, form, required, disabled };
-  const checks = { validate, incompleteMessage, placeholders, isUnavailable, unavailableMessage };
 
-  return [{ ...values, ...checks }, rest] as const;
+  return [{ ...values, incompleteMessage, placeholders, check }, rest] as const;
 }
 
 /** A Field around a value's segments; it shows the native input's error once the user has edited. */
@@ -252,6 +295,7 @@ export function SegmentField<Part extends string, Value extends Comparable<Value
   description,
   errorMessage,
   invalid,
+  validate,
   size,
   className,
   style,
@@ -259,7 +303,6 @@ export function SegmentField<Part extends string, Value extends Comparable<Value
   children,
   ...props
 }: SegmentFieldProps<Part, Value>) {
-  const [validity, setValidity] = useState<Validity>({ invalid: false, message: "" });
   const [options, rest] = splitOptions(props);
 
   return (
@@ -267,10 +310,11 @@ export function SegmentField<Part extends string, Value extends Comparable<Value
       {...mergeProps({ className: classNames.root }, { className, style })}
       label={label}
       description={description}
-      errorMessage={errorMessage ?? (validity.invalid ? validity.message : undefined)}
+      errorMessage={errorMessage}
+      invalid={invalid}
+      validate={validate}
       size={size}
       name={options.name}
-      invalid={invalid ?? (validity.invalid || undefined)}
       disabled={options.disabled}
       after={children}
     >
@@ -278,7 +322,6 @@ export function SegmentField<Part extends string, Value extends Comparable<Value
         {...rest}
         className={`${fieldStyles["control"]} ${classNames.group ?? ""}`}
         options={options}
-        onValidity={setValidity}
       />
     </Wrapper>
   );

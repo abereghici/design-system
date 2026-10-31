@@ -1,4 +1,4 @@
-import { useEffectEvent, useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import type { ChangeEvent, FocusEvent, KeyboardEvent, PointerEvent, RefObject } from "react";
 
 import { isComposing, trackComposition } from "../../events/events.ts";
@@ -9,18 +9,18 @@ import type { Comparable, SegmentModel, Segments } from "./segments.ts";
 import type { Buffer, Reason, useSegmentValue } from "./use-segment-value.ts";
 import fieldStyles from "../../field/field.module.css";
 
-interface Validity<Part extends string, Value> {
-  readonly apply: (segments: Segments<Part>, value: Value | null) => void;
-  readonly report: (commit?: boolean) => void;
-  readonly clearServerError: (() => void) | undefined;
+/** What the Field hears from the segments: an edit, a commit (leaving them after one), a submit. */
+interface FieldSide {
+  readonly edit: () => void;
+  readonly commit: () => void;
+  readonly submit: () => void;
 }
 
 interface Editing<Part extends string, Value extends Comparable<Value>> {
   readonly model: SegmentModel<Part, Value>;
   readonly state: ReturnType<typeof useSegmentValue<Part, Value>>;
-  readonly validity: Validity<Part, Value>;
   readonly blocked: boolean;
-  readonly submit: () => void;
+  readonly field: FieldSide;
 }
 
 const SEPARATORS = new Set(["/", ".", "-"]);
@@ -152,18 +152,16 @@ function pressKey<Part extends string, Value extends Comparable<Value>>(
   else if (!blocked && stepped !== null) context.change(stepped, null, "keyboard", nativeEvent);
 }
 
-/** Whether the user or the app changed the value; a committed change reports validity at once. */
-function useEdited(committed: string | undefined, report: () => void) {
+/** Whether the user or the app changed the value, so that leaving the segments commits it. */
+function useEdited(committed: string | undefined) {
   const edited = useRef(false);
   const last = useRef(committed);
-  const onChange = useEffectEvent(report);
 
   useLayoutEffect(() => {
     if (last.current === committed) return;
 
     last.current = committed;
     edited.current = true;
-    onChange();
   }, [committed]);
 
   return {
@@ -174,11 +172,11 @@ function useEdited(committed: string | undefined, report: () => void) {
   };
 }
 
-/** The group's props: a press between segments focuses the first empty one; leaving reports validity. */
+/** The group's props: a press between segments focuses the first empty one; leaving commits an edit. */
 function useGroupProps<Part extends string>(
   focus: ReturnType<typeof useFocus<Part, unknown>>,
   edited: RefObject<boolean>,
-  report: (commit?: boolean) => void,
+  commit: () => void,
 ) {
   return <Props extends object>(className: string | undefined, consumer: Props) =>
     mergeProps(
@@ -197,7 +195,7 @@ function useGroupProps<Part extends string>(
 
           if (into instanceof Node && event.currentTarget.contains(into)) return;
 
-          if (edited.current) report(true);
+          if (edited.current) commit();
         },
       },
       consumer,
@@ -208,24 +206,17 @@ function useGroupProps<Part extends string>(
 export function useSegmentEditing<Part extends string, Value extends Comparable<Value>>({
   model,
   state,
-  validity,
   blocked,
-  submit,
+  field,
 }: Editing<Part, Value>) {
   const focus = useFocus(model, state.segments);
   const committed = state.committed === null ? undefined : model.serialize(state.committed);
-  const { edited, markEdited } = useEdited(committed, () => {
-    validity.report();
-  });
+  const { edited, markEdited } = useEdited(committed);
   const change = (next: Segments<Part>, text: Buffer<Part>, reason: Reason, event: Event) => {
-    const result = state.edit(next, text, reason, event);
-
-    if (result === null) return false;
+    if (state.edit(next, text, reason, event) === null) return false;
 
     markEdited();
-    validity.clearServerError?.();
-    validity.apply(result.segments, result.value);
-    validity.report();
+    field.edit();
 
     return true;
   };
@@ -234,7 +225,7 @@ export function useSegmentEditing<Part extends string, Value extends Comparable<
   const context = { model, state, focus, change, typed };
 
   return {
-    groupProps: useGroupProps(focus, edited, validity.report),
+    groupProps: useGroupProps(focus, edited, field.commit),
     register: focus.register,
     onCompositionEnd: trackComposition(),
     focusFirstEmpty: () => {
@@ -248,7 +239,7 @@ export function useSegmentEditing<Part extends string, Value extends Comparable<
       if (char.length === 1) typeChar(context, part, char, nativeEvent);
     },
     onKeyDown: (part: Part, event: KeyboardEvent<HTMLInputElement>) => {
-      pressKey(context, part, event, blocked, submit);
+      pressKey(context, part, event, blocked, field.submit);
     },
   };
 }

@@ -10,6 +10,7 @@ import { Slot } from "../internal/slot/slot.tsx";
 
 import { Input, PickerContext } from "./file-trigger-input.tsx";
 import type { NativeProps } from "./file-trigger-input.tsx";
+import { useFiles } from "./use-files.ts";
 import styles from "./file-trigger.module.css";
 
 /** `cancel()`: clears the selection from the file input. */
@@ -70,9 +71,9 @@ export function FileTrigger({
 }: FileTriggerProps) {
   const zone = use(PickerContext);
   const { field, blocked, invalid } = useField(disabled || zone?.disabled);
-  const input = useRef<HTMLInputElement>(null);
+  const files = useFiles();
   const trigger = useRef<HTMLElement>(null);
-  const inputRef = zone?.input ?? input;
+  const inputRef = zone?.input ?? files.inputRef;
   const triggerRef = zone?.trigger ?? trigger;
   const ownId = useId();
   const id = zone?.triggerId ?? ownId;
@@ -108,11 +109,11 @@ export function FileTrigger({
       {button}
       <Input
         {...props}
-        inputRef={input}
         triggerRef={trigger}
         triggerId={id}
         disabled={blocked}
         clearLabel={clearLabel}
+        files={files}
       />
     </span>
   );

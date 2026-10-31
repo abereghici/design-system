@@ -266,6 +266,22 @@ InAForm.test(
   },
 );
 
+InAForm.test(
+  "blocks the submit of a default date its rule rejects and shows why",
+  {
+    args: {
+      defaultValue: date("2026-10-24"),
+      validate: (value) => (value > "2008-10-31" ? "You must be 18 or older." : null),
+    },
+  },
+  async ({ canvas, userEvent }) => {
+    submitted.mockClear();
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
+    await expect(submitted).not.toHaveBeenCalled();
+    await expect(await canvas.findByText("You must be 18 or older.")).toBeVisible();
+  },
+);
+
 InAForm.test("reports a partial date as incomplete", async ({ canvas, userEvent }) => {
   await userEvent.click(canvas.getByRole("spinbutton", { name: "month" }));
   await userEvent.keyboard("1");
