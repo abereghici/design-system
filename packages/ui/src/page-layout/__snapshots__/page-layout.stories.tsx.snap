@@ -1,26 +1,26 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Default   > base story 1`] = `
+exports[`Default 1`] = `
 - banner:
   - img "Bereghici"
   - navigation "Main":
     - list:
       - listitem:
         - link "Orders":
-          - /url: #orders
+          - /url: "#orders"
       - listitem:
         - link "Customers":
-          - /url: #customers
+          - /url: "#customers"
 - navigation "Workspace":
   - group "Reports":
     - text: Reports
     - list:
       - listitem:
         - link "Revenue":
-          - /url: #revenue
+          - /url: "#revenue"
       - listitem:
         - link "Refunds":
-          - /url: #refunds
+          - /url: "#refunds"
 - main:
   - heading "Revenue" [level=1]
   - heading "This month" [level=2]

@@ -1,9 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Compact 1`] = `
-- button "Bold"
-`;
-
 exports[`Default   > base story 1`] = `
 - button "Bold"
 `;

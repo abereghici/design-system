@@ -35,6 +35,24 @@ Default.test("copies its text and says so", async ({ canvas, args }) => {
   await waitFor(async () => expect(await navigator.clipboard.readText()).toBe("INV-2026-0042"));
 });
 
+Default.test("says so again on every copy, though the message is the same", async ({ canvas }) => {
+  const user = await trusted();
+  const status = canvas.getByRole("status");
+  const messages: string[] = [];
+  // A live region announces the text added to it, so each copy must add its message afresh.
+  const observer = new MutationObserver((records) => {
+    for (const { addedNodes } of records)
+      messages.push(...[...addedNodes].map((n) => n.textContent ?? ""));
+  });
+
+  observer.observe(status, { childList: true, subtree: true });
+  await user.click(canvas.getByRole("button", { name: "Copy invoice number" }));
+  await waitFor(() => expect(messages).toEqual(["Copied"]));
+  await user.click(canvas.getByRole("button", { name: "Copy invoice number" }));
+  await waitFor(() => expect(messages).toEqual(["Copied", "Copied"]));
+  observer.disconnect();
+});
+
 Default.test("says so when copying fails", async ({ canvas, userEvent }) => {
   const clipboard = navigator.clipboard.writeText.bind(navigator.clipboard);
 

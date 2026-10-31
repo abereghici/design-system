@@ -1,19 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Compact 1`] = `
-- combobox "Search commands" [expanded]
-- status
-- listbox "Commands":
-  - group "Suggestions":
-    - option "New document" [selected]
-    - option "Search files"
-    - option "Copy link" [disabled]
-  - group "Navigation":
-    - option "Go to Home"
-    - option "Go to Release notes"
-    - option "Open settings"
-`;
-
 exports[`Default   > base story 1`] = `
 - combobox "Search commands" [expanded]
 - status

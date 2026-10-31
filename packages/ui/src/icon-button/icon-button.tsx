@@ -7,16 +7,13 @@ import "@abereghici/tokens/components/icon-button.css";
 
 import { dispatchFeedback, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./icon-button.module.css";
 
 export type IconButtonChangeEventDetails = Details<"none", MouseEvent<HTMLButtonElement>>;
-
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
 
 export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "aria-labelledby"> &
   AccessibleName & {

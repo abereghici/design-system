@@ -27,7 +27,8 @@ export interface RootProps extends OverlayOptions<ChangeReason> {
  * choose a form value use Select; for the same actions on a right click, ContextMenu; for other
  * content, Popover.
  *
- * Tier 2: shows its final content before hydration and works after it.
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, its
+ * Trigger is hidden.
  */
 export function Root({ children, ...options }: RootProps) {
   const overlay = useOverlay("DropdownMenu", options);

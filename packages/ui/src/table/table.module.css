@@ -1,7 +1,8 @@
 @layer ab.components {
   .root {
     inline-size: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
   }
 
   .caption {
@@ -22,12 +23,7 @@
     border-block-end: none;
   }
 
-  .root[data-sticky-header] {
-    border-collapse: separate;
-    border-spacing: 0;
-  }
-
-  .root[data-sticky-header] .header {
+  .header {
     position: sticky;
     inset-block-start: 0;
     z-index: var(--ab-z-index-sticky);
@@ -43,7 +39,7 @@
     }
   }
 
-  .row[data-selected] {
+  .body > .row:has(> .select :checked) {
     background-color: var(--ab-table-row-background-color-selected);
   }
 

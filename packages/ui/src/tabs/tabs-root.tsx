@@ -1,13 +1,14 @@
 "use client";
 
-import { createContext, use, useId, useState } from "react";
+import { createContext, use, useId } from "react";
 import { flushSync } from "react-dom";
 import type { ComponentProps, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/tabs.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./tabs.module.css";
@@ -19,11 +20,13 @@ import styles from "./tabs.module.css";
 export type ChangeEventDetails = Details<"none" | "find">;
 
 interface TabsState {
-  readonly id: string;
-  readonly value: string;
-  readonly select: (value: string, event: MouseEvent<HTMLButtonElement>) => void;
-  /** Answers whether the consumer accepted opening `value` for a match the browser revealed. */
-  readonly reveal: (value: string, event: Event) => boolean;
+  readonly state: { readonly value: string };
+  readonly actions: {
+    readonly select: (value: string, event: MouseEvent<HTMLButtonElement>) => void;
+    /** Answers whether the consumer accepted opening `value` for a match the browser revealed. */
+    readonly reveal: (value: string, event: Event) => boolean;
+  };
+  readonly meta: { readonly id: string };
 }
 
 const TabsContext = createContext<TabsState | null>(null);
@@ -55,15 +58,10 @@ export type RootProps = Omit<ComponentProps<"div">, "defaultValue"> & {
  */
 export function Root({ value, defaultValue, onValueChange, ...props }: RootProps) {
   const id = useId();
-  const [uncontrolled, setUncontrolled] = useState(defaultValue ?? "");
-  const current = value ?? uncontrolled;
+  const [current, request] = useControllableState(value, defaultValue ?? "", onValueChange);
 
   function select(next: string, event: MouseEvent<HTMLButtonElement>) {
-    if (next === current) return;
-
-    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) return;
-
-    setUncontrolled(next);
+    if (next === current || !request(next, "none", event.nativeEvent)) return;
 
     const trigger = event.currentTarget;
 
@@ -75,17 +73,11 @@ export function Root({ value, defaultValue, onValueChange, ...props }: RootProps
   function reveal(next: string, event: Event) {
     // The browser shows the panel once `beforematch` returns: the tab switches in the same task, so
     // no frame paints two panels.
-    return flushSync(() => {
-      const accepted = requestChange(onValueChange, next, "find", event);
-
-      if (accepted) setUncontrolled(next);
-
-      return accepted;
-    });
+    return flushSync(() => request(next, "find", event));
   }
 
   return (
-    <TabsContext value={{ id, value: current, select, reveal }}>
+    <TabsContext value={{ state: { value: current }, actions: { select, reveal }, meta: { id } }}>
       <div {...mergeProps({ className: styles["root"] }, props)} />
     </TabsContext>
   );

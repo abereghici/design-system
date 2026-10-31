@@ -13,12 +13,20 @@ export interface DateRange {
   readonly end: Temporal.PlainDate;
 }
 
+/** The range between two days, whichever comes first. */
+export const ordered = (a: Temporal.PlainDate, b: Temporal.PlainDate): DateRange =>
+  Temporal.PlainDate.compare(a, b) <= 0 ? { start: a, end: b } : { start: b, end: a };
+
+/** Whether two ranges, or no range, are the same days. */
+export const sameRange = (a: DateRange | null, b: DateRange | null) =>
+  a === b || (a !== null && b !== null && a.start.equals(b.start) && a.end.equals(b.end));
+
 const isPart = (type: string): type is DatePart =>
   type === "year" || type === "month" || type === "day";
 
 const utc = (date: Temporal.PlainDate) => Date.UTC(date.year, date.month - 1, date.day);
 
-function build(locale: string | undefined) {
+function buildDateFormats(locale: string | undefined) {
   // Dates are Gregorian (ADR-0004); a locale whose default calendar differs, such as th-TH's
   // Buddhist one, would otherwise head the Calendar with another year than the DateField shows.
   const format = (options: Intl.DateTimeFormatOptions) =>
@@ -54,18 +62,23 @@ function build(locale: string | undefined) {
   };
 }
 
-const cache = new Map<string, ReturnType<typeof build>>();
+/** A hook for what `build` makes from the app's locale, made once per locale. */
+export function perLocale<Built>(build: (locale: string | undefined) => Built) {
+  const cache = new Map<string, Built>();
+
+  return function usePerLocale() {
+    const locale = useLocale();
+    const key = String(locale);
+    const cached = cache.get(key) ?? build(locale);
+
+    cache.set(key, cached);
+
+    return cached;
+  };
+}
 
 /** Intl formatters in the app's locale, created on first use. */
-export function useDateFormats() {
-  const locale = useLocale();
-  const key = String(locale);
-  const cached = cache.get(key) ?? build(locale);
-
-  cache.set(key, cached);
-
-  return cached;
-}
+export const useDateFormats = perLocale(buildDateFormats);
 
 /** What a Calendar inside a DatePicker, or a RangeCalendar inside a DateRangePicker, reads in place of its own props. */
 export interface PickerContextValue<Value> {

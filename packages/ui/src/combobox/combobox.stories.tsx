@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { expect, fn, screen, waitFor } from "storybook/test";
 
+import type { StoryContext } from "@storybook/react-vite";
+
 import { UserIcon } from "@abereghici/ui/icons/user";
 
-import { withDensity } from "#.storybook/decorators/with-density.tsx";
 import { withDialog } from "#.storybook/decorators/with-dialog.tsx";
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
@@ -18,6 +19,8 @@ import * as Combobox from "./combobox.tsx";
 ({ label: "Assignee", noOptionsText: "No results", loading: true }) satisfies Combobox.RootProps;
 // @ts-expect-error -- several choices need the label their remove buttons read
 ({ label: "Tags", noOptionsText: "None", selectionMode: "multiple" }) satisfies Combobox.RootProps;
+// @ts-expect-error -- either the app holds the choices or the Combobox does, not both
+({ selectionMode: "multiple", value: [], defaultValue: [] }) satisfies Partial<Combobox.RootProps>;
 
 const onValueChange = fn<NonNullable<Combobox.RootProps["onValueChange"]>>();
 const onInputValueChange = fn<NonNullable<Combobox.RootProps["onInputValueChange"]>>();
@@ -283,7 +286,7 @@ Default.test(
 
 export const Open = meta.story({
   parameters: { docs: { description: { story: "Open, with the first option highlighted." } } },
-  play: ({ userEvent }) => userEvent.click(field()),
+  play: ({ userEvent }: StoryContext) => userEvent.click(field()),
 });
 
 export const ServerSearchResults = meta.story({
@@ -300,8 +303,6 @@ ServerSearchResults.test("shows the Items the app renders", async ({ canvas, use
   await userEvent.keyboard("{Backspace}{Enter}");
   await expect(field("Repository")).toHaveValue("platform/web");
 });
-
-export const Compact = Open.extend({ decorators: [withDensity("compact")] });
 
 export const Multiple = meta.story({
   args: { selectionMode: "multiple", removeLabel: "Remove", defaultValue: ["ab"] },

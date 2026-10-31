@@ -5,8 +5,9 @@ import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/splitter.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./splitter.module.css";
@@ -66,9 +67,10 @@ export function useSplitter(part: string) {
  * them, as in a master-detail or editor layout. Compose `Splitter.Panel`, `Splitter.Handle` and
  * `Splitter.Panel`, and give the handle a name such as "Resize folders". On the focused handle,
  * the arrow keys move it, Home and End move it to the first panel's smallest and largest size, and
- * Enter collapses the first panel or restores it. Interactive after hydration (Tier 2): the panels
- * render at their size on the server, and the handle moves once the page's JavaScript has loaded;
- * while scripting is off, the handle is hidden.
+ * Enter collapses the first panel or restores it.
+ *
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, the
+ * handle is hidden.
  */
 export function Root({
   value,
@@ -80,19 +82,14 @@ export function Root({
   orientation = "horizontal",
   ...props
 }: RootProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
-  const current = value ?? uncontrolled;
+  const [current, request] = useControllableState(value, defaultValue, onValueChange);
   const [expanded, setExpanded] = useState(current);
   const [dragging, setDragging] = useState(false);
 
   function resize(raw: number, reason: Reason, event: Event) {
     const next = Math.min(Math.max(raw, min), max);
 
-    if (next === current || !requestChange(onValueChange, next, reason, event)) return false;
-
-    setUncontrolled(next);
-
-    return true;
+    return next !== current && request(next, reason, event);
   }
 
   function toggle(event: KeyboardEvent<HTMLElement>) {

@@ -1,9 +1,11 @@
 import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "react";
 
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { getDocument, useEvent } from "../events/use-event.ts";
 import { filterOptions, enabled, textOf } from "../internal/listbox/listbox.tsx";
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
+import { valuesOf } from "../internal/toggle/toggle.ts";
 
 import {
   chosenOf,
@@ -23,10 +25,6 @@ export const ValueContext = createContext<{ chosen: readonly string[]; multiple:
   chosen: [],
   multiple: false,
 });
-
-/** The values as a list, whether one (`null` for none) or several. */
-export const valuesOf = (value: string | null | ReadonlyArray<string> | undefined) =>
-  value === undefined || value === null ? [] : typeof value === "string" ? [value] : value;
 
 function applyText(c: ComboboxState, list: Element, input: HTMLInputElement) {
   const { inputValue, defaultInputValue } = c.options;
@@ -127,10 +125,10 @@ function useListeners(c: ComboboxState) {
   useEvent(
     "reset",
     () => {
-      const { defaultInputValue, selectionMode } = c.options;
+      const { defaultInputValue } = c.options;
       const defaults = valuesOf(c.options.defaultValue);
       const list = listOf(c);
-      const chosen = selectionMode === "multiple" ? null : (defaults[0] ?? null);
+      const chosen = c.multiple ? null : (defaults[0] ?? null);
       const label = defaultInputValue ?? textOf(list === null ? null : chosenOf(list, chosen));
 
       // The reset event fires before the form resets its controls, so the label goes in afterwards:
@@ -141,7 +139,6 @@ function useListeners(c: ComboboxState) {
         if (input !== null) input.value = label;
 
         memoryOf(c).text = label;
-        c.setValue(defaults);
       });
     },
     () => inputOf(c)?.form,
@@ -150,14 +147,21 @@ function useListeners(c: ComboboxState) {
 
 /** The Combobox's state, given its empty-list text. The open list, the input's text and the highlight live in the DOM. */
 export function useCombobox(options: Options, empty: string): ComboboxState {
-  const [ownValue, setValue] = useState(() => valuesOf(options.defaultValue));
+  const id = useId();
+  const [value, , setValue] = useControllableState(
+    options.value === undefined ? undefined : valuesOf(options.value),
+    valuesOf(options.defaultValue),
+    undefined,
+    () => inputOf({ id })?.form,
+  );
   const [ownOpen, setOpen] = useState(options.defaultOpen ?? false);
   const [query, setQuery] = useState("");
   const locale = useLocale();
   const c: ComboboxState = {
     options,
-    id: useId(),
-    value: options.value === undefined ? ownValue : valuesOf(options.value),
+    id,
+    multiple: options.selectionMode === "multiple",
+    value,
     open: options.open ?? ownOpen,
     query,
     setValue,

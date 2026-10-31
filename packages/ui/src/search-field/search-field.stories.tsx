@@ -191,3 +191,34 @@ InASearchLandmark.test("submits its form on Enter", async ({ canvas }) => {
   await user.type(canvas.getByRole("searchbox", { name: "Search invoices" }), "march{Enter}");
   await expect(submitted.mock.lastCall?.[0].get("q")).toBe("march");
 });
+
+InASearchLandmark.test(
+  "doesn't submit on the Enter that ends an IME composition",
+  async ({ canvas }) => {
+    const { cdp } = await import("vitest/browser");
+    const input = canvas.getByRole("searchbox", { name: "Search invoices" });
+    const enter = { key: "Enter", code: "Enter" };
+
+    input.focus();
+    submitted.mockClear();
+    // As an IME sends it: the Enter that picks the candidate is a key the IME processes (229).
+    await cdp().send("Input.imeSetComposition", {
+      text: "まち",
+      selectionStart: 2,
+      selectionEnd: 2,
+    });
+    await cdp().send("Input.dispatchKeyEvent", {
+      type: "rawKeyDown",
+      ...enter,
+      windowsVirtualKeyCode: 229,
+    });
+    await cdp().send("Input.insertText", { text: "まち" });
+    await cdp().send("Input.dispatchKeyEvent", {
+      type: "keyUp",
+      ...enter,
+      windowsVirtualKeyCode: 13,
+    });
+    await expect(input).toHaveValue("まち");
+    await expect(submitted).not.toHaveBeenCalled();
+  },
+);

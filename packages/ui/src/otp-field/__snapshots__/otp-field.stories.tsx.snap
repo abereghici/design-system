@@ -5,7 +5,7 @@ exports[`Default   > base story 1`] = `
 - textbox "Verification code"
 `;
 
-exports[`Four Digits   > base story 1`] = `
+exports[`Partly Entered   > base story 1`] = `
 - text: Verification code
 - textbox "Verification code": "48"
 `;

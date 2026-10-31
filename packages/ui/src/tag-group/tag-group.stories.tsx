@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { expect, fn } from "storybook/test";
 
+import { withInputBefore } from "#.storybook/decorators/with-input-before.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
@@ -82,14 +83,7 @@ Default.test(
 Default.test(
   "leaves focus where onValueChange moves it",
   {
-    decorators: [
-      (Story) => (
-        <>
-          <input aria-label="Add a filter" />
-          <Story />
-        </>
-      ),
-    ],
+    decorators: [withInputBefore("Add a filter")],
     args: {
       onValueChange: () => {
         document.querySelector<HTMLInputElement>('[aria-label="Add a filter"]')?.focus();

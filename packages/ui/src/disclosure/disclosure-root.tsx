@@ -1,12 +1,13 @@
 "use client";
 
-import { createContext, use, useState } from "react";
+import { createContext, use } from "react";
 import type { ComponentProps, SyntheticEvent } from "react";
 
 import "@abereghici/tokens/components/disclosure.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as EventDetails, ToggleFeedbackEvent } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./disclosure.module.css";
@@ -20,8 +21,11 @@ import styles from "./disclosure.module.css";
 export type ChangeEventDetails = EventDetails<"trigger-press" | "none">;
 
 interface DisclosureState {
-  readonly open: boolean;
-  readonly change: (open: boolean, event: SyntheticEvent<HTMLElement>) => void;
+  readonly state: { readonly open: boolean };
+  readonly actions: {
+    readonly change: (open: boolean, event: SyntheticEvent<HTMLElement>) => void;
+  };
+  readonly meta: { readonly component: Component };
 }
 
 export const DisclosureContext = createContext<DisclosureState | null>(null);
@@ -46,31 +50,31 @@ export type RootProps = Omit<ComponentProps<"details">, "open"> & {
 type Component = ToggleFeedbackEvent["detail"]["component"];
 
 /** The `<details>` behind Disclosure.Root and Accordion.Item; `component` names it in `ab-toggle`. */
-export function Details({
+export function DisclosureRoot({
   component,
   open,
   defaultOpen = false,
   onOpenChange,
   ...props
 }: RootProps & { component: Component }) {
-  const [uncontrolled, setUncontrolled] = useState(defaultOpen);
-  const current = open ?? uncontrolled;
+  const [current, request, set] = useControllableState(open, defaultOpen, onOpenChange);
 
   function change(next: boolean, event: SyntheticEvent<HTMLElement>) {
-    const reason = event.type === "click" ? "trigger-press" : "none";
-    const accepted = requestChange(onOpenChange, next, reason, event.nativeEvent);
+    const pressed = event.type === "click";
 
-    if (!accepted && reason === "trigger-press") return;
-
-    setUncontrolled(next);
-
-    if (reason === "trigger-press") {
-      dispatchFeedback(event.currentTarget, "ab-toggle", { component, reason: "user" });
+    if (request(next, pressed ? "trigger-press" : "none", event.nativeEvent)) {
+      if (pressed)
+        dispatchFeedback(event.currentTarget, "ab-toggle", { component, reason: "user" });
+    } else if (!pressed) {
+      // The browser opened it already, for find-in-page or a fragment link; only a press can wait.
+      set(next);
     }
   }
 
   return (
-    <DisclosureContext value={{ open: current, change }}>
+    <DisclosureContext
+      value={{ state: { open: current }, actions: { change }, meta: { component } }}
+    >
       <details
         {...mergeProps(
           {
@@ -96,5 +100,5 @@ export function Details({
  * Tier 1: works before hydration.
  */
 export function Root(props: RootProps) {
-  return <Details component="Disclosure" {...props} />;
+  return <DisclosureRoot component="Disclosure" {...props} />;
 }

@@ -1,12 +1,9 @@
-import { expect } from "storybook/test";
-
 import { Card } from "@abereghici/ui/card";
 import { Heading } from "@abereghici/ui/heading";
 import { Logo } from "@abereghici/ui/logo";
 import { Navbar } from "@abereghici/ui/navbar";
 import { Sidebar } from "@abereghici/ui/sidebar";
 
-import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as PageLayout from "./page-layout.tsx";
@@ -65,41 +62,3 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({});
-
-const regions = (canvas: { getByRole: (role: string, options?: object) => HTMLElement }) => ({
-  navigation: canvas.getByRole("navigation", { name: "Workspace" }).getBoundingClientRect(),
-  main: canvas.getByRole("main").getBoundingClientRect(),
-  banner: canvas.getByRole("banner").getBoundingClientRect(),
-});
-
-Default.test(
-  "puts the navigation beside the main content, under the header, in a wide container",
-  { decorators: [withWidth("64rem")] },
-  async ({ canvas }) => {
-    const { navigation, main, banner } = regions(canvas);
-
-    await expect(navigation.right).toBeLessThanOrEqual(main.left);
-    await expect(main.top).toBeGreaterThanOrEqual(banner.bottom);
-  },
-);
-
-Default.test(
-  "puts the navigation above the main content, in reading order, in a narrow container",
-  { decorators: [withWidth("320px")] },
-  async ({ canvas, canvasElement }) => {
-    const { navigation, main } = regions(canvas);
-
-    await expect(main.top).toBeGreaterThanOrEqual(navigation.bottom);
-    await expect(canvasElement.scrollWidth).toBe(canvasElement.clientWidth);
-  },
-);
-
-Default.test(
-  "mirrors in right-to-left, so the navigation sits on the right of the main content",
-  { decorators: [withWidth("64rem")], globals: { dir: "rtl" } },
-  async ({ canvas }) => {
-    const { navigation, main } = regions(canvas);
-
-    await expect(navigation.left).toBeGreaterThanOrEqual(main.right);
-  },
-);

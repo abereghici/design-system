@@ -10,18 +10,10 @@ const invoices = [
 export default function Page() {
   return (
     <main>
-      <Table.Root
-        selectionMode="multiple"
-        defaultSelectedKeys={new Set(invoices.map((invoice) => invoice.id))}
-        stickyHeader
-      >
+      <Table.Root>
         <Table.Caption>Invoices</Table.Caption>
         <Table.Header>
           <Table.Row>
-            <Table.SelectAll
-              keys={invoices.map((invoice) => invoice.id)}
-              selectAllLabel="Select all invoices"
-            />
             <Table.ColumnHeader sortDirection="ascending">
               <Table.SortLabel asChild>
                 <NextLink href="?sort=invoice">Invoice</NextLink>
@@ -32,8 +24,7 @@ export default function Page() {
         </Table.Header>
         <Table.Body>
           {invoices.map((invoice) => (
-            <Table.Row key={invoice.id} id={invoice.id}>
-              <Table.SelectRow />
+            <Table.Row key={invoice.id}>
               <Table.RowHeader>{invoice.id}</Table.RowHeader>
               <Table.Cell>{invoice.amount}</Table.Cell>
             </Table.Row>

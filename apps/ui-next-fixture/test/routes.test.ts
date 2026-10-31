@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, test } from "vitest";
 
-import { componentRoutes } from "./component-routes.ts";
+import componentRoutes from "./component-routes.json" with { type: "json" };
 
 const next = join(import.meta.dirname, "..", ".next");
 const out = join(import.meta.dirname, "..", "out");

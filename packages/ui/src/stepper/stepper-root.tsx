@@ -16,7 +16,9 @@ export interface RootProps extends ComponentProps<"ol"> {
  * order, the current one, and the ones already done. Give each `Stepper.Step` its `status`, and each
  * completed step the `completedLabel` screen readers announce. Link completed steps with `asChild`
  * so people can go back to them. To show progress through one task, use Progress; to switch
- * between views, Tabs. Works before hydration (Tier 1): it is plain HTML and CSS.
+ * between views, Tabs.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({ orientation = "horizontal", ...props }: RootProps) {
   return (

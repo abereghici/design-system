@@ -1,12 +1,13 @@
 "use client";
 
-import { createContext, use, useState } from "react";
+import { createContext, use } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/tag-group.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./tag-group.module.css";
@@ -57,8 +58,10 @@ export type RootProps = Omit<ComponentProps<"ul">, "defaultValue"> & {
 /**
  * Removable tags, such as active filters or chosen values. Each Tag has a remove button that reads
  * `removeLabel` before the Tag's text ("Remove Draft"), and every removal dispatches a bubbling
- * `ab-dismiss`. For a static label, use Tag. Tier 2: the Tags render on the server, and they can be
- * removed once the page is hydrated.
+ * `ab-dismiss`. For a static label, use Tag.
+ *
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, the
+ * remove buttons are hidden.
  */
 export function Root({
   value,
@@ -68,16 +71,14 @@ export function Root({
   disabled = false,
   ...props
 }: RootProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue ?? []);
-  const current = value ?? uncontrolled;
+  const [current, request] = useControllableState(value, defaultValue ?? [], onValueChange);
 
   function remove(tag: string, event: MouseEvent<HTMLButtonElement>) {
     const button = event.currentTarget;
     const next = current.filter((v) => v !== tag);
 
-    if (disabled || !requestChange(onValueChange, next, "remove-press", event.nativeEvent)) return;
+    if (disabled || !request(next, "remove-press", event.nativeEvent)) return;
 
-    setUncontrolled(next);
     dispatchFeedback(button, "ab-dismiss", { component: "TagGroup", reason: "user" });
 
     // Only focus that would be lost moves: onValueChange may have sent it elsewhere.

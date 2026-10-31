@@ -4,13 +4,10 @@ import type { ComponentProps, FocusEvent, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/toolbar.css";
 
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./toolbar.module.css";
-
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
 
 export type ToolbarProps = Omit<ComponentProps<"div">, "aria-label" | "aria-labelledby"> &
   AccessibleName;

@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/accordion.css";
 
-import { Details } from "../disclosure/disclosure-root.tsx";
+import { DisclosureRoot } from "../disclosure/disclosure-root.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { useAccordion } from "./accordion-root.tsx";
@@ -20,7 +20,7 @@ export function Item({ value, ...props }: ItemProps) {
   const accordion = useAccordion("Item");
 
   return (
-    <Details
+    <DisclosureRoot
       component="Accordion"
       {...mergeProps({ className: styles["item"] }, props)}
       name={accordion.name}

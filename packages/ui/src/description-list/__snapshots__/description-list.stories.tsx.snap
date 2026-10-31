@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Default   > base story 1`] = `
+exports[`Default 1`] = `
 - term: Order
 - definition: "#4821"
 - term: Placed
@@ -9,7 +9,7 @@ exports[`Default   > base story 1`] = `
 - definition: Strada Lipscani 23, Bucharest
 `;
 
-exports[`Narrow   > base story 1`] = `
+exports[`Narrow 1`] = `
 - term: Order
 - definition: "#4821"
 - term: Placed

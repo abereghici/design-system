@@ -5,7 +5,7 @@ import type { ComponentProps, FocusEvent, KeyboardEvent, MouseEvent } from "reac
 import "@abereghici/tokens/components/calendar.css";
 
 import { sharedListener } from "../events/events.ts";
-import { Temporal, useDateFormats } from "../internal/date/date.ts";
+import { ordered, Temporal, useDateFormats } from "../internal/date/date.ts";
 import type { DateRange } from "../internal/date/date.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
@@ -44,9 +44,6 @@ const clamp = (date: Temporal.PlainDate, { min, max }: Limits) => {
 
   return date;
 };
-
-const ordered = (a: Temporal.PlainDate, b: Temporal.PlainDate) =>
-  Temporal.PlainDate.compare(a, b) <= 0 ? { start: a, end: b } : { start: b, end: a };
 
 function useToday() {
   // The server renders UTC's date; the browser corrects it to its own time zone after hydration:

@@ -51,6 +51,13 @@
     flex-direction: column;
   }
 
+  /* Script filters and runs every command, so without it the search and its list would do nothing. */
+  @media (scripting: none) {
+    .root {
+      display: none;
+    }
+  }
+
   .search {
     display: flex;
     align-items: center;

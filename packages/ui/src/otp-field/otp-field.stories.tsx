@@ -41,19 +41,21 @@ Default.test("takes a pasted code whole, up to its length", async ({ args, canva
   await expect(args.onValueChange).toHaveBeenLastCalledWith("482719", expect.anything());
 });
 
-export const FourDigits = meta.story({
-  args: { length: 4, defaultValue: "48", size: "lg" },
-  parameters: {
-    docs: { description: { story: "`length` sets how many digits, and boxes, the code has." } },
+export const PartlyEntered = meta.story({
+  args: { defaultValue: "48" },
+  parameters: { docs: { description: { story: "A code entered in part, one digit to a box." } } },
+});
+
+PartlyEntered.test(
+  "takes as many digits as its length",
+  { args: { length: 4 } },
+  async ({ canvas, userEvent }) => {
+    const input = canvas.getByRole("textbox", { name: "Verification code" });
+
+    await userEvent.type(input, "271");
+    await expect(input).toHaveValue("4827");
   },
-});
-
-FourDigits.test("takes as many digits as its length", async ({ canvas, userEvent }) => {
-  const input = canvas.getByRole("textbox", { name: "Verification code" });
-
-  await userEvent.type(input, "271");
-  await expect(input).toHaveValue("4827");
-});
+);
 
 Default.test(
   "replaces its description with the error after a submit with too few digits",

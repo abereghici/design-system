@@ -4,16 +4,13 @@ import type { ComponentProps, KeyboardEvent, PointerEvent } from "react";
 
 import "@abereghici/tokens/components/splitter.css";
 
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { useSplitter } from "./splitter-root.tsx";
 import type { SplitterContextValue } from "./splitter-root.tsx";
 import styles from "./splitter.module.css";
-
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
 
 export type HandleProps = Omit<ComponentProps<"hr">, "aria-label" | "aria-labelledby"> &
   AccessibleName;
@@ -23,7 +20,6 @@ function controlPrevious(handle: HTMLHRElement | null) {
   if (handle?.previousElementSibling) handle.ariaControlsElements = [handle.previousElementSibling];
 }
 
-// Where a key moves the handle: arrows across its line, following the reading direction.
 function keyTarget(event: KeyboardEvent<HTMLHRElement>, { state, meta }: SplitterContextValue) {
   const { value } = state;
   const { step } = meta;
@@ -36,7 +32,6 @@ function keyTarget(event: KeyboardEvent<HTMLHRElement>, { state, meta }: Splitte
   return arrow ?? { Home: meta.min, End: meta.max }[event.key];
 }
 
-// The first panel's share of the space the panels split, with the handle centred on the pointer.
 function positionAt(event: PointerEvent<HTMLHRElement>, horizontal: boolean) {
   const handle = event.currentTarget.getBoundingClientRect();
   const root = event.currentTarget.parentElement?.getBoundingClientRect() ?? handle;

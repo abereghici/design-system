@@ -1,13 +1,10 @@
 import type { ComponentProps } from "react";
 
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { Stack } from "../stack/stack.tsx";
 
 import styles from "./page-layout.module.css";
-
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
 
 /** Name the region, so it is announced by what it holds rather than as an unnamed aside. */
 export type AsideProps = Omit<ComponentProps<"aside">, "aria-label" | "aria-labelledby"> &

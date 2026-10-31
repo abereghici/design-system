@@ -140,7 +140,8 @@ export interface RootProps extends ComponentProps<"div"> {
 /**
  * A keyboard-first launcher: type a few letters, press Enter, and the best match runs. Use it inline when a searchable list of commands belongs in the page or a Popover, and `Command.Dialog` once per app for the ⌘K palette. To choose a form value use Combobox; for the few actions of one control, DropdownMenu.
  *
- * Tier 2: shows its final content before hydration and works after it.
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, it is
+ * hidden.
  */
 export function Root({
   inputValue,

@@ -53,6 +53,7 @@ const variants: ScreenshotVariant[] = [
     matches: ["(pointer: coarse)", "(hover: none)"],
   },
   { name: "rtl", initialGlobals: { dir: "rtl" } },
+  { name: "compact", initialGlobals: { density: "compact" } },
   // After a scale-in under backdrop-filter, Chromium snaps 200% text a pixel either way from launch to
   // launch (Combobox Open); light already covers the end state of motion.
   { name: "text-200", defaultFontSize: 32, contextOptions: { reducedMotion: "reduce" } },

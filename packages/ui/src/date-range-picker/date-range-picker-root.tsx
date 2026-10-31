@@ -6,15 +6,14 @@ import type { CSSProperties, ReactNode } from "react";
 import "@abereghici/tokens/components/date-range-picker.css";
 
 import { focusStayed, PanelContext } from "../date-picker/date-picker-panel.tsx";
-import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { Wrapper } from "../field/field-wrapper.tsx";
 import type { SizedWrapperProps } from "../field/field-wrapper.tsx";
-import { DateRangePickerContext } from "../internal/date/date.ts";
+import { DateRangePickerContext, sameRange } from "../internal/date/date.ts";
 import type { DatePart, DateRange, PickerContextValue, Temporal } from "../internal/date/date.ts";
 import { useOverlay } from "../internal/overlay/overlay.ts";
 import type { ChangeEventDetails as OverlayDetails } from "../internal/overlay/overlay.ts";
-import type { Validity } from "../internal/segment-field/use-validity.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { Box } from "./date-range-picker-box.tsx";
@@ -89,14 +88,10 @@ export type RootProps = Omit<SizedWrapperProps, "validate"> &
     children?: ReactNode;
   } & ({ value: DateRange | null; defaultValue?: never } | { value?: never });
 
-const same = (a: DateRange | null, b: DateRange | null) =>
-  a === b || (a !== null && b !== null && a.start.equals(b.start) && a.end.equals(b.end));
-
 const empty: Halves = { start: null, end: null };
 
 function useRange({ value, defaultValue = null, onValueChange }: RootProps): Range {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
-  const current = value === undefined ? uncontrolled : value;
+  const [current, request, set] = useControllableState(value, defaultValue, onValueChange);
   const [partial, setPartial] = useState<Halves>(current ?? empty);
 
   return {
@@ -106,18 +101,14 @@ function useRange({ value, defaultValue = null, onValueChange }: RootProps): Ran
       const { start, end } = next;
       const range = start === null || end === null ? null : { start, end };
 
-      if (!same(range, current)) {
-        if (!requestChange(onValueChange, range, reason, event)) return false;
-
-        setUncontrolled(range);
-      }
+      if (!sameRange(range, current) && !request(range, reason, event)) return false;
 
       setPartial(next);
 
       return true;
     },
     reset: () => {
-      setUncontrolled(defaultValue);
+      set(defaultValue);
       setPartial(defaultValue ?? empty);
     },
   };
@@ -134,7 +125,7 @@ function usePicker(props: RootProps, range: ReturnType<typeof useRange>) {
     max,
     isDateUnavailable,
     choose: (next, event) => {
-      if (same(next, range.current) || range.change(next, "day-press", event)) {
+      if (sameRange(next, range.current) || range.change(next, "day-press", event)) {
         overlay.toggle(false, "day-press", event);
       }
     },
@@ -144,7 +135,7 @@ function usePicker(props: RootProps, range: ReturnType<typeof useRange>) {
   return { panel: { overlay, name: triggerLabel, trigger }, picker };
 }
 
-const valid: Validity = { invalid: false, message: "" };
+const valid = { invalid: false, message: "" };
 
 /**
  * A field for a start and an end date, such as a stay, with a button that opens a RangeCalendar:

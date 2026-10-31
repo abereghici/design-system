@@ -3,7 +3,19 @@ import type { MouseEvent, MouseEventHandler } from "react";
 
 import { composeEventHandlers, dispatchFeedback, requestChange } from "../../events/events.ts";
 import type { ChangeEventDetails as Details } from "../../events/events.ts";
-import { useEvent } from "../../events/use-event.ts";
+import { useControllableState } from "../../events/use-controllable-state.ts";
+
+/** The values as a list: none for `undefined`, `null` or `""`, else one or several. */
+export const valuesOf = (value: string | null | ReadonlyArray<string> | undefined) =>
+  value === undefined || value === null || value === ""
+    ? []
+    : typeof value === "string"
+      ? [value]
+      : value;
+
+/** The list with `item` added, or removed if it was there. */
+export const toggled = (list: ReadonlyArray<string>, item: string) =>
+  list.includes(item) ? list.filter((each) => each !== item) : [...list, item];
 
 /** `cancel()`: keeps the previous state: the browser restores it once the click is cancelled. */
 export type ChangeEventDetails = Details<"none">;
@@ -42,28 +54,23 @@ export function useRadioChoice(
   defaultValue: string | null,
   onValueChange: ((value: string, details: ChangeEventDetails) => void) | undefined,
 ) {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
   const [root, setRoot] = useState<HTMLFieldSetElement | null>(null);
-  const current = value === undefined ? uncontrolled : value;
-
-  useEvent(
-    "reset",
-    () => {
-      setUncontrolled(defaultValue);
-    },
+  const [current, change] = useControllableState(
+    value,
+    defaultValue,
+    onValueChange,
     root?.form ?? null,
   );
 
   function select(next: string, event: MouseEvent<HTMLInputElement>) {
     if (next === current) return;
 
-    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) {
+    if (!change(next, "none", event.nativeEvent)) {
       event.preventDefault();
 
       return;
     }
 
-    setUncontrolled(next);
     dispatchFeedback(event.currentTarget, "ab-toggle", { component, reason: "user" });
   }
 

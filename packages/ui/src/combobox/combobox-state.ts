@@ -11,6 +11,7 @@ import { isComposing, requestChange, trackComposition } from "../events/events.t
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { enabled, navigate, optionAt, textOf } from "../internal/listbox/listbox.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
+import { toggled } from "../internal/toggle/toggle.ts";
 
 export const chosenOf = (list: Element, value: string | null) =>
   value === null ? null : list.querySelector(`[role="option"][data-value="${CSS.escape(value)}"]`);
@@ -71,17 +72,24 @@ export type Selection =
       onValueChange?: Callback<string | null, ValueReason> | undefined;
       removeLabel?: undefined;
     }
-  | {
+  | ({
       selectionMode: "multiple";
-      /** The chosen Items' `value`s, when your state holds them. */
-      value?: ReadonlyArray<string> | undefined;
-      /** The Items chosen on the first render when it holds its own state. */
-      defaultValue?: ReadonlyArray<string> | undefined;
       /** Called before the choices change; `details.cancel()` keeps the current ones. */
       onValueChange?: Callback<string[], ValuesReason> | undefined;
       /** The action each tag's remove button reads before the tag's text, such as "Remove". */
       removeLabel: string;
-    };
+    } & (
+      | {
+          /** The chosen Items' `value`s, when your state holds them. */
+          value: ReadonlyArray<string>;
+          defaultValue?: never;
+        }
+      | {
+          value?: never;
+          /** The Items chosen on the first render when it holds its own state. */
+          defaultValue?: ReadonlyArray<string> | undefined;
+        }
+    ));
 
 export type Options = Selection & {
   /** The typed text, when your state holds it; pair it with `onInputValueChange`. */
@@ -119,7 +127,9 @@ interface Memory {
 export interface ComboboxState {
   readonly options: Options;
   readonly id: string;
-  /** The chosen Items' values: at most one unless `selectionMode` is `"multiple"`. */
+  /** Whether `selectionMode` is `"multiple"`. */
+  readonly multiple: boolean;
+  /** The chosen Items' values: at most one unless `multiple`. */
   readonly value: readonly string[];
   readonly open: boolean;
   readonly query: string;
@@ -130,14 +140,13 @@ export interface ComboboxState {
 
 const memories = new WeakMap<Element, Memory>();
 
-export const part = (
-  c: ComboboxState,
-  name: "root" | "box" | "list" | "label" | "empty" | "status",
-) => `${c.id}${name}`;
+type PartName = "root" | "box" | "list" | "label" | "empty" | "status";
+
+export const part = (c: Pick<ComboboxState, "id">, name: PartName) => `${c.id}${name}`;
 
 export const listOf = (c: ComboboxState) => document.getElementById(part(c, "list"));
 
-export const inputOf = (c: ComboboxState) =>
+export const inputOf = (c: Pick<ComboboxState, "id">) =>
   document.getElementById(part(c, "root"))?.querySelector<HTMLInputElement>('[role="combobox"]') ??
   null;
 
@@ -177,8 +186,7 @@ function changeText(c: ComboboxState, next: string, reason: InputReason, event?:
 }
 
 /** The single choice the input shows as text; `null` while none, or when several can be chosen. */
-export const chosenValue = (c: ComboboxState) =>
-  c.options.selectionMode === "multiple" ? null : (c.value[0] ?? null);
+export const chosenValue = (c: ComboboxState) => (c.multiple ? null : (c.value[0] ?? null));
 
 /** A single choice; several choices change through `changeValues` only. */
 function changeValue(c: ComboboxState, next: string | null, reason: ValueReason, event?: Event) {
@@ -243,10 +251,8 @@ function choose(c: ComboboxState, option: HTMLElement, event: Event) {
 
   if (!enabled(option)) return;
 
-  if (c.options.selectionMode === "multiple") {
-    const next = c.value.includes(value)
-      ? c.value.filter((each) => each !== value)
-      : [...c.value, value];
+  if (c.multiple) {
+    const next = toggled(c.value, value);
 
     if (changeValues(c, next, "item-press", event) && changeText(c, "", "item-press", event)) {
       memoryOf(c).edge = "kept";

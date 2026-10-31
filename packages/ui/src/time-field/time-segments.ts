@@ -1,5 +1,4 @@
-import { Temporal } from "../internal/date/date.ts";
-import { useLocale } from "../internal/locale/use-locale.ts";
+import { perLocale, Temporal } from "../internal/date/date.ts";
 import type { SegmentModel } from "../internal/segment-field/segments.ts";
 
 export type TimePart = "hour" | "minute" | "dayPeriod";
@@ -56,15 +55,5 @@ function build(locale: string | undefined): SegmentModel<TimePart, Temporal.Plai
   };
 }
 
-const cache = new Map<string, ReturnType<typeof build>>();
-
 /** A time's hour, minute and day period segments, in the app's Locale and its hour cycle. */
-export function useTimeSegments() {
-  const locale = useLocale();
-  const key = String(locale);
-  const cached = cache.get(key) ?? build(locale);
-
-  cache.set(key, cached);
-
-  return cached;
-}
+export const useTimeSegments = perLocale(build);

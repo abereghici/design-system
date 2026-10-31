@@ -1,12 +1,13 @@
 "use client";
 
-import { use, useState } from "react";
+import { use } from "react";
 import type { ComponentProps, MouseEvent, ReactNode } from "react";
 
 import "@abereghici/tokens/components/toggle-button.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { ToggleGroupContext } from "../internal/toggle/toggle-group.ts";
 
@@ -40,9 +41,11 @@ export type ToggleButtonProps = Omit<ComponentProps<"button">, "type" | "value" 
 /**
  * A button that stays on or off, such as Bold in a formatting toolbar; a screen reader announces it
  * as pressed. Each change dispatches a bubbling `ab-toggle`. Put several in a ToggleButtonGroup, or
- * in a Toolbar, whose arrow keys then move between them. It needs script, so it is interactive
- * after hydration and hidden while scripting is off (Tier 2). To switch between views of the same content, use SegmentedControl; for
- * an icon alone, IconButton; for a single action, Button.
+ * in a Toolbar, whose arrow keys then move between them. To switch between views of the same
+ * content, use SegmentedControl; for an icon alone, IconButton; for a single action, Button.
+ *
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, it is
+ * hidden.
  */
 export function ToggleButton({
   value,
@@ -55,8 +58,8 @@ export function ToggleButton({
   ...props
 }: ToggleButtonProps) {
   const group = use(ToggleGroupContext);
-  const [uncontrolled, setUncontrolled] = useState(defaultPressed ?? false);
-  const current = group?.pressed(value) ?? pressed ?? uncontrolled;
+  const [own, request] = useControllableState(pressed, defaultPressed ?? false, onPressedChange);
+  const current = group?.pressed(value) ?? own;
 
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     if (disabled) {
@@ -68,9 +71,7 @@ export function ToggleButton({
     onClick?.(event);
 
     if (group === null) {
-      if (!requestChange(onPressedChange, !current, "none", event)) return;
-
-      setUncontrolled(!current);
+      if (!request(!current, "none", event)) return;
     } else if (!group.toggle(value, event)) return;
 
     dispatchFeedback(event.currentTarget, "ab-toggle", {

@@ -5,14 +5,16 @@ import type { ComponentProps, FocusEvent, KeyboardEvent, SyntheticEvent } from "
 
 import "@abereghici/tokens/components/tree.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { typeahead } from "../internal/listbox/listbox.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
+import { toggled } from "../internal/toggle/toggle.ts";
 
 /**
  * `"arrow-key"`: Right or Left on an Item. `"item-press"`: a click on an Item's chevron, or a
- * click, Enter or Space on an Item when `selectionMode` is `"none"`. `cancel()`: keeps the Items
+ * click, Enter or Space on an Item without a `selectionMode`. `cancel()`: keeps the Items
  * as they were.
  */
 export type ExpandedChangeEventDetails = Details<"arrow-key" | "item-press">;
@@ -56,9 +58,6 @@ const shownItems = (tree: Element) =>
   [...tree.querySelectorAll<HTMLElement>('[role="treeitem"]')].filter((item) =>
     item.checkVisibility(),
   );
-
-const toggled = (keys: readonly string[], id: string) =>
-  keys.includes(id) ? keys.filter((key) => key !== id) : [...keys, id];
 
 /** Whether a click landed on the chevron, the Item's first child, rather than its label. */
 const onChevron = (event: ItemEvent, item: TreeItemState) =>
@@ -117,16 +116,15 @@ function useKeys<Reason extends string>(
   defaultKeys: ReadonlyArray<string>,
   onChange: ((keys: string[], details: Details<Reason>) => void) | undefined,
 ) {
-  const [uncontrolled, setUncontrolled] = useState(defaultKeys);
+  const [current, request] = useControllableState(keys, defaultKeys, onChange);
 
   function change(next: string[], reason: Reason, event: ItemEvent) {
-    if (!requestChange(onChange, next, reason, event.nativeEvent)) return;
-
-    setUncontrolled(next);
-    dispatchFeedback(event.currentTarget, "ab-toggle", { component: "Tree", reason: "user" });
+    if (request(next, reason, event.nativeEvent)) {
+      dispatchFeedback(event.currentTarget, "ab-toggle", { component: "Tree", reason: "user" });
+    }
   }
 
-  return [keys ?? uncontrolled, change] as const;
+  return [current, change] as const;
 }
 
 export type RootProps = Omit<ComponentProps<"div">, "role"> & {
@@ -139,8 +137,8 @@ export type RootProps = Omit<ComponentProps<"div">, "role"> & {
    * Item's children once it expands to load them lazily.
    */
   onExpandedChange?: (keys: string[], details: ExpandedChangeEventDetails) => void;
-  /** Lets people select one Item or several; with `"none"`, Items only expand and collapse. */
-  selectionMode?: "none" | "single" | "multiple";
+  /** Lets people select one Item or several; without it, Items only expand and collapse. */
+  selectionMode?: "single" | "multiple" | undefined;
   /** The `id`s of the selected Items, when your state holds them. */
   selectedKeys?: ReadonlyArray<string>;
   /** The Items selected on the first render when it holds its own state. */
@@ -162,14 +160,16 @@ export type RootProps = Omit<ComponentProps<"div">, "role"> & {
  * Down move through the shown Items, Home and End reach the ends, Right expands an Item or enters
  * it, and Left collapses it or goes up to its parent (mirrored right to left). With a
  * `selectionMode`, Enter, Space or a click selects an Item and its chevron expands it. Every change
- * dispatches a bubbling `ab-toggle`. Name it with `aria-label` or `aria-labelledby`. Tier 2: the
- * Items render on the server, and they respond once the page is hydrated.
+ * dispatches a bubbling `ab-toggle`. Name it with `aria-label` or `aria-labelledby`.
+ *
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, the
+ * chevrons are hidden.
  */
 export function Root({
   expandedKeys,
   defaultExpandedKeys = [],
   onExpandedChange,
-  selectionMode = "none",
+  selectionMode,
   selectedKeys,
   defaultSelectedKeys = [],
   onSelectionChange,
@@ -178,7 +178,7 @@ export function Root({
   const [expanded, setExpanded] = useKeys(expandedKeys, defaultExpandedKeys, onExpandedChange);
   const [selected, setSelected] = useKeys(selectedKeys, defaultSelectedKeys, onSelectionChange);
   const [active, setActive] = useState<string | null>(null);
-  const selectable = selectionMode === "none" ? null : selected;
+  const selectable = selectionMode === undefined ? null : selected;
 
   function press(event: ItemEvent, item: TreeItemState) {
     if (selectable === null || onChevron(event, item)) {

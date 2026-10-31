@@ -1,16 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import type { ComponentProps } from "react";
 
-import {
-  composeEventHandlers,
-  isComposing,
-  requestChange,
-  trackComposition,
-} from "../events/events.ts";
+import { composeEventHandlers, isComposing, trackComposition } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useEvent } from "../events/use-event.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { useField } from "../field/use-field.ts";
 import type { FormControl } from "../field/use-field.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
@@ -63,21 +57,10 @@ function useSearchText({
 }: Pick<ControlProps, "value" | "defaultValue" | "onValueChange" | "disabled" | "readOnly">) {
   const { field, blocked } = useField(disabled);
   const input = field?.control ?? null;
-  const [own, setOwn] = useState(defaultValue ?? "");
-  const text = value ?? own;
-  const change = (next: string, reason: Reason, event: Event) => {
-    const accepted = requestChange(onValueChange, next, reason, event);
-
-    if (accepted) setOwn(next);
-
-    return accepted;
-  };
-
-  useEvent(
-    "reset",
-    () => {
-      setOwn(defaultValue ?? "");
-    },
+  const [text, change] = useControllableState(
+    value,
+    defaultValue ?? "",
+    onValueChange,
     input?.form ?? null,
   );
 

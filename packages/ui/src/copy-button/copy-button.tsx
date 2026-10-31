@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import type { MouseEvent, ReactNode } from "react";
 
 import { Button } from "../button/button.tsx";
@@ -23,8 +23,10 @@ export type CopyButtonProps = Omit<ButtonProps, "children"> & {
 /**
  * Copies a text, such as an ID, a token or a snippet, to the clipboard in one press, and says so in
  * a status message screen readers announce; a refused copy says that too, so a press is never
- * silent. It needs script, so it copies after hydration and is hidden while scripting is off
- * (Tier 2). For a message that goes away on its own, answer `onClick` with a Toast.
+ * silent. For a message that goes away on its own, answer `onClick` with a Toast.
+ *
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, it is
+ * hidden.
  */
 export function CopyButton({
   value,
@@ -33,7 +35,7 @@ export function CopyButton({
   onClick,
   ...props
 }: CopyButtonProps) {
-  const [message, setMessage] = useState("");
+  const [{ message, copies }, setStatus] = useState({ message: "", copies: 0 });
 
   function handleClick(event: MouseEvent<HTMLElement>) {
     onClick?.(event);
@@ -47,7 +49,7 @@ export function CopyButton({
         () => failedLabel,
       )
       .then((announcement) => {
-        setMessage(announcement);
+        setStatus((status) => ({ message: announcement, copies: status.copies + 1 }));
 
         return announcement;
       });
@@ -60,8 +62,11 @@ export function CopyButton({
         data-copied={message === copiedLabel ? "" : undefined}
         onClick={handleClick}
       />
-      {/* An <output> is a status live region, so screen readers announce the message it receives. */}
-      <output className={styles["status"]}>{message}</output>
+      {/* An <output> is a status live region, so screen readers announce the message it receives;
+          a new key adds the message afresh, so a second copy is announced too. */}
+      <output className={styles["status"]}>
+        <Fragment key={copies}>{message}</Fragment>
+      </output>
     </>
   );
 }

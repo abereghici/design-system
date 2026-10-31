@@ -1,31 +1,26 @@
-import { useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
-import { expect, fn, waitFor } from "storybook/test";
+import type { ReactNode } from "react";
+import { expect, waitFor } from "storybook/test";
 
 import { EmptyState } from "@abereghici/ui/empty-state";
-import { VisuallyHidden } from "@abereghici/ui/visually-hidden";
 
-import { withDensity } from "#.storybook/decorators/with-density.tsx";
+import { SortableInvoices } from "#.storybook/components/sortable-invoices.tsx";
 import { withScroll } from "#.storybook/decorators/with-scroll.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
-import { listen } from "#.storybook/test/listen.ts";
 
 import * as Table from "./table.tsx";
 
 const invoices = [
-  { id: "INV-001", status: "Paid", date: "2026-01-05", amount: "€250.00", total: 250 },
-  { id: "INV-002", status: "Pending", date: "2026-02-05", amount: "€1,180.40", total: 1180.4 },
-  { id: "INV-003", status: "Overdue", date: "2026-03-05", amount: "€74.10", total: 74.1 },
+  { id: "INV-001", status: "Paid", date: "2026-01-05", amount: "€250.00" },
+  { id: "INV-002", status: "Pending", date: "2026-02-05", amount: "€1,180.40" },
+  { id: "INV-003", status: "Overdue", date: "2026-03-05", amount: "€74.10" },
 ];
-
-const ids = invoices.map((invoice) => invoice.id);
 
 const end = { textAlign: "end" } as const;
 
-const header = (
+const columns = (invoice: ReactNode = "Invoice", sort?: "ascending") => (
   <Table.Header>
     <Table.Row>
-      <Table.ColumnHeader>Invoice</Table.ColumnHeader>
+      <Table.ColumnHeader sortDirection={sort}>{invoice}</Table.ColumnHeader>
       <Table.ColumnHeader>Status</Table.ColumnHeader>
       <Table.ColumnHeader>Issued</Table.ColumnHeader>
       <Table.ColumnHeader style={end}>Amount</Table.ColumnHeader>
@@ -48,7 +43,7 @@ const body = (
   </Table.Body>
 );
 
-const captioned = (rows: ReactNode, captionId?: string, head: ReactNode = header) => (
+const captioned = (rows: ReactNode, captionId?: string, head: ReactNode = columns()) => (
   <>
     <Table.Caption id={captionId}>Invoices, 2026</Table.Caption>
     {head}
@@ -60,7 +55,7 @@ const meta = preview.meta({
   title: "Components/Table",
   component: Table.Root,
   subcomponents: partsOf(Table),
-  args: { children: captioned(body), onSelectionChange: fn() },
+  args: { children: captioned(body) },
 });
 
 export const Default = meta.story({});
@@ -78,7 +73,7 @@ export const InAScrollArea = meta.story({
     docs: {
       description: {
         story:
-          "A wide or long table scrolls inside a ScrollArea named by the caption, so the page never scrolls in two axes; `stickyHeader` keeps the column headers in view meanwhile.",
+          "A wide or long table scrolls inside a ScrollArea named by the caption, so the page never scrolls in two axes; the column headers stay in view meanwhile.",
       },
     },
   },
@@ -95,21 +90,17 @@ InAScrollArea.test(
   },
 );
 
-InAScrollArea.test(
-  "keeps a sticky header in view while the rows scroll",
-  { args: { stickyHeader: true } },
-  async ({ canvas }) => {
-    const box = canvas.getByRole("region", { name: "Invoices, 2026" });
-    const columnHeader = canvas.getByRole("columnheader", { name: "Invoice" });
-    const offset = () => columnHeader.getBoundingClientRect().top - box.getBoundingClientRect().top;
+InAScrollArea.test("keeps the header in view while the rows scroll", async ({ canvas }) => {
+  const box = canvas.getByRole("region", { name: "Invoices, 2026" });
+  const columnHeader = canvas.getByRole("columnheader", { name: "Invoice" });
+  const offset = () => columnHeader.getBoundingClientRect().top - box.getBoundingClientRect().top;
 
-    await expect(offset()).toBeGreaterThan(0);
+  await expect(offset()).toBeGreaterThan(0);
 
-    box.scrollTop = 48;
+  box.scrollTop = 48;
 
-    await waitFor(() => expect(offset()).toBeCloseTo(0, 0));
-  },
-);
+  await waitFor(() => expect(offset()).toBeCloseTo(0, 0));
+});
 
 export const SortedOnTheServer = meta.story({
   parameters: {
@@ -124,99 +115,30 @@ export const SortedOnTheServer = meta.story({
     children: captioned(
       body,
       undefined,
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader sortDirection="ascending">
-            <Table.SortLabel asChild>
-              <a href="?sort=invoice">Invoice</a>
-            </Table.SortLabel>
-          </Table.ColumnHeader>
-          <Table.ColumnHeader>Status</Table.ColumnHeader>
-          <Table.ColumnHeader>Issued</Table.ColumnHeader>
-          <Table.ColumnHeader style={end}>Amount</Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>,
+      columns(
+        <Table.SortLabel asChild>
+          <a href="?sort=invoice">Invoice</a>
+        </Table.SortLabel>,
+        "ascending",
+      ),
     ),
   },
 });
 
-const cancel = (_keys: unknown, details: { cancel: () => void }) => {
-  details.cancel();
-};
-
-type Sort = { column: "id" | "amount"; direction: "ascending" | "descending" };
-
-const selectionHeader = (mode: Table.RootProps["selectionMode"]) =>
-  mode === "multiple" ? (
-    <Table.SelectAll keys={ids} selectAllLabel="Select all invoices" />
-  ) : (
-    <Table.ColumnHeader>
-      <VisuallyHidden>Chosen</VisuallyHidden>
-    </Table.ColumnHeader>
-  );
-
-function SortableInvoices(props: Table.RootProps) {
-  const [sort, setSort] = useState<Sort>({ column: "id", direction: "ascending" });
-  const sorted = invoices.toSorted((a, b) => {
-    const order = sort.column === "id" ? a.id.localeCompare(b.id) : a.total - b.total;
-
-    return sort.direction === "ascending" ? order : -order;
-  });
-  const sortable = (column: typeof sort.column, label: string, style?: CSSProperties) => (
-    <Table.ColumnHeader
-      style={style}
-      sortDirection={sort.column === column ? sort.direction : undefined}
-    >
-      <Table.SortLabel
-        onClick={() => {
-          const flip = sort.column === column && sort.direction === "ascending";
-
-          setSort({ column, direction: flip ? "descending" : "ascending" });
-        }}
-      >
-        {label}
-      </Table.SortLabel>
-    </Table.ColumnHeader>
-  );
-
-  return (
-    <Table.Root {...props}>
-      <Table.Caption>Invoices, 2026</Table.Caption>
-      <Table.Header>
-        <Table.Row>
-          {selectionHeader(props.selectionMode)}
-          {sortable("id", "Invoice")}
-          {sortable("amount", "Amount", end)}
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {sorted.map((invoice) => (
-          <Table.Row key={invoice.id} id={invoice.id}>
-            <Table.SelectRow />
-            <Table.RowHeader>{invoice.id}</Table.RowHeader>
-            <Table.Cell style={end}>{invoice.amount}</Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table.Root>
-  );
-}
-
-export const SortingAndSelecting = meta.story({
+export const Sorting = meta.story({
   parameters: {
     docs: {
       description: {
         story:
-          '`selectionMode` adds a `SelectRow` cell to each `Row`, keyed by its `id` and named by its `RowHeader`, and `"multiple"` a `SelectAll` header cell; a `SortLabel` in each sortable `ColumnHeader` lets your handler reorder the rows, and the selection follows them.',
+          "A `SortLabel` in each sortable `ColumnHeader` is a button your handler answers by reordering the rows; the header announces the sort.",
       },
     },
   },
-  args: { selectionMode: "multiple", defaultSelectedKeys: new Set(["INV-002"]) },
   render: SortableInvoices,
 });
 
-SortingAndSelecting.test(
-  "sorts by a pressed column, announced on its header",
+Sorting.test(
+  "sorts by a pressed column, and reverses it on Enter, announced on its header",
   async ({ canvas, userEvent }) => {
     const sortOf = (name: string) =>
       canvas.getByRole("columnheader", { name }).getAttribute("aria-sort");
@@ -226,65 +148,9 @@ SortingAndSelecting.test(
     await userEvent.click(canvas.getByRole("button", { name: "Amount" }));
     await expect([sortOf("Invoice"), sortOf("Amount")]).toEqual([null, "ascending"]);
     await expect(order()).toEqual(["INV-003", "INV-001", "INV-002"]);
-  },
-);
-
-SortingAndSelecting.test(
-  "selects a row with the checkbox its row header names, and keeps it selected through a sort",
-  async ({ args, canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole("checkbox", { name: "INV-003" }));
-    await expect(args.onSelectionChange).toHaveBeenCalledWith(
-      new Set(["INV-002", "INV-003"]),
-      expect.objectContaining({ reason: "row-press" }),
-    );
-    await userEvent.click(canvas.getByRole("button", { name: "Amount" }));
-    await expect(canvas.getAllByRole("rowheader")[0]).toHaveTextContent("INV-003");
-    await expect(canvas.getByRole("checkbox", { name: "INV-003" })).toBeChecked();
-  },
-);
-
-SortingAndSelecting.test(
-  "selects and clears every row from the header checkbox, which reports mixed meanwhile",
-  async ({ canvas, userEvent }) => {
-    const selectAll = canvas.getByRole("checkbox", { name: "Select all invoices" });
-    const checked = () => canvas.queryAllByRole("checkbox", { checked: true });
-
-    await expect(selectAll).toBePartiallyChecked();
-    await userEvent.click(selectAll);
-    await expect(checked()).toHaveLength(ids.length + 1);
-    await userEvent.click(selectAll);
-    await expect(checked()).toEqual([]);
-    await expect(selectAll).not.toBePartiallyChecked();
-  },
-);
-
-SortingAndSelecting.test(
-  "keeps the selection, and reports no toggle, when the app cancels the change",
-  { args: { onSelectionChange: cancel } },
-  async ({ canvas, userEvent }) => {
-    const toggles = listen("ab-toggle");
-
-    await userEvent.click(canvas.getByRole("checkbox", { name: "INV-001" }));
-    toggles.stop();
-    await expect(canvas.getByRole("checkbox", { name: "INV-001" })).not.toBeChecked();
-    await expect(canvas.getByRole("checkbox", { name: "INV-002" })).toBeChecked();
-    await expect(toggles.events).toEqual([]);
-  },
-);
-
-SortingAndSelecting.test(
-  "chooses one row at a time in single selection, and reports the chosen one",
-  { args: { selectionMode: "single" } },
-  async ({ args, canvas, userEvent }) => {
-    const radio = (id: string) => canvas.getByRole("radio", { name: id });
-
-    await userEvent.click(radio("INV-003"));
-    await expect(radio("INV-003")).toBeChecked();
-    await expect(radio("INV-002")).not.toBeChecked();
-    await expect(args.onSelectionChange).toHaveBeenLastCalledWith(
-      new Set(["INV-003"]),
-      expect.objectContaining({ reason: "row-press" }),
-    );
+    await userEvent.keyboard("{Enter}");
+    await expect(sortOf("Amount")).toBe("descending");
+    await expect(order()).toEqual(["INV-002", "INV-001", "INV-003"]);
   },
 );
 
@@ -335,5 +201,3 @@ export const Empty = meta.story({
     ),
   },
 });
-
-export const Compact = Default.extend({ decorators: [withDensity("compact")] });

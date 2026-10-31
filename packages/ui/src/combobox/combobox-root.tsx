@@ -6,10 +6,11 @@ import "@abereghici/tokens/components/combobox.css";
 
 import { Wrapper } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
+import { useHydrated } from "../internal/hydration/use-hydrated.ts";
 import { Listbox } from "../internal/listbox/listbox.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
-import { Control, Tags } from "./combobox-control.tsx";
+import { Control } from "./combobox-control.tsx";
 import { labelsOf } from "./combobox-item.tsx";
 import { listProps, part } from "./combobox-state.ts";
 import type { ComboboxState, Options } from "./combobox-state.ts";
@@ -56,12 +57,13 @@ export type RootProps = Naming &
 interface ListProps {
   c: ComboboxState;
   naming: Pick<ComponentProps<"div">, "aria-labelledby" | "aria-label">;
-  multiple: boolean;
   empty: string;
   children: ReactNode;
 }
 
-function List({ c, naming, multiple, empty, children }: ListProps) {
+function List({ c, naming, empty, children }: ListProps) {
+  const { multiple } = c;
+
   return (
     <Listbox
       {...listProps(c)}
@@ -75,6 +77,19 @@ function List({ c, naming, multiple, empty, children }: ListProps) {
       </div>
     </Listbox>
   );
+}
+
+/**
+ * One hidden input per chosen value. A single choice names its input only once hydrated: until
+ * then the typed text submits under the name.
+ */
+function Values({ c, name, form }: { c: ComboboxState } & Pick<InputProps, "name" | "form">) {
+  const hydrated = useHydrated();
+  const named = c.multiple || hydrated ? name : undefined;
+
+  return (c.multiple ? c.value : [c.value[0] ?? ""]).map((value) => (
+    <input key={value} type="hidden" name={named} form={form} value={value} />
+  ));
 }
 
 /** The props left for the input once the Combobox has taken its own, and the empty-list text. */
@@ -107,8 +122,8 @@ const inputPropsOf = ({
  * Items; the typed text only filters. Use Select for a short known list, RadioGroup for 2–6
  * options that should stay visible, a TextField for free text, and Command to run commands.
  *
- * Tier 2: shows its final content before hydration and works after it; until then, its form
- * submits the starting value whatever is typed.
+ * Tier 2: shows its final content before hydration and works after it; until then, a single
+ * choice submits the typed text.
  */
 export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, validate, ...rest } = props;
@@ -116,19 +131,14 @@ export function Root(props: RootProps) {
   // Read-only blocks the same presses and keys as disabled; only the look and announcement differ.
   const locked = input.disabled === true || input.readOnly === true;
   const c = useCombobox({ ...props, disabled: locked }, empty);
-  const multiple = props.selectionMode === "multiple";
   const field = { className, style, name, invalid, disabled: input.disabled, id: part(c, "root") };
   const naming = {
     "aria-labelledby": label === undefined ? input["aria-labelledby"] : part(c, "label"),
     "aria-label": label === undefined ? input["aria-label"] : undefined,
   };
   const labels = labelsOf(children);
-  const tags =
-    props.selectionMode === "multiple" ? (
-      <Tags c={c} naming={naming} removeLabel={props.removeLabel} labels={labels} />
-    ) : undefined;
   // The server renders the chosen Item's text as well, so hydration doesn't change the field.
-  const text = input.defaultValue ?? (multiple ? undefined : labels.get(c.value[0] ?? ""));
+  const text = input.defaultValue ?? (c.multiple ? undefined : labels.get(c.value[0] ?? ""));
 
   return (
     <Wrapper
@@ -145,11 +155,9 @@ export function Root(props: RootProps) {
         </VisuallyHidden>
       }
     >
-      <Control c={c} input={{ ...input, defaultValue: text }} tags={tags} />
-      {(multiple ? c.value : [c.value[0] ?? ""]).map((value) => (
-        <input key={value} type="hidden" name={name} form={form} value={value} />
-      ))}
-      <List c={c} naming={naming} multiple={multiple} empty={empty}>
+      <Control c={c} input={{ ...input, defaultValue: text }} naming={naming} labels={labels} />
+      <Values c={c} name={name} form={form} />
+      <List c={c} naming={naming} empty={empty}>
         {children}
       </List>
     </Wrapper>

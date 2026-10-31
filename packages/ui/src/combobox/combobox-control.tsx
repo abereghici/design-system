@@ -1,11 +1,12 @@
 "use client";
 
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/field.css";
 
 import * as Field from "../field/field.tsx";
 import { SearchIcon } from "../icon/icons/search.tsx";
+import { useHydrated } from "../internal/hydration/use-hydrated.ts";
 import * as TagGroup from "../tag-group/tag-group.tsx";
 import { InputGroup } from "../text-field/text-field-input-group.tsx";
 
@@ -14,7 +15,12 @@ import type { ComboboxState } from "./combobox-state.ts";
 import textFieldStyles from "../text-field/text-field.module.css";
 import styles from "./combobox.module.css";
 
-function Input({ readOnly, className, ...props }: Field.ControlProps) {
+function Input({
+  readOnly,
+  className,
+  submitsText,
+  ...props
+}: Field.ControlProps & { submitsText: boolean }) {
   const bindings = Field.useFieldControl<HTMLInputElement, typeof props>(props);
 
   return (
@@ -22,7 +28,7 @@ function Input({ readOnly, className, ...props }: Field.ControlProps) {
       dir="auto"
       autoComplete="off"
       {...bindings}
-      name={undefined}
+      name={submitsText ? bindings.name : undefined}
       role="combobox"
       aria-autocomplete="list"
       aria-expanded={props["aria-expanded"]}
@@ -33,23 +39,26 @@ function Input({ readOnly, className, ...props }: Field.ControlProps) {
   );
 }
 
+type Naming = Pick<ComponentProps<"ul">, "aria-labelledby" | "aria-label">;
+
 interface TagsProps {
   c: ComboboxState;
-  naming: Pick<ComponentProps<"ul">, "aria-labelledby" | "aria-label">;
-  removeLabel: string;
+  naming: Naming;
   labels: ReadonlyMap<string, string>;
 }
 
 /** The chosen Items as tags; removing one returns focus to the input. */
-export function Tags({ c, naming, removeLabel, labels }: TagsProps) {
-  if (c.value.length === 0) return null;
+function Tags({ c, naming, labels }: TagsProps) {
+  const { options } = c;
+
+  if (options.selectionMode !== "multiple" || c.value.length === 0) return null;
 
   return (
     <TagGroup.Root
       {...naming}
       value={c.value}
-      removeLabel={removeLabel}
-      disabled={c.options.disabled === true}
+      removeLabel={options.removeLabel}
+      disabled={options.disabled === true}
       onValueChange={(next, details) => {
         if (changeValues(c, next, "remove-press", details.event)) inputOf(c)?.focus();
         else details.cancel();
@@ -64,27 +73,27 @@ export function Tags({ c, naming, removeLabel, labels }: TagsProps) {
   );
 }
 
+interface ControlProps extends Omit<TagsProps, "c"> {
+  c: ComboboxState;
+  input: Field.ControlProps;
+}
+
 /**
  * The field box: a search icon, the chosen tags if any, and the input, which a press anywhere on
  * the box focuses.
  */
-export function Control({
-  c,
-  input,
-  tags,
-}: {
-  c: ComboboxState;
-  input: Field.ControlProps;
-  tags: ReactNode;
-}) {
+export function Control({ c, input, naming, labels }: ControlProps) {
+  const { multiple } = c;
+  const hydrated = useHydrated();
   const field = (
     <Input
       {...inputProps(c, input)}
+      // Until hydration the input is a plain text field, so one choice submits what is typed;
+      // several choices submit their tags, since typing only filters.
+      submitsText={!multiple && !hydrated}
       // With several choices the text is empty once chosen, so only the choices meet `required`.
-      required={
-        tags === undefined ? input.required : input.required === true && c.value.length === 0
-      }
-      className={tags === undefined ? undefined : styles["input"]}
+      required={multiple ? input.required === true && c.value.length === 0 : input.required}
+      className={multiple ? styles["input"] : undefined}
       aria-expanded={c.open}
       aria-controls={part(c, "list")}
     />
@@ -93,7 +102,7 @@ export function Control({
   return (
     <InputGroup
       id={part(c, "box")}
-      className={tags === undefined ? undefined : styles["multiple"]}
+      className={multiple ? styles["multiple"] : undefined}
       start={<SearchIcon />}
       end={undefined}
       onPointerDown={(event) => {
@@ -102,13 +111,13 @@ export function Control({
         }
       }}
     >
-      {tags === undefined ? (
-        field
-      ) : (
+      {multiple ? (
         <span className={styles["values"]}>
-          {tags}
+          <Tags c={c} naming={naming} labels={labels} />
           {field}
         </span>
+      ) : (
+        field
       )}
     </InputGroup>
   );

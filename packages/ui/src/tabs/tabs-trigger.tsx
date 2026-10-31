@@ -46,15 +46,15 @@ export interface TriggerProps extends Omit<ComponentProps<"button">, "type" | "r
 /** A tab that shows the Content with the same `value`. */
 export function Trigger({ value, onClick, onPointerDown, onKeyDown, ...props }: TriggerProps) {
   const tabs = useTabs("Trigger");
-  const selected = value === tabs.value;
+  const selected = value === tabs.state.value;
 
   return (
     <button
       {...mergeProps({ className: styles["trigger"] }, props)}
       type="button"
       role="tab"
-      id={`${tabs.id}-trigger-${value}`}
-      aria-controls={`${tabs.id}-content-${value}`}
+      id={`${tabs.meta.id}-trigger-${value}`}
+      aria-controls={`${tabs.meta.id}-content-${value}`}
       aria-selected={selected}
       tabIndex={selected ? 0 : -1}
       onPointerDown={(event) => {
@@ -70,7 +70,7 @@ export function Trigger({ value, onClick, onPointerDown, onKeyDown, ...props }: 
       }}
       onClick={(event) => {
         onClick?.(event);
-        tabs.select(value, event);
+        tabs.actions.select(value, event);
       }}
     />
   );

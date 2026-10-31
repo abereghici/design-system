@@ -3,7 +3,9 @@
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import { focusLast, itemsOf, useMenu } from "../internal/menu/menu.tsx";
-import { Slot } from "../internal/slot/slot.tsx";
+import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+
+import styles from "./dropdown-menu.module.css";
 
 export interface TriggerProps extends ComponentProps<"button"> {
   /** Makes its one child (a Button or IconButton) the Trigger. */
@@ -14,7 +16,7 @@ export interface TriggerProps extends ComponentProps<"button"> {
 export function Trigger({ asChild = false, ...props }: TriggerProps) {
   const { overlay } = useMenu();
   const Element = asChild ? Slot : "button";
-  const trigger = overlay.triggerProps(props);
+  const trigger = mergeProps({ className: styles["trigger"] }, overlay.triggerProps(props));
 
   return (
     <Element

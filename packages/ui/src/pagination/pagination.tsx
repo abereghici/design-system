@@ -5,14 +5,11 @@ import "@abereghici/tokens/components/pagination.css";
 
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { MoreIcon } from "../icon/icons/more.tsx";
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { FormattedNumber } from "../internal/locale/formatted-number.tsx";
 
 import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./pagination.module.css";
-
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
 
 export type PaginationProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelledby"> &
   AccessibleName & {

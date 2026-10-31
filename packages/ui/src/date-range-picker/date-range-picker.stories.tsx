@@ -4,6 +4,7 @@ import { Temporal } from "temporal-polyfill";
 import { RangeCalendar } from "@abereghici/ui/range-calendar";
 
 import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
@@ -56,14 +57,7 @@ const meta = preview.meta({
       today.mockRestore();
     };
   },
-  decorators: [
-    withForm,
-    (Story) => (
-      <div style={{ maxInlineSize: "24rem", paddingBlockEnd: "24rem" }}>
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withForm, withWidth("24rem", "24rem")],
 });
 
 export const Default = meta.story({});
