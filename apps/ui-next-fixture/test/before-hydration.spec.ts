@@ -121,6 +121,11 @@ const fields = [
     "/search-field?q=april",
   ],
   [
+    "otp-field",
+    (page: Page) => page.getByRole("textbox", { name: "Verification code" }).fill("482719"),
+    "/otp-field?code=482719",
+  ],
+  [
     "checkbox",
     (page: Page) => page.getByRole("checkbox", { name: "Email me updates" }).check(),
     "/checkbox?updates=on",

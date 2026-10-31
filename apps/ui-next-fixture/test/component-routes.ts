@@ -141,6 +141,18 @@ export const componentRoutes = [
     html: 'enterKeyHint="search"',
   },
   {
+    name: "otp-field",
+    tokens: ["field"],
+    client: [
+      "field/field-description",
+      "field/field-error",
+      "field/field-label",
+      "field/field-root",
+      "text-field/text-field-input",
+    ],
+    html: 'autoComplete="one-time-code"',
+  },
+  {
     name: "file-trigger",
     tokens: ["button", "spinner", "icon", "icon-button"],
     client: ["button/button", "file-trigger/file-trigger"],
