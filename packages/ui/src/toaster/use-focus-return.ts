@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import type { FocusEvent, KeyboardEvent, RefObject } from "react";
 
 import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
+import { returnFocus } from "../internal/overlay/overlay.ts";
 import { snapshot } from "../toast/toast.ts";
 
 const hotkey = (event: globalThis.KeyboardEvent) =>
@@ -10,14 +11,6 @@ const hotkey = (event: globalThis.KeyboardEvent) =>
   !event.metaKey &&
   !event.shiftKey &&
   (event.code === "KeyT" || event.key.toLowerCase() === "t");
-
-function restoreFrom(before: RefObject<Element | null>) {
-  const target = before.current;
-
-  before.current = null;
-
-  if (target instanceof HTMLElement && target.isConnected) target.focus();
-}
 
 const inside = (node: Element, target: EventTarget | null) =>
   target instanceof Node && node.contains(target);
@@ -31,7 +24,9 @@ export function useFocusReturn(region: RefObject<HTMLElement | null>) {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const restore = () => {
-    restoreFrom(before);
+    if (region.current !== null) returnFocus(region.current, before.current);
+
+    before.current = null;
   };
 
   useEvent(
