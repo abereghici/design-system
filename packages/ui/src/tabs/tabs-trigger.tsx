@@ -5,6 +5,7 @@ import type { ComponentProps, KeyboardEvent } from "react";
 import "@abereghici/tokens/components/tabs.css";
 
 import { chain } from "../internal/chain/chain.ts";
+import type { InvokerCommands } from "../internal/invoker-commands/invoker-commands.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useTabs } from "./tabs-root.tsx";
@@ -37,7 +38,8 @@ function moveSelection(event: KeyboardEvent<HTMLButtonElement>) {
   next.click();
 }
 
-export interface TriggerProps extends Omit<ComponentProps<"button">, "type" | "role"> {
+export interface TriggerProps
+  extends Omit<ComponentProps<"button">, "type" | "role">, InvokerCommands {
   /** Pairs the Trigger with its Content; use one word with no spaces. */
   value: string;
 }

@@ -8,13 +8,15 @@ import "@abereghici/tokens/components/alert.css";
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { chain } from "../internal/chain/chain.ts";
+import type { InvokerCommands } from "../internal/invoker-commands/invoker-commands.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { useButton } from "../internal/use-button/use-button.ts";
 
 import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./alert.module.css";
 
-export interface CloseProps extends Omit<ComponentProps<"button">, "aria-label" | "children"> {
+export interface CloseProps
+  extends Omit<ComponentProps<"button">, "aria-label" | "children">, InvokerCommands {
   /** The button's name, such as "Dismiss": it shows only an icon. */
   "aria-label": string;
   /**

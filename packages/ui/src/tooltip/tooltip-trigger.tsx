@@ -8,6 +8,7 @@ import type {
   SyntheticEvent,
 } from "react";
 
+import type { InvokerCommands } from "../internal/invoker-commands/invoker-commands.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Slot } from "../internal/slot/slot.tsx";
 
@@ -15,7 +16,7 @@ import { outside, useTooltip } from "./tooltip-root.tsx";
 
 const pressed = new WeakSet<Element>();
 
-export interface TriggerProps extends ComponentProps<"button"> {
+export interface TriggerProps extends ComponentProps<"button">, InvokerCommands {
   /** Makes its one child (a Button, IconButton or Link) the Trigger. */
   asChild?: boolean;
 }

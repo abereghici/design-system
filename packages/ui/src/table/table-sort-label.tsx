@@ -2,12 +2,13 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/table.css";
 
+import type { InvokerCommands } from "../internal/invoker-commands/invoker-commands.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Slot } from "../internal/slot/slot.tsx";
 
 import styles from "./table.module.css";
 
-export interface SortLabelProps extends ComponentProps<"button"> {
+export interface SortLabelProps extends ComponentProps<"button">, InvokerCommands {
   /**
    * Gives the sort affordance to its one child, such as a link to the sorted page, which a server
    * sorts without waiting for JavaScript.

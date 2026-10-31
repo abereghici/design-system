@@ -7,6 +7,7 @@ import "@abereghici/tokens/components/button.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { chain } from "../internal/chain/chain.ts";
+import type { InvokerCommands } from "../internal/invoker-commands/invoker-commands.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Slot } from "../internal/slot/slot.tsx";
 import { useButton } from "../internal/use-button/use-button.ts";
@@ -14,7 +15,7 @@ import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./button.module.css";
 
-export interface ButtonProps extends Omit<ComponentProps<"button">, "onClick"> {
+export interface ButtonProps extends Omit<ComponentProps<"button">, "onClick">, InvokerCommands {
   /** Runs on every press, unless the Button is disabled or loading. */
   onClick?: MouseEventHandler<HTMLElement> | undefined;
   /**
