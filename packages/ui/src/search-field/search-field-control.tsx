@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 import { composeEventHandlers, isComposing, trackComposition } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
@@ -9,9 +9,9 @@ import { useField } from "../field/use-field.ts";
 import type { FormControl } from "../field/use-field.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { XIcon } from "../icon/icons/x.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 import { InputGroup } from "../text-field/text-field-input-group.tsx";
 import { Input as TextInput } from "../text-field/text-field-input.tsx";
-import type { TextFieldProps } from "../text-field/text-field.tsx";
 
 import styles from "./search-field.module.css";
 
@@ -40,7 +40,7 @@ export type ControlProps = Omit<
   /** The name of the clear button, such as "Clear search": it shows only an icon. */
   clearLabel: string;
   /** Content before the input, such as a decorative search icon. */
-  startElement?: TextFieldProps["startElement"];
+  startElement?: ReactNode;
 };
 
 function empty(input: FormControl) {
@@ -99,8 +99,7 @@ export function Control({ clearLabel, startElement, ...props }: ControlProps) {
   return (
     <InputGroup start={startElement} end={clearButton}>
       <TextInput
-        {...props}
-        className={styles["input"]}
+        {...mergeProps({ className: styles["input"] }, props)}
         type="search"
         enterKeyHint="search"
         onValueChange={(next, details) => {

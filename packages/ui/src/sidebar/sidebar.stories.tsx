@@ -1,10 +1,11 @@
-import { expect } from "storybook/test";
+import { expect, waitFor } from "storybook/test";
 
 import { FilesIcon } from "@abereghici/ui/icons/files";
 import { LayersIcon } from "@abereghici/ui/icons/layers";
 import { MailIcon } from "@abereghici/ui/icons/mail";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
+import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Sidebar from "./sidebar.tsx";
@@ -88,12 +89,18 @@ Default.test(
   },
 );
 
+const billing = (
+  <Sidebar.Item>
+    <Sidebar.Link href="#billing">Billing</Sidebar.Link>
+  </Sidebar.Item>
+);
+
 export const Collapsible = meta.story({
   parameters: {
     docs: {
       description: {
         story:
-          "A `collapsible` Group folds its links under its label, a native disclosure; `defaultOpen` starts it open.",
+          "A CollapsibleGroup folds its links under its label, as a Disclosure does; `defaultOpen` starts it open.",
       },
     },
   },
@@ -101,23 +108,47 @@ export const Collapsible = meta.story({
     children: (
       <>
         {groups}
-        <Sidebar.Group label="Settings" collapsible>
-          <Sidebar.Item>
-            <Sidebar.Link href="#billing">Billing</Sidebar.Link>
-          </Sidebar.Item>
-        </Sidebar.Group>
+        <Sidebar.CollapsibleGroup label="Settings">{billing}</Sidebar.CollapsibleGroup>
       </>
     ),
   },
 });
 
 Collapsible.test(
-  "shows a folded group's links once its label is pressed",
+  "shows a folded group's links once its label is pressed, dispatching ab-toggle",
   async ({ canvas, userEvent }) => {
+    const toggles = listen("ab-toggle");
+
     await expect(canvas.getByRole("link", { name: "Billing" })).not.toBeVisible();
     await userEvent.click(canvas.getByText("Settings"));
+    toggles.stop();
     await expect(canvas.getByRole("group", { name: "Settings" })).toBeVisible();
-    await expect(canvas.getByRole("link", { name: "Billing" })).toBeVisible();
+    await waitFor(() => expect(canvas.getByRole("link", { name: "Billing" })).toBeVisible());
+    await expect(toggles.events.map(({ detail }) => detail)).toEqual([
+      { component: "Sidebar", reason: "user" },
+    ]);
+  },
+);
+
+Collapsible.test(
+  "stays folded when the app cancels the change",
+  {
+    args: {
+      children: (
+        <Sidebar.CollapsibleGroup
+          label="Settings"
+          onOpenChange={(_open, details) => {
+            details.cancel();
+          }}
+        >
+          {billing}
+        </Sidebar.CollapsibleGroup>
+      ),
+    },
+  },
+  async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByText("Settings"));
+    await expect(canvas.getByRole("link", { name: "Billing" })).not.toBeVisible();
   },
 );
 

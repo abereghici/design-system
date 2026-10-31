@@ -23,5 +23,8 @@ export interface ScrollAreaProps extends ComponentProps<"div"> {
 export function ScrollArea({ asChild = false, tabIndex = 0, ...props }: ScrollAreaProps) {
   const Root = asChild ? Slot : "div";
 
+  // Keyboard users scroll the box from a Tab stop (WCAG 2.1.1). Only script can tell whether the
+  // content overflows, and not every engine makes a scroll container focusable on its own, so the
+  // box always takes one.
   return <Root {...mergeProps({ className: styles["root"] }, props)} tabIndex={tabIndex} />;
 }

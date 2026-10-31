@@ -18,7 +18,7 @@ export interface ItemProps extends Omit<ComponentProps<"div">, "id" | "role"> {
   id: string;
   /** What the Item shows and is announced by. */
   label: ReactNode;
-  /** The nested Items. */
+  /** The nested Items, rendered while the Item is expanded. */
   children?: ReactNode;
   /** Makes the Item expandable before its children are rendered, to load them once it expands. */
   hasChildItems?: boolean;
@@ -50,9 +50,9 @@ export function Item({
 }: ItemProps) {
   const { state, actions, meta } = useTree("Item");
   const base = useId();
-  const owns = children !== undefined;
-  const branch = hasChildItems || owns;
-  const item = { id, branch, expanded: branch && state.expandedKeys.includes(id) };
+  const branch = hasChildItems || children !== undefined;
+  const item = { id, branch, expanded: branch && state.expandedKeys.has(id) };
+  const owns = item.expanded && children !== undefined;
 
   return (
     <>
@@ -62,7 +62,7 @@ export function Item({
         aria-labelledby={`${base}-label`}
         aria-level={meta.level}
         aria-expanded={branch ? item.expanded : undefined}
-        aria-selected={state.selectedKeys?.includes(id)}
+        aria-selected={state.selectedKeys?.has(id)}
         aria-busy={loading ? true : undefined}
         aria-owns={owns ? `${base}-group` : undefined}
         tabIndex={state.active === id ? 0 : -1}
@@ -73,7 +73,7 @@ export function Item({
       </div>
       {/* Beside the treeitem and owned by it, so the row alone takes the name, focus and events. */}
       {owns ? (
-        <fieldset id={`${base}-group`} className={styles["group"]} hidden={!item.expanded}>
+        <fieldset id={`${base}-group`} className={styles["group"]}>
           <TreeContext value={{ state, actions, meta: { level: meta.level + 1 } }}>
             {children}
           </TreeContext>

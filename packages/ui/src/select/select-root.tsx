@@ -5,6 +5,7 @@ import type { ComponentProps, KeyboardEvent } from "react";
 import "@abereghici/tokens/components/field.css";
 import "@abereghici/tokens/components/select.css";
 
+import { composeEventHandlers, pointerMarker } from "../events/events.ts";
 import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
@@ -54,7 +55,10 @@ function Control({ placeholder, defaultValue, children, ...props }: ControlProps
             : undefined
         }
         className={`${fieldStyles["control"]} ${styles["select"]}`}
+        onPointerDown={composeEventHandlers(props.onPointerDown, pointerMarker.onPointerDown)}
         onKeyDown={(event) => {
+          pointerMarker.onKeyDown(event);
+
           if (disabled && blocked(event)) event.preventDefault();
 
           props.onKeyDown?.(event);

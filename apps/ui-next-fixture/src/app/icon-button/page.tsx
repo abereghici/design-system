@@ -4,7 +4,7 @@ import { PinIcon } from "@abereghici/ui/icons/pin";
 export default function Page() {
   return (
     <main>
-      <IconButton aria-label="Pin" defaultPressed={false}>
+      <IconButton aria-label="Pin">
         <PinIcon />
       </IconButton>
     </main>

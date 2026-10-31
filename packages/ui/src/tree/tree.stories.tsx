@@ -1,11 +1,23 @@
 import { useState } from "react";
-import { expect, fn } from "storybook/test";
+import { expect, fn, within } from "storybook/test";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
+import { turns } from "#.storybook/test/motion.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
 import { Tree } from "./index.ts";
+
+const cancel = (_keys: string[], details: { cancel: () => void }) => {
+  details.cancel();
+};
+
+const mounted = fn<(item: HTMLDivElement | null) => void>();
+const folder = (
+  <Tree.Item id="src" label="src">
+    <Tree.Item id="index" label="index.ts" ref={mounted} />
+  </Tree.Item>
+);
 
 const meta = preview.meta({
   title: "Components/Tree",
@@ -52,13 +64,14 @@ Default.test("moves through the shown items with Up, Down, Home and End", async 
 });
 
 Default.test(
-  "expands with Right, enters with Right again and goes back up with Left",
-  async ({ canvas, args }) => {
+  "expands with Right without turning the chevron, enters with Right and goes up with Left",
+  async ({ canvas, canvasElement, args }) => {
     const user = await trusted();
     const toggles = listen("ab-toggle");
 
     await user.keyboard("{Tab}{ArrowDown}{ArrowRight}");
     toggles.stop();
+    await expect(turns(canvasElement)).toBe(false);
 
     const components = canvas.getByRole("treeitem", { name: "components", expanded: true });
 
@@ -111,10 +124,7 @@ Default.test(
   async ({ canvas, args }) => {
     const user = await trusted();
 
-    await expect(canvas.getByRole("tree", { name: "Files" })).toHaveAttribute(
-      "aria-multiselectable",
-      "true",
-    );
+    await expect(canvas.getByRole("tree")).toHaveAttribute("aria-multiselectable", "true");
     await user.keyboard("{Tab}[Space]{ArrowDown}{ArrowDown}[Space]{ArrowDown}[Space][Space]");
     await expect(args.onSelectionChange).toHaveBeenLastCalledWith(
       ["src", "index"],
@@ -128,16 +138,21 @@ Default.test(
 );
 
 Default.test(
-  "expands with a click on the chevron, leaving the selection as it is",
-  async ({ canvas, args }) => {
+  "expands with a click on the chevron, which turns when motion is allowed, leaving the selection",
+  async ({ canvas, canvasElement, args }) => {
     const user = await trusted();
     const components = canvas.getByRole("treeitem", { name: "components" });
+    const row = components.getBoundingClientRect();
+    const { left } = within(components).getByText("components").getBoundingClientRect();
 
-    await user.click(components, { position: { x: 12, y: components.offsetHeight / 2 } });
-    await expect(canvas.getByRole("treeitem", { name: "components", expanded: true })).toBe(
-      components,
+    // The chevron has no role or name: it is pressed where it is drawn, before the label.
+    await user.click(components, { position: { x: (left - row.left) / 2, y: row.height / 2 } });
+    await expect(turns(canvasElement)).toBe(
+      !matchMedia("(prefers-reduced-motion: reduce)").matches,
     );
-    await expect(components).toHaveAttribute("aria-selected", "false");
+    await expect(
+      canvas.getByRole("treeitem", { name: "components", expanded: true, selected: false }),
+    ).toBe(components);
     await expect(args.onExpandedChange).toHaveBeenCalledWith(
       ["src", "components"],
       expect.objectContaining({ reason: "item-press" }),
@@ -160,16 +175,7 @@ Default.test(
 
 Default.test(
   "keeps the items and the selection when the changes are cancelled",
-  {
-    args: {
-      onExpandedChange: (_keys, details) => {
-        details.cancel();
-      },
-      onSelectionChange: (_keys, details) => {
-        details.cancel();
-      },
-    },
-  },
+  { args: { onExpandedChange: cancel, onSelectionChange: cancel } },
   async ({ canvas }) => {
     const user = await trusted();
     const toggles = listen("ab-toggle");
@@ -180,6 +186,20 @@ Default.test(
       canvas.getByRole("treeitem", { name: "src", expanded: true, selected: false }),
     ).toHaveFocus();
     await expect(toggles.events).toEqual([]);
+  },
+);
+
+Default.test(
+  "renders an item's children only while it is expanded",
+  { args: { defaultExpandedKeys: [], children: folder } },
+  async ({ canvas }) => {
+    const user = await trusted();
+
+    await expect(mounted).not.toHaveBeenCalled();
+    await user.keyboard("{Tab}{ArrowRight}");
+    await expect(mounted).toHaveBeenCalledWith(canvas.getByRole("treeitem", { name: "index.ts" }));
+    await user.keyboard("{ArrowLeft}");
+    await expect(mounted.mock.lastCall?.[0]).toBeNull();
   },
 );
 

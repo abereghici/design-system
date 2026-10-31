@@ -16,7 +16,10 @@ import styles from "./toggle-button.module.css";
 export type ToggleButtonChangeEventDetails = Details<"none", MouseEvent<HTMLButtonElement>>;
 
 export type ToggleButtonProps = Omit<ComponentProps<"button">, "type" | "value" | "children"> & {
-  /** Says what the button turns on, as its visible label. */
+  /**
+   * Says what the button turns on, as its visible label, or shows an icon alone when `aria-label` or
+   * `aria-labelledby` names the button.
+   */
   children: ReactNode;
   /** Names this button in a ToggleButtonGroup's value, and tells it apart from its siblings. */
   value: string;
@@ -40,9 +43,10 @@ export type ToggleButtonProps = Omit<ComponentProps<"button">, "type" | "value" 
 
 /**
  * A button that stays on or off, such as Bold in a formatting toolbar; a screen reader announces it
- * as pressed. Each change dispatches a bubbling `ab-toggle`. Put several in a ToggleButtonGroup, or
- * in a Toolbar, whose arrow keys then move between them. To switch between views of the same
- * content, use SegmentedControl; for an icon alone, IconButton; for a single action, Button.
+ * as pressed. For an icon alone, name it with `aria-label`. Each change dispatches a bubbling
+ * `ab-toggle`. Put several in a ToggleButtonGroup, or in a Toolbar, whose arrow keys then move
+ * between them. To switch between views of the same content, use SegmentedControl; for a single
+ * action, Button or IconButton.
  *
  * Tier 2: shows its final content before hydration and works after it; with JavaScript off, it is
  * hidden.
@@ -87,6 +91,9 @@ export function ToggleButton({
       aria-pressed={current}
       aria-disabled={disabled ? true : undefined}
       data-size={size}
+      data-icon-only={
+        props["aria-label"] === undefined && props["aria-labelledby"] === undefined ? undefined : ""
+      }
       onClick={handleClick}
     />
   );

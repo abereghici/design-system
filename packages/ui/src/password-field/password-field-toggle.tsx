@@ -1,17 +1,28 @@
 "use client";
 
-import { IconButton } from "../icon-button/icon-button.tsx";
-import type { IconButtonProps } from "../icon-button/icon-button.tsx";
 import { EyeOffIcon } from "../icon/icons/eye-off.tsx";
 import { EyeIcon } from "../icon/icons/eye.tsx";
+import { ToggleButton } from "../toggle-button/toggle-button.tsx";
+import type { ToggleButtonProps } from "../toggle-button/toggle-button.tsx";
 
 import styles from "./password-field.module.css";
 
 /** The show-password toggle: an open eye while the password shows. */
-export function Toggle({ pressed, ...props }: IconButtonProps & { pressed: boolean }) {
+export function Toggle({
+  pressed,
+  ...props
+}: Omit<ToggleButtonProps, "value" | "children" | "pressed" | "defaultPressed"> & {
+  pressed: boolean;
+}) {
   return (
-    <IconButton {...props} size="sm" className={styles["toggle"]} pressed={pressed}>
-      {pressed ? <EyeIcon size="sm" /> : <EyeOffIcon size="sm" />}
-    </IconButton>
+    <ToggleButton
+      {...props}
+      value="visible"
+      size="sm"
+      className={styles["toggle"]}
+      pressed={pressed}
+    >
+      {pressed ? <EyeIcon /> : <EyeOffIcon />}
+    </ToggleButton>
   );
 }

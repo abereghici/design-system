@@ -53,6 +53,14 @@ Default.test("says so again on every copy, though the message is the same", asyn
   observer.disconnect();
 });
 
+Default.test("clears its message a few seconds after a copy", async ({ canvas }) => {
+  const user = await trusted();
+
+  await user.click(canvas.getByRole("button", { name: "Copy invoice number" }));
+  await announced(canvas, "Copied");
+  await waitFor(() => expect(canvas.getByRole("status")).toBeEmptyDOMElement(), { timeout: 4000 });
+});
+
 Default.test("says so when copying fails", async ({ canvas, userEvent }) => {
   const clipboard = navigator.clipboard.writeText.bind(navigator.clipboard);
 

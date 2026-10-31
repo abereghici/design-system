@@ -57,7 +57,9 @@ Default.test(
       true,
       expect.objectContaining({ reason: "toggle-press" }),
     );
-    await expect(toggled.events).toHaveLength(1);
+    await expect(toggled.events.map(({ detail }) => detail)).toEqual([
+      { component: "ToggleButton", reason: "user" },
+    ]);
   },
 );
 

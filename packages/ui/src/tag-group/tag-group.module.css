@@ -24,6 +24,22 @@
     color: inherit;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    transition-property: background-color, scale;
+    transition-duration: var(--ab-motion-duration-hover-out), var(--ab-motion-duration-press);
+    transition-timing-function: var(--ab-motion-easing-color), var(--ab-motion-easing-enter);
+  }
+
+  /* A tint of the Tag's own color, so the fill suits every variant in both Themes. */
+  @media (hover: hover) and (pointer: fine) {
+    .remove:where(:not([aria-disabled="true"])):hover {
+      background-color: color-mix(in oklch, currentColor 10%, transparent);
+      transition-duration: var(--ab-motion-duration-hover-in), var(--ab-motion-duration-press);
+    }
+  }
+
+  .remove:where(:not([aria-disabled="true"])):active {
+    background-color: color-mix(in oklch, currentColor 20%, transparent);
+    scale: var(--ab-tag-group-remove-scale-pressed);
   }
 
   .remove:where([aria-disabled="true"]) {

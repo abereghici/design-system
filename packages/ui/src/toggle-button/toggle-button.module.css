@@ -48,6 +48,20 @@
     font: var(--ab-toggle-button-lg-font);
   }
 
+  /* Named apart from its content, it shows an icon alone, in a square. */
+  .root:where([data-icon-only]) {
+    inline-size: var(--ab-toggle-button-md-height);
+    padding-inline: 0;
+  }
+
+  .root:where([data-icon-only][data-size="sm"]) {
+    inline-size: var(--ab-toggle-button-sm-height);
+  }
+
+  .root:where([data-icon-only][data-size="lg"]) {
+    inline-size: var(--ab-toggle-button-lg-height);
+  }
+
   @container style(--ab-density: compact) {
     .root {
       --ab-toggle-button-sm-height: var(--ab-size-control-compact-sm);

@@ -5,7 +5,6 @@
     border-radius: var(--ab-code-block-border-radius);
     background-color: var(--ab-code-block-background-color);
     color: var(--ab-code-block-text-color);
-    overflow: auto;
     overscroll-behavior-inline: contain;
   }
 

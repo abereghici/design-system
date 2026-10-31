@@ -1,5 +1,5 @@
 import { useId } from "react";
-import type { ComponentProps, ReactNode } from "react";
+import type { CSSProperties, ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/progress.css";
 
@@ -13,7 +13,10 @@ type Name =
   | { label?: undefined; "aria-label": string }
   | { label?: undefined; "aria-labelledby": string };
 
-export type ProgressProps = Omit<ComponentProps<"progress">, "children" | "value" | "max"> &
+export type ProgressProps = Omit<
+  ComponentProps<"progress">,
+  "children" | "className" | "style" | "value" | "max"
+> &
   Name & {
     /** How far the task has got, from 0 to `max`; `null` when it can't be measured yet. */
     value?: number | null;
@@ -23,6 +26,13 @@ export type ProgressProps = Omit<ComponentProps<"progress">, "children" | "value
     valueLabel?: ReactNode;
     /** How the value reads, such as a percent or a unit. */
     formatOptions?: Intl.NumberFormatOptions;
+    /**
+     * Styles the whole Progress, its label and value included. `ref`, `id` and the other attributes
+     * reach the bar itself, which assistive technology reads.
+     */
+    className?: string | undefined;
+    /** Styles the whole Progress, its label and value included. */
+    style?: CSSProperties | undefined;
   };
 
 /**
