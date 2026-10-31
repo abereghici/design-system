@@ -7,7 +7,7 @@ import { Calendar } from "@abereghici/ui/calendar";
 import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
 import { dateFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview, { partsOf } from "#.storybook/preview.tsx";
-import { listen } from "#.storybook/test/listen.ts";
+import { listen, reasons } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as DatePicker from "./date-picker.tsx";
@@ -15,7 +15,6 @@ import * as DatePicker from "./date-picker.tsx";
 const date = (iso: string) => Temporal.PlainDate.from(iso);
 const onOpenChange = fn<NonNullable<DatePicker.RootProps["onOpenChange"]>>();
 const onValueChange = fn<NonNullable<DatePicker.RootProps["onValueChange"]>>();
-const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const months = { previousMonthLabel: "Previous month", nextMonthLabel: "Next month" };
 
@@ -113,7 +112,7 @@ Default.test(
       date("2025-03-20"),
       expect.objectContaining({ reason: "day-press" }),
     );
-    await expect(reasons()).toEqual([
+    await expect(reasons(onOpenChange)).toEqual([
       [true, "trigger-press"],
       [false, "day-press"],
     ]);
@@ -157,7 +156,12 @@ Default.test(
     await expect(args.onValueChange).not.toHaveBeenCalled();
     await expect(dismissed.events.map((event) => event.detail.component)).toEqual(["Popover"]);
     dismissed.stop();
-    await expect(reasons().flat()).toEqual([true, "trigger-press", false, "escape-key"]);
+    await expect(reasons(onOpenChange).flat()).toEqual([
+      true,
+      "trigger-press",
+      false,
+      "escape-key",
+    ]);
   },
 );
 
@@ -169,7 +173,7 @@ Default.test("closes on a press outside", async ({ canvas }) => {
   await user.click(document.body, { position: { x: 600, y: 20 } });
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
   await expect(canvas.getByRole("spinbutton", { name: "day" })).toHaveValue("12");
-  await expect(reasons().at(-1)).toEqual([false, "outside-press"]);
+  await expect(reasons(onOpenChange).at(-1)).toEqual([false, "outside-press"]);
 });
 
 Default.test("closes when Tab leaves the panel, on to the next control", async ({ canvas }) => {
@@ -179,7 +183,7 @@ Default.test("closes when Tab leaves the panel, on to the next control", async (
   await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
   await user.keyboard("{Tab}");
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
-  await expect(reasons().at(-1)).toEqual([false, "focus-out"]);
+  await expect(reasons(onOpenChange).at(-1)).toEqual([false, "focus-out"]);
   await expect(canvas.getByRole("button", { name: "Save" })).toHaveFocus();
 });
 
@@ -191,7 +195,12 @@ Default.test("closes when its trigger is pressed again", async ({ canvas }) => {
   await waitFor(() => expect(canvas.getByRole("dialog")).toBeVisible());
   await user.click(trigger);
   await waitFor(() => expect(trigger).toHaveAttribute("aria-expanded", "false"));
-  await expect(reasons().flat()).toEqual([true, "trigger-press", false, "trigger-press"]);
+  await expect(reasons(onOpenChange).flat()).toEqual([
+    true,
+    "trigger-press",
+    false,
+    "trigger-press",
+  ]);
 });
 
 Default.test(

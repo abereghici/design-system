@@ -4,14 +4,12 @@ import { expect, fn, waitFor } from "storybook/test";
 import { Button } from "@abereghici/ui/button";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
-import { listen } from "#.storybook/test/listen.ts";
+import { listen, reasons } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Popover from "./popover.tsx";
 
 const onOpenChange = fn<NonNullable<Popover.RootProps["onOpenChange"]>>();
-
-const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const filters = (
   <>
@@ -92,7 +90,7 @@ Default.test(
     await expect(canvas.getByRole("checkbox", { name: "Assigned to me" })).toHaveFocus();
     await user.click(trigger);
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
-    await expect(reasons()).toEqual([
+    await expect(reasons(onOpenChange)).toEqual([
       [true, "trigger-press"],
       [false, "trigger-press"],
     ]);
@@ -117,7 +115,7 @@ Default.test(
     await expect(dismissals.events.map(({ detail }) => detail)).toEqual([
       { component: "Popover", userInitiated: true },
     ]);
-    await expect(reasons().at(-1)).toEqual([false, "escape-key"]);
+    await expect(reasons(onOpenChange).at(-1)).toEqual([false, "escape-key"]);
   },
 );
 
@@ -132,7 +130,7 @@ Default.test("closes on a press outside", async ({ canvas }) => {
   await waitFor(() => expect(dismissals.events).toHaveLength(1));
   dismissals.stop();
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
-  await expect(reasons().at(-1)).toEqual([false, "outside-press"]);
+  await expect(reasons(onOpenChange).at(-1)).toEqual([false, "outside-press"]);
 });
 
 Default.test("closes from Close and returns focus to the Trigger", async ({ canvas }) => {
@@ -151,7 +149,7 @@ Default.test("closes from Close and returns focus to the Trigger", async ({ canv
   await expect(dismissals.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
     { target: close, detail: { component: "Popover", userInitiated: true } },
   ]);
-  await expect(reasons().at(-1)).toEqual([false, "close-press"]);
+  await expect(reasons(onOpenChange).at(-1)).toEqual([false, "close-press"]);
 });
 
 Default.test("closes once Tab moves focus past its Content", async ({ canvas }) => {
@@ -163,7 +161,7 @@ Default.test("closes once Tab moves focus past its Content", async ({ canvas }) 
   await user.keyboard("{Tab}{Tab}");
   await expect(canvas.getByRole("button", { name: "After" })).toHaveFocus();
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
-  await expect(reasons().at(-1)).toEqual([false, "focus-out"]);
+  await expect(reasons(onOpenChange).at(-1)).toEqual([false, "focus-out"]);
 });
 
 Default.test(
