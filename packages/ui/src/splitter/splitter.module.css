@@ -1,3 +1,16 @@
+/* Neither is inherited, so each drag step restyles the Root alone, not every element in its panels. */
+@property --splitter-position {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 50;
+}
+
+@property --first-size {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+
 @layer ab.components {
   .root {
     --first-size: calc(
