@@ -233,11 +233,7 @@ test.describe("Tier 2 before hydration", () => {
 });
 
 // Tier 2 bugs, kept failing until fixed: these controls show with JavaScript off and do nothing.
-const shownWithoutScript = new Set([
-  "splitter",
-  "toggle-button",
-  "toggle-button-group",
-]);
+const shownWithoutScript = new Set(["splitter"]);
 
 test.describe("with JavaScript off, a control only script can run is hidden", () => {
   for (const [route, role, name] of [
