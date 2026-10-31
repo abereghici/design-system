@@ -51,4 +51,12 @@
 
     inset-inline: auto anchor(self-end);
   }
+
+  /* Only script runs the items, so without it the trigger would open a menu that does nothing.
+     Doubled to outrank a Button's or IconButton's display whichever stylesheet loads first. */
+  @media (scripting: none) {
+    .trigger.trigger {
+      display: none;
+    }
+  }
 }

@@ -162,8 +162,10 @@ export type RootProps = Omit<ComponentProps<"div">, "role"> & {
  * Down move through the shown Items, Home and End reach the ends, Right expands an Item or enters
  * it, and Left collapses it or goes up to its parent (mirrored right to left). With a
  * `selectionMode`, Enter, Space or a click selects an Item and its chevron expands it. Every change
- * dispatches a bubbling `ab-toggle`. Name it with `aria-label` or `aria-labelledby`. Tier 2: the
- * Items render on the server, and they respond once the page is hydrated.
+ * dispatches a bubbling `ab-toggle`. Name it with `aria-label` or `aria-labelledby`.
+ *
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, the
+ * chevrons are hidden.
  */
 export function Root({
   expandedKeys,

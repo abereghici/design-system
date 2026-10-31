@@ -1,10 +1,11 @@
 "use client";
 
-import { createContext, useState, useSyncExternalStore } from "react";
+import { createContext, useState } from "react";
 import type { ComponentProps, RefObject } from "react";
 
 import { useEvent } from "../events/use-event.ts";
 import { useField, useFieldControl } from "../field/use-field.ts";
+import { useHydrated } from "../internal/hydration/use-hydrated.ts";
 import { composeRefs } from "../internal/slot/slot.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
@@ -43,20 +44,6 @@ function clear(input: HTMLInputElement | null, trigger: HTMLElement | null) {
   trigger?.focus();
 }
 
-const subscribeToNothing = () => () => {};
-
-/**
- * Whether React has hydrated. The server HTML keeps the input in the tab order and the
- * accessibility tree for when script never runs; once hydrated, the trigger takes over both.
- */
-function useHydrated() {
-  return useSyncExternalStore(
-    subscribeToNothing,
-    () => true,
-    () => false,
-  );
-}
-
 /** The chosen file names, emptied when the form resets. */
 function useNames(inputRef: Picker["input"]) {
   const [names, setNames] = useState<string[]>([]);
@@ -87,6 +74,8 @@ export function Input({
   const { field } = useField();
   const bindings = useFieldControl<HTMLInputElement, NativeProps & { disabled: boolean }>(props);
   const [names, setNames] = useNames(inputRef);
+  // The server HTML keeps the input in the tab order and the accessibility tree for when script
+  // never runs; once hydrated, the trigger takes over both.
   const hydrated = useHydrated();
 
   return (

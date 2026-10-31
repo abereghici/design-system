@@ -41,4 +41,13 @@
       border-color: Highlight;
     }
   }
+
+  /* Only script takes a drop, so without it the zone shows no drop target, and the FileTrigger's
+     own file input picks the files. */
+  @media (scripting: none) {
+    .root {
+      border-color: transparent;
+      background-color: transparent;
+    }
+  }
 }

@@ -27,6 +27,15 @@ test.describe("Tier 1 works with JavaScript off", () => {
     });
   }
 
+  test("a CodeBlock takes a Tab stop, so keyboard users can scroll it", async ({ page }) => {
+    await page.goto("/code-block");
+    await page.keyboard.press("Tab");
+
+    await expect(page.locator(":focus")).toHaveText(
+      'import { Button } from "@abereghici/ui/button";',
+    );
+  });
+
   test("a SkipLink appears on Tab and moves focus to the main content", async ({ page }) => {
     await page.goto("/skip-link");
     await page.keyboard.press("Tab");
@@ -120,37 +129,21 @@ test.describe("with JavaScript off, a Field control submits its form", () => {
   }
 
   // With JavaScript off, the native file input stands in for the trigger, named by its text.
-  test("file-trigger", async ({ page }) => {
-    await page.goto("/file-trigger");
-    await page.keyboard.press("Tab");
-    await expect(page.getByRole("button", { name: "Choose image" })).toBeFocused();
-
-    const chooser = page.waitForEvent("filechooser", { timeout: 1000 });
-
-    await page.getByRole("button", { name: "Choose image" }).click();
-    await (
-      await chooser
-    ).setFiles({ name: "photo.png", mimeType: "image/png", buffer: Buffer.from("png") });
-    await page.getByRole("button", { name: "Submit" }).click();
-
-    await expect(page).toHaveURL("/file-trigger?avatar=photo.png");
-  });
-});
-
-// Each Tier 2 Field control route, what the user types, and the starting values its form submits.
-const startingValues = [
-  [
-    "combobox",
-    (page: Page) => page.getByRole("combobox", { name: "Assignee" }).fill("Erik"),
-    "/combobox?assignee=ab&reviewers=ab&reviewers=eh",
-  ],
-] as const;
-
-test.describe("with JavaScript off, a Tier 2 Field control submits its starting value", () => {
-  for (const [route, fill, url] of startingValues) {
+  for (const [route, trigger, file, url] of [
+    ["file-trigger", "Choose image", "photo.png", "/file-trigger?avatar=photo.png"],
+    ["drop-zone", "Choose files", "rates.csv", "/drop-zone?files=rates.csv"],
+  ] as const) {
     test(route, async ({ page }) => {
       await page.goto(`/${route}`);
-      await fill(page);
+      await page.keyboard.press("Tab");
+      await expect(page.getByRole("button", { name: trigger })).toBeFocused();
+
+      const chooser = page.waitForEvent("filechooser", { timeout: 1000 });
+
+      await page.getByRole("button", { name: trigger }).click();
+      await (
+        await chooser
+      ).setFiles({ name: file, mimeType: "text/plain", buffer: Buffer.from("") });
       await page.getByRole("button", { name: "Submit" }).click();
 
       await expect(page).toHaveURL(url);
@@ -183,7 +176,6 @@ test.describe("with JavaScript off, a Slider", () => {
 
 const tier2 = [
   "calendar",
-  "code-block",
   "combobox",
   "command",
   "context-menu",
@@ -238,10 +230,13 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["alert", "button", "Dismiss"],
     ["calendar", "button", "Previous month"],
     ["combobox", "button", "Remove Erik Halvorsen"],
+    ["command-inline", "combobox", "Search commands"],
+    ["command-inline", "option", "New document"],
     ["calendar", "button", "Next month"],
     ["date-field", "spinbutton", "lună"],
     ["date-picker", "button", "Choose date"],
     ["date-range-picker", "button", "Choose dates"],
+    ["dropdown-menu", "button", "Actions"],
     ["number-field", "button", "Decrease"],
     ["number-field", "button", "Increase"],
     ["password-field", "button", "Show password"],

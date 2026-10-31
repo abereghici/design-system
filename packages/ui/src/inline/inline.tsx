@@ -25,8 +25,9 @@ export interface InlineProps extends ComponentProps<"div"> {
 
 /**
  * Lays out its children side by side in reading order, spaced by an inline space token, and wraps
- * them onto the next line when they don't fit, such as a row of actions or tags. Works before
- * hydration (Tier 1): it is plain HTML and CSS.
+ * them onto the next line when they don't fit, such as a row of actions or tags.
+ *
+ * Tier 1: works before hydration.
  */
 export function Inline({
   gap = "inline-sm",

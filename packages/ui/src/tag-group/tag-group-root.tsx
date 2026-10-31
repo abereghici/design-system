@@ -57,8 +57,10 @@ export type RootProps = Omit<ComponentProps<"ul">, "defaultValue"> & {
 /**
  * Removable tags, such as active filters or chosen values. Each Tag has a remove button that reads
  * `removeLabel` before the Tag's text ("Remove Draft"), and every removal dispatches a bubbling
- * `ab-dismiss`. For a static label, use Tag. Tier 2: the Tags render on the server, and they can be
- * removed once the page is hydrated.
+ * `ab-dismiss`. For a static label, use Tag.
+ *
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, the
+ * remove buttons are hidden.
  */
 export function Root({
   value,

@@ -159,7 +159,8 @@ function useDropTarget({ accept, multiple, onDrop, blocked, input }: DropTargetO
  * Use it where uploading is the main task of a view; for a small Attach action use FileTrigger
  * alone.
  *
- * Tier 2: shows its final content before hydration and works after it.
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, it
+ * takes no drops and its FileTrigger picks files through the browser's own file input.
  */
 export function DropZone({
   accept,

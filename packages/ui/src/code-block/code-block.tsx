@@ -1,5 +1,3 @@
-"use client";
-
 import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/code-block.css";
@@ -15,41 +13,18 @@ export interface CodeBlockProps extends ComponentProps<"pre"> {
 
 /**
  * Shows code as written, with its line breaks and spaces kept. Code too wide or too tall for the
- * block scrolls, and only then does it take a Tab stop, so keyboard users can scroll it without
- * stopping at code that fits. It is readable before hydration, and the Tab stop arrives with it
- * (Tier 2). For a key or shortcut inside a sentence, use Kbd; to copy the code, add a CopyButton.
+ * block scrolls, and the block is a Tab stop, so keyboard users can scroll it. For a key or
+ * shortcut inside a sentence, use Kbd; to copy the code, add a CopyButton.
+ *
+ * Tier 1: works before hydration.
  */
 export function CodeBlock({ children, ...props }: CodeBlockProps) {
+  // Keyboard users scroll the block from a Tab stop (WCAG 2.1.1). Only script can tell whether the
+  // code overflows, and not every engine makes a scroll container focusable on its own, so the block
+  // always takes one.
   return (
-    <pre {...mergeProps({ className: styles["root"], ref: scrollStop }, props)}>
+    <pre {...mergeProps({ className: styles["root"], tabIndex: 0 }, props)}>
       <code className={styles["code"]}>{children}</code>
     </pre>
   );
-}
-
-/**
- * WCAG 2.1.1 asks for keyboard access to a scroll container, but a Tab stop on code that fits would
- * only be in the way, and CSS can't answer `scrollWidth`.
- */
-function scrollStop(block: HTMLPreElement) {
-  const sync = () => {
-    if (block.scrollWidth > block.clientWidth || block.scrollHeight > block.clientHeight) {
-      block.tabIndex = 0;
-    } else {
-      block.removeAttribute("tabindex");
-    }
-  };
-
-  const resized = new ResizeObserver(sync);
-  const rewritten = new MutationObserver(sync);
-
-  // The observers report from the next frame on, and a Tab stop is needed on the first one.
-  sync();
-  resized.observe(block);
-  rewritten.observe(block, { childList: true, subtree: true, characterData: true });
-
-  return () => {
-    resized.disconnect();
-    rewritten.disconnect();
-  };
 }

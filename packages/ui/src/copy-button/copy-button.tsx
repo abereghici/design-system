@@ -23,8 +23,10 @@ export type CopyButtonProps = Omit<ButtonProps, "children"> & {
 /**
  * Copies a text, such as an ID, a token or a snippet, to the clipboard in one press, and says so in
  * a status message screen readers announce; a refused copy says that too, so a press is never
- * silent. It needs script, so it copies after hydration and is hidden while scripting is off
- * (Tier 2). For a message that goes away on its own, answer `onClick` with a Toast.
+ * silent. For a message that goes away on its own, answer `onClick` with a Toast.
+ *
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, it is
+ * hidden.
  */
 export function CopyButton({
   value,

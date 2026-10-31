@@ -127,10 +127,10 @@ function useListeners(c: ComboboxState) {
   useEvent(
     "reset",
     () => {
-      const { defaultInputValue, selectionMode } = c.options;
+      const { defaultInputValue } = c.options;
       const defaults = valuesOf(c.options.defaultValue);
       const list = listOf(c);
-      const chosen = selectionMode === "multiple" ? null : (defaults[0] ?? null);
+      const chosen = c.multiple ? null : (defaults[0] ?? null);
       const label = defaultInputValue ?? textOf(list === null ? null : chosenOf(list, chosen));
 
       // The reset event fires before the form resets its controls, so the label goes in afterwards:
@@ -157,6 +157,7 @@ export function useCombobox(options: Options, empty: string): ComboboxState {
   const c: ComboboxState = {
     options,
     id: useId(),
+    multiple: options.selectionMode === "multiple",
     value: options.value === undefined ? ownValue : valuesOf(options.value),
     open: options.open ?? ownOpen,
     query,

@@ -69,6 +69,11 @@ export const fieldRoutes = [
     "/search?q=shoes",
   ],
   [
+    "combobox",
+    (page: Page) => page.getByRole("combobox", { name: "Assignee" }).fill("Erik"),
+    "/combobox?assignee=Erik&reviewers=ab&reviewers=eh",
+  ],
+  [
     "date-field",
     (page: Page) => page.getByRole("textbox", { name: "Date of birth" }).fill("2026-10-24"),
     "/date-field?birthDate=2026-10-24",

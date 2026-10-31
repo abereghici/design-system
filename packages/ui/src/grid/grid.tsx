@@ -24,8 +24,9 @@ export interface GridProps extends ComponentProps<"div"> {
 
 /**
  * Lays out its children in as many equal columns as fit, each no narrower than `min`, so a set of
- * cards reflows at any container width with no breakpoints. Works before hydration (Tier 1): it is
- * plain HTML and CSS.
+ * cards reflows at any container width with no breakpoints.
+ *
+ * Tier 1: works before hydration.
  */
 export function Grid({
   gap = "stack-md",

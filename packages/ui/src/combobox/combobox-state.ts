@@ -119,7 +119,9 @@ interface Memory {
 export interface ComboboxState {
   readonly options: Options;
   readonly id: string;
-  /** The chosen Items' values: at most one unless `selectionMode` is `"multiple"`. */
+  /** Whether `selectionMode` is `"multiple"`. */
+  readonly multiple: boolean;
+  /** The chosen Items' values: at most one unless `multiple`. */
   readonly value: readonly string[];
   readonly open: boolean;
   readonly query: string;
@@ -177,8 +179,7 @@ function changeText(c: ComboboxState, next: string, reason: InputReason, event?:
 }
 
 /** The single choice the input shows as text; `null` while none, or when several can be chosen. */
-export const chosenValue = (c: ComboboxState) =>
-  c.options.selectionMode === "multiple" ? null : (c.value[0] ?? null);
+export const chosenValue = (c: ComboboxState) => (c.multiple ? null : (c.value[0] ?? null));
 
 /** A single choice; several choices change through `changeValues` only. */
 function changeValue(c: ComboboxState, next: string | null, reason: ValueReason, event?: Event) {
@@ -243,7 +244,7 @@ function choose(c: ComboboxState, option: HTMLElement, event: Event) {
 
   if (!enabled(option)) return;
 
-  if (c.options.selectionMode === "multiple") {
+  if (c.multiple) {
     const next = c.value.includes(value)
       ? c.value.filter((each) => each !== value)
       : [...c.value, value];

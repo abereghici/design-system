@@ -40,9 +40,11 @@ export type ToggleButtonProps = Omit<ComponentProps<"button">, "type" | "value" 
 /**
  * A button that stays on or off, such as Bold in a formatting toolbar; a screen reader announces it
  * as pressed. Each change dispatches a bubbling `ab-toggle`. Put several in a ToggleButtonGroup, or
- * in a Toolbar, whose arrow keys then move between them. It needs script, so it is interactive
- * after hydration and hidden while scripting is off (Tier 2). To switch between views of the same content, use SegmentedControl; for
- * an icon alone, IconButton; for a single action, Button.
+ * in a Toolbar, whose arrow keys then move between them. To switch between views of the same
+ * content, use SegmentedControl; for an icon alone, IconButton; for a single action, Button.
+ *
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, it is
+ * hidden.
  */
 export function ToggleButton({
   value,

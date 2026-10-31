@@ -14,10 +14,8 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("shows the code as written, and takes no Tab stop", async ({ canvas, userEvent }) => {
+Default.test("shows the code as written", async ({ canvas }) => {
   await expect(canvas.getByText('import { Button } from "@abereghici/ui/button";')).toBeVisible();
-  await userEvent.tab();
-  await expect(document.body).toHaveFocus();
 });
 
 export const Scrolling = meta.story({
@@ -34,7 +32,7 @@ export const Scrolling = meta.story({
   },
 });
 
-Scrolling.test("becomes a Tab stop so keyboard users can scroll it", async () => {
+Scrolling.test("is a Tab stop, so keyboard users can scroll it", async () => {
   // Only trusted keys scroll a container; user-event's are synthetic.
   const user = await trusted();
 

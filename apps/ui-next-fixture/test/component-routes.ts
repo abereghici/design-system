@@ -212,7 +212,7 @@ export const componentRoutes = [
   {
     name: "code-block",
     tokens: ["code-block"],
-    client: ["code-block/code-block"],
+    client: [],
     html: "<pre class",
   },
   {
