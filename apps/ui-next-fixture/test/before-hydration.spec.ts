@@ -161,6 +161,11 @@ const fields = [
     (page: Page) => page.getByRole("textbox", { name: "Date of birth" }).fill("2026-10-24"),
     "/date-field?birthDate=2026-10-24",
   ],
+  [
+    "time-field",
+    (page: Page) => page.getByRole("textbox", { name: "Start time" }).fill("14:30"),
+    "/time-field?start=14%3A30",
+  ],
 ] as const;
 
 test.describe("with JavaScript off, a Field control submits its form", () => {
@@ -207,6 +212,7 @@ const tier2 = [
   "splitter",
   "tabs",
   "tag-group",
+  "time-field",
   "toast",
   "toaster",
   "toggle-button",
@@ -261,6 +267,7 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["password-field", "button", "Show password"],
     ["tabs", "tab", "Settings"],
     ["tag-group", "button", "Remove Draft"],
+    ["time-field", "spinbutton", "oră"],
     ["copy-button", "button", "Copy invoice number"],
     ["toggle-button", "button", "Bold"],
     ["toggle-button-group", "button", "Italic"],

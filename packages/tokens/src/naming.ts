@@ -121,6 +121,7 @@ const COMPONENTS = [
   "sidebar",
   "table",
   "date-field",
+  "time-field",
   "calendar",
   "description-list",
   "stepper",

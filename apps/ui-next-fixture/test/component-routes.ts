@@ -328,6 +328,12 @@ export const componentRoutes = [
     html: 'role="spinbutton"',
   },
   {
+    name: "time-field",
+    tokens: ["field", "time-field"],
+    client: ["time-field/time-field"],
+    html: 'role="spinbutton"',
+  },
+  {
     name: "calendar",
     tokens: ["calendar", "icon", "icon-button", "spinner"],
     client: [],
