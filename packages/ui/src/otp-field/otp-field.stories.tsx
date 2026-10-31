@@ -57,6 +57,14 @@ PartlyEntered.test(
   },
 );
 
+export const Entered = meta.story({
+  parameters: {
+    docs: { description: { story: "The whole code typed, the caret in the last box." } },
+  },
+  play: ({ canvas, userEvent }) =>
+    userEvent.type(canvas.getByRole("textbox", { name: "Verification code" }), "482719"),
+});
+
 Default.test(
   "replaces its description with the error after a submit with too few digits",
   {

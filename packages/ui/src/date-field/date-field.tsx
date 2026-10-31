@@ -47,7 +47,7 @@ export interface DateFieldOptions {
 
 export type DateFieldProps = DateFieldOptions &
   Omit<SizedWrapperProps, "validate"> &
-  Omit<ControlProps<DatePart, Temporal.PlainDate>, "model" | "options" | "onValidity" | "end"> & {
+  Omit<ControlProps<DatePart, Temporal.PlainDate>, "model" | "options" | "end"> & {
     /** The visible label. Every field needs one, or an `aria-label`. */
     label?: ReactNode;
   };

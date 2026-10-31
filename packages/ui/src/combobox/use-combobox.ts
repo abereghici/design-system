@@ -1,4 +1,4 @@
-import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "react";
+import { createContext, useId, useLayoutEffect, useState } from "react";
 
 import { useControllableState } from "../events/use-controllable-state.ts";
 import { getDocument, useEvent } from "../events/use-event.ts";
@@ -60,23 +60,6 @@ function sync(c: OwnState) {
 }
 
 function useListeners(c: ComboboxState) {
-  // A form control reports a committed value with a native change, which the Field validates on.
-  const reread = useEffectEvent((value: string) => {
-    const memory = memoryOf(c);
-    const previous = memory.value;
-
-    memory.value = value;
-
-    if (previous !== undefined && previous !== value) {
-      inputOf(c)?.dispatchEvent(new Event("change", { bubbles: true }));
-    }
-  });
-  const value = c.value.join("\n");
-
-  useEffect(() => {
-    reread(value);
-  }, [value]);
-
   useEvent(
     "pointerdown",
     (event) => {

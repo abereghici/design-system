@@ -1,12 +1,13 @@
 "use client";
 
-import { createContext, use, useId, useState } from "react";
+import { createContext, use, useId } from "react";
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/command.css";
 
-import { isComposing, requestChange } from "../events/events.ts";
+import { isComposing } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { useListbox } from "../internal/listbox/use-listbox.ts";
 import type { ListboxNavigator } from "../internal/listbox/use-listbox.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
@@ -89,14 +90,13 @@ export function Root({
   children,
   ...props
 }: RootProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultInputValue);
-  const query = inputValue ?? uncontrolled;
+  const [query, request] = useControllableState(inputValue, defaultInputValue, onInputValueChange);
   const locale = useLocale();
   const listbox = useListbox(query, filtering === null ? null : locale);
   const context: CommandContext = {
     query,
     change: (next, event) => {
-      if (requestChange(onInputValueChange, next, "input-change", event)) setUncontrolled(next);
+      request(next, "input-change", event);
     },
     keyDown: (event) => {
       keyDown(event, listbox);

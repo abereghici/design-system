@@ -1,14 +1,15 @@
 "use client";
 
-import { createContext, use, useId, useState } from "react";
+import { createContext, use, useId, useRef, useState } from "react";
 import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/slider.css";
 
-import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
+import type { EventTargetSource } from "../events/use-event.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { composeRefs, mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./slider.module.css";
 
@@ -61,12 +62,16 @@ type Scale = Readonly<Record<"min" | "max" | "step" | "largeStep" | "gap", numbe
   readonly disabled: boolean;
 };
 
-function useSliderState(options: Options, scale: Scale) {
+function useSliderState(options: Options, scale: Scale, form: EventTargetSource) {
   const { min, max, step, gap } = scale;
-  const [uncontrolled, setUncontrolled] = useState(options.defaultValue ?? min);
+  const [current, request] = useControllableState(
+    options.value,
+    options.defaultValue ?? min,
+    options.onValueChange,
+    form,
+  );
   const [dragging, setDragging] = useState<number | null>(null);
   const formatter = new Intl.NumberFormat(useLocale(), options.format);
-  const current = options.value ?? uncontrolled;
   const values = typeof current === "number" ? [current] : current;
   const output = (next: readonly number[]) =>
     typeof current === "number" ? (next[0] ?? min) : [...next];
@@ -79,11 +84,7 @@ function useSliderState(options: Options, scale: Scale) {
 
     if (next[index] === from[index]) return from;
 
-    if (!requestChange(options.onValueChange, output(next), reason, event)) return from;
-
-    setUncontrolled(output(next));
-
-    return next;
+    return request(output(next), reason, event) ? next : from;
   }
 
   function commit(from: readonly number[], to: readonly number[], details: CommitEventDetails) {
@@ -103,9 +104,6 @@ function useSliderState(options: Options, scale: Scale) {
     change,
     commit,
     format: (entry: number) => formatter.format(entry),
-    reset: () => {
-      setUncontrolled(options.defaultValue ?? min);
-    },
     percent: (entry: number) => ((entry - min) / (max - min)) * 100,
   };
 }
@@ -141,8 +139,10 @@ export function Root({
   format,
   name,
   disabled = false,
+  ref,
   ...props
 }: RootProps) {
+  const root = useRef<HTMLDivElement>(null);
   const slider = useSliderState(
     { value, defaultValue, onValueChange, onValueCommitted, format, name },
     {
@@ -153,12 +153,14 @@ export function Root({
       gap: minStepsBetweenValues * step,
       disabled,
     },
+    () => root.current?.querySelector("input")?.form,
   );
 
   return (
     <SliderContext value={slider}>
       <div
         {...mergeProps({ className: styles["root"] }, props)}
+        ref={composeRefs(root, ref)}
         data-dragging={slider.dragging === null ? undefined : ""}
         data-disabled={disabled ? "" : undefined}
       />

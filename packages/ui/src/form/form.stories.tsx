@@ -103,3 +103,28 @@ Default.test(
     await expect(canvas.queryByText("You must be 18 or older.")).toBeNull();
   },
 );
+
+Default.test(
+  "keeps a date typed in part after a server error invalid",
+  {
+    args: {
+      errors: { birthDate: "You must be 18 or older." },
+      children: (
+        <>
+          <DateField
+            label="Date of birth"
+            name="birthDate"
+            incompleteMessage="Enter a complete date"
+          />
+          <Button type="submit">Create account</Button>
+        </>
+      ),
+    },
+  },
+  async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("spinbutton", { name: "month" }));
+    await userEvent.keyboard("1{Enter}");
+    await expect(args.onSubmit).not.toHaveBeenCalled();
+    await expect(await canvas.findByText("Enter a complete date")).toBeVisible();
+  },
+);

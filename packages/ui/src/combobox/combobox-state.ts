@@ -1,4 +1,3 @@
-import { flushSync } from "react-dom";
 import type { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent } from "react";
 
 import { isComposing, requestChange, trackComposition } from "../events/events.ts";
@@ -79,7 +78,6 @@ export type Options = Selection & {
 interface Memory {
   pointer: boolean;
   text: string | null;
-  value: string | undefined;
 }
 
 /** One render's state; element ids are derived from `id`. */
@@ -112,7 +110,7 @@ export const inputOf = (c: Pick<ComboboxState, "id">) =>
 
 export function memoryOf(c: Pick<ComboboxState, "id">): Memory {
   const root = document.getElementById(part(c, "root"));
-  const memory = (root && memories.get(root)) ?? { pointer: false, text: null, value: undefined };
+  const memory = (root && memories.get(root)) ?? { pointer: false, text: null };
 
   if (root !== null) memories.set(root, memory);
 
@@ -289,10 +287,7 @@ function blur(c: ComboboxState, event: FocusEvent<HTMLInputElement>) {
 
   if (!c.open || inside || !document.hasFocus()) return;
 
-  // The Field reads :user-invalid in this same blur, so the restored text must already be in place.
-  flushSync(() => {
-    dismiss(c, "focus-out", event.nativeEvent);
-  });
+  dismiss(c, "focus-out", event.nativeEvent);
 }
 
 /** The input: keys navigate and choose, typing filters, leaving closes; composed with the consumer's props. */

@@ -5,7 +5,7 @@ The Bereghici design system's React components: the controls, overlays and layou
 ## Language
 
 **Component**:
-A named, documented building block of the interface (Button, Dialog, Select), named after the term the major UI libraries agree on.
+A named, documented building block of the interface (Button, Dialog, Select), named after the term the major UI libraries agree on. Each one is a single entry, `@abereghici/ui/<name>`; a capability it offers, such as a Table's row selection, is its props and Parts, never a Component of its own.
 _Avoid_: Widget, element, control (as a generic name)
 
 **Part**:

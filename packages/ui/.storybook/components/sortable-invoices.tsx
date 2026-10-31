@@ -1,8 +1,6 @@
 import { useState } from "react";
-import type { ReactNode } from "react";
 
 import { Table } from "@abereghici/ui/table";
-import { TableSelection } from "@abereghici/ui/table-selection";
 import { VisuallyHidden } from "@abereghici/ui/visually-hidden";
 
 const invoices = [
@@ -17,11 +15,9 @@ const end = { textAlign: "end" } as const;
 
 type Sort = { column: "id" | "amount"; direction: "ascending" | "descending" };
 
-export type Selection = Omit<TableSelection.RootProps, "children" | "selectedKeys">;
-
-const selectHeader = (mode: Selection["selectionMode"]) =>
+const selectHeader = (mode: Table.RootProps["selectionMode"]) =>
   mode === "multiple" ? (
-    <TableSelection.SelectAll keys={invoiceIds} selectAllLabel="Select all invoices" />
+    <Table.SelectAll keys={invoiceIds} selectAllLabel="Select all invoices" />
   ) : (
     <Table.ColumnHeader>
       <VisuallyHidden>Chosen</VisuallyHidden>
@@ -56,14 +52,15 @@ function useSort() {
 }
 
 /**
- * Invoices sorted by the pressed column header; with `selectionMode`, their rows are selectable.
+ * Invoices sorted by the pressed column header; with a `selectionMode`, their rows are selectable.
  * The Table's own `children` are ignored.
  */
-export function SortableInvoices(selection: Partial<Selection> & { children?: ReactNode }) {
+export function SortableInvoices(props: Table.RootProps) {
   const { sorted, header } = useSort();
-  const mode = selection.selectionMode;
-  const table: ReactNode = (
-    <Table.Root>
+  const mode = props.selectionMode;
+
+  return (
+    <Table.Root {...props}>
       <Table.Caption>Invoices, 2026</Table.Caption>
       <Table.Header>
         <Table.Row>
@@ -76,7 +73,7 @@ export function SortableInvoices(selection: Partial<Selection> & { children?: Re
         {sorted.map(({ id, amount }) => (
           <Table.Row key={id}>
             {mode === undefined ? null : (
-              <TableSelection.SelectRow value={id} selectRowLabel={`Select ${id}`} />
+              <Table.SelectRow value={id} selectRowLabel={`Select ${id}`} />
             )}
             <Table.RowHeader>{id}</Table.RowHeader>
             <Table.Cell style={end}>{amount}</Table.Cell>
@@ -84,13 +81,5 @@ export function SortableInvoices(selection: Partial<Selection> & { children?: Re
         ))}
       </Table.Body>
     </Table.Root>
-  );
-
-  return mode === undefined ? (
-    table
-  ) : (
-    <TableSelection.Root {...selection} selectionMode={mode}>
-      {table}
-    </TableSelection.Root>
   );
 }

@@ -266,6 +266,24 @@ Default.test(
   },
 );
 
+Default.test(
+  "blocks the submit of an unavailable default day and shows why",
+  {
+    args: {
+      defaultValue: date("2025-03-15"),
+      isDateUnavailable: (day: Temporal.PlainDate) => day.dayOfWeek > 5,
+      unavailableMessage: "This date is not available",
+    },
+  },
+  async ({ canvas, userEvent }) => {
+    submitted.mockClear();
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
+    await expect(submitted).not.toHaveBeenCalled();
+    await expect(await canvas.findByText("This date is not available")).toBeVisible();
+    await expect(canvas.getByRole("spinbutton", { name: "day" })).toBeInvalid();
+  },
+);
+
 export const LazyCalendar = meta.story({
   parameters: {
     docs: {

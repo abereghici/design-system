@@ -2,20 +2,22 @@
 
 import { useId } from "react";
 
-import { IconButton } from "../icon-button/icon-button.tsx";
-import { CalendarIcon } from "../icon/icons/calendar.tsx";
+import { IconButton } from "../../icon-button/icon-button.tsx";
+import { CalendarIcon } from "../../icon/icons/calendar.tsx";
 
-import type { Panel } from "./date-picker-panel.tsx";
-import styles from "./date-picker.module.css";
+import type { Panel } from "./picker.ts";
+import styles from "./picker.module.css";
 
 interface TriggerProps {
   readonly panel: Panel;
   /** The chosen date or range, in full words. */
   readonly description: string | undefined;
   readonly disabled: boolean;
+  /** The `form` of the field's inputs: the picker's value resets with that form. */
+  readonly form: string | undefined;
 }
 
-export function Trigger({ panel, description, disabled }: TriggerProps) {
+export function Trigger({ panel, description, disabled, form }: TriggerProps) {
   const { overlay, name, trigger } = panel;
   const descriptionId = useId();
 
@@ -30,6 +32,7 @@ export function Trigger({ panel, description, disabled }: TriggerProps) {
         aria-haspopup="dialog"
         aria-describedby={description === undefined ? undefined : descriptionId}
         disabled={disabled}
+        form={form}
         className={styles["trigger"]}
       >
         <CalendarIcon size="sm" />

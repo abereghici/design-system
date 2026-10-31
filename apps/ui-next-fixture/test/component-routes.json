@@ -208,7 +208,7 @@
       "field/field-error",
       "field/field-label",
       "field/field-root",
-      "text-field/text-field-input"
+      "otp-field/otp-field-input"
     ],
     "html": "autoComplete=\"one-time-code\""
   },
@@ -456,18 +456,8 @@
   },
   {
     "name": "table",
-    "tokens": ["table"],
-    "client": [],
-    "html": "aria-sort=\"ascending\""
-  },
-  {
-    "name": "table-selection",
     "tokens": ["table", "checkbox"],
-    "client": [
-      "table-selection/table-selection-root",
-      "table-selection/table-selection-select-all",
-      "table-selection/table-selection-select-row"
-    ],
+    "client": ["table/table-select-all", "table/table-select-row", "table/table-selection"],
     "html": "aria-label=\"Select all invoices\""
   },
   {
@@ -501,8 +491,8 @@
       "spinner"
     ],
     "client": [
-      "date-picker/date-picker-content",
       "date-range-picker/date-range-picker-root",
+      "internal/picker/picker-content",
       "range-calendar/range-calendar"
     ],
     "html": "aria-haspopup=\"dialog\""

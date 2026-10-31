@@ -6,6 +6,6 @@ export type {
   RootProps,
 } from "./date-range-picker-root.tsx";
 
-export { Content } from "../date-picker/date-picker-content.tsx";
+export { Content } from "../internal/picker/picker-content.tsx";
 
-export type { ContentProps } from "../date-picker/date-picker-content.tsx";
+export type { ContentProps } from "../internal/picker/picker-content.tsx";

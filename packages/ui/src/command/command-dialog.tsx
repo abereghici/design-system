@@ -8,6 +8,7 @@ import "@abereghici/tokens/components/command.css";
 import { Content } from "../dialog/dialog-content.tsx";
 import { Modal } from "../dialog/dialog-modal.tsx";
 import { requestChange } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 
 import { DialogContext, Root } from "./command-root.tsx";
 import type { Callback, RootProps } from "./command-root.tsx";
@@ -53,19 +54,13 @@ function handleClose(
 export function Dialog(props: DialogProps) {
   const { open, defaultOpen = false, onOpenChange, finalFocus: _, ...rest } = props;
   const { inputValue, defaultInputValue, onInputValueChange, filter, children, ...native } = rest;
-  const [uncontrolled, setUncontrolled] = useState(defaultOpen);
+  const [current, request] = useControllableState(open, defaultOpen, onOpenChange);
   const [closes, setCloses] = useState(0);
-  const close = (reason: Exclude<Reason, "none">, event: Event) => {
-    const accepted = requestChange(onOpenChange, false, reason, event);
-
-    if (accepted) setUncontrolled(false);
-
-    return accepted;
-  };
+  const close = (reason: Exclude<Reason, "none">, event: Event) => request(false, reason, event);
 
   return (
     <Modal
-      open={open ?? uncontrolled}
+      open={current}
       styles={styles}
       component="Dialog"
       onOpenChange={(_open, details) => {
