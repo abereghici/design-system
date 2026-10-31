@@ -154,7 +154,7 @@ Default.test(
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     await expect(trigger).toHaveFocus();
     await expect(args.onValueChange).not.toHaveBeenCalled();
-    await expect(dismissed.events.map((event) => event.detail.component)).toEqual(["Popover"]);
+    await expect(dismissed.events.map((event) => event.detail.component)).toEqual(["DatePicker"]);
     dismissed.stop();
     await expect(reasons(onOpenChange).flat()).toEqual([
       true,

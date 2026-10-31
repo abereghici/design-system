@@ -6,6 +6,7 @@ import { RangeCalendar } from "@abereghici/ui/range-calendar";
 import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
+import { listen } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as DateRangePicker from "./date-range-picker.tsx";
@@ -104,6 +105,22 @@ Default.test(
     await expect(segment("End date", "day")).toHaveValue("20");
   },
 );
+
+Default.test("closes on Escape and dispatches an ab-dismiss that names it", async ({ canvas }) => {
+  const user = await trusted();
+  const dismissed = listen("ab-dismiss");
+  const trigger = canvas.getByRole("button", { name: "Choose dates" });
+
+  await user.click(trigger);
+  await waitFor(() => expect(canvas.getByRole("dialog")).toBeVisible());
+  await user.keyboard("{Escape}");
+  await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
+  await expect(trigger).toHaveFocus();
+  await expect(dismissed.events.map((event) => event.detail.component)).toEqual([
+    "DateRangePicker",
+  ]);
+  dismissed.stop();
+});
 
 Default.test(
   "submits both ISO dates, and returns to its default value when its form resets",

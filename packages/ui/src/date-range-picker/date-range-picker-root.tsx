@@ -127,7 +127,7 @@ function useRange(
  */
 export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, size, className, style, disabled } = props;
-  const { panel, form, calendar } = usePicker(props);
+  const { panel, form, calendar } = usePicker("DateRangePicker", props);
   const range = useRange(props, form);
 
   return (

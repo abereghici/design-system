@@ -56,13 +56,14 @@ const focusStayed = (trigger: HTMLButtonElement | null) => {
 /**
  * A date picker's calendar button and panel: the open state and the trigger they share, the form
  * the picker's value resets with (the trigger's, which is its inputs'), and what the Calendar in
- * the panel reads, where choosing closes the panel unless the value refuses the change.
+ * the panel reads, where choosing closes the panel unless the value refuses the change. `component`
+ * names the picker in its `ab-dismiss`.
  */
-export function usePicker(options: PickerOptions) {
+export function usePicker(component: "DatePicker" | "DateRangePicker", options: PickerOptions) {
   const { open, defaultOpen, onOpenChange, triggerLabel, min, max, isDateUnavailable } = options;
   const trigger = useRef<HTMLButtonElement>(null);
   const overlay = useOverlay(
-    "Popover",
+    component,
     { open, defaultOpen, onOpenChange },
     { returnTo: () => trigger.current },
   );

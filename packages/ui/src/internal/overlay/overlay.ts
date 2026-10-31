@@ -45,7 +45,7 @@ interface Options {
     | undefined;
 }
 
-type Component = "Popover" | "DropdownMenu" | "ContextMenu";
+type Component = "Popover" | "DropdownMenu" | "ContextMenu" | "DatePicker" | "DateRangePicker";
 
 /** What a Content part adds to the layer's own `beforetoggle` and `toggle` handling, which runs first. */
 type ContentHooks = Partial<

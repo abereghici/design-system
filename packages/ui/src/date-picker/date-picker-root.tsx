@@ -68,7 +68,7 @@ export function Root(props: RootProps) {
   const { triggerLabel, disabled, isDateUnavailable, children, ...field } = rest;
   const { min, max } = field;
   const overlay = { open, defaultOpen, onOpenChange };
-  const { panel, form, calendar } = usePicker({
+  const { panel, form, calendar } = usePicker("DatePicker", {
     ...overlay,
     triggerLabel,
     min,
