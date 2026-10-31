@@ -6,6 +6,7 @@ import type { ComponentProps, MouseEvent, ReactNode } from "react";
 import "@abereghici/tokens/components/toggle-button.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import { chain } from "../internal/chain/chain.ts";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
@@ -68,9 +69,7 @@ export function ToggleButton({
 
   const button = useButton<HTMLButtonElement>({
     disabled,
-    onClick: (event) => {
-      onClick?.(event);
-
+    onClick: chain(onClick, (event) => {
       if (group === null) {
         if (!request(!current, "none", event)) return;
       } else if (!group.toggle(value, event)) return;
@@ -79,7 +78,7 @@ export function ToggleButton({
         component: "ToggleButton",
         userInitiated: true,
       });
-    },
+    }),
   });
 
   return (

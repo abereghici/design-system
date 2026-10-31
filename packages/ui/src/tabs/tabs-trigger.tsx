@@ -4,6 +4,7 @@ import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/tabs.css";
 
+import { chain } from "../internal/chain/chain.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useTabs } from "./tabs-root.tsx";
@@ -55,14 +56,10 @@ export function Trigger({ value, onClick, onKeyDown, ...props }: TriggerProps) {
       aria-controls={`${tabs.meta.id}-content-${value}`}
       aria-selected={selected}
       tabIndex={selected ? 0 : -1}
-      onKeyDown={(event) => {
-        onKeyDown?.(event);
-        moveSelection(event);
-      }}
-      onClick={(event) => {
-        onClick?.(event);
+      onKeyDown={chain(onKeyDown, moveSelection)}
+      onClick={chain(onClick, (event) => {
         tabs.actions.select(value, event);
-      }}
+      })}
     />
   );
 }

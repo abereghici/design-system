@@ -3,6 +3,8 @@
 import { createContext } from "react";
 import type { ComponentProps } from "react";
 
+import { chain } from "../internal/chain/chain.ts";
+
 type Errors = Readonly<Record<string, string | undefined>>;
 
 export const FormErrorsContext = createContext<Errors | undefined>(undefined);
@@ -27,8 +29,7 @@ export function Form({ errors, onInvalidCapture, ...props }: FormProps) {
     <FormErrorsContext value={errors}>
       <form
         {...props}
-        onInvalidCapture={(event) => {
-          onInvalidCapture?.(event);
+        onInvalidCapture={chain(onInvalidCapture, (event) => {
           event.preventDefault();
 
           const first = Array.from(event.currentTarget.elements).find(
@@ -36,7 +37,7 @@ export function Form({ errors, onInvalidCapture, ...props }: FormProps) {
           );
 
           if (event.target === first && first instanceof HTMLElement) first.focus();
-        }}
+        })}
       />
     </FormErrorsContext>
   );

@@ -62,13 +62,12 @@ export function Control({ clearLabel, startElement, ...props }: ControlProps) {
   return (
     <InputGroup start={startElement} end={clearButton}>
       <TextInput
-        {...mergeProps({ className: styles["input"] }, props)}
+        {...mergeProps({ className: styles["input"], onCompositionEnd: trackComposition }, props)}
         type="search"
         enterKeyHint="search"
         onValueChange={(next, details) => {
           if (!change(next, "none", details.event.nativeEvent)) details.cancel();
         }}
-        onCompositionEnd={trackComposition(props.onCompositionEnd)}
         onKeyDown={composeEventHandlers(props.onKeyDown, (event) => {
           if (event.key !== "Escape" || !clearable || isComposing(event)) return;
 

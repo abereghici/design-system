@@ -7,6 +7,7 @@ import "@abereghici/tokens/components/alert.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { XIcon } from "../icon/icons/x.tsx";
+import { chain } from "../internal/chain/chain.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { useButton } from "../internal/use-button/use-button.ts";
 
@@ -27,13 +28,12 @@ export interface CloseProps extends Omit<ComponentProps<"button">, "aria-label" 
 export function Close({ disabled = false, onClick, ...props }: CloseProps) {
   const button = useButton<HTMLButtonElement>({
     disabled,
-    onClick: (event) => {
-      onClick?.(event);
+    onClick: chain(onClick, (event) => {
       dispatchFeedback(event.currentTarget, "ab-dismiss", {
         component: "Alert",
         userInitiated: true,
       });
-    },
+    }),
   });
 
   return (

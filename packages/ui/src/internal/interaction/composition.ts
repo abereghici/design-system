@@ -4,18 +4,12 @@ interface Targeted {
 
 const justComposed = new WeakSet<EventTarget>();
 
-/** The input's `onCompositionEnd`: runs `handler`, then marks the input for `isComposing` until the next task. */
-export function trackComposition<Cause extends Targeted>(handler?: (event: Cause) => void) {
-  return (event: Cause) => {
-    handler?.(event);
-
-    const input = event.currentTarget;
-
-    justComposed.add(input);
-    setTimeout(() => {
-      justComposed.delete(input);
-    });
-  };
+/** The input's `onCompositionEnd`: marks the input for `isComposing` until the next task. */
+export function trackComposition({ currentTarget: input }: Targeted) {
+  justComposed.add(input);
+  setTimeout(() => {
+    justComposed.delete(input);
+  });
 }
 
 /**

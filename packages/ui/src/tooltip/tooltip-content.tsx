@@ -4,6 +4,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/tooltip.css";
 
+import { chain } from "../internal/chain/chain.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { outside, seen, triggerOf, useTooltip } from "./tooltip-root.tsx";
@@ -28,15 +29,12 @@ export function Content({ side = "top", align = "center", ...props }: ContentPro
       popover="manual"
       data-side={side}
       data-align={align}
-      onTransitionStart={(event) => {
-        props.onTransitionStart?.(event);
+      onTransitionStart={chain(props.onTransitionStart, (event) => {
         seen.add(event.currentTarget);
-      }}
-      onPointerLeave={(event) => {
-        props.onPointerLeave?.(event);
-
+      })}
+      onPointerLeave={chain(props.onPointerLeave, (event) => {
         if (outside(event, triggerOf(contentId))) change(false, "trigger-hover", event);
-      }}
+      })}
     />
   );
 }

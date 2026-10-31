@@ -9,6 +9,7 @@ import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
+import { chain } from "../internal/chain/chain.ts";
 import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 
@@ -57,18 +58,16 @@ function Control({ placeholder, defaultValue, children, ...props }: ControlProps
         }
         className={`${fieldStyles["control"]} ${styles["select"]}`}
         onPointerDown={composeEventHandlers(props.onPointerDown, pointerMarker.onPointerDown)}
-        onKeyDown={(event) => {
-          pointerMarker.onKeyDown(event);
-
-          if (disabled && blocked(event)) event.preventDefault();
-
-          props.onKeyDown?.(event);
-        }}
-        onMouseDown={(event) => {
+        onKeyDown={chain(
+          pointerMarker.onKeyDown,
+          (event) => {
+            if (disabled && blocked(event)) event.preventDefault();
+          },
+          props.onKeyDown,
+        )}
+        onMouseDown={chain((event) => {
           if (disabled) event.preventDefault();
-
-          props.onMouseDown?.(event);
-        }}
+        }, props.onMouseDown)}
       >
         {placeholder !== undefined && (
           <option value="" disabled hidden className={styles["placeholder"]}>

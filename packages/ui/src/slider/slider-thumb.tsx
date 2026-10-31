@@ -5,6 +5,8 @@ import type { ComponentProps, KeyboardEvent } from "react";
 import "@abereghici/tokens/components/slider.css";
 
 import { useFieldControl } from "../field/use-field.ts";
+import { chain } from "../internal/chain/chain.ts";
+import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useSlider } from "./slider-root.tsx";
@@ -87,18 +89,14 @@ export function Thumb({
         value={value}
         aria-valuetext={slider.format(value)}
         className={styles["input"]}
-        onKeyDown={(event) => {
-          onKeyDown?.(event);
-
-          if (!event.defaultPrevented) step(event, slider, index, blocked);
-        }}
-        onChange={(event) => {
-          onChange?.(event);
-
+        onKeyDown={composeEventHandlers(onKeyDown, (event) => {
+          step(event, slider, index, blocked);
+        })}
+        onChange={chain(onChange, (event) => {
           if (blocked) return;
 
           slider.change(index, event.currentTarget.valueAsNumber, "keyboard", event.nativeEvent);
-        }}
+        })}
       />
     </div>
   );

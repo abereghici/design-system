@@ -6,6 +6,7 @@ import "@abereghici/tokens/components/icon-button.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
+import { chain } from "../internal/chain/chain.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Slot } from "../internal/slot/slot.tsx";
 import { useButton } from "../internal/use-button/use-button.ts";
@@ -52,13 +53,12 @@ export function IconButton({
 }: IconButtonProps) {
   const button = useButton<HTMLButtonElement>({
     disabled: disabled || loading,
-    onClick: (event) => {
-      onClick?.(event);
+    onClick: chain(onClick, (event) => {
       dispatchFeedback(event.currentTarget, "ab-press", {
         component: "IconButton",
         userInitiated: true,
       });
-    },
+    }),
   });
   const Root = asChild ? Slot : "button";
 

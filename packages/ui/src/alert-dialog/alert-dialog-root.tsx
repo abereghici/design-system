@@ -8,6 +8,7 @@ import type { Reason } from "../dialog/dialog-controller.ts";
 import { Modal, useModal } from "../dialog/dialog-modal.tsx";
 import type { RootProps as ModalProps } from "../dialog/dialog-modal.tsx";
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import { chain } from "../internal/chain/chain.ts";
 import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
 
 import styles from "../dialog/dialog.module.css";
@@ -33,11 +34,9 @@ export function useClose(onClick: ButtonProps["onClick"], dismiss: boolean) {
     commandfor: id,
     command: "request-close",
     onClick: composeEventHandlers(
-      (event: MouseEvent<HTMLButtonElement>) => {
-        onClick?.(event);
-
+      chain(onClick, (event: MouseEvent<HTMLButtonElement>) => {
         if (!dismiss) dispatchFeedback(event.currentTarget, "ab-confirm", feedback);
-      },
+      }),
       (event) => {
         controller.press({
           reason: "close-press",

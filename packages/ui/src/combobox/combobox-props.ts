@@ -120,7 +120,7 @@ export function inputProps<Props extends object>(c: WithListbox, consumer: Props
   const merged = mergeProps(
     {
       ref: c.listbox.input,
-      onCompositionEnd: trackComposition(),
+      onCompositionEnd: trackComposition,
       onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => {
         keyDown(c, event);
       },

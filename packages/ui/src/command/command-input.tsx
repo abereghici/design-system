@@ -7,6 +7,7 @@ import "@abereghici/tokens/components/command.css";
 
 import { SearchIcon } from "../icon/icons/search.tsx";
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
+import { chain } from "../internal/chain/chain.ts";
 import { trackComposition } from "../internal/interaction/composition.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Kbd } from "../kbd/kbd.tsx";
@@ -39,18 +40,23 @@ export function Input({ onChange, onKeyDown, ...props }: InputProps) {
       <input
         autoComplete="off"
         spellCheck={false}
-        {...mergeProps({ className: styles["input"], ref: command.listbox.input }, props)}
+        {...mergeProps(
+          {
+            className: styles["input"],
+            ref: command.listbox.input,
+            onCompositionEnd: trackComposition,
+          },
+          props,
+        )}
         type="text"
         role="combobox"
         aria-expanded
         aria-controls={command.listId}
         aria-autocomplete="list"
         value={command.query}
-        onCompositionEnd={trackComposition(props.onCompositionEnd)}
-        onChange={(event) => {
-          onChange?.(event);
+        onChange={chain(onChange, (event) => {
           command.change(event.currentTarget.value, event.nativeEvent);
-        }}
+        })}
         onKeyDown={(event) => {
           onKeyDown?.(event);
 
