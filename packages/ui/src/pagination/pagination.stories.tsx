@@ -9,11 +9,14 @@ import { Pagination } from "./pagination.tsx";
 const controls = (canvasElement: HTMLElement) =>
   within(canvasElement)
     .getAllByRole("listitem")
-    .map((item) => {
-      const control = within(item).queryByRole("link") ?? within(item).getByRole("button");
+    .map((item) => within(item).queryByRole("link") ?? within(item).getByRole("button"));
 
-      return control.getAttribute("aria-label");
-    });
+const named = (canvasElement: HTMLElement, names: readonly string[]) =>
+  names.map(
+    (name) =>
+      within(canvasElement).queryByRole("link", { name }) ??
+      within(canvasElement).getByRole("button", { name }),
+  );
 
 const meta = preview.meta({
   title: "Components/Pagination",
@@ -43,16 +46,18 @@ Default.test(
   "on the first page, Previous is a disabled button that stays focusable and does nothing",
   { args: { page: 1 } },
   async ({ canvas, canvasElement, userEvent }) => {
-    await expect(controls(canvasElement)).toEqual([
-      "Previous page",
-      "Page 1",
-      "Page 2",
-      "Page 3",
-      "Page 4",
-      "Page 5",
-      "Page 10",
-      "Next page",
-    ]);
+    await expect(controls(canvasElement)).toEqual(
+      named(canvasElement, [
+        "Previous page",
+        "Page 1",
+        "Page 2",
+        "Page 3",
+        "Page 4",
+        "Page 5",
+        "Page 10",
+        "Next page",
+      ]),
+    );
 
     const previous = canvas.getByRole("button", { name: "Previous page" });
 
@@ -74,16 +79,18 @@ Default.test(
   "on the last page, Next is disabled",
   { args: { page: 10 } },
   async ({ canvas, canvasElement }) => {
-    await expect(controls(canvasElement)).toEqual([
-      "Previous page",
-      "Page 1",
-      "Page 6",
-      "Page 7",
-      "Page 8",
-      "Page 9",
-      "Page 10",
-      "Next page",
-    ]);
+    await expect(controls(canvasElement)).toEqual(
+      named(canvasElement, [
+        "Previous page",
+        "Page 1",
+        "Page 6",
+        "Page 7",
+        "Page 8",
+        "Page 9",
+        "Page 10",
+        "Next page",
+      ]),
+    );
     await expect(canvas.getByRole("button", { name: "Next page" })).toHaveAttribute(
       "aria-disabled",
       "true",
@@ -95,11 +102,13 @@ Default.test(
   "shows every page when there are seven or fewer",
   { args: { page: 4, count: 7 } },
   async ({ canvasElement }) => {
-    await expect(controls(canvasElement)).toEqual([
-      "Previous page",
-      ...[1, 2, 3, 4, 5, 6, 7].map((page) => `Page ${page}`),
-      "Next page",
-    ]);
+    await expect(controls(canvasElement)).toEqual(
+      named(canvasElement, [
+        "Previous page",
+        ...[1, 2, 3, 4, 5, 6, 7].map((page) => `Page ${page}`),
+        "Next page",
+      ]),
+    );
   },
 );
 

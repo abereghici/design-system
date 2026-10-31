@@ -5,6 +5,7 @@ import { Badge } from "@abereghici/ui/badge";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { followLinkTo } from "#.storybook/test/follow-link.ts";
 import { listen } from "#.storybook/test/listen.ts";
+import { atCentre } from "#.storybook/test/pointer.ts";
 
 import { Tabs } from "./index.ts";
 
@@ -250,10 +251,7 @@ export const Overflowing = meta.story({
 Overflowing.test("scrolls a partly hidden tab into view", async ({ canvas, userEvent }) => {
   const settings = canvas.getByRole("tab", { name: "Settings" });
 
+  await expect(atCentre(settings)).not.toBe(settings);
   await userEvent.click(settings);
-
-  const list = canvas.getByRole("tablist").getBoundingClientRect();
-  const tab = settings.getBoundingClientRect();
-
-  await expect(tab.right).toBeLessThanOrEqual(list.right + 0.5);
+  await expect(atCentre(settings)).toBe(settings);
 });

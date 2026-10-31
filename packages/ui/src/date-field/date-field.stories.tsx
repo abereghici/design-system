@@ -9,8 +9,7 @@ import { DateField } from "./date-field.tsx";
 import type { DateFieldChangeEventDetails } from "./date-field.tsx";
 
 const date = (iso: string) => Temporal.PlainDate.from(iso);
-const names = () =>
-  screen.getAllByRole("spinbutton").map((segment) => segment.getAttribute("aria-label"));
+const named = (...names: string[]) => names.map((name) => screen.getByRole("spinbutton", { name }));
 
 const meta = preview.meta({
   title: "Components/DateField",
@@ -34,7 +33,7 @@ Default.test(
     args: { placeholders: { day: "zz", month: "ll", year: "aaaa" } },
   },
   async ({ canvas }) => {
-    await expect(names()).toEqual(["zi", "lună", "an"]);
+    await expect(screen.getAllByRole("spinbutton")).toEqual(named("zi", "lună", "an"));
     await expect(canvas.getByRole("spinbutton", { name: "zi" })).toHaveAttribute(
       "placeholder",
       "zz",

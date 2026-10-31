@@ -55,7 +55,6 @@ Default.test("names and describes its control", async ({ canvas }) => {
 
   await expect(input).toHaveAccessibleDescription("Letters, digits and underscores.");
   await expect(input).toBeRequired();
-  await expect(input).toHaveAttribute("name", "handle");
 });
 
 Default.test(

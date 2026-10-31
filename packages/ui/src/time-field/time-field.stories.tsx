@@ -8,8 +8,7 @@ import { TimeField } from "./time-field.tsx";
 import type { TimeFieldChangeEventDetails } from "./time-field.tsx";
 
 const time = (iso: string) => Temporal.PlainTime.from(iso);
-const names = () =>
-  screen.getAllByRole("spinbutton").map((segment) => segment.getAttribute("aria-label"));
+const named = (...names: string[]) => names.map((name) => screen.getByRole("spinbutton", { name }));
 
 const meta = preview.meta({
   title: "Components/TimeField",
@@ -27,7 +26,7 @@ const meta = preview.meta({
 export const Default = meta.story({});
 
 Default.test("shows en-US time in 12 hours, with the day period last", async ({ canvas }) => {
-  await expect(names()).toEqual(["hour", "minute", "AM/PM"]);
+  await expect(screen.getAllByRole("spinbutton")).toEqual(named("hour", "minute", "AM/PM"));
   await expect(canvas.getByRole("spinbutton", { name: "hour" })).toHaveAttribute(
     "aria-valuemax",
     "12",
@@ -76,7 +75,7 @@ Default.test(
   async ({ args, canvas, userEvent }) => {
     const hour = canvas.getByRole("spinbutton", { name: "oră" });
 
-    await expect(names()).toEqual(["oră", "minut"]);
+    await expect(screen.getAllByRole("spinbutton")).toEqual(named("oră", "minut"));
     await expect(hour).toHaveAttribute("aria-valuemax", "23");
     await userEvent.click(hour);
     await userEvent.keyboard("0005");

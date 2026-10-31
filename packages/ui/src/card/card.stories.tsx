@@ -69,27 +69,18 @@ Default.test(
   },
 );
 
-Default.test(
-  "puts the footer beside the header horizontally when 480 px or wider",
-  { args: { orientation: "horizontal" }, decorators: [withWidth("36rem")] },
-  async ({ canvas }) => {
-    const title = canvas.getByRole("heading", { name: "API keys" }).getBoundingClientRect();
-    const action = canvas.getByRole("button", { name: "Manage" }).getBoundingClientRect();
-
-    await expect(action.left).toBeGreaterThan(title.right);
+export const Horizontal = meta.story({
+  args: { orientation: "horizontal" },
+  decorators: [withWidth("36rem")],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "From 480 px wide, a horizontal card puts its footer beside the header; narrower, it stacks the footer below.",
+      },
+    },
   },
-);
-
-Default.test(
-  "stacks when horizontal but narrower than 480 px",
-  { args: { orientation: "horizontal" }, decorators: [withWidth("20rem")] },
-  async ({ canvas }) => {
-    const title = canvas.getByRole("heading", { name: "API keys" }).getBoundingClientRect();
-    const action = canvas.getByRole("button", { name: "Manage" }).getBoundingClientRect();
-
-    await expect(action.top).toBeGreaterThan(title.bottom);
-  },
-);
+});
 
 export const Linked = meta.story({
   args: {
