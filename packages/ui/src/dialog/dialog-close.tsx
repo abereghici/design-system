@@ -2,15 +2,13 @@
 
 import type { ComponentProps, MouseEvent, ReactElement } from "react";
 
-import "@abereghici/tokens/components/icon-button.css";
-
+import { IconButton } from "../icon-button/icon-button.tsx";
 import { XIcon } from "../icon/icons/x.tsx";
 import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Slot } from "../internal/slot/slot.tsx";
 
 import { useModal } from "./dialog-modal.tsx";
-import iconButton from "../icon-button/icon-button.module.css";
 
 interface CloseBase {
   /** Makes its one child (a Button such as Cancel) close the dialog. */
@@ -33,31 +31,35 @@ export type CloseProps = Omit<
   Shape;
 
 /** Closes the dialog: the `x` button, or with `asChild` its one child. */
-export function Close({ asChild = false, onClick, ...props }: CloseProps) {
+export function Close(props: CloseProps) {
   const { id, controller, styles } = useModal("Close");
 
-  const handleClick = composeEventHandlers(onClick, (event: MouseEvent<HTMLButtonElement>) => {
-    controller.press({
-      reason: "close-press",
-      event: event.nativeEvent,
-      dismiss: asChild ? null : event.currentTarget,
-    });
-  });
+  const handleClick = composeEventHandlers(
+    props.onClick,
+    (event: MouseEvent<HTMLButtonElement>) => {
+      controller.press({
+        reason: "close-press",
+        event: event.nativeEvent,
+        dismiss: props.asChild === true ? null : event.currentTarget,
+      });
+    },
+  );
 
-  if (asChild) {
-    return <Slot {...props} commandfor={id} command="request-close" onClick={handleClick} />;
+  if (props.asChild === true) {
+    const { asChild: _, ...child } = props;
+
+    return <Slot {...child} commandfor={id} command="request-close" onClick={handleClick} />;
   }
 
   return (
-    <button
-      type="button"
-      {...mergeProps({ className: `${iconButton["root"]} ${styles["close"]}` }, props)}
-      data-size="sm"
+    <IconButton
+      {...mergeProps({ className: styles["close"] }, props)}
+      size="sm"
       commandfor={id}
       command="request-close"
       onClick={handleClick}
     >
       <XIcon />
-    </button>
+    </IconButton>
   );
 }

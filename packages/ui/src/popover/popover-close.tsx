@@ -2,17 +2,16 @@
 
 import type { ComponentProps, MouseEvent, ReactElement } from "react";
 
-import "@abereghici/tokens/components/icon-button.css";
 import "@abereghici/tokens/components/popover.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import { IconButton } from "../icon-button/icon-button.tsx";
 import { XIcon } from "../icon/icons/x.tsx";
 import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Slot } from "../internal/slot/slot.tsx";
 
 import { usePopover } from "./popover-root.tsx";
-import iconButtonStyles from "../icon-button/icon-button.module.css";
 import styles from "./popover.module.css";
 
 interface CloseBase {
@@ -33,16 +32,15 @@ export type CloseProps = Omit<ComponentProps<"button">, "aria-label" | "children
   Shape;
 
 /** Closes the Popover. Without children it is the `x` button in the corner. */
-export function Close({ asChild = false, ...props }: CloseProps) {
+export function Close(props: CloseProps) {
   const popover = usePopover("Popover.Close");
-  const shared = {
-    ...props,
+  const invoker = {
     commandfor: popover.contentId,
     command: "hide-popover" as const,
     onClick: composeEventHandlers(props.onClick, (event: MouseEvent<HTMLButtonElement>) => {
       if (!popover.request(false, "close-press", event.nativeEvent)) {
         event.preventDefault();
-      } else if (!asChild) {
+      } else if (props.asChild !== true) {
         dispatchFeedback(event.currentTarget, "ab-dismiss", {
           component: "Popover",
           userInitiated: true,
@@ -51,15 +49,15 @@ export function Close({ asChild = false, ...props }: CloseProps) {
     }),
   };
 
-  if (asChild) return <Slot {...shared} />;
+  if (props.asChild === true) {
+    const { asChild: _, ...child } = props;
+
+    return <Slot {...child} {...invoker} />;
+  }
 
   return (
-    <button
-      type="button"
-      {...mergeProps({ className: `${iconButtonStyles["root"]} ${styles["close"]}` }, shared)}
-      data-size="sm"
-    >
+    <IconButton {...mergeProps({ className: styles["close"] }, props)} {...invoker} size="sm">
       <XIcon size="sm" />
-    </button>
+    </IconButton>
   );
 }

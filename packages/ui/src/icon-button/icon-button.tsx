@@ -27,9 +27,9 @@ export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "ari
      * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
      * nearby why it is unavailable.
      */
-    disabled?: boolean;
+    disabled?: boolean | undefined;
     /** `submit` sends its form; the default, `button`, does nothing on its own. */
-    type?: "button" | "submit" | "reset";
+    type?: "button" | "submit" | "reset" | undefined;
     /** Gives the IconButton's look to its one child, such as a link. */
     asChild?: boolean;
   };
