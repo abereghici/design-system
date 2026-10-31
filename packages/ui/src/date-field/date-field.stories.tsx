@@ -6,10 +6,7 @@ import preview from "#.storybook/preview.tsx";
 import { confirmComposition } from "#.storybook/test/trusted.ts";
 
 import { DateField } from "./date-field.tsx";
-import type { DateFieldChangeEventDetails, DateFieldProps } from "./date-field.tsx";
-
-// @ts-expect-error -- a date typed in part is invalid, so it needs its error
-({ label: "Date of birth" }) satisfies DateFieldProps;
+import type { DateFieldChangeEventDetails } from "./date-field.tsx";
 
 const date = (iso: string) => Temporal.PlainDate.from(iso);
 const names = () =>

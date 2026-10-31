@@ -42,7 +42,7 @@ const preserveModules: Plugin = {
 };
 
 export default defineConfig({
-  entry: ["src/**/*.{ts,tsx,js}", "!src/**/*.{stories,test}.{ts,tsx}", "!src/**/*.d.ts"],
+  entry: ["src/**/*.{ts,tsx,js}", "!src/**/*.{stories,test,test-d}.{ts,tsx}", "!src/**/*.d.ts"],
   unbundle: true,
   platform: "neutral",
   // A lower target makes Lightning CSS lower light-dark(), which breaks data-theme subtrees.

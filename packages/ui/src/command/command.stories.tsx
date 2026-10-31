@@ -10,15 +10,6 @@ import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Command from "./command.tsx";
 
-// @ts-expect-error -- the search field needs a name
-({}) satisfies Command.InputProps;
-// @ts-expect-error -- the list of commands needs a name
-({}) satisfies Command.ListProps;
-// @ts-expect-error -- the empty state is announced, so it needs its text
-({}) satisfies Command.EmptyProps;
-// @ts-expect-error -- the palette is a dialog, so it needs a name
-({ children: null }) satisfies Command.DialogProps;
-
 const onHome = fn<() => void>();
 const palette = (
   <>

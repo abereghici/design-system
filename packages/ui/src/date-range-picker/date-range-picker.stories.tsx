@@ -25,11 +25,6 @@ const labels = {
   reversedMessage: "The end date is before the start date",
 };
 
-const unnamed = { label: "Trip dates", incompleteMessage: "", reversedMessage: "" };
-
-// @ts-expect-error -- each date and the calendar button need names
-unnamed satisfies DateRangePicker.RootProps;
-
 const meta = preview.meta({
   title: "Components/DateRangePicker",
   component: DateRangePicker.Root,

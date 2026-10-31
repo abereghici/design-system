@@ -4,7 +4,7 @@ import { Temporal } from "temporal-polyfill";
 import preview from "#.storybook/preview.tsx";
 
 import { RangeCalendar } from "./range-calendar.tsx";
-import type { RangeCalendarChangeEventDetails, RangeCalendarProps } from "./range-calendar.tsx";
+import type { RangeCalendarChangeEventDetails } from "./range-calendar.tsx";
 
 const months = { previousMonthLabel: "Previous month", nextMonthLabel: "Next month" };
 const date = (iso: string) => Temporal.PlainDate.from(iso);
@@ -15,14 +15,6 @@ const selectedDays = () =>
     .getAllByLabelText(/, \d{4}$/v)
     .filter((day) => day.getAttribute("aria-selected") === "true");
 const selectedNumbers = () => selectedDays().map((day) => day.textContent);
-
-// @ts-expect-error -- the month buttons show only icons, so they need names
-({}) satisfies RangeCalendarProps;
-
-const both = { ...months, value: null, defaultValue: null };
-
-// @ts-expect-error -- either the app holds the range or the RangeCalendar does, not both
-both satisfies RangeCalendarProps;
 
 const meta = preview.meta({
   title: "Components/RangeCalendar",

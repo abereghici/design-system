@@ -6,9 +6,6 @@ import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Stepper from "./stepper.tsx";
 
-// @ts-expect-error -- a completed step needs the word screen readers announce
-({ status: "complete", children: "Account" }) satisfies Stepper.StepProps;
-
 const meta = preview.meta({
   title: "Components/Stepper",
   component: Stepper.Root,

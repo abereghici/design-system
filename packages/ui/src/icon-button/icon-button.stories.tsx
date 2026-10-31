@@ -31,9 +31,6 @@ async function blocksActivation({ canvas, userEvent, args }: Context) {
   await expect(feedback.flatMap(({ events }): Event[] => events)).toEqual([]);
 }
 
-// @ts-expect-error -- an IconButton without aria-label or aria-labelledby has no accessible name
-void (<IconButton />);
-
 function ControlledIconButton(props: IconButtonProps) {
   const [pressed, setPressed] = useState(props.pressed ?? false);
 

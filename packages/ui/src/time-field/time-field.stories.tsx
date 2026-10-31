@@ -5,15 +5,7 @@ import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { TimeField } from "./time-field.tsx";
-import type { TimeFieldChangeEventDetails, TimeFieldProps } from "./time-field.tsx";
-
-// @ts-expect-error -- a time typed in part is invalid, so it needs its error
-({ label: "Start time" }) satisfies TimeFieldProps;
-
-const both = { label: "Start time", incompleteMessage: "Enter", value: null, defaultValue: null };
-
-// @ts-expect-error -- either the app holds the time or the TimeField does, not both
-both satisfies TimeFieldProps;
+import type { TimeFieldChangeEventDetails } from "./time-field.tsx";
 
 const time = (iso: string) => Temporal.PlainTime.from(iso);
 const names = () =>

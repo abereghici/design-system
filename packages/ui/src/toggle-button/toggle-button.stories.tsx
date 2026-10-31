@@ -4,15 +4,7 @@ import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
 import { ToggleButton } from "./toggle-button.tsx";
-import type { ToggleButtonChangeEventDetails, ToggleButtonProps } from "./toggle-button.tsx";
-
-const bold = { value: "bold", children: "Bold" };
-
-// @ts-expect-error -- a ToggleButton is either controlled or uncontrolled, never both
-void ({ ...bold, pressed: true, defaultPressed: true } satisfies ToggleButtonProps);
-
-// @ts-expect-error -- a ToggleButton says what it turns on in its children
-void (<ToggleButton value="bold" />);
+import type { ToggleButtonChangeEventDetails } from "./toggle-button.tsx";
 
 const meta = preview.meta({
   title: "Components/ToggleButton",

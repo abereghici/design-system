@@ -9,9 +9,6 @@ import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Popover from "./popover.tsx";
 
-// @ts-expect-error -- the x button shows only an icon, so it needs a name
-({}) satisfies Popover.CloseProps;
-
 const onOpenChange = fn<NonNullable<Popover.RootProps["onOpenChange"]>>();
 
 const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);

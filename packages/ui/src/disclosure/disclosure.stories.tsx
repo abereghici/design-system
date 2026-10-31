@@ -8,12 +8,6 @@ import { Disclosure } from "./index.ts";
 
 const limits = "Retries stop after five attempts, and the cache keeps responses for an hour.";
 
-// @ts-expect-error -- a Disclosure is either controlled or uncontrolled, never both
-void (<Disclosure.Root open defaultOpen />);
-
-// @ts-expect-error -- a Trigger says what it shows in its children
-void (<Disclosure.Trigger />);
-
 const meta = preview.meta({
   title: "Components/Disclosure",
   component: Disclosure.Root,

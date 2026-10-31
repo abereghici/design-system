@@ -8,12 +8,6 @@ import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Splitter from "./splitter.tsx";
 
-// @ts-expect-error -- the handle needs a name
-({}) satisfies Splitter.HandleProps;
-
-// @ts-expect-error -- either the app holds the size or the Splitter does, not both
-({ value: 40, defaultValue: 30 }) satisfies Splitter.RootProps;
-
 const inset = { padding: "var(--ab-space-inset-md)" };
 
 const meta = preview.meta({

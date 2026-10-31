@@ -5,10 +5,6 @@ import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
 import { Pagination } from "./pagination.tsx";
-import type { PaginationProps } from "./pagination.tsx";
-
-// @ts-expect-error -- the landmark and the Previous and Next buttons need names
-({ page: 1, count: 2, getPageUrl: String }) satisfies PaginationProps;
 
 const controls = (canvasElement: HTMLElement) =>
   within(canvasElement)

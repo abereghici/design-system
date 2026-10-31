@@ -4,9 +4,6 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, test } from "vitest";
 
-// @ts-expect-error -- no root barrel
-export type PackageRoot = typeof import("@abereghici/ui");
-
 const uiDir = join(import.meta.dirname, "..", "..", "..", "packages", "ui");
 
 // import.meta.resolve applies `exports` but doesn't check that the target exists.

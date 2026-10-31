@@ -4,12 +4,6 @@ import preview from "#.storybook/preview.tsx";
 import { moves } from "#.storybook/test/motion.ts";
 
 import { Spinner } from "./spinner.tsx";
-import type { SpinnerProps } from "./spinner.tsx";
-
-// @ts-expect-error -- a status needs its message
-({}) satisfies SpinnerProps;
-// @ts-expect-error -- a decorative Spinner says nothing
-({ "aria-hidden": true, children: "Loading" }) satisfies SpinnerProps;
 
 const meta = preview.meta({
   title: "Components/Spinner",
