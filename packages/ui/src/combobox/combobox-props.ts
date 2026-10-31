@@ -115,54 +115,57 @@ function blur(c: WithListbox, event: FocusEvent<HTMLInputElement>) {
   dismiss(c, "focus-out", event.nativeEvent);
 }
 
-/** The input: keys navigate and choose, typing filters, leaving closes; composed with the consumer's props. */
-export function inputProps<Props extends object>(c: WithListbox, consumer: Props) {
-  const merged = mergeProps(
-    {
-      ref: c.listbox.input,
-      onCompositionEnd: trackComposition,
-      onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => {
-        keyDown(c, event);
+/** What the Combobox's input, field box and list spread, bound to its state. */
+export const comboboxProps = {
+  /** The input: keys navigate and choose, typing filters, leaving closes; composed with the consumer's props. */
+  input: <Props extends object>(c: WithListbox, consumer: Props) => {
+    const merged = mergeProps(
+      {
+        ref: c.listbox.input,
+        onCompositionEnd: trackComposition,
+        onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => {
+          keyDown(c, event);
+        },
+        onChange: (event: ChangeEvent<HTMLInputElement>) => {
+          inputChange(c, event);
+        },
+        onBlur: (event: FocusEvent<HTMLInputElement>) => {
+          blur(c, event);
+        },
       },
-      onChange: (event: ChangeEvent<HTMLInputElement>) => {
-        inputChange(c, event);
+      consumer,
+    );
+
+    return { ...merged, "aria-expanded": c.open, "aria-controls": part(c, "list") };
+  },
+
+  /** The field box: a primary press anywhere on it, but on a tag's button, opens the list; the motion is the pointer's. */
+  box: (c: WithListbox) => {
+    return {
+      id: part(c, "box"),
+      onPointerDown: (event: PointerEvent) => {
+        if (event.target instanceof Element && event.target.closest("button, [tabindex]")) return;
+
+        memoryOf(c).pointer = true;
+
+        if (event.button !== 0 || !changeOpen(c, true, "input-press", event.nativeEvent)) return;
+
+        landOnChosen(c);
+        c.setQuery("");
       },
-      onBlur: (event: FocusEvent<HTMLInputElement>) => {
-        blur(c, event);
+    };
+  },
+
+  /** The listbox: a press chooses. */
+  list: (c: WithListbox) => {
+    return {
+      id: part(c, "list"),
+      popover: "manual",
+      onClick: (event: MouseEvent) => {
+        const option = optionAt(event.target);
+
+        if (option !== null) choose(c, option, event.nativeEvent);
       },
-    },
-    consumer,
-  );
-
-  return { ...merged, "aria-expanded": c.open, "aria-controls": part(c, "list") };
-}
-
-/** The field box: a primary press anywhere on it, but on a tag's button, opens the list; the motion is the pointer's. */
-export function boxProps(c: WithListbox) {
-  return {
-    id: part(c, "box"),
-    onPointerDown: (event: PointerEvent) => {
-      if (event.target instanceof Element && event.target.closest("button, [tabindex]")) return;
-
-      memoryOf(c).pointer = true;
-
-      if (event.button !== 0 || !changeOpen(c, true, "input-press", event.nativeEvent)) return;
-
-      landOnChosen(c);
-      c.setQuery("");
-    },
-  };
-}
-
-/** The listbox: a press chooses. */
-export function listProps(c: WithListbox) {
-  return {
-    id: part(c, "list"),
-    popover: "manual",
-    onClick: (event: MouseEvent) => {
-      const option = optionAt(event.target);
-
-      if (option !== null) choose(c, option, event.nativeEvent);
-    },
-  } as const;
-}
+    } as const;
+  },
+};

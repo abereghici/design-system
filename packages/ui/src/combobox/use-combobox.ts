@@ -8,7 +8,7 @@ import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 import { valuesOf } from "../internal/selection/selection.ts";
 import { textOf } from "../internal/typeahead/text-of.ts";
 
-import { boxProps, inputProps, listProps } from "./combobox-props.ts";
+import { comboboxProps } from "./combobox-props.ts";
 import {
   chosenOf,
   chosenValue,
@@ -111,9 +111,9 @@ export function useCombobox(options: Options) {
 
   return {
     ...c,
-    inputProps: <Props extends object>(consumer: Props) => inputProps(c, consumer),
-    boxProps: boxProps(c),
-    listProps: listProps(c),
+    inputProps: <Props extends object>(consumer: Props) => comboboxProps.input(c, consumer),
+    boxProps: comboboxProps.box(c),
+    listProps: comboboxProps.list(c),
   };
 }
 
