@@ -1,11 +1,12 @@
 "use client";
 
 import { useId } from "react";
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/checkbox.css";
 
 import { useFieldControl } from "../field/use-field.ts";
+import type { Labelled } from "../internal/accessible-name/accessible-name.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { toggleClick } from "../internal/toggle-click/toggle-click.ts";
@@ -15,13 +16,8 @@ import styles from "./checkbox.module.css";
 
 export type CheckboxChangeEventDetails = ChangeEventDetails;
 
-type Name =
-  | { children: ReactNode }
-  | { children?: undefined; "aria-label": string }
-  | { children?: undefined; "aria-labelledby": string };
-
 export type CheckboxProps = Omit<ComponentProps<"input">, "type" | "children"> &
-  Name & {
+  Labelled<"children"> & {
     /** Called before the box changes; `details.cancel()` keeps the old state. */
     onCheckedChange?: (checked: boolean, details: CheckboxChangeEventDetails) => void;
     /** Shows "some selected", for a box that selects a group whose items are partly chosen. */

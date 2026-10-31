@@ -3,15 +3,11 @@ import type { CSSProperties, ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/meter.css";
 
+import type { Labelled } from "../internal/accessible-name/accessible-name.ts";
 import { FormattedNumber } from "../internal/locale/formatted-number.tsx";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./meter.module.css";
-
-type Name =
-  | { label: ReactNode }
-  | { label?: undefined; "aria-label": string }
-  | { label?: undefined; "aria-labelledby": string };
 
 type Thresholds =
   | { low?: undefined; high?: undefined; valueLabel?: ReactNode }
@@ -22,7 +18,7 @@ export type MeterProps = Omit<
   ComponentProps<"meter">,
   "children" | "className" | "style" | "value" | "min" | "max" | "low" | "high" | "optimum"
 > &
-  Name &
+  Labelled<"label"> &
   Thresholds & {
     /** The measurement, kept between `min` and `max`. */
     value: number;

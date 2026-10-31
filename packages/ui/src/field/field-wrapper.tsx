@@ -1,5 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 
+import type { Labelled } from "../internal/accessible-name/accessible-name.ts";
+
 import { Description } from "./field-description.tsx";
 import { Error } from "./field-error.tsx";
 import type { ErrorProps } from "./field-error.tsx";
@@ -7,10 +9,7 @@ import { Label } from "./field-label.tsx";
 import { Root } from "./field-root.tsx";
 import type { RootProps } from "./field-root.tsx";
 
-export type Naming =
-  | { label: ReactNode }
-  | { label?: undefined; "aria-label": string }
-  | { label?: undefined; "aria-labelledby": string };
+export type Naming = Labelled<"label">;
 
 export interface WrapperProps {
   /**
