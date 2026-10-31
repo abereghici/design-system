@@ -178,10 +178,11 @@ test.describe("with JavaScript off, a Tier 1 Field control submits its form", ()
     });
   }
 
-  // A Tier 1 bug, kept failing until fixed: the trigger opens the file picker only through script.
+  // With JavaScript off, the native file input stands in for the trigger, named by its text.
   test("file-trigger", async ({ page }) => {
-    test.fail();
     await page.goto("/file-trigger");
+    await page.keyboard.press("Tab");
+    await expect(page.getByRole("button", { name: "Choose image" })).toBeFocused();
 
     const chooser = page.waitForEvent("filechooser", { timeout: 1000 });
 

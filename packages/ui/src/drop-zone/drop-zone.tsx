@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import type { ComponentProps, DragEvent, RefObject } from "react";
 
 import "@abereghici/tokens/components/drop-zone.css";
@@ -176,8 +176,9 @@ export function DropZone({
   const { blocked, invalid } = useField(disabled);
   const input = useRef<HTMLInputElement>(null);
   const trigger = useRef<HTMLElement>(null);
+  const triggerId = useId();
   const { target, ...handlers } = useDropTarget({ accept, multiple, onDrop, blocked, input });
-  const picker = { input, trigger, disabled: blocked };
+  const picker = { input, trigger, triggerId, disabled: blocked };
 
   usePreventDocumentDrop();
 
@@ -195,6 +196,7 @@ export function DropZone({
           {...{ accept, multiple, name, required, form }}
           inputRef={input}
           triggerRef={trigger}
+          triggerId={triggerId}
           disabled={blocked}
           clearLabel={clearLabel}
         />
