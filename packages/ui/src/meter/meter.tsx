@@ -1,5 +1,5 @@
 import { useId } from "react";
-import type { ComponentProps, ReactNode } from "react";
+import type { CSSProperties, ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/meter.css";
 
@@ -20,7 +20,7 @@ type Thresholds =
 
 export type MeterProps = Omit<
   ComponentProps<"meter">,
-  "children" | "value" | "min" | "max" | "low" | "high" | "optimum"
+  "children" | "className" | "style" | "value" | "min" | "max" | "low" | "high" | "optimum"
 > &
   Name &
   Thresholds & {
@@ -34,6 +34,13 @@ export type MeterProps = Omit<
     optimum?: number;
     /** How the value reads, such as a percent or a unit ("12 GB"). */
     formatOptions?: Intl.NumberFormatOptions;
+    /**
+     * Styles the whole Meter, its label and value included. `ref`, `id` and the other attributes
+     * reach the bar itself, which assistive technology reads.
+     */
+    className?: string | undefined;
+    /** Styles the whole Meter, its label and value included. */
+    style?: CSSProperties | undefined;
   };
 
 /**
