@@ -185,6 +185,27 @@ test.describe("with JavaScript off, a Tier 1 Field control submits its form", ()
   });
 });
 
+// Each Tier 2 Field control route, what the user types, and the starting values its form submits.
+const startingValues = [
+  [
+    "combobox",
+    (page: Page) => page.getByRole("combobox", { name: "Assignee" }).fill("Erik"),
+    "/combobox?assignee=ab&reviewers=ab&reviewers=eh",
+  ],
+] as const;
+
+test.describe("with JavaScript off, a Tier 2 Field control submits its starting value", () => {
+  for (const [route, fill, url] of startingValues) {
+    test(route, async ({ page }) => {
+      await page.goto(`/${route}`);
+      await fill(page);
+      await page.getByRole("button", { name: "Submit" }).click();
+
+      await expect(page).toHaveURL(url);
+    });
+  }
+});
+
 const tier2 = [
   "calendar",
   "code-block",
@@ -247,6 +268,7 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
   for (const [route, role, name] of [
     ["alert", "button", "Dismiss"],
     ["calendar", "button", "Previous month"],
+    ["combobox", "button", "Remove Erik Halvorsen"],
     ["calendar", "button", "Next month"],
     ["date-picker", "button", "Choose date"],
     ["number-field", "button", "Decrease"],

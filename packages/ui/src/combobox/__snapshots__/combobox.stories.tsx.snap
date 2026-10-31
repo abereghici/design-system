@@ -9,6 +9,19 @@ exports[`Default   > base story 1`] = `
   - button "Reset"
 `;
 
+exports[`Multiple   > base story 1`] = `
+- form "Profile":
+  - text: Assignee
+  - list "Assignee":
+    - listitem:
+      - text: Alexandru Bereghici
+      - button "Remove Alexandru Bereghici"
+  - combobox "Assignee"
+  - status
+  - button "Save"
+  - button "Reset"
+`;
+
 exports[`Open 1`] = `
 - form "Profile":
   - text: Assignee

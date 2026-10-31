@@ -5,10 +5,28 @@ import { filterOptions, enabled, textOf } from "../internal/listbox/listbox.tsx"
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 
-import { chosenOf, dismiss, highlight, inputOf, listOf, memoryOf, part } from "./combobox-state.ts";
+import {
+  chosenOf,
+  chosenValue,
+  dismiss,
+  highlight,
+  highlightedOf,
+  inputOf,
+  listOf,
+  memoryOf,
+  part,
+} from "./combobox-state.ts";
 import type { ComboboxState, Options } from "./combobox-state.ts";
 
-export const ValueContext = createContext<string | null>(null);
+/** The chosen values, and whether the list marks them selected (several) or marks the highlight. */
+export const ValueContext = createContext<{ chosen: readonly string[]; multiple: boolean }>({
+  chosen: [],
+  multiple: false,
+});
+
+/** The values as a list, whether one (`null` for none) or several. */
+export const valuesOf = (value: string | null | ReadonlyArray<string> | undefined) =>
+  value === undefined || value === null ? [] : typeof value === "string" ? [value] : value;
 
 function applyText(c: ComboboxState, list: Element, input: HTMLInputElement) {
   const { inputValue, defaultInputValue } = c.options;
@@ -17,7 +35,7 @@ function applyText(c: ComboboxState, list: Element, input: HTMLInputElement) {
   if (inputValue !== undefined && input.value !== inputValue) input.value = inputValue;
 
   if (memory.text === null && inputValue === undefined && defaultInputValue === undefined) {
-    input.value = textOf(chosenOf(list, c.value));
+    input.value = textOf(chosenOf(list, chosenValue(c)));
   }
 
   memory.text = input.value;
@@ -65,19 +83,20 @@ function sync(c: ComboboxState, emptyText: string, locale: string | undefined) {
   memory.shown = key;
 
   const choices = shown.filter((option) => enabled(option));
-  const chosen = choices.find((option) => option.dataset["value"] === c.value);
+  const chosen = choices.find((option) => c.value.includes(option.dataset["value"] ?? ""));
   const from = memory.edge;
 
   memory.edge = "first";
 
   if (!c.open) highlight(list, input, null, false);
   else if (from === "last") highlight(list, input, choices.at(-1), true);
+  else if (from === "kept") highlight(list, input, highlightedOf(input) ?? choices[0], true);
   else highlight(list, input, from === "chosen" ? (chosen ?? choices[0]) : choices[0], true);
 }
 
 function useListeners(c: ComboboxState) {
   // A form control reports a committed value with a native change, which the Field validates on.
-  const reread = useEffectEvent((value: string | null) => {
+  const reread = useEffectEvent((value: string) => {
     const memory = memoryOf(c);
     const previous = memory.value;
 
@@ -87,7 +106,7 @@ function useListeners(c: ComboboxState) {
       inputOf(c)?.dispatchEvent(new Event("change", { bubbles: true }));
     }
   });
-  const { value } = c;
+  const value = c.value.join("\n");
 
   useEffect(() => {
     reread(value);
@@ -108,10 +127,11 @@ function useListeners(c: ComboboxState) {
   useEvent(
     "reset",
     () => {
-      const { defaultValue = null, defaultInputValue } = c.options;
+      const { defaultInputValue, selectionMode } = c.options;
+      const defaults = valuesOf(c.options.defaultValue);
       const list = listOf(c);
-      const label =
-        defaultInputValue ?? textOf(list === null ? null : chosenOf(list, defaultValue));
+      const chosen = selectionMode === "multiple" ? null : (defaults[0] ?? null);
+      const label = defaultInputValue ?? textOf(list === null ? null : chosenOf(list, chosen));
 
       // The reset event fires before the form resets its controls, so the label goes in afterwards:
       // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#resetting-a-form
@@ -121,7 +141,7 @@ function useListeners(c: ComboboxState) {
         if (input !== null) input.value = label;
 
         memoryOf(c).text = label;
-        c.setValue(defaultValue);
+        c.setValue(defaults);
       });
     },
     () => inputOf(c)?.form,
@@ -130,14 +150,14 @@ function useListeners(c: ComboboxState) {
 
 /** The Combobox's state, given its empty-list text. The open list, the input's text and the highlight live in the DOM. */
 export function useCombobox(options: Options, empty: string): ComboboxState {
-  const [ownValue, setValue] = useState(options.defaultValue ?? null);
+  const [ownValue, setValue] = useState(() => valuesOf(options.defaultValue));
   const [ownOpen, setOpen] = useState(options.defaultOpen ?? false);
   const [query, setQuery] = useState("");
   const locale = useLocale();
   const c: ComboboxState = {
     options,
     id: useId(),
-    value: options.value === undefined ? ownValue : options.value,
+    value: options.value === undefined ? ownValue : valuesOf(options.value),
     open: options.open ?? ownOpen,
     query,
     setValue,

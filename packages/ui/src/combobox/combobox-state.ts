@@ -15,7 +15,7 @@ import { mergeProps } from "../internal/slot/slot.tsx";
 export const chosenOf = (list: Element, value: string | null) =>
   value === null ? null : list.querySelector(`[role="option"][data-value="${CSS.escape(value)}"]`);
 
-function highlightedOf(input: Element) {
+export function highlightedOf(input: Element) {
   const id = input.getAttribute("aria-activedescendant");
 
   return id === null ? null : document.getElementById(id);
@@ -27,8 +27,12 @@ export function highlight(
   option: HTMLElement | null | undefined,
   scroll: boolean,
 ) {
+  // A single-select list marks the highlighted option selected; a multi-select one, the chosen ones.
+  const single = list.getAttribute("aria-multiselectable") !== "true";
+
   for (const each of list.querySelectorAll('[role="option"]')) {
-    each.setAttribute("aria-selected", String(each === option));
+    if (single) each.setAttribute("aria-selected", String(each === option));
+
     each.toggleAttribute("data-highlighted", each === option);
   }
 
@@ -46,6 +50,7 @@ export function highlight(
 export type ChangeEventDetails<Reason extends string = string> = Details<Reason, Event | undefined>;
 
 type ValueReason = "item-press" | "input-clear" | "escape-key";
+type ValuesReason = "item-press" | "remove-press" | "backspace-key";
 type InputReason = "input-change" | "item-press" | "escape-key" | "focus-out" | "outside-press";
 type OpenReason = InputReason | "input-press" | "list-navigation" | "none";
 
@@ -54,13 +59,31 @@ export type Callback<Value, Reason extends string> = (
   details: ChangeEventDetails<Reason>,
 ) => void;
 
-export interface Options {
-  /** The chosen Item's `value`, when your state holds it; `null` is none. */
-  value?: string | null | undefined;
-  /** The Item chosen on the first render when it holds its own state. */
-  defaultValue?: string | null | undefined;
-  /** Called before the choice changes; `details.cancel()` keeps the current one. */
-  onValueChange?: Callback<string | null, ValueReason> | undefined;
+export type Selection =
+  | {
+      /** `"multiple"` lets people choose several Items, shown as tags in the field. */
+      selectionMode?: "single" | undefined;
+      /** The chosen Item's `value`, when your state holds it; `null` is none. */
+      value?: string | null | undefined;
+      /** The Item chosen on the first render when it holds its own state. */
+      defaultValue?: string | null | undefined;
+      /** Called before the choice changes; `details.cancel()` keeps the current one. */
+      onValueChange?: Callback<string | null, ValueReason> | undefined;
+      removeLabel?: undefined;
+    }
+  | {
+      selectionMode: "multiple";
+      /** The chosen Items' `value`s, when your state holds them. */
+      value?: ReadonlyArray<string> | undefined;
+      /** The Items chosen on the first render when it holds its own state. */
+      defaultValue?: ReadonlyArray<string> | undefined;
+      /** Called before the choices change; `details.cancel()` keeps the current ones. */
+      onValueChange?: Callback<string[], ValuesReason> | undefined;
+      /** The action each tag's remove button reads before the tag's text, such as "Remove". */
+      removeLabel: string;
+    };
+
+export type Options = Selection & {
   /** The typed text, when your state holds it; pair it with `onInputValueChange`. */
   inputValue?: string | undefined;
   /** The text on the first render when it holds its own state. */
@@ -73,29 +96,34 @@ export interface Options {
   defaultOpen?: boolean | undefined;
   /** Called before the list opens or closes; `details.cancel()` keeps it as it is. */
   onOpenChange?: Callback<boolean, OpenReason> | undefined;
-  /** `null` turns the built-in filtering off: every Item shows, in your order (server search). */
+  /**
+   * `null` turns the built-in filtering off: every Item shows, in your order (server search). With
+   * several choices, keep the chosen Items among them, since each tag shows its Item's text.
+   */
   filter?: null | undefined;
   disabled?: boolean | undefined;
-}
+};
 
-type Edge = "chosen" | "first" | "last";
+/** Where the highlight goes when the shown options change; `"kept"` leaves it on the same option. */
+type Edge = "chosen" | "first" | "last" | "kept";
 
 interface Memory {
   pointer: boolean;
   edge: Edge;
   text: string | null;
   shown: string;
-  value: string | null | undefined;
+  value: string | undefined;
 }
 
 /** One render's state; element ids are derived from `id`. */
 export interface ComboboxState {
   readonly options: Options;
   readonly id: string;
-  readonly value: string | null;
+  /** The chosen Items' values: at most one unless `selectionMode` is `"multiple"`. */
+  readonly value: readonly string[];
   readonly open: boolean;
   readonly query: string;
-  readonly setValue: (value: string | null) => void;
+  readonly setValue: (value: readonly string[]) => void;
   readonly setOpen: (open: boolean) => void;
   readonly setQuery: (query: string) => void;
 }
@@ -148,10 +176,34 @@ function changeText(c: ComboboxState, next: string, reason: InputReason, event?:
   return true;
 }
 
-function changeValue(c: ComboboxState, next: string | null, reason: ValueReason, event?: Event) {
-  if (next === c.value) return true;
+/** The single choice the input shows as text; `null` while none, or when several can be chosen. */
+export const chosenValue = (c: ComboboxState) =>
+  c.options.selectionMode === "multiple" ? null : (c.value[0] ?? null);
 
-  if (!requestChange(c.options.onValueChange, next, reason, event)) return false;
+/** A single choice; several choices change through `changeValues` only. */
+function changeValue(c: ComboboxState, next: string | null, reason: ValueReason, event?: Event) {
+  const { options } = c;
+
+  if (options.selectionMode === "multiple" || next === chosenValue(c)) return true;
+
+  if (!requestChange(options.onValueChange, next, reason, event)) return false;
+
+  c.setValue(next === null ? [] : [next]);
+
+  return true;
+}
+
+export function changeValues(
+  c: ComboboxState,
+  next: string[],
+  reason: ValuesReason,
+  event?: Event,
+) {
+  const { options } = c;
+
+  if (options.selectionMode !== "multiple") return false;
+
+  if (!requestChange(options.onValueChange, next, reason, event)) return false;
 
   c.setValue(next);
 
@@ -182,14 +234,29 @@ export function dismiss(c: ComboboxState, reason: InputReason, event: Event) {
   const list = listOf(c);
 
   if (list !== null && changeOpen(c, false, reason, event)) {
-    changeText(c, textOf(chosenOf(list, c.value)), reason, event);
+    changeText(c, textOf(chosenOf(list, chosenValue(c))), reason, event);
   }
 }
 
 function choose(c: ComboboxState, option: HTMLElement, event: Event) {
+  const value = option.dataset["value"] ?? "";
+
   if (!enabled(option)) return;
 
-  if (!changeValue(c, option.dataset["value"] ?? null, "item-press", event)) return;
+  if (c.options.selectionMode === "multiple") {
+    const next = c.value.includes(value)
+      ? c.value.filter((each) => each !== value)
+      : [...c.value, value];
+
+    if (changeValues(c, next, "item-press", event) && changeText(c, "", "item-press", event)) {
+      memoryOf(c).edge = "kept";
+      c.setQuery("");
+    }
+
+    return;
+  }
+
+  if (!changeValue(c, value, "item-press", event)) return;
 
   changeText(c, textOf(option), "item-press", event);
   changeOpen(c, false, "item-press", event);
@@ -230,10 +297,12 @@ function keyDown(c: ComboboxState, event: KeyboardEvent<HTMLInputElement>) {
   } else if (key === "Escape" && c.open) {
     event.preventDefault();
     dismiss(c, "escape-key", native);
-  } else if (key === "Escape" && (c.value !== null || input.value !== "")) {
+  } else if (key === "Escape" && (chosenValue(c) !== null || input.value !== "")) {
     event.preventDefault();
 
     if (changeValue(c, null, "escape-key", native)) changeText(c, "", "escape-key", native);
+  } else if (key === "Backspace" && input.value === "" && c.value.length > 0) {
+    changeValues(c, c.value.slice(0, -1), "backspace-key", native);
   }
 }
 

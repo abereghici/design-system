@@ -1,7 +1,7 @@
 "use client";
 
-import { use, useId } from "react";
-import type { ComponentProps } from "react";
+import { Children, isValidElement, use, useId } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/combobox.css";
 
@@ -21,15 +21,46 @@ export interface ItemProps extends ComponentProps<"div"> {
   disabled?: boolean;
 }
 
-/** One choice. Its text content is its label: what the input shows once chosen and what ranks. */
+const textOfNode = (node: ReactNode): string =>
+  Children.toArray(node)
+    .map((child) => {
+      if (typeof child === "string" || typeof child === "number") return String(child);
+
+      return isValidElement<{ children?: ReactNode }>(child)
+        ? textOfNode(child.props.children)
+        : "";
+    })
+    .join("");
+
+/**
+ * Each Item's text by its `value`, read from the elements rather than the page, so the server
+ * renders the chosen labels too. An Item is any element with a string `value` prop, whatever its
+ * element type.
+ */
+export function labelsOf(children: ReactNode, labels = new Map<string, string>()) {
+  Children.forEach(children, (child) => {
+    if (!isValidElement<Partial<ItemProps>>(child)) return;
+
+    if (typeof child.props.value === "string") {
+      labels.set(child.props.value, textOfNode(child.props.children).trim());
+    } else {
+      labelsOf(child.props.children, labels);
+    }
+  });
+
+  return labels;
+}
+
+/** One choice. Its text content is its label: what the input or tag shows once chosen, and what ranks. */
 export function Item({ value, keywords, disabled = false, children, ...props }: ItemProps) {
   const id = useId();
-  const chosen = use(ValueContext) === value;
+  const { chosen: values, multiple } = use(ValueContext);
+  const chosen = values.includes(value);
 
   return (
     <Option
       {...mergeProps({ className: styles["option"] }, props)}
-      aria-selected={false}
+      aria-selected={multiple && chosen}
       id={id}
       data-value={value}
       data-keywords={keywords?.join("\n")}
