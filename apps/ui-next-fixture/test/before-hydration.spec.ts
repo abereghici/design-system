@@ -93,6 +93,28 @@ test.describe("Tier 1 works with JavaScript off", () => {
       await expect(dialog).toBeHidden();
     });
   }
+
+  test("contextual-help: its button opens it, and Escape and a press outside close it", async ({
+    page,
+  }) => {
+    await page.goto("/contextual-help");
+
+    const button = page.getByRole("button", { name: "About billing cycles" });
+    const dialog = page.getByRole("dialog", { name: "Billing cycle" });
+
+    await button.click();
+
+    await expect(dialog).toBeVisible();
+
+    await page.keyboard.press("Escape");
+
+    await expect(dialog).toBeHidden();
+
+    await button.click();
+    await page.mouse.click(400, 5);
+
+    await expect(dialog).toBeHidden();
+  });
 });
 
 test.describe("with JavaScript off, a Field control is described by its description", () => {

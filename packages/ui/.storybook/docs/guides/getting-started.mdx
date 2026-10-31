@@ -82,7 +82,7 @@ Compound components are namespaces: `import { Card } from "@abereghici/ui/card"`
 
 A server-rendered page is on screen before its JavaScript loads and hydrates it. Each component's description says, in one line, which of two tiers it belongs to:
 
-- **Tier 1 works before hydration**, from the server HTML alone: links navigate, native fields submit with their form, Accordion and Disclosure sections open and close, and Dialog, AlertDialog, Sheet and Popover open and close. It works the same with JavaScript off.
+- **Tier 1 works before hydration**, from the server HTML alone: links navigate, native fields submit with their form, Accordion and Disclosure sections open and close, and Dialog, AlertDialog, Sheet, Popover and ContextualHelp open and close. It works the same with JavaScript off.
 - **Tier 2 shows its final content before hydration and works after it**: Tabs, Combobox, Command, the menus, Tooltip, Toolbar's arrow keys, NumberField, the date components, DropZone and toasts. They render on the server as they will look, so nothing moves when the page hydrates. With JavaScript off, the controls only script can run are hidden, such as NumberField's step buttons and every tab but the selected one.
 
 Build a page's main task from Tier 1 components, so it works while the rest of the page loads.

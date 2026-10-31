@@ -293,6 +293,18 @@ export const componentRoutes = [
     html: 'command="toggle-popover"',
   },
   {
+    name: "contextual-help",
+    tokens: ["popover", "icon", "icon-button", "spinner"],
+    client: [
+      "icon-button/icon-button",
+      "popover/popover-content",
+      "popover/popover-root",
+      "popover/popover-title",
+      "popover/popover-trigger",
+    ],
+    html: 'Billing cycle</h2><p class="',
+  },
+  {
     name: "dropdown-menu",
     tokens: ["dropdown-menu", "icon"],
     client: [
