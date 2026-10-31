@@ -1,6 +1,8 @@
 import type { MouseEvent } from "react";
 import { expect, fn } from "storybook/test";
 
+import type { StoryContext } from "@storybook/react-vite";
+
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -16,6 +18,10 @@ const message = (close: Partial<Alert.CloseProps> = {}) => (
   </>
 );
 
+async function showsMessage({ canvas }: StoryContext) {
+  await expect(canvas.getByText("The file is read-only. Duplicate it to edit.")).toBeVisible();
+}
+
 const meta = preview.meta({
   title: "Components/Alert",
   component: Alert.Root,
@@ -25,29 +31,11 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test(
-  "reads at AA contrast as neutral",
-  { args: { variant: "neutral" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("The file is read-only. Duplicate it to edit.")).toBeVisible();
-  },
-);
+Default.test("reads at AA contrast as neutral", { args: { variant: "neutral" } }, showsMessage);
 
-Default.test(
-  "reads at AA contrast as success",
-  { args: { variant: "success" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("The file is read-only. Duplicate it to edit.")).toBeVisible();
-  },
-);
+Default.test("reads at AA contrast as success", { args: { variant: "success" } }, showsMessage);
 
-Default.test(
-  "reads at AA contrast as warning",
-  { args: { variant: "warning" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("The file is read-only. Duplicate it to edit.")).toBeVisible();
-  },
-);
+Default.test("reads at AA contrast as warning", { args: { variant: "warning" } }, showsMessage);
 
 Default.test("is ordinary content without a role", async ({ canvas }) => {
   await expect(canvas.queryByRole("alert")).toBeNull();

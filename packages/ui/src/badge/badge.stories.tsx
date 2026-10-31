@@ -1,10 +1,16 @@
 import { expect } from "storybook/test";
 
+import type { StoryContext } from "@storybook/react-vite";
+
 import { Link } from "@abereghici/ui/link";
 
 import preview from "#.storybook/preview.tsx";
 
 import { Badge } from "./badge.tsx";
+
+async function showsCount({ canvas }: StoryContext) {
+  await expect(canvas.getByText("3")).toBeVisible();
+}
 
 const meta = preview.meta({
   title: "Components/Badge",
@@ -14,21 +20,9 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test(
-  "reads at AA contrast as accent",
-  { args: { variant: "accent" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("3")).toBeVisible();
-  },
-);
+Default.test("reads at AA contrast as accent", { args: { variant: "accent" } }, showsCount);
 
-Default.test(
-  "reads at AA contrast as danger",
-  { args: { variant: "danger" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("3")).toBeVisible();
-  },
-);
+Default.test("reads at AA contrast as danger", { args: { variant: "danger" } }, showsCount);
 
 Default.test("caps a count above max", { args: { children: 1280 } }, async ({ canvas }) => {
   await expect(canvas.getByText("99+")).toBeVisible();
