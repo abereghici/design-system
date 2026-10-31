@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { expect, fn, screen, waitFor } from "storybook/test";
 
+import type { UserEventObject } from "storybook/test";
+
 import { UserIcon } from "@abereghici/ui/icons/user";
 
 import { withDialog } from "#.storybook/decorators/with-dialog.tsx";
@@ -279,7 +281,7 @@ Default.test(
 
 export const Open = meta.story({
   parameters: { docs: { description: { story: "Open, with the first option highlighted." } } },
-  play: ({ userEvent }) => userEvent.click(field()),
+  play: ({ userEvent }: { userEvent: UserEventObject }) => userEvent.click(field()),
 });
 
 export const ServerSearchResults = meta.story({
