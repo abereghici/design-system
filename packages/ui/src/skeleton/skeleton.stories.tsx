@@ -45,10 +45,24 @@ Default.test(
 );
 
 Default.test(
-  "keeps a wrapped element's class beside the consumer's",
+  "keeps the app's styles for a wrapped element's class and the consumer's",
   { args: { children: <span className="avatar">Ana Pop</span>, className: "wide" } },
   async ({ canvas }) => {
-    await expect(canvas.getByText("Ana Pop")).toHaveClass("avatar", "wide");
+    const appStyles = document.createElement("style");
+
+    appStyles.textContent =
+      ".avatar { border-start-start-radius: 7px; } .wide { letter-spacing: 3px; }";
+    document.head.append(appStyles);
+
+    try {
+      const { borderStartStartRadius, letterSpacing } = getComputedStyle(
+        canvas.getByText("Ana Pop"),
+      );
+
+      await expect([borderStartStartRadius, letterSpacing]).toEqual(["7px", "3px"]);
+    } finally {
+      appStyles.remove();
+    }
   },
 );
 
