@@ -98,14 +98,21 @@ Default.test(
   blocksActivation,
 );
 
+Default.test("is announced as disabled", { args: { disabled: true } }, async ({ canvas }) => {
+  await expect(canvas.getByRole("button", { name: "Pin" })).toHaveAttribute(
+    "aria-disabled",
+    "true",
+  );
+});
+
 Default.test(
-  "is announced as disabled or busy",
-  { args: { disabled: true, loading: true } },
+  "is announced as busy and unavailable while loading",
+  { args: { loading: true } },
   async ({ canvas }) => {
     const button = canvas.getByRole("button", { name: "Pin" });
 
-    await expect(button).toHaveAttribute("aria-disabled", "true");
     await expect(button).toHaveAttribute("aria-busy", "true");
+    await expect(button).toHaveAttribute("aria-disabled", "true");
   },
 );
 

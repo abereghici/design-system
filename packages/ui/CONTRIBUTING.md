@@ -35,6 +35,7 @@ Setup, checks and releases are in the repository's [CONTRIBUTING.md](../../CONTR
 | DOM event listeners                                                            | `internal/dom-event/` (`use-event.ts`, `shared-listener.ts`)                                                             |
 | Pointer modality and IME composition                                           | `internal/interaction/` (`pointer-marker.ts`, `composition.ts`)                                                          |
 | Finding an element by id                                                       | `internal/get-by-id/get-by-id.ts`                                                                                        |
+| A button that stays focusable while disabled                                   | `internal/use-button/use-button.ts`                                                                                      |
 | A native checkbox's click                                                      | `internal/toggle-click/toggle-click.ts`                                                                                  |
 | A native radio group                                                           | `internal/radio-choice/` (`use-radio-choice.ts`, `follow-visual-direction.ts`)                                           |
 | A list of chosen values                                                        | `internal/selection/selection.ts`                                                                                        |

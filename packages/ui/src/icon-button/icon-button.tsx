@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentProps, MouseEvent } from "react";
+import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/icon-button.css";
 
@@ -8,6 +8,7 @@ import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Slot } from "../internal/slot/slot.tsx";
+import { useButton } from "../internal/use-button/use-button.ts";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./icon-button.module.css";
@@ -49,31 +50,25 @@ export function IconButton({
   onClick,
   ...props
 }: IconButtonProps) {
-  function handleClick(event: MouseEvent<HTMLButtonElement>) {
-    if (disabled || loading) {
-      event.preventDefault();
-
-      return;
-    }
-
-    onClick?.(event);
-    dispatchFeedback(event.currentTarget, "ab-press", {
-      component: "IconButton",
-      userInitiated: true,
-    });
-  }
-
+  const button = useButton<HTMLButtonElement>({
+    disabled: disabled || loading,
+    onClick: (event) => {
+      onClick?.(event);
+      dispatchFeedback(event.currentTarget, "ab-press", {
+        component: "IconButton",
+        userInitiated: true,
+      });
+    },
+  });
   const Root = asChild ? Slot : "button";
 
   return (
     <Root
-      {...mergeProps({ className: styles["root"] }, props)}
+      {...mergeProps({ className: styles["root"], ...button }, props)}
       type={asChild ? undefined : type}
-      aria-disabled={disabled ? true : undefined}
       aria-busy={loading ? true : undefined}
       data-loading={loading ? "" : undefined}
       data-size={size}
-      onClick={handleClick}
     >
       {loading && !asChild ? <Spinner aria-hidden /> : props.children}
     </Root>
