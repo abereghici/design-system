@@ -1,10 +1,10 @@
 "use client";
 
-import type { Panel } from "../date-picker/date-picker-panel.tsx";
-import { Trigger } from "../date-picker/date-picker-trigger.tsx";
 import { useField } from "../field/use-field.ts";
 import { Temporal, useDateFormats } from "../internal/date/date.ts";
 import type { DatePart, DateRange } from "../internal/date/date.ts";
+import { Trigger } from "../internal/picker/picker-trigger.tsx";
+import type { Panel } from "../internal/picker/picker.ts";
 import type { SegmentFieldOptions } from "../internal/segment-field/segment-field.tsx";
 
 import { Half } from "./date-range-picker-half.tsx";

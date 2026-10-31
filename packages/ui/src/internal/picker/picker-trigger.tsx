@@ -2,11 +2,11 @@
 
 import { useId } from "react";
 
-import { IconButton } from "../icon-button/icon-button.tsx";
-import { CalendarIcon } from "../icon/icons/calendar.tsx";
+import { IconButton } from "../../icon-button/icon-button.tsx";
+import { CalendarIcon } from "../../icon/icons/calendar.tsx";
 
-import type { Panel } from "./date-picker-panel.tsx";
-import styles from "./date-picker.module.css";
+import type { Panel } from "./picker.ts";
+import styles from "./picker.module.css";
 
 interface TriggerProps {
   readonly panel: Panel;

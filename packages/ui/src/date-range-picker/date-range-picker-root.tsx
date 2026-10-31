@@ -1,19 +1,17 @@
 "use client";
 
-import { useRef } from "react";
-import type { CSSProperties, ReactNode, RefObject } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import "@abereghici/tokens/components/date-range-picker.css";
 
-import { focusStayed, PanelContext } from "../date-picker/date-picker-panel.tsx";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useControllableState } from "../events/use-controllable-state.ts";
 import { Wrapper } from "../field/field-wrapper.tsx";
 import type { SizedWrapperProps } from "../field/field-wrapper.tsx";
 import { DateRangePickerContext, sameRange } from "../internal/date/date.ts";
-import type { DatePart, DateRange, PickerContextValue, Temporal } from "../internal/date/date.ts";
-import { useOverlay } from "../internal/overlay/overlay.ts";
-import type { ChangeEventDetails as OverlayDetails } from "../internal/overlay/overlay.ts";
+import type { DatePart, DateRange, Temporal } from "../internal/date/date.ts";
+import { PanelContext, usePicker } from "../internal/picker/picker.ts";
+import type { OpenChangeEventDetails } from "../internal/picker/picker.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { Box } from "./date-range-picker-box.tsx";
@@ -23,9 +21,7 @@ import styles from "./date-range-picker.module.css";
 /** `cancel()`: keeps the previous dates; after a day press the panel stays open. */
 export type ChangeEventDetails = Details<"input-change" | "keyboard" | "day-press">;
 
-export type OpenChangeEventDetails = OverlayDetails<
-  "trigger-press" | "outside-press" | "escape-key" | "focus-out" | "day-press" | "none"
->;
+export type { OpenChangeEventDetails } from "../internal/picker/picker.ts";
 
 type Unavailable =
   | { isDateUnavailable?: undefined; unavailableMessage?: undefined }
@@ -119,30 +115,6 @@ function useRange(
   };
 }
 
-function usePicker(
-  props: RootProps,
-  range: ReturnType<typeof useRange>,
-  trigger: RefObject<HTMLButtonElement | null>,
-) {
-  const { open, defaultOpen, onOpenChange, triggerLabel, min, max, isDateUnavailable } = props;
-  const overlay = useOverlay("Popover", { open, defaultOpen, onOpenChange });
-  const picker: PickerContextValue<DateRange> = {
-    open: overlay.open,
-    value: range.current,
-    min,
-    max,
-    isDateUnavailable,
-    choose: (next, event) => {
-      if (sameRange(next, range.current) || range.change(next, "day-press", event)) {
-        overlay.toggle(false, "day-press", event);
-      }
-    },
-    canFocus: () => focusStayed(overlay),
-  };
-
-  return { panel: { overlay, name: triggerLabel, trigger }, picker };
-}
-
 /**
  * A field for a start and an end date, such as a stay, with a button that opens a RangeCalendar:
  * type both dates, or pick them. Its label names the field, `startLabel` and `endLabel` its two
@@ -154,9 +126,8 @@ function usePicker(
  */
 export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, size, className, style, disabled } = props;
-  const trigger = useRef<HTMLButtonElement>(null);
-  const range = useRange(props, () => trigger.current?.form);
-  const { panel, picker } = usePicker(props, range, trigger);
+  const { panel, form, calendar } = usePicker(props);
+  const range = useRange(props, form);
 
   return (
     <Wrapper
@@ -170,7 +141,9 @@ export function Root(props: RootProps) {
       invalid={invalid}
       after={
         <PanelContext value={panel}>
-          <DateRangePickerContext value={picker}>{props.children}</DateRangePickerContext>
+          <DateRangePickerContext value={calendar(range, sameRange)}>
+            {props.children}
+          </DateRangePickerContext>
         </PanelContext>
       }
     >

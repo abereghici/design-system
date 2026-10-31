@@ -501,8 +501,8 @@
       "spinner"
     ],
     "client": [
-      "date-picker/date-picker-content",
       "date-range-picker/date-range-picker-root",
+      "internal/picker/picker-content",
       "range-calendar/range-calendar"
     ],
     "html": "aria-haspopup=\"dialog\""

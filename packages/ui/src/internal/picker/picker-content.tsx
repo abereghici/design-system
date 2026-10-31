@@ -5,12 +5,12 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/popover.css";
 
-import { rememberFocus } from "../internal/overlay/overlay.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { rememberFocus } from "../overlay/overlay.ts";
+import { mergeProps } from "../slot/slot.tsx";
 
-import { PanelContext } from "./date-picker-panel.tsx";
-import popoverStyles from "../popover/popover.module.css";
-import styles from "./date-picker.module.css";
+import { PanelContext } from "./picker.ts";
+import popoverStyles from "../../popover/popover.module.css";
+import styles from "./picker.module.css";
 
 export type ContentProps = Omit<
   ComponentProps<"dialog">,
