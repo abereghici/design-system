@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 import "@abereghici/tokens/components/table.css";
 
 import { Checkbox } from "../checkbox/checkbox.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { ColumnHeader } from "./table-column-header.tsx";
 import { useSelection } from "./table-selection.tsx";
@@ -23,7 +23,7 @@ export interface SelectAllProps extends ComponentProps<"th"> {
  * mixed while only some of them are selected. Needs `selectionMode="multiple"`.
  */
 export function SelectAll({ keys, selectAllLabel, ...props }: SelectAllProps) {
-  const { state, actions } = useSelection("SelectAll");
+  const { state, actions } = useSelection("Table.SelectAll");
 
   if (state.selectionMode !== "multiple") {
     throw new Error('Table.SelectAll needs selectionMode="multiple" on its Table.Root');

@@ -5,7 +5,7 @@ import type { ComponentProps, PointerEvent } from "react";
 
 import "@abereghici/tokens/components/slider.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import type { Reason } from "./slider-root.tsx";
 import { useSlider } from "./slider-root.tsx";
@@ -80,7 +80,7 @@ function useDrag(slider: ReturnType<typeof useSlider>) {
 
 /** The rail: a press moves the nearest thumb there; dragging follows the pointer. */
 export function Track(props: TrackProps) {
-  const drag = useDrag(useSlider());
+  const drag = useDrag(useSlider("Slider.Track"));
 
   return <div {...mergeProps({ className: styles["track"], ...drag }, props)} />;
 }

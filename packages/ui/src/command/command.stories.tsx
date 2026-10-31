@@ -163,7 +163,7 @@ Default.test(
     await expect(confirmations.events.map(({ target, detail }) => ({ target, detail }))).toEqual(
       [canvas.getByRole("option", { name: "Search files" }), home].map((target) => ({
         target,
-        detail: { component: "Command", reason: "user" },
+        detail: { component: "Command", userInitiated: true },
       })),
     );
   },
@@ -301,7 +301,7 @@ InADialog.test(
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     await expect(onOpenChange).toHaveBeenLastCalledWith(false, reason("outside-press"));
     await expect(dismissals.events.map(({ detail }) => detail)).toEqual([
-      { component: "Dialog", reason: "user" },
+      { component: "Dialog", userInitiated: true },
     ]);
     await expect(args.onInputValueChange).toHaveBeenLastCalledWith("", reason("input-clear"));
     await userEvent.click(opener);

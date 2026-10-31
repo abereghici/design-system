@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/kbd.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { Key } from "./kbd-key.tsx";
 import type { KbdFace, KeyLabel } from "./kbd-key.tsx";

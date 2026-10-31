@@ -4,9 +4,10 @@ import type { ComponentProps, MouseEvent, ReactElement } from "react";
 
 import "@abereghici/tokens/components/icon-button.css";
 
-import { composeEventHandlers } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import { useModal } from "./dialog-modal.tsx";
 import iconButton from "../icon-button/icon-button.module.css";
@@ -33,7 +34,7 @@ export type CloseProps = Omit<
 
 /** Closes the dialog: the `x` button, or with `asChild` its one child. */
 export function Close({ asChild = false, onClick, ...props }: CloseProps) {
-  const { id, controller, styles } = useModal();
+  const { id, controller, styles } = useModal("Close");
 
   const handleClick = composeEventHandlers(onClick, (event: MouseEvent<HTMLButtonElement>) => {
     controller.press({

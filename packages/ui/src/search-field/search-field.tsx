@@ -4,7 +4,7 @@ import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import { Control } from "./search-field-control.tsx";
 import type { ControlProps } from "./search-field-control.tsx";
 
-export type { SearchFieldChangeEventDetails } from "./search-field-control.tsx";
+export type { SearchFieldChangeEventDetails } from "./use-search-field-state.ts";
 
 export type SearchFieldProps = Naming &
   SizedWrapperProps &

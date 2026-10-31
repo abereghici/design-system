@@ -1,14 +1,14 @@
 "use client";
 
-import { createContext, use } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/tag-group.css";
 
-import { dispatchFeedback } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./tag-group.module.css";
 
@@ -23,15 +23,8 @@ interface TagGroupContextValue {
   readonly meta: { readonly removeLabel: string };
 }
 
-const TagGroupContext = createContext<TagGroupContextValue | null>(null);
-
-export function useTagGroup(part: string) {
-  const group = use(TagGroupContext);
-
-  if (group === null) throw new Error(`TagGroup.${part} must be inside TagGroup.Root`);
-
-  return group;
-}
+export const [TagGroupContext, useTagGroup] =
+  createSafeContext<TagGroupContextValue>("TagGroup.Root");
 
 export type RootProps = Omit<ComponentProps<"ul">, "defaultValue"> & {
   /** The `value`s of the Tags shown, when your state holds them. */
@@ -79,7 +72,7 @@ export function Root({
 
     if (disabled || !request(next, "remove-press", event.nativeEvent)) return;
 
-    dispatchFeedback(button, "ab-dismiss", { component: "TagGroup", reason: "user" });
+    dispatchFeedback(button, "ab-dismiss", { component: "TagGroup", userInitiated: true });
 
     // Only focus that would be lost moves: onValueChange may have sent it elsewhere.
     if (document.activeElement !== button) return;

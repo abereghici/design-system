@@ -1,15 +1,16 @@
 "use client";
 
-import { createContext, useId } from "react";
+import { useId } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/segmented-control.css";
 
-import { pointerMarker } from "../events/events.ts";
-import { followVisualDirection } from "../internal/follow-visual-direction/follow-visual-direction.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import { useRadioChoice } from "../internal/toggle/toggle.ts";
-import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { followVisualDirection } from "../internal/radio-choice/follow-visual-direction.ts";
+import { useRadioChoice } from "../internal/radio-choice/use-radio-choice.ts";
+import type { ChangeEventDetails } from "../internal/toggle-click/toggle-click.ts";
 
 import styles from "./segmented-control.module.css";
 
@@ -19,7 +20,8 @@ interface Group {
   readonly select: (value: string, event: MouseEvent<HTMLInputElement>) => void;
 }
 
-export const GroupContext = createContext<Group | null>(null);
+export const [GroupContext, useSegmentedControl] =
+  createSafeContext<Group>("SegmentedControl.Root");
 
 export type RootProps = Omit<ComponentProps<"fieldset">, "defaultValue"> & {
   /** The chosen segment's `value`, when your state holds it. */

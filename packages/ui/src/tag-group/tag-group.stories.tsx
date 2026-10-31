@@ -52,7 +52,7 @@ Default.test(
       expect.objectContaining({ reason: "remove-press" }),
     );
     await expect(dismisses.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: remove, detail: { component: "TagGroup", reason: "user" } },
+      { target: remove, detail: { component: "TagGroup", userInitiated: true } },
     ]);
   },
 );

@@ -4,9 +4,10 @@ import type { ComponentProps, MouseEvent, ReactNode } from "react";
 
 import "@abereghici/tokens/components/disclosure.css";
 
-import { composeEventHandlers, pointerMarker } from "../events/events.ts";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
+import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useDisclosure } from "./disclosure-root.tsx";
 import styles from "./disclosure.module.css";
@@ -18,7 +19,7 @@ export interface TriggerProps extends ComponentProps<"summary"> {
 
 /** The heading button that opens and closes the Content. */
 export function Trigger({ children, onClick, ...props }: TriggerProps) {
-  const disclosure = useDisclosure("Trigger");
+  const disclosure = useDisclosure("Disclosure.Trigger");
 
   return (
     <summary

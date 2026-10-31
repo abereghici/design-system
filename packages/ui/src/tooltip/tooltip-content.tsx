@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/tooltip.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { outside, seen, triggerOf, useTooltip } from "./tooltip-root.tsx";
 import styles from "./tooltip.module.css";
@@ -18,7 +18,7 @@ export interface ContentProps extends Omit<ComponentProps<"div">, "id" | "role" 
 
 /** The short label, optionally followed by an `aria-hidden` Kbd. */
 export function Content({ side = "top", align = "center", ...props }: ContentProps) {
-  const { contentId, contentRef, change } = useTooltip();
+  const { contentId, contentRef, change } = useTooltip("Tooltip.Content");
 
   return (
     <div

@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 
-import { useEvent } from "../events/use-event.ts";
 import { useField } from "../field/use-field.ts";
+import { useEvent } from "../internal/dom-event/use-event.ts";
 
 /**
  * The native file input's ref and its files' names, emptied when the form resets. The system picker

@@ -136,7 +136,7 @@ Default.test("runs the action, dispatches ab-confirm and closes", async ({ userE
   confirms.stop();
   await expect(undo).toHaveBeenCalledOnce();
   await expect(confirms.events.map(({ detail }) => detail)).toEqual([
-    { component: "Toast", reason: "user" },
+    { component: "Toast", userInitiated: true },
   ]);
   await gone("Moved to Archive");
 });
@@ -147,7 +147,7 @@ Default.test("closes on Dismiss with ab-dismiss", async ({ userEvent }) => {
   await userEvent.click(within(await region()).getByRole("button", { name: "Dismiss" }));
   dismisses.stop();
   await expect(dismisses.events.map(({ detail }) => detail)).toEqual([
-    { component: "Toast", reason: "user" },
+    { component: "Toast", userInitiated: true },
   ]);
   await gone("Moved to Archive");
 });
@@ -198,7 +198,7 @@ Default.test("dispatches ab-appear when a toast shows, and never takes focus", a
   await region();
   await waitFor(() => expect(appears.events).toHaveLength(1));
   appears.stop();
-  await expect(appears.events[0]?.detail).toEqual({ component: "Toast", reason: "programmatic" });
+  await expect(appears.events[0]?.detail).toEqual({ component: "Toast", userInitiated: false });
   await expect(document.activeElement).toBe(before);
 });
 

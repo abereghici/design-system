@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 import "@abereghici/tokens/components/accordion.css";
 
 import { DisclosureRoot } from "../disclosure/disclosure-root.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useAccordion } from "./accordion-root.tsx";
 import styles from "./accordion.module.css";
@@ -17,7 +17,7 @@ export interface ItemProps extends Omit<ComponentProps<"details">, "open" | "nam
 
 /** One collapsible section, holding a Trigger and its Content. */
 export function Item({ value, ...props }: ItemProps) {
-  const accordion = useAccordion("Item");
+  const accordion = useAccordion("Accordion.Item");
 
   return (
     <DisclosureRoot

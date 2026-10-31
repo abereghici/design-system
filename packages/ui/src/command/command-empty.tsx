@@ -5,7 +5,7 @@ import type { ComponentProps, ReactNode } from "react";
 import "@abereghici/tokens/components/command.css";
 
 import { SearchIcon } from "../icon/icons/search.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";
@@ -17,7 +17,7 @@ export interface EmptyProps extends Omit<ComponentProps<"output">, "children"> {
 
 /** What to show while nothing matches; screen readers announce it. */
 export function Empty({ children, ...props }: EmptyProps) {
-  const { listbox } = useCommand();
+  const { listbox } = useCommand("Command.Empty");
 
   return (
     <output {...mergeProps({ className: styles["empty"] }, props)}>

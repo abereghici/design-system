@@ -3,7 +3,8 @@ import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/card.css";
 
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import styles from "./card.module.css";
 

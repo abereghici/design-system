@@ -15,6 +15,8 @@ docs/
 └── tech-stack.md        # the agreed stack and versions
 ```
 
+Where code goes inside `@abereghici/ui` is in [packages/ui/CONTRIBUTING.md](packages/ui/CONTRIBUTING.md).
+
 ## Development
 
 The Node.js and pnpm versions are pinned in `package.json` under `devEngines`.

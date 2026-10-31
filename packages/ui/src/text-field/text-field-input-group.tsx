@@ -4,7 +4,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/field.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import fieldStyles from "../field/field.module.css";
 import styles from "./text-field.module.css";

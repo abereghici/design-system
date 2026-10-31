@@ -1,7 +1,8 @@
 import type { RefObject } from "react";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { returnFocus } from "../internal/overlay/overlay.ts";
 
 declare global {
@@ -134,7 +135,10 @@ export class Controller {
     if (!event.defaultPrevented) this.#skipClose = true;
 
     if (accepted && dismiss !== null) {
-      dispatchFeedback(dismiss, "ab-dismiss", { component: options.component, reason: "user" });
+      dispatchFeedback(dismiss, "ab-dismiss", {
+        component: options.component,
+        userInitiated: true,
+      });
     }
   }
 

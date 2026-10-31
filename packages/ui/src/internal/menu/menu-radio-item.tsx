@@ -1,11 +1,9 @@
 "use client";
 
-import { use } from "react";
-
-import { dispatchFeedback } from "../../events/events.ts";
+import { dispatchFeedback } from "../../feedback-event/feedback-event.ts";
 
 import { Indicator } from "./menu-item-indicator.tsx";
-import { RadioGroupContext } from "./menu-radio-group.tsx";
+import { useMenuRadioGroup } from "./menu-radio-group.tsx";
 import { useItem } from "./menu.tsx";
 import type { ItemBaseProps } from "./menu.tsx";
 
@@ -17,9 +15,7 @@ export interface RadioItemProps extends ItemBaseProps {
 /** One choice of a RadioGroup; choosing it closes the menu, unless `closeOnClick` is off. */
 export function RadioItem({ value, onClick, children, ...rest }: RadioItemProps) {
   const { menu, props, blocked, close: closeMenu } = useItem(rest, "menuitemradio");
-  const group = use(RadioGroupContext);
-
-  if (group === null) throw new Error("RadioItem must be inside a RadioGroup");
+  const group = useMenuRadioGroup("RadioItem");
 
   const checked = group.value === value;
 
@@ -38,7 +34,7 @@ export function RadioItem({ value, onClick, children, ...rest }: RadioItemProps)
 
           dispatchFeedback(event.currentTarget, "ab-toggle", {
             component: menu.component,
-            reason: "user",
+            userInitiated: true,
           });
         }
 

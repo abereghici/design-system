@@ -1,16 +1,18 @@
 "use client";
 
-import { createContext, use, useState } from "react";
+import { useState } from "react";
 import type { ComponentProps, FocusEvent, KeyboardEvent, SyntheticEvent } from "react";
 
 import "@abereghici/tokens/components/tree.css";
 
-import { dispatchFeedback, pointerMarker } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { typeahead } from "../internal/listbox/typeahead.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import { toggled } from "../internal/toggle/toggle.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { toggled } from "../internal/selection/selection.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./tree.module.css";
 
@@ -46,15 +48,7 @@ interface TreeContextValue {
   readonly meta: { readonly level: number };
 }
 
-export const TreeContext = createContext<TreeContextValue | null>(null);
-
-export function useTree(part: string) {
-  const tree = use(TreeContext);
-
-  if (tree === null) throw new Error(`Tree.${part} must be inside Tree.Root`);
-
-  return tree;
-}
+export const [TreeContext, useTree] = createSafeContext<TreeContextValue>("Tree.Root");
 
 const shownItems = (tree: Element) => [...tree.querySelectorAll<HTMLElement>('[role="treeitem"]')];
 
@@ -119,7 +113,10 @@ function useKeys<Reason extends string>(
 
   function change(next: string[], reason: Reason, event: ItemEvent) {
     if (request(next, reason, event.nativeEvent)) {
-      dispatchFeedback(event.currentTarget, "ab-toggle", { component: "Tree", reason: "user" });
+      dispatchFeedback(event.currentTarget, "ab-toggle", {
+        component: "Tree",
+        userInitiated: true,
+      });
     }
   }
 

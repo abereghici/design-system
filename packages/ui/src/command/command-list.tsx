@@ -5,10 +5,10 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/command.css";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { Listbox } from "../internal/listbox/listbox.tsx";
 import { enabled, optionAt } from "../internal/listbox/options.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { DialogContext, useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";
@@ -28,7 +28,7 @@ export type ListProps = Omit<ComponentProps<"div">, "aria-label" | "aria-labelle
 
 /** The list of Groups and Items, filtered as people type. */
 export function List(props: ListProps) {
-  const command = useCommand();
+  const command = useCommand("Command.List");
   const press = use(DialogContext);
 
   return (
@@ -55,7 +55,7 @@ export function List(props: ListProps) {
             const option = optionAt(event.target);
 
             if (option !== null) {
-              dispatchFeedback(option, "ab-confirm", { component: "Command", reason: "user" });
+              dispatchFeedback(option, "ab-confirm", { component: "Command", userInitiated: true });
             }
           },
         },

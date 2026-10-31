@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
 
 import { Inline } from "../inline/inline.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./page-layout.module.css";
 

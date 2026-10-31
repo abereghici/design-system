@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import { requestChange } from "./events.ts";
-import type { ChangeEventDetails } from "./events.ts";
-import { useEvent } from "./use-event.ts";
-import type { EventTargetSource } from "./use-event.ts";
+import { requestChange } from "../change-request/change-request.ts";
+import type { ChangeEventDetails } from "../change-request/change-request.ts";
+import { useEvent } from "../dom-event/use-event.ts";
+import type { EventTargetSource } from "../dom-event/use-event.ts";
 
 /**
  * A value the app holds (`value`) or leaves to the Component (`defaultValue`), as Radix's and

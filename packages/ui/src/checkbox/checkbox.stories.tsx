@@ -51,7 +51,7 @@ Default.test("dispatches a bubbling ab-toggle after a change", async ({ canvas, 
   await expect(
     toggles.events.map(({ target, bubbles, detail }) => ({ target, bubbles, detail })),
   ).toEqual([
-    { target: checkbox, bubbles: true, detail: { component: "Checkbox", reason: "user" } },
+    { target: checkbox, bubbles: true, detail: { component: "Checkbox", userInitiated: true } },
   ]);
 });
 

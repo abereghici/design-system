@@ -1,13 +1,14 @@
 import type { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent } from "react";
 
-import { isComposing, requestChange, trackComposition } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { getById } from "../internal/get-by-id/get-by-id.ts";
+import { isComposing, trackComposition } from "../internal/interaction/composition.ts";
 import { enabled, optionAt } from "../internal/listbox/options.ts";
 import { textOf } from "../internal/listbox/text-of.ts";
 import type { ListboxNavigator } from "../internal/listbox/use-listbox.ts";
-import { byId } from "../internal/overlay/overlay.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import { toggled } from "../internal/toggle/toggle.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { toggled } from "../internal/selection/selection.ts";
 
 export const chosenOf = (list: Element, value: string | null) =>
   value === null ? null : list.querySelector(`[role="option"][data-value="${CSS.escape(value)}"]`);
@@ -103,13 +104,13 @@ type PartName = "root" | "box" | "list" | "label";
 
 export const part = (c: Pick<ComboboxState, "id">, name: PartName) => `${c.id}${name}`;
 
-export const listOf = (c: Pick<ComboboxState, "id">) => byId(part(c, "list"));
+export const listOf = (c: Pick<ComboboxState, "id">) => getById(part(c, "list"));
 
 export const inputOf = (c: Pick<ComboboxState, "id">) =>
-  byId(part(c, "root"))?.querySelector<HTMLInputElement>('[role="combobox"]') ?? null;
+  getById(part(c, "root"))?.querySelector<HTMLInputElement>('[role="combobox"]') ?? null;
 
 export function memoryOf(c: Pick<ComboboxState, "id">): Memory {
-  const root = byId(part(c, "root"));
+  const root = getById(part(c, "root"));
   const memory = (root && memories.get(root)) ?? { pointer: false, text: null };
 
   if (root !== null) memories.set(root, memory);
@@ -282,7 +283,7 @@ function inputChange(c: ComboboxState, event: ChangeEvent<HTMLInputElement>) {
 
 function blur(c: ComboboxState, event: FocusEvent<HTMLInputElement>) {
   const next = event.relatedTarget;
-  const inside = next instanceof Node && byId(part(c, "root"))?.contains(next) === true;
+  const inside = next instanceof Node && getById(part(c, "root"))?.contains(next) === true;
 
   if (!c.open || inside || !document.hasFocus()) return;
 

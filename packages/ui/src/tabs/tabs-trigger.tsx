@@ -4,7 +4,7 @@ import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/tabs.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useTabs } from "./tabs-root.tsx";
 import styles from "./tabs.module.css";
@@ -45,7 +45,7 @@ export interface TriggerProps extends Omit<ComponentProps<"button">, "type" | "r
 
 /** A tab that shows the Content with the same `value`. */
 export function Trigger({ value, onClick, onPointerDown, onKeyDown, ...props }: TriggerProps) {
-  const tabs = useTabs("Trigger");
+  const tabs = useTabs("Tabs.Trigger");
   const selected = value === tabs.state.value;
 
   return (

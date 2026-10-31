@@ -1,19 +1,12 @@
 "use client";
 
-import {
-  createContext,
-  use,
-  useEffectEvent,
-  useId,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffectEvent, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ReactNode, RefObject, SyntheticEvent } from "react";
 
-import { requestChange } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { getDocument, useEvent } from "../events/use-event.ts";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
 import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 
 export type ChangeReason =
@@ -43,15 +36,7 @@ interface Tooltip {
   ) => void;
 }
 
-const TooltipContext = createContext<Tooltip | null>(null);
-
-export function useTooltip(): Tooltip {
-  const tooltip = use(TooltipContext);
-
-  if (tooltip === null) throw new Error("Tooltip parts must be inside Tooltip.Root");
-
-  return tooltip;
-}
+export const [TooltipContext, useTooltip] = createSafeContext<Tooltip>("Tooltip.Root");
 
 const WARM_WINDOW = 400;
 

@@ -2,8 +2,9 @@
 
 import type { ReactNode } from "react";
 
+import { getById } from "../internal/get-by-id/get-by-id.ts";
 import { MenuContext } from "../internal/menu/menu.tsx";
-import { byId, useOverlay } from "../internal/overlay/overlay.ts";
+import { useOverlay } from "../internal/overlay/overlay.ts";
 import type { ChangeEventDetails as Details, OverlayOptions } from "../internal/overlay/overlay.ts";
 
 export type ChangeReason =
@@ -39,7 +40,7 @@ const focusBefore = new WeakMap<Element, Element | null>();
  * for the menu to return it there.
  */
 export function rememberFocus(contentId: string) {
-  const content = byId(contentId);
+  const content = getById(contentId);
 
   if (content !== null) focusBefore.set(content, document.activeElement);
 }
@@ -54,8 +55,8 @@ function returnTo(content: Element) {
 }
 
 function cornerAnchor(contentId: string) {
-  const anchor = byId(`${contentId}-anchor`);
-  const area = byId(`${contentId}-area`);
+  const anchor = getById(`${contentId}-anchor`);
+  const area = getById(`${contentId}-area`);
 
   if (anchor === null || area === null) return anchor;
 

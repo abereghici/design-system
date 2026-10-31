@@ -1,15 +1,17 @@
 "use client";
 
-import { createContext, use, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/slider.css";
 
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
-import type { EventTargetSource } from "../events/use-event.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { composeRefs } from "../internal/compose-refs/compose-refs.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import type { EventTargetSource } from "../internal/dom-event/use-event.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
-import { composeRefs, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./slider.module.css";
 
@@ -110,15 +112,7 @@ function useSliderState(options: Options, scale: Scale, form: EventTargetSource)
 
 export type Slider = ReturnType<typeof useSliderState>;
 
-const SliderContext = createContext<Slider | null>(null);
-
-export function useSlider() {
-  const slider = use(SliderContext);
-
-  if (slider === null) throw new Error("Slider parts must be inside Slider.Root");
-
-  return slider;
-}
+export const [SliderContext, useSlider] = createSafeContext<Slider>("Slider.Root");
 
 /**
  * A value or range picked by feel (volume, price). For an exact number, use NumberField.

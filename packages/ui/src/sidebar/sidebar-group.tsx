@@ -3,7 +3,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/sidebar.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./sidebar.module.css";
 

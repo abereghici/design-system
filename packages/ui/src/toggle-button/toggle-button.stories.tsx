@@ -40,8 +40,8 @@ Default.test(
     );
     await expect(args.onPressedChange).toHaveBeenNthCalledWith(2, false, expect.anything());
     await expect(toggles.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: button, detail: { component: "ToggleButton", reason: "user" } },
-      { target: button, detail: { component: "ToggleButton", reason: "user" } },
+      { target: button, detail: { component: "ToggleButton", userInitiated: true } },
+      { target: button, detail: { component: "ToggleButton", userInitiated: true } },
     ]);
   },
 );

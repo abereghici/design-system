@@ -7,8 +7,8 @@ import "@abereghici/tokens/components/command.css";
 
 import { Content } from "../dialog/dialog-content.tsx";
 import { Modal } from "../dialog/dialog-modal.tsx";
-import { requestChange } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import { DialogContext, Root } from "./command-root.tsx";
 import type { Callback, RootProps } from "./command-root.tsx";

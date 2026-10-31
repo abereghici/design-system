@@ -1,7 +1,9 @@
 "use client";
 
-import { createContext, use, useId, useState } from "react";
+import { useId, useState } from "react";
 import type { ReactNode } from "react";
+
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 
 import { Controller } from "./dialog-controller.ts";
 import type { ChangeEventDetails, Options, Reason } from "./dialog-controller.ts";
@@ -17,25 +19,19 @@ export interface RootProps<R extends Reason = Reason> {
   children?: ReactNode;
 }
 
-interface ModalContext extends Omit<Options, "initialFocus"> {
+interface ModalContextValue extends Omit<Options, "initialFocus"> {
   readonly id: string;
   readonly defaultOpen: boolean;
   readonly styles: Readonly<Record<string, string>>;
   readonly controller: Controller;
 }
 
-const Context = createContext<ModalContext | null>(null);
-
-export function useModal(): ModalContext {
-  const context = use(Context);
-
-  if (context === null) throw new Error("Dialog parts must be inside their Root");
-
-  return context;
-}
+export const [ModalContext, useModal] = createSafeContext<ModalContextValue>(
+  "Dialog.Root, AlertDialog.Root or Sheet.Root",
+);
 
 type ModalProps = Omit<RootProps, "onOpenChange"> &
-  Pick<ModalContext, "styles" | "component"> & {
+  Pick<ModalContextValue, "styles" | "component"> & {
     // Method syntax stays bivariant, so a narrower reason set fits:
     // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html#strict-function-types
     onOpenChange?(open: boolean, details: ChangeEventDetails): void;
@@ -46,7 +42,7 @@ export function Modal(props: ModalProps) {
   const id = useId();
   const [initial] = useState(defaultOpen);
   const [controller] = useState(() => new Controller());
-  const context: ModalContext = {
+  const context: ModalContextValue = {
     id,
     open,
     defaultOpen: initial,
@@ -58,5 +54,5 @@ export function Modal(props: ModalProps) {
     controller,
   };
 
-  return <Context value={context}>{children}</Context>;
+  return <ModalContext value={context}>{children}</ModalContext>;
 }

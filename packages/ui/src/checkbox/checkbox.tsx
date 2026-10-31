@@ -5,11 +5,11 @@ import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/checkbox.css";
 
-import { pointerMarker } from "../events/events.ts";
 import { useFieldControl } from "../field/use-field.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import { toggleClick } from "../internal/toggle/toggle.ts";
-import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
+import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { toggleClick } from "../internal/toggle-click/toggle-click.ts";
+import type { ChangeEventDetails } from "../internal/toggle-click/toggle-click.ts";
 
 import styles from "./checkbox.module.css";
 

@@ -7,7 +7,7 @@ import "@abereghici/tokens/components/tag.css";
 import "@abereghici/tokens/components/tag-group.css";
 
 import { XIcon } from "../icon/icons/x.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import type { TagProps as StaticTagProps } from "../tag/tag.tsx";
 
 import { useTagGroup } from "./tag-group-root.tsx";
@@ -23,7 +23,7 @@ export interface TagProps extends Omit<ComponentProps<"li">, "value"> {
 
 /** A tag with its remove button. */
 export function Tag({ value, variant = "neutral", children, ...props }: TagProps) {
-  const { state, actions, meta } = useTagGroup("Tag");
+  const { state, actions, meta } = useTagGroup("TagGroup.Tag");
   const id = useId();
 
   if (!state.value.includes(value)) return null;

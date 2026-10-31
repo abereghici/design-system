@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/tabs.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./tabs.module.css";
 

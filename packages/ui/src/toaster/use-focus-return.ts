@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import type { FocusEvent, KeyboardEvent, RefObject } from "react";
 
-import { getDocument, useEvent } from "../events/use-event.ts";
+import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
 import { snapshot } from "../toast/toast.ts";
 
 const hotkey = (event: globalThis.KeyboardEvent) =>

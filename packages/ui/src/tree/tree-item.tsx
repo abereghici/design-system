@@ -6,7 +6,7 @@ import type { ComponentProps, KeyboardEvent, MouseEvent, ReactNode } from "react
 import "@abereghici/tokens/components/tree.css";
 
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import { TreeContext, useTree } from "./tree-root.tsx";
@@ -48,7 +48,7 @@ export function Item({
   loading = false,
   ...props
 }: ItemProps) {
-  const { state, actions, meta } = useTree("Item");
+  const { state, actions, meta } = useTree("Tree.Item");
   const base = useId();
   const branch = hasChildItems || children !== undefined;
   const item = { id, branch, expanded: branch && state.expandedKeys.has(id) };

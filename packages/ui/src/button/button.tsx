@@ -5,8 +5,9 @@ import type { ComponentProps, MouseEvent, MouseEventHandler, ReactNode } from "r
 
 import "@abereghici/tokens/components/button.css";
 
-import { dispatchFeedback } from "../events/events.ts";
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./button.module.css";
@@ -71,7 +72,7 @@ export function Button({
     }
 
     onClick?.(event);
-    dispatchFeedback(event.currentTarget, "ab-press", { component: "Button", reason: "user" });
+    dispatchFeedback(event.currentTarget, "ab-press", { component: "Button", userInitiated: true });
   }
 
   const Root = asChild ? Slot : "button";

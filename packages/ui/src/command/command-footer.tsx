@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/command.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Kbd } from "../kbd/kbd.tsx";
 
 import { DialogContext } from "./command-root.tsx";

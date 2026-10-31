@@ -1,12 +1,13 @@
 import { createContext, useId, useLayoutEffect, useState } from "react";
 
-import { useControllableState } from "../events/use-controllable-state.ts";
-import { getDocument, useEvent } from "../events/use-event.ts";
+import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
+import { getById } from "../internal/get-by-id/get-by-id.ts";
 import { textOf } from "../internal/listbox/text-of.ts";
 import { useListbox } from "../internal/listbox/use-listbox.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
-import { byId, isOpen, sourceOf } from "../internal/overlay/overlay.ts";
-import { valuesOf } from "../internal/toggle/toggle.ts";
+import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
+import { valuesOf } from "../internal/selection/selection.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import {
   chosenOf,
@@ -45,7 +46,7 @@ function placePopover(c: OwnState, list: HTMLElement) {
 
   list.toggleAttribute("data-pointer", memoryOf(c).pointer);
 
-  if (c.open) list.showPopover(sourceOf(byId(part(c, "box"))));
+  if (c.open) list.showPopover(sourceOf(getById(part(c, "box"))));
   else list.hidePopover();
 }
 
@@ -63,7 +64,7 @@ function useListeners(c: ComboboxState) {
   useEvent(
     "pointerdown",
     (event) => {
-      const root = byId(part(c, "root"));
+      const root = getById(part(c, "root"));
 
       if (event.target instanceof Node && root?.contains(event.target) !== true) {
         dismiss(c, "outside-press", event);

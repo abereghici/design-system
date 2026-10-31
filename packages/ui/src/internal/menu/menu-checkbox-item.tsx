@@ -1,7 +1,7 @@
 "use client";
 
-import { dispatchFeedback } from "../../events/events.ts";
-import { useControllableState } from "../../events/use-controllable-state.ts";
+import { dispatchFeedback } from "../../feedback-event/feedback-event.ts";
+import { useControllableState } from "../uncontrolled-state/use-controllable-state.ts";
 
 import { Indicator } from "./menu-item-indicator.tsx";
 import { useItem } from "./menu.tsx";
@@ -42,7 +42,7 @@ export function CheckboxItem({
 
         dispatchFeedback(event.currentTarget, "ab-toggle", {
           component: menu.component,
-          reason: "user",
+          userInitiated: true,
         });
         closeMenu(event);
       }}

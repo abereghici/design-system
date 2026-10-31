@@ -3,7 +3,7 @@
 import "@abereghici/tokens/components/field.css";
 
 import * as Field from "../field/field.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./text-field.module.css";
 

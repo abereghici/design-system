@@ -63,7 +63,7 @@ Default.test(
       expect.objectContaining({ reason: "none" }),
     );
     await expect(toggles.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: board, detail: { component: "SegmentedControl", reason: "user" } },
+      { target: board, detail: { component: "SegmentedControl", userInitiated: true } },
     ]);
   },
 );

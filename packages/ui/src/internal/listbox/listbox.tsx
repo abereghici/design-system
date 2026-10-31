@@ -1,7 +1,7 @@
 import { useId } from "react";
 import type { ComponentProps } from "react";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../merge-props/merge-props.ts";
 
 import type { ListboxNavigator } from "./use-listbox.ts";
 

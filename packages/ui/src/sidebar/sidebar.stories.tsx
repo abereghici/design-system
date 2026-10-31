@@ -125,7 +125,7 @@ Collapsible.test(
     await expect(canvas.getByRole("group", { name: "Settings" })).toBeVisible();
     await waitFor(() => expect(canvas.getByRole("link", { name: "Billing" })).toBeVisible());
     await expect(toggles.events.map(({ detail }) => detail)).toEqual([
-      { component: "Sidebar", reason: "user" },
+      { component: "Sidebar", userInitiated: true },
     ]);
   },
 );

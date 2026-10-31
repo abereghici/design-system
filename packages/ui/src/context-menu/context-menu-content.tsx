@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 import "@abereghici/tokens/components/context-menu.css";
 
 import { menuContentProps, useMenu } from "../internal/menu/menu.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import menuStyles from "../internal/menu/menu.module.css";
 import styles from "./context-menu.module.css";
@@ -16,7 +16,7 @@ export type ContentProps = Omit<ComponentProps<"div">, "id" | "role" | "popover"
 
 /** The menu, opened at the pointer and kept inside the window. */
 export function Content(props: ContentProps) {
-  const menu = useMenu();
+  const menu = useMenu("ContextMenu.Content");
 
   return (
     <>

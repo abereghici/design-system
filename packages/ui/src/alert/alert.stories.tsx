@@ -73,7 +73,9 @@ Default.test(
     await expect(onClose).toHaveBeenCalledOnce();
     await expect(
       dismissals.events.map(({ target, bubbles, detail }) => ({ target, bubbles, detail })),
-    ).toEqual([{ target: close, bubbles: true, detail: { component: "Alert", reason: "user" } }]);
+    ).toEqual([
+      { target: close, bubbles: true, detail: { component: "Alert", userInitiated: true } },
+    ]);
   },
 );
 

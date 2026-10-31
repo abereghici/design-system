@@ -7,7 +7,8 @@ import "@abereghici/tokens/components/dialog.css";
 import type { Reason } from "../dialog/dialog-controller.ts";
 import { Modal, useModal } from "../dialog/dialog-modal.tsx";
 import type { RootProps as ModalProps } from "../dialog/dialog-modal.tsx";
-import { composeEventHandlers, dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
 
 import styles from "../dialog/dialog.module.css";
 
@@ -25,7 +26,7 @@ export function Root(props: RootProps) {
 export type ButtonProps = Omit<ComponentProps<"button">, "command" | "commandfor">;
 
 export function useClose(onClick: ButtonProps["onClick"], dismiss: boolean) {
-  const { id, controller } = useModal();
+  const { id, controller } = useModal(dismiss ? "AlertDialog.Cancel" : "AlertDialog.Action");
 
   return {
     type: "button",
@@ -48,4 +49,4 @@ export function useClose(onClick: ButtonProps["onClick"], dismiss: boolean) {
   } as const;
 }
 
-const feedback = { component: "AlertDialog", reason: "user" } as const;
+const feedback = { component: "AlertDialog", userInitiated: true } as const;

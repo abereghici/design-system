@@ -2,10 +2,11 @@
 
 import type { ComponentProps, MouseEvent, PointerEvent as ReactPointerEvent } from "react";
 
+import { getById } from "../internal/get-by-id/get-by-id.ts";
 import { useMenu } from "../internal/menu/menu.tsx";
 import type { Menu } from "../internal/menu/menu.tsx";
-import { byId } from "../internal/overlay/overlay.ts";
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import { place, rememberFocus } from "./context-menu-root.tsx";
 
@@ -96,7 +97,7 @@ const isKeyboard = (event: globalThis.MouseEvent) =>
   event instanceof PointerEvent ? event.pointerType === "" : event.button !== 2;
 
 function anchorAt(contentId: string, x: number, y: number) {
-  const anchor = byId(`${contentId}-anchor`);
+  const anchor = getById(`${contentId}-anchor`);
 
   return anchor === null ? null : place(anchor, x, y, true);
 }
@@ -127,7 +128,7 @@ function openFromContextMenu(event: MouseEvent<HTMLDivElement>, overlay: Menu["o
 
 /** The area that opens the menu. It keeps its own look. */
 export function Trigger({ disabled = false, asChild = false, ...props }: TriggerProps) {
-  const { overlay } = useMenu();
+  const { overlay } = useMenu("ContextMenu.Trigger");
   const Area = asChild ? Slot : "div";
   const end = (event: ReactPointerEvent<HTMLDivElement>) => {
     endPress(event, (x, y) => {

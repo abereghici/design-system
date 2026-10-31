@@ -4,13 +4,13 @@ import type { ReactNode } from "react";
 
 import { Root as DateFieldRoot } from "../date-field/date-field-root.tsx";
 import type { DateFieldChangeEventDetails, DateFieldProps } from "../date-field/date-field.tsx";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { DatePickerContext, useDateFormats } from "../internal/date/date.ts";
 import type { Temporal } from "../internal/date/date.ts";
 import { Trigger } from "../internal/picker/picker-trigger.tsx";
 import { PanelContext, usePicker } from "../internal/picker/picker.ts";
 import type { OpenChangeEventDetails } from "../internal/picker/picker.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 export type { OpenChangeEventDetails } from "../internal/picker/picker.ts";
 

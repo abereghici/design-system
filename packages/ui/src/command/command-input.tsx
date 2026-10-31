@@ -5,9 +5,9 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/command.css";
 
-import { trackComposition } from "../events/events.ts";
 import { SearchIcon } from "../icon/icons/search.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { trackComposition } from "../internal/interaction/composition.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Kbd } from "../kbd/kbd.tsx";
 
 import { DialogContext, useCommand } from "./command-root.tsx";
@@ -31,7 +31,7 @@ export type InputProps = Omit<
 
 /** The search field; arrow keys move the highlight, Enter runs it. */
 export function Input({ onChange, onKeyDown, ...props }: InputProps) {
-  const command = useCommand();
+  const command = useCommand("Command.Input");
   const inDialog = use(DialogContext) !== null;
 
   return (

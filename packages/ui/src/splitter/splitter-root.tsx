@@ -1,14 +1,15 @@
 "use client";
 
-import { createContext, use, useState } from "react";
+import { useState } from "react";
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/splitter.css";
 
-import { dispatchFeedback } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./splitter.module.css";
 
@@ -52,15 +53,8 @@ export interface SplitterContextValue {
   readonly meta: Required<Pick<RootProps, "min" | "max" | "step" | "orientation">>;
 }
 
-const SplitterContext = createContext<SplitterContextValue | null>(null);
-
-export function useSplitter(part: string) {
-  const splitter = use(SplitterContext);
-
-  if (splitter === null) throw new Error(`Splitter.${part} must be inside Splitter.Root`);
-
-  return splitter;
-}
+export const [SplitterContext, useSplitter] =
+  createSafeContext<SplitterContextValue>("Splitter.Root");
 
 /**
  * Two panels side by side, or stacked, with a handle people drag to share the space between
@@ -99,7 +93,10 @@ export function Root({
 
     if (collapsing) setExpanded(current);
 
-    dispatchFeedback(event.currentTarget, "ab-toggle", { component: "Splitter", reason: "user" });
+    dispatchFeedback(event.currentTarget, "ab-toggle", {
+      component: "Splitter",
+      userInitiated: true,
+    });
   }
 
   return (

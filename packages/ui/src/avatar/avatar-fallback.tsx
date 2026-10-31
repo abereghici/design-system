@@ -3,7 +3,7 @@ import type { ComponentProps } from "react";
 import "@abereghici/tokens/components/avatar.css";
 
 import { UserIcon } from "../icon/icons/user.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./avatar.module.css";
 

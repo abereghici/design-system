@@ -115,7 +115,7 @@ Default.test(
     dismissals.stop();
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     await expect(dismissals.events.map(({ detail }) => detail)).toEqual([
-      { component: "Popover", reason: "user" },
+      { component: "Popover", userInitiated: true },
     ]);
     await expect(reasons().at(-1)).toEqual([false, "escape-key"]);
   },
@@ -149,7 +149,7 @@ Default.test("closes from Close and returns focus to the Trigger", async ({ canv
   await waitFor(() => expect(trigger).toHaveFocus());
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
   await expect(dismissals.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-    { target: close, detail: { component: "Popover", reason: "user" } },
+    { target: close, detail: { component: "Popover", userInitiated: true } },
   ]);
   await expect(reasons().at(-1)).toEqual([false, "close-press"]);
 });

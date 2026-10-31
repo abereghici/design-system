@@ -4,7 +4,8 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/popover.css";
 
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import { usePopover } from "./popover-root.tsx";
 import styles from "./popover.module.css";
@@ -16,7 +17,7 @@ export interface TitleProps extends ComponentProps<"h2"> {
 
 /** Names the Content. */
 export function Title({ asChild = false, ...props }: TitleProps) {
-  const popover = usePopover();
+  const popover = usePopover("Popover.Title");
   const Element = asChild ? Slot : "h2";
 
   return (

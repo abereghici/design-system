@@ -5,8 +5,8 @@ import type { ChangeEvent, ComponentProps } from "react";
 import "@abereghici/tokens/components/table.css";
 
 import { Checkbox } from "../checkbox/checkbox.tsx";
-import { dispatchFeedback } from "../events/events.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { Cell } from "./table-cell.tsx";
 import { useSelection } from "./table-selection.tsx";
@@ -21,14 +21,14 @@ export interface SelectRowProps extends ComponentProps<"td"> {
 
 /** The cell that selects its Table row: a checkbox, or a radio in `single` mode. */
 export function SelectRow({ value, selectRowLabel, ...props }: SelectRowProps) {
-  const { state, actions, meta } = useSelection("SelectRow");
+  const { state, actions, meta } = useSelection("Table.SelectRow");
   const selected = state.selectedKeys.includes(value);
 
   function choose(event: ChangeEvent<HTMLInputElement>) {
     if (actions.selectRow(value, event.nativeEvent)) {
       dispatchFeedback(event.currentTarget, "ab-toggle", {
         component: "Table",
-        reason: "user",
+        userInitiated: true,
       });
     }
   }

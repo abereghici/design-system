@@ -1,13 +1,13 @@
 "use client";
 
-import { createContext, use } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
-import type { ChangeEventDetails as Details } from "../../events/events.ts";
+import type { ChangeEventDetails as Details } from "../change-request/change-request.ts";
+import { createSafeContext } from "../create-safe-context/create-safe-context.ts";
 import { typeahead } from "../listbox/typeahead.ts";
+import { mergeProps } from "../merge-props/merge-props.ts";
 import { returnFocus } from "../overlay/overlay.ts";
 import type { Overlay } from "../overlay/overlay.ts";
-import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./menu.module.css";
 
@@ -19,15 +19,9 @@ export interface Menu {
   readonly component: "DropdownMenu" | "ContextMenu";
 }
 
-export const MenuContext = createContext<Menu | null>(null);
-
-export function useMenu(): Menu {
-  const menu = use(MenuContext);
-
-  if (menu === null) throw new Error("Menu parts must be inside their menu's Root");
-
-  return menu;
-}
+export const [MenuContext, useMenu] = createSafeContext<Menu>(
+  "DropdownMenu.Root or ContextMenu.Root",
+);
 
 export const focusLast = new WeakSet<Element>();
 
@@ -125,7 +119,7 @@ export function useItem(
   { closeOnClick, disabled = false, ...props }: ItemBaseProps,
   role: "menuitem" | "menuitemcheckbox" | "menuitemradio",
 ) {
-  const menu = useMenu();
+  const menu = useMenu("Menu items");
 
   return {
     menu,

@@ -45,8 +45,8 @@ Default.test(
     );
     await expect(args.onOpenChange).toHaveBeenNthCalledWith(2, false, expect.anything());
     await expect(toggles.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: trigger, detail: { component: "Disclosure", reason: "user" } },
-      { target: trigger, detail: { component: "Disclosure", reason: "user" } },
+      { target: trigger, detail: { component: "Disclosure", userInitiated: true } },
+      { target: trigger, detail: { component: "Disclosure", userInitiated: true } },
     ]);
   },
 );

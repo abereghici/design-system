@@ -1,8 +1,8 @@
 "use client";
 
-import { createContext, use } from "react";
 import type { ReactNode } from "react";
 
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import { useOverlay } from "../internal/overlay/overlay.ts";
 import type {
   ChangeEventDetails as Details,
@@ -20,15 +20,7 @@ export type ChangeReason =
 
 export type ChangeEventDetails = Details<ChangeReason>;
 
-const PopoverContext = createContext<Overlay | null>(null);
-
-export function usePopover(): Overlay {
-  const popover = use(PopoverContext);
-
-  if (popover === null) throw new Error("Popover parts must be inside Popover.Root");
-
-  return popover;
-}
+export const [PopoverContext, usePopover] = createSafeContext<Overlay>("Popover.Root");
 
 export interface RootProps extends OverlayOptions<ChangeReason> {
   /** The Trigger and Content. */

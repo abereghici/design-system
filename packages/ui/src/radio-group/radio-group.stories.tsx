@@ -56,7 +56,7 @@ Default.test(
       expect.objectContaining({ reason: "none" }),
     );
     await expect(toggles.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: yearly, detail: { component: "RadioGroup", reason: "user" } },
+      { target: yearly, detail: { component: "RadioGroup", userInitiated: true } },
     ]);
   },
 );

@@ -8,7 +8,8 @@ import type {
   SyntheticEvent,
 } from "react";
 
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import { outside, useTooltip } from "./tooltip-root.tsx";
 
@@ -59,7 +60,7 @@ export function Trigger({
   "aria-describedby": describedBy,
   ...props
 }: TriggerProps) {
-  const tooltip = useTooltip();
+  const tooltip = useTooltip("Tooltip.Trigger");
   const Element = asChild ? Slot : "button";
   const type = asChild ? undefined : "button";
 

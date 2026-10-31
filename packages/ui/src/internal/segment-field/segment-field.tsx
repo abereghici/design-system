@@ -6,7 +6,8 @@ import "@abereghici/tokens/components/field.css";
 import { Wrapper } from "../../field/field-wrapper.tsx";
 import type { SizedWrapperProps } from "../../field/field-wrapper.tsx";
 import { useField } from "../../field/use-field.ts";
-import { composeRefs, mergeProps } from "../slot/slot.tsx";
+import { composeRefs } from "../compose-refs/compose-refs.ts";
+import { mergeProps } from "../merge-props/merge-props.ts";
 
 import { display } from "./segments.ts";
 import type { Comparable, SegmentModel, Segments } from "./segments.ts";

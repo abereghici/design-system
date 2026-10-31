@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 import "@abereghici/tokens/components/dropdown-menu.css";
 
 import { menuContentProps, useMenu } from "../internal/menu/menu.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import menuStyles from "../internal/menu/menu.module.css";
 import styles from "./dropdown-menu.module.css";
@@ -19,7 +19,7 @@ export interface ContentProps extends Omit<ComponentProps<"div">, "id" | "role" 
 
 /** The menu, named by its Trigger and at least as wide as it. */
 export function Content({ side = "bottom", align = "start", ...props }: ContentProps) {
-  const menu = useMenu();
+  const menu = useMenu("DropdownMenu.Content");
 
   return (
     <div

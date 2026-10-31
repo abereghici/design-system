@@ -11,7 +11,8 @@ import type {
   ToggleEvent,
 } from "react";
 
-import { composeRefs, mergeProps } from "../internal/slot/slot.tsx";
+import { composeRefs } from "../internal/compose-refs/compose-refs.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import type { Options } from "./dialog-controller.ts";
 import { useModal } from "./dialog-modal.tsx";
@@ -26,7 +27,7 @@ export interface ContentProps extends Omit<ComponentProps<"dialog">, "open" | "i
 
 /** The modal itself, named by its Title and described by its Description. */
 export function Content({ initialFocus, ref, ...props }: ContentProps) {
-  const { controller, open, onOpenChange, component, ...context } = useModal();
+  const { controller, open, onOpenChange, component, ...context } = useModal("Content");
   const dialog = useRef<HTMLDialogElement>(null);
   const options: Options = { open, onOpenChange, component, initialFocus };
   const wanted = open ?? context.defaultOpen;

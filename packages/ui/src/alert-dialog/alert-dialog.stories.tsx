@@ -72,7 +72,7 @@ Default.test(
       expect.objectContaining({ reason: "escape-key" }),
     );
     await expect(dismissals.events.map(({ detail }) => detail)).toEqual([
-      { component: "AlertDialog", reason: "user" },
+      { component: "AlertDialog", userInitiated: true },
     ]);
   },
 );
@@ -96,7 +96,7 @@ Default.test(
       expect.objectContaining({ reason: "close-press" }),
     );
     await expect(confirmations.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: action, detail: { component: "AlertDialog", reason: "user" } },
+      { target: action, detail: { component: "AlertDialog", userInitiated: true } },
     ]);
     await expect(dismissals.events).toEqual([]);
   },

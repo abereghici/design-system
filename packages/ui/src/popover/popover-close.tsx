@@ -5,9 +5,11 @@ import type { ComponentProps, MouseEvent, ReactElement } from "react";
 import "@abereghici/tokens/components/icon-button.css";
 import "@abereghici/tokens/components/popover.css";
 
-import { composeEventHandlers, dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import { usePopover } from "./popover-root.tsx";
 import iconButtonStyles from "../icon-button/icon-button.module.css";
@@ -32,7 +34,7 @@ export type CloseProps = Omit<ComponentProps<"button">, "aria-label" | "children
 
 /** Closes the Popover. Without children it is the `x` button in the corner. */
 export function Close({ asChild = false, ...props }: CloseProps) {
-  const popover = usePopover();
+  const popover = usePopover("Popover.Close");
   const shared = {
     ...props,
     commandfor: popover.contentId,
@@ -43,7 +45,7 @@ export function Close({ asChild = false, ...props }: CloseProps) {
       } else if (!asChild) {
         dispatchFeedback(event.currentTarget, "ab-dismiss", {
           component: "Popover",
-          reason: "user",
+          userInitiated: true,
         });
       }
     }),

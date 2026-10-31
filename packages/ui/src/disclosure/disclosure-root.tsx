@@ -1,14 +1,15 @@
 "use client";
 
-import { createContext, use } from "react";
 import type { ComponentProps, SyntheticEvent } from "react";
 
 import "@abereghici/tokens/components/disclosure.css";
 
-import { dispatchFeedback } from "../events/events.ts";
-import type { ChangeEventDetails as EventDetails, ToggleFeedbackEvent } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import type { ToggleFeedbackEvent } from "../feedback-event/feedback-event.ts";
+import type { ChangeEventDetails as EventDetails } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./disclosure.module.css";
 
@@ -28,15 +29,9 @@ interface DisclosureState {
   readonly meta: { readonly component: Component };
 }
 
-export const DisclosureContext = createContext<DisclosureState | null>(null);
-
-export function useDisclosure(part: string) {
-  const disclosure = use(DisclosureContext);
-
-  if (disclosure === null) throw new Error(`Disclosure.${part} must be inside Disclosure.Root`);
-
-  return disclosure;
-}
+export const [DisclosureContext, useDisclosure] = createSafeContext<DisclosureState>(
+  "Disclosure.Root or Accordion.Item",
+);
 
 export type RootProps = Omit<ComponentProps<"details">, "open"> & {
   /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
@@ -64,7 +59,7 @@ export function DisclosureRoot({
 
     if (request(next, pressed ? "trigger-press" : "none", event.nativeEvent)) {
       if (pressed)
-        dispatchFeedback(event.currentTarget, "ab-toggle", { component, reason: "user" });
+        dispatchFeedback(event.currentTarget, "ab-toggle", { component, userInitiated: true });
     } else if (!pressed) {
       // The browser opened it already, for find-in-page or a fragment link; only a press can wait.
       set(next);

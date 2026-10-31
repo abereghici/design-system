@@ -105,7 +105,7 @@ Default.test(
     await expect(toggles.events.map(({ target, detail }) => ({ target, detail }))).toEqual(
       Array.from({ length: 2 }, () => ({
         target: handle,
-        detail: { component: "Splitter", reason: "user" },
+        detail: { component: "Splitter", userInitiated: true },
       })),
     );
   },

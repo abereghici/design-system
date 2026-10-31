@@ -3,7 +3,8 @@
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import { focusLast, itemsOf, useMenu } from "../internal/menu/menu.tsx";
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import styles from "./dropdown-menu.module.css";
 
@@ -14,7 +15,7 @@ export interface TriggerProps extends ComponentProps<"button"> {
 
 /** Opens the menu on press, Enter, Space or Down Arrow, and at its last item on Up Arrow. */
 export function Trigger({ asChild = false, ...props }: TriggerProps) {
-  const { overlay } = useMenu();
+  const { overlay } = useMenu("DropdownMenu.Trigger");
   const Element = asChild ? Slot : "button";
   const trigger = mergeProps({ className: styles["trigger"] }, overlay.triggerProps(props));
 

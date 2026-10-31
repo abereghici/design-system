@@ -4,15 +4,15 @@ import type { CSSProperties, ReactNode } from "react";
 
 import "@abereghici/tokens/components/date-range-picker.css";
 
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
 import { Wrapper } from "../field/field-wrapper.tsx";
 import type { SizedWrapperProps } from "../field/field-wrapper.tsx";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { DateRangePickerContext, sameRange } from "../internal/date/date.ts";
 import type { DatePart, DateRange, Temporal } from "../internal/date/date.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { PanelContext, usePicker } from "../internal/picker/picker.ts";
 import type { OpenChangeEventDetails } from "../internal/picker/picker.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import { Box } from "./date-range-picker-box.tsx";
 import type { Halves, Range } from "./date-range-picker-box.tsx";

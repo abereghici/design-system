@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/disclosure.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./disclosure.module.css";
 

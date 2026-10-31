@@ -1,17 +1,18 @@
 "use client";
 
-import { createContext, use, useId } from "react";
+import { createContext, useId } from "react";
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/command.css";
 
-import { isComposing } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import { isComposing } from "../internal/interaction/composition.ts";
 import { useListbox } from "../internal/listbox/use-listbox.ts";
 import type { ListboxNavigator } from "../internal/listbox/use-listbox.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./command.module.css";
 
@@ -22,7 +23,7 @@ export type Callback<Value, Reason extends string> = (
   details: ChangeEventDetails<Reason>,
 ) => void;
 
-interface CommandContext {
+interface CommandContextValue {
   readonly query: string;
   readonly change: (query: string, event: Event) => void;
   readonly keyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
@@ -30,21 +31,14 @@ interface CommandContext {
   readonly listId: string;
 }
 
-const Context = createContext<CommandContext | null>(null);
+export const [CommandContext, useCommand] = createSafeContext<CommandContextValue>(
+  "Command.Root or Command.Dialog",
+);
 
 /** The item-press close of the enclosing Command.Dialog, `null` inline. */
 export const DialogContext = createContext<((event: Event, option: HTMLElement) => void) | null>(
   null,
 );
-
-export function useCommand(): CommandContext {
-  const context = use(Context);
-
-  if (context === null)
-    throw new Error("Command parts must be inside Command.Root or Command.Dialog");
-
-  return context;
-}
 
 /** Enter runs the highlighted command; the other keys go to the Listbox navigator. */
 function keyDown(event: KeyboardEvent<HTMLInputElement>, listbox: ListboxNavigator) {
@@ -93,7 +87,7 @@ export function Root({
   const [query, request] = useControllableState(inputValue, defaultInputValue, onInputValueChange);
   const locale = useLocale();
   const listbox = useListbox(query, filtering === null ? null : locale);
-  const context: CommandContext = {
+  const context: CommandContextValue = {
     query,
     change: (next, event) => {
       request(next, "input-change", event);
@@ -107,7 +101,7 @@ export function Root({
 
   return (
     <div {...mergeProps({ className: styles["root"] }, props)}>
-      <Context value={context}>{children}</Context>
+      <CommandContext value={context}>{children}</CommandContext>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import type { ComponentProps, FocusEvent, KeyboardEvent } from "react";
 import "@abereghici/tokens/components/toolbar.css";
 
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./toolbar.module.css";
 

@@ -56,7 +56,9 @@ Default.test("dispatches a bubbling ab-press after a press", async ({ canvas, us
   presses.stop();
   await expect(
     presses.events.map(({ target, bubbles, detail }) => ({ target, bubbles, detail })),
-  ).toEqual([{ target: button, bubbles: true, detail: { component: "Button", reason: "user" } }]);
+  ).toEqual([
+    { target: button, bubbles: true, detail: { component: "Button", userInitiated: true } },
+  ]);
 });
 
 Default.test("reads at AA contrast as primary", { args: { variant: "primary" } }, isNamed);

@@ -5,12 +5,12 @@ import type { ComponentProps, DragEvent } from "react";
 
 import "@abereghici/tokens/components/drop-zone.css";
 
-import { requestChange } from "../events/events.ts";
-import { useEvent } from "../events/use-event.ts";
 import { useField } from "../field/use-field.ts";
 import { Input as FileInput, PickerContext } from "../file-trigger/file-trigger-input.tsx";
 import { useFiles } from "../file-trigger/use-files.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import { useEvent } from "../internal/dom-event/use-event.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./drop-zone.module.css";
 

@@ -80,7 +80,7 @@ Default.test(
       expect.objectContaining({ reason: "arrow-key" }),
     );
     await expect(toggles.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: components, detail: { component: "Tree", reason: "user" } },
+      { target: components, detail: { component: "Tree", userInitiated: true } },
     ]);
     await user.keyboard("{ArrowRight}");
     await expect(canvas.getByRole("treeitem", { name: "button.tsx" })).toHaveFocus();
@@ -112,8 +112,8 @@ Default.test(
       expect.objectContaining({ reason: "item-press" }),
     );
     await expect(toggles.events.map(({ detail }) => detail)).toEqual([
-      { component: "Tree", reason: "user" },
-      { component: "Tree", reason: "user" },
+      { component: "Tree", userInitiated: true },
+      { component: "Tree", userInitiated: true },
     ]);
   },
 );

@@ -1,6 +1,6 @@
 import type { RefObject } from "react";
 
-import { getDocument, useEvent } from "../events/use-event.ts";
+import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
 import { platform } from "../kbd/kbd-key.tsx";
 
 const modifiers = new Map([
