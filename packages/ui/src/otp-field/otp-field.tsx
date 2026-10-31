@@ -3,8 +3,8 @@ import type { ComponentProps } from "react";
 import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import type { ChangeEventDetails } from "../field/use-field.ts";
-import { Input as TextInput } from "../text-field/text-field-input.tsx";
 
+import { Input } from "./otp-field-input.tsx";
 import fieldStyles from "../field/field.module.css";
 import styles from "./otp-field.module.css";
 
@@ -19,7 +19,7 @@ export type OTPFieldChangeEventDetails = ChangeEventDetails;
 export type OTPFieldProps = Naming &
   SizedWrapperProps &
   Omit<
-    ComponentProps<typeof TextInput>,
+    ComponentProps<typeof Input>,
     | "type"
     | "inputMode"
     | "autoComplete"
@@ -59,7 +59,7 @@ export function OTPField({ length = 6, ...props }: OTPFieldProps) {
       >
         {/* Sizes the boxes from the digits' own advance, so the reader's letter spacing moves both. */}
         <span className={styles["ruler"]}>{"0".repeat(length)}</span>
-        <TextInput
+        <Input
           {...control}
           className={styles["input"]}
           dir="ltr"

@@ -208,7 +208,7 @@
       "field/field-error",
       "field/field-label",
       "field/field-root",
-      "text-field/text-field-input"
+      "otp-field/otp-field-input"
     ],
     "html": "autoComplete=\"one-time-code\""
   },

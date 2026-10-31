@@ -5,6 +5,11 @@ exports[`Default   > base story 1`] = `
 - textbox "Verification code"
 `;
 
+exports[`Entered 1`] = `
+- text: Verification code
+- textbox "Verification code": "482719"
+`;
+
 exports[`Partly Entered   > base story 1`] = `
 - text: Verification code
 - textbox "Verification code": "48"
