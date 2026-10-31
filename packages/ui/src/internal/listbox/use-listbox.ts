@@ -11,7 +11,7 @@ import { enabled, optionAt } from "./options.ts";
  * first shown, enabled option, the last, the one it is on, or the first one `to` picks out. Each
  * falls back to the first.
  */
-export type Landing = "first" | "last" | "kept" | ((option: HTMLElement) => boolean);
+type Landing = "first" | "last" | "kept" | ((option: HTMLElement) => boolean);
 
 export interface ListboxNavigator {
   /** Whether no option is shown. */

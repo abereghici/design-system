@@ -47,7 +47,7 @@ interface Options {
 type Component = "Popover" | "DropdownMenu" | "ContextMenu";
 
 /** What a Content part adds to the layer's own `beforetoggle` and `toggle` handling, which runs first. */
-export type ContentHooks = Partial<
+type ContentHooks = Partial<
   Record<"onBeforeToggle" | "onToggle", (event: ToggleEvent<HTMLElement>) => void>
 >;
 

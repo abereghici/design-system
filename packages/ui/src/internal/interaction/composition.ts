@@ -1,4 +1,4 @@
-export interface Targeted {
+interface Targeted {
   readonly currentTarget: EventTarget;
 }
 
