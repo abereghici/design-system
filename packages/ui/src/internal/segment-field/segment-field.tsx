@@ -150,6 +150,7 @@ function NativeInput<Part extends string, Value extends Comparable<Value>>({
       min={serialize(options.min)}
       max={serialize(options.max)}
       defaultValue={serialize(state.committed) ?? ""}
+      aria-labelledby={field?.labelId}
       aria-describedby={field?.describedBy}
       aria-invalid={invalid}
       className={styles["native"]}
@@ -175,7 +176,7 @@ export interface ControlProps<Part extends string, Value> extends Omit<
   readonly end?: ReactNode;
 }
 
-/** The field box: a value's segments in the Locale's order, on the native input the form submits. */
+/** A value's segments in the Locale's order, on the native input the form submits. */
 export function Control<Part extends string, Value extends Comparable<Value>>({
   model,
   options,
@@ -191,7 +192,7 @@ export function Control<Part extends string, Value extends Comparable<Value>>({
       aria-labelledby={field?.labelId}
       aria-describedby={field?.describedBy}
       aria-disabled={blocked || undefined}
-      {...editing.groupProps(`${fieldStyles["control"]} ${styles["group"]}`, props)}
+      {...editing.groupProps(styles["group"], props)}
     >
       {model.layout.map((item, index) =>
         "part" in item ? (
@@ -275,7 +276,12 @@ export function SegmentField<Part extends string, Value extends Comparable<Value
       disabled={options.disabled}
       after={children}
     >
-      <Control {...rest} className={classNames.group} options={options} onValidity={setValidity} />
+      <Control
+        {...rest}
+        className={`${fieldStyles["control"]} ${classNames.group ?? ""}`}
+        options={options}
+        onValidity={setValidity}
+      />
     </Wrapper>
   );
 }

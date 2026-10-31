@@ -2,7 +2,8 @@ import type { FocusEvent, KeyboardEvent, MouseEvent, RefObject } from "react";
 
 import "@abereghici/tokens/components/calendar.css";
 
-import type { Temporal, useDateFormats } from "../internal/date/date.ts";
+import { Temporal } from "../internal/date/date.ts";
+import type { DateRange, useDateFormats } from "../internal/date/date.ts";
 
 import styles from "./calendar.module.css";
 
@@ -35,7 +36,7 @@ interface GridProps {
   readonly headingId: string;
   readonly formats: Formats;
   readonly focused: Temporal.PlainDate;
-  readonly selected: Temporal.PlainDate | null;
+  readonly selection: DateRange | null;
   readonly today: Temporal.PlainDate;
   readonly unavailable: (date: Temporal.PlainDate) => boolean;
   readonly onKeyDown: (event: KeyboardEvent<HTMLTableElement>) => void;
@@ -44,16 +45,22 @@ interface GridProps {
 }
 
 function Day({ date, grid }: { date: Temporal.PlainDate; grid: GridProps }) {
-  const { formats, focused, selected, today, unavailable } = grid;
+  const { formats, focused, selection, today, unavailable } = grid;
+  const selected =
+    selection !== null &&
+    Temporal.PlainDate.compare(date, selection.start) >= 0 &&
+    Temporal.PlainDate.compare(date, selection.end) <= 0;
 
   return (
     <td
       tabIndex={date.equals(focused) ? 0 : -1}
       aria-label={formats.full(date)}
-      aria-selected={selected?.equals(date) === true || undefined}
+      aria-selected={selected || undefined}
       aria-current={date.equals(today) ? "date" : undefined}
       aria-disabled={unavailable(date) || undefined}
       data-date={date.toString()}
+      data-selection-start={selection?.start.equals(date) === true ? "" : undefined}
+      data-selection-end={selection?.end.equals(date) === true ? "" : undefined}
       className={styles["day"]}
     >
       {date.day}

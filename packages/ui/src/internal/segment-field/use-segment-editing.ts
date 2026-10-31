@@ -40,7 +40,12 @@ function useFocus<Part extends string, Value>(
       else elements.current.set(part, node);
     },
     move: (part: Part, delta: number) => {
-      focus(order[order.indexOf(part) + delta]);
+      const segment = elements.current.get(part);
+      // In the field box's DOM order, so a DateRangePicker's end date follows its start date.
+      const box = segment?.parentElement?.parentElement;
+      const all = [...(box?.querySelectorAll<HTMLElement>('[role="spinbutton"]') ?? [])];
+
+      if (segment !== undefined) all[all.indexOf(segment) + delta]?.focus();
     },
     firstEmpty: (fallback: number) => {
       focus(order.find((part) => segments[part] === undefined) ?? order.at(fallback));
@@ -174,7 +179,7 @@ function useGroupProps<Part extends string>(
   edited: RefObject<boolean>,
   report: (commit?: boolean) => void,
 ) {
-  return <Props extends object>(className: string, consumer: Props) =>
+  return <Props extends object>(className: string | undefined, consumer: Props) =>
     mergeProps(
       {
         className,

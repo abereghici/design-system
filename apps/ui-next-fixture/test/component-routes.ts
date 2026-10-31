@@ -346,6 +346,31 @@ export const componentRoutes = [
     html: 'aria-haspopup="dialog"',
   },
   {
+    name: "range-calendar",
+    tokens: ["calendar", "range-calendar", "icon", "icon-button", "spinner"],
+    client: [],
+    html: "data-selection-start",
+  },
+  {
+    name: "date-range-picker",
+    tokens: [
+      "field",
+      "date-range-picker",
+      "popover",
+      "calendar",
+      "range-calendar",
+      "icon",
+      "icon-button",
+      "spinner",
+    ],
+    client: [
+      "date-picker/date-picker-content",
+      "date-range-picker/date-range-picker-root",
+      "range-calendar/range-calendar",
+    ],
+    html: 'aria-haspopup="dialog"',
+  },
+  {
     name: "tree",
     tokens: ["icon", "spinner", "tree"],
     client: ["tree/tree-item", "tree/tree-root"],

@@ -7,11 +7,12 @@ import { Root as DateFieldRoot } from "../date-field/date-field-root.tsx";
 import type { DateFieldChangeEventDetails, DateFieldProps } from "../date-field/date-field.tsx";
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import type { DatePickerContextValue, Temporal } from "../internal/date/date.ts";
+import { DatePickerContext, useDateFormats } from "../internal/date/date.ts";
+import type { PickerContextValue, Temporal } from "../internal/date/date.ts";
 import { useOverlay } from "../internal/overlay/overlay.ts";
 import type { ChangeEventDetails as OverlayDetails, Overlay } from "../internal/overlay/overlay.ts";
 
-import { PanelContext } from "./date-picker-panel.tsx";
+import { focusStayed, PanelContext } from "./date-picker-panel.tsx";
 import { Trigger } from "./date-picker-trigger.tsx";
 
 /** `cancel()`: keeps the previous value; after a day press the panel stays open. */
@@ -80,7 +81,7 @@ function pickerOf(
   overlay: Overlay,
   date: ReturnType<typeof useValue>,
   { min, max, isDateUnavailable }: RootProps,
-): DatePickerContextValue {
+): PickerContextValue<Temporal.PlainDate> {
   return {
     open: overlay.open,
     value: date.current,
@@ -92,22 +93,15 @@ function pickerOf(
         overlay.toggle(false, "day-press", event);
       }
     },
-    canFocus: () => {
-      const focus = document.activeElement;
-
-      return (
-        focus === document.body ||
-        focus?.getAttribute("commandfor") === overlay.contentId ||
-        document.getElementById(overlay.contentId)?.contains(focus) === true
-      );
-    },
+    canFocus: () => focusStayed(overlay),
   };
 }
 
 /**
  * A date field with a button that opens a month: type the date, or pick it. Put a `<Calendar />` in
  * `DatePicker.Content`; it follows the DatePicker's value and limits. For dates people type from
- * memory (birth dates), use DateField; for an always visible month, Calendar.
+ * memory (birth dates), use DateField; for an always visible month, Calendar; for a start and an
+ * end date, DateRangePicker.
  *
  * Tier 2: shows its final content before hydration and works after it; with JavaScript off, the
  * browser's own date input takes its place.
@@ -119,6 +113,7 @@ export function Root(props: RootProps) {
   const trigger = useRef<HTMLButtonElement>(null);
   const overlay = useOverlay("Popover", { open, defaultOpen, onOpenChange });
   const panel = { overlay, name, trigger };
+  const formats = useDateFormats();
 
   return (
     <DateFieldRoot
@@ -131,10 +126,16 @@ export function Root(props: RootProps) {
       }}
       isDateUnavailable={isDateUnavailable}
       onFormReset={date.reset}
-      end={<Trigger panel={panel} value={date.current} disabled={disabled === true} />}
+      end={
+        <Trigger
+          panel={panel}
+          description={date.current === null ? undefined : formats.full(date.current)}
+          disabled={disabled === true}
+        />
+      }
     >
-      <PanelContext value={{ ...panel, picker: pickerOf(overlay, date, props) }}>
-        {children}
+      <PanelContext value={panel}>
+        <DatePickerContext value={pickerOf(overlay, date, props)}>{children}</DatePickerContext>
       </PanelContext>
     </DateFieldRoot>
   );

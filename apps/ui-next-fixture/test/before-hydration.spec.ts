@@ -166,6 +166,14 @@ const fields = [
     (page: Page) => page.getByRole("textbox", { name: "Start time" }).fill("14:30"),
     "/time-field?start=14%3A30",
   ],
+  [
+    "date-range-picker",
+    async (page: Page) => {
+      await page.getByRole("textbox", { name: "Start date" }).fill("2026-10-12");
+      await page.getByRole("textbox", { name: "End date" }).fill("2026-10-16");
+    },
+    "/date-range-picker?checkIn=2026-10-12&checkOut=2026-10-16",
+  ],
 ] as const;
 
 test.describe("with JavaScript off, a Field control submits its form", () => {
@@ -205,10 +213,12 @@ const tier2 = [
   "copy-button",
   "date-field",
   "date-picker",
+  "date-range-picker",
   "drop-zone",
   "dropdown-menu",
   "number-field",
   "password-field",
+  "range-calendar",
   "splitter",
   "tabs",
   "tag-group",
@@ -262,9 +272,11 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["calendar", "button", "Next month"],
     ["date-field", "spinbutton", "lună"],
     ["date-picker", "button", "Choose date"],
+    ["date-range-picker", "button", "Choose dates"],
     ["number-field", "button", "Decrease"],
     ["number-field", "button", "Increase"],
     ["password-field", "button", "Show password"],
+    ["range-calendar", "button", "Previous month"],
     ["tabs", "tab", "Settings"],
     ["tag-group", "button", "Remove Draft"],
     ["time-field", "spinbutton", "oră"],

@@ -5,7 +5,6 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/popover.css";
 
-import { DatePickerContext } from "../internal/date/date.ts";
 import { rememberFocus } from "../internal/overlay/overlay.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
@@ -22,9 +21,10 @@ export type ContentProps = Omit<
 export function Content({ children, ...props }: ContentProps) {
   const panel = use(PanelContext);
 
-  if (panel === null) throw new Error("DatePicker.Content must be inside DatePicker.Root");
+  if (panel === null)
+    throw new Error("Content must be inside a DatePicker or DateRangePicker Root");
 
-  const { overlay, picker, name, trigger } = panel;
+  const { overlay, name, trigger } = panel;
   const [mounted, setMounted] = useState(false);
 
   if (overlay.open && !mounted) setMounted(true);
@@ -46,7 +46,7 @@ export function Content({ children, ...props }: ContentProps) {
       )}
       aria-label={name}
     >
-      {mounted && <DatePickerContext value={picker}>{children}</DatePickerContext>}
+      {mounted && children}
     </dialog>
   );
 }

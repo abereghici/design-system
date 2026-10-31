@@ -122,6 +122,8 @@ const COMPONENTS = [
   "table",
   "date-field",
   "time-field",
+  "date-range-picker",
+  "range-calendar",
   "calendar",
   "description-list",
   "stepper",

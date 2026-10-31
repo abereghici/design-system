@@ -3,14 +3,23 @@
 import { createContext } from "react";
 import type { RefObject } from "react";
 
-import type { DatePickerContextValue } from "../internal/date/date.ts";
 import type { Overlay } from "../internal/overlay/overlay.ts";
 
 export interface Panel {
   readonly overlay: Overlay;
-  readonly picker: DatePickerContextValue;
   readonly name: string;
   readonly trigger: RefObject<HTMLButtonElement | null>;
 }
 
 export const PanelContext = createContext<Panel | null>(null);
+
+/** Whether focus is still where the open left it (the trigger, the panel or nowhere). */
+export const focusStayed = (overlay: Overlay) => {
+  const focus = document.activeElement;
+
+  return (
+    focus === document.body ||
+    focus?.getAttribute("commandfor") === overlay.contentId ||
+    document.getElementById(overlay.contentId)?.contains(focus) === true
+  );
+};

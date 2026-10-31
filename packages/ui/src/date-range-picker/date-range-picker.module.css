@@ -1,0 +1,48 @@
+@layer ab.components {
+  /* DateRangePicker.Content lines its panel up with the field box through this name, one per field. */
+  .root {
+    anchor-scope: --ab-date-field-box;
+  }
+
+  .box {
+    --segment-border-radius: var(--ab-date-range-picker-segment-border-radius);
+    --segment-background-color-focused: var(
+      --ab-date-range-picker-segment-background-color-focused
+    );
+    --segment-text-color-focused: var(--ab-date-range-picker-segment-text-color-focused);
+
+    display: flex;
+    align-items: center;
+    cursor: text;
+    anchor-name: --ab-date-field-box;
+  }
+
+  /* Field's own rules look only at the box's children; the segments sit a level deeper. */
+  .box:has(> .half > :focus-visible) {
+    border-color: var(--ab-field-border-color-focused);
+    outline: var(--ab-focus-ring-width) solid var(--ab-field-border-color-focused);
+    outline-offset: 0;
+  }
+
+  .box:has(> .half > [aria-invalid="true"]) {
+    border-color: var(--ab-field-border-color-invalid);
+    outline-color: var(--ab-field-border-color-invalid);
+  }
+
+  .half {
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .separator {
+    white-space: pre;
+  }
+
+  @media (scripting: none) {
+    .half {
+      flex: 1;
+    }
+  }
+}
