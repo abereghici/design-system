@@ -21,7 +21,7 @@ export interface SelectRowProps extends ComponentProps<"td"> {
 
 /** The cell that selects its Table row: a checkbox, or a radio in `single` mode. */
 export function SelectRow({ value, selectRowLabel, ...props }: SelectRowProps) {
-  const { state, actions, meta } = useSelection("SelectRow");
+  const { state, actions, meta } = useSelection("Table.SelectRow");
   const selected = state.selectedKeys.includes(value);
 
   function choose(event: ChangeEvent<HTMLInputElement>) {

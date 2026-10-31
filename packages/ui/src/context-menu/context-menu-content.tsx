@@ -16,7 +16,7 @@ export type ContentProps = Omit<ComponentProps<"div">, "id" | "role" | "popover"
 
 /** The menu, opened at the pointer and kept inside the window. */
 export function Content(props: ContentProps) {
-  const menu = useMenu();
+  const menu = useMenu("ContextMenu.Content");
 
   return (
     <>

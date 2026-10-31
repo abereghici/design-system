@@ -19,7 +19,7 @@ export interface TriggerProps extends ComponentProps<"summary"> {
 
 /** The heading button that opens and closes the Content. */
 export function Trigger({ children, onClick, ...props }: TriggerProps) {
-  const disclosure = useDisclosure("Trigger");
+  const disclosure = useDisclosure("Disclosure.Trigger");
 
   return (
     <summary

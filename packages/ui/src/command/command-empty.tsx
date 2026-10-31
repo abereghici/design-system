@@ -17,7 +17,7 @@ export interface EmptyProps extends Omit<ComponentProps<"output">, "children"> {
 
 /** What to show while nothing matches; screen readers announce it. */
 export function Empty({ children, ...props }: EmptyProps) {
-  const { listbox } = useCommand();
+  const { listbox } = useCommand("Command.Empty");
 
   return (
     <output {...mergeProps({ className: styles["empty"] }, props)}>

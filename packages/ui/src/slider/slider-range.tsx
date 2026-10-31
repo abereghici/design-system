@@ -13,7 +13,7 @@ export type RangeProps = ComponentProps<"div">;
 
 /** The filled part of the Track, up to the value or between the Thumbs. */
 export function Range({ style, ...props }: RangeProps) {
-  const { values, percent } = useSlider();
+  const { values, percent } = useSlider("Slider.Range");
   const first = values.length > 1 ? percent(values[0] ?? 0) : 0;
   const last = percent(values.at(-1) ?? 0);
 

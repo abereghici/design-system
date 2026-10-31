@@ -31,7 +31,7 @@ export type InputProps = Omit<
 
 /** The search field; arrow keys move the highlight, Enter runs it. */
 export function Input({ onChange, onKeyDown, ...props }: InputProps) {
-  const command = useCommand();
+  const command = useCommand("Command.Input");
   const inDialog = use(DialogContext) !== null;
 
   return (

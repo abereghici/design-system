@@ -1,9 +1,10 @@
 "use client";
 
-import { createContext, use, useId } from "react";
+import { useId } from "react";
 import type { ReactNode } from "react";
 
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 /** `cancel()`: keeps the rows that were selected. */
@@ -17,7 +18,7 @@ interface SelectionProps {
   readonly children: ReactNode;
 }
 
-interface SelectionContext {
+interface SelectionContextValue {
   readonly state: {
     readonly selectionMode: "single" | "multiple";
     readonly selectedKeys: ReadonlyArray<string>;
@@ -31,15 +32,9 @@ interface SelectionContext {
   readonly meta: { readonly name: string };
 }
 
-const Context = createContext<SelectionContext | null>(null);
-
-export function useSelection(part: string) {
-  const selection = use(Context);
-
-  if (selection === null) throw new Error(`Table.${part} needs a selectionMode on its Table.Root`);
-
-  return selection;
-}
+export const [SelectionContext, useSelection] = createSafeContext<SelectionContextValue>(
+  "a Table.Root with a selectionMode",
+);
 
 /** Holds the selected rows of a Table.Root that has a `selectionMode`. */
 export function Selection({
@@ -57,7 +52,7 @@ export function Selection({
   );
 
   return (
-    <Context
+    <SelectionContext
       value={{
         state: { selectionMode, selectedKeys: current },
         actions: {
@@ -79,6 +74,6 @@ export function Selection({
       }}
     >
       {children}
-    </Context>
+    </SelectionContext>
   );
 }

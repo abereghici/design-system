@@ -23,7 +23,7 @@ export interface TagProps extends Omit<ComponentProps<"li">, "value"> {
 
 /** A tag with its remove button. */
 export function Tag({ value, variant = "neutral", children, ...props }: TagProps) {
-  const { state, actions, meta } = useTagGroup("Tag");
+  const { state, actions, meta } = useTagGroup("TagGroup.Tag");
   const id = useId();
 
   if (!state.value.includes(value)) return null;

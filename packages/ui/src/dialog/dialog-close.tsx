@@ -34,7 +34,7 @@ export type CloseProps = Omit<
 
 /** Closes the dialog: the `x` button, or with `asChild` its one child. */
 export function Close({ asChild = false, onClick, ...props }: CloseProps) {
-  const { id, controller, styles } = useModal();
+  const { id, controller, styles } = useModal("Close");
 
   const handleClick = composeEventHandlers(onClick, (event: MouseEvent<HTMLButtonElement>) => {
     controller.press({

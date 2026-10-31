@@ -1,6 +1,5 @@
 "use client";
 
-import { createContext, use } from "react";
 import type { ComponentProps, SyntheticEvent } from "react";
 
 import "@abereghici/tokens/components/disclosure.css";
@@ -8,6 +7,7 @@ import "@abereghici/tokens/components/disclosure.css";
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import type { ToggleFeedbackEvent } from "../feedback-event/feedback-event.ts";
 import type { ChangeEventDetails as EventDetails } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
@@ -29,15 +29,9 @@ interface DisclosureState {
   readonly meta: { readonly component: Component };
 }
 
-export const DisclosureContext = createContext<DisclosureState | null>(null);
-
-export function useDisclosure(part: string) {
-  const disclosure = use(DisclosureContext);
-
-  if (disclosure === null) throw new Error(`Disclosure.${part} must be inside Disclosure.Root`);
-
-  return disclosure;
-}
+export const [DisclosureContext, useDisclosure] = createSafeContext<DisclosureState>(
+  "Disclosure.Root or Accordion.Item",
+);
 
 export type RootProps = Omit<ComponentProps<"details">, "open"> & {
   /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */

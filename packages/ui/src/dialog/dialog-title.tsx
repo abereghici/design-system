@@ -14,7 +14,7 @@ export interface TitleProps extends ComponentProps<"h2"> {
 
 /** The heading that names the dialog. */
 export function Title({ asChild = false, ...props }: TitleProps) {
-  const { id, styles } = useModal();
+  const { id, styles } = useModal("Title");
   const Root = asChild ? Slot : "h2";
 
   return <Root {...mergeProps({ className: styles["title"] }, props)} id={`${id}-title`} />;

@@ -34,7 +34,7 @@ export type CloseProps = Omit<ComponentProps<"button">, "aria-label" | "children
 
 /** Closes the Popover. Without children it is the `x` button in the corner. */
 export function Close({ asChild = false, ...props }: CloseProps) {
-  const popover = usePopover();
+  const popover = usePopover("Popover.Close");
   const shared = {
     ...props,
     commandfor: popover.contentId,

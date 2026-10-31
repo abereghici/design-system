@@ -49,7 +49,7 @@ function positionAt(event: PointerEvent<HTMLHRElement>, horizontal: boolean) {
 
 /** The line between the panels that people drag, or focus and move with the keyboard. */
 export function Handle(props: HandleProps) {
-  const splitter = useSplitter("Handle");
+  const splitter = useSplitter("Splitter.Handle");
   const { state, actions, meta } = splitter;
   const horizontal = meta.orientation === "horizontal";
   const percent = new Intl.NumberFormat(useLocale(), {

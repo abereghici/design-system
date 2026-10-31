@@ -128,7 +128,7 @@ function openFromContextMenu(event: MouseEvent<HTMLDivElement>, overlay: Menu["o
 
 /** The area that opens the menu. It keeps its own look. */
 export function Trigger({ disabled = false, asChild = false, ...props }: TriggerProps) {
-  const { overlay } = useMenu();
+  const { overlay } = useMenu("ContextMenu.Trigger");
   const Area = asChild ? Slot : "div";
   const end = (event: ReactPointerEvent<HTMLDivElement>) => {
     endPress(event, (x, y) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useId } from "react";
+import { useId } from "react";
 import { flushSync } from "react-dom";
 import type { ComponentProps, MouseEvent } from "react";
 
@@ -8,6 +8,7 @@ import "@abereghici/tokens/components/tabs.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
@@ -29,15 +30,7 @@ interface TabsState {
   readonly meta: { readonly id: string };
 }
 
-const TabsContext = createContext<TabsState | null>(null);
-
-export function useTabs(part: string) {
-  const tabs = use(TabsContext);
-
-  if (tabs === null) throw new Error(`Tabs.${part} must be inside Tabs.Root`);
-
-  return tabs;
-}
+export const [TabsContext, useTabs] = createSafeContext<TabsState>("Tabs.Root");
 
 export type RootProps = Omit<ComponentProps<"div">, "defaultValue"> & {
   /** The open tab's `value`, when your state holds it. */

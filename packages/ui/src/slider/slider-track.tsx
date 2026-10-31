@@ -80,7 +80,7 @@ function useDrag(slider: ReturnType<typeof useSlider>) {
 
 /** The rail: a press moves the nearest thumb there; dragging follows the pointer. */
 export function Track(props: TrackProps) {
-  const drag = useDrag(useSlider());
+  const drag = useDrag(useSlider("Slider.Track"));
 
   return <div {...mergeProps({ className: styles["track"], ...drag }, props)} />;
 }

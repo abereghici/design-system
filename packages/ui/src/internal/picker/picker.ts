@@ -1,8 +1,9 @@
 "use client";
 
-import { createContext, useRef } from "react";
+import { useRef } from "react";
 import type { RefObject } from "react";
 
+import { createSafeContext } from "../create-safe-context/create-safe-context.ts";
 import type { PickerContextValue, Temporal } from "../date/date.ts";
 import { useOverlay } from "../overlay/overlay.ts";
 import type { ChangeEventDetails, Overlay, OverlayOptions } from "../overlay/overlay.ts";
@@ -25,7 +26,9 @@ export interface Panel {
   readonly trigger: RefObject<HTMLButtonElement | null>;
 }
 
-export const PanelContext = createContext<Panel | null>(null);
+export const [PanelContext, usePanel] = createSafeContext<Panel>(
+  "DatePicker.Root or DateRangePicker.Root",
+);
 
 interface PickerOptions extends OverlayOptions<OpenReason> {
   readonly triggerLabel: string;

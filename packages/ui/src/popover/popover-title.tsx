@@ -17,7 +17,7 @@ export interface TitleProps extends ComponentProps<"h2"> {
 
 /** Names the Content. */
 export function Title({ asChild = false, ...props }: TitleProps) {
-  const popover = usePopover();
+  const popover = usePopover("Popover.Title");
   const Element = asChild ? Slot : "h2";
 
   return (

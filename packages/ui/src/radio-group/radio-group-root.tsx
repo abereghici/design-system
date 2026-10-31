@@ -1,11 +1,12 @@
 "use client";
 
-import { createContext, useId } from "react";
+import { useId } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/fieldset.css";
 import "@abereghici/tokens/components/radio-group.css";
 
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { followVisualDirection } from "../internal/radio-choice/follow-visual-direction.ts";
@@ -22,7 +23,7 @@ interface Group {
   readonly select: (value: string, event: MouseEvent<HTMLInputElement>) => void;
 }
 
-export const GroupContext = createContext<Group | null>(null);
+export const [GroupContext, useRadioGroup] = createSafeContext<Group>("RadioGroup.Root");
 
 export interface RootProps extends Omit<ComponentProps<"fieldset">, "defaultValue" | "disabled"> {
   /** The chosen option, when your state holds it; `null` when nothing is chosen. */

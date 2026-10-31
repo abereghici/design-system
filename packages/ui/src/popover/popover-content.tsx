@@ -28,7 +28,7 @@ export function Content({
   initialFocus,
   ...props
 }: ContentProps) {
-  const popover = usePopover();
+  const popover = usePopover("Popover.Content");
 
   return (
     <dialog

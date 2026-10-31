@@ -18,7 +18,7 @@ export interface ContentProps extends Omit<ComponentProps<"div">, "id" | "role" 
 
 /** The short label, optionally followed by an `aria-hidden` Kbd. */
 export function Content({ side = "top", align = "center", ...props }: ContentProps) {
-  const { contentId, contentRef, change } = useTooltip();
+  const { contentId, contentRef, change } = useTooltip("Tooltip.Content");
 
   return (
     <div

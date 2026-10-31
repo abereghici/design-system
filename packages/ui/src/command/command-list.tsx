@@ -28,7 +28,7 @@ export type ListProps = Omit<ComponentProps<"div">, "aria-label" | "aria-labelle
 
 /** The list of Groups and Items, filtered as people type. */
 export function List(props: ListProps) {
-  const command = useCommand();
+  const command = useCommand("Command.List");
   const press = use(DialogContext);
 
   return (

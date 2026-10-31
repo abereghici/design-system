@@ -48,7 +48,7 @@ export function Item({
   loading = false,
   ...props
 }: ItemProps) {
-  const { state, actions, meta } = useTree("Item");
+  const { state, actions, meta } = useTree("Tree.Item");
   const base = useId();
   const branch = hasChildItems || children !== undefined;
   const item = { id, branch, expanded: branch && state.expandedKeys.has(id) };

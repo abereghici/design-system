@@ -1,6 +1,5 @@
 "use client";
 
-import { use } from "react";
 import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/segmented-control.css";
@@ -9,7 +8,7 @@ import { useFieldControl } from "../field/use-field.ts";
 import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
-import { GroupContext } from "./segmented-control-root.tsx";
+import { useSegmentedControl } from "./segmented-control-root.tsx";
 import styles from "./segmented-control.module.css";
 
 export interface ItemProps extends Omit<
@@ -22,9 +21,7 @@ export interface ItemProps extends Omit<
 
 /** One segment; its children are the visible label. */
 export function Item({ value, children, className, style, onClick, ...props }: ItemProps) {
-  const group = use(GroupContext);
-
-  if (group === null) throw new Error("SegmentedControl.Item must be inside SegmentedControl.Root");
+  const group = useSegmentedControl("SegmentedControl.Item");
 
   const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>({
     ...props,

@@ -23,7 +23,7 @@ export interface SelectAllProps extends ComponentProps<"th"> {
  * mixed while only some of them are selected. Needs `selectionMode="multiple"`.
  */
 export function SelectAll({ keys, selectAllLabel, ...props }: SelectAllProps) {
-  const { state, actions } = useSelection("SelectAll");
+  const { state, actions } = useSelection("Table.SelectAll");
 
   if (state.selectionMode !== "multiple") {
     throw new Error('Table.SelectAll needs selectionMode="multiple" on its Table.Root');

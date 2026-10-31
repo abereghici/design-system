@@ -13,7 +13,7 @@ export interface TriggerProps extends ComponentProps<"button"> {
 
 /** Opens and closes the Content. */
 export function Trigger({ asChild = false, ...props }: TriggerProps) {
-  const popover = usePopover();
+  const popover = usePopover("Popover.Trigger");
   const Element = asChild ? Slot : "button";
 
   return (

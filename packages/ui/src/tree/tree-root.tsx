@@ -1,12 +1,13 @@
 "use client";
 
-import { createContext, use, useState } from "react";
+import { useState } from "react";
 import type { ComponentProps, FocusEvent, KeyboardEvent, SyntheticEvent } from "react";
 
 import "@abereghici/tokens/components/tree.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { typeahead } from "../internal/listbox/typeahead.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
@@ -47,15 +48,7 @@ interface TreeContextValue {
   readonly meta: { readonly level: number };
 }
 
-export const TreeContext = createContext<TreeContextValue | null>(null);
-
-export function useTree(part: string) {
-  const tree = use(TreeContext);
-
-  if (tree === null) throw new Error(`Tree.${part} must be inside Tree.Root`);
-
-  return tree;
-}
+export const [TreeContext, useTree] = createSafeContext<TreeContextValue>("Tree.Root");
 
 const shownItems = (tree: Element) => [...tree.querySelectorAll<HTMLElement>('[role="treeitem"]')];
 

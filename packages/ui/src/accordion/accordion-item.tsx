@@ -17,7 +17,7 @@ export interface ItemProps extends Omit<ComponentProps<"details">, "open" | "nam
 
 /** One collapsible section, holding a Trigger and its Content. */
 export function Item({ value, ...props }: ItemProps) {
-  const accordion = useAccordion("Item");
+  const accordion = useAccordion("Accordion.Item");
 
   return (
     <DisclosureRoot

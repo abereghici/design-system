@@ -1,12 +1,13 @@
 "use client";
 
-import { createContext, use, useId, useState } from "react";
+import { useId, useState } from "react";
 import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/accordion.css";
 
 import type { ChangeEventDetails as Details } from "../disclosure/disclosure-root.tsx";
 import { requestChange } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./accordion.module.css";
@@ -25,7 +26,7 @@ interface AccordionState {
   readonly change: (item: string, open: boolean, details: ChangeEventDetails) => boolean;
 }
 
-const AccordionContext = createContext<AccordionState | null>(null);
+export const [AccordionContext, useAccordion] = createSafeContext<AccordionState>("Accordion.Root");
 
 export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
   /** Lets several Items stay open at once; by default opening one closes the other. */
@@ -75,12 +76,4 @@ export function Root({
       <div {...mergeProps({ className: styles["root"] }, props)} />
     </AccordionContext>
   );
-}
-
-export function useAccordion(part: string) {
-  const accordion = use(AccordionContext);
-
-  if (accordion === null) throw new Error(`Accordion.${part} must be inside Accordion.Root`);
-
-  return accordion;
 }

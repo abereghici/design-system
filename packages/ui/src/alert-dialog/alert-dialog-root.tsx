@@ -26,7 +26,7 @@ export function Root(props: RootProps) {
 export type ButtonProps = Omit<ComponentProps<"button">, "command" | "commandfor">;
 
 export function useClose(onClick: ButtonProps["onClick"], dismiss: boolean) {
-  const { id, controller } = useModal();
+  const { id, controller } = useModal(dismiss ? "AlertDialog.Cancel" : "AlertDialog.Action");
 
   return {
     type: "button",

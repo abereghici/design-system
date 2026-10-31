@@ -19,7 +19,7 @@ export interface ContentProps extends ComponentProps<"div"> {
 
 /** The panel shown while its Trigger is selected; find-in-page searches it while hidden. */
 export function Content({ value, ref, ...props }: ContentProps) {
-  const tabs = useTabs("Content");
+  const tabs = useTabs("Tabs.Content");
   const panel = useRef<HTMLDivElement>(null);
   const hidden = value !== tabs.state.value;
 

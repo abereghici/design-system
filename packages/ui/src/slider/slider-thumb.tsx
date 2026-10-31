@@ -61,7 +61,7 @@ export function Thumb({
   onChange,
   ...props
 }: ThumbProps) {
-  const slider = useSlider();
+  const slider = useSlider("Slider.Thumb");
   const value = slider.values[index] ?? slider.min;
   const [lo, hi] = slider.bounds(index);
   const ownId = id ?? `${slider.id}-${index}`;

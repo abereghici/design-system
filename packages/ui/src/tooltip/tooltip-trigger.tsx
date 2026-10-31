@@ -60,7 +60,7 @@ export function Trigger({
   "aria-describedby": describedBy,
   ...props
 }: TriggerProps) {
-  const tooltip = useTooltip();
+  const tooltip = useTooltip("Tooltip.Trigger");
   const Element = asChild ? Slot : "button";
   const type = asChild ? undefined : "button";
 
