@@ -87,6 +87,13 @@
     padding-inline: var(--ab-combobox-option-padding-inline);
   }
 
+  @container style(--ab-density: compact) {
+    .option,
+    .empty {
+      --ab-combobox-option-height: var(--ab-size-control-compact-sm);
+    }
+  }
+
   .option {
     --ab-icon-size: var(--ab-icon-sm-size);
     --ab-icon-color: var(--ab-combobox-option-icon-color);

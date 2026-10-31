@@ -29,6 +29,12 @@
     transition-timing-function: var(--ab-motion-easing-color);
   }
 
+  @container style(--ab-density: compact) {
+    .item {
+      --ab-tree-item-min-height: var(--ab-size-control-compact-sm);
+    }
+  }
+
   /* Inset, so neighbouring rows don't cover the ring. */
   .item:focus-visible {
     outline-offset: calc(-1 * var(--ab-focus-ring-width));

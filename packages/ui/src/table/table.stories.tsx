@@ -5,6 +5,7 @@ import { expect, fn, waitFor } from "storybook/test";
 import { EmptyState } from "@abereghici/ui/empty-state";
 import { VisuallyHidden } from "@abereghici/ui/visually-hidden";
 
+import { withDensity } from "#.storybook/decorators/with-density.tsx";
 import { withScroll } from "#.storybook/decorators/with-scroll.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
@@ -139,6 +140,10 @@ export const SortedOnTheServer = meta.story({
   },
 });
 
+const cancel = (_keys: unknown, details: { cancel: () => void }) => {
+  details.cancel();
+};
+
 type Sort = { column: "id" | "amount"; direction: "ascending" | "descending" };
 
 const selectionHeader = (mode: Table.RootProps["selectionMode"]) =>
@@ -255,13 +260,7 @@ SortingAndSelecting.test(
 
 SortingAndSelecting.test(
   "keeps the selection, and reports no toggle, when the app cancels the change",
-  {
-    args: {
-      onSelectionChange: (_keys, details) => {
-        details.cancel();
-      },
-    },
-  },
+  { args: { onSelectionChange: cancel } },
   async ({ canvas, userEvent }) => {
     const toggles = listen("ab-toggle");
 
@@ -336,3 +335,5 @@ export const Empty = meta.story({
     ),
   },
 });
+
+export const Compact = Default.extend({ decorators: [withDensity("compact")] });
