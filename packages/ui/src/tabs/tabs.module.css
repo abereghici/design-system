@@ -32,6 +32,12 @@
     anchor-scope: --ab-tabs-selected;
   }
 
+  @container style(--ab-density: compact) {
+    .list {
+      --ab-tabs-height: var(--ab-size-control-compact-lg);
+    }
+  }
+
   .list::after {
     content: "";
     position: absolute;

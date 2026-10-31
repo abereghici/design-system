@@ -109,6 +109,8 @@ export type ToggleFeedbackEvent = CustomEvent<
     | "ToggleButton"
     | "SegmentedControl"
     | "Accordion"
+    | "Disclosure"
+    | "Table"
     | "DropdownMenu"
     | "ContextMenu"
     | "Splitter"

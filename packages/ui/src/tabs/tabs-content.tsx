@@ -50,6 +50,8 @@ export function Content({ value, ref, ...props }: ContentProps) {
       role="tabpanel"
       id={`${tabs.id}-content-${value}`}
       aria-labelledby={`${tabs.id}-trigger-${value}`}
+      // A panel hidden until found keeps its box, which Chrome exposes; find-in-page ignores `aria-hidden`.
+      aria-hidden={hidden || undefined}
       hidden={hidden}
     />
   );

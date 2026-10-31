@@ -69,9 +69,9 @@ export const componentRoutes = [
   },
   {
     name: "combobox",
-    tokens: ["field", "combobox", "icon"],
+    tokens: ["field", "combobox", "icon", "tag", "tag-group"],
     client: ["combobox/combobox-group", "combobox/combobox-item", "combobox/combobox-root"],
-    html: 'role="combobox"',
+    html: 'name="reviewers" value="eh"',
   },
   { name: "form", tokens: [], client: ["form/form"], html: "<form" },
   { name: "fieldset", tokens: ["fieldset"], client: [], html: "<legend" },
@@ -187,14 +187,15 @@ export const componentRoutes = [
   },
   {
     name: "accordion",
-    tokens: ["accordion", "icon"],
-    client: [
-      "accordion/accordion-content",
-      "accordion/accordion-item",
-      "accordion/accordion-root",
-      "accordion/accordion-trigger",
-    ],
+    tokens: ["accordion", "disclosure", "icon"],
+    client: ["accordion/accordion-item", "accordion/accordion-root", "accordion/accordion-trigger"],
     html: "<summary",
+  },
+  {
+    name: "disclosure",
+    tokens: ["disclosure", "icon"],
+    client: ["disclosure/disclosure-root", "disclosure/disclosure-trigger"],
+    html: "Retries stop after five attempts.</div></details>",
   },
   {
     name: "breadcrumbs",
@@ -316,6 +317,18 @@ export const componentRoutes = [
     html: 'command="toggle-popover"',
   },
   {
+    name: "contextual-help",
+    tokens: ["popover", "icon", "icon-button", "spinner"],
+    client: [
+      "icon-button/icon-button",
+      "popover/popover-content",
+      "popover/popover-root",
+      "popover/popover-title",
+      "popover/popover-trigger",
+    ],
+    html: 'Billing cycle</h2><p class="',
+  },
+  {
     name: "dropdown-menu",
     tokens: ["dropdown-menu", "icon"],
     client: [
@@ -350,6 +363,18 @@ export const componentRoutes = [
     tokens: ["field", "date-field"],
     client: ["date-field/date-field-root"],
     html: 'role="spinbutton"',
+  },
+  {
+    name: "table",
+    tokens: ["table", "checkbox"],
+    client: [
+      "table/table-root",
+      "table/table-row",
+      "table/table-row-header",
+      "table/table-select-all",
+      "table/table-select-row",
+    ],
+    html: 'aria-label="Select all invoices"',
   },
   {
     name: "calendar",

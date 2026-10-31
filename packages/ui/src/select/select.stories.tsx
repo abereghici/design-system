@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
+import { withDensity } from "#.storybook/decorators/with-density.tsx";
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
@@ -306,3 +307,5 @@ Controlled.test("follows the value the app holds", async ({ canvas, userEvent })
   await userEvent.selectOptions(select, "name");
   await expect(select).toHaveDisplayValue("Name");
 });
+
+export const Compact = Open.extend({ decorators: [withDensity("compact")] });

@@ -55,7 +55,7 @@ const list = (value: string | readonly string[] | undefined) =>
  * Holds the pressed state of the ToggleButtons inside it, one at a time or several with
  * `selectionMode="multiple"`. Name it with `aria-label`. Each button keeps its own Tab stop; inside
  * a Toolbar, the Toolbar's arrow keys move between them. It needs script, so it is interactive after
- * hydration (Tier 2). To switch between views of the same content, use SegmentedControl.
+ * hydration, and its buttons hide while scripting is off (Tier 2). To switch between views of the same content, use SegmentedControl.
  */
 export function ToggleButtonGroup(props: ToggleButtonGroupProps) {
   // `_onValueChange` is destructured only to keep it off the fieldset; `toggle` reads it from

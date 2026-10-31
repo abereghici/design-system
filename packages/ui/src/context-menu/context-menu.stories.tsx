@@ -5,6 +5,7 @@ import { CopyIcon } from "@abereghici/ui/icons/copy";
 import { TrashIcon } from "@abereghici/ui/icons/trash";
 import { Kbd } from "@abereghici/ui/kbd";
 
+import { withDensity } from "#.storybook/decorators/with-density.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
@@ -180,3 +181,12 @@ Default.test(
     await expect(reasons().at(-1)).toEqual([true, "trigger-press"]);
   },
 );
+
+export const Compact = Default.extend({
+  decorators: [withDensity("compact")],
+  play: async ({ canvas }) => {
+    const user = await trusted().catch(() => null);
+
+    await user?.click(canvas.getByRole("button", { name: "Report.pdf" }), { button: "right" });
+  },
+});
