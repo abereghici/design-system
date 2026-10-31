@@ -61,6 +61,17 @@ test.describe("Tier 1 works with JavaScript off", () => {
     await expect(page.getByText("Invoices are sent monthly.")).toBeVisible();
   });
 
+  test("disclosure: it opens and closes", async ({ page }) => {
+    await page.goto("/disclosure");
+    await page.getByText("Advanced settings").click();
+
+    await expect(page.getByText("Retries stop after five attempts.")).toBeVisible();
+
+    await page.getByText("Advanced settings").click();
+
+    await expect(page.getByText("Retries stop after five attempts.")).toBeHidden();
+  });
+
   for (const [route, trigger, overlay, close] of [
     ["dialog", "Rename", "Rename project?", "Close"],
     ["alert-dialog", "Delete", "Delete project?", "Cancel"],

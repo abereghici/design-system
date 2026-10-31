@@ -10,6 +10,6 @@ export { Trigger } from "./accordion-trigger.tsx";
 
 export type { TriggerProps } from "./accordion-trigger.tsx";
 
-export { Content } from "./accordion-content.tsx";
+export { Content } from "../disclosure/disclosure-content.tsx";
 
-export type { ContentProps } from "./accordion-content.tsx";
+export type { ContentProps } from "../disclosure/disclosure-content.tsx";

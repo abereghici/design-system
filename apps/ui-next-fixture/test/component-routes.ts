@@ -163,14 +163,15 @@ export const componentRoutes = [
   },
   {
     name: "accordion",
-    tokens: ["accordion", "icon"],
-    client: [
-      "accordion/accordion-content",
-      "accordion/accordion-item",
-      "accordion/accordion-root",
-      "accordion/accordion-trigger",
-    ],
+    tokens: ["accordion", "disclosure", "icon"],
+    client: ["accordion/accordion-item", "accordion/accordion-root", "accordion/accordion-trigger"],
     html: "<summary",
+  },
+  {
+    name: "disclosure",
+    tokens: ["disclosure", "icon"],
+    client: ["disclosure/disclosure-root", "disclosure/disclosure-trigger"],
+    html: "Retries stop after five attempts.</div></details>",
   },
   {
     name: "breadcrumbs",
