@@ -97,6 +97,33 @@
     }
   }
 
+  /* Script moves the thumbs, the fill and the value, so without it the native inputs take over. */
+  @media (scripting: none) {
+    .track {
+      display: flex;
+      gap: var(--ab-space-inline-md);
+    }
+
+    .track::before,
+    .range,
+    .value {
+      display: none;
+    }
+
+    .thumb {
+      display: contents;
+    }
+
+    .input {
+      position: static;
+      flex: 1;
+      min-inline-size: 0;
+      opacity: 1;
+      pointer-events: auto;
+      accent-color: var(--ab-slider-range-background-color);
+    }
+  }
+
   @media (forced-colors: active) {
     .track::before {
       outline: 1px solid CanvasText;
