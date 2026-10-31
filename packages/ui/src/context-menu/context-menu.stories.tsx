@@ -95,7 +95,7 @@ Default.test(
     await waitFor(() => expect(file).toHaveFocus());
     dismissals.stop();
     await expect(dismissals.events.map(({ detail }) => detail)).toEqual([
-      { component: "ContextMenu", reason: "user" },
+      { component: "ContextMenu", userInitiated: true },
     ]);
   },
 );
@@ -113,7 +113,7 @@ Default.test("runs an item and closes, dispatching ab-press", async ({ canvas })
   await expect(onDuplicate).toHaveBeenCalledOnce();
   await waitFor(() => expect(canvas.queryByRole("menu")).toBeNull());
   await expect(presses.events.map(({ detail }) => detail)).toEqual([
-    { component: "ContextMenu", reason: "user" },
+    { component: "ContextMenu", userInitiated: true },
   ]);
   await expect(reasons().at(-1)).toEqual([false, "item-press"]);
 });

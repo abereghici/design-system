@@ -24,7 +24,7 @@ const budgets: Readonly<Record<string, string>> = {
   "dropdown-menu": "5.9 kB",
   "empty-state": "970 B",
   "icon-button": "1.85 kB",
-  events: "20 B",
+  "feedback-event": "20 B",
   field: "2.85 kB",
   "file-trigger": "3.7 kB",
   fieldset: "670 B",

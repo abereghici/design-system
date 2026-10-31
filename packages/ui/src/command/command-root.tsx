@@ -5,13 +5,13 @@ import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/command.css";
 
-import { isComposing } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { isComposing } from "../internal/interaction/composition.ts";
 import { useListbox } from "../internal/listbox/use-listbox.ts";
 import type { ListboxNavigator } from "../internal/listbox/use-listbox.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./command.module.css";
 

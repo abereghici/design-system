@@ -5,8 +5,8 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/command.css";
 
-import { trackComposition } from "../events/events.ts";
 import { SearchIcon } from "../icon/icons/search.tsx";
+import { trackComposition } from "../internal/interaction/composition.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { Kbd } from "../kbd/kbd.tsx";
 

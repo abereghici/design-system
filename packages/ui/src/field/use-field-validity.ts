@@ -1,7 +1,7 @@
 import { use, useEffect, useLayoutEffect, useRef, useState } from "react";
 
-import { useEvent } from "../events/use-event.ts";
 import { FormErrorsContext } from "../form/form.tsx";
+import { useEvent } from "../internal/dom-event/use-event.ts";
 
 import type { FormControl, Validate } from "./use-field.ts";
 

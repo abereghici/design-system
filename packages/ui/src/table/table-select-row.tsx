@@ -5,7 +5,7 @@ import type { ChangeEvent, ComponentProps } from "react";
 import "@abereghici/tokens/components/table.css";
 
 import { Checkbox } from "../checkbox/checkbox.tsx";
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { Cell } from "./table-cell.tsx";
@@ -28,7 +28,7 @@ export function SelectRow({ value, selectRowLabel, ...props }: SelectRowProps) {
     if (actions.selectRow(value, event.nativeEvent)) {
       dispatchFeedback(event.currentTarget, "ab-toggle", {
         component: "Table",
-        reason: "user",
+        userInitiated: true,
       });
     }
   }

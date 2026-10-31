@@ -3,10 +3,10 @@
 import { use } from "react";
 import type { ComponentProps } from "react";
 
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { DatePickerContext } from "../internal/date/date.ts";
 import type { Temporal } from "../internal/date/date.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import { Month } from "./calendar-month.tsx";
 

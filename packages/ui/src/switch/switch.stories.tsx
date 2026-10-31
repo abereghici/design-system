@@ -63,7 +63,9 @@ Default.test("dispatches a bubbling ab-toggle after a change", async ({ canvas, 
   toggles.stop();
   await expect(
     toggles.events.map(({ target, bubbles, detail }) => ({ target, bubbles, detail })),
-  ).toEqual([{ target: control, bubbles: true, detail: { component: "Switch", reason: "user" } }]);
+  ).toEqual([
+    { target: control, bubbles: true, detail: { component: "Switch", userInitiated: true } },
+  ]);
 });
 
 Default.test(

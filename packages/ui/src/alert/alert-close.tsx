@@ -5,7 +5,7 @@ import type { ComponentProps, MouseEvent } from "react";
 import "@abereghici/tokens/components/icon-button.css";
 import "@abereghici/tokens/components/alert.css";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
@@ -32,7 +32,10 @@ export function Close({ disabled = false, onClick, ...props }: CloseProps) {
     }
 
     onClick?.(event);
-    dispatchFeedback(event.currentTarget, "ab-dismiss", { component: "Alert", reason: "user" });
+    dispatchFeedback(event.currentTarget, "ab-dismiss", {
+      component: "Alert",
+      userInitiated: true,
+    });
   }
 
   return (

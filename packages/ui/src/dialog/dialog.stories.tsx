@@ -78,7 +78,7 @@ Default.test(
       expect.objectContaining({ reason: "close-press" }),
     );
     await expect(dismissals.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: close, detail: { component: "Dialog", reason: "user" } },
+      { target: close, detail: { component: "Dialog", userInitiated: true } },
     ]);
   },
 );

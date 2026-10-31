@@ -4,7 +4,7 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/icon-button.css";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
@@ -58,7 +58,7 @@ export function IconButton({
     onClick?.(event);
     dispatchFeedback(event.currentTarget, "ab-press", {
       component: "IconButton",
-      reason: "user",
+      userInitiated: true,
     });
   }
 

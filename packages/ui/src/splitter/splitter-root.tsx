@@ -5,10 +5,10 @@ import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/splitter.css";
 
-import { dispatchFeedback } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./splitter.module.css";
 
@@ -99,7 +99,10 @@ export function Root({
 
     if (collapsing) setExpanded(current);
 
-    dispatchFeedback(event.currentTarget, "ab-toggle", { component: "Splitter", reason: "user" });
+    dispatchFeedback(event.currentTarget, "ab-toggle", {
+      component: "Splitter",
+      userInitiated: true,
+    });
   }
 
   return (

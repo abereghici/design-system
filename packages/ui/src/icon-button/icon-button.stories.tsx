@@ -56,7 +56,7 @@ Default.test("dispatches a bubbling ab-press after a press", async ({ canvas, us
   await expect(
     presses.events.map(({ target, bubbles, detail }) => ({ target, bubbles, detail })),
   ).toEqual([
-    { target: button, bubbles: true, detail: { component: "IconButton", reason: "user" } },
+    { target: button, bubbles: true, detail: { component: "IconButton", userInitiated: true } },
   ]);
 });
 

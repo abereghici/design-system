@@ -5,11 +5,12 @@ import type { ComponentProps, KeyboardEvent } from "react";
 import "@abereghici/tokens/components/field.css";
 import "@abereghici/tokens/components/select.css";
 
-import { composeEventHandlers, pointerMarker } from "../events/events.ts";
 import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
+import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
+import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 
 import fieldStyles from "../field/field.module.css";
 import styles from "./select.module.css";

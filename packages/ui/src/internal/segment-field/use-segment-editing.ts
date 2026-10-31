@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import type { ChangeEvent, FocusEvent, KeyboardEvent, PointerEvent, RefObject } from "react";
 
-import { isComposing, trackComposition } from "../../events/events.ts";
+import { isComposing, trackComposition } from "../interaction/composition.ts";
 import { mergeProps } from "../slot/slot.tsx";
 
 import { erasePart, stepKey, typeDigit, typeLetter } from "./segments.ts";

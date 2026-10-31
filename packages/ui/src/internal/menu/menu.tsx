@@ -3,7 +3,7 @@
 import { createContext, use } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent, PointerEvent } from "react";
 
-import type { ChangeEventDetails as Details } from "../../events/events.ts";
+import type { ChangeEventDetails as Details } from "../change-request/change-request.ts";
 import { typeahead } from "../listbox/typeahead.ts";
 import { returnFocus } from "../overlay/overlay.ts";
 import type { Overlay } from "../overlay/overlay.ts";

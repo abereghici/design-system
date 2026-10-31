@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
 import type { KeyboardEvent, SyntheticEvent } from "react";
 
-import { useControllableState } from "../events/use-controllable-state.ts";
-import { useEvent } from "../events/use-event.ts";
+import { useEvent } from "../internal/dom-event/use-event.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import type { Direction } from "./number-field-step-buttons.tsx";
 import type { ControlProps, NumberFieldChangeEventDetails } from "./number-field.tsx";

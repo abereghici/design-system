@@ -4,8 +4,8 @@ import type { ComponentProps, MouseEvent, ReactElement } from "react";
 
 import "@abereghici/tokens/components/icon-button.css";
 
-import { composeEventHandlers } from "../events/events.ts";
 import { XIcon } from "../icon/icons/x.tsx";
+import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
 import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 
 import { useModal } from "./dialog-modal.tsx";

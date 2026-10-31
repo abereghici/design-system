@@ -5,8 +5,8 @@ import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/switch.css";
 
-import { pointerMarker } from "../events/events.ts";
 import { useFieldControl } from "../field/use-field.ts";
+import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { toggleClick } from "../internal/toggle/toggle.ts";
 import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";

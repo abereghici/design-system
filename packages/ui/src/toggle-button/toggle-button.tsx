@@ -5,11 +5,11 @@ import type { ComponentProps, MouseEvent, ReactNode } from "react";
 
 import "@abereghici/tokens/components/toggle-button.css";
 
-import { dispatchFeedback } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { ToggleGroupContext } from "../internal/toggle/toggle-group.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./toggle-button.module.css";
 
@@ -80,7 +80,7 @@ export function ToggleButton({
 
     dispatchFeedback(event.currentTarget, "ab-toggle", {
       component: "ToggleButton",
-      reason: "user",
+      userInitiated: true,
     });
   }
 

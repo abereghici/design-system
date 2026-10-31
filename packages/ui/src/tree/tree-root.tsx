@@ -5,12 +5,13 @@ import type { ComponentProps, FocusEvent, KeyboardEvent, SyntheticEvent } from "
 
 import "@abereghici/tokens/components/tree.css";
 
-import { dispatchFeedback, pointerMarker } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { typeahead } from "../internal/listbox/typeahead.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { toggled } from "../internal/toggle/toggle.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./tree.module.css";
 
@@ -119,7 +120,10 @@ function useKeys<Reason extends string>(
 
   function change(next: string[], reason: Reason, event: ItemEvent) {
     if (request(next, reason, event.nativeEvent)) {
-      dispatchFeedback(event.currentTarget, "ab-toggle", { component: "Tree", reason: "user" });
+      dispatchFeedback(event.currentTarget, "ab-toggle", {
+        component: "Tree",
+        userInitiated: true,
+      });
     }
   }
 

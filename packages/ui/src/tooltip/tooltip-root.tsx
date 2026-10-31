@@ -11,9 +11,9 @@ import {
 } from "react";
 import type { ReactNode, RefObject, SyntheticEvent } from "react";
 
-import { requestChange } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { getDocument, useEvent } from "../events/use-event.ts";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
 import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 
 export type ChangeReason =

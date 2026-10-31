@@ -1,9 +1,11 @@
 import { useState } from "react";
 import type { MouseEvent, MouseEventHandler } from "react";
 
-import { composeEventHandlers, dispatchFeedback, requestChange } from "../../events/events.ts";
-import type { ChangeEventDetails as Details } from "../../events/events.ts";
-import { useControllableState } from "../../events/use-controllable-state.ts";
+import { dispatchFeedback } from "../../feedback-event/feedback-event.ts";
+import { requestChange } from "../change-request/change-request.ts";
+import type { ChangeEventDetails as Details } from "../change-request/change-request.ts";
+import { composeEventHandlers } from "../compose-event-handlers/compose-event-handlers.ts";
+import { useControllableState } from "../uncontrolled-state/use-controllable-state.ts";
 
 /** The values as a list: none for `undefined`, `null` or `""`, else one or several. */
 export const valuesOf = (value: string | null | ReadonlyArray<string> | undefined) =>
@@ -36,7 +38,7 @@ export function toggleClick(
 ): MouseEventHandler<HTMLInputElement> {
   return composeEventHandlers(disabled ? preventDefault : onClick, (event) => {
     if (requestChange(onCheckedChange, event.currentTarget.checked, "none", event.nativeEvent)) {
-      dispatchFeedback(event.currentTarget, "ab-toggle", { component, reason: "user" });
+      dispatchFeedback(event.currentTarget, "ab-toggle", { component, userInitiated: true });
     } else {
       event.preventDefault();
     }
@@ -71,7 +73,7 @@ export function useRadioChoice(
       return;
     }
 
-    dispatchFeedback(event.currentTarget, "ab-toggle", { component, reason: "user" });
+    dispatchFeedback(event.currentTarget, "ab-toggle", { component, userInitiated: true });
   }
 
   return { current, select, setRoot };

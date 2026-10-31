@@ -5,8 +5,8 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/segmented-control.css";
 
-import { composeEventHandlers } from "../events/events.ts";
 import { useFieldControl } from "../field/use-field.ts";
+import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { GroupContext } from "./segmented-control-root.tsx";

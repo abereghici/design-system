@@ -8,8 +8,8 @@ import type {
   RefCallback,
 } from "react";
 
-import { requestChange } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { composeRefs } from "../internal/slot/slot.tsx";
 
 /** The native elements a Field validates. */

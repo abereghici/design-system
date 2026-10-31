@@ -4,13 +4,13 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/toggle-button-group.css";
 
-import { requestChange } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { ToggleGroupContext } from "../internal/toggle/toggle-group.ts";
 import { toggled, valuesOf } from "../internal/toggle/toggle.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./toggle-button-group.module.css";
 

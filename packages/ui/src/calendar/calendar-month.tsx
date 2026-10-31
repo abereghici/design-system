@@ -4,9 +4,9 @@ import type { ComponentProps, FocusEvent, KeyboardEvent, MouseEvent } from "reac
 
 import "@abereghici/tokens/components/calendar.css";
 
-import { sharedListener } from "../events/events.ts";
 import { ordered, Temporal, useDateFormats } from "../internal/date/date.ts";
 import type { DateRange } from "../internal/date/date.ts";
+import { sharedListener } from "../internal/dom-event/shared-listener.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { Grid, keyTarget } from "./calendar-grid.tsx";

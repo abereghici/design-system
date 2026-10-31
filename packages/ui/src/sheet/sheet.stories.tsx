@@ -77,7 +77,7 @@ Default.test(
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     await expect(trigger).toHaveFocus();
     await expect(dismissals.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: close, detail: { component: "Sheet", reason: "user" } },
+      { target: close, detail: { component: "Sheet", userInitiated: true } },
     ]);
   },
 );
@@ -100,7 +100,7 @@ Default.test(
       expect.objectContaining({ reason: "escape-key" }),
     );
     await expect(dismissals.events.map(({ detail }) => detail)).toEqual([
-      { component: "Sheet", reason: "user" },
+      { component: "Sheet", userInitiated: true },
     ]);
   },
 );

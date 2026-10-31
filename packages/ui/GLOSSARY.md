@@ -21,7 +21,7 @@ UI that renders above the page flow: menus, popovers, tooltips, toasts, dialogs 
 _Avoid_: Floating layer, popup (as a generic term), portal, modal (unless it blocks the page)
 
 **Feedback event**:
-A bubbling DOM event (press, toggle, confirm, dismiss or appear) a component dispatches at a moment an app may want to answer with sound or haptics. It names the component and whether the user or the app caused it, and fires only after a change request is accepted. Not to be confused with the reason of a change request, which names what triggered the change.
+A bubbling DOM event (press, toggle, confirm, dismiss or appear) a component dispatches at a moment an app may want to answer with sound or haptics. It names the component and whether the user initiated it or the design system did, and fires only after a change request is accepted. Not to be confused with the reason of a change request, which names what triggered the change.
 _Avoid_: Sound event, haptic event, callback
 
 **Change request**:

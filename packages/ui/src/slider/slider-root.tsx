@@ -5,11 +5,11 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/slider.css";
 
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
-import type { EventTargetSource } from "../events/use-event.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import type { EventTargetSource } from "../internal/dom-event/use-event.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { composeRefs, mergeProps } from "../internal/slot/slot.tsx";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./slider.module.css";
 

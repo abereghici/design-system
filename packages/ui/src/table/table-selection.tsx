@@ -3,8 +3,8 @@
 import { createContext, use, useId } from "react";
 import type { ReactNode } from "react";
 
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 /** `cancel()`: keeps the rows that were selected. */
 export type ChangeEventDetails = Details<"row-press" | "select-all-press">;

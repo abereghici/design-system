@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import type { ChangeEventDetails as Details } from "../../events/events.ts";
-import { useControllableState } from "../../events/use-controllable-state.ts";
-import { useEvent } from "../../events/use-event.ts";
-import type { EventTargetSource } from "../../events/use-event.ts";
+import type { ChangeEventDetails as Details } from "../change-request/change-request.ts";
+import { useEvent } from "../dom-event/use-event.ts";
+import type { EventTargetSource } from "../dom-event/use-event.ts";
+import { useControllableState } from "../uncontrolled-state/use-controllable-state.ts";
 
 import { same } from "./segments.ts";
 import type { Comparable, SegmentModel, Segments } from "./segments.ts";

@@ -58,7 +58,7 @@ Default.test(
       expect.objectContaining({ reason: "toggle-press" }),
     );
     await expect(toggled.events.map(({ detail }) => detail)).toEqual([
-      { component: "ToggleButton", reason: "user" },
+      { component: "ToggleButton", userInitiated: true },
     ]);
   },
 );

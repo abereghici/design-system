@@ -4,11 +4,11 @@ import type { ComponentProps, ReactNode, SyntheticEvent } from "react";
 
 import "@abereghici/tokens/components/field.css";
 
-import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
 import { useField } from "../field/use-field.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { InputGroup } from "../text-field/text-field-input-group.tsx";
 
 import { StepButtons } from "./number-field-step-buttons.tsx";

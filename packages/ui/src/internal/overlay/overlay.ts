@@ -1,9 +1,11 @@
 import { useId, useLayoutEffect, useState } from "react";
 import type { ComponentProps, FocusEvent, MouseEvent, ToggleEvent } from "react";
 
-import { composeEventHandlers, dispatchFeedback, requestChange } from "../../events/events.ts";
-import type { ChangeEventDetails as Details } from "../../events/events.ts";
-import { getDocument, useEvent } from "../../events/use-event.ts";
+import { dispatchFeedback } from "../../feedback-event/feedback-event.ts";
+import { requestChange } from "../change-request/change-request.ts";
+import type { ChangeEventDetails as Details } from "../change-request/change-request.ts";
+import { composeEventHandlers } from "../compose-event-handlers/compose-event-handlers.ts";
+import { getDocument, useEvent } from "../dom-event/use-event.ts";
 
 type ChangeReason =
   | "trigger-press"
@@ -132,7 +134,7 @@ function settle(element: HTMLElement, component: Component) {
   layer.closing = undefined;
 
   if (closing === "escape-key" || closing === "outside-press") {
-    dispatchFeedback(element, "ab-dismiss", { component, reason: "user" });
+    dispatchFeedback(element, "ab-dismiss", { component, userInitiated: true });
   }
 
   if (focusInside === true && closing !== "outside-press") returnFocus(element);

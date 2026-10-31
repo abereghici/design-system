@@ -1,7 +1,8 @@
 import type { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent } from "react";
 
-import { isComposing, requestChange, trackComposition } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { isComposing, trackComposition } from "../internal/interaction/composition.ts";
 import { enabled, optionAt } from "../internal/listbox/options.ts";
 import { textOf } from "../internal/listbox/text-of.ts";
 import type { ListboxNavigator } from "../internal/listbox/use-listbox.ts";

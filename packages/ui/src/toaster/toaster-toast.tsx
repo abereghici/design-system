@@ -5,7 +5,7 @@ import type { PointerEvent, RefObject } from "react";
 import "@abereghici/tokens/components/toast.css";
 import "@abereghici/tokens/components/kbd.css";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { composeRefs } from "../internal/slot/slot.tsx";
 import { close, mark, progressOf, remove } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
@@ -102,7 +102,7 @@ const appearRef = (id: string) => (node: HTMLLIElement | null) => {
   if (node === null || progressOf(id).shown === true) return;
 
   mark(id, { shown: true });
-  dispatchFeedback(node, "ab-appear", { component: "Toast", reason: "programmatic" });
+  dispatchFeedback(node, "ab-appear", { component: "Toast", userInitiated: false });
 };
 
 function nextControl(node: HTMLElement | null, action: boolean) {
@@ -132,7 +132,7 @@ export function Toast({ record, index, closeLabel, restore }: ToastProps) {
   useShortcut(actionRef, index === 0 && !record.exiting ? record.action?.shortcut : undefined);
 
   const leave = (from: Element, type: "ab-dismiss" | "ab-confirm") => {
-    dispatchFeedback(from, type, { component: "Toast", reason: "user" });
+    dispatchFeedback(from, type, { component: "Toast", userInitiated: true });
 
     const focused = ref.current?.contains(document.activeElement) === true;
     const next = nextControl(ref.current, document.activeElement === actionRef.current);

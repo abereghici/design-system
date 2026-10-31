@@ -2,23 +2,17 @@
 
 import type { ComponentProps, ReactNode } from "react";
 
-import { composeEventHandlers, isComposing, trackComposition } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
-import { useField } from "../field/use-field.ts";
-import type { FormControl } from "../field/use-field.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { XIcon } from "../icon/icons/x.tsx";
+import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
+import { isComposing, trackComposition } from "../internal/interaction/composition.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { InputGroup } from "../text-field/text-field-input-group.tsx";
 import { Input as TextInput } from "../text-field/text-field-input.tsx";
 
+import { useSearchFieldState } from "./use-search-field-state.ts";
+import type { SearchFieldChangeEventDetails } from "./use-search-field-state.ts";
 import styles from "./search-field.module.css";
-
-/** `cancel()`: keeps the current text. */
-export type SearchFieldChangeEventDetails = Details<"none" | "clear-press" | "escape-key">;
-
-type Reason = SearchFieldChangeEventDetails["reason"];
 
 export type ControlProps = Omit<
   ComponentProps<typeof TextInput>,
@@ -43,40 +37,9 @@ export type ControlProps = Omit<
   startElement?: ReactNode;
 };
 
-function empty(input: FormControl) {
-  input.value = "";
-  input.focus();
-}
-
-function useSearchText({
-  value,
-  defaultValue,
-  onValueChange,
-  disabled,
-  readOnly,
-}: Pick<ControlProps, "value" | "defaultValue" | "onValueChange" | "disabled" | "readOnly">) {
-  const { field, blocked } = useField(disabled);
-  const input = field?.control ?? null;
-  const [text, change] = useControllableState(
-    value,
-    defaultValue ?? "",
-    onValueChange,
-    input?.form ?? null,
-  );
-
-  return {
-    field,
-    clearable: text !== "" && !blocked && readOnly !== true,
-    change,
-    clear: (reason: Reason, event: Event) => {
-      if (input !== null && change("", reason, event)) empty(input);
-    },
-  };
-}
-
 /** The search input and its clear button. */
 export function Control({ clearLabel, startElement, ...props }: ControlProps) {
-  const { field, clearable, change, clear } = useSearchText(props);
+  const { controlId, clearable, change, clear } = useSearchFieldState(props);
 
   const clearButton = clearable ? (
     <IconButton
@@ -84,7 +47,7 @@ export function Control({ clearLabel, startElement, ...props }: ControlProps) {
       className={styles["clear"]}
       tabIndex={-1}
       aria-label={clearLabel}
-      aria-controls={field?.controlId}
+      aria-controls={controlId}
       onPointerDown={(event) => {
         event.preventDefault();
       }}

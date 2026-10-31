@@ -5,10 +5,11 @@ import type { ComponentProps, SyntheticEvent } from "react";
 
 import "@abereghici/tokens/components/disclosure.css";
 
-import { dispatchFeedback } from "../events/events.ts";
-import type { ChangeEventDetails as EventDetails, ToggleFeedbackEvent } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import type { ToggleFeedbackEvent } from "../feedback-event/feedback-event.ts";
+import type { ChangeEventDetails as EventDetails } from "../internal/change-request/change-request.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./disclosure.module.css";
 
@@ -64,7 +65,7 @@ export function DisclosureRoot({
 
     if (request(next, pressed ? "trigger-press" : "none", event.nativeEvent)) {
       if (pressed)
-        dispatchFeedback(event.currentTarget, "ab-toggle", { component, reason: "user" });
+        dispatchFeedback(event.currentTarget, "ab-toggle", { component, userInitiated: true });
     } else if (!pressed) {
       // The browser opened it already, for find-in-page or a fragment link; only a press can wait.
       set(next);

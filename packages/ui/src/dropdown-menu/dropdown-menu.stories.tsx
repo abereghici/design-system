@@ -128,7 +128,7 @@ Default.test(
     dismissals.stop();
     await waitFor(() => expect(canvas.queryByRole("menu")).toBeNull());
     await expect(dismissals.events.map(({ detail }) => detail)).toEqual([
-      { component: "DropdownMenu", reason: "user" },
+      { component: "DropdownMenu", userInitiated: true },
     ]);
     await expect(reasons()).toEqual([
       [true, "trigger-press"],
@@ -163,7 +163,7 @@ Default.test(
     await waitFor(() => expect(canvas.queryByRole("menu")).toBeNull());
     await expect(presses.events.map(({ detail }) => detail)).toContainEqual({
       component: "DropdownMenu",
-      reason: "user",
+      userInitiated: true,
     });
     await expect(reasons().at(-1)).toEqual([false, "item-press"]);
   },
@@ -202,7 +202,7 @@ Default.test(
     await expect(item).toHaveAttribute("aria-checked", "true");
     await expect(item).toHaveFocus();
     await expect(toggles.events.map(({ detail }) => detail)).toEqual([
-      { component: "DropdownMenu", reason: "user" },
+      { component: "DropdownMenu", userInitiated: true },
     ]);
   },
 );

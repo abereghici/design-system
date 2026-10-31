@@ -5,7 +5,7 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/command.css";
 
-import { dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { Listbox } from "../internal/listbox/listbox.tsx";
 import { enabled, optionAt } from "../internal/listbox/options.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
@@ -55,7 +55,7 @@ export function List(props: ListProps) {
             const option = optionAt(event.target);
 
             if (option !== null) {
-              dispatchFeedback(option, "ab-confirm", { component: "Command", reason: "user" });
+              dispatchFeedback(option, "ab-confirm", { component: "Command", userInitiated: true });
             }
           },
         },

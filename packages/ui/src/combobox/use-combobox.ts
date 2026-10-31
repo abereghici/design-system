@@ -1,12 +1,12 @@
 import { createContext, useId, useLayoutEffect, useState } from "react";
 
-import { useControllableState } from "../events/use-controllable-state.ts";
-import { getDocument, useEvent } from "../events/use-event.ts";
+import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
 import { textOf } from "../internal/listbox/text-of.ts";
 import { useListbox } from "../internal/listbox/use-listbox.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { byId, isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 import { valuesOf } from "../internal/toggle/toggle.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import {
   chosenOf,

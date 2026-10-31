@@ -3,7 +3,7 @@
 import { createContext } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
-import { useControllableState } from "../../events/use-controllable-state.ts";
+import { useControllableState } from "../uncontrolled-state/use-controllable-state.ts";
 
 import { Group } from "./menu-group.tsx";
 import type { ItemChangeEventDetails } from "./menu.tsx";

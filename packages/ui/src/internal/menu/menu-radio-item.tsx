@@ -2,7 +2,7 @@
 
 import { use } from "react";
 
-import { dispatchFeedback } from "../../events/events.ts";
+import { dispatchFeedback } from "../../feedback-event/feedback-event.ts";
 
 import { Indicator } from "./menu-item-indicator.tsx";
 import { RadioGroupContext } from "./menu-radio-group.tsx";
@@ -38,7 +38,7 @@ export function RadioItem({ value, onClick, children, ...rest }: RadioItemProps)
 
           dispatchFeedback(event.currentTarget, "ab-toggle", {
             component: menu.component,
-            reason: "user",
+            userInitiated: true,
           });
         }
 

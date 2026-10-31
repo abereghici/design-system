@@ -5,8 +5,9 @@ import type { ComponentProps, MouseEvent, ReactElement } from "react";
 import "@abereghici/tokens/components/icon-button.css";
 import "@abereghici/tokens/components/popover.css";
 
-import { composeEventHandlers, dispatchFeedback } from "../events/events.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { XIcon } from "../icon/icons/x.tsx";
+import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
 import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 
 import { usePopover } from "./popover-root.tsx";
@@ -43,7 +44,7 @@ export function Close({ asChild = false, ...props }: CloseProps) {
       } else if (!asChild) {
         dispatchFeedback(event.currentTarget, "ab-dismiss", {
           component: "Popover",
-          reason: "user",
+          userInitiated: true,
         });
       }
     }),

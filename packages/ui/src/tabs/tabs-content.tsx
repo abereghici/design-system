@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/tabs.css";
 
-import { useEvent } from "../events/use-event.ts";
+import { useEvent } from "../internal/dom-event/use-event.ts";
 import { composeRefs, mergeProps } from "../internal/slot/slot.tsx";
 
 import { useTabs } from "./tabs-root.tsx";

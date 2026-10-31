@@ -6,10 +6,10 @@ import type { ComponentProps, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/tabs.css";
 
-import { dispatchFeedback } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./tabs.module.css";
 
@@ -67,7 +67,7 @@ export function Root({ value, defaultValue, onValueChange, ...props }: RootProps
 
     trigger.focus();
     trigger.scrollIntoView({ block: "nearest", inline: "nearest" });
-    dispatchFeedback(trigger, "ab-toggle", { component: "Tabs", reason: "user" });
+    dispatchFeedback(trigger, "ab-toggle", { component: "Tabs", userInitiated: true });
   }
 
   function reveal(next: string, event: Event) {

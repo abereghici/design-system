@@ -4,8 +4,9 @@ import type { ComponentProps, MouseEvent, ReactNode } from "react";
 
 import "@abereghici/tokens/components/disclosure.css";
 
-import { composeEventHandlers, pointerMarker } from "../events/events.ts";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
+import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
+import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { useDisclosure } from "./disclosure-root.tsx";
