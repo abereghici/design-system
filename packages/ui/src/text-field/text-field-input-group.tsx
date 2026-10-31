@@ -4,6 +4,8 @@ import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/field.css";
 
+import { mergeProps } from "../internal/slot/slot.tsx";
+
 import fieldStyles from "../field/field.module.css";
 import styles from "./text-field.module.css";
 
@@ -17,8 +19,7 @@ export function InputGroup({
 }: ComponentProps<"div"> & { start: ReactNode; end: ReactNode }) {
   return (
     <div
-      {...props}
-      className={`${fieldStyles["control"]} ${styles["group"]}`}
+      {...mergeProps({ className: `${fieldStyles["control"]} ${styles["group"]}` }, props)}
       onPointerDown={(event) => {
         onPointerDown?.(event);
 

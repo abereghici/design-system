@@ -69,9 +69,9 @@ export const componentRoutes = [
   },
   {
     name: "combobox",
-    tokens: ["field", "combobox", "icon"],
+    tokens: ["field", "combobox", "icon", "tag", "tag-group"],
     client: ["combobox/combobox-group", "combobox/combobox-item", "combobox/combobox-root"],
-    html: 'role="combobox"',
+    html: 'name="reviewers" value="eh"',
   },
   { name: "form", tokens: [], client: ["form/form"], html: "<form" },
   { name: "fieldset", tokens: ["fieldset"], client: [], html: "<legend" },

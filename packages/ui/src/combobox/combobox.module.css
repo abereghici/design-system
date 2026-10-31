@@ -1,4 +1,31 @@
 @layer ab.components {
+  /* With several choices the box grows a line at a time as its tags wrap. */
+  .multiple {
+    block-size: auto;
+    min-block-size: var(--ab-field-height);
+  }
+
+  [data-size="lg"] .multiple {
+    block-size: auto;
+    min-block-size: var(--ab-field-lg-height);
+  }
+
+  .values {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ab-tag-group-gap);
+    min-inline-size: 0;
+    padding-block: var(--ab-field-padding-block);
+  }
+
+  /* Sized to its text, so it moves to its own line only once the tags leave it no room. */
+  .input {
+    flex: 1 0 auto;
+    field-sizing: content;
+  }
+
   .list {
     position-anchor: auto;
     inset: auto;
