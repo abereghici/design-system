@@ -1,13 +1,7 @@
-import type { SyntheticEvent } from "react";
-
-import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
-import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { toggled } from "../internal/selection/selection.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import type { RootProps } from "./tree-root.tsx";
-
-type ItemEvent = SyntheticEvent<HTMLElement>;
 
 type Options = {
   readonly [
@@ -22,37 +16,20 @@ type Options = {
   ]: RootProps[Key];
 };
 
-/** Keys held by the Tree or the app; a change is requested first and dispatches `ab-toggle`. */
-function useKeys<Reason extends string>(
-  keys: ReadonlyArray<string> | undefined,
-  defaultKeys: ReadonlyArray<string> | undefined,
-  onChange: ((keys: string[], details: Details<Reason>) => void) | undefined,
-) {
-  const [current, request] = useControllableState(keys, defaultKeys ?? [], onChange);
-
-  function change(next: string[], reason: Reason, event: ItemEvent) {
-    if (request(next, reason, event.nativeEvent)) {
-      dispatchFeedback(event.currentTarget, "ab-toggle", {
-        component: "Tree",
-        userInitiated: true,
-      });
-    }
-  }
-
-  return [current, change] as const;
-}
-
-/** The Tree's expanded Items and, with a `selectionMode`, its selected ones. */
+/**
+ * The Tree's expanded Items and, with a `selectionMode`, its selected ones, held by the Tree or the
+ * app. Each change is requested first; `toggle` and `select` answer whether it was accepted.
+ */
 export function useTreeState(options: Options) {
   const { selectionMode } = options;
-  const [expanded, setExpanded] = useKeys(
+  const [expanded, requestExpanded] = useControllableState(
     options.expandedKeys,
-    options.defaultExpandedKeys,
+    options.defaultExpandedKeys ?? [],
     options.onExpandedChange,
   );
-  const [selected, setSelected] = useKeys(
+  const [selected, requestSelected] = useControllableState(
     options.selectedKeys,
-    options.defaultSelectedKeys,
+    options.defaultSelectedKeys ?? [],
     options.onSelectionChange,
   );
   const selectedKeys = selectionMode === undefined ? null : new Set(selected);
@@ -60,12 +37,14 @@ export function useTreeState(options: Options) {
   return {
     expandedKeys: new Set(expanded),
     selectedKeys,
-    toggle: (id: string, reason: "arrow-key" | "item-press", event: ItemEvent) => {
-      setExpanded(toggled(expanded, id), reason, event);
-    },
-    select: (id: string, event: ItemEvent) => {
-      if (selectionMode === "multiple") setSelected(toggled(selected, id), "item-press", event);
-      else if (selectedKeys?.has(id) === false) setSelected([id], "item-press", event);
+    toggle: (id: string, reason: "arrow-key" | "item-press", event: Event) =>
+      requestExpanded(toggled(expanded, id), reason, event),
+    select: (id: string, event: Event) => {
+      if (selectionMode === "multiple") {
+        return requestSelected(toggled(selected, id), "item-press", event);
+      }
+
+      return selectedKeys?.has(id) === false && requestSelected([id], "item-press", event);
     },
   };
 }

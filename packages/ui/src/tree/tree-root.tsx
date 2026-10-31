@@ -39,10 +39,11 @@ interface TreeContextValue {
     readonly selectedKeys: ReadonlySet<string> | null;
     readonly active: string | null;
   };
+  /** `keyDown` and `press` answer whether the Tree accepted a change. */
   readonly actions: {
     readonly focus: (id: string) => void;
-    readonly keyDown: (event: KeyboardEvent<HTMLElement>, item: TreeItemState) => void;
-    readonly press: (event: ItemEvent, item: TreeItemState) => void;
+    readonly keyDown: (event: KeyboardEvent<HTMLElement>, item: TreeItemState) => boolean;
+    readonly press: (event: ItemEvent, item: TreeItemState) => boolean;
   };
   readonly meta: { readonly level: number };
 }
@@ -59,22 +60,26 @@ type TreeState = ReturnType<typeof useTreeState>;
 
 function press(tree: TreeState, event: ItemEvent, item: TreeItemState) {
   if (tree.selectedKeys === null || onChevron(event, item)) {
-    if (item.branch) tree.toggle(item.id, "item-press", event);
-  } else {
-    tree.select(item.id, event);
+    return item.branch && tree.toggle(item.id, "item-press", event.nativeEvent);
   }
+
+  return tree.select(item.id, event.nativeEvent);
 }
 
 function keyDown(tree: TreeState, event: KeyboardEvent<HTMLElement>, item: TreeItemState) {
   const target = treeNavigation.keyTarget(event, item);
 
-  if (target === null) return;
+  if (target === null) return false;
 
   event.preventDefault();
 
-  if (target === "toggle") tree.toggle(item.id, "arrow-key", event);
-  else if (target === "press") press(tree, event, item);
-  else if (target instanceof HTMLElement) target.focus();
+  if (target === "toggle") return tree.toggle(item.id, "arrow-key", event.nativeEvent);
+
+  if (target === "press") return press(tree, event, item);
+
+  if (target instanceof HTMLElement) target.focus();
+
+  return false;
 }
 
 const own = {
@@ -148,12 +153,8 @@ export function Root({
         state: { expandedKeys: tree.expandedKeys, selectedKeys: tree.selectedKeys, active },
         actions: {
           focus: setActive,
-          keyDown: (event, item) => {
-            keyDown(tree, event, item);
-          },
-          press: (event, item) => {
-            press(tree, event, item);
-          },
+          keyDown: (event, item) => keyDown(tree, event, item),
+          press: (event, item) => press(tree, event, item),
         },
         meta: { level: 1 },
       }}
