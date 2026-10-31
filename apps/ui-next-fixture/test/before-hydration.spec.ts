@@ -98,7 +98,8 @@ test.describe("with JavaScript off, a Field control is described by its descript
   }
 });
 
-// Each Tier 1 Field control route, what the user enters, and where its native GET form goes.
+// Each Tier 1 Field control route, and each Tier 2 one with a native fallback, what the user enters,
+// and where its native GET form goes.
 const fields = [
   [
     "text-field",
@@ -155,9 +156,14 @@ const fields = [
     (page: Page) => page.getByRole("textbox", { name: "Query" }).fill("shoes"),
     "/search?q=shoes",
   ],
+  [
+    "date-field",
+    (page: Page) => page.getByRole("textbox", { name: "Date of birth" }).fill("2026-10-24"),
+    "/date-field?birthDate=2026-10-24",
+  ],
 ] as const;
 
-test.describe("with JavaScript off, a Tier 1 Field control submits its form", () => {
+test.describe("with JavaScript off, a Field control submits its form", () => {
   for (const [route, fill, url] of fields) {
     test(route, async ({ page }) => {
       await page.goto(`/${route}`);
@@ -248,6 +254,7 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["alert", "button", "Dismiss"],
     ["calendar", "button", "Previous month"],
     ["calendar", "button", "Next month"],
+    ["date-field", "spinbutton", "lună"],
     ["date-picker", "button", "Choose date"],
     ["number-field", "button", "Decrease"],
     ["number-field", "button", "Increase"],

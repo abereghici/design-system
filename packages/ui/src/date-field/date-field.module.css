@@ -51,6 +51,31 @@
     color: var(--ab-field-text-color-disabled);
   }
 
+  .native {
+    display: none;
+  }
+
+  /* Only script can edit the segments, so without it the browser's own input takes their place. */
+  @media (scripting: none) {
+    .segment,
+    .separator {
+      display: none;
+    }
+
+    .native {
+      display: block;
+      flex: 1;
+      min-inline-size: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: inherit;
+      font: inherit;
+      outline: none;
+    }
+  }
+
   @media (forced-colors: active) {
     .segment::placeholder {
       color: GrayText;

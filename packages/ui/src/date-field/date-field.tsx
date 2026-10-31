@@ -19,7 +19,8 @@ export type DateFieldProps = DateFieldOptions &
  * such as a birth date people know by heart. It submits with the form and validates like any input.
  * To pick from a month, use Calendar or DatePicker.
  *
- * Tier 2: shows its final content before hydration and works after it.
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, the
+ * browser's own date input takes its place.
  */
 export function DateField(props: DateFieldProps) {
   return <Root {...props} />;

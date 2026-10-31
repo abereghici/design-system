@@ -109,7 +109,8 @@ function pickerOf(
  * `DatePicker.Content`; it follows the DatePicker's value and limits. For dates people type from
  * memory (birth dates), use DateField; for an always visible month, Calendar.
  *
- * Tier 2: shows its final content before hydration and works after it.
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, the
+ * browser's own date input takes its place.
  */
 export function Root(props: RootProps) {
   const { defaultValue, open, defaultOpen, onOpenChange, isDateUnavailable, ...rest } = props;

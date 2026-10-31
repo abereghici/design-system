@@ -7,7 +7,6 @@ import "@abereghici/tokens/components/date-field.css";
 import { useField } from "../field/use-field.ts";
 import { useDateFormats } from "../internal/date/date.ts";
 import type { DatePart, Temporal } from "../internal/date/date.ts";
-import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import { bounds, display } from "./segments.ts";
 import type { Segments } from "./segments.ts";
@@ -139,39 +138,38 @@ const isFirstInvalid = (input: HTMLInputElement) =>
     (element) => !(element instanceof HTMLFieldSetElement) && element.matches(":invalid"),
   ) === input;
 
-function HiddenInput({
+/** The browser's date input: it holds the value for the form, and stands in for the segments without script. */
+function NativeInput({
   control,
   options,
 }: {
   control: ReturnType<typeof useControl>;
   options: DateFieldOptions;
 }) {
-  const { field, name, date, editing, validity } = control;
+  const { field, name, date, invalid, editing, validity } = control;
 
   return (
-    <VisuallyHidden asChild>
-      <input
-        type="date"
-        tabIndex={-1}
-        aria-hidden="true"
-        id={field?.controlId}
-        ref={field?.register}
-        name={name}
-        form={options.form}
-        required={options.required}
-        min={options.min?.toString()}
-        max={options.max?.toString()}
-        defaultValue={date.committed?.toString() ?? ""}
-        onFocus={editing.focusFirstEmpty}
-        onClick={editing.focusFirstEmpty}
-        onInvalid={(event) => {
-          validity.report(true);
+    <input
+      type="date"
+      id={field?.controlId}
+      ref={field?.register}
+      name={name}
+      form={options.form}
+      required={options.required}
+      min={options.min?.toString()}
+      max={options.max?.toString()}
+      defaultValue={date.committed?.toString() ?? ""}
+      aria-describedby={field?.describedBy}
+      aria-invalid={invalid}
+      className={styles["native"]}
+      onClick={editing.focusFirstEmpty}
+      onInvalid={(event) => {
+        validity.report(true);
 
-          // The control is visually hidden, so the user lands on the first segment they can fill in.
-          if (isFirstInvalid(event.currentTarget)) setTimeout(editing.focusFirstEmpty);
-        }}
-      />
-    </VisuallyHidden>
+        // With script the input isn't rendered, so the user lands on the first segment to fill in.
+        if (isFirstInvalid(event.currentTarget)) setTimeout(editing.focusFirstEmpty);
+      }}
+    />
   );
 }
 
@@ -210,7 +208,7 @@ export function Control({ options, onValidity, end, ...props }: ControlProps) {
           </span>
         ),
       )}
-      <HiddenInput control={control} options={options} />
+      <NativeInput control={control} options={options} />
       {end}
     </fieldset>
   );
