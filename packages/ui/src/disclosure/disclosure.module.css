@@ -1,0 +1,89 @@
+@layer ab.components {
+  .root::details-content {
+    block-size: 0;
+    overflow: clip;
+    opacity: 0;
+  }
+
+  .root[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+
+  .trigger {
+    --ab-icon-color: var(--ab-disclosure-trigger-icon-color);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ab-disclosure-trigger-gap);
+    padding-block: var(--ab-disclosure-trigger-padding-block);
+    font: var(--ab-disclosure-trigger-font);
+    color: var(--ab-disclosure-trigger-text-color);
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    user-select: none;
+    border-radius: var(--ab-radius-xs);
+  }
+
+  .trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .icon {
+    transition: color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color);
+  }
+
+  .root[open] > .trigger > .icon {
+    rotate: 180deg;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .trigger:hover {
+      --ab-icon-color: var(--ab-disclosure-trigger-icon-color-hovered);
+    }
+  }
+
+  .content {
+    padding-block-end: var(--ab-disclosure-panel-padding-block);
+    font: var(--ab-disclosure-panel-font);
+    color: var(--ab-disclosure-panel-text-color);
+    text-wrap: pretty;
+    overflow-wrap: anywhere;
+  }
+
+  .root:has(> .trigger[data-pointer])::details-content {
+    transition:
+      opacity var(--ab-disclosure-duration) var(--ab-motion-easing-color),
+      content-visibility var(--ab-disclosure-duration) allow-discrete;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .root:has(> .trigger[data-pointer])::details-content {
+      transition:
+        block-size var(--ab-disclosure-duration) var(--ab-disclosure-easing),
+        opacity var(--ab-disclosure-duration) var(--ab-motion-easing-color),
+        content-visibility var(--ab-disclosure-duration) allow-discrete;
+    }
+
+    .trigger[data-pointer] > .icon {
+      transition:
+        rotate var(--ab-disclosure-duration) var(--ab-disclosure-easing),
+        color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color);
+    }
+  }
+
+  .root:has(> .trigger[data-pointer]):not([open])::details-content {
+    transition-duration: var(--ab-disclosure-exit-duration);
+  }
+
+  @media (prefers-contrast: more) {
+    .trigger {
+      --ab-icon-color: var(--ab-disclosure-trigger-icon-color-hovered);
+    }
+
+    .content {
+      color: var(--ab-disclosure-trigger-text-color);
+    }
+  }
+}

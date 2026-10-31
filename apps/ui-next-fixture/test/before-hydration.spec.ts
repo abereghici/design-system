@@ -33,6 +33,7 @@ test.describe("Tier 1 works with JavaScript off", () => {
     ["pagination", "Next page", "/pagination?page=3"],
     ["navbar", "Home", "/"],
     ["sidebar", "Home", "/"],
+    ["table", "Invoice", "/table?sort=invoice"],
   ] as const) {
     test(`${route}: a link navigates`, async ({ page }) => {
       await page.goto(`/${route}`);
@@ -48,17 +49,6 @@ test.describe("Tier 1 works with JavaScript off", () => {
     await page.getByRole("link", { name: "Skip to main content" }).press("Enter");
 
     await expect(page.getByRole("main")).toBeFocused();
-  });
-
-  test("accordion: an item opens and closes", async ({ page }) => {
-    await page.goto("/accordion");
-    await page.getByText("Billing").click();
-
-    await expect(page.getByText("Invoices are sent monthly.")).toBeHidden();
-
-    await page.getByText("Billing").click();
-
-    await expect(page.getByText("Invoices are sent monthly.")).toBeVisible();
   });
 
   for (const [route, trigger, overlay, close] of [
@@ -80,6 +70,42 @@ test.describe("Tier 1 works with JavaScript off", () => {
       await dialog.getByRole("button", { name: close }).click();
 
       await expect(dialog).toBeHidden();
+    });
+  }
+});
+
+test.describe("with JavaScript off, ContextualHelp opens from its button", () => {
+  test("Escape and a press outside close it", async ({ page }) => {
+    await page.goto("/contextual-help");
+
+    const button = page.getByRole("button", { name: "About billing cycles" });
+    const dialog = page.getByRole("dialog", { name: "Billing cycle" });
+
+    await button.click();
+    await expect(dialog).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await button.click();
+    await expect(dialog).toBeVisible();
+    await page.mouse.click(400, 5);
+    await expect(dialog).toBeHidden();
+  });
+});
+
+test.describe("with JavaScript off, a <details> section opens and closes", () => {
+  for (const [route, summary, content] of [
+    ["accordion", "Billing", "Invoices are sent monthly."],
+    ["disclosure", "Advanced settings", "Retries stop after five attempts."],
+  ] as const) {
+    test(route, async ({ page }) => {
+      await page.goto(`/${route}`);
+      await page.getByText(summary).click();
+
+      await expect(page.getByText(content)).toBeHidden();
+
+      await page.getByText(summary).click();
+
+      await expect(page.getByText(content)).toBeVisible();
     });
   }
 });
@@ -206,6 +232,29 @@ test.describe("with JavaScript off, a Tier 2 Field control submits its starting 
   }
 });
 
+test.describe("with JavaScript off, a Slider", () => {
+  test("moves where it is pressed", async ({ page }) => {
+    await page.goto("/slider");
+
+    const slider = page.getByRole("slider", { name: "Volume" });
+    const { width, height } = (await slider.boundingBox()) ?? { width: 0, height: 0 };
+
+    await slider.click({ position: { x: width - 1, y: height / 2 } });
+    await page.getByRole("button", { name: "Submit" }).click();
+
+    await expect(page).toHaveURL("/slider?volume=100");
+  });
+
+  test("shows no value it can't keep up with", async ({ page }) => {
+    await page.goto("/slider");
+    await page.getByRole("slider", { name: "Volume" }).press("ArrowRight");
+
+    expect(await page.getByRole("main").ariaSnapshot()).toBe(
+      '- main:\n  - slider "Volume": "41"\n  - button "Submit"',
+    );
+  });
+});
+
 const tier2 = [
   "calendar",
   "code-block",
@@ -220,6 +269,7 @@ const tier2 = [
   "number-field",
   "password-field",
   "splitter",
+  "table",
   "tabs",
   "tag-group",
   "toast",
@@ -236,9 +286,6 @@ test.describe("Tier 2 before hydration", () => {
 
   for (const route of tier2) {
     test(`${route}: renders what hydration renders, and passes axe`, async ({ page, context }) => {
-      // A Tier 2 bug, kept failing until fixed: once hydrated, Tabs sets hidden="until-found" on its
-      // inactive panels, and Chrome then exposes them in the accessibility tree.
-      test.fail(route === "tabs");
       await page.route("**/*.js", (request) => request.abort());
       await page.goto(`/${route}`);
 
@@ -256,14 +303,6 @@ test.describe("Tier 2 before hydration", () => {
   }
 });
 
-// Tier 2 bugs, kept failing until fixed: these controls show with JavaScript off and do nothing.
-const shownWithoutScript = new Set([
-  "copy-button",
-  "splitter",
-  "toggle-button",
-  "toggle-button-group",
-]);
-
 test.describe("with JavaScript off, a control only script can run is hidden", () => {
   for (const [route, role, name] of [
     ["alert", "button", "Dismiss"],
@@ -274,6 +313,8 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["number-field", "button", "Decrease"],
     ["number-field", "button", "Increase"],
     ["password-field", "button", "Show password"],
+    ["table", "checkbox", "Select all invoices"],
+    ["table", "checkbox", "INV-001"],
     ["tabs", "tab", "Settings"],
     ["tag-group", "button", "Remove Draft"],
     ["copy-button", "button", "Copy invoice number"],
@@ -282,7 +323,6 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["splitter", "separator", "Resize folders"],
   ] as const) {
     test(`${route}: ${name}`, async ({ page }) => {
-      test.fail(shownWithoutScript.has(route));
       await page.goto(`/${route}`);
 
       const control = page.getByRole(role, { name, includeHidden: true });

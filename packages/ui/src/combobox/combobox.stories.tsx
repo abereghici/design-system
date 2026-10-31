@@ -3,9 +3,9 @@ import { expect, fn, screen, waitFor } from "storybook/test";
 
 import { UserIcon } from "@abereghici/ui/icons/user";
 
+import { withDensity } from "#.storybook/decorators/with-density.tsx";
 import { withDialog } from "#.storybook/decorators/with-dialog.tsx";
 import { withForm } from "#.storybook/decorators/with-form.tsx";
-import { withRoomBelow } from "#.storybook/decorators/with-room-below.tsx";
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
@@ -70,7 +70,7 @@ const meta = preview.meta({
       </>
     ),
   },
-  decorators: [withForm, withWidth("20rem"), withRoomBelow("16rem")],
+  decorators: [withForm, withWidth("20rem", "16rem")],
 });
 
 export const Default = meta.story({});
@@ -283,9 +283,7 @@ Default.test(
 
 export const Open = meta.story({
   parameters: { docs: { description: { story: "Open, with the first option highlighted." } } },
-  play: async ({ canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole("combobox", { name: "Assignee" }));
-  },
+  play: ({ userEvent }) => userEvent.click(field()),
 });
 
 export const ServerSearchResults = meta.story({
@@ -302,6 +300,8 @@ ServerSearchResults.test("shows the Items the app renders", async ({ canvas, use
   await userEvent.keyboard("{Backspace}{Enter}");
   await expect(field("Repository")).toHaveValue("platform/web");
 });
+
+export const Compact = Open.extend({ decorators: [withDensity("compact")] });
 
 export const Multiple = meta.story({
   args: { selectionMode: "multiple", removeLabel: "Remove", defaultValue: ["ab"] },

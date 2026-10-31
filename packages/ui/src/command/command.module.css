@@ -136,6 +136,16 @@
     user-select: none;
   }
 
+  @container style(--ab-density: compact) {
+    .search {
+      --ab-command-input-height: var(--ab-size-control-compact-lg);
+    }
+
+    .item {
+      --ab-command-item-height: var(--ab-size-control-compact-md);
+    }
+  }
+
   .item[hidden] {
     display: none;
   }

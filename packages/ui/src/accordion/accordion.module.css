@@ -3,95 +3,21 @@
     border-block-start: var(--ab-accordion-border-width) solid var(--ab-accordion-border-color);
   }
 
+  /* Each Item is a Disclosure; this keeps an app's overrides of the Accordion tokens working. */
   .item {
+    --ab-disclosure-trigger-padding-block: var(--ab-accordion-trigger-padding-block);
+    --ab-disclosure-trigger-font: var(--ab-accordion-trigger-font);
+    --ab-disclosure-trigger-text-color: var(--ab-accordion-trigger-text-color);
+    --ab-disclosure-trigger-icon-color: var(--ab-accordion-trigger-icon-color);
+    --ab-disclosure-trigger-icon-color-hovered: var(--ab-accordion-trigger-icon-color-hovered);
+    --ab-disclosure-trigger-gap: var(--ab-accordion-trigger-gap);
+    --ab-disclosure-panel-padding-block: var(--ab-accordion-panel-padding-block);
+    --ab-disclosure-panel-font: var(--ab-accordion-panel-font);
+    --ab-disclosure-panel-text-color: var(--ab-accordion-panel-text-color);
+    --ab-disclosure-duration: var(--ab-accordion-duration);
+    --ab-disclosure-easing: var(--ab-accordion-easing);
+    --ab-disclosure-exit-duration: var(--ab-accordion-exit-duration);
+
     border-block-end: var(--ab-accordion-border-width) solid var(--ab-accordion-border-color);
-  }
-
-  .item::details-content {
-    block-size: 0;
-    overflow: clip;
-    opacity: 0;
-  }
-
-  .item[open]::details-content {
-    block-size: auto;
-    opacity: 1;
-  }
-
-  .trigger {
-    --ab-icon-color: var(--ab-accordion-trigger-icon-color);
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--ab-accordion-trigger-gap);
-    padding-block: var(--ab-accordion-trigger-padding-block);
-    font: var(--ab-accordion-trigger-font);
-    color: var(--ab-accordion-trigger-text-color);
-    overflow-wrap: anywhere;
-    cursor: pointer;
-    user-select: none;
-    border-radius: var(--ab-radius-xs);
-  }
-
-  .trigger::-webkit-details-marker {
-    display: none;
-  }
-
-  .icon {
-    transition: color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color);
-  }
-
-  .item[open] > .trigger > .icon {
-    rotate: 180deg;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .trigger:hover {
-      --ab-icon-color: var(--ab-accordion-trigger-icon-color-hovered);
-    }
-  }
-
-  .content {
-    padding-block-end: var(--ab-accordion-panel-padding-block);
-    font: var(--ab-accordion-panel-font);
-    color: var(--ab-accordion-panel-text-color);
-    text-wrap: pretty;
-    overflow-wrap: anywhere;
-  }
-
-  .item:has(> .trigger[data-pointer])::details-content {
-    transition:
-      opacity var(--ab-accordion-duration) var(--ab-motion-easing-color),
-      content-visibility var(--ab-accordion-duration) allow-discrete;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .item:has(> .trigger[data-pointer])::details-content {
-      transition:
-        block-size var(--ab-accordion-duration) var(--ab-accordion-easing),
-        opacity var(--ab-accordion-duration) var(--ab-motion-easing-color),
-        content-visibility var(--ab-accordion-duration) allow-discrete;
-    }
-
-    .trigger[data-pointer] > .icon {
-      transition:
-        rotate var(--ab-accordion-duration) var(--ab-accordion-easing),
-        color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color);
-    }
-  }
-
-  .item:has(> .trigger[data-pointer]):not([open])::details-content {
-    transition-duration: var(--ab-accordion-exit-duration);
-  }
-
-  @media (prefers-contrast: more) {
-    .trigger {
-      --ab-icon-color: var(--ab-accordion-trigger-icon-color-hovered);
-    }
-
-    .content {
-      color: var(--ab-accordion-trigger-text-color);
-    }
   }
 }
