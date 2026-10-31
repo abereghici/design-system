@@ -40,13 +40,12 @@ export function Input({ onChange, onKeyDown, ...props }: InputProps) {
       <input
         autoComplete="off"
         spellCheck={false}
-        {...mergeProps({ className: styles["input"] }, props)}
+        {...mergeProps({ className: styles["input"], ref: command.listbox.input }, props)}
         type="text"
         role="combobox"
         aria-expanded
         aria-controls={command.listId}
         aria-autocomplete="list"
-        aria-activedescendant={command.highlighted ?? undefined}
         value={command.query}
         onCompositionEnd={trackComposition(props.onCompositionEnd)}
         onChange={(event) => {

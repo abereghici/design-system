@@ -2,7 +2,8 @@ import { createContext, useId, useLayoutEffect, useState } from "react";
 
 import { useControllableState } from "../events/use-controllable-state.ts";
 import { getDocument, useEvent } from "../events/use-event.ts";
-import { filterOptions, enabled, textOf } from "../internal/listbox/listbox.tsx";
+import { textOf } from "../internal/listbox/text-of.ts";
+import { useListbox } from "../internal/listbox/use-listbox.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 import { valuesOf } from "../internal/toggle/toggle.ts";
@@ -11,8 +12,6 @@ import {
   chosenOf,
   chosenValue,
   dismiss,
-  highlight,
-  highlightedOf,
   inputOf,
   listOf,
   memoryOf,
@@ -26,7 +25,9 @@ export const ValueContext = createContext<{ chosen: readonly string[]; multiple:
   multiple: false,
 });
 
-function applyText(c: ComboboxState, list: Element, input: HTMLInputElement) {
+type OwnState = Omit<ComboboxState, "listbox">;
+
+function applyText(c: OwnState, list: Element, input: HTMLInputElement) {
   const { inputValue, defaultInputValue } = c.options;
   const memory = memoryOf(c);
 
@@ -39,7 +40,7 @@ function applyText(c: ComboboxState, list: Element, input: HTMLInputElement) {
   memory.text = input.value;
 }
 
-function placePopover(c: ComboboxState, list: HTMLElement) {
+function placePopover(c: OwnState, list: HTMLElement) {
   if (c.open === isOpen(list)) return;
 
   list.toggleAttribute("data-pointer", memoryOf(c).pointer);
@@ -48,19 +49,7 @@ function placePopover(c: ComboboxState, list: HTMLElement) {
   else list.hidePopover();
 }
 
-function showEmpty(c: ComboboxState, list: HTMLElement, empty: boolean, text: string) {
-  list.toggleAttribute("data-empty", empty);
-
-  const row = document.getElementById(part(c, "empty"));
-
-  if (row !== null) row.hidden = !empty;
-
-  const status = document.getElementById(part(c, "status"));
-
-  if (status !== null) status.textContent = c.open && empty ? text : "";
-}
-
-function sync(c: ComboboxState, emptyText: string, locale: string | undefined) {
+function sync(c: OwnState) {
   const list = listOf(c);
   const input = inputOf(c);
 
@@ -68,28 +57,6 @@ function sync(c: ComboboxState, emptyText: string, locale: string | undefined) {
 
   applyText(c, list, input);
   placePopover(c, list);
-
-  const shown = filterOptions(list, c.options.filter === null ? "" : c.query, locale);
-
-  showEmpty(c, list, shown.length === 0, emptyText);
-
-  const memory = memoryOf(c);
-  const key = c.open ? shown.map((option) => option.id).join(" ") : "";
-
-  if (key === memory.shown) return;
-
-  memory.shown = key;
-
-  const choices = shown.filter((option) => enabled(option));
-  const chosen = choices.find((option) => c.value.includes(option.dataset["value"] ?? ""));
-  const from = memory.edge;
-
-  memory.edge = "first";
-
-  if (!c.open) highlight(list, input, null, false);
-  else if (from === "last") highlight(list, input, choices.at(-1), true);
-  else if (from === "kept") highlight(list, input, highlightedOf(input) ?? choices[0], true);
-  else highlight(list, input, from === "chosen" ? (chosen ?? choices[0]) : choices[0], true);
 }
 
 function useListeners(c: ComboboxState) {
@@ -128,8 +95,8 @@ function useListeners(c: ComboboxState) {
   );
 }
 
-/** The Combobox's state, given its empty-list text. The open list, the input's text and the highlight live in the DOM. */
-export function useCombobox(options: Options, empty: string): ComboboxState {
+/** The Combobox's state. The open list, the input's text and the highlight live in the DOM. */
+export function useCombobox(options: Options): ComboboxState {
   const id = useId();
   const [value, , setValue] = useControllableState(
     options.value === undefined ? undefined : valuesOf(options.value),
@@ -140,7 +107,7 @@ export function useCombobox(options: Options, empty: string): ComboboxState {
   const [ownOpen, setOpen] = useState(options.defaultOpen ?? false);
   const [query, setQuery] = useState("");
   const locale = useLocale();
-  const c: ComboboxState = {
+  const own: OwnState = {
     options,
     id,
     multiple: options.selectionMode === "multiple",
@@ -152,9 +119,16 @@ export function useCombobox(options: Options, empty: string): ComboboxState {
     setQuery,
   };
 
+  // The list must be open before the Listbox navigator's effect scrolls its highlight into view.
   useLayoutEffect(() => {
-    sync(c, empty, locale);
+    sync(own);
   });
+
+  const c = {
+    ...own,
+    listbox: useListbox(query, options.filter === null ? null : locale, own.open),
+  };
+
   useListeners(c);
 
   return c;

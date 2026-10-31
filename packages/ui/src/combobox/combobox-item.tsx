@@ -1,6 +1,6 @@
 "use client";
 
-import { Children, isValidElement, use, useId } from "react";
+import { Children, isValidElement, use } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/combobox.css";
@@ -52,20 +52,16 @@ export function labelsOf(children: ReactNode, labels = new Map<string, string>()
 }
 
 /** One choice. Its text content is its label: what the input or tag shows once chosen, and what ranks. */
-export function Item({ value, keywords, disabled = false, children, ...props }: ItemProps) {
-  const id = useId();
+export function Item({ value, children, ...props }: ItemProps) {
   const { chosen: values, multiple } = use(ValueContext);
   const chosen = values.includes(value);
 
   return (
     <Option
       {...mergeProps({ className: styles["option"] }, props)}
-      aria-selected={multiple && chosen}
-      id={id}
+      aria-selected={multiple ? chosen : undefined}
       data-value={value}
-      data-keywords={keywords?.join("\n")}
       data-selected={chosen ? "" : undefined}
-      aria-disabled={disabled || undefined}
     >
       {children}
       <span className={styles["indicator"]}>{chosen && <CheckIcon size="sm" />}</span>

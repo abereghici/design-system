@@ -66,13 +66,14 @@ function List({ c, naming, empty, children }: ListProps) {
 
   return (
     <Listbox
+      navigator={c.listbox}
       {...listProps(c)}
       {...naming}
       aria-multiselectable={multiple || undefined}
       className={styles["list"]}
     >
       <ValueContext value={{ chosen: c.value, multiple }}>{children}</ValueContext>
-      <div id={part(c, "empty")} aria-hidden className={styles["empty"]}>
+      <div aria-hidden hidden={!c.listbox.empty} className={styles["empty"]}>
         {empty}
       </div>
     </Listbox>
@@ -130,7 +131,7 @@ export function Root(props: RootProps) {
   const { size, className, style, name, form, children, empty, ...input } = inputPropsOf(rest);
   // Read-only blocks the same presses and keys as disabled; only the look and announcement differ.
   const locked = input.disabled === true || input.readOnly === true;
-  const c = useCombobox({ ...props, disabled: locked }, empty);
+  const c = useCombobox({ ...props, disabled: locked });
   const field = { className, style, name, invalid, disabled: input.disabled, id: part(c, "root") };
   const naming = {
     "aria-labelledby": label === undefined ? input["aria-labelledby"] : part(c, "label"),
@@ -151,7 +152,7 @@ export function Root(props: RootProps) {
       validate={validate && ((_text, formData) => validate(c.value[0] ?? "", formData))}
       after={
         <VisuallyHidden asChild>
-          <output id={part(c, "status")} />
+          <output>{c.open && c.listbox.empty ? empty : ""}</output>
         </VisuallyHidden>
       }
     >

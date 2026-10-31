@@ -31,7 +31,6 @@ exports[`Open 1`] = `
     - option "Ioana Munteanu"
     - option "Mugur Ionescu"
     - group "Former members":
-      - text: Former members
       - option "Erik Halvorsen" [disabled]
       - option "Ștefan Țurcanu"
   - status

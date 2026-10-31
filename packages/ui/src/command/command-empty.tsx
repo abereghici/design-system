@@ -17,11 +17,11 @@ export interface EmptyProps extends Omit<ComponentProps<"output">, "children"> {
 
 /** What to show while nothing matches; screen readers announce it. */
 export function Empty({ children, ...props }: EmptyProps) {
-  const { empty } = useCommand();
+  const { listbox } = useCommand();
 
   return (
     <output {...mergeProps({ className: styles["empty"] }, props)}>
-      {empty && (
+      {listbox.empty && (
         <>
           <SearchIcon size="xl" className={styles["emptyIcon"]} />
           <span>{children}</span>

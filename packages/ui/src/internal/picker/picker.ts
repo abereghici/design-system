@@ -59,7 +59,11 @@ const focusStayed = (overlay: Overlay) => {
 export function usePicker(options: PickerOptions) {
   const { open, defaultOpen, onOpenChange, triggerLabel, min, max, isDateUnavailable } = options;
   const trigger = useRef<HTMLButtonElement>(null);
-  const overlay = useOverlay("Popover", { open, defaultOpen, onOpenChange });
+  const overlay = useOverlay(
+    "Popover",
+    { open, defaultOpen, onOpenChange },
+    { returnTo: () => trigger.current },
+  );
 
   return {
     panel: { overlay, name: triggerLabel, trigger },
