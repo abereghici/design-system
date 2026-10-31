@@ -1,0 +1,516 @@
+[
+  {
+    "name": "badge",
+    "tokens": ["badge"],
+    "client": ["internal/locale/formatted-number"],
+    "html": "12.345"
+  },
+  {
+    "name": "tag",
+    "tokens": ["tag"],
+    "client": [],
+    "html": "Live"
+  },
+  {
+    "name": "tag-group",
+    "tokens": ["icon", "tag", "tag-group"],
+    "client": ["tag-group/tag-group-root", "tag-group/tag-group-tag"],
+    "html": "aria-label=\"Remove\""
+  },
+  {
+    "name": "status-dot",
+    "tokens": ["status-dot"],
+    "client": [],
+    "html": "Operational"
+  },
+  {
+    "name": "avatar",
+    "tokens": ["avatar", "icon"],
+    "client": ["avatar/avatar-image"],
+    "html": "alt=\"Ana Popescu\""
+  },
+  {
+    "name": "card",
+    "tokens": ["card"],
+    "client": [],
+    "html": "<h1"
+  },
+  {
+    "name": "stack",
+    "tokens": [],
+    "client": [],
+    "html": "style=\"--gap:var(--ab-space-stack-lg)"
+  },
+  {
+    "name": "inline",
+    "tokens": [],
+    "client": [],
+    "html": "style=\"--gap:var(--ab-space-inline-md)"
+  },
+  {
+    "name": "grid",
+    "tokens": [],
+    "client": [],
+    "html": "--min:var(--ab-size-container-xs)"
+  },
+  {
+    "name": "separator",
+    "tokens": ["separator"],
+    "client": [],
+    "html": "<hr"
+  },
+  {
+    "name": "description-list",
+    "tokens": ["description-list"],
+    "client": [],
+    "html": "<dt class="
+  },
+  {
+    "name": "alert",
+    "tokens": ["alert", "icon", "icon-button"],
+    "client": ["alert/alert-close"],
+    "html": "aria-label=\"Dismiss\""
+  },
+  {
+    "name": "empty-state",
+    "tokens": ["empty-state", "icon"],
+    "client": [],
+    "html": "No files yet"
+  },
+  {
+    "name": "checkbox",
+    "tokens": ["checkbox"],
+    "client": ["checkbox/checkbox"],
+    "html": "Email me updates"
+  },
+  {
+    "name": "switch",
+    "tokens": ["switch"],
+    "client": ["switch/switch"],
+    "html": "role=\"switch\""
+  },
+  {
+    "name": "radio-group",
+    "tokens": ["fieldset", "radio-group"],
+    "client": [
+      "radio-group/radio-group-item",
+      "radio-group/radio-group-label",
+      "radio-group/radio-group-root"
+    ],
+    "html": "role=\"radiogroup\""
+  },
+  {
+    "name": "slider",
+    "tokens": ["slider"],
+    "client": [
+      "slider/slider-range",
+      "slider/slider-root",
+      "slider/slider-thumb",
+      "slider/slider-track",
+      "slider/slider-value"
+    ],
+    "html": "type=\"range\""
+  },
+  {
+    "name": "select",
+    "tokens": ["field", "select", "icon"],
+    "client": ["select/select-root"],
+    "html": "label=\"Asia Pacific\""
+  },
+  {
+    "name": "combobox",
+    "tokens": ["field", "combobox", "icon", "tag", "tag-group"],
+    "client": ["combobox/combobox-group", "combobox/combobox-item", "combobox/combobox-root"],
+    "html": "name=\"reviewers\" value=\"eh\""
+  },
+  {
+    "name": "form",
+    "tokens": [],
+    "client": ["form/form"],
+    "html": "<form"
+  },
+  {
+    "name": "fieldset",
+    "tokens": ["fieldset"],
+    "client": [],
+    "html": "<legend"
+  },
+  {
+    "name": "field",
+    "tokens": ["field"],
+    "client": ["field/field"],
+    "html": "Letters and digits."
+  },
+  {
+    "name": "text-field",
+    "tokens": ["field"],
+    "client": [
+      "field/field-description",
+      "field/field-error",
+      "field/field-label",
+      "field/field-root",
+      "text-field/text-field-input-group",
+      "text-field/text-field-input"
+    ],
+    "html": "dir=\"auto\""
+  },
+  {
+    "name": "form-fields",
+    "tokens": ["field", "icon", "icon-button", "select", "spinner"],
+    "client": [
+      "field/field-description",
+      "field/field-error",
+      "field/field-label",
+      "field/field-root",
+      "number-field/number-field",
+      "select/select-root",
+      "text-area/text-area",
+      "text-field/text-field-input-group",
+      "text-field/text-field-input"
+    ],
+    "html": "<textarea"
+  },
+  {
+    "name": "text-area",
+    "tokens": ["field"],
+    "client": ["text-area/text-area"],
+    "html": "<textarea"
+  },
+  {
+    "name": "password-field",
+    "tokens": ["field", "icon", "icon-button", "spinner"],
+    "client": [
+      "field/field-description",
+      "field/field-error",
+      "field/field-label",
+      "field/field-root",
+      "password-field/password-field-control"
+    ],
+    "html": "aria-label=\"Show password\""
+  },
+  {
+    "name": "search-field",
+    "tokens": ["field", "icon", "icon-button", "spinner"],
+    "client": [
+      "field/field-description",
+      "field/field-error",
+      "field/field-label",
+      "field/field-root",
+      "search-field/search-field-control"
+    ],
+    "html": "enterKeyHint=\"search\""
+  },
+  {
+    "name": "otp-field",
+    "tokens": ["field"],
+    "client": [
+      "field/field-description",
+      "field/field-error",
+      "field/field-label",
+      "field/field-root",
+      "text-field/text-field-input"
+    ],
+    "html": "autoComplete=\"one-time-code\""
+  },
+  {
+    "name": "file-trigger",
+    "tokens": ["button", "spinner", "icon", "icon-button"],
+    "client": ["button/button", "file-trigger/file-trigger"],
+    "html": "type=\"file\""
+  },
+  {
+    "name": "drop-zone",
+    "tokens": ["drop-zone", "button", "spinner", "icon", "icon-button"],
+    "client": ["button/button", "drop-zone/drop-zone", "file-trigger/file-trigger"],
+    "html": "Drop CSV files here"
+  },
+  {
+    "name": "number-field",
+    "tokens": ["field", "icon", "icon-button", "spinner"],
+    "client": ["number-field/number-field"],
+    "html": "aria-label=\"Increase\""
+  },
+  {
+    "name": "tabs",
+    "tokens": ["tabs"],
+    "client": ["tabs/tabs-content", "tabs/tabs-list", "tabs/tabs-root", "tabs/tabs-trigger"],
+    "html": "hidden=\"\">Settings</div>"
+  },
+  {
+    "name": "segmented-control",
+    "tokens": ["segmented-control"],
+    "client": [
+      "segmented-control/segmented-control-item",
+      "segmented-control/segmented-control-root"
+    ],
+    "html": "aria-label=\"View\""
+  },
+  {
+    "name": "accordion",
+    "tokens": ["accordion", "disclosure", "icon"],
+    "client": [
+      "accordion/accordion-item",
+      "accordion/accordion-root",
+      "accordion/accordion-trigger"
+    ],
+    "html": "<summary"
+  },
+  {
+    "name": "disclosure",
+    "tokens": ["disclosure", "icon"],
+    "client": ["disclosure/disclosure-root", "disclosure/disclosure-trigger"],
+    "html": "Retries stop after five attempts.</div></details>"
+  },
+  {
+    "name": "breadcrumbs",
+    "tokens": ["breadcrumbs", "icon", "link"],
+    "client": [],
+    "html": "<nav aria-label=\"Breadcrumb\">"
+  },
+  {
+    "name": "pagination",
+    "tokens": ["pagination", "icon", "icon-button"],
+    "client": ["internal/locale/formatted-number"],
+    "html": "href=\"/pagination?page=3\">3</a>"
+  },
+  {
+    "name": "code-block",
+    "tokens": ["code-block"],
+    "client": [],
+    "html": "<pre class"
+  },
+  {
+    "name": "copy-button",
+    "tokens": ["button", "spinner"],
+    "client": ["copy-button/copy-button"],
+    "html": "Copy invoice number</button><output"
+  },
+  {
+    "name": "toggle-button",
+    "tokens": ["toggle-button"],
+    "client": ["toggle-button/toggle-button"],
+    "html": "aria-pressed=\"true\""
+  },
+  {
+    "name": "toggle-button-group",
+    "tokens": ["toggle-button", "toggle-button-group"],
+    "client": ["toggle-button-group/toggle-button-group", "toggle-button/toggle-button"],
+    "html": "aria-label=\"Text style\""
+  },
+  {
+    "name": "toolbar",
+    "tokens": ["toolbar", "icon", "icon-button", "spinner"],
+    "client": ["icon-button/icon-button", "toolbar/toolbar"],
+    "html": "role=\"toolbar\""
+  },
+  {
+    "name": "dialog",
+    "tokens": ["dialog", "icon", "icon-button"],
+    "client": [
+      "dialog/dialog-close",
+      "dialog/dialog-content",
+      "dialog/dialog-modal",
+      "dialog/dialog-title",
+      "dialog/dialog-trigger"
+    ],
+    "html": "command=\"show-modal\""
+  },
+  {
+    "name": "alert-dialog",
+    "tokens": ["dialog", "button"],
+    "client": [
+      "alert-dialog/alert-dialog-action",
+      "alert-dialog/alert-dialog-cancel",
+      "alert-dialog/alert-dialog-content",
+      "alert-dialog/alert-dialog-footer",
+      "alert-dialog/alert-dialog-root",
+      "dialog/dialog-description",
+      "dialog/dialog-title",
+      "dialog/dialog-trigger"
+    ],
+    "html": "role=\"alertdialog\""
+  },
+  {
+    "name": "sheet",
+    "tokens": ["sheet", "icon", "icon-button"],
+    "client": [
+      "dialog/dialog-close",
+      "dialog/dialog-content",
+      "dialog/dialog-modal",
+      "dialog/dialog-title",
+      "dialog/dialog-trigger"
+    ],
+    "html": "data-side=\"end\""
+  },
+  {
+    "name": "navbar",
+    "tokens": ["navbar"],
+    "client": [],
+    "html": "<nav aria-label=\"Main\">"
+  },
+  {
+    "name": "page-layout",
+    "tokens": ["navbar", "sidebar"],
+    "client": [],
+    "html": "<aside"
+  },
+  {
+    "name": "splitter",
+    "tokens": ["splitter"],
+    "client": ["splitter/splitter-handle", "splitter/splitter-root"],
+    "html": "aria-valuenow=\"30\""
+  },
+  {
+    "name": "stepper",
+    "tokens": ["stepper", "icon"],
+    "client": [],
+    "html": "aria-current=\"step\""
+  },
+  {
+    "name": "sidebar",
+    "tokens": ["sidebar"],
+    "client": [],
+    "html": "Settings</summary>"
+  },
+  {
+    "name": "tooltip",
+    "tokens": ["tooltip", "icon", "icon-button", "spinner"],
+    "client": [
+      "icon-button/icon-button",
+      "tooltip/tooltip-content",
+      "tooltip/tooltip-root",
+      "tooltip/tooltip-trigger"
+    ],
+    "html": "role=\"tooltip\""
+  },
+  {
+    "name": "popover",
+    "tokens": ["popover", "icon", "icon-button"],
+    "client": [
+      "popover/popover-close",
+      "popover/popover-content",
+      "popover/popover-root",
+      "popover/popover-title",
+      "popover/popover-trigger"
+    ],
+    "html": "command=\"toggle-popover\""
+  },
+  {
+    "name": "contextual-help",
+    "tokens": ["popover", "icon", "icon-button", "spinner"],
+    "client": [
+      "icon-button/icon-button",
+      "popover/popover-content",
+      "popover/popover-root",
+      "popover/popover-title",
+      "popover/popover-trigger"
+    ],
+    "html": "Billing cycle</h2><p class=\""
+  },
+  {
+    "name": "dropdown-menu",
+    "tokens": ["dropdown-menu", "icon"],
+    "client": [
+      "dropdown-menu/dropdown-menu-content",
+      "dropdown-menu/dropdown-menu-root",
+      "dropdown-menu/dropdown-menu-trigger",
+      "internal/menu/menu-checkbox-item",
+      "internal/menu/menu-item"
+    ],
+    "html": "aria-haspopup=\"menu\""
+  },
+  {
+    "name": "context-menu",
+    "tokens": ["context-menu", "icon"],
+    "client": [
+      "context-menu/context-menu-content",
+      "context-menu/context-menu-root",
+      "context-menu/context-menu-trigger",
+      "internal/menu/menu-item"
+    ],
+    "html": "role=\"menu\""
+  },
+  {
+    "name": "toast",
+    "tokens": [],
+    "client": [],
+    "html": "Copy link"
+  },
+  {
+    "name": "toaster",
+    "tokens": ["toast", "kbd", "icon"],
+    "client": ["toaster/toaster"],
+    "html": "Copy link"
+  },
+  {
+    "name": "date-field",
+    "tokens": ["field", "date-field"],
+    "client": ["date-field/date-field-root"],
+    "html": "role=\"spinbutton\""
+  },
+  {
+    "name": "time-field",
+    "tokens": ["field", "time-field"],
+    "client": ["time-field/time-field"],
+    "html": "role=\"spinbutton\""
+  },
+  {
+    "name": "table",
+    "tokens": ["table"],
+    "client": [],
+    "html": "aria-sort=\"ascending\""
+  },
+  {
+    "name": "table-selection",
+    "tokens": ["table", "checkbox"],
+    "client": [
+      "table-selection/table-selection-root",
+      "table-selection/table-selection-select-all",
+      "table-selection/table-selection-select-row"
+    ],
+    "html": "aria-label=\"Select all invoices\""
+  },
+  {
+    "name": "calendar",
+    "tokens": ["calendar", "icon", "icon-button", "spinner"],
+    "client": [],
+    "html": "role=\"grid\""
+  },
+  {
+    "name": "date-picker",
+    "tokens": ["field", "date-field", "popover", "icon", "icon-button", "spinner"],
+    "client": [],
+    "html": "aria-haspopup=\"dialog\""
+  },
+  {
+    "name": "range-calendar",
+    "tokens": ["calendar", "range-calendar", "icon", "icon-button", "spinner"],
+    "client": [],
+    "html": "aria-selected=\"true\""
+  },
+  {
+    "name": "date-range-picker",
+    "tokens": [
+      "field",
+      "date-range-picker",
+      "popover",
+      "calendar",
+      "range-calendar",
+      "icon",
+      "icon-button",
+      "spinner"
+    ],
+    "client": [
+      "date-picker/date-picker-content",
+      "date-range-picker/date-range-picker-root",
+      "range-calendar/range-calendar"
+    ],
+    "html": "aria-haspopup=\"dialog\""
+  },
+  {
+    "name": "tree",
+    "tokens": ["icon", "spinner", "tree"],
+    "client": ["tree/tree-item", "tree/tree-root"],
+    "html": "role=\"tree\""
+  }
+]
