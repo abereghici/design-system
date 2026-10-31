@@ -40,6 +40,7 @@ Setup, checks and releases are in the repository's [CONTRIBUTING.md](../../CONTR
 | A native radio group                                                           | `internal/radio-choice/` (`use-radio-choice.ts`, `follow-visual-direction.ts`)                                           |
 | A list of chosen values                                                        | `internal/selection/selection.ts`                                                                                        |
 | Snapping a number to its steps                                                 | `internal/snap-value-to-step/snap-value-to-step.ts`                                                                      |
+| The icon of each status Variant                                                | `internal/variant-icons/variant-icons.ts`                                                                                |
 | Overlay                                                                        | `internal/overlay/overlay.ts`                                                                                            |
 | Listbox navigator                                                              | `internal/listbox/`                                                                                                      |
 | Locale                                                                         | `internal/locale/`                                                                                                       |
