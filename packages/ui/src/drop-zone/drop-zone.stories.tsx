@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { expect, fn } from "storybook/test";
+import { expect, fn, waitFor } from "storybook/test";
 
 import { Button } from "@abereghici/ui/button";
 import { Field } from "@abereghici/ui/field";
@@ -86,7 +86,9 @@ Default.test(
   "shows and announces the dropped file names, and clears them",
   async ({ canvas, userEvent }) => {
     drop(canvas.getByText("Drop CSV files here, or"), january, february);
-    await expect(canvas.getByRole("status")).toHaveTextContent("january.csv, february.csv");
+    await waitFor(() =>
+      expect(canvas.getByRole("status")).toHaveTextContent("january.csv, february.csv"),
+    );
     await userEvent.click(canvas.getByRole("button", { name: "Clear files" }));
     await expect(canvas.getByRole("status")).toBeEmptyDOMElement();
     await expect(canvas.getByRole("button", { name: "Choose files" })).toHaveFocus();
@@ -119,6 +121,20 @@ Default.test(
     drop(zone, january);
     drop(zone, february);
     await expect(submitted(canvas.getByRole("form", { name: "Profile" }))).toEqual(["january.csv"]);
+  },
+);
+
+Default.test(
+  "drops its files and their names when its form resets",
+  { decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    drop(canvas.getByText("Drop CSV files here, or"), january);
+    await waitFor(() => expect(canvas.getByRole("status")).toHaveTextContent("january.csv"));
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(canvas.getByRole("status")).toBeEmptyDOMElement();
+    await expect(submitted(form)).toEqual([""]);
   },
 );
 
@@ -189,7 +205,7 @@ Default.test(
 );
 
 Default.test(
-  "focuses its trigger and marks it invalid after a blocked submit when required",
+  "focuses its trigger and marks it invalid after a blocked submit when required, until a drop",
   {
     args: { required: true },
     decorators: [
@@ -210,6 +226,8 @@ Default.test(
 
     await expect(trigger).toHaveFocus();
     await expect(trigger).toHaveAttribute("aria-invalid", "true");
+    drop(canvas.getByText("Drop CSV files here, or"), january);
+    await waitFor(() => expect(trigger).not.toHaveAttribute("aria-invalid"));
   },
 );
 

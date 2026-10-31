@@ -2,4 +2,11 @@
   .input {
     font-variant-numeric: tabular-nums;
   }
+
+  @media (scripting: none) {
+    /* Doubled to outrank IconButton's display whichever stylesheet loads first. */
+    .step.step {
+      display: none;
+    }
+  }
 }

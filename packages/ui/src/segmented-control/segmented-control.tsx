@@ -6,4 +6,4 @@ export { Item } from "./segmented-control-item.tsx";
 
 export type { ItemProps } from "./segmented-control-item.tsx";
 
-export type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
+export type { ChangeEventDetails } from "./segmented-control-root.tsx";

@@ -45,20 +45,24 @@ Default.test(
 );
 
 Default.test(
-  "keeps a wrapped element's shape and class beside the consumer's",
-  {
-    args: {
-      children: <span className="pill" style={{ borderRadius: "999px" }} />,
-      className: "wide",
-      style: { inlineSize: "12rem" },
-    },
-  },
-  async ({ canvasElement }) => {
-    const placeholder = canvasElement.querySelector(".pill");
+  "keeps the app's styles for a wrapped element's class and the consumer's",
+  { args: { children: <span className="avatar">Ana Pop</span>, className: "wide" } },
+  async ({ canvas }) => {
+    const appStyles = document.createElement("style");
 
-    await expect(placeholder).toHaveClass("wide");
-    await expect(placeholder).not.toHaveClass("undefined");
-    await expect(placeholder).toHaveStyle({ borderRadius: "999px", inlineSize: "192px" });
+    appStyles.textContent =
+      ".avatar { border-start-start-radius: 7px; } .wide { letter-spacing: 3px; }";
+    document.head.append(appStyles);
+
+    try {
+      const { borderStartStartRadius, letterSpacing } = getComputedStyle(
+        canvas.getByText("Ana Pop"),
+      );
+
+      await expect([borderStartStartRadius, letterSpacing]).toEqual(["7px", "3px"]);
+    } finally {
+      appStyles.remove();
+    }
   },
 );
 
@@ -67,6 +71,17 @@ Default.test("pulses without moving, also under reduced motion", async ({ canvas
 
   await expect(animates(placeholder)).toBe(true);
   await expect(moves(placeholder)).toBe(false);
+});
+
+export const AroundAnElement = meta.story({
+  args: { children: save },
+  parameters: {
+    docs: {
+      description: {
+        story: "Around an element, it takes that element's size and shape, here a pill button.",
+      },
+    },
+  },
 });
 
 export const Empty = meta.story({

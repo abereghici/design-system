@@ -1,17 +1,13 @@
 import { useId } from "react";
-import type { ComponentProps, ReactNode } from "react";
+import type { CSSProperties, ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/meter.css";
 
+import type { Labelled } from "../internal/accessible-name/accessible-name.ts";
 import { FormattedNumber } from "../internal/locale/formatted-number.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./meter.module.css";
-
-type Name =
-  | { label: ReactNode }
-  | { label?: undefined; "aria-label": string }
-  | { label?: undefined; "aria-labelledby": string };
 
 type Thresholds =
   | { low?: undefined; high?: undefined; valueLabel?: ReactNode }
@@ -20,9 +16,9 @@ type Thresholds =
 
 export type MeterProps = Omit<
   ComponentProps<"meter">,
-  "children" | "value" | "min" | "max" | "low" | "high" | "optimum"
+  "children" | "className" | "style" | "value" | "min" | "max" | "low" | "high" | "optimum"
 > &
-  Name &
+  Labelled<"label"> &
   Thresholds & {
     /** The measurement, kept between `min` and `max`. */
     value: number;
@@ -34,12 +30,21 @@ export type MeterProps = Omit<
     optimum?: number;
     /** How the value reads, such as a percent or a unit ("12 GB"). */
     formatOptions?: Intl.NumberFormatOptions;
+    /**
+     * Styles the whole Meter, its label and value included. `ref`, `id` and the other attributes
+     * reach the bar itself, which assistive technology reads.
+     */
+    className?: string | undefined;
+    /** Styles the whole Meter, its label and value included. */
+    style?: CSSProperties | undefined;
   };
 
 /**
  * A measurement within a known range: storage used, a quota, a score. With `low`, `high` and
  * `optimum` the fill turns green, amber or red, so say the same in words with `valueLabel`. For
  * progress use Progress; for a value the user sets, Slider.
+ *
+ * Tier 1: works before hydration.
  */
 export function Meter({
   value,

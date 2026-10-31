@@ -5,14 +5,11 @@ import "@abereghici/tokens/components/pagination.css";
 
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { MoreIcon } from "../icon/icons/more.tsx";
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { FormattedNumber } from "../internal/locale/formatted-number.tsx";
 
 import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./pagination.module.css";
-
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
 
 export type PaginationProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelledby"> &
   AccessibleName & {
@@ -78,6 +75,8 @@ function Step({ href, label, Anchor, children }: StepProps) {
  * Links to the pages of a long, ordered list of results: Previous, a few page numbers, Next. Each
  * page is a URL, so it can be shared, bookmarked and opened in a new tab. For a short list show
  * everything; for a feed, load more on demand.
+ *
+ * Tier 1: works before hydration.
  */
 export function Pagination({
   page,

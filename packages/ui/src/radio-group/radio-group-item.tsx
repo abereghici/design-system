@@ -1,17 +1,19 @@
 "use client";
 
-import { use, useId } from "react";
+import { useId } from "react";
 import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/fieldset.css";
 import "@abereghici/tokens/components/radio-group.css";
 
-import { composeEventHandlers } from "../events/events.ts";
 import { useFieldControl } from "../field/use-field.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import { preventDefault } from "../internal/toggle/toggle.ts";
+import {
+  composeEventHandlers,
+  preventDefault,
+} from "../internal/compose-event-handlers/compose-event-handlers.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
-import { GroupContext } from "./radio-group-root.tsx";
+import { useRadioGroup } from "./radio-group-root.tsx";
 import styles from "./radio-group.module.css";
 
 export interface ItemProps extends Omit<
@@ -36,9 +38,7 @@ export function Item({
   onChange,
   ...props
 }: ItemProps) {
-  const group = use(GroupContext);
-
-  if (group === null) throw new Error("RadioGroup.Item must be inside RadioGroup.Root");
+  const group = useRadioGroup("RadioGroup.Item");
 
   const fallbackId = useId();
   const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>({

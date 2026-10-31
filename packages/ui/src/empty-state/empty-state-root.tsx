@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/empty-state.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./empty-state.module.css";
 
@@ -12,6 +12,8 @@ import styles from "./empty-state.module.css";
  * step. Screen readers don't announce it when it appears: announce a filter's empty result from your
  * own `role="status"` region. For a load still running, use Skeleton or Spinner; for an error, an
  * Alert.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root(props: ComponentProps<"div">) {
   return <div {...mergeProps({ className: styles["root"] }, props)} />;

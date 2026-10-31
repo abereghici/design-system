@@ -2,11 +2,9 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/navbar.css";
 
-import styles from "./navbar.module.css";
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
+import styles from "./navbar.module.css";
 
 /** Name every navigation landmark: an app with a Navbar and a Sidebar has two. */
 export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelledby"> &
@@ -17,6 +15,8 @@ export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelle
  * it a name, and mark the link to the page on screen with `aria-current="page"`. For many
  * destinations in groups, use a Sidebar; for the path to this page, Breadcrumbs; for views within
  * one page, Tabs.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({ children, ...props }: RootProps) {
   return (

@@ -4,7 +4,9 @@ import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/tabs.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { chain } from "../internal/chain/chain.ts";
+import type { InvokerCommands } from "../internal/invoker-commands/invoker-commands.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useTabs } from "./tabs-root.tsx";
 import styles from "./tabs.module.css";
@@ -17,8 +19,6 @@ function moveSelection(event: KeyboardEvent<HTMLButtonElement>) {
   const list = listOf(event.currentTarget);
 
   if (list === null) return;
-
-  delete list.dataset["pointer"];
 
   const tabs = [...list.querySelectorAll<HTMLButtonElement>('[role="tab"]:enabled')];
   const from = tabs.indexOf(event.currentTarget);
@@ -38,40 +38,30 @@ function moveSelection(event: KeyboardEvent<HTMLButtonElement>) {
   next.click();
 }
 
-export interface TriggerProps extends Omit<ComponentProps<"button">, "type" | "role"> {
+export interface TriggerProps
+  extends Omit<ComponentProps<"button">, "type" | "role">, InvokerCommands {
   /** Pairs the Trigger with its Content; use one word with no spaces. */
   value: string;
 }
 
 /** A tab that shows the Content with the same `value`. */
-export function Trigger({ value, onClick, onPointerDown, onKeyDown, ...props }: TriggerProps) {
-  const tabs = useTabs("Trigger");
-  const selected = value === tabs.value;
+export function Trigger({ value, onClick, onKeyDown, ...props }: TriggerProps) {
+  const tabs = useTabs("Tabs.Trigger");
+  const selected = value === tabs.state.value;
 
   return (
     <button
       {...mergeProps({ className: styles["trigger"] }, props)}
       type="button"
       role="tab"
-      id={`${tabs.id}-trigger-${value}`}
-      aria-controls={`${tabs.id}-content-${value}`}
+      id={`${tabs.meta.id}-trigger-${value}`}
+      aria-controls={`${tabs.meta.id}-content-${value}`}
       aria-selected={selected}
       tabIndex={selected ? 0 : -1}
-      onPointerDown={(event) => {
-        onPointerDown?.(event);
-
-        const list = listOf(event.currentTarget);
-
-        if (list !== null) list.dataset["pointer"] = "";
-      }}
-      onKeyDown={(event) => {
-        onKeyDown?.(event);
-        moveSelection(event);
-      }}
-      onClick={(event) => {
-        onClick?.(event);
-        tabs.select(value, event);
-      }}
+      onKeyDown={chain(onKeyDown, moveSelection)}
+      onClick={chain(onClick, (event) => {
+        tabs.actions.select(value, event);
+      })}
     />
   );
 }

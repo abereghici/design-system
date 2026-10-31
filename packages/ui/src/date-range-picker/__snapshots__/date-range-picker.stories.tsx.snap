@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- form "Profile":
+  - text: Trip dates
+  - group "Trip dates":
+    - group "Start date":
+      - spinbutton "month": "10"
+      - spinbutton "day": "12"
+      - spinbutton "year": "2026"
+    - group "End date":
+      - spinbutton "month": "10"
+      - spinbutton "day": "16"
+      - spinbutton "year": "2026"
+    - button "Choose dates"
+  - button "Save"
+  - button "Reset"
+`;

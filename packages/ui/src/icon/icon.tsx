@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/icon.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./icon.module.css";
 
@@ -20,6 +20,8 @@ export interface IconProps extends ComponentProps<"svg"> {
  * A glyph that takes the color of the text it sits in. Import a ready icon from
  * `@abereghici/ui/icons/<name>`, or pass your own `<path>` children for a custom one. For the brand
  * mark, use Logo.
+ *
+ * Tier 1: works before hydration.
  */
 export function Icon({ size = "md", label, ...props }: IconProps) {
   return (

@@ -20,6 +20,12 @@
     rotate: 180deg;
   }
 
+  @media (scripting: none) {
+    .header .page {
+      display: none;
+    }
+  }
+
   .heading {
     margin: 0;
     color: var(--ab-color-text-default);
@@ -66,6 +72,13 @@
     background-color: var(--ab-calendar-cell-background-color-selected);
     box-shadow: none;
     color: var(--ab-calendar-cell-text-color-selected);
+  }
+
+  /* A RangeCalendar's days between its ends; it sets the custom properties to its own tokens. */
+  .day[aria-selected="true"]:where(:not([data-selection-start], [data-selection-end])) {
+    border-radius: 0;
+    background-color: var(--range-background-color);
+    color: var(--range-text-color);
   }
 
   /* The ring is the fill's colour, so it stands off the selected fill by its own width to keep 3:1 against what it touches: https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html */

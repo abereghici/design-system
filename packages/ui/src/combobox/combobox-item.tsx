@@ -1,15 +1,15 @@
 "use client";
 
-import { use, useId } from "react";
+import { use } from "react";
 import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/combobox.css";
 
 import { CheckIcon } from "../icon/icons/check.tsx";
 import { Option } from "../internal/listbox/listbox.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
-import { ValueContext } from "./use-combobox.ts";
+import { ValueContext } from "./combobox-root.tsx";
 import styles from "./combobox.module.css";
 
 export interface ItemProps extends ComponentProps<"div"> {
@@ -21,20 +21,17 @@ export interface ItemProps extends ComponentProps<"div"> {
   disabled?: boolean;
 }
 
-/** One choice. Its text content is its label: what the input shows once chosen and what ranks. */
-export function Item({ value, keywords, disabled = false, children, ...props }: ItemProps) {
-  const id = useId();
-  const chosen = use(ValueContext) === value;
+/** One choice. Its text content is its label: what the input or tag shows once chosen, and what ranks. */
+export function Item({ value, children, ...props }: ItemProps) {
+  const { chosen: values, multiple } = use(ValueContext);
+  const chosen = values.includes(value);
 
   return (
     <Option
       {...mergeProps({ className: styles["option"] }, props)}
-      aria-selected={false}
-      id={id}
+      aria-selected={multiple ? chosen : undefined}
       data-value={value}
-      data-keywords={keywords?.join("\n")}
       data-selected={chosen ? "" : undefined}
-      aria-disabled={disabled || undefined}
     >
       {children}
       <span className={styles["indicator"]}>{chosen && <CheckIcon size="sm" />}</span>

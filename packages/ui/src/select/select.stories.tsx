@@ -3,6 +3,7 @@ import { expect, fn, waitFor } from "storybook/test";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
+import { turns } from "#.storybook/test/motion.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Select from "./select.tsx";
@@ -206,6 +207,18 @@ Default.test(
   },
 );
 
+Default.test(
+  "returns to its default value when its form resets",
+  { args: { defaultValue: "sg" }, decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const select = canvas.getByRole("combobox", { name: "Region" });
+
+    await userEvent.selectOptions(select, "jp");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(select).toHaveDisplayValue("Singapore");
+  },
+);
+
 function ControlledSelect(args: Select.RootProps) {
   const [value, setValue] = useState(args.value ?? "recent");
 
@@ -237,6 +250,24 @@ Default.test("opens its picker on click and chooses an option", async ({ args, c
 });
 
 Default.test(
+  "turns its chevron only when a pointer opens it and motion is allowed",
+  async ({ canvas, canvasElement }) => {
+    if (!basePicker()) return;
+
+    const user = await trusted();
+
+    await user.tab();
+    await user.keyboard(" ");
+    await expect(turns(canvasElement)).toBe(false);
+    await user.keyboard("{Escape}");
+    await user.click(canvas.getByRole("combobox", { name: "Region" }));
+    await expect(turns(canvasElement)).toBe(
+      !matchMedia("(prefers-reduced-motion: reduce)").matches,
+    );
+  },
+);
+
+Default.test(
   "stays closed on click when disabled",
   { args: { disabled: true } },
   async ({ canvas }) => {
@@ -248,6 +279,24 @@ Default.test(
     await expect(canvas.getByRole("option", { name: "Japan" }).checkVisibility()).toBe(false);
   },
 );
+
+export const Open = meta.story({
+  args: { defaultValue: "eu" },
+  parameters: {
+    docs: {
+      description: { story: "Open, with focus on the chosen option and the pointer over another." },
+    },
+  },
+  play: async ({ canvas }) => {
+    const user = await trusted().catch(() => null);
+
+    if (user === null || !basePicker()) return;
+
+    await user.tab();
+    await user.keyboard(" ");
+    await user.hover(canvas.getByRole("option", { name: "Japan" }));
+  },
+});
 
 export const Controlled = meta.story({
   args: {

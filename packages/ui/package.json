@@ -108,7 +108,8 @@
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "web-features": "catalog:"
   },
   "peerDependencies": {
     "react": "^19.2.0",

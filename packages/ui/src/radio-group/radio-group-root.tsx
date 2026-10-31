@@ -1,17 +1,22 @@
 "use client";
 
-import { createContext, useId, useState } from "react";
+import { useId } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/fieldset.css";
 import "@abereghici/tokens/components/radio-group.css";
 
-import { dispatchFeedback, pointerMarker, requestChange } from "../events/events.ts";
-import { followVisualDirection } from "../internal/follow-visual-direction/follow-visual-direction.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { followVisualDirection } from "../internal/radio-choice/follow-visual-direction.ts";
+import { useRadioChoice } from "../internal/radio-choice/use-radio-choice.ts";
 
 import styles from "./radio-group.module.css";
+
+/** `cancel()`: keeps the previous choice: the browser restores it once the click is cancelled. */
+export type ChangeEventDetails = Details<"none">;
 
 interface Group {
   readonly name: string;
@@ -21,7 +26,7 @@ interface Group {
   readonly select: (value: string, event: MouseEvent<HTMLInputElement>) => void;
 }
 
-export const GroupContext = createContext<Group | null>(null);
+export const [GroupContext, useRadioGroup] = createSafeContext<Group>("RadioGroup.Root");
 
 export interface RootProps extends Omit<ComponentProps<"fieldset">, "defaultValue" | "disabled"> {
   /** The chosen option, when your state holds it; `null` when nothing is chosen. */
@@ -47,6 +52,8 @@ export interface RootProps extends Omit<ComponentProps<"fieldset">, "defaultValu
  * One choice among 2–6 options that should all stay visible, under a Label. Arrow keys move and
  * choose (following the reading direction), and every change dispatches a bubbling `ab-toggle`. With
  * more options use Select; for a yes/no choice, Switch or Checkbox.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({
   value,
@@ -59,21 +66,12 @@ export function Root({
   ...props
 }: RootProps) {
   const fallbackName = useId();
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
-  const current = value === undefined ? uncontrolled : value;
-
-  function select(next: string, event: MouseEvent<HTMLInputElement>) {
-    if (next === current) return;
-
-    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) {
-      event.preventDefault();
-
-      return;
-    }
-
-    setUncontrolled(next);
-    dispatchFeedback(event.currentTarget, "ab-toggle", { component: "RadioGroup", reason: "user" });
-  }
+  const { current, select, setRoot } = useRadioChoice(
+    "RadioGroup",
+    value,
+    defaultValue,
+    onValueChange,
+  );
 
   return (
     <GroupContext
@@ -82,6 +80,7 @@ export function Root({
       <fieldset
         {...mergeProps(
           {
+            ref: setRoot,
             className: styles["root"],
             onPointerDown: pointerMarker.onPointerDown,
             onKeyDown: (event: KeyboardEvent<HTMLFieldSetElement>) => {

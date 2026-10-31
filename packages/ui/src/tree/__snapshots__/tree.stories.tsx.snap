@@ -1,0 +1,28 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Controlled   > base story 1`] = `
+- tree "Files":
+  - treeitem "src" [level=1] [expanded]:
+    - text: src
+    - group:
+      - treeitem "components" [level=2]
+      - treeitem "index.ts" [level=2] [selected]
+  - treeitem "package.json" [level=1]
+  - treeitem "README.md" [level=1]
+`;
+
+exports[`Default   > base story 1`] = `
+- tree "Files":
+  - treeitem "src" [level=1] [expanded]:
+    - text: src
+    - group:
+      - treeitem "components" [level=2]
+      - treeitem "index.ts" [level=2]
+  - treeitem "package.json" [level=1]
+  - treeitem "README.md" [level=1]
+`;
+
+exports[`Lazy Children   > base story 1`] = `
+- tree "Remotes":
+  - treeitem "origin" [level=1]
+`;

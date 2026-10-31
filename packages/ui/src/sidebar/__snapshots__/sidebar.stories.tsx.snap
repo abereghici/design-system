@@ -15,8 +15,7 @@ exports[`Collapsible   > base story 1`] = `
       - listitem:
         - link "UI":
           - /url: "#ui"
-  - group "Settings":
-    - group: Settings
+  - group "Settings"
 `;
 
 exports[`Default   > base story 1`] = `

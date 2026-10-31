@@ -16,7 +16,7 @@ export default defineConfig({
           {
             from: "package",
             package: "style-dictionary",
-            name: ["Dictionary", "DesignTokens", "TransformedToken", "FormatFnArguments"],
+            name: ["Dictionary", "DesignTokens", "TransformedToken"],
           },
           { from: "package", package: "fflate", name: "UnzipFileInfo" },
         ],

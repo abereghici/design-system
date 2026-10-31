@@ -34,6 +34,12 @@
     margin: var(--ab-dropdown-menu-offset);
   }
 
+  @container style(--ab-density: compact) {
+    .content {
+      --ab-dropdown-menu-item-height: var(--ab-size-control-compact-sm);
+    }
+  }
+
   .content:where([data-side="top"]) {
     --origin-block: bottom;
 
@@ -44,5 +50,13 @@
     --origin-inline: var(--end);
 
     inset-inline: auto anchor(self-end);
+  }
+
+  /* Only script runs the items, so without it the trigger would open a menu that does nothing.
+     Doubled to outrank a Button's or IconButton's display whichever stylesheet loads first. */
+  @media (scripting: none) {
+    .trigger.trigger {
+      display: none;
+    }
   }
 }

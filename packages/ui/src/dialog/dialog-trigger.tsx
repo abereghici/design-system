@@ -13,7 +13,7 @@ export interface TriggerProps extends Omit<ComponentProps<"button">, "command" |
 
 /** Opens the dialog; focus returns here when it closes. */
 export function Trigger({ asChild = false, ...props }: TriggerProps) {
-  const { id } = useModal();
+  const { id } = useModal("Trigger");
   const Root = asChild ? Slot : "button";
 
   return (

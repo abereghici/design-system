@@ -1,13 +1,14 @@
 "use client";
 
-import { createContext, use, useId, useState } from "react";
-import type { ComponentProps, SyntheticEvent } from "react";
+import { useId, useState } from "react";
+import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/accordion.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import type { ChangeEventDetails as Details } from "../disclosure/disclosure-root.tsx";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./accordion.module.css";
 
@@ -16,17 +17,16 @@ import styles from "./accordion.module.css";
  * (find-in-page, fragment navigation). `cancel()`: keeps the open Items as they were. Only a
  * `"trigger-press"` can be cancelled: the browser has already revealed its match.
  */
-export type ChangeEventDetails = Details<"trigger-press" | "none">;
+export type ChangeEventDetails = Details;
 
 interface AccordionState {
   readonly name: string | undefined;
   readonly value: readonly string[];
-  readonly change: (item: string, open: boolean, event: SyntheticEvent<HTMLElement>) => void;
+  /** Answers whether the consumer accepted the change. */
+  readonly change: (item: string, open: boolean, details: ChangeEventDetails) => boolean;
 }
 
-const AccordionContext = createContext<AccordionState | null>(null);
-
-export const ItemContext = createContext<string | null>(null);
+export const [AccordionContext, useAccordion] = createSafeContext<AccordionState>("Accordion.Root");
 
 export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
   /** Lets several Items stay open at once; by default opening one closes the other. */
@@ -42,8 +42,10 @@ export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
 /**
  * Stacked sections of secondary content that open one at a time, or several with `multiple`. Enter
  * and Space toggle a section, the browser's find-in-page opens one with a match, and every press
- * dispatches a bubbling `ab-toggle`. Never hide a primary task inside one; for peer views of the
- * same place, use Tabs.
+ * dispatches a bubbling `ab-toggle`. Never hide a primary task inside one; for a single section,
+ * use Disclosure; for peer views of the same place, Tabs.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root({
   multiple = false,
@@ -56,25 +58,17 @@ export function Root({
   const [uncontrolled, setUncontrolled] = useState(defaultValue);
   const current = multiple ? (value ?? uncontrolled) : (value ?? uncontrolled).slice(0, 1);
 
-  function change(item: string, open: boolean, event: SyntheticEvent<HTMLElement>) {
+  function change(item: string, open: boolean, { reason, event }: ChangeEventDetails) {
     const next = open
       ? multiple
         ? [...current, item]
         : [item]
       : current.filter((v) => v !== item);
-    const reason = event.type === "click" ? "trigger-press" : "none";
-    const accepted = requestChange(onValueChange, next, reason, event.nativeEvent);
+    const accepted = requestChange(onValueChange, next, reason, event);
 
-    if (!accepted && reason === "trigger-press") return;
+    if (accepted || reason === "none") setUncontrolled(next);
 
-    setUncontrolled(next);
-
-    if (reason === "trigger-press") {
-      dispatchFeedback(event.currentTarget, "ab-toggle", {
-        component: "Accordion",
-        reason: "user",
-      });
-    }
+    return accepted;
   }
 
   return (
@@ -82,12 +76,4 @@ export function Root({
       <div {...mergeProps({ className: styles["root"] }, props)} />
     </AccordionContext>
   );
-}
-
-export function useAccordion(part: string) {
-  const accordion = use(AccordionContext);
-
-  if (accordion === null) throw new Error(`Accordion.${part} must be inside Accordion.Root`);
-
-  return accordion;
 }

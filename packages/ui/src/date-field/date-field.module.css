@@ -5,60 +5,10 @@
   }
 
   .group {
+    --segment-border-radius: var(--ab-date-field-segment-border-radius);
+    --segment-background-color-focused: var(--ab-date-field-segment-background-color-focused);
+    --segment-text-color-focused: var(--ab-date-field-segment-text-color-focused);
+
     anchor-name: --ab-date-field-box;
-    position: relative;
-    display: flex;
-    align-items: center;
-    cursor: text;
-  }
-
-  .segment {
-    box-sizing: border-box;
-    field-sizing: content;
-    min-inline-size: var(--ab-size-target-min);
-    margin: 0;
-    border: 0;
-    background: none;
-    font: inherit;
-    padding-inline: var(--ab-space-inset-xs);
-    border-radius: var(--ab-date-field-segment-border-radius);
-    color: var(--ab-field-text-color);
-    font-variant-numeric: tabular-nums;
-    text-align: center;
-    caret-color: transparent;
-    white-space: nowrap;
-  }
-
-  .segment:focus {
-    outline-offset: calc(var(--ab-focus-ring-width) * -1);
-    background-color: var(--ab-date-field-segment-background-color-focused);
-    color: var(--ab-date-field-segment-text-color-focused);
-  }
-
-  .segment:focus::placeholder {
-    color: inherit;
-  }
-
-  .separator {
-    color: var(--ab-field-placeholder-color);
-  }
-
-  .separator[data-filled] {
-    color: var(--ab-field-text-color);
-  }
-
-  [aria-disabled="true"] > :is(.segment, .separator) {
-    color: var(--ab-field-text-color-disabled);
-  }
-
-  @media (forced-colors: active) {
-    .segment::placeholder {
-      color: GrayText;
-    }
-
-    .segment:focus {
-      background-color: Highlight;
-      color: HighlightText;
-    }
   }
 }

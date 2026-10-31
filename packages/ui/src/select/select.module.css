@@ -24,7 +24,12 @@
     inset-inline-end: var(--ab-field-padding-inline);
     color: var(--ab-select-icon-color);
     pointer-events: none;
-    transition: rotate var(--ab-motion-duration-swap) var(--ab-motion-easing-enter);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .select[data-pointer] + .icon {
+      transition: rotate var(--ab-motion-duration-swap) var(--ab-motion-easing-enter);
+    }
   }
 
   .select[aria-disabled="true"] + .icon {
@@ -98,6 +103,8 @@
       padding-block: 0;
       padding-inline: var(--ab-select-option-padding-inline);
       border-radius: var(--ab-select-option-border-radius);
+      /* The base appearance tints a hovered option on any device, so a tap would leave it tinted. */
+      background-color: transparent;
       color: var(--ab-select-option-text-color);
       font: var(--ab-select-option-font);
       letter-spacing: normal;
@@ -107,8 +114,20 @@
       outline-offset: calc(var(--ab-focus-ring-width) * -1);
     }
 
-    .item:is(:hover, :focus-visible) {
+    @container style(--ab-density: compact) {
+      .item {
+        --ab-select-option-height: var(--ab-size-control-compact-sm);
+      }
+    }
+
+    .item:focus-visible {
       background-color: var(--ab-select-option-background-color-hovered);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .item:hover {
+        background-color: var(--ab-select-option-background-color-hovered);
+      }
     }
 
     .item::checkmark {

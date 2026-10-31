@@ -51,6 +51,13 @@
     flex-direction: column;
   }
 
+  /* Script filters and runs every command, so without it the search and its list would do nothing. */
+  @media (scripting: none) {
+    .root {
+      display: none;
+    }
+  }
+
   .search {
     display: flex;
     align-items: center;
@@ -134,6 +141,16 @@
     color: var(--ab-command-item-text-color);
     cursor: default;
     user-select: none;
+  }
+
+  @container style(--ab-density: compact) {
+    .search {
+      --ab-command-input-height: var(--ab-size-control-compact-lg);
+    }
+
+    .item {
+      --ab-command-item-height: var(--ab-size-control-compact-md);
+    }
   }
 
   .item[hidden] {

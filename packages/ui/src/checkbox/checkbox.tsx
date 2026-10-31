@@ -1,27 +1,24 @@
 "use client";
 
 import { useId } from "react";
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/checkbox.css";
 
-import { pointerMarker } from "../events/events.ts";
 import { useFieldControl } from "../field/use-field.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import { toggleClick } from "../internal/toggle/toggle.ts";
-import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
+import type { Labelled } from "../internal/accessible-name/accessible-name.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { toggleClick } from "../internal/toggle-click/toggle-click.ts";
 
 import styles from "./checkbox.module.css";
 
-export type CheckboxChangeEventDetails = ChangeEventDetails;
-
-type Name =
-  | { children: ReactNode }
-  | { children?: undefined; "aria-label": string }
-  | { children?: undefined; "aria-labelledby": string };
+/** `cancel()`: keeps the previous state: the browser restores it once the click is cancelled. */
+export type CheckboxChangeEventDetails = Details<"none">;
 
 export type CheckboxProps = Omit<ComponentProps<"input">, "type" | "children"> &
-  Name & {
+  Labelled<"children"> & {
     /** Called before the box changes; `details.cancel()` keeps the old state. */
     onCheckedChange?: (checked: boolean, details: CheckboxChangeEventDetails) => void;
     /** Shows "some selected", for a box that selects a group whose items are partly chosen. */
@@ -37,6 +34,8 @@ export type CheckboxProps = Omit<ComponentProps<"input">, "type" | "children"> &
  * An on/off choice in a form that is submitted, or one item of a set where any number may be
  * chosen. Its children are its label. Every change dispatches a bubbling `ab-toggle`. For a setting
  * that applies at once, use Switch; for one choice among several, RadioGroup.
+ *
+ * Tier 1: works before hydration.
  */
 export function Checkbox({
   children,

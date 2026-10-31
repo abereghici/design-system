@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/skip-link.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./skip-link.module.css";
 
@@ -19,6 +19,8 @@ export interface SkipLinkProps extends Omit<ComponentProps<"a">, "href" | "child
  * Lets keyboard users jump past the navigation to the main content. Put it first in the page layout;
  * it stays hidden until it has focus. Give the target `<main>` the matching `id` and `tabIndex={-1}`.
  * For any other navigation, use a Link.
+ *
+ * Tier 1: works before hydration.
  */
 export function SkipLink({ children, ...props }: SkipLinkProps) {
   return <a {...mergeProps({ className: styles["root"] }, props)}>{children}</a>;

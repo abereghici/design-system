@@ -6,9 +6,6 @@ import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Navbar from "./navbar.tsx";
 
-// @ts-expect-error -- a Navbar without aria-label or aria-labelledby leaves its landmark unnamed
-<Navbar.Root>{null}</Navbar.Root>;
-
 const links = (
   <>
     <Navbar.Item>

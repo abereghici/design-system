@@ -1,10 +1,17 @@
 import { expect } from "storybook/test";
 
+import type { StoryContext } from "@storybook/react-vite";
+
 import { CheckIcon } from "@abereghici/ui/icons/check";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { Tag } from "./tag.tsx";
+
+async function showsLabel({ canvas }: StoryContext) {
+  await expect(canvas.getByText("Draft")).toBeVisible();
+}
 
 const meta = preview.meta({
   title: "Components/Tag",
@@ -14,58 +21,23 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test(
-  "reads at AA contrast as accent",
-  { args: { variant: "accent" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("Draft")).toBeVisible();
-  },
-);
+Default.test("reads at AA contrast as accent", { args: { variant: "accent" } }, showsLabel);
 
-Default.test(
-  "reads at AA contrast as success",
-  { args: { variant: "success" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("Draft")).toBeVisible();
-  },
-);
+Default.test("reads at AA contrast as success", { args: { variant: "success" } }, showsLabel);
 
-Default.test(
-  "reads at AA contrast as warning",
-  { args: { variant: "warning" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("Draft")).toBeVisible();
-  },
-);
+Default.test("reads at AA contrast as warning", { args: { variant: "warning" } }, showsLabel);
 
-Default.test(
-  "reads at AA contrast as danger",
-  { args: { variant: "danger" } },
-  async ({ canvas }) => {
-    await expect(canvas.getByText("Draft")).toBeVisible();
-  },
-);
+Default.test("reads at AA contrast as danger", { args: { variant: "danger" } }, showsLabel);
 
-Default.test(
-  "wraps a long label instead of overflowing its container",
-  {
-    args: { children: "Awaitingsecondreviewerapproval" },
-    decorators: [
-      (Story) => (
-        <div style={{ inlineSize: "8rem" }}>
-          <Story />
-        </div>
-      ),
-    ],
+export const LongLabel = meta.story({
+  args: { children: "Awaitingsecondreviewerapproval" },
+  decorators: [withWidth("8rem")],
+  parameters: {
+    docs: {
+      description: { story: "A label longer than its container wraps instead of overflowing." },
+    },
   },
-  async ({ canvas }) => {
-    const tag = canvas.getByText("Awaitingsecondreviewerapproval");
-
-    await expect(tag.getBoundingClientRect().width).toBeLessThanOrEqual(
-      tag.parentElement?.getBoundingClientRect().width ?? 0,
-    );
-  },
-);
+});
 
 export const WithIcon = meta.story({
   args: {

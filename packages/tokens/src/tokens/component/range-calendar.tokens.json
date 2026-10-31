@@ -1,0 +1,12 @@
+{
+  "component": {
+    "range-calendar-range-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-selected}"
+    },
+    "range-calendar-range-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-selected}"
+    }
+  }
+}

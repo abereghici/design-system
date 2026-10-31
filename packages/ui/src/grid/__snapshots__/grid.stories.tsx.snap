@@ -1,0 +1,12 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default 1`] = `
+- heading "Revenue" [level=3]
+- paragraph: €48,200 this month
+- heading "Orders" [level=3]
+- paragraph: 1,284 this month
+- heading "Refunds" [level=3]
+- paragraph: 12 this month
+- heading "Customers" [level=3]
+- paragraph: 312 new this month
+`;

@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 
+import { getById } from "../internal/get-by-id/get-by-id.ts";
 import { MenuContext } from "../internal/menu/menu.tsx";
 import { useOverlay } from "../internal/overlay/overlay.ts";
 import type { ChangeEventDetails as Details, OverlayOptions } from "../internal/overlay/overlay.ts";
@@ -32,9 +33,30 @@ export function place(anchor: HTMLElement, x: number, y: number, pointer: boolea
   return anchor;
 }
 
+const focusBefore = new WeakMap<Element, Element | null>();
+
+/**
+ * Records where focus was before a press that may open the menu moved it (WebKit blurs on press),
+ * for the menu to return it there.
+ */
+export function rememberFocus(contentId: string) {
+  const content = getById(contentId);
+
+  if (content !== null) focusBefore.set(content, document.activeElement);
+}
+
+/** Where focus returns once the menu closes: where it was before the press that opened it. */
+function returnTo(content: Element) {
+  const focus = focusBefore.get(content) ?? document.activeElement;
+
+  focusBefore.delete(content);
+
+  return focus;
+}
+
 function cornerAnchor(contentId: string) {
-  const anchor = document.getElementById(`${contentId}-anchor`);
-  const area = document.getElementById(`${contentId}-area`);
+  const anchor = getById(`${contentId}-anchor`);
+  const area = getById(`${contentId}-area`);
 
   if (anchor === null || area === null) return anchor;
 
@@ -52,9 +74,15 @@ export interface RootProps extends OverlayOptions<ChangeReason> {
  * The same menu as DropdownMenu, opened by a right click or a long press on an area, or by the
  * keyboard's context-menu key. It is a shortcut, never the only way to an action: put the same items
  * in a visible control too.
+ *
+ * Tier 2: shows its final content before hydration and works after it.
  */
 export function Root({ children, ...options }: RootProps) {
-  const overlay = useOverlay("ContextMenu", options, cornerAnchor);
+  const overlay = useOverlay("ContextMenu", options, {
+    source: cornerAnchor,
+    returnTo,
+    pointer: (source) => source?.matches("[data-pointer]") === true,
+  });
 
   return <MenuContext value={{ overlay, component: "ContextMenu" }}>{children}</MenuContext>;
 }

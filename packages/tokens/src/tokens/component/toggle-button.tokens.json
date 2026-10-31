@@ -1,0 +1,108 @@
+{
+  "component": {
+    "toggle-button-sm-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-sm}"
+    },
+    "toggle-button-md-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-md}"
+    },
+    "toggle-button-lg-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-lg}"
+    },
+    "toggle-button-sm-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "toggle-button-md-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "toggle-button-lg-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-lg}"
+    },
+    "toggle-button-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
+    },
+    "toggle-button-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "toggle-button-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-default}"
+    },
+    "toggle-button-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-sm}"
+    },
+    "toggle-button-lg-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-label-md}"
+    },
+    "toggle-button-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    },
+    "toggle-button-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtle}"
+    },
+    "toggle-button-text-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "toggle-button-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "toggle-button-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-subtle}"
+    },
+    "toggle-button-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle}"
+    },
+    "toggle-button-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+    },
+    "toggle-button-background-color-pressed": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-pressed}"
+    },
+    "toggle-button-text-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-text-selected}"
+    },
+    "toggle-button-icon-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-selected}"
+    },
+    "toggle-button-background-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-background-selected}"
+    },
+    "toggle-button-border-color-selected": {
+      "$type": "color",
+      "$value": "{semantic.color-border-selected}"
+    },
+    "toggle-button-text-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-text-disabled}"
+    },
+    "toggle-button-border-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-border-disabled}"
+    },
+    "toggle-button-scale-pressed": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-pressed}"
+    }
+  }
+}

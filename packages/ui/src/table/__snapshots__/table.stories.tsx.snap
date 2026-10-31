@@ -30,6 +30,22 @@ exports[`Default   > base story 1`] = `
       - cell "€74.10"
 `;
 
+exports[`Empty 1`] = `
+- table "Invoices, 2026":
+  - caption: Invoices, 2026
+  - rowgroup:
+    - row "Invoice Status Issued Amount":
+      - columnheader "Invoice"
+      - columnheader "Status"
+      - columnheader "Issued"
+      - columnheader "Amount"
+  - rowgroup:
+    - row "No invoices yet Invoices appear here as soon as you bill a customer.":
+      - cell "No invoices yet Invoices appear here as soon as you bill a customer.":
+        - heading "No invoices yet" [level=3]
+        - paragraph: Invoices appear here as soon as you bill a customer.
+`;
+
 exports[`In A Scroll Area   > base story 1`] = `
 - region "Invoices, 2026":
   - table "Invoices, 2026":
@@ -61,14 +77,44 @@ exports[`In A Scroll Area   > base story 1`] = `
         - cell "€74.10"
 `;
 
-exports[`Selectable   > base story 1`] = `
-- table "Invoices":
+exports[`Loading   > base story 1`] = `
+- table "Invoices, 2026":
+  - caption: Invoices, 2026
+  - rowgroup:
+    - row "Invoice Status Issued Amount":
+      - columnheader "Invoice"
+      - columnheader "Status"
+      - columnheader "Issued"
+      - columnheader "Amount"
+  - rowgroup:
+    - row:
+      - cell
+      - cell
+      - cell
+      - cell
+    - row:
+      - cell
+      - cell
+      - cell
+      - cell
+    - row:
+      - cell
+      - cell
+      - cell
+      - cell
+`;
+
+exports[`Row Selection   > base story 1`] = `
+- table "Invoices, 2026":
+  - caption: Invoices, 2026
   - rowgroup:
     - row "Select all invoices Invoice Amount":
       - columnheader "Select all invoices":
         - checkbox "Select all invoices" [checked=mixed]
-      - columnheader "Invoice"
-      - columnheader "Amount"
+      - columnheader "Invoice":
+        - button "Invoice"
+      - columnheader "Amount":
+        - button "Amount"
   - rowgroup:
     - row "Select INV-001 INV-001 €250.00":
       - cell "Select INV-001":
@@ -87,27 +133,55 @@ exports[`Selectable   > base story 1`] = `
       - cell "€74.10"
 `;
 
-exports[`Sortable   > base story 1`] = `
+exports[`Sorted On The Server 1`] = `
 - table "Invoices, 2026":
   - caption: Invoices, 2026
   - rowgroup:
-    - row "Invoice Status Amount":
+    - row "Invoice Status Issued Amount":
+      - columnheader "Invoice":
+        - link "Invoice":
+          - /url: "?sort=invoice"
+      - columnheader "Status"
+      - columnheader "Issued"
+      - columnheader "Amount"
+  - rowgroup:
+    - row "INV-001 Paid 2026-01-05 €250.00":
+      - rowheader "INV-001"
+      - cell "Paid"
+      - cell "2026-01-05":
+        - time: 2026-01-05
+      - cell "€250.00"
+    - row "INV-002 Pending 2026-02-05 €1,180.40":
+      - rowheader "INV-002"
+      - cell "Pending"
+      - cell "2026-02-05":
+        - time: 2026-02-05
+      - cell "€1,180.40"
+    - row "INV-003 Overdue 2026-03-05 €74.10":
+      - rowheader "INV-003"
+      - cell "Overdue"
+      - cell "2026-03-05":
+        - time: 2026-03-05
+      - cell "€74.10"
+`;
+
+exports[`Sorting   > base story 1`] = `
+- table "Invoices, 2026":
+  - caption: Invoices, 2026
+  - rowgroup:
+    - row "Invoice Amount":
       - columnheader "Invoice":
         - button "Invoice"
-      - columnheader "Status"
       - columnheader "Amount":
         - button "Amount"
   - rowgroup:
-    - row "INV-001 Paid €250.00":
+    - row "INV-001 €250.00":
       - rowheader "INV-001"
-      - cell "Paid"
       - cell "€250.00"
-    - row "INV-002 Pending €1,180.40":
+    - row "INV-002 €1,180.40":
       - rowheader "INV-002"
-      - cell "Pending"
       - cell "€1,180.40"
-    - row "INV-003 Overdue €74.10":
+    - row "INV-003 €74.10":
       - rowheader "INV-003"
-      - cell "Overdue"
       - cell "€74.10"
 `;

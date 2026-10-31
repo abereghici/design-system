@@ -7,7 +7,10 @@ import "@abereghici/tokens/components/command.css";
 
 import { Content } from "../dialog/dialog-content.tsx";
 import { Modal } from "../dialog/dialog-modal.tsx";
-import { requestChange } from "../events/events.ts";
+import { chain } from "../internal/chain/chain.ts";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import { returnFocus } from "../internal/overlay/overlay.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import { DialogContext, Root } from "./command-root.tsx";
 import type { Callback, RootProps } from "./command-root.tsx";
@@ -36,36 +39,26 @@ export interface DialogProps
 
 function handleClose(
   event: SyntheticEvent<HTMLDialogElement>,
-  { onClose, onInputValueChange, finalFocus }: DialogProps,
+  { onInputValueChange, finalFocus }: DialogProps,
 ) {
-  onClose?.(event);
-
   if ((event.currentTarget.querySelector("input")?.value ?? "") !== "") {
     requestChange(onInputValueChange, "", "input-clear", event.nativeEvent);
   }
 
-  if (document.activeElement === document.body && finalFocus?.current?.isConnected === true) {
-    finalFocus.current.focus();
-  }
+  returnFocus(event.currentTarget, finalFocus?.current);
 }
 
 /** The ⌘K palette: a top-anchored modal Command. The app binds ⌘K / Ctrl K and holds `open`. */
 export function Dialog(props: DialogProps) {
   const { open, defaultOpen = false, onOpenChange, finalFocus: _, ...rest } = props;
   const { inputValue, defaultInputValue, onInputValueChange, filter, children, ...native } = rest;
-  const [uncontrolled, setUncontrolled] = useState(defaultOpen);
+  const [current, request] = useControllableState(open, defaultOpen, onOpenChange);
   const [closes, setCloses] = useState(0);
-  const close = (reason: Exclude<Reason, "none">, event: Event) => {
-    const accepted = requestChange(onOpenChange, false, reason, event);
-
-    if (accepted) setUncontrolled(false);
-
-    return accepted;
-  };
+  const close = (reason: Exclude<Reason, "none">, event: Event) => request(false, reason, event);
 
   return (
     <Modal
-      open={open ?? uncontrolled}
+      open={current}
       styles={styles}
       component="Dialog"
       onOpenChange={(_open, details) => {
@@ -77,10 +70,10 @@ export function Dialog(props: DialogProps) {
     >
       <Content
         {...native}
-        onClose={(event) => {
+        onClose={chain(props.onClose, (event) => {
           handleClose(event, props);
           setCloses((count) => count + 1);
-        }}
+        })}
       >
         <DialogContext
           value={(event, option) => {

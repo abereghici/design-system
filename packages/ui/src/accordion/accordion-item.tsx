@@ -4,9 +4,10 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/accordion.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { DisclosureRoot } from "../disclosure/disclosure-root.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
-import { ItemContext, useAccordion } from "./accordion-root.tsx";
+import { useAccordion } from "./accordion-root.tsx";
 import styles from "./accordion.module.css";
 
 export interface ItemProps extends Omit<ComponentProps<"details">, "open" | "name"> {
@@ -15,22 +16,18 @@ export interface ItemProps extends Omit<ComponentProps<"details">, "open" | "nam
 }
 
 /** One collapsible section, holding a Trigger and its Content. */
-export function Item({ value, onToggle, ...props }: ItemProps) {
-  const accordion = useAccordion("Item");
-  const open = accordion.value.includes(value);
+export function Item({ value, ...props }: ItemProps) {
+  const accordion = useAccordion("Accordion.Item");
 
   return (
-    <ItemContext value={value}>
-      <details
-        {...mergeProps({ className: styles["item"] }, props)}
-        open={open}
-        name={accordion.name}
-        onToggle={(event) => {
-          onToggle?.(event);
-
-          if (event.currentTarget.open !== open) accordion.change(value, !open, event);
-        }}
-      />
-    </ItemContext>
+    <DisclosureRoot
+      component="Accordion"
+      {...mergeProps({ className: styles["item"] }, props)}
+      name={accordion.name}
+      open={accordion.value.includes(value)}
+      onOpenChange={(open, details) => {
+        if (!accordion.change(value, open, details)) details.cancel();
+      }}
+    />
   );
 }

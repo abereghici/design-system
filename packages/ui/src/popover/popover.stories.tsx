@@ -4,17 +4,12 @@ import { expect, fn, waitFor } from "storybook/test";
 import { Button } from "@abereghici/ui/button";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
-import { listen } from "#.storybook/test/listen.ts";
+import { listen, listenFeedback, reasons } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Popover from "./popover.tsx";
 
-// @ts-expect-error -- the x button shows only an icon, so it needs a name
-({}) satisfies Popover.CloseProps;
-
 const onOpenChange = fn<NonNullable<Popover.RootProps["onOpenChange"]>>();
-
-const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const filters = (
   <>
@@ -95,7 +90,7 @@ Default.test(
     await expect(canvas.getByRole("checkbox", { name: "Assigned to me" })).toHaveFocus();
     await user.click(trigger);
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
-    await expect(reasons()).toEqual([
+    await expect(reasons(onOpenChange)).toEqual([
       [true, "trigger-press"],
       [false, "trigger-press"],
     ]);
@@ -118,9 +113,9 @@ Default.test(
     dismissals.stop();
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     await expect(dismissals.events.map(({ detail }) => detail)).toEqual([
-      { component: "Popover", reason: "user" },
+      { component: "Popover", userInitiated: true },
     ]);
-    await expect(reasons().at(-1)).toEqual([false, "escape-key"]);
+    await expect(reasons(onOpenChange).at(-1)).toEqual([false, "escape-key"]);
   },
 );
 
@@ -135,27 +130,32 @@ Default.test("closes on a press outside", async ({ canvas }) => {
   await waitFor(() => expect(dismissals.events).toHaveLength(1));
   dismissals.stop();
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
-  await expect(reasons().at(-1)).toEqual([false, "outside-press"]);
+  await expect(reasons(onOpenChange).at(-1)).toEqual([false, "outside-press"]);
 });
 
-Default.test("closes from Close and returns focus to the Trigger", async ({ canvas }) => {
-  const user = await trusted();
-  const trigger = canvas.getByRole("button", { name: "Filters" });
+Default.test(
+  "closes from Close, returns focus to the Trigger and dispatches one Feedback event, ab-dismiss",
+  async ({ canvas }) => {
+    const user = await trusted();
+    const trigger = canvas.getByRole("button", { name: "Filters" });
 
-  await user.click(trigger);
+    await user.click(trigger);
 
-  const close = canvas.getByRole("button", { name: "Close" });
-  const dismissals = listen("ab-dismiss");
+    const close = canvas.getByRole("button", { name: "Close" });
+    const feedback = listenFeedback();
 
-  await user.click(close);
-  dismissals.stop();
-  await waitFor(() => expect(trigger).toHaveFocus());
-  await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
-  await expect(dismissals.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-    { target: close, detail: { component: "Popover", reason: "user" } },
-  ]);
-  await expect(reasons().at(-1)).toEqual([false, "close-press"]);
-});
+    await user.click(close);
+    await waitFor(() => expect(trigger).toHaveFocus());
+    await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
+    feedback.stop();
+    await expect(
+      feedback.events.map(({ type, target, detail }) => ({ type, target, detail })),
+    ).toEqual([
+      { type: "ab-dismiss", target: close, detail: { component: "Popover", userInitiated: true } },
+    ]);
+    await expect(reasons(onOpenChange).at(-1)).toEqual([false, "close-press"]);
+  },
+);
 
 Default.test("closes once Tab moves focus past its Content", async ({ canvas }) => {
   const user = await trusted();
@@ -166,7 +166,7 @@ Default.test("closes once Tab moves focus past its Content", async ({ canvas }) 
   await user.keyboard("{Tab}{Tab}");
   await expect(canvas.getByRole("button", { name: "After" })).toHaveFocus();
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
-  await expect(reasons().at(-1)).toEqual([false, "focus-out"]);
+  await expect(reasons(onOpenChange).at(-1)).toEqual([false, "focus-out"]);
 });
 
 Default.test(

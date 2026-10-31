@@ -5,13 +5,7 @@ import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
 import { PasswordField } from "./password-field.tsx";
-import type {
-  PasswordFieldProps,
-  PasswordFieldVisibleChangeEventDetails,
-} from "./password-field.tsx";
-
-// @ts-expect-error -- the show-password toggle shows only an icon, so it needs a name
-({ label: "Password" }) satisfies PasswordFieldProps;
+import type { PasswordFieldVisibleChangeEventDetails } from "./password-field.tsx";
 
 const meta = preview.meta({
   title: "Components/PasswordField",
@@ -63,7 +57,9 @@ Default.test(
       true,
       expect.objectContaining({ reason: "toggle-press" }),
     );
-    await expect(toggled.events).toHaveLength(1);
+    await expect(toggled.events.map(({ detail }) => detail)).toEqual([
+      { component: "ToggleButton", userInitiated: true },
+    ]);
   },
 );
 
@@ -93,6 +89,20 @@ Default.test(
     await userEvent.click(toggle);
     await expect(toggle).toHaveAttribute("aria-pressed", "false");
     await expect(canvas.queryByRole("textbox", { name: "Password" })).toBeNull();
+  },
+);
+
+Default.test(
+  "submits its value, and returns to its default value when its form resets",
+  { args: { defaultValue: "hunter2", defaultVisible: true }, decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const input = canvas.getByRole("textbox", { name: "Password" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    await userEvent.type(input, "!");
+    await expect(new FormData(form).get("password")).toBe("hunter2!");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(input).toHaveValue("hunter2");
   },
 );
 

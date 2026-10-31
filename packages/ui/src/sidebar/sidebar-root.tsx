@@ -2,13 +2,10 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/sidebar.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./sidebar.module.css";
-
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
 
 /** Name every navigation landmark: a Sidebar usually sits beside a Navbar. */
 export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelledby"> &
@@ -19,6 +16,8 @@ export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelle
  * layout sizes and scrolls. Give it a name, and mark the link to the page on screen with
  * `aria-current="page"`. For a few top-level destinations, use a Navbar; for the path to this page,
  * Breadcrumbs.
+ *
+ * Tier 1: works before hydration.
  */
 export function Root(props: RootProps) {
   return <nav {...mergeProps({ className: styles["root"] }, props)} />;

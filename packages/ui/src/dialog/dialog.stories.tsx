@@ -5,13 +5,10 @@ import { Button } from "@abereghici/ui/button";
 import { TextField } from "@abereghici/ui/text-field";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
-import { listen } from "#.storybook/test/listen.ts";
+import { listen, listenFeedback } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Dialog from "./dialog.tsx";
-
-// @ts-expect-error -- the x button shows only an icon, so it needs a name
-({}) satisfies Dialog.CloseProps;
 
 const content = (props: Dialog.ContentProps = {}) => (
   <Dialog.Content {...props}>
@@ -63,25 +60,27 @@ Default.test(
 );
 
 Default.test(
-  "closes with the Close button, returns focus to the Trigger and dispatches ab-dismiss",
+  "closes with the Close button, returns focus to the Trigger and dispatches one Feedback event, ab-dismiss",
   async ({ args, canvas, userEvent }) => {
     const trigger = canvas.getByRole("button", { name: "Rename…" });
 
     await userEvent.click(trigger);
 
     const close = canvas.getByRole("button", { name: "Close" });
-    const dismissals = listen("ab-dismiss");
+    const feedback = listenFeedback();
 
     await userEvent.click(close);
-    dismissals.stop();
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     await expect(trigger).toHaveFocus();
     await expect(args.onOpenChange).toHaveBeenLastCalledWith(
       false,
       expect.objectContaining({ reason: "close-press" }),
     );
-    await expect(dismissals.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: close, detail: { component: "Dialog", reason: "user" } },
+    feedback.stop();
+    await expect(
+      feedback.events.map(({ type, target, detail }) => ({ type, target, detail })),
+    ).toEqual([
+      { type: "ab-dismiss", target: close, detail: { component: "Dialog", userInitiated: true } },
     ]);
   },
 );

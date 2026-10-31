@@ -6,6 +6,8 @@ import { IconButton } from "../icon-button/icon-button.tsx";
 import { MinusIcon } from "../icon/icons/minus.tsx";
 import { PlusIcon } from "../icon/icons/plus.tsx";
 
+import styles from "./number-field.module.css";
+
 export type Direction = 1 | -1;
 
 export function StepButtons({
@@ -25,6 +27,7 @@ export function StepButtons({
     <IconButton
       key={direction}
       size="sm"
+      className={styles["step"]}
       tabIndex={-1}
       aria-label={direction === 1 ? incrementLabel : decrementLabel}
       aria-controls={controls}

@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Controlled   > base story 1`] = `
+- text: Search invoices
+- searchbox "Search invoices": march
+- button "Clear search"
+- status: Invoices matching march
+`;
+
+exports[`Default   > base story 1`] = `
+- text: Search invoices
+- searchbox "Search invoices"
+`;
+
+exports[`In A Search Landmark   > base story 1`] = `
+- searchbox "Search invoices"
+- button "Search"
+`;

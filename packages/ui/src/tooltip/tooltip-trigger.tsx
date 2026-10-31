@@ -8,18 +8,20 @@ import type {
   SyntheticEvent,
 } from "react";
 
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import type { InvokerCommands } from "../internal/invoker-commands/invoker-commands.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import { outside, useTooltip } from "./tooltip-root.tsx";
 
 const pressed = new WeakSet<Element>();
 
-export interface TriggerProps extends ComponentProps<"button"> {
+export interface TriggerProps extends ComponentProps<"button">, InvokerCommands {
   /** Makes its one child (a Button, IconButton or Link) the Trigger. */
   asChild?: boolean;
 }
 
-function handlers({ contentId, change }: ReturnType<typeof useTooltip>) {
+function handlers({ contentRef, change }: ReturnType<typeof useTooltip>) {
   const press = (event: SyntheticEvent<HTMLElement>) => {
     pressed.add(event.currentTarget);
     change(false, "trigger-press", event);
@@ -34,7 +36,7 @@ function handlers({ contentId, change }: ReturnType<typeof useTooltip>) {
     onPointerLeave: (event: PointerEvent<HTMLElement>) => {
       pressed.delete(event.currentTarget);
 
-      if (outside(event, document.getElementById(contentId))) change(false, "trigger-hover", event);
+      if (outside(event, contentRef.current)) change(false, "trigger-hover", event);
     },
     onFocus: (event: FocusEvent<HTMLElement>) => {
       if (pressed.has(event.currentTarget) || !event.currentTarget.matches(":focus-visible"))
@@ -59,7 +61,7 @@ export function Trigger({
   "aria-describedby": describedBy,
   ...props
 }: TriggerProps) {
-  const tooltip = useTooltip();
+  const tooltip = useTooltip("Tooltip.Trigger");
   const Element = asChild ? Slot : "button";
   const type = asChild ? undefined : "button";
 

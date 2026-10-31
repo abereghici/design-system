@@ -8,7 +8,7 @@ import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
 import { remove, snapshot, toast } from "./toast.ts";
-import type { ToastOptions } from "./toast.ts";
+import type { ToastOptions, ToastVariant } from "./toast.ts";
 
 const undo = fn<() => void>();
 const mod = /^(?:Mac|iPhone|iPad)/v.test(navigator.platform) ? "Meta" : "Control";
@@ -46,6 +46,18 @@ const withTextField: Decorator = (Story) => (
   </>
 );
 
+const published = (variant: ToastVariant) => ({
+  variant,
+  title: "Published",
+  description: "Live at bereghici.dev",
+});
+
+async function showsPublished() {
+  const toasts = within(await region());
+
+  await waitFor(() => expect(toasts.getByText("Live at bereghici.dev")).toBeVisible());
+}
+
 const meta = preview.meta({
   title: "Components/Toast",
   component: Toaster,
@@ -80,34 +92,14 @@ Default.test("announces the toast politely, once", async () => {
 
 Default.test(
   "reads at AA contrast as success",
-  {
-    beforeEach: showing({
-      variant: "success",
-      title: "Published",
-      description: "Live at bereghici.dev",
-    }),
-  },
-  async () => {
-    const toasts = within(await region());
-
-    await waitFor(() => expect(toasts.getByText("Live at bereghici.dev")).toBeVisible());
-  },
+  { beforeEach: showing(published("success")) },
+  showsPublished,
 );
 
 Default.test(
   "reads at AA contrast as warning",
-  {
-    beforeEach: showing({
-      variant: "warning",
-      title: "Published",
-      description: "Live at bereghici.dev",
-    }),
-  },
-  async () => {
-    const toasts = within(await region());
-
-    await waitFor(() => expect(toasts.getByText("Live at bereghici.dev")).toBeVisible());
-  },
+  { beforeEach: showing(published("warning")) },
+  showsPublished,
 );
 
 Default.test(
@@ -136,7 +128,7 @@ Default.test("runs the action, dispatches ab-confirm and closes", async ({ userE
   confirms.stop();
   await expect(undo).toHaveBeenCalledOnce();
   await expect(confirms.events.map(({ detail }) => detail)).toEqual([
-    { component: "Toast", reason: "user" },
+    { component: "Toast", userInitiated: true },
   ]);
   await gone("Moved to Archive");
 });
@@ -147,7 +139,7 @@ Default.test("closes on Dismiss with ab-dismiss", async ({ userEvent }) => {
   await userEvent.click(within(await region()).getByRole("button", { name: "Dismiss" }));
   dismisses.stop();
   await expect(dismisses.events.map(({ detail }) => detail)).toEqual([
-    { component: "Toast", reason: "user" },
+    { component: "Toast", userInitiated: true },
   ]);
   await gone("Moved to Archive");
 });
@@ -198,7 +190,7 @@ Default.test("dispatches ab-appear when a toast shows, and never takes focus", a
   await region();
   await waitFor(() => expect(appears.events).toHaveLength(1));
   appears.stop();
-  await expect(appears.events[0]?.detail).toEqual({ component: "Toast", reason: "programmatic" });
+  await expect(appears.events[0]?.detail).toEqual({ component: "Toast", userInitiated: false });
   await expect(document.activeElement).toBe(before);
 });
 

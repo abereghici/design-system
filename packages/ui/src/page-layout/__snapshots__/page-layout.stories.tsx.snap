@@ -1,0 +1,30 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default 1`] = `
+- banner:
+  - img "Bereghici"
+  - navigation "Main":
+    - list:
+      - listitem:
+        - link "Orders":
+          - /url: "#orders"
+      - listitem:
+        - link "Customers":
+          - /url: "#customers"
+- navigation "Workspace":
+  - group "Reports":
+    - text: Reports
+    - list:
+      - listitem:
+        - link "Revenue":
+          - /url: "#revenue"
+      - listitem:
+        - link "Refunds":
+          - /url: "#refunds"
+- main:
+  - heading "Revenue" [level=1]
+  - heading "This month" [level=2]
+  - paragraph: €48,200
+- complementary "Activity":
+  - heading "Activity" [level=2]
+`;

@@ -3,6 +3,8 @@
 import { createContext } from "react";
 import type { ComponentProps } from "react";
 
+import { chain } from "../internal/chain/chain.ts";
+
 type Errors = Readonly<Record<string, string | undefined>>;
 
 export const FormErrorsContext = createContext<Errors | undefined>(undefined);
@@ -19,14 +21,15 @@ export interface FormProps extends ComponentProps<"form"> {
  * A form that shows each error inside its Field instead of the browser's bubbles, moves focus to the
  * first invalid field after a blocked submit, and puts server errors on their fields. Submitting
  * works as with any form: `action`, `method`, `FormData` and React actions are unchanged.
+ *
+ * Tier 1: works before hydration.
  */
 export function Form({ errors, onInvalidCapture, ...props }: FormProps) {
   return (
     <FormErrorsContext value={errors}>
       <form
         {...props}
-        onInvalidCapture={(event) => {
-          onInvalidCapture?.(event);
+        onInvalidCapture={chain(onInvalidCapture, (event) => {
           event.preventDefault();
 
           const first = Array.from(event.currentTarget.elements).find(
@@ -34,7 +37,7 @@ export function Form({ errors, onInvalidCapture, ...props }: FormProps) {
           );
 
           if (event.target === first && first instanceof HTMLElement) first.focus();
-        }}
+        })}
       />
     </FormErrorsContext>
   );

@@ -8,9 +8,6 @@ import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Sheet from "./sheet.tsx";
 
-// @ts-expect-error -- the x button shows only an icon, so it needs a name
-({}) satisfies Sheet.CloseProps;
-
 const lines = Array.from({ length: 30 }, (_, index) => `Line ${index + 1} · Design review · 2 h`);
 
 const content = (props: Sheet.ContentProps = {}) => (
@@ -80,7 +77,7 @@ Default.test(
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     await expect(trigger).toHaveFocus();
     await expect(dismissals.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: close, detail: { component: "Sheet", reason: "user" } },
+      { target: close, detail: { component: "Sheet", userInitiated: true } },
     ]);
   },
 );
@@ -103,7 +100,7 @@ Default.test(
       expect.objectContaining({ reason: "escape-key" }),
     );
     await expect(dismissals.events.map(({ detail }) => detail)).toEqual([
-      { component: "Sheet", reason: "user" },
+      { component: "Sheet", userInitiated: true },
     ]);
   },
 );

@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/tag.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./tag.module.css";
 
@@ -13,8 +13,11 @@ export interface TagProps extends ComponentProps<"span"> {
 
 /**
  * A static label for status, type or topic ("Draft", "Live", "Failed"). It is never a button: to
- * filter, use SegmentedControl or Checkbox. For a count, use a Badge (other libraries call this
- * component Badge); for a state marker in a dense list, a StatusDot.
+ * filter, use SegmentedControl or Checkbox, and for tags people remove, TagGroup. For a count, use
+ * a Badge (other libraries call this component Badge); for a state marker in a dense list, a
+ * StatusDot.
+ *
+ * Tier 1: works before hydration.
  */
 export function Tag({ variant = "neutral", ...props }: TagProps) {
   return <span {...mergeProps({ className: styles["root"] }, props)} data-variant={variant} />;

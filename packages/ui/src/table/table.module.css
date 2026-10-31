@@ -1,7 +1,8 @@
 @layer ab.components {
   .root {
     inline-size: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
   }
 
   .caption {
@@ -11,16 +12,101 @@
     text-align: start;
   }
 
-  .row {
+  /* On the cells, not the row: a sticky header needs separate borders, and the separated borders
+     model ignores borders on rows (CSS 2.1 §17.6.1). */
+  .column-header,
+  .cell {
     border-block-end: var(--ab-table-border-width) solid var(--ab-table-border-color);
   }
 
-  .body > .row:last-child {
+  .body > .row:last-child > .cell {
     border-block-end: none;
   }
 
-  .row[data-selected] {
+  .header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--ab-z-index-sticky);
+    background-color: var(--ab-table-header-background-color);
+    container: ab-table-header / scroll-state;
+  }
+
+  /* Scroll-state queries are below the Baseline floor: engines without them keep the sticky header
+     and show no shadow. */
+  @container ab-table-header scroll-state(stuck: block-start) {
+    .column-header {
+      box-shadow: var(--ab-table-header-shadow);
+    }
+  }
+
+  .body > .row:has(> .select :checked) {
     background-color: var(--ab-table-row-background-color-selected);
+  }
+
+  /* The selection column is as narrow as its control: auto table layout grows it only to fit. */
+  .select {
+    inline-size: 0;
+  }
+
+  .choice {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--ab-size-control-xs);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .radio {
+    appearance: none;
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    margin: 0;
+    inline-size: var(--ab-size-icon-sm);
+    block-size: var(--ab-size-icon-sm);
+    border: var(--ab-table-border-width) solid var(--ab-color-border-default);
+    border-radius: var(--ab-radius-full);
+    background-color: var(--ab-color-surface-overlay);
+    cursor: inherit;
+  }
+
+  .radio::before {
+    content: "";
+    inline-size: var(--ab-size-indicator);
+    aspect-ratio: 1;
+    border-radius: var(--ab-radius-full);
+    background-color: var(--ab-color-icon-on-accent);
+    scale: 0;
+  }
+
+  .radio:checked {
+    border-color: var(--ab-color-background-accent-bold);
+    background-color: var(--ab-color-background-accent-bold);
+  }
+
+  .radio:checked::before {
+    scale: 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .choice:hover .radio:not(:checked) {
+      border-color: var(--ab-color-border-default-hovered);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .radio {
+      border-color: CanvasText;
+    }
+
+    .radio:checked {
+      border-color: Highlight;
+      background-color: Highlight;
+    }
+
+    .radio::before {
+      background-color: HighlightText;
+    }
   }
 
   .sort-label {
@@ -77,6 +163,13 @@
     vertical-align: baseline;
   }
 
+  @container style(--ab-density: compact) {
+    .column-header,
+    .cell {
+      --ab-table-padding-block: var(--ab-space-inset-xs);
+    }
+  }
+
   .column-header {
     font: var(--ab-table-header-font);
     color: var(--ab-table-header-text-color);
@@ -87,8 +180,16 @@
     color: var(--ab-table-body-text-color);
   }
 
+  /* Selecting needs script: without it the rows stay readable but offer no control that does nothing. */
+  @media (scripting: none) {
+    .select {
+      display: none;
+    }
+  }
+
   @media (prefers-contrast: more) {
-    .row {
+    .column-header,
+    .cell {
       border-block-end-color: var(--ab-color-border-default);
     }
 

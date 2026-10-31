@@ -1,0 +1,80 @@
+@layer ab.components {
+  /* Doubled, here and on .input, to outrank the field box's and TextField's input's size and
+     padding whichever stylesheet loads first. */
+  .cells.cells {
+    --cell: var(--ab-field-height);
+
+    position: relative;
+    /* Not hidden: Chromium scrolls a hidden box to show the caret after the last digit. */
+    overflow: clip;
+    inline-size: max-content;
+    padding: 0;
+    font-family: var(--ab-type-code-md-font-family);
+    /* A line between the digits' boxes. */
+    background-image: repeating-linear-gradient(
+      to right,
+      transparent 0 calc(100% / (var(--length) - 1) - var(--ab-field-border-width)),
+      var(--ab-field-border-color) 0 calc(100% / (var(--length) - 1))
+    );
+    background-repeat: no-repeat;
+    background-size: calc(100% / var(--length) * (var(--length) - 1)) 100%;
+  }
+
+  [data-size="lg"] .cells.cells {
+    --cell: var(--ab-field-lg-height);
+  }
+
+  /* A box per digit: each digit advances by its width and the letter spacing after it, so a
+     reader's own letter spacing resizes the boxes with the digits instead of moving them out. */
+  .ruler,
+  .input.input {
+    letter-spacing: calc(var(--cell) - 1ch);
+  }
+
+  .ruler {
+    visibility: hidden;
+    white-space: pre;
+  }
+
+  /* One box wider than the boxes, so the caret after the last digit never scrolls the digits. */
+  .input.input {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    box-sizing: border-box;
+    inline-size: calc(100% + 100% / var(--length));
+    /* Centres each digit in its box: half the spacing that follows it. */
+    padding-inline-start: calc((100% / var(--length) - 1ch) / 2);
+  }
+
+  /* After the last digit the browser's caret stands in that extra box, past the boxes: the last
+     box draws the caret instead, as wide and tall as the browser's, right after the digit. It
+     holds still, as only loading indicators loop here (WCAG 2.2.2). */
+  .input.input[data-caret-end] {
+    caret-color: transparent;
+  }
+
+  .cells::after {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: min(
+      100% / var(--length) * (var(--length) - 0.5) + 0.5ch,
+      100% - var(--ab-border-width-default)
+    );
+    margin-block: auto;
+    inline-size: var(--ab-border-width-default);
+    block-size: 1lh;
+    line-height: normal;
+    background-color: var(--ab-color-text-accent);
+  }
+
+  .cells:has(> .input[data-caret-end]:focus:read-write)::after {
+    content: "";
+  }
+
+  @media (forced-colors: active) {
+    .cells::after {
+      background-color: FieldText;
+    }
+  }
+}

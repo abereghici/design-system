@@ -1,31 +1,36 @@
 "use client";
 
-import { createContext, use, useId, useState } from "react";
+import { useId } from "react";
+import { flushSync } from "react-dom";
 import type { ComponentProps, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/tabs.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./tabs.module.css";
 
+/**
+ * `"none"`: a Trigger click or arrow key. `"find"`: the browser revealed a match in a hidden panel
+ * (find-in-page, a link into it). `cancel()`: keeps the current tab; a revealed panel hides again.
+ */
+export type ChangeEventDetails = Details<"none" | "find">;
+
 interface TabsState {
-  readonly id: string;
-  readonly value: string;
-  readonly select: (value: string, event: MouseEvent<HTMLButtonElement>) => void;
+  readonly state: { readonly value: string };
+  readonly actions: {
+    readonly select: (value: string, event: MouseEvent<HTMLButtonElement>) => void;
+    /** Answers whether the consumer accepted opening `value` for a match the browser revealed. */
+    readonly reveal: (value: string, event: Event) => boolean;
+  };
+  readonly meta: { readonly id: string };
 }
 
-const TabsContext = createContext<TabsState | null>(null);
-
-export function useTabs(part: string) {
-  const tabs = use(TabsContext);
-
-  if (tabs === null) throw new Error(`Tabs.${part} must be inside Tabs.Root`);
-
-  return tabs;
-}
+export const [TabsContext, useTabs] = createSafeContext<TabsState>("Tabs.Root");
 
 export type RootProps = Omit<ComponentProps<"div">, "defaultValue"> & {
   /** The open tab's `value`, when your state holds it. */
@@ -38,31 +43,34 @@ export type RootProps = Omit<ComponentProps<"div">, "defaultValue"> & {
 
 /**
  * Peer sections of one place, one shown at a time. Arrow keys move and open (following the reading
- * direction), and every change dispatches a bubbling `ab-toggle`. For modes of the same content use
- * SegmentedControl; to move between pages, Navbar or Sidebar; for sections that open independently,
- * Accordion.
+ * direction), the browser's find-in-page opens the tab holding a match, and every press dispatches
+ * a bubbling `ab-toggle`. For modes of the same content use SegmentedControl; to move between pages,
+ * Navbar or Sidebar; for sections that open independently, Accordion.
+ *
+ * Tier 2: shows its final content before hydration and works after it.
  */
 export function Root({ value, defaultValue, onValueChange, ...props }: RootProps) {
   const id = useId();
-  const [uncontrolled, setUncontrolled] = useState(defaultValue ?? "");
-  const current = value ?? uncontrolled;
+  const [current, request] = useControllableState(value, defaultValue ?? "", onValueChange);
 
   function select(next: string, event: MouseEvent<HTMLButtonElement>) {
-    if (next === current) return;
-
-    if (!requestChange(onValueChange, next, "none", event.nativeEvent)) return;
-
-    setUncontrolled(next);
+    if (next === current || !request(next, "none", event.nativeEvent)) return;
 
     const trigger = event.currentTarget;
 
     trigger.focus();
     trigger.scrollIntoView({ block: "nearest", inline: "nearest" });
-    dispatchFeedback(trigger, "ab-toggle", { component: "Tabs", reason: "user" });
+    dispatchFeedback(trigger, "ab-toggle", { component: "Tabs", userInitiated: true });
+  }
+
+  function reveal(next: string, event: Event) {
+    // The browser shows the panel once `beforematch` returns: the tab switches in the same task, so
+    // no frame paints two panels.
+    return flushSync(() => request(next, "find", event));
   }
 
   return (
-    <TabsContext value={{ id, value: current, select }}>
+    <TabsContext value={{ state: { value: current }, actions: { select, reveal }, meta: { id } }}>
       <div {...mergeProps({ className: styles["root"] }, props)} />
     </TabsContext>
   );

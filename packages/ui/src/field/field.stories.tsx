@@ -26,12 +26,35 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
+Default.test(
+  "submits its control's value, and returns to the default value when its form resets",
+  {
+    args: {
+      children: (
+        <>
+          <Field.Label>Handle</Field.Label>
+          <Field.Control defaultValue="@ana" />
+        </>
+      ),
+    },
+    decorators: [withForm],
+  },
+  async ({ canvas, userEvent }) => {
+    const input = canvas.getByRole("textbox", { name: "Handle" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    await userEvent.type(input, "_b");
+    await expect(new FormData(form).get("handle")).toBe("@ana_b");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(input).toHaveValue("@ana");
+  },
+);
+
 Default.test("names and describes its control", async ({ canvas }) => {
   const input = canvas.getByRole("textbox", { name: "Handle" });
 
   await expect(input).toHaveAccessibleDescription("Letters, digits and underscores.");
   await expect(input).toBeRequired();
-  await expect(input).toHaveAttribute("name", "handle");
 });
 
 Default.test(

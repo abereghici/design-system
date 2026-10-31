@@ -54,7 +54,7 @@ Default.test(
       expect.objectContaining({ reason: "trigger-press" }),
     );
     await expect(toggles.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: trigger, detail: { component: "Accordion", reason: "user" } },
+      { target: trigger, detail: { component: "Accordion", userInitiated: true } },
     ]);
   },
 );

@@ -1,9 +1,11 @@
-import { expect, fn } from "storybook/test";
+import { expect, fn, waitFor } from "storybook/test";
 
 import { Badge } from "@abereghici/ui/badge";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
+import { followLinkTo } from "#.storybook/test/follow-link.ts";
 import { listen } from "#.storybook/test/listen.ts";
+import { atCentre } from "#.storybook/test/pointer.ts";
 
 import { Tabs } from "./index.ts";
 
@@ -70,7 +72,7 @@ Default.test(
       expect.objectContaining({ reason: "none" }),
     );
     await expect(toggles.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: activity, detail: { component: "Tabs", reason: "user" } },
+      { target: activity, detail: { component: "Tabs", userInitiated: true } },
     ]);
   },
 );
@@ -163,6 +165,56 @@ Default.test(
   },
 );
 
+Default.test(
+  "opens the tab holding a match the browser reveals, without a feedback event",
+  async ({ canvas, args }) => {
+    const toggles = listen("ab-toggle");
+
+    followLinkTo(canvas.getByText("Three new comments."));
+    toggles.stop();
+    await expect(args.onValueChange).toHaveBeenCalledOnce();
+    await expect(args.onValueChange).toHaveBeenCalledWith(
+      "activity",
+      expect.objectContaining({ reason: "find" }),
+    );
+    await expect(canvas.getByRole("tab", { name: "Activity 3" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    await expect(canvas.getByRole("tabpanel", { name: "Activity 3" })).toBeVisible();
+    await expect(canvas.queryByText("Selection glides on a spring.")).not.toBeVisible();
+    await expect(toggles.events).toEqual([]);
+  },
+);
+
+Default.test(
+  "hides a revealed panel again when the change is cancelled",
+  {
+    args: {
+      onValueChange: (_value, details) => {
+        details.cancel();
+      },
+    },
+  },
+  async ({ canvas }) => {
+    followLinkTo(canvas.getByText("Three new comments."));
+    await waitFor(() => expect(canvas.queryByText("Three new comments.")).not.toBeVisible());
+    await expect(canvas.getByRole("tab", { name: "Overview" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    await expect(canvas.getByRole("tabpanel", { name: "Overview" })).toBeVisible();
+  },
+);
+
+Default.test("leaves the hidden panels out of the Tab order", async ({ canvas, userEvent }) => {
+  await userEvent.tab();
+  await userEvent.tab();
+  await expect(canvas.getByRole("tabpanel", { name: "Overview" })).toHaveFocus();
+  await userEvent.tab();
+  await expect(document.body).toHaveFocus();
+});
+
 Default.test("still changes when its click is default-prevented", async ({ canvas, userEvent }) => {
   const tab = canvas.getByRole("tab", { name: "Settings" });
 
@@ -199,10 +251,7 @@ export const Overflowing = meta.story({
 Overflowing.test("scrolls a partly hidden tab into view", async ({ canvas, userEvent }) => {
   const settings = canvas.getByRole("tab", { name: "Settings" });
 
+  await expect(atCentre(settings)).not.toBe(settings);
   await userEvent.click(settings);
-
-  const list = canvas.getByRole("tablist").getBoundingClientRect();
-  const tab = settings.getBoundingClientRect();
-
-  await expect(tab.right).toBeLessThanOrEqual(list.right + 0.5);
+  await expect(atCentre(settings)).toBe(settings);
 });

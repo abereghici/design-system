@@ -1,0 +1,24 @@
+@layer ab.components {
+  .trigger {
+    flex: none;
+    margin-inline: auto calc(var(--ab-field-border-width) * -1);
+  }
+
+  @media (scripting: none) {
+    /* Doubled to outrank IconButton's display whichever stylesheet loads first. */
+    .trigger.trigger {
+      display: none;
+    }
+  }
+
+  .content {
+    --ab-popover-max-width: none;
+  }
+
+  /* The Trigger is the popover source, so Tab leaves the panel to the control after it, but the spec
+     lines the panel up with the field box; Popover's margin would nudge it inward. */
+  .content[popover] {
+    position-anchor: --ab-date-field-box;
+    margin-inline: 0;
+  }
+}

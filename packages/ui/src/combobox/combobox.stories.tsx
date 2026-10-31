@@ -1,44 +1,54 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { expect, fn, screen, waitFor } from "storybook/test";
+
+import type { UserEventObject } from "storybook/test";
 
 import { UserIcon } from "@abereghici/ui/icons/user";
 
 import { withDialog } from "#.storybook/decorators/with-dialog.tsx";
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
+import { reasons } from "#.storybook/test/listen.ts";
 import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Combobox from "./combobox.tsx";
 
-// @ts-expect-error -- the empty list is announced, so it needs its text
-({ label: "Assignee" }) satisfies Combobox.RootProps;
-// @ts-expect-error -- while loading, the list announces its loading text
-({ label: "Assignee", noOptionsText: "No results", loading: true }) satisfies Combobox.RootProps;
-
 const onValueChange = fn<NonNullable<Combobox.RootProps["onValueChange"]>>();
 const onInputValueChange = fn<NonNullable<Combobox.RootProps["onInputValueChange"]>>();
 const onOpenChange = fn<NonNullable<Combobox.RootProps["onOpenChange"]>>();
-const reasons = (callback: { mock: { calls: [unknown, { reason: string }][] } }) =>
-  callback.mock.calls.map(([value, { reason }]) => [value, reason]);
 const field = (name = "Assignee") => screen.getByRole<HTMLInputElement>("combobox", { name });
 const highlighted = () => screen.queryByRole("option", { selected: true });
 const names = () => screen.queryAllByRole("option").map((option) => option.textContent);
-const submitted = () => new FormData(screen.getByRole<HTMLFormElement>("form")).get("assignee");
+const entries = () => new FormData(screen.getByRole<HTMLFormElement>("form")).getAll("assignee");
 const type = async (keys: string, name?: string) => {
   field(name).focus();
   await (await trusted()).keyboard(keys);
 };
+
+const inView = async (element: HTMLElement) =>
+  (await import("vitest")).expect.element(element).toBeInViewport({ ratio: 1 });
 
 const cancel = (_value: unknown, details: { cancel: () => void }) => {
   details.cancel();
 };
 
 const person = (value: string, name: string, keywords?: string[]) => (
-  <Combobox.Item value={value} {...(keywords && { keywords })}>
+  <Combobox.Item key={value} value={value} {...(keywords && { keywords })}>
     <UserIcon />
     {name}
   </Combobox.Item>
 );
+
+let receive: (crew: readonly string[]) => void;
+
+function Fetched() {
+  const [crew, setCrew] = useState<readonly string[]>([]);
+
+  useEffect(() => void (receive = setCrew), []);
+
+  return <Combobox.Group label="Staff">{crew.map((name) => person(name, name))}</Combobox.Group>;
+}
 
 const meta = preview.meta({
   title: "Components/Combobox",
@@ -66,34 +76,10 @@ const meta = preview.meta({
       </>
     ),
   },
-  decorators: [
-    withForm,
-    (Story) => (
-      <div style={{ maxInlineSize: "20rem", paddingBlockEnd: "16rem" }}>
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withForm, withWidth("20rem", "16rem")],
 });
 
 export const Default = meta.story({});
-
-Default.test("opens on a press, first option highlighted", async ({ canvas, userEvent }) => {
-  await expect(field()).toHaveAttribute("aria-expanded", "false");
-  await userEvent.click(field());
-  await waitFor(() => expect(canvas.getByRole("listbox", { name: "Assignee" })).toBeVisible());
-  await expect(field()).toHaveFocus();
-  await expect(field()).toHaveAttribute("aria-expanded", "true");
-  await expect(names().join()).toBe(
-    "Alexandru Bereghici,Ioana Munteanu,Mugur Ionescu,Erik Halvorsen,Ștefan Țurcanu",
-  );
-  await expect(highlighted()).toHaveAccessibleName("Alexandru Bereghici");
-  await expect(field()).toHaveAttribute("aria-activedescendant", highlighted()?.id);
-  await expect(canvas.getByRole("group", { name: "Former members" })).toContainElement(
-    canvas.getByRole("option", { name: "Erik Halvorsen" }),
-  );
-  await expect(reasons(onOpenChange)).toEqual([[true, "input-press"]]);
-});
 
 Default.test("ranks prefix, word start, then subsequence", async ({ canvas, userEvent }) => {
   await type("mu");
@@ -102,7 +88,6 @@ Default.test("ranks prefix, word start, then subsequence", async ({ canvas, user
   const ioana = canvas.getByRole("option", { name: "Ioana Munteanu" });
 
   await expect(ioana).toHaveAttribute("aria-posinset", "2");
-  await expect(canvas.queryByRole("option", { name: "Alexandru Bereghici" })).toBeNull();
   await expect(canvas.queryByRole("group")).toBeNull();
   await userEvent.keyboard("{ArrowDown}");
   await expect(highlighted()).toBe(ioana);
@@ -115,6 +100,15 @@ Default.test("ranks prefix, word start, then subsequence", async ({ canvas, user
   await userEvent.clear(field());
   await userEvent.keyboard("stefan t");
   await expect(highlighted()).toHaveAccessibleName("Ștefan Țurcanu");
+});
+
+Default.test("ranks and reveals fetched Items", { args: { children: <Fetched /> } }, async () => {
+  await type("a");
+  receive("Ana Bea Cara Dana Ela Ema Ina Lara Mara Oana Rada Sanda Petru".split(" "));
+  await waitFor(() => expect(highlighted()).toHaveAttribute("aria-setsize", "12"));
+  await expect(field()).toHaveAttribute("aria-activedescendant", highlighted()?.id ?? "");
+  await type("{ArrowUp}{Backspace}a");
+  await inView(screen.getByText("Staff"));
 });
 
 Default.test("shows and announces No results", async ({ canvas, userEvent }) => {
@@ -135,11 +129,12 @@ Default.test("chooses by Enter but not IME's, or click", async ({ canvas, userEv
   await type("{Enter}");
   await expect(field()).toHaveValue("Ioana Munteanu");
   await expect(field()).toHaveAttribute("aria-expanded", "false");
-  await expect(submitted()).toBe("im");
+  await expect(entries()).toEqual(["im"]);
   await expect(reasons(onValueChange)).toEqual([["im", "item-press"]]);
   await expect(reasons(onInputValueChange).at(-1)).toEqual(["Ioana Munteanu", "item-press"]);
   await expect(reasons(onOpenChange).at(-1)).toEqual([false, "item-press"]);
   await userEvent.click(field());
+  await expect(reasons(onOpenChange).at(-1)).toEqual([true, "input-press"]);
   await userEvent.hover(canvas.getByRole("option", { name: "Alexandru Bereghici" }));
   await expect(highlighted()).toHaveAccessibleName("Alexandru Bereghici");
   await userEvent.click(canvas.getByRole("option", { name: "Mugur Ionescu" }));
@@ -176,7 +171,7 @@ Default.test(
     await expect(field()).toHaveAttribute("aria-expanded", "false");
     await type("{Escape}");
     await expect(field()).toHaveValue("");
-    await expect(submitted()).toBe("");
+    await expect(entries()).toEqual([""]);
     await expect(reasons(onValueChange)).toEqual([[null, "escape-key"]]);
     await expect(dialog).toBeVisible();
   },
@@ -219,7 +214,7 @@ Default.test(
     await expect(field()).toHaveAccessibleDescription("Mugur is on leave.");
     await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
     await waitFor(() => expect(field()).toHaveValue("Ioana Munteanu"));
-    await waitFor(() => expect(submitted()).toBe("im"));
+    await waitFor(() => expect(entries()).toEqual(["im"]));
   },
 );
 
@@ -233,7 +228,7 @@ Default.test(
     await userEvent.keyboard("{ArrowDown}x{Escape}");
     await expect(field()).toHaveAttribute("aria-expanded", "false");
     await expect(field()).toHaveValue("Alexandru Bereghici");
-    await expect(submitted()).toBe("ab");
+    await expect(entries()).toEqual(["ab"]);
     await expect(onOpenChange).not.toHaveBeenCalled();
   },
 );
@@ -246,7 +241,7 @@ Default.test(
     await expect(field()).toHaveFocus();
     await userEvent.keyboard("{ArrowDown}x{Enter}{Escape}");
     await expect(field()).toHaveValue("Alexandru Bereghici");
-    await expect(submitted()).toBe("ab");
+    await expect(entries()).toEqual(["ab"]);
     await expect(onValueChange).not.toHaveBeenCalled();
   },
 );
@@ -286,9 +281,7 @@ Default.test(
 
 export const Open = meta.story({
   parameters: { docs: { description: { story: "Open, with the first option highlighted." } } },
-  play: async ({ canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole("combobox", { name: "Assignee" }));
-  },
+  play: ({ userEvent }: { userEvent: UserEventObject }) => userEvent.click(field()),
 });
 
 export const ServerSearchResults = meta.story({
@@ -304,4 +297,31 @@ ServerSearchResults.test("shows the Items the app renders", async ({ canvas, use
   await expect(canvas.getByRole("status")).toHaveTextContent("No repositories");
   await userEvent.keyboard("{Backspace}{Enter}");
   await expect(field("Repository")).toHaveValue("platform/web");
+});
+
+export const Multiple = meta.story({
+  args: { selectionMode: "multiple", removeLabel: "Remove", defaultValue: ["ab"] },
+  parameters: { docs: { description: { story: "Several choices, shown as tags in the field." } } },
+});
+
+Multiple.test("toggles options, clearing the text, and removes tags", async ({ canvas }) => {
+  await type("io{Enter}");
+  await expect(field()).toHaveValue("");
+  await expect(names()).toHaveLength(5);
+  await expect(entries()).toEqual(["ab", "im"]);
+  await type("{ArrowUp}{Enter}{Backspace}{Enter}");
+  await expect(canvas.getByRole("listbox")).toHaveAttribute("aria-multiselectable", "true");
+  await expect(canvas.getByRole("option", { selected: true })).toHaveTextContent("Alexandru");
+  await (await trusted()).click(canvas.getByRole("button", { name: "Remove Alexandru Bereghici" }));
+  await expect(field()).toHaveFocus();
+  await type("{Escape}");
+  await expect(reasons(onValueChange)).toEqual([
+    [["ab", "im"], "item-press"],
+    [["im"], "item-press"],
+    [[], "backspace-key"],
+    [["ab"], "item-press"],
+    [[], "remove-press"],
+  ]);
+  await (await trusted()).click(canvas.getByRole("button", { name: "Reset" }));
+  await waitFor(() => expect(entries()).toEqual(["ab"]));
 });

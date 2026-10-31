@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/separator.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./separator.module.css";
 
@@ -28,6 +28,8 @@ export type SeparatorProps = HorizontalProps | VerticalProps;
 /**
  * A line between groups of content. Prefer space first: use it only when space alone leaves the
  * grouping unclear. A line the user drags to resize panes is a window splitter, not this component.
+ *
+ * Tier 1: works before hydration.
  */
 export function Separator({
   orientation = "horizontal",

@@ -1,6 +1,6 @@
 import type { RefObject } from "react";
 
-import { getDocument, useEvent } from "../events/use-event.ts";
+import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
 import { platform } from "../kbd/kbd-key.tsx";
 
 const modifiers = new Map([
@@ -19,11 +19,16 @@ export const keyNames = (shortcut: string) =>
     return modifiers.get(id) ?? id.toUpperCase();
   });
 
-function matches(event: globalThis.KeyboardEvent, shortcut: string) {
+/**
+ * Whether a keydown is the shortcut. With Alt, a letter also matches by its key's position: Option
+ * on macOS types another character, such as † for Alt+T.
+ */
+export function matchesShortcut(event: globalThis.KeyboardEvent, shortcut: string) {
   const names = keyNames(shortcut);
+  const key = names.at(-1) ?? "";
 
   return (
-    event.key.toUpperCase() === names.at(-1) &&
+    (event.key.toUpperCase() === key || (event.altKey && event.code === `Key${key}`)) &&
     event.metaKey === names.includes("Meta") &&
     event.ctrlKey === names.includes("Control") &&
     event.shiftKey === names.includes("Shift") &&
@@ -45,7 +50,7 @@ export function useShortcut(
     (event) => {
       if (shortcut === undefined || event.defaultPrevented || editing(event.target)) return;
 
-      if (!matches(event, shortcut)) return;
+      if (!matchesShortcut(event, shortcut)) return;
 
       event.preventDefault();
       action.current?.click();

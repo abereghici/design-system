@@ -1,0 +1,92 @@
+/* Neither is inherited, so each drag step restyles the Root alone, not every element in its panels. */
+@property --splitter-position {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 50;
+}
+
+@property --first-size {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+
+@layer ab.components {
+  .root {
+    --first-size: calc(
+      (100% - var(--ab-splitter-handle-border-width)) * var(--splitter-position) / 100
+    );
+
+    display: grid;
+    grid-template-columns: minmax(0, var(--first-size)) auto minmax(0, 1fr);
+    block-size: 100%;
+  }
+
+  .root[data-orientation="vertical"] {
+    grid-template-columns: none;
+    grid-template-rows: minmax(0, var(--first-size)) auto minmax(0, 1fr);
+  }
+
+  .panel {
+    overflow: auto;
+  }
+
+  /* A panel with no size would still take focus, out of sight. */
+  @container style(--splitter-position: 0) {
+    .panel:first-child {
+      visibility: hidden;
+    }
+  }
+
+  @container style(--splitter-position: 100) {
+    .panel:last-child {
+      visibility: hidden;
+    }
+  }
+
+  .handle {
+    position: relative;
+    overflow: visible;
+    margin: 0;
+    border: 0;
+    border-inline-start: var(--ab-splitter-handle-border-width) solid
+      var(--ab-splitter-handle-border-color);
+    cursor: col-resize;
+    touch-action: none;
+  }
+
+  .root[data-orientation="vertical"] > .handle {
+    border-inline-start: none;
+    border-block-start: var(--ab-splitter-handle-border-width) solid
+      var(--ab-splitter-handle-border-color);
+    cursor: row-resize;
+  }
+
+  /* Hidden in place, so the panels keep their grid tracks. */
+  @media (scripting: none) {
+    .handle {
+      visibility: hidden;
+    }
+  }
+
+  /* The line is thinner than a finger, so a wider, invisible area takes the presses. */
+  .handle::before {
+    content: "";
+    position: absolute;
+    inset: 0 calc(var(--ab-size-target-min) / -2);
+  }
+
+  .root[data-orientation="vertical"] > .handle::before {
+    inset: calc(var(--ab-size-target-min) / -2) 0;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .handle:hover {
+      border-color: var(--ab-splitter-handle-border-color-hovered);
+    }
+  }
+
+  .root[data-dragging] > .handle {
+    border-color: var(--ab-splitter-handle-border-color-pressed);
+  }
+}

@@ -1,5 +1,6 @@
-import { Meta } from "@storybook/addon-docs/blocks";
+import { Canvas, Meta } from "@storybook/addon-docs/blocks";
 
+import * as UIProviderStories from "../../../src/ui-provider/ui-provider.stories.tsx";
 import { Do, Dont, Guidance } from "../blocks/prose.tsx";
 import { RadiusScale, SpaceScale } from "../blocks/specimens.tsx";
 import { Value } from "../blocks/values.tsx";
@@ -23,7 +24,7 @@ Pick the kind of space first, then the size.
 
 <SpaceScale />
 
-Below <Value of="breakpoint-md" /> wide, `space-section` and `layout-gutter` shrink.
+Below <Value of="breakpoint-md" /> wide, `space-section` and `layout-gutter` shrink. In a media query, `em` is the browser's default text size, so readers with larger text get the narrow layout on wider screens.
 
 ## Size
 
@@ -35,6 +36,20 @@ Controls share four heights, so a button, a field and a select line up in a row.
 | `sm`           | <Value of="size-control-sm" /> | <Value of="size-control-sm" when="(pointer: coarse)" /> |
 | `md`           | <Value of="size-control-md" /> | <Value of="size-control-md" when="(pointer: coarse)" /> |
 | `lg`           | <Value of="size-control-lg" /> | <Value of="size-control-lg" when="(pointer: coarse)" /> |
+
+## Density
+
+Comfortable is the default. For a dense screen, set `data-density="compact"` on any element, and the buttons, icon buttons, toggle buttons, segmented controls and single-line fields inside it take the compact heights, as do the options of a Select, Combobox or Command, the items of a menu or Tree, the Tabs and the Steps of a Stepper, while a Table's rows get shorter; `data-density="comfortable"` goes back inside a compact region. The nearest setting wins, and touch screens keep the touch heights in both.
+
+| Control height | Comfortable                    | Compact                                |
+| -------------- | ------------------------------ | -------------------------------------- |
+| `sm`           | <Value of="size-control-sm" /> | <Value of="size-control-compact-sm" /> |
+| `md`           | <Value of="size-control-md" /> | <Value of="size-control-compact-md" /> |
+| `lg`           | <Value of="size-control-lg" /> | <Value of="size-control-compact-lg" /> |
+
+<Canvas of={UIProviderStories.Density} />
+
+Your own components can follow the density too, with a container style query: `@container style(--ab-density: compact) { … }`.
 
 ## Radius
 

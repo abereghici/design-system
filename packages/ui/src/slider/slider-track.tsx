@@ -5,7 +5,8 @@ import type { ComponentProps, PointerEvent } from "react";
 
 import "@abereghici/tokens/components/slider.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { useMove } from "../internal/interaction/use-move.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import type { Reason } from "./slider-root.tsx";
 import { useSlider } from "./slider-root.tsx";
@@ -31,25 +32,12 @@ export type TrackProps = ComponentProps<"div">;
 /** Moves the nearest thumb to a press, then follows the drag with the pointer captured. */
 function useDrag(slider: ReturnType<typeof useSlider>) {
   const drag = useRef<Drag | null>(null);
-  const release = (event: PointerEvent<HTMLDivElement>) => {
-    const current = drag.current;
 
-    if (current === null) return;
-
-    drag.current = null;
-    slider.setDragging(null);
-    slider.commit(current.start, current.last, {
-      reason: current.reason,
-      event: event.nativeEvent,
-    });
-  };
-
-  return {
-    onPointerDown: (event: PointerEvent<HTMLDivElement>) => {
-      if (slider.disabled || event.button !== 0) return;
+  return useMove<HTMLDivElement>({
+    onMoveStart: (event) => {
+      if (slider.disabled) return false;
 
       event.preventDefault();
-      event.currentTarget.setPointerCapture(event.pointerId);
 
       const at = valueAt(event, slider.min, slider.max);
       const distances = slider.values.map((entry) => Math.abs(entry - at));
@@ -61,8 +49,10 @@ function useDrag(slider: ReturnType<typeof useSlider>) {
       const last = slider.change(index, at, "track-press", event.nativeEvent);
 
       drag.current = { index, start: slider.values, last, reason: "track-press" };
+
+      return true;
     },
-    onPointerMove: (event: PointerEvent<HTMLDivElement>) => {
+    onMove: (event) => {
       const current = drag.current;
 
       if (current === null) return;
@@ -73,14 +63,24 @@ function useDrag(slider: ReturnType<typeof useSlider>) {
 
       current.last = slider.change(current.index, at, "drag", event.nativeEvent, current.last);
     },
-    onPointerUp: release,
-    onPointerCancel: release,
-  };
+    onMoveEnd: (event) => {
+      const current = drag.current;
+
+      if (current === null) return;
+
+      drag.current = null;
+      slider.setDragging(null);
+      slider.commit(current.start, current.last, {
+        reason: current.reason,
+        event: event.nativeEvent,
+      });
+    },
+  });
 }
 
 /** The rail: a press moves the nearest thumb there; dragging follows the pointer. */
 export function Track(props: TrackProps) {
-  const drag = useDrag(useSlider());
+  const drag = useDrag(useSlider("Slider.Track"));
 
   return <div {...mergeProps({ className: styles["track"], ...drag }, props)} />;
 }

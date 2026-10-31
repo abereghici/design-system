@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/kbd.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { Key } from "./kbd-key.tsx";
 import type { KbdFace, KeyLabel } from "./kbd-key.tsx";
@@ -74,6 +74,8 @@ function key(
  * Shows a keyboard shortcut, one keycap per key: `mod` is ⌘ on Apple platforms and Ctrl elsewhere.
  * It only shows the keys; your app handles them. Inside a control, pass `aria-hidden` and set
  * `aria-keyshortcuts` on the control, so the shortcut isn't read twice.
+ *
+ * Tier 1: works before hydration.
  */
 export function Kbd({ keys, platform, keyLabels, children, ...props }: KbdProps) {
   const content =

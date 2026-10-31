@@ -4,13 +4,10 @@ import type { ComponentProps, FocusEvent, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/toolbar.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./toolbar.module.css";
-
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
 
 export type ToolbarProps = Omit<ComponentProps<"div">, "aria-label" | "aria-labelledby"> &
   AccessibleName;
@@ -86,6 +83,8 @@ function handleFocus(event: FocusEvent<HTMLDivElement>) {
  * stop, so keyboard users skip the group in one press; the arrow keys move between them. Name it
  * with `aria-label`. For one or two controls, place them directly; never put text fields, Selects or
  * Sliders inside, since they need the arrow keys themselves.
+ *
+ * Tier 1: works before hydration, except moving with the arrow keys (Tier 2), which works after it.
  */
 export function Toolbar(props: ToolbarProps) {
   return (

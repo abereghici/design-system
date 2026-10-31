@@ -4,6 +4,9 @@ import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/field.css";
 
+import { chain } from "../internal/chain/chain.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+
 import fieldStyles from "../field/field.module.css";
 import styles from "./text-field.module.css";
 
@@ -17,11 +20,8 @@ export function InputGroup({
 }: ComponentProps<"div"> & { start: ReactNode; end: ReactNode }) {
   return (
     <div
-      {...props}
-      className={`${fieldStyles["control"]} ${styles["group"]}`}
-      onPointerDown={(event) => {
-        onPointerDown?.(event);
-
+      {...mergeProps({ className: `${fieldStyles["control"]} ${styles["group"]}` }, props)}
+      onPointerDown={chain(onPointerDown, (event) => {
         const input = event.currentTarget.querySelector("input");
 
         if (!(event.target instanceof Element) || input === null || event.target === input) return;
@@ -30,7 +30,7 @@ export function InputGroup({
 
         event.preventDefault();
         input.focus();
-      }}
+      })}
     >
       {start !== undefined && <span className={styles["start"]}>{start}</span>}
       {children}

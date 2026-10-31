@@ -51,7 +51,7 @@ Default.test("dispatches a bubbling ab-toggle after a change", async ({ canvas, 
   await expect(
     toggles.events.map(({ target, bubbles, detail }) => ({ target, bubbles, detail })),
   ).toEqual([
-    { target: checkbox, bubbles: true, detail: { component: "Checkbox", reason: "user" } },
+    { target: checkbox, bubbles: true, detail: { component: "Checkbox", userInitiated: true } },
   ]);
 });
 
@@ -132,12 +132,23 @@ Default.test(
 );
 
 Default.test(
+  "returns to its default state when its form resets",
+  { args: { name: "updates", defaultChecked: true }, decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const checkbox = canvas.getByRole("checkbox", { name: "Email me updates" });
+
+    await userEvent.click(checkbox);
+    await expect(checkbox).not.toBeChecked();
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(checkbox).toBeChecked();
+  },
+);
+
+Default.test(
   "is named by aria-label without visible text",
   { args: { children: undefined, "aria-label": "Select row" } },
   async ({ canvas }) => {
     await expect(canvas.getByRole("checkbox", { name: "Select row" })).toBeInTheDocument();
-    // @ts-expect-error -- a checkbox without visible text needs aria-label or aria-labelledby
-    void (<Checkbox />);
   },
 );
 

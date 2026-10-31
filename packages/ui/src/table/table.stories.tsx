@@ -1,11 +1,14 @@
-import { useState } from "react";
-import type { CSSProperties } from "react";
-import { expect } from "storybook/test";
+import type { ReactNode } from "react";
+import { expect, fn, waitFor } from "storybook/test";
 
-import { Checkbox } from "@abereghici/ui/checkbox";
-import { ScrollArea } from "@abereghici/ui/scroll-area";
+import { EmptyState } from "@abereghici/ui/empty-state";
 
+import { invoiceIds, SortableInvoices } from "#.storybook/components/sortable-invoices.tsx";
+import { withScroll } from "#.storybook/decorators/with-scroll.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
+import { listen } from "#.storybook/test/listen.ts";
+import { atCentre } from "#.storybook/test/pointer.ts";
+import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Table from "./table.tsx";
 
@@ -17,42 +20,61 @@ const invoices = [
 
 const end = { textAlign: "end" } as const;
 
-const rows = (
-  <>
-    <Table.Header>
-      <Table.Row>
-        <Table.ColumnHeader>Invoice</Table.ColumnHeader>
-        <Table.ColumnHeader>Status</Table.ColumnHeader>
-        <Table.ColumnHeader>Issued</Table.ColumnHeader>
-        <Table.ColumnHeader style={end}>Amount</Table.ColumnHeader>
+const columns = (invoice: ReactNode = "Invoice", sort?: "ascending") => (
+  <Table.Header>
+    <Table.Row>
+      <Table.ColumnHeader sortDirection={sort}>{invoice}</Table.ColumnHeader>
+      <Table.ColumnHeader>Status</Table.ColumnHeader>
+      <Table.ColumnHeader>Issued</Table.ColumnHeader>
+      <Table.ColumnHeader style={end}>Amount</Table.ColumnHeader>
+    </Table.Row>
+  </Table.Header>
+);
+
+const body = (
+  <Table.Body>
+    {invoices.map((invoice) => (
+      <Table.Row key={invoice.id}>
+        <Table.RowHeader>{invoice.id}</Table.RowHeader>
+        <Table.Cell>{invoice.status}</Table.Cell>
+        <Table.Cell>
+          <time dateTime={invoice.date}>{invoice.date}</time>
+        </Table.Cell>
+        <Table.Cell style={end}>{invoice.amount}</Table.Cell>
       </Table.Row>
-    </Table.Header>
-    <Table.Body>
-      {invoices.map((invoice) => (
-        <Table.Row key={invoice.id}>
-          <Table.RowHeader>{invoice.id}</Table.RowHeader>
-          <Table.Cell>{invoice.status}</Table.Cell>
-          <Table.Cell>
-            <time dateTime={invoice.date}>{invoice.date}</time>
-          </Table.Cell>
-          <Table.Cell style={end}>{invoice.amount}</Table.Cell>
-        </Table.Row>
-      ))}
-    </Table.Body>
+    ))}
+  </Table.Body>
+);
+
+const captioned = (rows: ReactNode, captionId?: string, head: ReactNode = columns()) => (
+  <>
+    <Table.Caption id={captionId}>Invoices, 2026</Table.Caption>
+    {head}
+    {rows}
   </>
 );
+
+const cancel = (_keys: unknown, details: { cancel: () => void }) => {
+  details.cancel();
+};
 
 const meta = preview.meta({
   title: "Components/Table",
   component: Table.Root,
   subcomponents: partsOf(Table),
+  argTypes: {
+    selectedKeys: {
+      control: false,
+      description: "The selected rows' keys, when your state holds them.",
+    },
+    defaultSelectedKeys: {
+      control: false,
+      description: "The rows selected on the first render when the Table holds its own state.",
+    },
+  },
   args: {
-    children: (
-      <>
-        <Table.Caption>Invoices, 2026</Table.Caption>
-        {rows}
-      </>
-    ),
+    children: captioned(body),
+    onSelectionChange: fn<(keys: string[], details: Table.ChangeEventDetails) => void>(),
   },
 });
 
@@ -60,7 +82,7 @@ export const Default = meta.story({});
 
 Default.test(
   "is named by aria-label without a caption",
-  { args: { "aria-label": "Usage", children: rows } },
+  { args: { "aria-label": "Usage", children: body } },
   async ({ canvas }) => {
     await expect(canvas.getByRole("table", { name: "Usage" })).toBeVisible();
   },
@@ -71,28 +93,12 @@ export const InAScrollArea = meta.story({
     docs: {
       description: {
         story:
-          "A wide table scrolls inside a ScrollArea named by the caption, so the page never scrolls in two axes.",
+          "A wide or long table scrolls inside a ScrollArea named by the caption, so the page never scrolls in two axes; the column headers stay in view meanwhile.",
       },
     },
   },
-  args: {
-    style: { minInlineSize: "32rem" },
-    children: (
-      <>
-        <Table.Caption id="invoices-caption">Invoices, 2026</Table.Caption>
-        {rows}
-      </>
-    ),
-  },
-  decorators: [
-    (Story) => (
-      <ScrollArea asChild style={{ maxInlineSize: "20rem" }}>
-        <section aria-labelledby="invoices-caption">
-          <Story />
-        </section>
-      </ScrollArea>
-    ),
-  ],
+  args: { style: { minInlineSize: "32rem" }, children: captioned(body, "invoices-caption") },
+  decorators: [withScroll({ maxInlineSize: "20rem", maxBlockSize: "7rem" }, "invoices-caption")],
 });
 
 InAScrollArea.test(
@@ -104,72 +110,58 @@ InAScrollArea.test(
   },
 );
 
-const amountOf = (invoice: (typeof invoices)[number]) =>
-  Number(invoice.amount.replaceAll(/[€,]/gv, ""));
+InAScrollArea.test(
+  "keeps the header in view while the rows scroll",
+  async ({ canvas, userEvent }) => {
+    const columnHeader = canvas.getByRole("columnheader", { name: "Invoice" });
+    const lastRow = canvas.getByRole("rowheader", { name: "INV-003" });
+    const user = await trusted();
 
-type Sort = { column: "id" | "amount"; direction: "ascending" | "descending" };
+    await expect(atCentre(lastRow)).not.toBe(lastRow);
+    await userEvent.tab();
+    await user.keyboard("{End}");
+    await waitFor(() => expect(atCentre(lastRow)).toBe(lastRow));
+    await expect(atCentre(columnHeader)).toBe(columnHeader);
+  },
+);
 
-function SortableInvoices() {
-  const [sort, setSort] = useState<Sort>({ column: "id", direction: "ascending" });
-  const sorted = invoices.toSorted((a, b) => {
-    const order = sort.column === "id" ? a.id.localeCompare(b.id) : amountOf(a) - amountOf(b);
-
-    return sort.direction === "ascending" ? order : -order;
-  });
-  const header = (column: typeof sort.column, label: string, style?: CSSProperties) => (
-    <Table.ColumnHeader
-      style={style}
-      sortDirection={sort.column === column ? sort.direction : undefined}
-    >
-      <Table.SortLabel
-        onClick={() => {
-          const flip = sort.column === column && sort.direction === "ascending";
-
-          setSort({ column, direction: flip ? "descending" : "ascending" });
-        }}
-      >
-        {label}
-      </Table.SortLabel>
-    </Table.ColumnHeader>
-  );
-
-  return (
-    <Table.Root>
-      <Table.Caption>Invoices, 2026</Table.Caption>
-      <Table.Header>
-        <Table.Row>
-          {header("id", "Invoice")}
-          <Table.ColumnHeader>Status</Table.ColumnHeader>
-          {header("amount", "Amount", end)}
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {sorted.map((invoice) => (
-          <Table.Row key={invoice.id}>
-            <Table.RowHeader>{invoice.id}</Table.RowHeader>
-            <Table.Cell>{invoice.status}</Table.Cell>
-            <Table.Cell style={end}>{invoice.amount}</Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table.Root>
-  );
-}
-
-export const Sortable = meta.story({
+export const SortedOnTheServer = meta.story({
   parameters: {
     docs: {
       description: {
         story:
-          "Put a `SortLabel` in each sortable `ColumnHeader` and give the sorted one `sortDirection`; your handler reorders the rows.",
+          "A `SortLabel` with `asChild` gives the sort affordance to your own link, so the server sorts the rows and the Table works before its JavaScript loads.",
+      },
+    },
+  },
+  args: {
+    children: captioned(
+      body,
+      undefined,
+      columns(
+        <Table.SortLabel asChild>
+          <a href="?sort=invoice">Invoice</a>
+        </Table.SortLabel>,
+        "ascending",
+      ),
+    ),
+  },
+});
+
+export const Sorting = meta.story({
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A `SortLabel` in each sortable `ColumnHeader` is a button your handler answers by reordering the rows; the header announces the sort.",
       },
     },
   },
   render: SortableInvoices,
 });
 
-Sortable.test(
-  "sorts by a pressed column, announced on its header",
+Sorting.test(
+  "sorts by a pressed column, and reverses it on Enter, announced on its header",
   async ({ canvas, userEvent }) => {
     const sortOf = (name: string) =>
       canvas.getByRole("columnheader", { name }).getAttribute("aria-sort");
@@ -185,80 +177,122 @@ Sortable.test(
   },
 );
 
-function SelectableInvoices() {
-  const [selected, setSelected] = useState<ReadonlySet<string>>(new Set(["INV-002"]));
-  const all = selected.size === invoices.length;
-
-  return (
-    <Table.Root aria-label="Invoices">
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader>
-            <Checkbox
-              aria-label="Select all invoices"
-              checked={all}
-              indeterminate={selected.size > 0 && !all}
-              onCheckedChange={(checked) => {
-                setSelected(new Set(checked ? invoices.map((invoice) => invoice.id) : []));
-              }}
-            />
-          </Table.ColumnHeader>
-          <Table.ColumnHeader>Invoice</Table.ColumnHeader>
-          <Table.ColumnHeader style={end}>Amount</Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {invoices.map((invoice) => (
-          <Table.Row key={invoice.id} selected={selected.has(invoice.id)}>
-            <Table.Cell>
-              <Checkbox
-                aria-label={`Select ${invoice.id}`}
-                checked={selected.has(invoice.id)}
-                onCheckedChange={(checked) => {
-                  const one = new Set([invoice.id]);
-
-                  setSelected((current) =>
-                    checked ? current.union(one) : current.difference(one),
-                  );
-                }}
-              />
-            </Table.Cell>
-            <Table.RowHeader>{invoice.id}</Table.RowHeader>
-            <Table.Cell style={end}>{invoice.amount}</Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table.Root>
-  );
-}
-
-export const Selectable = meta.story({
+export const RowSelection = meta.story({
   parameters: {
     docs: {
       description: {
         story:
-          "A first column of native checkboxes selects rows; mark each chosen `Row` `selected`. The header checkbox selects all and shows mixed while only some are chosen.",
+          "A `selectionMode` with a `SelectRow` cell in each Row, and a `SelectAll` header cell for `multiple`, lets people select rows; the selection outlives a sort.",
       },
     },
   },
-  render: SelectableInvoices,
+  args: { selectionMode: "multiple", defaultSelectedKeys: ["INV-002"] },
+  render: SortableInvoices,
 });
 
-Selectable.test("selects rows with their checkboxes", async ({ canvas, userEvent }) => {
-  const selectAll = canvas.getByRole("checkbox", { name: "Select all invoices" });
+RowSelection.test(
+  "selects a row with its checkbox, and keeps it selected through a sort",
+  async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("checkbox", { name: "Select INV-003" }));
+    await expect(args.onSelectionChange).toHaveBeenCalledWith(
+      ["INV-002", "INV-003"],
+      expect.objectContaining({ reason: "row-press" }),
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "Amount" }));
+    await expect(canvas.getAllByRole("rowheader")[0]).toHaveTextContent("INV-003");
+    await expect(canvas.getByRole("checkbox", { name: "Select INV-003" })).toBeChecked();
+  },
+);
 
-  await expect(selectAll).toBePartiallyChecked();
-  await userEvent.click(canvas.getByRole("checkbox", { name: "Select INV-001" }));
-  await expect(canvas.getByRole("checkbox", { name: "Select INV-001" })).toBeChecked();
-  await userEvent.click(canvas.getByRole("checkbox", { name: "Select INV-003" }));
-  await expect(selectAll).toBeChecked();
+RowSelection.test(
+  "selects and clears every row from the header checkbox, which reports mixed meanwhile",
+  async ({ canvas, userEvent }) => {
+    const selectAll = canvas.getByRole("checkbox", { name: "Select all invoices" });
+    const checked = () => canvas.queryAllByRole("checkbox", { checked: true });
+
+    await expect(selectAll).toBePartiallyChecked();
+    await userEvent.click(selectAll);
+    await expect(checked()).toHaveLength(invoiceIds.length + 1);
+    await userEvent.click(selectAll);
+    await expect(checked()).toEqual([]);
+    await expect(selectAll).not.toBePartiallyChecked();
+  },
+);
+
+RowSelection.test(
+  "keeps the selection, and reports no toggle, when the app cancels the change",
+  { args: { onSelectionChange: cancel } },
+  async ({ canvas, userEvent }) => {
+    const toggles = listen("ab-toggle");
+
+    await userEvent.click(canvas.getByRole("checkbox", { name: "Select INV-001" }));
+    toggles.stop();
+    await expect(canvas.getByRole("checkbox", { name: "Select INV-001" })).not.toBeChecked();
+    await expect(canvas.getByRole("checkbox", { name: "Select INV-002" })).toBeChecked();
+    await expect(toggles.events).toEqual([]);
+  },
+);
+
+RowSelection.test(
+  "chooses one row at a time in single selection, and reports the chosen one",
+  { args: { selectionMode: "single" } },
+  async ({ args, canvas, userEvent }) => {
+    const radio = (id: string) => canvas.getByRole("radio", { name: `Select ${id}` });
+
+    await userEvent.click(radio("INV-003"));
+    await expect(radio("INV-003")).toBeChecked();
+    await expect(radio("INV-002")).not.toBeChecked();
+    await expect(args.onSelectionChange).toHaveBeenLastCalledWith(
+      ["INV-003"],
+      expect.objectContaining({ reason: "row-press" }),
+    );
+  },
+);
+
+export const Loading = meta.story({
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "`loading` announces the Table as busy, and `Skeleton` holds the place of the rows, so the page keeps its height while they arrive.",
+      },
+    },
+  },
+  args: {
+    loading: true,
+    children: captioned(
+      <Table.Body>
+        <Table.Skeleton rows={3} columns={4} />
+      </Table.Body>,
+    ),
+  },
 });
 
-Selectable.test("selects and clears every row from the header", async ({ canvas, userEvent }) => {
-  const selectAll = canvas.getByRole("checkbox", { name: "Select all invoices" });
+Loading.test("announces the table as busy while its rows load", async ({ canvas }) => {
+  await expect(canvas.getByRole("table")).toHaveAttribute("aria-busy", "true");
+});
 
-  await userEvent.click(selectAll);
-  await userEvent.click(selectAll);
-
-  for (const box of canvas.getAllByRole("checkbox")) await expect(box).not.toBeChecked();
+export const Empty = meta.story({
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "With no rows to show, an `Empty` cell spans every column, so an EmptyState can say what is missing and what to do next.",
+      },
+    },
+  },
+  args: {
+    children: captioned(
+      <Table.Body>
+        <Table.Empty colSpan={4}>
+          <EmptyState.Root>
+            <EmptyState.Title>No invoices yet</EmptyState.Title>
+            <EmptyState.Description>
+              Invoices appear here as soon as you bill a customer.
+            </EmptyState.Description>
+          </EmptyState.Root>
+        </Table.Empty>
+      </Table.Body>,
+    ),
+  },
 });

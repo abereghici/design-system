@@ -1,15 +1,18 @@
 "use client";
 
-import { createContext, use, useId, useLayoutEffect, useRef, useState } from "react";
-import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction } from "react";
+import { createContext, useId } from "react";
+import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/command.css";
 
-import { isComposing, requestChange } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { filterOptions, enabled, navigate, reveal } from "../internal/listbox/listbox.tsx";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import { isComposing } from "../internal/interaction/composition.ts";
+import { useListbox } from "../internal/listbox/use-listbox.ts";
+import type { ListboxNavigator } from "../internal/listbox/use-listbox.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./command.module.css";
 
@@ -20,107 +23,37 @@ export type Callback<Value, Reason extends string> = (
   details: ChangeEventDetails<Reason>,
 ) => void;
 
-interface CommandContext {
+interface CommandContextValue {
   readonly query: string;
   readonly change: (query: string, event: Event) => void;
-  readonly highlighted: string | null;
-  readonly highlight: (id: string) => void;
   readonly keyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
-  readonly list: RefObject<HTMLDivElement | null>;
+  readonly listbox: ListboxNavigator;
   readonly listId: string;
-  readonly empty: boolean;
 }
 
-const Context = createContext<CommandContext | null>(null);
+export const [CommandContext, useCommand] = createSafeContext<CommandContextValue>(
+  "Command.Root or Command.Dialog",
+);
 
 /** The item-press close of the enclosing Command.Dialog, `null` inline. */
 export const DialogContext = createContext<((event: Event, option: HTMLElement) => void) | null>(
   null,
 );
 
-export function useCommand(): CommandContext {
-  const context = use(Context);
-
-  if (context === null)
-    throw new Error("Command parts must be inside Command.Root or Command.Dialog");
-
-  return context;
-}
-
-function keyDown(
-  event: KeyboardEvent<HTMLInputElement>,
-  list: HTMLElement | null,
-  highlighted: string | null,
-  highlight: (id: string) => void,
-) {
-  if (event.key === "Enter") {
-    const option = highlighted === null ? null : document.getElementById(highlighted);
-
-    if (isComposing(event) || option === null) return;
-
-    event.preventDefault();
-    option.click();
+/** Enter runs the highlighted command; the other keys go to the Listbox navigator. */
+function keyDown(event: KeyboardEvent<HTMLInputElement>, listbox: ListboxNavigator) {
+  if (event.key !== "Enter") {
+    listbox.keyDown(event);
 
     return;
   }
 
-  const next = navigate(event, list, highlighted);
+  const option = listbox.highlighted();
 
-  if (next !== null) highlight(next.id);
-}
+  if (isComposing(event) || option === null) return;
 
-/**
- * Ranks the Items, then keeps the highlight on a shown, enabled Item: the first one after a new
- * query.
- */
-function useFilter(
-  list: RefObject<HTMLDivElement | null>,
-  query: string,
-  locale: Intl.LocalesArgument | null,
-  setHighlighted: Dispatch<SetStateAction<string | null>>,
-) {
-  const [empty, setEmpty] = useState(false);
-  const searched = useRef(query);
-
-  useLayoutEffect(() => {
-    const node = list.current;
-    const run = (fresh: boolean) => {
-      const shown = filterOptions(node, query, locale);
-
-      setEmpty(shown.length === 0);
-
-      const [first] = shown.filter((option) => enabled(option));
-
-      setHighlighted((current) =>
-        !fresh && shown.some((option) => option.id === current && enabled(option))
-          ? current
-          : (first?.id ?? null),
-      );
-
-      if (fresh && first !== undefined) reveal(first, shown);
-    };
-
-    run(searched.current !== query);
-    searched.current = query;
-
-    const observer = new MutationObserver(() => {
-      run(false);
-    });
-
-    if (node !== null)
-      observer.observe(node, {
-        subtree: true,
-        childList: true,
-        characterData: true,
-        attributeFilter: ["aria-disabled", "data-label", "data-keywords"],
-      });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [list, query, locale, setHighlighted]);
-
-  return empty;
+  event.preventDefault();
+  option.click();
 }
 
 export interface RootProps extends ComponentProps<"div"> {
@@ -139,6 +72,9 @@ export interface RootProps extends ComponentProps<"div"> {
 
 /**
  * A keyboard-first launcher: type a few letters, press Enter, and the best match runs. Use it inline when a searchable list of commands belongs in the page or a Popover, and `Command.Dialog` once per app for the ⌘K palette. To choose a form value use Combobox; for the few actions of one control, DropdownMenu.
+ *
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, it is
+ * hidden.
  */
 export function Root({
   inputValue,
@@ -148,30 +84,24 @@ export function Root({
   children,
   ...props
 }: RootProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultInputValue);
-  const query = inputValue ?? uncontrolled;
-  const [highlighted, setHighlighted] = useState<string | null>(null);
-  const list = useRef<HTMLDivElement>(null);
+  const [query, request] = useControllableState(inputValue, defaultInputValue, onInputValueChange);
   const locale = useLocale();
-  const empty = useFilter(list, query, filtering === null ? null : locale, setHighlighted);
-  const context: CommandContext = {
+  const listbox = useListbox(query, filtering === null ? null : locale);
+  const context: CommandContextValue = {
     query,
     change: (next, event) => {
-      if (requestChange(onInputValueChange, next, "input-change", event)) setUncontrolled(next);
+      request(next, "input-change", event);
     },
-    highlighted,
-    highlight: setHighlighted,
     keyDown: (event) => {
-      keyDown(event, list.current, highlighted, setHighlighted);
+      keyDown(event, listbox);
     },
-    list,
+    listbox,
     listId: useId(),
-    empty,
   };
 
   return (
     <div {...mergeProps({ className: styles["root"] }, props)}>
-      <Context value={context}>{children}</Context>
+      <CommandContext value={context}>{children}</CommandContext>
     </div>
   );
 }

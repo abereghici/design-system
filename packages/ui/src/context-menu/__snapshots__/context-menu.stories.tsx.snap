@@ -3,3 +3,12 @@
 exports[`Default   > base story 1`] = `
 - button "Report.pdf"
 `;
+
+exports[`Open 1`] = `
+- button "Report.pdf"
+- menu "File actions":
+  - menuitem "Duplicate"
+  - menuitemcheckbox "Pinned"
+  - separator
+  - menuitem "Delete"
+`;

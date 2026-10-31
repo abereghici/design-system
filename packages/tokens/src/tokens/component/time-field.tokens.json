@@ -1,0 +1,16 @@
+{
+  "component": {
+    "time-field-segment-background-color-focused": {
+      "$type": "color",
+      "$value": "{semantic.color-background-selected}"
+    },
+    "time-field-segment-text-color-focused": {
+      "$type": "color",
+      "$value": "{semantic.color-text-selected}"
+    },
+    "time-field-segment-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-xs}"
+    }
+  }
+}

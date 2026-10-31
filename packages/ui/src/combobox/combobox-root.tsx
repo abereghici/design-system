@@ -1,18 +1,22 @@
 "use client";
 
+import { Children, createContext, isValidElement } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/combobox.css";
 
 import { Wrapper } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
+import { useHydrated } from "../internal/hydration/use-hydrated.ts";
 import { Listbox } from "../internal/listbox/listbox.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import { Control } from "./combobox-control.tsx";
-import { listProps, part } from "./combobox-state.ts";
-import type { ComboboxState, Options } from "./combobox-state.ts";
-import { ValueContext, useCombobox } from "./use-combobox.ts";
+import type { ItemProps } from "./combobox-item.tsx";
+import type { Options } from "./use-combobox-state.ts";
+import { part } from "./use-combobox-state.ts";
+import { useCombobox } from "./use-combobox.ts";
+import type { Combobox } from "./use-combobox.ts";
 import styles from "./combobox.module.css";
 
 type Loading =
@@ -46,77 +50,134 @@ export type RootProps = Naming &
     /** The text shown and announced while `loading`, such as "Loading…". */
     loadingText?: string | undefined;
     /**
-     * Your own rule, given the chosen Item's `value` (`""` when none): return a message when
-     * invalid.
+     * Your own rule, given the chosen Item's `value` (`""` when none, the first of several): return a
+     * message when invalid.
      */
     validate?: SizedWrapperProps["validate"];
   };
 
+/** The chosen values, and whether the list marks them selected (several) or marks the highlight. */
+export const ValueContext = createContext<{ chosen: readonly string[]; multiple: boolean }>({
+  chosen: [],
+  multiple: false,
+});
+
+const textOfNode = (node: ReactNode): string =>
+  Children.toArray(node)
+    .map((child) => {
+      if (typeof child === "string" || typeof child === "number") return String(child);
+
+      return isValidElement<{ children?: ReactNode }>(child)
+        ? textOfNode(child.props.children)
+        : "";
+    })
+    .join("");
+
+/**
+ * Each Item's text by its `value`, read from the elements rather than the page, so the server
+ * renders the chosen labels too. An Item is any element with a string `value` prop, whatever its
+ * element type.
+ */
+function labelsOf(children: ReactNode, labels = new Map<string, string>()) {
+  Children.forEach(children, (child) => {
+    if (!isValidElement<Partial<ItemProps>>(child)) return;
+
+    if (typeof child.props.value === "string") {
+      labels.set(child.props.value, textOfNode(child.props.children).trim());
+    } else {
+      labelsOf(child.props.children, labels);
+    }
+  });
+
+  return labels;
+}
+
 interface ListProps {
-  c: ComboboxState;
-  labelledBy: string | undefined;
-  label: string | undefined;
+  c: Combobox;
+  naming: Pick<ComponentProps<"div">, "aria-labelledby" | "aria-label">;
+  empty: string;
   children: ReactNode;
 }
 
-function List({ c, labelledBy, label, children }: ListProps) {
+function List({ c, naming, empty, children }: ListProps) {
+  const { multiple } = c;
+
   return (
     <Listbox
-      {...listProps(c)}
-      aria-labelledby={labelledBy}
-      aria-label={label}
+      navigator={c.listbox}
+      {...c.listProps}
+      {...naming}
+      aria-multiselectable={multiple || undefined}
       className={styles["list"]}
     >
-      <ValueContext value={c.value}>{children}</ValueContext>
+      <ValueContext value={{ chosen: c.value, multiple }}>{children}</ValueContext>
+      <div aria-hidden hidden={!c.listbox.empty} className={styles["empty"]}>
+        {empty}
+      </div>
     </Listbox>
   );
 }
 
-const split = ({
-  value,
-  defaultValue,
-  onValueChange,
+/**
+ * One hidden input per chosen value. A single choice names its input only once hydrated: until
+ * then the typed text submits under the name.
+ */
+function Values({ c, name, form }: { c: Combobox } & Pick<InputProps, "name" | "form">) {
+  const hydrated = useHydrated();
+  const named = c.multiple || hydrated ? name : undefined;
+
+  return (c.multiple ? c.value : [c.value[0] ?? ""]).map((value) => (
+    <input key={value} type="hidden" name={named} form={form} value={value} />
+  ));
+}
+
+/** The props left for the input once the Combobox has taken its own, and the empty-list text. */
+const inputPropsOf = ({
+  value: _value,
+  defaultValue: _defaultValue,
+  onValueChange: _onValueChange,
+  selectionMode: _selectionMode,
+  removeLabel: _removeLabel,
   inputValue,
   defaultInputValue,
-  onInputValueChange,
-  open,
-  defaultOpen,
-  onOpenChange,
-  filter,
+  onInputValueChange: _onInputValueChange,
+  open: _open,
+  defaultOpen: _defaultOpen,
+  onOpenChange: _onOpenChange,
+  filter: _filter,
+  loading,
+  loadingText,
+  noOptionsText,
   ...rest
-}: Omit<RootProps, "label" | "description" | "errorMessage" | "invalid" | "validate">) =>
-  [
-    {
-      value,
-      defaultValue,
-      onValueChange,
-      inputValue,
-      defaultInputValue,
-      onInputValueChange,
-      open,
-      defaultOpen,
-      onOpenChange,
-      filter,
-      // Read-only blocks the same presses and keys as disabled; only the look and announcement differ.
-      disabled: rest.disabled === true || rest.readOnly === true,
-    },
-    { ...rest, defaultValue: inputValue ?? defaultInputValue },
-  ] as const;
+}: Omit<RootProps, "label" | "description" | "errorMessage" | "invalid" | "validate">) => ({
+  ...rest,
+  defaultValue: inputValue ?? defaultInputValue,
+  empty: (loading === true ? loadingText : undefined) ?? noOptionsText,
+});
 
 /**
- * Chooses one value from a long or open-ended list by typing to narrow it. The value is always one
- * of the Items; the typed text only filters. Use Select for a short known list, RadioGroup for 2–6
+ * Chooses a value from a long or open-ended list by typing to narrow it, or several with
+ * `selectionMode="multiple"`, shown as tags that Backspace removes from the end. Values are always
+ * Items; the typed text only filters. Use Select for a short known list, RadioGroup for 2–6
  * options that should stay visible, a TextField for free text, and Command to run commands.
+ *
+ * Tier 2: shows its final content before hydration and works after it; until then, a single
+ * choice submits the typed text.
  */
 export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, validate, ...rest } = props;
-  const [
-    options,
-    { size, className, style, loading, loadingText, noOptionsText, name, form, children, ...input },
-  ] = split(rest);
-  const empty = (loading === true ? loadingText : undefined) ?? noOptionsText;
-  const c = useCombobox(options, empty);
+  const { size, className, style, name, form, children, empty, ...input } = inputPropsOf(rest);
+  // Read-only blocks the same presses and keys as disabled; only the look and announcement differ.
+  const locked = input.disabled === true || input.readOnly === true;
+  const c = useCombobox({ ...props, disabled: locked });
   const field = { className, style, name, invalid, disabled: input.disabled, id: part(c, "root") };
+  const naming = {
+    "aria-labelledby": label === undefined ? input["aria-labelledby"] : part(c, "label"),
+    "aria-label": label === undefined ? input["aria-label"] : undefined,
+  };
+  const labels = labelsOf(children);
+  // The server renders the chosen Item's text as well, so hydration doesn't change the field.
+  const text = input.defaultValue ?? (c.multiple ? undefined : labels.get(c.value[0] ?? ""));
 
   return (
     <Wrapper
@@ -126,24 +187,17 @@ export function Root(props: RootProps) {
       labelId={part(c, "label")}
       description={description}
       errorMessage={errorMessage}
-      validate={validate && ((_text, formData) => validate(c.value ?? "", formData))}
+      validate={validate && ((_text, formData) => validate(c.value[0] ?? "", formData))}
       after={
         <VisuallyHidden asChild>
-          <output id={part(c, "status")} />
+          <output>{c.open && c.listbox.empty ? empty : ""}</output>
         </VisuallyHidden>
       }
     >
-      <Control c={c} input={input} />
-      <input type="hidden" name={name} form={form} value={c.value ?? ""} />
-      <List
-        c={c}
-        labelledBy={label === undefined ? input["aria-labelledby"] : part(c, "label")}
-        label={label === undefined ? input["aria-label"] : undefined}
-      >
+      <Control c={c} input={{ ...input, defaultValue: text }} naming={naming} labels={labels} />
+      <Values c={c} name={name} form={form} />
+      <List c={c} naming={naming} empty={empty}>
         {children}
-        <div id={part(c, "empty")} aria-hidden className={styles["empty"]}>
-          {empty}
-        </div>
       </List>
     </Wrapper>
   );

@@ -6,15 +6,13 @@ import { TrashIcon } from "@abereghici/ui/icons/trash";
 import { Kbd } from "@abereghici/ui/kbd";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
-import { listen } from "#.storybook/test/listen.ts";
+import { listen, reasons } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as ContextMenu from "./context-menu.tsx";
 
 const onOpenChange = fn<NonNullable<ContextMenu.RootProps["onOpenChange"]>>();
 const onDuplicate = fn<() => void>();
-
-const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const meta = preview.meta({
   title: "Components/ContextMenu",
@@ -61,7 +59,7 @@ Default.test("opens on a right click at its first item", async ({ canvas }) => {
   await user.click(canvas.getByRole("button", { name: "Report.pdf" }), { button: "right" });
   await waitFor(() => expect(canvas.getByRole("menu", { name: "File actions" })).toBeVisible());
   await waitFor(() => expect(canvas.getByRole("menuitem", { name: "Duplicate" })).toHaveFocus());
-  await expect(reasons()).toEqual([[true, "trigger-press"]]);
+  await expect(reasons(onOpenChange)).toEqual([[true, "trigger-press"]]);
 });
 
 Default.test("moves with the arrow keys, wrapping, and End", async ({ canvas }) => {
@@ -95,7 +93,7 @@ Default.test(
     await waitFor(() => expect(file).toHaveFocus());
     dismissals.stop();
     await expect(dismissals.events.map(({ detail }) => detail)).toEqual([
-      { component: "ContextMenu", reason: "user" },
+      { component: "ContextMenu", userInitiated: true },
     ]);
   },
 );
@@ -113,9 +111,9 @@ Default.test("runs an item and closes, dispatching ab-press", async ({ canvas })
   await expect(onDuplicate).toHaveBeenCalledOnce();
   await waitFor(() => expect(canvas.queryByRole("menu")).toBeNull());
   await expect(presses.events.map(({ detail }) => detail)).toEqual([
-    { component: "ContextMenu", reason: "user" },
+    { component: "ContextMenu", userInitiated: true },
   ]);
-  await expect(reasons().at(-1)).toEqual([false, "item-press"]);
+  await expect(reasons(onOpenChange).at(-1)).toEqual([false, "item-press"]);
 });
 
 Default.test(
@@ -177,6 +175,15 @@ Default.test(
     await expect(canvas.queryByRole("menu")).toBeNull();
     await userEvent.pointer({ keys: "[/TouchA]", target: file });
     await waitFor(() => expect(canvas.getByRole("menu", { name: "File actions" })).toBeVisible());
-    await expect(reasons().at(-1)).toEqual([true, "trigger-press"]);
+    await expect(reasons(onOpenChange).at(-1)).toEqual([true, "trigger-press"]);
   },
 );
+
+export const Open = Default.extend({
+  parameters: { docs: { description: { story: "Open from a right click on its target." } } },
+  play: async ({ canvas }) => {
+    const user = await trusted().catch(() => null);
+
+    await user?.click(canvas.getByRole("button", { name: "Report.pdf" }), { button: "right" });
+  },
+});

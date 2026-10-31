@@ -3,30 +3,19 @@ import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/sidebar.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./sidebar.module.css";
 
 export interface GroupProps extends ComponentProps<"div"> {
   /** The group's visible name; with it the group is announced by that name. */
   label?: ReactNode;
-  /** Lets people fold the group's links under its `label`, for long navigation. */
-  collapsible?: boolean;
-  /** Starts a collapsible group unfolded. */
-  defaultOpen?: boolean;
 }
 
-/** A set of Items under an optional `label`; with `collapsible`, people can fold it. */
-export function Group({
-  label,
-  collapsible = false,
-  defaultOpen = false,
-  children,
-  ...props
-}: GroupProps) {
+/** A set of Items under an optional `label`. For a group people can fold, use CollapsibleGroup. */
+export function Group({ label, children, ...props }: GroupProps) {
   const id = useId();
   const labelled = label !== undefined;
-  const list = <ul className={styles["list"]}>{children}</ul>;
 
   return (
     <div
@@ -34,23 +23,12 @@ export function Group({
       aria-labelledby={labelled ? id : undefined}
       {...mergeProps({ className: styles["group"] }, props)}
     >
-      {labelled && collapsible ? (
-        <details open={defaultOpen} className={styles["collapsible"]}>
-          <summary id={id} className={`${styles["label"]} ${styles["summary"]}`}>
-            {label}
-          </summary>
-          {list}
-        </details>
-      ) : (
-        <>
-          {labelled && (
-            <div id={id} className={styles["label"]}>
-              {label}
-            </div>
-          )}
-          {list}
-        </>
+      {labelled && (
+        <div id={id} className={styles["label"]}>
+          {label}
+        </div>
       )}
+      <ul className={styles["list"]}>{children}</ul>
     </div>
   );
 }

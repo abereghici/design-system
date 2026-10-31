@@ -1,19 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import type { ComponentProps } from "react";
 
-import { requestChange } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useEvent } from "../events/use-event.ts";
 import { useField } from "../field/use-field.ts";
 import type { FormControl } from "../field/use-field.ts";
-import { IconButton } from "../icon-button/icon-button.tsx";
-import { EyeOffIcon } from "../icon/icons/eye-off.tsx";
-import { EyeIcon } from "../icon/icons/eye.tsx";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { useEvent } from "../internal/dom-event/use-event.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 import { InputGroup } from "../text-field/text-field-input-group.tsx";
 import { Input as TextInput } from "../text-field/text-field-input.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
+
+import { Toggle } from "./password-field-toggle.tsx";
 
 /** `cancel()`: keeps the current visibility. */
 export type PasswordFieldVisibleChangeEventDetails = Details<"toggle-press" | "form-submit">;
@@ -42,8 +40,6 @@ export type ControlProps = Omit<
   startElement?: TextFieldProps["startElement"];
 };
 
-type Reason = PasswordFieldVisibleChangeEventDetails["reason"];
-
 function mask(input: Element) {
   input.setAttribute("type", "password");
 }
@@ -54,15 +50,7 @@ function useVisibility(
   defaultVisible: boolean | undefined,
   onVisibleChange: ControlProps["onVisibleChange"],
 ) {
-  const [uncontrolled, setUncontrolled] = useState(defaultVisible ?? false);
-  const current = visible ?? uncontrolled;
-  const change = (next: boolean, reason: Reason, event: Event) => {
-    const accepted = requestChange(onVisibleChange, next, reason, event);
-
-    if (accepted) setUncontrolled(next);
-
-    return accepted;
-  };
+  const [current, change] = useControllableState(visible, defaultVisible ?? false, onVisibleChange);
 
   useEvent(
     "submit",
@@ -92,8 +80,7 @@ export function Control({
   const [visible, change] = useVisibility(input, controlled, defaultVisible, onVisibleChange);
 
   const toggle = (
-    <IconButton
-      size="sm"
+    <Toggle
       aria-label={toggleLabel}
       aria-controls={field?.controlId}
       pressed={visible}
@@ -104,9 +91,7 @@ export function Control({
       onClick={(event) => {
         if (event.detail > 0) input?.focus();
       }}
-    >
-      {visible ? <EyeIcon size="sm" /> : <EyeOffIcon size="sm" />}
-    </IconButton>
+    />
   );
 
   return (

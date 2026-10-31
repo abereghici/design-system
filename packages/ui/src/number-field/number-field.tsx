@@ -4,11 +4,11 @@ import type { ComponentProps, ReactNode, SyntheticEvent } from "react";
 
 import "@abereghici/tokens/components/field.css";
 
-import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
-import { useField } from "../field/use-field.ts";
+import { chain } from "../internal/chain/chain.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { InputGroup } from "../text-field/text-field-input-group.tsx";
 
 import { StepButtons } from "./number-field-step-buttons.tsx";
@@ -67,21 +67,19 @@ export type ControlProps = Omit<
 export type NumberFieldProps = Naming & SizedWrapperProps & ControlProps;
 
 function Control({ startElement, incrementLabel, decrementLabel, ...options }: ControlProps) {
-  const { field } = useField();
   const { rest: props, hidden, ...number } = useNumberValue(options);
   const bindings = Field.useFieldControl<HTMLInputElement, typeof props>({
     ...props,
-    onChange: (event) => {
+    onChange: chain((event) => {
       number.setText(event.currentTarget.value);
-      props.onChange?.(event);
-    },
+    }, props.onChange),
   });
   const blocked = bindings["aria-disabled"] === true || props.readOnly === true;
   const steppers = (
     <StepButtons
       incrementLabel={incrementLabel}
       decrementLabel={decrementLabel}
-      controls={field?.controlId}
+      controls={bindings.id}
       disabled={(direction) => blocked || number.atBound(direction)}
       onStep={number.step}
     />
@@ -99,17 +97,14 @@ function Control({ startElement, incrementLabel, decrementLabel, ...options }: C
         value={number.display}
         readOnly={blocked}
         className={`${textFieldStyles["input"]} ${styles["input"]}`}
-        onBlur={(event) => {
-          props.onBlur?.(event);
+        onBlur={chain(props.onBlur, (event) => {
           number.commitTyped(event, "input-blur");
-        }}
-        onKeyDown={(event) => {
-          props.onKeyDown?.(event);
-
+        })}
+        onKeyDown={chain(props.onKeyDown, (event) => {
           if (event.key === "Enter") number.commitTyped(event, "keyboard");
 
           if (!blocked) number.keyStep(event);
-        }}
+        })}
       />
       <input ref={hidden} type="hidden" name={props.name} value={number.committed ?? ""} />
     </InputGroup>
@@ -119,6 +114,9 @@ function Control({ startElement, incrementLabel, decrementLabel, ...options }: C
 /**
  * A number people type or step, such as a quantity or a price. For digit codes use TextField; to
  * pick by feel, Slider.
+ *
+ * Tier 2: shows its final content before hydration and works after it; until then, its form
+ * submits the starting value whatever is typed.
  */
 export function NumberField(props: NumberFieldProps) {
   const [wrapper, control] = splitWrapperProps(props);

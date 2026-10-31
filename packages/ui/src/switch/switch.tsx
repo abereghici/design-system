@@ -1,27 +1,24 @@
 "use client";
 
 import { useId } from "react";
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/switch.css";
 
-import { pointerMarker } from "../events/events.ts";
 import { useFieldControl } from "../field/use-field.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import { toggleClick } from "../internal/toggle/toggle.ts";
-import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
+import type { Labelled } from "../internal/accessible-name/accessible-name.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { toggleClick } from "../internal/toggle-click/toggle-click.ts";
 
 import styles from "./switch.module.css";
 
-export type SwitchChangeEventDetails = ChangeEventDetails;
-
-type Name =
-  | { children: ReactNode }
-  | { children?: undefined; "aria-label": string }
-  | { children?: undefined; "aria-labelledby": string };
+/** `cancel()`: keeps the previous state: the browser restores it once the click is cancelled. */
+export type SwitchChangeEventDetails = Details<"none">;
 
 export type SwitchProps = Omit<ComponentProps<"input">, "type" | "role" | "children"> &
-  Name & {
+  Labelled<"children"> & {
     /** Called before the switch flips; `details.cancel()` keeps the old state. */
     onCheckedChange?: (checked: boolean, details: SwitchChangeEventDetails) => void;
     /**
@@ -35,6 +32,8 @@ export type SwitchProps = Omit<ComponentProps<"input">, "type" | "role" | "child
  * An on/off setting that takes effect at once, such as notifications. Its children are its label,
  * which names the setting, never the state. Every change dispatches a bubbling `ab-toggle`. Inside a
  * form that needs Save, use Checkbox.
+ *
+ * Tier 1: works before hydration.
  */
 export function Switch({
   children,

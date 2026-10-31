@@ -1,11 +1,12 @@
 "use client";
 
-import { createContext, use, useEffectEvent, useId, useLayoutEffect, useState } from "react";
-import type { ReactNode, SyntheticEvent } from "react";
+import { useEffectEvent, useId, useLayoutEffect, useRef, useState } from "react";
+import type { ReactNode, RefObject, SyntheticEvent } from "react";
 
-import { requestChange } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { getDocument, useEvent } from "../events/use-event.ts";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
+import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
 import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 
 export type ChangeReason =
@@ -26,6 +27,7 @@ type Mode = "pointer" | "focus";
 interface Tooltip {
   readonly disabled: boolean;
   readonly contentId: string;
+  readonly contentRef: RefObject<HTMLDivElement | null>;
   readonly change: (
     open: boolean,
     reason: ChangeReason,
@@ -34,15 +36,7 @@ interface Tooltip {
   ) => void;
 }
 
-const TooltipContext = createContext<Tooltip | null>(null);
-
-export function useTooltip(): Tooltip {
-  const tooltip = use(TooltipContext);
-
-  if (tooltip === null) throw new Error("Tooltip parts must be inside Tooltip.Root");
-
-  return tooltip;
-}
+export const [TooltipContext, useTooltip] = createSafeContext<Tooltip>("Tooltip.Root");
 
 const WARM_WINDOW = 400;
 
@@ -72,10 +66,14 @@ function hide(element: HTMLElement) {
   element.hidePopover();
 }
 
-function sync(contentId: string, open: boolean, mode: Mode | undefined, closeOther: () => void) {
+function sync(
+  contentId: string,
+  element: HTMLElement | null,
+  open: boolean,
+  mode: Mode | undefined,
+  closeOther: () => void,
+) {
   requested.delete(contentId);
-
-  const element = document.getElementById(contentId);
 
   if (element === null || open === isOpen(element)) return;
 
@@ -107,6 +105,8 @@ export interface RootProps {
  * A short label for an icon-only control, often with its shortcut, shown on hover after a short
  * delay and at once on keyboard focus. Screen readers hear it as the control's description. Touch
  * never opens it, so never put essential or interactive content in it; for that, use a Popover.
+ *
+ * Tier 2: shows its final content before hydration and works after it.
  */
 export function Root({
   open,
@@ -119,10 +119,11 @@ export function Root({
   const [mode, setMode] = useState<Mode>();
   const current = (open ?? uncontrolled) && !disabled;
   const contentId = useId();
+  const contentRef = useRef<HTMLDivElement>(null);
 
   function change(next: boolean, reason: ChangeReason, event?: SyntheticEvent, nextMode?: Mode) {
     // The DOM, not `current`: delays, Escape and blur show or hide it between renders.
-    if (next === (requested.get(contentId) ?? isOpen(document.getElementById(contentId)))) return;
+    if (next === (requested.get(contentId) ?? isOpen(contentRef.current))) return;
 
     if (!requestChange(onOpenChange, next, reason, event?.nativeEvent)) return;
 
@@ -132,7 +133,7 @@ export function Root({
   }
 
   const closeOther = useEffectEvent(() => {
-    document.getElementById(contentId)?.toggleAttribute("data-instant", true);
+    contentRef.current?.toggleAttribute("data-instant", true);
     change(false, "none");
   });
 
@@ -149,10 +150,12 @@ export function Root({
   );
 
   useLayoutEffect(() => {
-    sync(contentId, current, mode, closeOther);
+    sync(contentId, contentRef.current, current, mode, closeOther);
   }, [contentId, current, mode]);
 
-  return <TooltipContext value={{ disabled, contentId, change }}>{children}</TooltipContext>;
+  return (
+    <TooltipContext value={{ disabled, contentId, contentRef, change }}>{children}</TooltipContext>
+  );
 }
 
 export const outside = (event: { relatedTarget: EventTarget | null }, element: Element | null) =>

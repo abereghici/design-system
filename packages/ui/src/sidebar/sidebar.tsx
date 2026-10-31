@@ -6,6 +6,12 @@ export { Group } from "./sidebar-group.tsx";
 
 export type { GroupProps } from "./sidebar-group.tsx";
 
+export { CollapsibleGroup } from "./sidebar-collapsible-group.tsx";
+
+export type { CollapsibleGroupProps } from "./sidebar-collapsible-group.tsx";
+
+export type { ChangeEventDetails } from "../disclosure/disclosure-root.tsx";
+
 export { Item } from "./sidebar-item.tsx";
 
 export { Link } from "./sidebar-link.tsx";

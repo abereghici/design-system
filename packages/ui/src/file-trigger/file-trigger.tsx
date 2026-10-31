@@ -3,13 +3,15 @@
 import { use, useId, useRef } from "react";
 import type { MouseEvent, ReactElement } from "react";
 
-import { requestChange } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useField } from "../field/use-field.ts";
+import { requestChange } from "../internal/change-request/change-request.ts";
+import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { DropZoneContext } from "../internal/drop-zone-context/drop-zone-context.ts";
 import { Slot } from "../internal/slot/slot.tsx";
 
-import { Input, PickerContext } from "./file-trigger-input.tsx";
+import { Input } from "./file-trigger-input.tsx";
 import type { NativeProps } from "./file-trigger-input.tsx";
+import { useFiles } from "./use-files.ts";
 import styles from "./file-trigger.module.css";
 
 /** `cancel()`: clears the selection from the file input. */
@@ -56,7 +58,10 @@ function selectOnce(input: HTMLInputElement, onSelect: FileTriggerProps["onSelec
 /**
  * Opens the system file picker from its one child (usually a Button), and the chosen files submit
  * with the form; their names show next to it with a Clear button. To also accept files dragged onto
- * an area, put it inside a DropZone.
+ * an area, put it inside a DropZone. With JavaScript off, the browser's own file input takes the
+ * trigger's place.
+ *
+ * Tier 1: works before hydration.
  */
 export function FileTrigger({
   children,
@@ -65,13 +70,14 @@ export function FileTrigger({
   clearLabel,
   ...props
 }: FileTriggerProps) {
-  const zone = use(PickerContext);
+  const zone = use(DropZoneContext);
   const { field, blocked, invalid } = useField(disabled || zone?.disabled);
-  const input = useRef<HTMLInputElement>(null);
+  const files = useFiles();
   const trigger = useRef<HTMLElement>(null);
-  const inputRef = zone?.input ?? input;
+  const inputRef = zone?.input ?? files.inputRef;
   const triggerRef = zone?.trigger ?? trigger;
-  const id = useId();
+  const ownId = useId();
+  const id = zone?.triggerId ?? ownId;
 
   function open(event: MouseEvent) {
     const target = inputRef.current;
@@ -85,7 +91,8 @@ export function FileTrigger({
   const button = (
     <Slot
       ref={triggerRef}
-      id={field === undefined ? undefined : id}
+      id={id}
+      className={styles["trigger"]}
       aria-labelledby={field === undefined ? undefined : `${field.labelId} ${id}`}
       aria-describedby={field?.describedBy}
       aria-invalid={invalid}
@@ -103,10 +110,11 @@ export function FileTrigger({
       {button}
       <Input
         {...props}
-        inputRef={input}
         triggerRef={trigger}
+        triggerId={id}
         disabled={blocked}
         clearLabel={clearLabel}
+        files={files}
       />
     </span>
   );

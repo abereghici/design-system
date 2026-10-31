@@ -11,6 +11,8 @@ export type PasswordFieldProps = Naming & SizedWrapperProps & ControlProps;
 /**
  * A TextField for secrets, with a toggle that shows the password as plain text so users can check
  * what they typed. Use it for sign-in, sign-up and password-change forms.
+ *
+ * Tier 1: works before hydration, except the show-password toggle (Tier 2), which works after it.
  */
 export function PasswordField(props: PasswordFieldProps) {
   const [wrapper, control] = splitWrapperProps(props);

@@ -5,9 +5,9 @@ import { expect, fn } from "storybook/test";
 import { Button } from "@abereghici/ui/button";
 import { IconButton } from "@abereghici/ui/icon-button";
 import { CopyIcon } from "@abereghici/ui/icons/copy";
-import { DownloadIcon } from "@abereghici/ui/icons/download";
 import { PinIcon } from "@abereghici/ui/icons/pin";
 import { Separator } from "@abereghici/ui/separator";
+import { ToggleButton } from "@abereghici/ui/toggle-button";
 
 import preview from "#.storybook/preview.tsx";
 
@@ -15,15 +15,15 @@ import { Toolbar } from "./toolbar.tsx";
 
 const controls = (
   <>
-    <IconButton aria-label="Pin" defaultPressed={false}>
+    <ToggleButton value="pin" aria-label="Pin">
       <PinIcon />
-    </IconButton>
+    </ToggleButton>
     <IconButton aria-label="Copy link">
       <CopyIcon />
     </IconButton>
-    <IconButton aria-label="Download" disabled>
-      <DownloadIcon />
-    </IconButton>
+    <Button variant="tertiary" disabled>
+      Download
+    </Button>
     <Separator orientation="vertical" />
     <Button variant="tertiary">Share</Button>
   </>
@@ -47,11 +47,7 @@ function Growing() {
       <IconButton aria-label="Pin">
         <PinIcon />
       </IconButton>
-      {extra && (
-        <IconButton aria-label="Download">
-          <DownloadIcon />
-        </IconButton>
-      )}
+      {extra && <Button variant="tertiary">Download</Button>}
     </Toolbar>
   );
 }

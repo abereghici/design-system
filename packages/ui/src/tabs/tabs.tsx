@@ -1,6 +1,6 @@
 export { Root } from "./tabs-root.tsx";
 
-export type { RootProps } from "./tabs-root.tsx";
+export type { ChangeEventDetails, RootProps } from "./tabs-root.tsx";
 
 export { List } from "./tabs-list.tsx";
 
@@ -13,5 +13,3 @@ export type { TriggerProps } from "./tabs-trigger.tsx";
 export { Content } from "./tabs-content.tsx";
 
 export type { ContentProps } from "./tabs-content.tsx";
-
-export type { ChangeEventDetails } from "../internal/toggle/toggle.ts";

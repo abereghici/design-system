@@ -1,66 +1,16 @@
 import { useRef, useState } from "react";
 import type { KeyboardEvent, SyntheticEvent } from "react";
 
-import { requestChange } from "../events/events.ts";
-import { useEvent } from "../events/use-event.ts";
-import { useLocale } from "../internal/locale/use-locale.ts";
+import { useEvent } from "../internal/dom-event/use-event.ts";
+import { useNumberFormatter } from "../internal/locale/use-number-formatter.ts";
+import { snapValueToStep } from "../internal/snap-value-to-step/snap-value-to-step.ts";
+import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import type { Direction } from "./number-field-step-buttons.tsx";
 import type { ControlProps, NumberFieldChangeEventDetails } from "./number-field.tsx";
+import { parseNumber } from "./parse-number.ts";
 
-type Bounds = { min?: number | undefined; max?: number | undefined; step: number };
-
-function buildNumberFormat(
-  locale: Intl.LocalesArgument,
-  options: Intl.NumberFormatOptions | undefined,
-) {
-  const format = new Intl.NumberFormat(locale, options);
-  const parts = format.formatToParts(-1234567.89);
-  const symbol = (type: Intl.NumberFormatPartTypes) =>
-    parts.find((part) => part.type === type)?.value;
-  const digitFormat = new Intl.NumberFormat(locale, { useGrouping: false });
-  const digits = Array.from({ length: 10 }, (_, digit) => digitFormat.format(digit));
-  const parse = (text: string) => {
-    let raw = "";
-
-    for (const char of text) {
-      const digit = digits.indexOf(char);
-
-      if (digit !== -1) raw += String(digit);
-      else if (char === symbol("decimal")) raw += ".";
-      else if (char === "-" || char === symbol("minusSign")) raw += "-";
-    }
-
-    if (raw === "") return text.trim() === "" ? null : Number.NaN;
-
-    const value = Number(raw);
-
-    return options?.style === "percent" ? value / 100 : value;
-  };
-
-  return { format: (value: number) => format.format(value), parse };
-}
-
-const numberFormats = new Map<string, ReturnType<typeof buildNumberFormat>>();
-
-function numberFormat(locale: Intl.LocalesArgument, options: Intl.NumberFormatOptions | undefined) {
-  const key = `${String(locale)} ${JSON.stringify(options)}`;
-  const cached = numberFormats.get(key) ?? buildNumberFormat(locale, options);
-
-  numberFormats.set(key, cached);
-
-  return cached;
-}
-
-const decimals = (value: number) => (String(value).split(".")[1] ?? "").length;
-
-function fit(value: number, { min, max, step }: Bounds) {
-  const base = min ?? 0;
-  const snapped = base + Math.round((value - base) / step) * step;
-  const rounded = Number(snapped.toFixed(Math.max(decimals(step), decimals(base))));
-
-  return Math.min(max ?? Infinity, Math.max(min ?? -Infinity, rounded));
-}
+type Bounds = Partial<Record<"min" | "max", number | undefined>>;
 
 function stepKey(event: KeyboardEvent, step: number, largeStep: number, { min, max }: Bounds) {
   const large = event.shiftKey ? largeStep : step;
@@ -90,26 +40,22 @@ function useNumber({
   defaultValue = null,
   onValueChange,
 }: Pick<ControlProps, "value" | "defaultValue" | "onValueChange">) {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
+  const hidden = useRef<HTMLInputElement>(null);
+  const form = () => hidden.current?.form;
+  const [committed, change] = useControllableState(value, defaultValue, onValueChange, form);
   const [text, setText] = useState<string | null>(null);
-  const committed = value === undefined ? uncontrolled : value;
   const commit = (next: number | null, reason: Reason, event: SyntheticEvent) => {
     setText(null);
 
-    if (next === committed) return;
-
-    if (requestChange(onValueChange, next, reason, event)) setUncontrolled(next);
+    if (next !== committed) change(next, reason, event);
   };
-
-  const hidden = useRef<HTMLInputElement>(null);
 
   useEvent(
     "reset",
     () => {
-      setUncontrolled(defaultValue);
       setText(null);
     },
-    () => hidden.current?.form,
+    form,
   );
 
   return { committed, text, setText, commit, hidden };
@@ -127,20 +73,20 @@ export function useNumberValue({
   largeStep,
   ...rest
 }: Omit<ControlProps, "startElement" | "incrementLabel" | "decrementLabel">) {
-  const { format, parse } = numberFormat(useLocale(), formatOptions);
+  const formatter = useNumberFormatter(formatOptions);
   const { committed, text, setText, commit, hidden } = useNumber({
     value,
     defaultValue,
     onValueChange,
   });
   const current = () => {
-    const parsed = text === null ? committed : parse(text);
+    const parsed = text === null ? committed : parseNumber(text, formatter);
 
     return parsed !== null && Number.isNaN(parsed) ? committed : parsed;
   };
 
   const settle = (next: number | null, reason: Reason, event: SyntheticEvent) => {
-    commit(next === null ? null : fit(next, { min, max, step }), reason, event);
+    commit(next === null ? null : snapValueToStep(next, min, max, step), reason, event);
   };
 
   return {
@@ -148,7 +94,7 @@ export function useNumberValue({
     hidden,
     inputMode: inputMode(step, min),
     committed,
-    display: text ?? (committed === null ? "" : format(committed)),
+    display: text ?? (committed === null ? "" : formatter.format(committed)),
     setText,
     atBound: (direction: Direction) =>
       committed !== null && committed === (direction === 1 ? max : min),
@@ -161,7 +107,7 @@ export function useNumberValue({
       settle(current(), reason, event);
     },
     keyStep: (event: KeyboardEvent) => {
-      const to = stepKey(event, step, largeStep ?? step * 10, { min, max, step });
+      const to = stepKey(event, step, largeStep ?? step * 10, { min, max });
 
       if (to === null) return;
 

@@ -80,6 +80,8 @@ function add(options: ToastOptions): string {
  * so it must never be the only place information or an action lives. Show errors that need action inline
  * with an Alert or Field error, and a decision that must interrupt with an AlertDialog. Does nothing
  * on the server.
+ *
+ * Tier 2: works after hydration.
  */
 export const toast = Object.assign(add, {
   /** Closes that toast as if it timed out. */

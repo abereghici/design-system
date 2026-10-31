@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default 1`] = `
+- term: Order
+- definition: "#4821"
+- term: Placed
+- definition: 12 March 2026
+- term: Shipping address
+- definition: Strada Lipscani 23, Bucharest
+`;
+
+exports[`Narrow 1`] = `
+- term: Order
+- definition: "#4821"
+- term: Placed
+- definition: 12 March 2026
+- term: Shipping address
+- definition: Strada Lipscani 23, Bucharest
+`;

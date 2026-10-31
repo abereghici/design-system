@@ -1,5 +1,6 @@
 import { expect, fn } from "storybook/test";
 
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -16,6 +17,20 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({});
+
+Default.test(
+  "submits name=on when on, and returns to its default state when its form resets",
+  { args: { name: "sound" }, decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const control = canvas.getByRole("switch", { name: "Sound" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    await userEvent.click(control);
+    await expect([...new FormData(form)]).toEqual([["sound", "on"]]);
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(control).not.toBeChecked();
+  },
+);
 
 Default.test("turns on when its label is clicked", async ({ canvas, userEvent, args }) => {
   const control = canvas.getByRole("switch", { name: "Sound" });
@@ -48,7 +63,9 @@ Default.test("dispatches a bubbling ab-toggle after a change", async ({ canvas, 
   toggles.stop();
   await expect(
     toggles.events.map(({ target, bubbles, detail }) => ({ target, bubbles, detail })),
-  ).toEqual([{ target: control, bubbles: true, detail: { component: "Switch", reason: "user" } }]);
+  ).toEqual([
+    { target: control, bubbles: true, detail: { component: "Switch", userInitiated: true } },
+  ]);
 });
 
 Default.test(

@@ -9,13 +9,6 @@ import type { CalendarChangeEventDetails, CalendarProps } from "./calendar.tsx";
 
 const names = { previousMonthLabel: "Previous month", nextMonthLabel: "Next month" };
 
-// @ts-expect-error -- the month buttons show only icons, so they need names
-({}) satisfies CalendarProps;
-// @ts-expect-error -- a Calendar has nothing to disable or submit
-({ ...names, disabled: true }) satisfies CalendarProps;
-// @ts-expect-error -- a Calendar has nothing to disable or submit
-({ ...names, name: "day", form: "booking" }) satisfies CalendarProps;
-
 const date = (iso: string) => Temporal.PlainDate.from(iso);
 
 function NarrowingMax(args: CalendarProps) {

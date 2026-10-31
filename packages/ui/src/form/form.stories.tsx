@@ -78,7 +78,7 @@ Default.test(
 );
 
 Default.test(
-  "clears a DateField server error once a segment is edited",
+  "focuses a DateField with a server error, and clears the error once a segment is edited",
   {
     args: {
       errors: { birthDate: "You must be 18 or older." },
@@ -94,11 +94,37 @@ Default.test(
   async ({ canvas, userEvent }) => {
     const month = canvas.getByRole("spinbutton", { name: "month" });
 
+    await expect(month).toHaveFocus();
     await expect(month).toBeInvalid();
     await expect(canvas.getByText("You must be 18 or older.")).toBeVisible();
     await userEvent.click(month);
     await userEvent.keyboard("1");
     await expect(month).not.toBeInvalid();
     await expect(canvas.queryByText("You must be 18 or older.")).toBeNull();
+  },
+);
+
+Default.test(
+  "keeps a date typed in part after a server error invalid",
+  {
+    args: {
+      errors: { birthDate: "You must be 18 or older." },
+      children: (
+        <>
+          <DateField
+            label="Date of birth"
+            name="birthDate"
+            incompleteMessage="Enter a complete date"
+          />
+          <Button type="submit">Create account</Button>
+        </>
+      ),
+    },
+  },
+  async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("spinbutton", { name: "month" }));
+    await userEvent.keyboard("1{Enter}");
+    await expect(args.onSubmit).not.toHaveBeenCalled();
+    await expect(await canvas.findByText("Enter a complete date")).toBeVisible();
   },
 );

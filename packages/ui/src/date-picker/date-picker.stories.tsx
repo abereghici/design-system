@@ -7,7 +7,7 @@ import { Calendar } from "@abereghici/ui/calendar";
 import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
 import { dateFieldArgTypes } from "#.storybook/docs/arg-types.ts";
 import preview, { partsOf } from "#.storybook/preview.tsx";
-import { listen } from "#.storybook/test/listen.ts";
+import { listen, reasons } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as DatePicker from "./date-picker.tsx";
@@ -15,12 +15,8 @@ import * as DatePicker from "./date-picker.tsx";
 const date = (iso: string) => Temporal.PlainDate.from(iso);
 const onOpenChange = fn<NonNullable<DatePicker.RootProps["onOpenChange"]>>();
 const onValueChange = fn<NonNullable<DatePicker.RootProps["onValueChange"]>>();
-const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const months = { previousMonthLabel: "Previous month", nextMonthLabel: "Next month" };
-
-// @ts-expect-error -- the calendar button shows only an icon, so it needs a name
-({ label: "Due date", incompleteMessage: "Enter a complete date" }) satisfies DatePicker.RootProps;
 
 const LoadedCalendar = lazy(() =>
   import("@abereghici/ui/calendar").then((module) => ({ default: module.Calendar })),
@@ -116,7 +112,7 @@ Default.test(
       date("2025-03-20"),
       expect.objectContaining({ reason: "day-press" }),
     );
-    await expect(reasons()).toEqual([
+    await expect(reasons(onOpenChange)).toEqual([
       [true, "trigger-press"],
       [false, "day-press"],
     ]);
@@ -158,9 +154,14 @@ Default.test(
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
     await expect(trigger).toHaveFocus();
     await expect(args.onValueChange).not.toHaveBeenCalled();
-    await expect(dismissed.events.map((event) => event.detail.component)).toEqual(["Popover"]);
+    await expect(dismissed.events.map((event) => event.detail.component)).toEqual(["DatePicker"]);
     dismissed.stop();
-    await expect(reasons().flat()).toEqual([true, "trigger-press", false, "escape-key"]);
+    await expect(reasons(onOpenChange).flat()).toEqual([
+      true,
+      "trigger-press",
+      false,
+      "escape-key",
+    ]);
   },
 );
 
@@ -172,7 +173,7 @@ Default.test("closes on a press outside", async ({ canvas }) => {
   await user.click(document.body, { position: { x: 600, y: 20 } });
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
   await expect(canvas.getByRole("spinbutton", { name: "day" })).toHaveValue("12");
-  await expect(reasons().at(-1)).toEqual([false, "outside-press"]);
+  await expect(reasons(onOpenChange).at(-1)).toEqual([false, "outside-press"]);
 });
 
 Default.test("closes when Tab leaves the panel, on to the next control", async ({ canvas }) => {
@@ -182,7 +183,7 @@ Default.test("closes when Tab leaves the panel, on to the next control", async (
   await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
   await user.keyboard("{Tab}");
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
-  await expect(reasons().at(-1)).toEqual([false, "focus-out"]);
+  await expect(reasons(onOpenChange).at(-1)).toEqual([false, "focus-out"]);
   await expect(canvas.getByRole("button", { name: "Save" })).toHaveFocus();
 });
 
@@ -194,7 +195,12 @@ Default.test("closes when its trigger is pressed again", async ({ canvas }) => {
   await waitFor(() => expect(canvas.getByRole("dialog")).toBeVisible());
   await user.click(trigger);
   await waitFor(() => expect(trigger).toHaveAttribute("aria-expanded", "false"));
-  await expect(reasons().flat()).toEqual([true, "trigger-press", false, "trigger-press"]);
+  await expect(reasons(onOpenChange).flat()).toEqual([
+    true,
+    "trigger-press",
+    false,
+    "trigger-press",
+  ]);
 });
 
 Default.test(
@@ -229,6 +235,18 @@ Default.test("submits the chosen day", async ({ canvas }) => {
   await expect(submitted.mock.calls[0]?.[0].get("due")).toBe("2025-03-20");
 });
 
+Default.test("returns to its default value when its form resets", async ({ canvas, userEvent }) => {
+  const day = canvas.getByRole("spinbutton", { name: "day" });
+
+  await userEvent.type(day, "20");
+  await expect(day).toHaveValue("20");
+  await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+  await expect(day).toHaveValue("12");
+  submitted.mockClear();
+  await userEvent.click(canvas.getByRole("button", { name: "Save" }));
+  await expect(submitted.mock.calls[0]?.[0].get("due")).toBe("2025-03-12");
+});
+
 Default.test(
   "marks a typed unavailable date invalid after leaving the field",
   {
@@ -251,6 +269,24 @@ Default.test(
       "aria-disabled",
       "true",
     );
+  },
+);
+
+Default.test(
+  "blocks the submit of an unavailable default day and shows why",
+  {
+    args: {
+      defaultValue: date("2025-03-15"),
+      isDateUnavailable: (day: Temporal.PlainDate) => day.dayOfWeek > 5,
+      unavailableMessage: "This date is not available",
+    },
+  },
+  async ({ canvas, userEvent }) => {
+    submitted.mockClear();
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
+    await expect(submitted).not.toHaveBeenCalled();
+    await expect(await canvas.findByText("This date is not available")).toBeVisible();
+    await expect(canvas.getByRole("spinbutton", { name: "day" })).toBeInvalid();
   },
 );
 

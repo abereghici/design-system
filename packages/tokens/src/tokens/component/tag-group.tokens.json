@@ -1,0 +1,16 @@
+{
+  "component": {
+    "tag-group-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-xs}"
+    },
+    "tag-group-remove-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-xs}"
+    },
+    "tag-group-remove-scale-pressed": {
+      "$type": "number",
+      "$value": "{semantic.motion-scale-pressed}"
+    }
+  }
+}

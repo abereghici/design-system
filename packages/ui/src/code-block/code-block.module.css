@@ -1,0 +1,14 @@
+@layer ab.components {
+  .root {
+    margin: 0;
+    padding: var(--ab-code-block-padding);
+    border-radius: var(--ab-code-block-border-radius);
+    background-color: var(--ab-code-block-background-color);
+    color: var(--ab-code-block-text-color);
+    overscroll-behavior-inline: contain;
+  }
+
+  .code {
+    font: var(--ab-code-block-font);
+  }
+}

@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default 1`] = `
+- button "Publish"
+- button "Save draft"
+- button "Discard"
+`;

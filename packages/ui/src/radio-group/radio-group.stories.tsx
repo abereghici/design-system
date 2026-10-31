@@ -56,7 +56,7 @@ Default.test(
       expect.objectContaining({ reason: "none" }),
     );
     await expect(toggles.events.map(({ target, detail }) => ({ target, detail }))).toEqual([
-      { target: yearly, detail: { component: "RadioGroup", reason: "user" } },
+      { target: yearly, detail: { component: "RadioGroup", userInitiated: true } },
     ]);
   },
 );
@@ -161,6 +161,20 @@ Default.test(
     const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
 
     await expect([...new FormData(form)]).toEqual([["plan", "monthly"]]);
+  },
+);
+
+Default.test(
+  "returns to its default value when its form resets, and reports the next choice",
+  { decorators: [withForm] },
+  async ({ args, canvas, userEvent }) => {
+    const yearly = canvas.getByRole("radio", { name: "Yearly" });
+
+    await userEvent.click(yearly);
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(canvas.getByRole("radio", { name: "Monthly" })).toBeChecked();
+    await userEvent.click(yearly);
+    await expect(args.onValueChange).toHaveBeenCalledTimes(2);
   },
 );
 

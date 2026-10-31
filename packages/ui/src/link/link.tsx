@@ -2,17 +2,15 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/link.css";
 
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import styles from "./link.module.css";
 
 interface LinkBase extends ComponentProps<"a"> {
   /** Where it goes; with `asChild`, the child carries it instead. */
   href?: string;
-  /**
-   * Gives the Link's look to its one child, such as your router's link, which carries the
-   * `href`.
-   */
+  /** Gives its look to its one child, such as your router's link, which carries the `href`. */
   asChild?: boolean;
 }
 
@@ -23,6 +21,8 @@ export type LinkProps = LinkBase & ({ href: string; asChild?: false } | { asChil
  * around it. Wrap a router link with `asChild`. To start an action, use a Button; to jump past
  * repeated navigation, a SkipLink. A link stays inline text so it can wrap, so mark an icon child
  * with `data-icon="inline-start"` or `data-icon="inline-end"` to space it from the words.
+ *
+ * Tier 1: works before hydration.
  */
 export function Link({ asChild = false, ...props }: LinkProps) {
   const Root = asChild ? Slot : "a";

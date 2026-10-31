@@ -9,6 +9,7 @@ import * as Slider from "./slider.tsx";
 
 const volume = (
   <>
+    {/* A test id: the track has no role or name, and the range input is only thumb-sized. */}
     <Slider.Track data-testid="track">
       <Slider.Range />
       <Slider.Thumb aria-label="Volume" />
@@ -68,6 +69,20 @@ Default.test(
     );
     await expect(args.onValueCommitted).toHaveBeenCalledTimes(3);
     await expect(args.onValueCommitted).toHaveBeenLastCalledWith(41, expect.anything());
+  },
+);
+
+Default.test(
+  "steps from its minimum when the minimum is finer than the step",
+  { args: { defaultValue: 0.05, min: 0.05, max: 1, step: 0.1 } },
+  async ({ canvas, userEvent }) => {
+    const slider = canvas.getByRole("slider", { name: "Volume" });
+
+    await userEvent.tab();
+    await userEvent.keyboard("{ArrowRight}");
+    await expect(slider).toHaveValue("0.15");
+    await userEvent.keyboard("{ArrowRight}");
+    await expect(slider).toHaveValue("0.25");
   },
 );
 
@@ -256,6 +271,22 @@ Default.test(
       ["price", "20"],
       ["price", "80"],
     ]);
+  },
+);
+
+Default.test(
+  "returns to its default value when its form resets",
+  { args: { name: "volume" }, decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const slider = canvas.getByRole("slider", { name: "Volume" });
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    await userEvent.tab();
+    await userEvent.keyboard("{ArrowRight}");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(slider).toHaveValue("40");
+    await expect(canvas.getByRole("status")).toHaveTextContent("40");
+    await expect([...new FormData(form)]).toEqual([["volume", "40"]]);
   },
 );
 

@@ -1,9 +1,9 @@
 "use client";
 
-import { createContext, useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
-import { requestChange } from "../../events/events.ts";
+import { createSafeContext } from "../create-safe-context/create-safe-context.ts";
+import { useControllableState } from "../uncontrolled-state/use-controllable-state.ts";
 
 import { Group } from "./menu-group.tsx";
 import type { ItemChangeEventDetails } from "./menu.tsx";
@@ -13,7 +13,9 @@ interface RadioGroupState {
   readonly select: (value: string, event: MouseEvent<HTMLButtonElement>) => boolean;
 }
 
-export const RadioGroupContext = createContext<RadioGroupState | null>(null);
+export const [RadioGroupContext, useMenuRadioGroup] = createSafeContext<RadioGroupState>(
+  "DropdownMenu.RadioGroup or ContextMenu.RadioGroup",
+);
 
 export interface RadioGroupProps extends Omit<ComponentProps<"fieldset">, "defaultValue"> {
   /** The chosen RadioItem's `value`, when your state holds it. */
@@ -31,15 +33,10 @@ export function RadioGroup({
   onValueChange,
   ...props
 }: RadioGroupProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
-  const current = value === undefined ? uncontrolled : value;
+  const [current, request] = useControllableState(value, defaultValue, onValueChange);
 
   function select(next: string, event: MouseEvent<HTMLButtonElement>) {
-    if (!requestChange(onValueChange, next, "item-press", event.nativeEvent)) return false;
-
-    setUncontrolled(next);
-
-    return true;
+    return request(next, "item-press", event.nativeEvent);
   }
 
   return (

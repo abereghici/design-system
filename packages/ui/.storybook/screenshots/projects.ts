@@ -7,25 +7,57 @@ import type { TestProjectInlineConfiguration } from "vitest/config";
 export interface ScreenshotVariant {
   name: string;
   contextOptions?: BrowserContextOptions;
+  /** Media queries the context options must make match; setup fails the run otherwise. */
+  matches?: string[];
   initialGlobals?: Record<string, unknown>;
   emulatedMedia?: { name: string; value: string }[];
   defaultFontSize?: number;
+  /** Applies the WCAG 1.4.12 text spacing overrides to the page. */
+  textSpacing?: boolean;
 }
 
 const variants: ScreenshotVariant[] = [
-  { name: "light", contextOptions: { colorScheme: "light" } },
-  { name: "dark", contextOptions: { colorScheme: "dark" } },
-  { name: "forced-colors", contextOptions: { forcedColors: "active" } },
-  { name: "contrast-more", contextOptions: { contrast: "more" } },
-  { name: "reduced-motion", contextOptions: { reducedMotion: "reduce" } },
+  {
+    name: "light",
+    contextOptions: { colorScheme: "light" },
+    matches: ["(prefers-color-scheme: light)"],
+  },
+  {
+    name: "dark",
+    contextOptions: { colorScheme: "dark" },
+    matches: ["(prefers-color-scheme: dark)"],
+  },
+  {
+    name: "forced-colors",
+    contextOptions: { forcedColors: "active" },
+    matches: ["(forced-colors: active)"],
+  },
+  {
+    name: "contrast-more",
+    contextOptions: { contrast: "more" },
+    matches: ["(prefers-contrast: more)"],
+  },
+  {
+    name: "reduced-motion",
+    contextOptions: { reducedMotion: "reduce" },
+    matches: ["(prefers-reduced-motion: reduce)"],
+  },
   {
     name: "reduced-transparency",
     emulatedMedia: [{ name: "prefers-reduced-transparency", value: "reduce" }],
   },
+  // CDP can't emulate pointer or hover; touch emulation sets both.
+  {
+    name: "touch",
+    contextOptions: { hasTouch: true },
+    matches: ["(pointer: coarse)", "(hover: none)"],
+  },
   { name: "rtl", initialGlobals: { dir: "rtl" } },
-  // After a scale-in under backdrop-filter, Chromium snaps 200% text a pixel either way from launch to
-  // launch (Combobox Open); light already covers the end state of motion.
+  { name: "compact", initialGlobals: { density: "compact" } },
+  // After a scale-in under backdrop-filter, Chromium snaps resized or respaced text a pixel either way
+  // from launch to launch (Combobox Open); light already covers the end state of motion.
   { name: "text-200", defaultFontSize: 32, contextOptions: { reducedMotion: "reduce" } },
+  { name: "text-spacing", textSpacing: true, contextOptions: { reducedMotion: "reduce" } },
   { name: "w320", initialGlobals: { viewport: { value: "mobile1" } } },
 ];
 

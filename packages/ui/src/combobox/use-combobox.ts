@@ -1,14 +1,25 @@
-import { createContext, useEffect, useEffectEvent, useId, useLayoutEffect, useState } from "react";
+import { useLayoutEffect } from "react";
 
-import { getDocument, useEvent } from "../events/use-event.ts";
-import { filterOptions, enabled, textOf } from "../internal/listbox/listbox.tsx";
+import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
+import { getById } from "../internal/get-by-id/get-by-id.ts";
+import { useListbox } from "../internal/listbox/use-listbox.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
+import { valuesOf } from "../internal/selection/selection.ts";
+import { textOf } from "../internal/typeahead/text-of.ts";
 
-import { chosenOf, dismiss, highlight, inputOf, listOf, memoryOf, part } from "./combobox-state.ts";
-import type { ComboboxState, Options } from "./combobox-state.ts";
-
-export const ValueContext = createContext<string | null>(null);
+import { comboboxProps } from "./combobox-props.ts";
+import {
+  chosenOf,
+  chosenValue,
+  dismiss,
+  inputOf,
+  listOf,
+  memoryOf,
+  part,
+  useComboboxState,
+} from "./use-combobox-state.ts";
+import type { ComboboxState, Options } from "./use-combobox-state.ts";
 
 function applyText(c: ComboboxState, list: Element, input: HTMLInputElement) {
   const { inputValue, defaultInputValue } = c.options;
@@ -17,7 +28,7 @@ function applyText(c: ComboboxState, list: Element, input: HTMLInputElement) {
   if (inputValue !== undefined && input.value !== inputValue) input.value = inputValue;
 
   if (memory.text === null && inputValue === undefined && defaultInputValue === undefined) {
-    input.value = textOf(chosenOf(list, c.value));
+    input.value = textOf(chosenOf(list, chosenValue(c)));
   }
 
   memory.text = input.value;
@@ -28,23 +39,11 @@ function placePopover(c: ComboboxState, list: HTMLElement) {
 
   list.toggleAttribute("data-pointer", memoryOf(c).pointer);
 
-  if (c.open) list.showPopover(sourceOf(document.getElementById(part(c, "box"))));
+  if (c.open) list.showPopover(sourceOf(getById(part(c, "box"))));
   else list.hidePopover();
 }
 
-function showEmpty(c: ComboboxState, list: HTMLElement, empty: boolean, text: string) {
-  list.toggleAttribute("data-empty", empty);
-
-  const row = document.getElementById(part(c, "empty"));
-
-  if (row !== null) row.hidden = !empty;
-
-  const status = document.getElementById(part(c, "status"));
-
-  if (status !== null) status.textContent = c.open && empty ? text : "";
-}
-
-function sync(c: ComboboxState, emptyText: string, locale: string | undefined) {
+function sync(c: ComboboxState) {
   const list = listOf(c);
   const input = inputOf(c);
 
@@ -52,51 +51,13 @@ function sync(c: ComboboxState, emptyText: string, locale: string | undefined) {
 
   applyText(c, list, input);
   placePopover(c, list);
-
-  const shown = filterOptions(list, c.options.filter === null ? "" : c.query, locale);
-
-  showEmpty(c, list, shown.length === 0, emptyText);
-
-  const memory = memoryOf(c);
-  const key = c.open ? shown.map((option) => option.id).join(" ") : "";
-
-  if (key === memory.shown) return;
-
-  memory.shown = key;
-
-  const choices = shown.filter((option) => enabled(option));
-  const chosen = choices.find((option) => option.dataset["value"] === c.value);
-  const from = memory.edge;
-
-  memory.edge = "first";
-
-  if (!c.open) highlight(list, input, null, false);
-  else if (from === "last") highlight(list, input, choices.at(-1), true);
-  else highlight(list, input, from === "chosen" ? (chosen ?? choices[0]) : choices[0], true);
 }
 
 function useListeners(c: ComboboxState) {
-  // A form control reports a committed value with a native change, which the Field validates on.
-  const reread = useEffectEvent((value: string | null) => {
-    const memory = memoryOf(c);
-    const previous = memory.value;
-
-    memory.value = value;
-
-    if (previous !== undefined && previous !== value) {
-      inputOf(c)?.dispatchEvent(new Event("change", { bubbles: true }));
-    }
-  });
-  const { value } = c;
-
-  useEffect(() => {
-    reread(value);
-  }, [value]);
-
   useEvent(
     "pointerdown",
     (event) => {
-      const root = document.getElementById(part(c, "root"));
+      const root = getById(part(c, "root"));
 
       if (event.target instanceof Node && root?.contains(event.target) !== true) {
         dismiss(c, "outside-press", event);
@@ -108,10 +69,11 @@ function useListeners(c: ComboboxState) {
   useEvent(
     "reset",
     () => {
-      const { defaultValue = null, defaultInputValue } = c.options;
+      const { defaultInputValue } = c.options;
+      const defaults = valuesOf(c.options.defaultValue);
       const list = listOf(c);
-      const label =
-        defaultInputValue ?? textOf(list === null ? null : chosenOf(list, defaultValue));
+      const chosen = c.multiple ? null : (defaults[0] ?? null);
+      const label = defaultInputValue ?? textOf(list === null ? null : chosenOf(list, chosen));
 
       // The reset event fires before the form resets its controls, so the label goes in afterwards:
       // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#resetting-a-form
@@ -121,34 +83,38 @@ function useListeners(c: ComboboxState) {
         if (input !== null) input.value = label;
 
         memoryOf(c).text = label;
-        c.setValue(defaultValue);
       });
     },
     () => inputOf(c)?.form,
   );
 }
 
-/** The Combobox's state, given its empty-list text. The open list, the input's text and the highlight live in the DOM. */
-export function useCombobox(options: Options, empty: string): ComboboxState {
-  const [ownValue, setValue] = useState(options.defaultValue ?? null);
-  const [ownOpen, setOpen] = useState(options.defaultOpen ?? false);
-  const [query, setQuery] = useState("");
+/**
+ * The Combobox's state, the props its input, field box and list spread, and the DOM kept in step:
+ * the input shows the chosen text, the list opens and closes as its popover, a press outside
+ * closes it and a form reset restores the text.
+ */
+export function useCombobox(options: Options) {
+  const state = useComboboxState(options);
   const locale = useLocale();
-  const c: ComboboxState = {
-    options,
-    id: useId(),
-    value: options.value === undefined ? ownValue : options.value,
-    open: options.open ?? ownOpen,
-    query,
-    setValue,
-    setOpen,
-    setQuery,
-  };
 
+  // The list must be open before the Listbox navigator's effect scrolls its highlight into view.
   useLayoutEffect(() => {
-    sync(c, empty, locale);
+    sync(state);
   });
-  useListeners(c);
 
-  return c;
+  const listbox = useListbox(state.query, options.filter === null ? null : locale, state.open);
+
+  const c = { ...state, listbox };
+
+  useListeners(state);
+
+  return {
+    ...c,
+    inputProps: <Props extends object>(consumer: Props) => comboboxProps.input(c, consumer),
+    boxProps: comboboxProps.box(c),
+    listProps: comboboxProps.list(c),
+  };
 }
+
+export type Combobox = ReturnType<typeof useCombobox>;
