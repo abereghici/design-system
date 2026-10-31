@@ -45,11 +45,11 @@ export const menuNavigation = {
   onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
     if (navigate(event)) {
       event.preventDefault();
-    } else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+    } else {
       const from = event.target instanceof Element ? event.target : null;
       const items = itemsOf(event.currentTarget).filter((item) => !isDisabled(item));
 
-      typeahead(event.currentTarget, event.key, items, from)?.focus();
+      typeahead(event.currentTarget, event, items, from)?.focus();
     }
   },
   onPointerMove: (event: PointerEvent<HTMLElement>) => {

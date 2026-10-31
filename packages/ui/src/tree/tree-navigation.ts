@@ -47,8 +47,6 @@ export const treeNavigation = {
 
     if (event.key in targets) return targets[event.key];
 
-    if (event.key.length !== 1 || event.ctrlKey || event.metaKey || event.altKey) return null;
-
-    return typeahead(tree, event.key, items, event.currentTarget) ?? null;
+    return typeahead(tree, event, items, event.currentTarget);
   },
 };
