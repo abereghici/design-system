@@ -328,6 +328,18 @@ export const componentRoutes = [
     html: 'role="spinbutton"',
   },
   {
+    name: "table",
+    tokens: ["table", "checkbox"],
+    client: [
+      "table/table-root",
+      "table/table-row",
+      "table/table-row-header",
+      "table/table-select-all",
+      "table/table-select-row",
+    ],
+    html: 'aria-label="Select all invoices"',
+  },
+  {
     name: "calendar",
     tokens: ["calendar", "icon", "icon-button", "spinner"],
     client: [],

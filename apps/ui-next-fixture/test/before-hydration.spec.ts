@@ -33,6 +33,7 @@ test.describe("Tier 1 works with JavaScript off", () => {
     ["pagination", "Next page", "/pagination?page=3"],
     ["navbar", "Home", "/"],
     ["sidebar", "Home", "/"],
+    ["table", "Invoice", "/table?sort=invoice"],
   ] as const) {
     test(`${route}: a link navigates`, async ({ page }) => {
       await page.goto(`/${route}`);
@@ -199,6 +200,7 @@ const tier2 = [
   "number-field",
   "password-field",
   "splitter",
+  "table",
   "tabs",
   "tag-group",
   "toast",
@@ -252,6 +254,8 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["number-field", "button", "Decrease"],
     ["number-field", "button", "Increase"],
     ["password-field", "button", "Show password"],
+    ["table", "checkbox", "Select all invoices"],
+    ["table", "checkbox", "INV-001"],
     ["tabs", "tab", "Settings"],
     ["tag-group", "button", "Remove Draft"],
     ["copy-button", "button", "Copy invoice number"],

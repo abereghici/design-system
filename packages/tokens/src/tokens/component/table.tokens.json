@@ -24,6 +24,16 @@
       "$type": "color",
       "$value": "{semantic.color-text-subtle}"
     },
+    "table-header-background-color": {
+      "$type": "color",
+      "$description": "Fills a sticky header, so the rows scrolling under it don't show through.",
+      "$value": "{semantic.color-surface-default}"
+    },
+    "table-header-shadow": {
+      "$type": "shadow",
+      "$description": "Lifts a sticky header off the rows once they scroll under it.",
+      "$value": "{semantic.elevation-raised}"
+    },
     "table-body-font": {
       "$type": "typography",
       "$value": "{semantic.type-body-xs}"
