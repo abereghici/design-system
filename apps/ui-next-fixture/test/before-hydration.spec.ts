@@ -185,6 +185,29 @@ test.describe("with JavaScript off, a Tier 1 Field control submits its form", ()
   });
 });
 
+test.describe("with JavaScript off, a Slider", () => {
+  test("moves where it is pressed", async ({ page }) => {
+    await page.goto("/slider");
+
+    const slider = page.getByRole("slider", { name: "Volume" });
+    const { width, height } = (await slider.boundingBox()) ?? { width: 0, height: 0 };
+
+    await slider.click({ position: { x: width - 1, y: height / 2 } });
+    await page.getByRole("button", { name: "Submit" }).click();
+
+    await expect(page).toHaveURL("/slider?volume=100");
+  });
+
+  test("shows no value it can't keep up with", async ({ page }) => {
+    await page.goto("/slider");
+    await page.getByRole("slider", { name: "Volume" }).press("ArrowRight");
+
+    expect(await page.getByRole("main").ariaSnapshot()).toBe(
+      '- main:\n  - slider "Volume": "41"\n  - button "Submit"',
+    );
+  });
+});
+
 const tier2 = [
   "calendar",
   "code-block",

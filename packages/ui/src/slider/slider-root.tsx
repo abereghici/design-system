@@ -125,7 +125,8 @@ export function useSlider() {
 /**
  * A value or range picked by feel (volume, price). For an exact number, use NumberField.
  *
- * Tier 1: works before hydration.
+ * Tier 1: works before hydration. While scripting is off it shows the browser's own slider, one
+ * per thumb, without the value text.
  */
 export function Root({
   value,
