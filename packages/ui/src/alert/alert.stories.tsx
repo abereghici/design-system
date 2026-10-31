@@ -4,7 +4,7 @@ import { expect, fn } from "storybook/test";
 import type { StoryContext } from "@storybook/react-vite";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
-import { listen } from "#.storybook/test/listen.ts";
+import { listen, listenFeedback } from "#.storybook/test/listen.ts";
 
 import * as Alert from "./alert.tsx";
 
@@ -51,18 +51,28 @@ Default.test(
 );
 
 Default.test(
-  "reports the Dismiss press and dispatches a bubbling ab-dismiss",
+  "reports the Dismiss press and dispatches one Feedback event, a bubbling ab-dismiss",
   async ({ canvas, userEvent }) => {
     const close = canvas.getByRole("button", { name: "Dismiss" });
-    const dismissals = listen("ab-dismiss");
+    const feedback = listenFeedback();
 
     await userEvent.click(close);
-    dismissals.stop();
+    feedback.stop();
     await expect(onClose).toHaveBeenCalledOnce();
     await expect(
-      dismissals.events.map(({ target, bubbles, detail }) => ({ target, bubbles, detail })),
+      feedback.events.map(({ type, target, bubbles, detail }) => ({
+        type,
+        target,
+        bubbles,
+        detail,
+      })),
     ).toEqual([
-      { target: close, bubbles: true, detail: { component: "Alert", userInitiated: true } },
+      {
+        type: "ab-dismiss",
+        target: close,
+        bubbles: true,
+        detail: { component: "Alert", userInitiated: true },
+      },
     ]);
   },
 );

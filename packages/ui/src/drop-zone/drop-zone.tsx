@@ -6,8 +6,9 @@ import type { ComponentProps, DragEvent } from "react";
 import "@abereghici/tokens/components/drop-zone.css";
 
 import { useField } from "../field/use-field.ts";
-import { Input as FileInput, PickerContext } from "../file-trigger/file-trigger-input.tsx";
+import { Input as FileInput } from "../file-trigger/file-trigger-input.tsx";
 import { useFiles } from "../file-trigger/use-files.ts";
+import { DropZoneContext } from "../internal/drop-zone-context/drop-zone-context.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useDropTarget } from "./use-drop-target.ts";
@@ -67,10 +68,10 @@ export function DropZone({
     blocked,
     assign: files.assign,
   });
-  const picker = { input: files.inputRef, trigger, triggerId, disabled: blocked };
+  const zone = { input: files.inputRef, trigger, triggerId, disabled: blocked };
 
   return (
-    <PickerContext value={picker}>
+    <DropZoneContext value={zone}>
       <div
         {...mergeProps({ className: styles["root"], ...handlers }, props)}
         data-drop-target={target}
@@ -87,6 +88,6 @@ export function DropZone({
           files={files}
         />
       </div>
-    </PickerContext>
+    </DropZoneContext>
   );
 }

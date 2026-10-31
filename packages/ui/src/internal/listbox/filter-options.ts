@@ -1,5 +1,6 @@
+import { textOf } from "../typeahead/text-of.ts";
+
 import { shownOf } from "./options.ts";
-import { textOf } from "./text-of.ts";
 
 interface Search {
   readonly collator: Intl.Collator;

@@ -5,6 +5,7 @@ import type { ComponentProps, KeyboardEvent, MouseEvent, ReactNode } from "react
 
 import "@abereghici/tokens/components/tree.css";
 
+import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Spinner } from "../spinner/spinner.tsx";
@@ -26,16 +27,21 @@ export interface ItemProps extends Omit<ComponentProps<"div">, "id" | "role"> {
   loading?: boolean;
 }
 
-/** Hands the Item's focus, keys and clicks to the Tree. */
+const toggleFeedback = { component: "Tree", userInitiated: true } as const;
+
+/** Hands the Item's focus, keys and clicks to the Tree; each change it accepts dispatches `ab-toggle`. */
 const handlersOf = (actions: ReturnType<typeof useTree>["actions"], item: TreeItemState) => ({
   onFocus: () => {
     actions.focus(item.id);
   },
   onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
-    actions.keyDown(event, item);
+    if (actions.keyDown(event, item)) {
+      dispatchFeedback(event.currentTarget, "ab-toggle", toggleFeedback);
+    }
   },
   onClick: (event: MouseEvent<HTMLElement>) => {
-    actions.press(event, item);
+    if (actions.press(event, item))
+      dispatchFeedback(event.currentTarget, "ab-toggle", toggleFeedback);
   },
 });
 

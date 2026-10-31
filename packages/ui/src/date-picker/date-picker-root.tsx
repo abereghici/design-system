@@ -5,8 +5,9 @@ import type { ReactNode } from "react";
 import { Root as DateFieldRoot } from "../date-field/date-field-root.tsx";
 import type { DateFieldChangeEventDetails, DateFieldProps } from "../date-field/date-field.tsx";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
-import { DatePickerContext, useDateFormats } from "../internal/date/date.ts";
+import { useDateFormats } from "../internal/date/date.ts";
 import type { Temporal } from "../internal/date/date.ts";
+import { DatePickerContext } from "../internal/picker/picker-context.ts";
 import { Trigger } from "../internal/picker/picker-trigger.tsx";
 import { PanelContext, usePicker } from "../internal/picker/picker.ts";
 import type { OpenChangeEventDetails } from "../internal/picker/picker.ts";
@@ -67,7 +68,7 @@ export function Root(props: RootProps) {
   const { triggerLabel, disabled, isDateUnavailable, children, ...field } = rest;
   const { min, max } = field;
   const overlay = { open, defaultOpen, onOpenChange };
-  const { panel, form, calendar } = usePicker({
+  const { panel, form, calendar } = usePicker("DatePicker", {
     ...overlay,
     triggerLabel,
     min,

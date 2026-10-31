@@ -1,6 +1,5 @@
 "use client";
 
-import { createContext } from "react";
 import type { ComponentProps, RefObject } from "react";
 
 import { useField, useFieldControl } from "../field/use-field.ts";
@@ -17,17 +16,8 @@ export type NativeProps = Pick<
   "accept" | "multiple" | "name" | "required" | "form"
 >;
 
-interface Picker {
-  readonly input: RefObject<HTMLInputElement | null>;
-  readonly trigger: RefObject<HTMLElement | null>;
-  readonly triggerId: string;
-  readonly disabled: boolean;
-}
-
-export const PickerContext = createContext<Picker | undefined>(undefined);
-
 interface InputProps extends NativeProps {
-  readonly triggerRef: Picker["trigger"];
+  readonly triggerRef: RefObject<HTMLElement | null>;
   readonly triggerId: string;
   readonly disabled: boolean;
   readonly directory?: boolean;

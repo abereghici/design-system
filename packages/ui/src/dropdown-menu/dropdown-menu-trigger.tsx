@@ -2,6 +2,7 @@
 
 import type { ComponentProps, KeyboardEvent } from "react";
 
+import { chain } from "../internal/chain/chain.ts";
 import { focusLast, itemsOf } from "../internal/menu/menu-navigation.ts";
 import { useMenu } from "../internal/menu/menu.tsx";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
@@ -26,9 +27,7 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
       {...trigger}
       id={`${overlay.contentId}-trigger`}
       aria-haspopup="menu"
-      onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
-        props.onKeyDown?.(event);
-
+      onKeyDown={chain(props.onKeyDown, (event: KeyboardEvent<HTMLButtonElement>) => {
         const arrow = event.key === "ArrowDown" || event.key === "ArrowUp";
 
         if (!arrow || event.currentTarget.getAttribute("aria-disabled") === "true") return;
@@ -50,7 +49,7 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
         if (event.key === "ArrowUp") focusLast.add(content);
 
         overlay.toggle(true, "trigger-press", event.nativeEvent);
-      }}
+      })}
     />
   );
 }

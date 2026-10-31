@@ -40,6 +40,8 @@ export type DismissFeedbackEvent = CustomEvent<
     | "Popover"
     | "DropdownMenu"
     | "ContextMenu"
+    | "DatePicker"
+    | "DateRangePicker"
     | "TagGroup"
     | "Toast"
   >

@@ -7,6 +7,7 @@ import "@abereghici/tokens/components/command.css";
 
 import { Content } from "../dialog/dialog-content.tsx";
 import { Modal } from "../dialog/dialog-modal.tsx";
+import { chain } from "../internal/chain/chain.ts";
 import { requestChange } from "../internal/change-request/change-request.ts";
 import { returnFocus } from "../internal/overlay/overlay.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
@@ -38,10 +39,8 @@ export interface DialogProps
 
 function handleClose(
   event: SyntheticEvent<HTMLDialogElement>,
-  { onClose, onInputValueChange, finalFocus }: DialogProps,
+  { onInputValueChange, finalFocus }: DialogProps,
 ) {
-  onClose?.(event);
-
   if ((event.currentTarget.querySelector("input")?.value ?? "") !== "") {
     requestChange(onInputValueChange, "", "input-clear", event.nativeEvent);
   }
@@ -71,10 +70,10 @@ export function Dialog(props: DialogProps) {
     >
       <Content
         {...native}
-        onClose={(event) => {
+        onClose={chain(props.onClose, (event) => {
           handleClose(event, props);
           setCloses((count) => count + 1);
-        }}
+        })}
       >
         <DialogContext
           value={(event, option) => {

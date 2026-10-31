@@ -1,5 +1,6 @@
 import type { Ref } from "react";
 
+import { chain } from "../chain/chain.ts";
 import { composeRefs } from "../compose-refs/compose-refs.ts";
 
 type Handler = (...args: unknown[]) => unknown;
@@ -35,12 +36,9 @@ export function mergeProps(own: object, consumer: object): object {
       merged[key] = { ...mine, ...value };
     // A callback ref is not serialisable, so compose only when both sides hold one; a lone ref passes through and Server Components keep working.
     else if (key === "ref" && isRef(mine) && isRef(value)) merged[key] = composeRefs(mine, value);
-    else if (/^on[A-Z]/v.test(key) && isHandler(mine) && isHandler(value)) {
-      merged[key] = (...args: unknown[]) => {
-        value(...args);
-        mine(...args);
-      };
-    } else merged[key] = value;
+    else if (/^on[A-Z]/v.test(key) && isHandler(mine) && isHandler(value))
+      merged[key] = chain(value, mine);
+    else merged[key] = value;
   }
 
   return merged;

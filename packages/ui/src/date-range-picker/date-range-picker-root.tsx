@@ -7,9 +7,10 @@ import "@abereghici/tokens/components/date-range-picker.css";
 import { Wrapper } from "../field/field-wrapper.tsx";
 import type { SizedWrapperProps } from "../field/field-wrapper.tsx";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
-import { DateRangePickerContext, sameRange } from "../internal/date/date.ts";
+import { sameRange } from "../internal/date/date.ts";
 import type { DatePart, DateRange, Temporal } from "../internal/date/date.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { DateRangePickerContext } from "../internal/picker/picker-context.ts";
 import { PanelContext, usePicker } from "../internal/picker/picker.ts";
 import type { OpenChangeEventDetails } from "../internal/picker/picker.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
@@ -126,7 +127,7 @@ function useRange(
  */
 export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, size, className, style, disabled } = props;
-  const { panel, form, calendar } = usePicker(props);
+  const { panel, form, calendar } = usePicker("DateRangePicker", props);
   const range = useRange(props, form);
 
   return (

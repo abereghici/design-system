@@ -2,6 +2,7 @@ import { useId, useLayoutEffect, useState } from "react";
 import type { ComponentProps, FocusEvent, MouseEvent, ToggleEvent } from "react";
 
 import { dispatchFeedback } from "../../feedback-event/feedback-event.ts";
+import { chain } from "../chain/chain.ts";
 import { requestChange } from "../change-request/change-request.ts";
 import type { ChangeEventDetails as Details } from "../change-request/change-request.ts";
 import { composeEventHandlers } from "../compose-event-handlers/compose-event-handlers.ts";
@@ -44,10 +45,10 @@ interface Options {
     | undefined;
 }
 
-type Component = "Popover" | "DropdownMenu" | "ContextMenu";
+type Component = "Popover" | "DropdownMenu" | "ContextMenu" | "DatePicker" | "DateRangePicker";
 
 /** What a Content part adds to the layer's own `beforetoggle` and `toggle` handling, which runs first. */
-export type ContentHooks = Partial<
+type ContentHooks = Partial<
   Record<"onBeforeToggle" | "onToggle", (event: ToggleEvent<HTMLElement>) => void>
 >;
 
@@ -74,10 +75,9 @@ function triggerPropsOf<Props extends TriggerHandlers>(
         event.preventDefault();
       }
     }),
-    onBlur: (event) => {
-      props.onBlur?.(event);
+    onBlur: chain(props.onBlur, (event) => {
       layer.focusOut(event.nativeEvent);
-    },
+    }),
   } satisfies TriggerHandlers;
 }
 
@@ -245,17 +245,14 @@ function contentPropsOf(
     onBlur: (event: FocusEvent<HTMLElement>) => {
       focusOut(event.nativeEvent);
     },
-    onBeforeToggle: (event: ToggleEvent<HTMLElement>) => {
+    onBeforeToggle: chain((event: ToggleEvent<HTMLElement>) => {
       beforeToggle(options, event, anchor);
-      hooks.onBeforeToggle?.(event);
-    },
-    onToggle: (event: ToggleEvent<HTMLElement>) => {
+    }, hooks.onBeforeToggle),
+    onToggle: chain((event: ToggleEvent<HTMLElement>) => {
       setOpen(event.newState === "open");
 
       if (event.newState === "closed") settle(event.currentTarget, component);
-
-      hooks.onToggle?.(event);
-    },
+    }, hooks.onToggle),
   } as const;
 }
 

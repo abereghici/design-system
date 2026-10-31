@@ -10,4 +10,4 @@ export type { GroupProps } from "./combobox-group.tsx";
 
 export type { ItemProps } from "./combobox-item.tsx";
 
-export type { ChangeEventDetails } from "./combobox-state.ts";
+export type { ChangeEventDetails } from "./use-combobox-state.ts";

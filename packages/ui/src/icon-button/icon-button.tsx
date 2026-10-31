@@ -6,6 +6,8 @@ import "@abereghici/tokens/components/icon-button.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
+import { chain } from "../internal/chain/chain.ts";
+import type { InvokerCommands } from "../internal/invoker-commands/invoker-commands.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Slot } from "../internal/slot/slot.tsx";
 import { useButton } from "../internal/use-button/use-button.ts";
@@ -14,7 +16,8 @@ import { Spinner } from "../spinner/spinner.tsx";
 import styles from "./icon-button.module.css";
 
 export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "aria-labelledby"> &
-  AccessibleName & {
+  AccessibleName &
+  InvokerCommands & {
     /**
      * `lg` for prominent or spacious layouts, `sm` for dense ones. Touch screens get larger targets
      * on their own.
@@ -52,13 +55,12 @@ export function IconButton({
 }: IconButtonProps) {
   const button = useButton<HTMLButtonElement>({
     disabled: disabled || loading,
-    onClick: (event) => {
-      onClick?.(event);
+    onClick: chain(onClick, (event) => {
       dispatchFeedback(event.currentTarget, "ab-press", {
         component: "IconButton",
         userInitiated: true,
       });
-    },
+    }),
   });
   const Root = asChild ? Slot : "button";
 

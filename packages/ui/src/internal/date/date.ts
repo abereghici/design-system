@@ -1,4 +1,3 @@
-import { createContext } from "react";
 import { Temporal } from "temporal-polyfill";
 
 import { perLocale } from "../locale/per-locale.ts";
@@ -64,19 +63,3 @@ function buildDateFormats(locale: string | undefined) {
 
 /** Intl formatters in the app's locale, created on first use. */
 export const useDateFormats = perLocale(buildDateFormats);
-
-/** What a Calendar inside a DatePicker, or a RangeCalendar inside a DateRangePicker, reads in place of its own props. */
-export interface PickerContextValue<Value> {
-  readonly open: boolean;
-  readonly value: Value | null;
-  readonly min: Temporal.PlainDate | undefined;
-  readonly max: Temporal.PlainDate | undefined;
-  readonly isDateUnavailable: ((date: Temporal.PlainDate) => boolean) | undefined;
-  readonly choose: (value: Value, event: Event) => void;
-  /** Whether focus is still where the open left it (the trigger, the panel or nowhere). */
-  readonly canFocus: () => boolean;
-}
-
-export const DatePickerContext = createContext<PickerContextValue<Temporal.PlainDate> | null>(null);
-
-export const DateRangePickerContext = createContext<PickerContextValue<DateRange> | null>(null);

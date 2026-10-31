@@ -1,5 +1,6 @@
 "use client";
 
+import { Children, createContext, isValidElement } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/combobox.css";
@@ -11,10 +12,11 @@ import { Listbox } from "../internal/listbox/listbox.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import { Control } from "./combobox-control.tsx";
-import { labelsOf } from "./combobox-item.tsx";
-import { listProps, part } from "./combobox-state.ts";
-import type { ComboboxState, Options } from "./combobox-state.ts";
-import { ValueContext, useCombobox } from "./use-combobox.ts";
+import type { ItemProps } from "./combobox-item.tsx";
+import type { Options } from "./use-combobox-state.ts";
+import { part } from "./use-combobox-state.ts";
+import { useCombobox } from "./use-combobox.ts";
+import type { Combobox } from "./use-combobox.ts";
 import styles from "./combobox.module.css";
 
 type Loading =
@@ -54,8 +56,44 @@ export type RootProps = Naming &
     validate?: SizedWrapperProps["validate"];
   };
 
+/** The chosen values, and whether the list marks them selected (several) or marks the highlight. */
+export const ValueContext = createContext<{ chosen: readonly string[]; multiple: boolean }>({
+  chosen: [],
+  multiple: false,
+});
+
+const textOfNode = (node: ReactNode): string =>
+  Children.toArray(node)
+    .map((child) => {
+      if (typeof child === "string" || typeof child === "number") return String(child);
+
+      return isValidElement<{ children?: ReactNode }>(child)
+        ? textOfNode(child.props.children)
+        : "";
+    })
+    .join("");
+
+/**
+ * Each Item's text by its `value`, read from the elements rather than the page, so the server
+ * renders the chosen labels too. An Item is any element with a string `value` prop, whatever its
+ * element type.
+ */
+function labelsOf(children: ReactNode, labels = new Map<string, string>()) {
+  Children.forEach(children, (child) => {
+    if (!isValidElement<Partial<ItemProps>>(child)) return;
+
+    if (typeof child.props.value === "string") {
+      labels.set(child.props.value, textOfNode(child.props.children).trim());
+    } else {
+      labelsOf(child.props.children, labels);
+    }
+  });
+
+  return labels;
+}
+
 interface ListProps {
-  c: ComboboxState;
+  c: Combobox;
   naming: Pick<ComponentProps<"div">, "aria-labelledby" | "aria-label">;
   empty: string;
   children: ReactNode;
@@ -67,7 +105,7 @@ function List({ c, naming, empty, children }: ListProps) {
   return (
     <Listbox
       navigator={c.listbox}
-      {...listProps(c)}
+      {...c.listProps}
       {...naming}
       aria-multiselectable={multiple || undefined}
       className={styles["list"]}
@@ -84,7 +122,7 @@ function List({ c, naming, empty, children }: ListProps) {
  * One hidden input per chosen value. A single choice names its input only once hydrated: until
  * then the typed text submits under the name.
  */
-function Values({ c, name, form }: { c: ComboboxState } & Pick<InputProps, "name" | "form">) {
+function Values({ c, name, form }: { c: Combobox } & Pick<InputProps, "name" | "form">) {
   const hydrated = useHydrated();
   const named = c.multiple || hydrated ? name : undefined;
 

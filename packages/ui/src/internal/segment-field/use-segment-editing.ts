@@ -227,7 +227,7 @@ export function useSegmentEditing<Part extends string, Value extends Comparable<
   return {
     groupProps: useGroupProps(focus, edited, field.commit),
     register: focus.register,
-    onCompositionEnd: trackComposition(),
+    onCompositionEnd: trackComposition,
     focusFirstEmpty: () => {
       focus.firstEmpty(0);
     },

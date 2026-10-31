@@ -1,6 +1,6 @@
 import type { KeyboardEvent, PointerEvent, ToggleEvent } from "react";
 
-import { typeahead } from "../listbox/typeahead.ts";
+import { typeahead } from "../typeahead/typeahead.ts";
 
 /** Menus to open with focus on their last item, such as one opened with ArrowUp. */
 export const focusLast = new WeakSet<Element>();
@@ -45,11 +45,11 @@ export const menuNavigation = {
   onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
     if (navigate(event)) {
       event.preventDefault();
-    } else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+    } else {
       const from = event.target instanceof Element ? event.target : null;
       const items = itemsOf(event.currentTarget).filter((item) => !isDisabled(item));
 
-      typeahead(event.currentTarget, event.key, items, from)?.focus();
+      typeahead(event.currentTarget, event, items, from)?.focus();
     }
   },
   onPointerMove: (event: PointerEvent<HTMLElement>) => {
