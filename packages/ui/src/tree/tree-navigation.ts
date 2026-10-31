@@ -1,6 +1,6 @@
 import type { FocusEvent, KeyboardEvent } from "react";
 
-import { typeahead } from "../internal/listbox/typeahead.ts";
+import { typeahead } from "../internal/typeahead/typeahead.ts";
 
 import type { TreeItemState } from "./tree-root.tsx";
 

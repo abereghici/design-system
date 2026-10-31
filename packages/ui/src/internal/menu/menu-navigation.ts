@@ -1,6 +1,6 @@
 import type { KeyboardEvent, PointerEvent, ToggleEvent } from "react";
 
-import { typeahead } from "../listbox/typeahead.ts";
+import { typeahead } from "../typeahead/typeahead.ts";
 
 /** Menus to open with focus on their last item, such as one opened with ArrowUp. */
 export const focusLast = new WeakSet<Element>();

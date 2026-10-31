@@ -2,11 +2,11 @@ import { createContext, useId, useLayoutEffect, useState } from "react";
 
 import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
 import { getById } from "../internal/get-by-id/get-by-id.ts";
-import { textOf } from "../internal/listbox/text-of.ts";
 import { useListbox } from "../internal/listbox/use-listbox.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 import { valuesOf } from "../internal/selection/selection.ts";
+import { textOf } from "../internal/typeahead/text-of.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import {

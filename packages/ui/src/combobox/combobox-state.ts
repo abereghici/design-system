@@ -5,10 +5,10 @@ import type { ChangeEventDetails as Details } from "../internal/change-request/c
 import { getById } from "../internal/get-by-id/get-by-id.ts";
 import { isComposing, trackComposition } from "../internal/interaction/composition.ts";
 import { enabled, optionAt } from "../internal/listbox/options.ts";
-import { textOf } from "../internal/listbox/text-of.ts";
 import type { ListboxNavigator } from "../internal/listbox/use-listbox.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { toggled } from "../internal/selection/selection.ts";
+import { textOf } from "../internal/typeahead/text-of.ts";
 
 export const chosenOf = (list: Element, value: string | null) =>
   value === null ? null : list.querySelector(`[role="option"][data-value="${CSS.escape(value)}"]`);
