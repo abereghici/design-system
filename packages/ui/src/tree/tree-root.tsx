@@ -32,8 +32,8 @@ type ItemEvent = SyntheticEvent<HTMLElement>;
 
 interface TreeContextValue {
   readonly state: {
-    readonly expandedKeys: readonly string[];
-    readonly selectedKeys: readonly string[] | null;
+    readonly expandedKeys: ReadonlySet<string>;
+    readonly selectedKeys: ReadonlySet<string> | null;
     readonly active: string | null;
   };
   readonly actions: {
@@ -54,10 +54,7 @@ export function useTree(part: string) {
   return tree;
 }
 
-const shownItems = (tree: Element) =>
-  [...tree.querySelectorAll<HTMLElement>('[role="treeitem"]')].filter((item) =>
-    item.checkVisibility(),
-  );
+const shownItems = (tree: Element) => [...tree.querySelectorAll<HTMLElement>('[role="treeitem"]')];
 
 /** Whether a click landed on the chevron, the Item's first child, rather than its label. */
 const onChevron = (event: ItemEvent, item: TreeItemState) =>
@@ -178,14 +175,15 @@ export function Root({
   const [expanded, setExpanded] = useKeys(expandedKeys, defaultExpandedKeys, onExpandedChange);
   const [selected, setSelected] = useKeys(selectedKeys, defaultSelectedKeys, onSelectionChange);
   const [active, setActive] = useState<string | null>(null);
-  const selectable = selectionMode === undefined ? null : selected;
+  const expandedSet = new Set(expanded);
+  const selectedSet = selectionMode === undefined ? null : new Set(selected);
 
   function press(event: ItemEvent, item: TreeItemState) {
-    if (selectable === null || onChevron(event, item)) {
+    if (selectedSet === null || onChevron(event, item)) {
       if (item.branch) setExpanded(toggled(expanded, item.id), "item-press", event);
     } else if (selectionMode === "multiple") {
       setSelected(toggled(selected, item.id), "item-press", event);
-    } else if (!selected.includes(item.id)) {
+    } else if (!selectedSet.has(item.id)) {
       setSelected([item.id], "item-press", event);
     }
   }
@@ -205,7 +203,7 @@ export function Root({
   return (
     <TreeContext
       value={{
-        state: { expandedKeys: expanded, selectedKeys: selectable, active },
+        state: { expandedKeys: expandedSet, selectedKeys: selectedSet, active },
         actions: { focus: setActive, keyDown, press },
         meta: { level: 1 },
       }}

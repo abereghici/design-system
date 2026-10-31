@@ -1,11 +1,18 @@
 import { useState } from "react";
-import { expect, fn } from "storybook/test";
+import { expect, fn, within } from "storybook/test";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
 import { Tree } from "./index.ts";
+
+const mounted = fn<(item: HTMLDivElement | null) => void>();
+const folder = (
+  <Tree.Item id="src" label="src">
+    <Tree.Item id="index" label="index.ts" ref={mounted} />
+  </Tree.Item>
+);
 
 const meta = preview.meta({
   title: "Components/Tree",
@@ -111,10 +118,7 @@ Default.test(
   async ({ canvas, args }) => {
     const user = await trusted();
 
-    await expect(canvas.getByRole("tree", { name: "Files" })).toHaveAttribute(
-      "aria-multiselectable",
-      "true",
-    );
+    await expect(canvas.getByRole("tree")).toHaveAttribute("aria-multiselectable", "true");
     await user.keyboard("{Tab}[Space]{ArrowDown}{ArrowDown}[Space]{ArrowDown}[Space][Space]");
     await expect(args.onSelectionChange).toHaveBeenLastCalledWith(
       ["src", "index"],
@@ -132,12 +136,14 @@ Default.test(
   async ({ canvas, args }) => {
     const user = await trusted();
     const components = canvas.getByRole("treeitem", { name: "components" });
+    const row = components.getBoundingClientRect();
+    const { left } = within(components).getByText("components").getBoundingClientRect();
 
-    await user.click(components, { position: { x: 12, y: components.offsetHeight / 2 } });
-    await expect(canvas.getByRole("treeitem", { name: "components", expanded: true })).toBe(
-      components,
-    );
-    await expect(components).toHaveAttribute("aria-selected", "false");
+    // The chevron has no role or name: it is pressed where it is drawn, before the label.
+    await user.click(components, { position: { x: (left - row.left) / 2, y: row.height / 2 } });
+    await expect(
+      canvas.getByRole("treeitem", { name: "components", expanded: true, selected: false }),
+    ).toBe(components);
     await expect(args.onExpandedChange).toHaveBeenCalledWith(
       ["src", "components"],
       expect.objectContaining({ reason: "item-press" }),
@@ -180,6 +186,20 @@ Default.test(
       canvas.getByRole("treeitem", { name: "src", expanded: true, selected: false }),
     ).toHaveFocus();
     await expect(toggles.events).toEqual([]);
+  },
+);
+
+Default.test(
+  "renders an item's children only while it is expanded",
+  { args: { defaultExpandedKeys: [], children: folder } },
+  async ({ canvas }) => {
+    const user = await trusted();
+
+    await expect(mounted).not.toHaveBeenCalled();
+    await user.keyboard("{Tab}{ArrowRight}");
+    await expect(mounted).toHaveBeenCalledWith(canvas.getByRole("treeitem", { name: "index.ts" }));
+    await user.keyboard("{ArrowLeft}");
+    await expect(mounted.mock.lastCall?.[0]).toBeNull();
   },
 );
 
