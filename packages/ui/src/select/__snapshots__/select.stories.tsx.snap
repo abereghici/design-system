@@ -1,15 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Compact 1`] = `
-- text: Region
-- combobox "Region":
-  - option "Europe" [selected]
-  - option "North America"
-  - group:
-    - option "Japan"
-    - option "Singapore"
-`;
-
 exports[`Controlled   > base story 1`] = `
 - text: Sort by
 - combobox "Sort by":

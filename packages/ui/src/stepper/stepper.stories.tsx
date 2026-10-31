@@ -2,7 +2,6 @@ import { expect } from "storybook/test";
 
 import { Link } from "@abereghici/ui/link";
 
-import { withDensity } from "#.storybook/decorators/with-density.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Stepper from "./stepper.tsx";
@@ -71,5 +70,3 @@ Linked.test("names each completed step's link with its completed label", async (
   );
   await expect(canvas.getByRole("listitem", { current: "step" })).toHaveTextContent("Payment");
 });
-
-export const Compact = Default.extend({ decorators: [withDensity("compact")] });

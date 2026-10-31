@@ -2,7 +2,6 @@ import { expect, fn, waitFor } from "storybook/test";
 
 import { Badge } from "@abereghici/ui/badge";
 
-import { withDensity } from "#.storybook/decorators/with-density.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { followLinkTo } from "#.storybook/test/follow-link.ts";
 import { listen } from "#.storybook/test/listen.ts";
@@ -258,5 +257,3 @@ Overflowing.test("scrolls a partly hidden tab into view", async ({ canvas, userE
 
   await expect(tab.right).toBeLessThanOrEqual(list.right + 0.5);
 });
-
-export const Compact = Default.extend({ decorators: [withDensity("compact")] });

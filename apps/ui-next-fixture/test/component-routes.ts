@@ -402,7 +402,7 @@ export const componentRoutes = [
     name: "range-calendar",
     tokens: ["calendar", "range-calendar", "icon", "icon-button", "spinner"],
     client: [],
-    html: "data-selection-start",
+    html: 'aria-selected="true"',
   },
   {
     name: "date-range-picker",

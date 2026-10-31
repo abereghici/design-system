@@ -5,7 +5,6 @@ import { CopyIcon } from "@abereghici/ui/icons/copy";
 import { TrashIcon } from "@abereghici/ui/icons/trash";
 import { Kbd } from "@abereghici/ui/kbd";
 
-import { withDensity } from "#.storybook/decorators/with-density.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
@@ -182,8 +181,8 @@ Default.test(
   },
 );
 
-export const Compact = Default.extend({
-  decorators: [withDensity("compact")],
+export const Open = Default.extend({
+  parameters: { docs: { description: { story: "Open from a right click on its target." } } },
   play: async ({ canvas }) => {
     const user = await trusted().catch(() => null);
 

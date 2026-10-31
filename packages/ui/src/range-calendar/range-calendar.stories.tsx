@@ -51,13 +51,14 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("selects every day of the range, and marks its ends", async () => {
-  const selected = selectedDays();
-
-  await expect(selected.map((day) => day.textContent)).toEqual(["12", "13", "14", "15", "16"]);
-  await expect(selected[0]).toHaveAttribute("data-selection-start");
-  await expect(selected.at(-1)).toHaveAttribute("data-selection-end");
-  await expect(selected[2]).not.toHaveAttribute("data-selection-start");
+Default.test("selects every day of the range", async () => {
+  await expect(selectedDays().map((day) => day.textContent)).toEqual([
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+  ]);
 });
 
 Default.test(

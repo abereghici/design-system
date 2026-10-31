@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { expect, fn } from "storybook/test";
 
-import { withDensity } from "#.storybook/decorators/with-density.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
@@ -320,5 +319,3 @@ LazyChildren.test(
     await expect(origin).not.toHaveAttribute("aria-busy");
   },
 );
-
-export const Compact = Default.extend({ decorators: [withDensity("compact")] });

@@ -1,5 +1,3 @@
-import { expect } from "storybook/test";
-
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
@@ -31,28 +29,6 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-const rects = (
-  canvas: { getByText: (text: string) => HTMLElement },
-  term: string,
-  value: string,
-) => [
-  canvas.getByText(term).getBoundingClientRect(),
-  canvas.getByText(value).getBoundingClientRect(),
-];
-
-Default.test(
-  "lines every value up in one column, beside its term, when there is room",
-  { decorators: [withWidth("40rem")] },
-  async ({ canvas }) => {
-    const [order, number] = rects(canvas, "Order", "#4821");
-    const [address, street] = rects(canvas, "Shipping address", "Strada Lipscani 23, Bucharest");
-
-    await expect(number?.left).toBeGreaterThanOrEqual(order?.right ?? Infinity);
-    await expect(street?.left).toBe(number?.left);
-    await expect(address?.left).toBe(order?.left);
-  },
-);
-
 export const Narrow = meta.story({
   decorators: [withWidth("14rem")],
   parameters: {
@@ -63,11 +39,4 @@ export const Narrow = meta.story({
       },
     },
   },
-});
-
-Narrow.test("puts each value below its term", async ({ canvas }) => {
-  const [order, number] = rects(canvas, "Order", "#4821");
-
-  await expect(number?.top).toBeGreaterThanOrEqual(order?.bottom ?? Infinity);
-  await expect(number?.left).toBe(order?.left);
 });

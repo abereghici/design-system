@@ -3,7 +3,6 @@ import { expect, fn, screen, waitFor } from "storybook/test";
 
 import { UserIcon } from "@abereghici/ui/icons/user";
 
-import { withDensity } from "#.storybook/decorators/with-density.tsx";
 import { withDialog } from "#.storybook/decorators/with-dialog.tsx";
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
@@ -300,8 +299,6 @@ ServerSearchResults.test("shows the Items the app renders", async ({ canvas, use
   await userEvent.keyboard("{Backspace}{Enter}");
   await expect(field("Repository")).toHaveValue("platform/web");
 });
-
-export const Compact = Open.extend({ decorators: [withDensity("compact")] });
 
 export const Multiple = meta.story({
   args: { selectionMode: "multiple", removeLabel: "Remove", defaultValue: ["ab"] },
