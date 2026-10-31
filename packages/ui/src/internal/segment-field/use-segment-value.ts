@@ -1,7 +1,9 @@
 import { useState } from "react";
 
-import { requestChange } from "../../events/events.ts";
 import type { ChangeEventDetails as Details } from "../../events/events.ts";
+import { useControllableState } from "../../events/use-controllable-state.ts";
+import { useEvent } from "../../events/use-event.ts";
+import type { EventTargetSource } from "../../events/use-event.ts";
 
 import { same } from "./segments.ts";
 import type { Comparable, SegmentModel, Segments } from "./segments.ts";
@@ -19,16 +21,18 @@ export interface ValueOptions<Value> {
   readonly onValueChange?:
     | ((value: Value | null, details: SegmentFieldChangeEventDetails) => void)
     | undefined;
-  readonly onFormReset?: (() => void) | undefined;
 }
 
-/** The committed value and the segments being edited; an edit that changes the value is a change request. */
+/**
+ * The committed value and the segments being edited; an edit that changes the value is a change
+ * request. The reset of `form` brings back the segments of the value the reset leaves.
+ */
 export function useSegmentValue<Part extends string, Value extends Comparable<Value>>(
   model: SegmentModel<Part, Value>,
-  { value, defaultValue = null, onValueChange, onFormReset }: ValueOptions<Value>,
+  { value, defaultValue = null, onValueChange }: ValueOptions<Value>,
+  form: EventTargetSource,
 ) {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
-  const committed = value === undefined ? uncontrolled : value;
+  const [committed, request] = useControllableState(value, defaultValue, onValueChange, form);
   const [segments, setSegments] = useState(() => model.fromValue(committed));
   const [seen, setSeen] = useState(committed);
   const [buffer, setBuffer] = useState<Buffer<Part>>(null);
@@ -38,13 +42,21 @@ export function useSegmentValue<Part extends string, Value extends Comparable<Va
     setSegments(model.fromValue(committed));
   }
 
+  useEvent(
+    "reset",
+    () => {
+      setSegments(model.fromValue(value === undefined ? defaultValue : value));
+      setBuffer(null);
+    },
+    form,
+  );
+
   const edit = (next: Segments<Part>, text: Buffer<Part>, reason: Reason, event: Event) => {
     const result = model.toValue(next);
 
     if (!same(result, committed)) {
-      if (!requestChange(onValueChange, result, reason, event)) return null;
+      if (!request(result, reason, event)) return null;
 
-      setUncontrolled(result);
       setSeen(result);
     }
 
@@ -56,12 +68,5 @@ export function useSegmentValue<Part extends string, Value extends Comparable<Va
     return { segments: shown, value: result };
   };
 
-  const reset = () => {
-    setUncontrolled(defaultValue);
-    setSegments(model.fromValue(defaultValue));
-    setBuffer(null);
-    onFormReset?.();
-  };
-
-  return { committed, segments, buffer, setBuffer, edit, reset };
+  return { committed, segments, buffer, setBuffer, edit };
 }

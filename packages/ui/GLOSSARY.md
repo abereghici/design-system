@@ -29,7 +29,7 @@ A state change a component asks its consumer about before committing it. The con
 _Avoid_: Change event, veto, controlled change
 
 **Listbox navigator**:
-The active-descendant keyboard both listbox popups share (Combobox, Command): focus stays in the input while Down and Up step through the shown, enabled options and wrap, and Home and End reach the ends while the input is empty.
+The active-descendant highlight both listbox popups share (Combobox, Command): focus stays in the input while the options re-rank as the query or the options change, the highlight lands on a shown, enabled option with its group heading in view, Down and Up step through those options and wrap, Home and End reach the ends while the input is empty, and the pointer moves it.
 _Avoid_: Roving focus (that is Menu's), list navigation
 
 **Field control**:

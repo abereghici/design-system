@@ -8,7 +8,7 @@ import "@abereghici/tokens/components/tree.css";
 import { dispatchFeedback, pointerMarker } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useControllableState } from "../events/use-controllable-state.ts";
-import { typeahead } from "../internal/listbox/listbox.tsx";
+import { typeahead } from "../internal/listbox/typeahead.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { toggled } from "../internal/toggle/toggle.ts";
 

@@ -1,13 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/slider.css";
 
-import { useEvent } from "../events/use-event.ts";
 import { useFieldControl } from "../field/use-field.ts";
-import { composeRefs, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { useSlider } from "./slider-root.tsx";
 import type { Slider } from "./slider-root.tsx";
@@ -70,9 +68,6 @@ export function Thumb({
   const own = { id: index === 0 ? ownId : undefined, name: slider.name, disabled: slider.disabled };
   const bindings = useFieldControl<HTMLInputElement, ThumbProps>({ ...props, ...own });
   const blocked = bindings["aria-disabled"] === true;
-  const [input, setInput] = useState<HTMLInputElement | null>(null);
-
-  useEvent("reset", slider.reset, input?.form ?? null);
 
   return (
     <div
@@ -84,7 +79,6 @@ export function Thumb({
     >
       <input
         {...bindings}
-        ref={composeRefs<HTMLInputElement>(setInput, bindings.ref)}
         id={ownId}
         type="range"
         min={lo}

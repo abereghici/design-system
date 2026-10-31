@@ -28,12 +28,18 @@ interface FieldState {
   readonly describedBy: string | undefined;
   readonly message: string | undefined;
   readonly validity: ValidityState | undefined;
-  readonly serverError: string | undefined;
   readonly clearServerError: () => void;
-  /** The control's element, once it is mounted. */
+  /** The first control's element, once it is mounted. */
   readonly control: FormControl | null;
-  /** The control's ref: the Field finds its element, id and form through it. */
+  /** Each control's ref: the Field finds its elements, the first one's id and their form through it. */
   readonly register: RefCallback<FormControl>;
+  /**
+   * A composite control's own check, once it has written a new value to its native element: the
+   * message, or `undefined` when the value passes.
+   */
+  readonly report: (control: FormControl, message: string | undefined) => void;
+  /** A composite control's value, changed and committed by the user: its error shows from now on. */
+  readonly commit: (control: FormControl) => void;
 }
 
 export const FieldContext = createContext<FieldState | undefined>(undefined);
@@ -67,22 +73,6 @@ export function useField(disabled?: boolean) {
     blocked: disabled === true || field?.disabled === true,
     invalid: field?.invalid === true || undefined,
   };
-}
-
-/** The custom validity message: the control's own check, then the server's error, then the app's rule. */
-export function setValidity(
-  target: {
-    setCustomValidity: (message: string) => void;
-    value: string;
-    form: HTMLFormElement | null;
-  },
-  own: string | undefined,
-  server: string | undefined,
-  rule: Validate | undefined,
-) {
-  target.setCustomValidity(
-    own ?? server ?? rule?.(target.value, new FormData(target.form ?? undefined)) ?? "",
-  );
 }
 
 /**

@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
-
-import { dispatchFeedback, requestChange } from "../../events/events.ts";
+import { dispatchFeedback } from "../../events/events.ts";
+import { useControllableState } from "../../events/use-controllable-state.ts";
 
 import { Indicator } from "./menu-item-indicator.tsx";
 import { useItem } from "./menu.tsx";
@@ -27,8 +26,7 @@ export function CheckboxItem({
   ...rest
 }: CheckboxItemProps) {
   const { menu, props, blocked, close: closeMenu } = useItem(rest, "menuitemcheckbox");
-  const [uncontrolled, setUncontrolled] = useState(defaultChecked);
-  const current = checked ?? uncontrolled;
+  const [current, request] = useControllableState(checked, defaultChecked, onCheckedChange);
 
   return (
     <button
@@ -40,9 +38,8 @@ export function CheckboxItem({
 
         onClick?.(event);
 
-        if (!requestChange(onCheckedChange, !current, "item-press", event.nativeEvent)) return;
+        if (!request(!current, "item-press", event.nativeEvent)) return;
 
-        setUncontrolled(!current);
         dispatchFeedback(event.currentTarget, "ab-toggle", {
           component: menu.component,
           reason: "user",

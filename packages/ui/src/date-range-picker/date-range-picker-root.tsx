@@ -1,19 +1,17 @@
 "use client";
 
-import { useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 
 import "@abereghici/tokens/components/date-range-picker.css";
 
-import { focusStayed, PanelContext } from "../date-picker/date-picker-panel.tsx";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { useControllableState } from "../events/use-controllable-state.ts";
 import { Wrapper } from "../field/field-wrapper.tsx";
 import type { SizedWrapperProps } from "../field/field-wrapper.tsx";
 import { DateRangePickerContext, sameRange } from "../internal/date/date.ts";
-import type { DatePart, DateRange, PickerContextValue, Temporal } from "../internal/date/date.ts";
-import { useOverlay } from "../internal/overlay/overlay.ts";
-import type { ChangeEventDetails as OverlayDetails } from "../internal/overlay/overlay.ts";
+import type { DatePart, DateRange, Temporal } from "../internal/date/date.ts";
+import { PanelContext, usePicker } from "../internal/picker/picker.ts";
+import type { OpenChangeEventDetails } from "../internal/picker/picker.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { Box } from "./date-range-picker-box.tsx";
@@ -23,9 +21,7 @@ import styles from "./date-range-picker.module.css";
 /** `cancel()`: keeps the previous dates; after a day press the panel stays open. */
 export type ChangeEventDetails = Details<"input-change" | "keyboard" | "day-press">;
 
-export type OpenChangeEventDetails = OverlayDetails<
-  "trigger-press" | "outside-press" | "escape-key" | "focus-out" | "day-press" | "none"
->;
+export type { OpenChangeEventDetails } from "../internal/picker/picker.ts";
 
 type Unavailable =
   | { isDateUnavailable?: undefined; unavailableMessage?: undefined }
@@ -90,9 +86,18 @@ export type RootProps = Omit<SizedWrapperProps, "validate"> &
 
 const empty: Halves = { start: null, end: null };
 
-function useRange({ value, defaultValue = null, onValueChange }: RootProps): Range {
-  const [current, request, set] = useControllableState(value, defaultValue, onValueChange);
-  const [partial, setPartial] = useState<Halves>(current ?? empty);
+function useRange(
+  { value, defaultValue = null, onValueChange }: RootProps,
+  form: () => HTMLFormElement | null | undefined,
+): Range {
+  const [current, request] = useControllableState(value, defaultValue, onValueChange, form);
+  // The dates typed so far are never the app's, but they too return to the default on reset.
+  const [partial, , setPartial] = useControllableState(
+    undefined,
+    defaultValue ?? empty,
+    undefined,
+    form,
+  );
 
   return {
     current,
@@ -107,35 +112,8 @@ function useRange({ value, defaultValue = null, onValueChange }: RootProps): Ran
 
       return true;
     },
-    reset: () => {
-      set(defaultValue);
-      setPartial(defaultValue ?? empty);
-    },
   };
 }
-
-function usePicker(props: RootProps, range: ReturnType<typeof useRange>) {
-  const { open, defaultOpen, onOpenChange, triggerLabel, min, max, isDateUnavailable } = props;
-  const trigger = useRef<HTMLButtonElement>(null);
-  const overlay = useOverlay("Popover", { open, defaultOpen, onOpenChange });
-  const picker: PickerContextValue<DateRange> = {
-    open: overlay.open,
-    value: range.current,
-    min,
-    max,
-    isDateUnavailable,
-    choose: (next, event) => {
-      if (sameRange(next, range.current) || range.change(next, "day-press", event)) {
-        overlay.toggle(false, "day-press", event);
-      }
-    },
-    canFocus: () => focusStayed(overlay),
-  };
-
-  return { panel: { overlay, name: triggerLabel, trigger }, picker };
-}
-
-const valid = { invalid: false, message: "" };
 
 /**
  * A field for a start and an end date, such as a stay, with a button that opens a RangeCalendar:
@@ -148,10 +126,8 @@ const valid = { invalid: false, message: "" };
  */
 export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, size, className, style, disabled } = props;
-  const range = useRange(props);
-  const { panel, picker } = usePicker(props, range);
-  const [validity, setValidity] = useState({ start: valid, end: valid });
-  const shown = validity.start.invalid ? validity.start : validity.end;
+  const { panel, form, calendar } = usePicker(props);
+  const range = useRange(props, form);
 
   return (
     <Wrapper
@@ -161,22 +137,17 @@ export function Root(props: RootProps) {
       size={size}
       name={props.startName}
       disabled={disabled}
-      errorMessage={errorMessage ?? (shown.invalid ? shown.message : undefined)}
-      invalid={invalid ?? (shown.invalid || undefined)}
+      errorMessage={errorMessage}
+      invalid={invalid}
       after={
         <PanelContext value={panel}>
-          <DateRangePickerContext value={picker}>{props.children}</DateRangePickerContext>
+          <DateRangePickerContext value={calendar(range, sameRange)}>
+            {props.children}
+          </DateRangePickerContext>
         </PanelContext>
       }
     >
-      <Box
-        {...props}
-        range={range}
-        onValidity={(half, next) => {
-          setValidity((previous) => ({ ...previous, [half]: next }));
-        }}
-        panel={panel}
-      />
+      <Box {...props} range={range} panel={panel} />
     </Wrapper>
   );
 }

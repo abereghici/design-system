@@ -1,10 +1,10 @@
 "use client";
 
-import { useId } from "react";
 import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/command.css";
 
+import { OptionGroup } from "../internal/listbox/listbox.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./command.module.css";
@@ -15,15 +15,11 @@ export interface GroupProps extends ComponentProps<"fieldset"> {
 }
 
 /** A set of Items under a `heading`; hidden while none of them match. */
-export function Group({ heading, children, ...props }: GroupProps) {
-  const id = useId();
-
+export function Group(props: GroupProps) {
   return (
-    <fieldset aria-labelledby={id} {...mergeProps({ className: styles["group"] }, props)}>
-      <div id={id} aria-hidden="true" className={styles["heading"]}>
-        {heading}
-      </div>
-      {children}
-    </fieldset>
+    <OptionGroup
+      {...mergeProps({ className: styles["group"] }, props)}
+      headingClassName={styles["heading"]}
+    />
   );
 }

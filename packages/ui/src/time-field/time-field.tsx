@@ -18,7 +18,7 @@ import styles from "./time-field.module.css";
 export type TimeFieldChangeEventDetails = SegmentFieldChangeEventDetails;
 
 export type TimeFieldProps = Omit<SizedWrapperProps, "validate"> &
-  Omit<ControlProps<TimePart, Temporal.PlainTime>, "model" | "options" | "onValidity" | "end"> & {
+  Omit<ControlProps<TimePart, Temporal.PlainTime>, "model" | "options" | "end"> & {
     /** The visible label. Every field needs one, or an `aria-label`. */
     label?: ReactNode;
     /** The chosen time, to the minute, when your state holds it; `null` is no time. */

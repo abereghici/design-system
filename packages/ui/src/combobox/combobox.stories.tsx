@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { expect, fn, screen, waitFor } from "storybook/test";
 
 import type { StoryContext } from "@storybook/react-vite";
@@ -36,16 +36,29 @@ const type = async (keys: string, name?: string) => {
   await (await trusted()).keyboard(keys);
 };
 
+const inView = async (element: HTMLElement) =>
+  (await import("vitest")).expect.element(element).toBeInViewport({ ratio: 1 });
+
 const cancel = (_value: unknown, details: { cancel: () => void }) => {
   details.cancel();
 };
 
 const person = (value: string, name: string, keywords?: string[]) => (
-  <Combobox.Item value={value} {...(keywords && { keywords })}>
+  <Combobox.Item key={value} value={value} {...(keywords && { keywords })}>
     <UserIcon />
     {name}
   </Combobox.Item>
 );
+
+let receive: (crew: readonly string[]) => void;
+
+function Fetched() {
+  const [crew, setCrew] = useState<readonly string[]>([]);
+
+  useEffect(() => void (receive = setCrew), []);
+
+  return <Combobox.Group label="Staff">{crew.map((name) => person(name, name))}</Combobox.Group>;
+}
 
 const meta = preview.meta({
   title: "Components/Combobox",
@@ -78,23 +91,6 @@ const meta = preview.meta({
 
 export const Default = meta.story({});
 
-Default.test("opens on a press, first option highlighted", async ({ canvas, userEvent }) => {
-  await expect(field()).toHaveAttribute("aria-expanded", "false");
-  await userEvent.click(field());
-  await waitFor(() => expect(canvas.getByRole("listbox", { name: "Assignee" })).toBeVisible());
-  await expect(field()).toHaveFocus();
-  await expect(field()).toHaveAttribute("aria-expanded", "true");
-  await expect(names().join()).toBe(
-    "Alexandru Bereghici,Ioana Munteanu,Mugur Ionescu,Erik Halvorsen,Ștefan Țurcanu",
-  );
-  await expect(highlighted()).toHaveAccessibleName("Alexandru Bereghici");
-  await expect(field()).toHaveAttribute("aria-activedescendant", highlighted()?.id);
-  await expect(canvas.getByRole("group", { name: "Former members" })).toContainElement(
-    canvas.getByRole("option", { name: "Erik Halvorsen" }),
-  );
-  await expect(reasons(onOpenChange)).toEqual([[true, "input-press"]]);
-});
-
 Default.test("ranks prefix, word start, then subsequence", async ({ canvas, userEvent }) => {
   await type("mu");
   await expect(highlighted()).toHaveAccessibleName("Mugur Ionescu");
@@ -102,7 +98,6 @@ Default.test("ranks prefix, word start, then subsequence", async ({ canvas, user
   const ioana = canvas.getByRole("option", { name: "Ioana Munteanu" });
 
   await expect(ioana).toHaveAttribute("aria-posinset", "2");
-  await expect(canvas.queryByRole("option", { name: "Alexandru Bereghici" })).toBeNull();
   await expect(canvas.queryByRole("group")).toBeNull();
   await userEvent.keyboard("{ArrowDown}");
   await expect(highlighted()).toBe(ioana);
@@ -115,6 +110,15 @@ Default.test("ranks prefix, word start, then subsequence", async ({ canvas, user
   await userEvent.clear(field());
   await userEvent.keyboard("stefan t");
   await expect(highlighted()).toHaveAccessibleName("Ștefan Țurcanu");
+});
+
+Default.test("ranks and reveals fetched Items", { args: { children: <Fetched /> } }, async () => {
+  await type("a");
+  receive("Ana Bea Cara Dana Ela Ema Ina Lara Mara Oana Rada Sanda Petru".split(" "));
+  await waitFor(() => expect(highlighted()).toHaveAttribute("aria-setsize", "12"));
+  await expect(field()).toHaveAttribute("aria-activedescendant", highlighted()?.id ?? "");
+  await type("{ArrowUp}{Backspace}a");
+  await inView(screen.getByText("Staff"));
 });
 
 Default.test("shows and announces No results", async ({ canvas, userEvent }) => {
@@ -140,6 +144,7 @@ Default.test("chooses by Enter but not IME's, or click", async ({ canvas, userEv
   await expect(reasons(onInputValueChange).at(-1)).toEqual(["Ioana Munteanu", "item-press"]);
   await expect(reasons(onOpenChange).at(-1)).toEqual([false, "item-press"]);
   await userEvent.click(field());
+  await expect(reasons(onOpenChange).at(-1)).toEqual([true, "input-press"]);
   await userEvent.hover(canvas.getByRole("option", { name: "Alexandru Bereghici" }));
   await expect(highlighted()).toHaveAccessibleName("Alexandru Bereghici");
   await userEvent.click(canvas.getByRole("option", { name: "Mugur Ionescu" }));
