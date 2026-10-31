@@ -4,7 +4,7 @@ import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/tabs.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useTabs } from "./tabs-root.tsx";
 import styles from "./tabs.module.css";

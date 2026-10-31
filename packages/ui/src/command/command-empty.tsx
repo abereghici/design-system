@@ -5,7 +5,7 @@ import type { ComponentProps, ReactNode } from "react";
 import "@abereghici/tokens/components/command.css";
 
 import { SearchIcon } from "../icon/icons/search.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";

@@ -5,11 +5,11 @@ import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/segmented-control.css";
 
-import { followVisualDirection } from "../internal/follow-visual-direction/follow-visual-direction.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import { useRadioChoice } from "../internal/toggle/toggle.ts";
-import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { followVisualDirection } from "../internal/radio-choice/follow-visual-direction.ts";
+import { useRadioChoice } from "../internal/radio-choice/use-radio-choice.ts";
+import type { ChangeEventDetails } from "../internal/toggle-click/toggle-click.ts";
 
 import styles from "./segmented-control.module.css";
 

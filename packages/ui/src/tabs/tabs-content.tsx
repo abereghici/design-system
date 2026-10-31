@@ -5,8 +5,9 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/tabs.css";
 
+import { composeRefs } from "../internal/compose-refs/compose-refs.ts";
 import { useEvent } from "../internal/dom-event/use-event.ts";
-import { composeRefs, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useTabs } from "./tabs-root.tsx";
 import styles from "./tabs.module.css";

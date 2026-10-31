@@ -7,7 +7,7 @@ import "@abereghici/tokens/components/disclosure.css";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
 import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useDisclosure } from "./disclosure-root.tsx";
 import styles from "./disclosure.module.css";

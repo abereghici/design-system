@@ -7,7 +7,7 @@ import "@abereghici/tokens/components/segmented-control.css";
 
 import { useFieldControl } from "../field/use-field.ts";
 import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { GroupContext } from "./segmented-control-root.tsx";
 import styles from "./segmented-control.module.css";

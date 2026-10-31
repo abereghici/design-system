@@ -3,7 +3,7 @@ import type { ComponentProps } from "react";
 import "@abereghici/tokens/components/breadcrumbs.css";
 
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./breadcrumbs.module.css";
 

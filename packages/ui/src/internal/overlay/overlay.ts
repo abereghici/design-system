@@ -6,6 +6,7 @@ import { requestChange } from "../change-request/change-request.ts";
 import type { ChangeEventDetails as Details } from "../change-request/change-request.ts";
 import { composeEventHandlers } from "../compose-event-handlers/compose-event-handlers.ts";
 import { getDocument, useEvent } from "../dom-event/use-event.ts";
+import { getById } from "../get-by-id/get-by-id.ts";
 
 type ChangeReason =
   | "trigger-press"
@@ -103,9 +104,6 @@ export const isOpen = (element: Element | null) => element?.matches(":popover-op
 export const sourceOf = (source: Element | null): ShowPopoverOptions =>
   source instanceof HTMLElement ? { source } : {};
 
-/** The element with this id, which may be the consumer's and need escaping as a selector. */
-export const byId = (id: string) => document.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
-
 /** The element that opened the layer: commands and `showPopover({ source })` both record it. */
 const invokerOf = (contentId: string) =>
   document.querySelector(`[commandfor="${CSS.escape(contentId)}"]`);
@@ -157,13 +155,15 @@ export function returnFocus(
 function leaves(contentId: string, next: EventTarget | null) {
   if (!(next instanceof Node)) return false;
 
-  return byId(contentId)?.contains(next) !== true && invokerOf(contentId)?.contains(next) !== true;
+  return (
+    getById(contentId)?.contains(next) !== true && invokerOf(contentId)?.contains(next) !== true
+  );
 }
 
 /** Remembers the open layer's last Escape or outside press, so its close reports the reason. */
 function useInputRecord(contentId: string, open: boolean) {
   const record = (event: Event) => {
-    const element = byId(contentId);
+    const element = getById(contentId);
 
     if (element === null) return;
 
@@ -215,7 +215,7 @@ function beforeToggle(options: Options, event: ToggleEvent<HTMLElement>, anchor:
 }
 
 function reconcile(contentId: string, open: boolean, findSource: (id: string) => Element | null) {
-  const element = byId(contentId);
+  const element = getById(contentId);
 
   if (element === null) return;
 
@@ -266,7 +266,7 @@ function controlsOf(
   findSource: (id: string) => Element | null,
 ) {
   const request = (next: boolean, reason: ChangeReason, event?: Event) => {
-    const element = byId(contentId);
+    const element = getById(contentId);
 
     if (element === null || !requestChange(options.onOpenChange, next, reason, event)) return false;
 
@@ -281,7 +281,7 @@ function controlsOf(
   };
 
   const toggle = (next: boolean, reason: ChangeReason, event?: Event, source?: Element | null) => {
-    const element = byId(contentId);
+    const element = getById(contentId);
 
     if (element === null || isOpen(element) === next || !request(next, reason, event)) return false;
 

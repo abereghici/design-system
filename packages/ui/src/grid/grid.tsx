@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import styles from "./grid.module.css";
 

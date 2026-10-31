@@ -3,7 +3,8 @@
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import { focusLast, itemsOf, useMenu } from "../internal/menu/menu.tsx";
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import styles from "./dropdown-menu.module.css";
 

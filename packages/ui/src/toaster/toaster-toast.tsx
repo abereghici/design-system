@@ -6,7 +6,7 @@ import "@abereghici/tokens/components/toast.css";
 import "@abereghici/tokens/components/kbd.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
-import { composeRefs } from "../internal/slot/slot.tsx";
+import { composeRefs } from "../internal/compose-refs/compose-refs.ts";
 import { close, mark, progressOf, remove } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
 

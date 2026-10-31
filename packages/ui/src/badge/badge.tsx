@@ -3,7 +3,7 @@ import type { ComponentProps } from "react";
 import "@abereghici/tokens/components/badge.css";
 
 import { FormattedNumber } from "../internal/locale/formatted-number.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./badge.module.css";
 

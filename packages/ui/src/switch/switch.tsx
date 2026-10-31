@@ -7,9 +7,9 @@ import "@abereghici/tokens/components/switch.css";
 
 import { useFieldControl } from "../field/use-field.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import { toggleClick } from "../internal/toggle/toggle.ts";
-import type { ChangeEventDetails } from "../internal/toggle/toggle.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { toggleClick } from "../internal/toggle-click/toggle-click.ts";
+import type { ChangeEventDetails } from "../internal/toggle-click/toggle-click.ts";
 
 import styles from "./switch.module.css";
 

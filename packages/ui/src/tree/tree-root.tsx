@@ -9,8 +9,8 @@ import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { typeahead } from "../internal/listbox/typeahead.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import { toggled } from "../internal/toggle/toggle.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { toggled } from "../internal/selection/selection.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./tree.module.css";

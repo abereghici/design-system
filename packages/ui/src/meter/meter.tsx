@@ -4,7 +4,7 @@ import type { CSSProperties, ComponentProps, ReactNode } from "react";
 import "@abereghici/tokens/components/meter.css";
 
 import { FormattedNumber } from "../internal/locale/formatted-number.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./meter.module.css";
 

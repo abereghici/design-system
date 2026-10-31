@@ -5,9 +5,9 @@ import type { ComponentProps, KeyboardEvent, MouseEvent, PointerEvent } from "re
 
 import type { ChangeEventDetails as Details } from "../change-request/change-request.ts";
 import { typeahead } from "../listbox/typeahead.ts";
+import { mergeProps } from "../merge-props/merge-props.ts";
 import { returnFocus } from "../overlay/overlay.ts";
 import type { Overlay } from "../overlay/overlay.ts";
-import { mergeProps } from "../slot/slot.tsx";
 
 import styles from "./menu.module.css";
 

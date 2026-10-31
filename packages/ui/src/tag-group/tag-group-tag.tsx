@@ -7,7 +7,7 @@ import "@abereghici/tokens/components/tag.css";
 import "@abereghici/tokens/components/tag-group.css";
 
 import { XIcon } from "../icon/icons/x.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import type { TagProps as StaticTagProps } from "../tag/tag.tsx";
 
 import { useTagGroup } from "./tag-group-root.tsx";

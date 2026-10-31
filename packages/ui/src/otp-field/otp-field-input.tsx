@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { ComponentProps, SyntheticEvent } from "react";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Input as TextInput } from "../text-field/text-field-input.tsx";
 
 /** The code's one input; `data-caret-end` marks its caret standing after the code's last digit. */

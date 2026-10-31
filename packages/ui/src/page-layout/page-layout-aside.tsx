@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
 
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Stack } from "../stack/stack.tsx";
 
 import styles from "./page-layout.module.css";

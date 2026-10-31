@@ -8,7 +8,7 @@ import "@abereghici/tokens/components/sidebar.css";
 import { DisclosureRoot } from "../disclosure/disclosure-root.tsx";
 import type { RootProps } from "../disclosure/disclosure-root.tsx";
 import { Trigger } from "../disclosure/disclosure-trigger.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./sidebar.module.css";
 

@@ -6,7 +6,7 @@ import "@abereghici/tokens/components/table.css";
 
 import { Checkbox } from "../checkbox/checkbox.tsx";
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { Cell } from "./table-cell.tsx";
 import { useSelection } from "./table-selection.tsx";

@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/popover.css";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../merge-props/merge-props.ts";
 
 import { PanelContext } from "./picker.ts";
 import popoverStyles from "../../popover/popover.module.css";

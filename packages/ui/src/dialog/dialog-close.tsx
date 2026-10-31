@@ -6,7 +6,8 @@ import "@abereghici/tokens/components/icon-button.css";
 
 import { XIcon } from "../icon/icons/x.tsx";
 import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import { useModal } from "./dialog-modal.tsx";
 import iconButton from "../icon-button/icon-button.module.css";

@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
 
 import { Flex } from "../internal/flex/flex.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./inline.module.css";
 

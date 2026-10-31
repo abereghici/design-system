@@ -3,7 +3,7 @@ import type { ComponentProps } from "react";
 import "@abereghici/tokens/components/field.css";
 import "@abereghici/tokens/components/select.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./select.module.css";
 

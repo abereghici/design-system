@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 import "@abereghici/tokens/components/table.css";
 
 import { Checkbox } from "../checkbox/checkbox.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { ColumnHeader } from "./table-column-header.tsx";
 import { useSelection } from "./table-selection.tsx";

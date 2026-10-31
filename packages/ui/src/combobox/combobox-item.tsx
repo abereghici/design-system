@@ -7,7 +7,7 @@ import "@abereghici/tokens/components/combobox.css";
 
 import { CheckIcon } from "../icon/icons/check.tsx";
 import { Option } from "../internal/listbox/listbox.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { ValueContext } from "./use-combobox.ts";
 import styles from "./combobox.module.css";

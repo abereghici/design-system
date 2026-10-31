@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/code-block.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { ScrollArea } from "../scroll-area/scroll-area.tsx";
 
 import styles from "./code-block.module.css";

@@ -5,7 +5,7 @@ import type { MouseEvent, ReactNode } from "react";
 
 import { Button } from "../button/button.tsx";
 import type { ButtonProps } from "../button/button.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./copy-button.module.css";
 

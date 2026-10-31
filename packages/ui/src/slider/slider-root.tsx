@@ -6,9 +6,10 @@ import type { ComponentProps } from "react";
 import "@abereghici/tokens/components/slider.css";
 
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { composeRefs } from "../internal/compose-refs/compose-refs.ts";
 import type { EventTargetSource } from "../internal/dom-event/use-event.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
-import { composeRefs, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./slider.module.css";

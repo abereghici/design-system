@@ -8,8 +8,8 @@ import "@abereghici/tokens/components/radio-group.css";
 
 import { useFieldControl } from "../field/use-field.ts";
 import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
-import { preventDefault } from "../internal/toggle/toggle.ts";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { preventDefault } from "../internal/toggle-click/toggle-click.ts";
 
 import { GroupContext } from "./radio-group-root.tsx";
 import styles from "./radio-group.module.css";

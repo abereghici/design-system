@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 
-import { Slot, mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../merge-props/merge-props.ts";
+import { Slot } from "../slot/slot.tsx";
 
 declare module "react" {
   interface CSSProperties {

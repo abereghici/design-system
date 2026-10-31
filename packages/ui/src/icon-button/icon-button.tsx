@@ -6,7 +6,8 @@ import "@abereghici/tokens/components/icon-button.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./icon-button.module.css";

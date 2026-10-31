@@ -7,7 +7,7 @@ import "@abereghici/tokens/components/command.css";
 
 import { SearchIcon } from "../icon/icons/search.tsx";
 import { trackComposition } from "../internal/interaction/composition.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Kbd } from "../kbd/kbd.tsx";
 
 import { DialogContext, useCommand } from "./command-root.tsx";

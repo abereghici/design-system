@@ -1,6 +1,7 @@
 import type { ComponentProps, Ref } from "react";
 
-import { mergeProps, Slot } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import styles from "./text.module.css";
 

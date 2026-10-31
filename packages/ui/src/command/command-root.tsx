@@ -10,7 +10,7 @@ import { isComposing } from "../internal/interaction/composition.ts";
 import { useListbox } from "../internal/listbox/use-listbox.ts";
 import type { ListboxNavigator } from "../internal/listbox/use-listbox.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./command.module.css";

@@ -7,7 +7,7 @@ import "@abereghici/tokens/components/accordion.css";
 
 import type { ChangeEventDetails as Details } from "../disclosure/disclosure-root.tsx";
 import { requestChange } from "../internal/change-request/change-request.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./accordion.module.css";
 

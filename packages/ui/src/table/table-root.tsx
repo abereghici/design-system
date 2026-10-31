@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/table.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { Selection } from "./table-selection.tsx";
 import type { ChangeEventDetails } from "./table-selection.tsx";

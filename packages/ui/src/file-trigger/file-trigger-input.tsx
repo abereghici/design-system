@@ -4,8 +4,8 @@ import { createContext } from "react";
 import type { ComponentProps, RefObject } from "react";
 
 import { useField, useFieldControl } from "../field/use-field.ts";
+import { composeRefs } from "../internal/compose-refs/compose-refs.ts";
 import { useHydrated } from "../internal/hydration/use-hydrated.ts";
-import { composeRefs } from "../internal/slot/slot.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import { Selection } from "./file-trigger-selection.tsx";

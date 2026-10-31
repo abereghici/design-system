@@ -6,7 +6,8 @@ import type { ComponentProps, MouseEvent, MouseEventHandler, ReactNode } from "r
 import "@abereghici/tokens/components/button.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./button.module.css";

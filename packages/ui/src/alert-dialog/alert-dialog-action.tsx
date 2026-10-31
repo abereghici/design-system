@@ -2,7 +2,7 @@
 
 import "@abereghici/tokens/components/button.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import type { ButtonProps } from "./alert-dialog-root.tsx";
 import { useClose } from "./alert-dialog-root.tsx";

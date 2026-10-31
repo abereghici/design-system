@@ -8,7 +8,7 @@ import "@abereghici/tokens/components/command.css";
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { Listbox } from "../internal/listbox/listbox.tsx";
 import { enabled, optionAt } from "../internal/listbox/options.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { DialogContext, useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";

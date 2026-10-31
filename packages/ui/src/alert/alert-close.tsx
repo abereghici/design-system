@@ -7,7 +7,7 @@ import "@abereghici/tokens/components/alert.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { XIcon } from "../icon/icons/x.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./alert.module.css";

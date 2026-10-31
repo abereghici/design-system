@@ -4,7 +4,8 @@ import type { ComponentProps, ReactNode } from "react";
 import "@abereghici/tokens/components/stepper.css";
 
 import { CheckIcon } from "../icon/icons/check.tsx";
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import styles from "./stepper.module.css";

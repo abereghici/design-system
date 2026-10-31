@@ -4,7 +4,7 @@ import type { ComponentProps, RefObject } from "react";
 
 import "@abereghici/tokens/components/popover.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { usePopover } from "./popover-root.tsx";
 import styles from "./popover.module.css";

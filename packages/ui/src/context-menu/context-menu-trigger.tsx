@@ -2,10 +2,11 @@
 
 import type { ComponentProps, MouseEvent, PointerEvent as ReactPointerEvent } from "react";
 
+import { getById } from "../internal/get-by-id/get-by-id.ts";
 import { useMenu } from "../internal/menu/menu.tsx";
 import type { Menu } from "../internal/menu/menu.tsx";
-import { byId } from "../internal/overlay/overlay.ts";
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import { place, rememberFocus } from "./context-menu-root.tsx";
 
@@ -96,7 +97,7 @@ const isKeyboard = (event: globalThis.MouseEvent) =>
   event instanceof PointerEvent ? event.pointerType === "" : event.button !== 2;
 
 function anchorAt(contentId: string, x: number, y: number) {
-  const anchor = byId(`${contentId}-anchor`);
+  const anchor = getById(`${contentId}-anchor`);
 
   return anchor === null ? null : place(anchor, x, y, true);
 }

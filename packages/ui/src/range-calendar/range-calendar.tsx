@@ -9,7 +9,7 @@ import type { CalendarProps } from "../calendar/calendar.tsx";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { DateRangePickerContext, ordered, sameRange } from "../internal/date/date.ts";
 import type { DateRange } from "../internal/date/date.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./range-calendar.module.css";

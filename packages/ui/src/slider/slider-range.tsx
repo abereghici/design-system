@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/slider.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useSlider } from "./slider-root.tsx";
 import styles from "./slider.module.css";

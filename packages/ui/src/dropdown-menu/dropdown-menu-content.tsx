@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 import "@abereghici/tokens/components/dropdown-menu.css";
 
 import { menuContentProps, useMenu } from "../internal/menu/menu.tsx";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import menuStyles from "../internal/menu/menu.module.css";
 import styles from "./dropdown-menu.module.css";

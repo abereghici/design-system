@@ -6,7 +6,7 @@ import { IconButton } from "../icon-button/icon-button.tsx";
 import { XIcon } from "../icon/icons/x.tsx";
 import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
 import { isComposing, trackComposition } from "../internal/interaction/composition.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { InputGroup } from "../text-field/text-field-input-group.tsx";
 import { Input as TextInput } from "../text-field/text-field-input.tsx";
 

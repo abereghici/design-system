@@ -10,7 +10,7 @@ import { Input as FileInput, PickerContext } from "../file-trigger/file-trigger-
 import { useFiles } from "../file-trigger/use-files.ts";
 import { requestChange } from "../internal/change-request/change-request.ts";
 import { useEvent } from "../internal/dom-event/use-event.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./drop-zone.module.css";
 

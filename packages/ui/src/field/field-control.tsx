@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/field.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useFieldControl } from "./use-field.ts";
 import type { ChangeEventDetails } from "./use-field.ts";

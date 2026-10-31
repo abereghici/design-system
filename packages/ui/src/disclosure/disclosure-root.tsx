@@ -8,7 +8,7 @@ import "@abereghici/tokens/components/disclosure.css";
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import type { ToggleFeedbackEvent } from "../feedback-event/feedback-event.ts";
 import type { ChangeEventDetails as EventDetails } from "../internal/change-request/change-request.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./disclosure.module.css";

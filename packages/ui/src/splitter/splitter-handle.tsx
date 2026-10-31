@@ -6,7 +6,7 @@ import "@abereghici/tokens/components/splitter.css";
 
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useSplitter } from "./splitter-root.tsx";
 import type { SplitterContextValue } from "./splitter-root.tsx";

@@ -5,7 +5,7 @@ import type { ComponentProps, PointerEvent } from "react";
 
 import "@abereghici/tokens/components/slider.css";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import type { Reason } from "./slider-root.tsx";
 import { useSlider } from "./slider-root.tsx";

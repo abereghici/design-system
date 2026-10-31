@@ -8,7 +8,8 @@ import "@abereghici/tokens/components/popover.css";
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { XIcon } from "../icon/icons/x.tsx";
 import { composeEventHandlers } from "../internal/compose-event-handlers/compose-event-handlers.ts";
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { Slot } from "../internal/slot/slot.tsx";
 
 import { usePopover } from "./popover-root.tsx";
 import iconButtonStyles from "../icon-button/icon-button.module.css";

@@ -3,7 +3,7 @@
 import { use } from "react";
 import type { ComponentProps } from "react";
 
-import { mergeProps } from "../slot/slot.tsx";
+import { mergeProps } from "../merge-props/merge-props.ts";
 
 import { GroupContext } from "./menu-group.tsx";
 import styles from "./menu.module.css";

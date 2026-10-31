@@ -10,7 +10,7 @@ import type {
 
 import { requestChange } from "../internal/change-request/change-request.ts";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
-import { composeRefs } from "../internal/slot/slot.tsx";
+import { composeRefs } from "../internal/compose-refs/compose-refs.ts";
 
 /** The native elements a Field validates. */
 export type FormControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;

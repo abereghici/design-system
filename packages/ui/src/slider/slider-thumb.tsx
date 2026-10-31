@@ -5,7 +5,7 @@ import type { ComponentProps, KeyboardEvent } from "react";
 import "@abereghici/tokens/components/slider.css";
 
 import { useFieldControl } from "../field/use-field.ts";
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useSlider } from "./slider-root.tsx";
 import type { Slider } from "./slider-root.tsx";
