@@ -1,11 +1,12 @@
 "use client";
 
 import { useId } from "react";
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/switch.css";
 
 import { useFieldControl } from "../field/use-field.ts";
+import type { Labelled } from "../internal/accessible-name/accessible-name.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { toggleClick } from "../internal/toggle-click/toggle-click.ts";
@@ -15,13 +16,8 @@ import styles from "./switch.module.css";
 
 export type SwitchChangeEventDetails = ChangeEventDetails;
 
-type Name =
-  | { children: ReactNode }
-  | { children?: undefined; "aria-label": string }
-  | { children?: undefined; "aria-labelledby": string };
-
 export type SwitchProps = Omit<ComponentProps<"input">, "type" | "role" | "children"> &
-  Name & {
+  Labelled<"children"> & {
     /** Called before the switch flips; `details.cancel()` keeps the old state. */
     onCheckedChange?: (checked: boolean, details: SwitchChangeEventDetails) => void;
     /**

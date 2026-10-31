@@ -6,6 +6,7 @@ import type { ComponentProps } from "react";
 import "@abereghici/tokens/components/command.css";
 
 import { SearchIcon } from "../icon/icons/search.tsx";
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { trackComposition } from "../internal/interaction/composition.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Kbd } from "../kbd/kbd.tsx";
@@ -20,14 +21,12 @@ interface Name {
   "aria-labelledby"?: string;
 }
 
-type Naming = { "aria-label": string } | { "aria-labelledby": string };
-
 export type InputProps = Omit<
   ComponentProps<"input">,
   "value" | "defaultValue" | "type" | "aria-label" | "aria-labelledby"
 > &
   Name &
-  Naming;
+  AccessibleName;
 
 /** The search field; arrow keys move the highlight, Enter runs it. */
 export function Input({ onChange, onKeyDown, ...props }: InputProps) {

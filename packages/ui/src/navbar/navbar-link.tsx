@@ -1,23 +1,12 @@
-import type { ComponentProps } from "react";
-
 import "@abereghici/tokens/components/navbar.css";
 
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Slot } from "../internal/slot/slot.tsx";
+import type { LinkProps } from "../link/link.tsx";
 
 import styles from "./navbar.module.css";
 
-interface LinkBase extends ComponentProps<"a"> {
-  /** Where it goes; with `asChild`, the child carries it instead. */
-  href?: string;
-  /**
-   * Gives the link's look to its one child, such as your router's link, which carries the
-   * `href`.
-   */
-  asChild?: boolean;
-}
-
-export type LinkProps = LinkBase & ({ href: string; asChild?: false } | { asChild: true });
+export type { LinkProps };
 
 /** Set `aria-current="page"` on the link to the page on screen. */
 export function Link({ asChild = false, ...props }: LinkProps) {

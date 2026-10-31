@@ -2,20 +2,10 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/alert.css";
 
-import { CheckCircleIcon } from "../icon/icons/check-circle.tsx";
-import { DangerIcon } from "../icon/icons/danger.tsx";
-import { InfoIcon } from "../icon/icons/info.tsx";
-import { WarningIcon } from "../icon/icons/warning.tsx";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { variantIcons } from "../internal/variant-icons/variant-icons.ts";
 
 import styles from "./alert.module.css";
-
-const icons = {
-  neutral: InfoIcon,
-  success: CheckCircleIcon,
-  warning: WarningIcon,
-  danger: DangerIcon,
-};
 
 export interface RootProps extends ComponentProps<"div"> {
   /** The kind of situation, shown by color and icon; the Title still says it in words. */
@@ -37,7 +27,7 @@ export interface RootProps extends ComponentProps<"div"> {
  * Tier 1: works before hydration.
  */
 export function Root({ variant = "neutral", children, ...props }: RootProps) {
-  const Icon = icons[variant];
+  const Icon = variantIcons[variant];
 
   return (
     <div {...mergeProps({ className: styles["root"] }, props)} data-variant={variant}>

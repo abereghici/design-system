@@ -8,6 +8,7 @@ import "@abereghici/tokens/components/command.css";
 import { Content } from "../dialog/dialog-content.tsx";
 import { Modal } from "../dialog/dialog-modal.tsx";
 import { requestChange } from "../internal/change-request/change-request.ts";
+import { returnFocus } from "../internal/overlay/overlay.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import { DialogContext, Root } from "./command-root.tsx";
@@ -45,9 +46,7 @@ function handleClose(
     requestChange(onInputValueChange, "", "input-clear", event.nativeEvent);
   }
 
-  if (document.activeElement === document.body && finalFocus?.current?.isConnected === true) {
-    finalFocus.current.focus();
-  }
+  returnFocus(event.currentTarget, finalFocus?.current);
 }
 
 /** The ⌘K palette: a top-anchored modal Command. The app binds ⌘K / Ctrl K and holds `open`. */

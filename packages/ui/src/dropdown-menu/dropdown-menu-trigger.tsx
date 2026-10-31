@@ -2,7 +2,8 @@
 
 import type { ComponentProps, KeyboardEvent } from "react";
 
-import { focusLast, itemsOf, useMenu } from "../internal/menu/menu.tsx";
+import { focusLast, itemsOf } from "../internal/menu/menu-navigation.ts";
+import { useMenu } from "../internal/menu/menu.tsx";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Slot } from "../internal/slot/slot.tsx";
 

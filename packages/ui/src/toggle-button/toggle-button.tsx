@@ -9,6 +9,7 @@ import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
+import { useButton } from "../internal/use-button/use-button.ts";
 import { ToggleButtonGroupContext } from "../toggle-button-group/toggle-button-group-context.ts";
 
 import styles from "./toggle-button.module.css";
@@ -65,36 +66,31 @@ export function ToggleButton({
   const [own, request] = useControllableState(pressed, defaultPressed ?? false, onPressedChange);
   const current = group?.pressed(value) ?? own;
 
-  function handleClick(event: MouseEvent<HTMLButtonElement>) {
-    if (disabled) {
-      event.preventDefault();
+  const button = useButton<HTMLButtonElement>({
+    disabled,
+    onClick: (event) => {
+      onClick?.(event);
 
-      return;
-    }
+      if (group === null) {
+        if (!request(!current, "none", event)) return;
+      } else if (!group.toggle(value, event)) return;
 
-    onClick?.(event);
-
-    if (group === null) {
-      if (!request(!current, "none", event)) return;
-    } else if (!group.toggle(value, event)) return;
-
-    dispatchFeedback(event.currentTarget, "ab-toggle", {
-      component: "ToggleButton",
-      userInitiated: true,
-    });
-  }
+      dispatchFeedback(event.currentTarget, "ab-toggle", {
+        component: "ToggleButton",
+        userInitiated: true,
+      });
+    },
+  });
 
   return (
     <button
-      {...mergeProps({ className: styles["root"] }, props)}
+      {...mergeProps({ className: styles["root"], ...button }, props)}
       type="button"
       aria-pressed={current}
-      aria-disabled={disabled ? true : undefined}
       data-size={size}
       data-icon-only={
         props["aria-label"] === undefined && props["aria-labelledby"] === undefined ? undefined : ""
       }
-      onClick={handleClick}
     />
   );
 }

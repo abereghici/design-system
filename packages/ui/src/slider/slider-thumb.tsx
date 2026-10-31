@@ -8,7 +8,7 @@ import { useFieldControl } from "../field/use-field.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useSlider } from "./slider-root.tsx";
-import type { Slider } from "./slider-root.tsx";
+import type { Slider } from "./use-slider-state.ts";
 import styles from "./slider.module.css";
 
 export interface ThumbProps extends Omit<

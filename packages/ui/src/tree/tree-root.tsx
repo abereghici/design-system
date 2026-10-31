@@ -1,19 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import type { ComponentProps, FocusEvent, KeyboardEvent, SyntheticEvent } from "react";
+import type { ComponentProps, KeyboardEvent, SyntheticEvent } from "react";
 
 import "@abereghici/tokens/components/tree.css";
 
-import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
-import { typeahead } from "../internal/listbox/typeahead.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
-import { toggled } from "../internal/selection/selection.ts";
-import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
+import { enter, keyTarget } from "./tree-navigation.ts";
+import { useTreeState } from "./use-tree-state.ts";
 import styles from "./tree.module.css";
 
 /**
@@ -50,80 +49,35 @@ interface TreeContextValue {
 
 export const [TreeContext, useTree] = createSafeContext<TreeContextValue>("Tree.Root");
 
-const shownItems = (tree: Element) => [...tree.querySelectorAll<HTMLElement>('[role="treeitem"]')];
-
 /** Whether a click landed on the chevron, the Item's first child, rather than its label. */
 const onChevron = (event: ItemEvent, item: TreeItemState) =>
   item.branch &&
   event.target instanceof Node &&
   event.currentTarget.firstElementChild?.contains(event.target) === true;
 
-/** Hands the Tree's Tab stop to its selected Item, or its first. */
-function enter(event: FocusEvent<HTMLElement>) {
-  if (event.target !== event.currentTarget) return;
+type TreeState = ReturnType<typeof useTreeState>;
 
-  const items = shownItems(event.currentTarget);
-
-  (items.find((item) => item.getAttribute("aria-selected") === "true") ?? items[0])?.focus();
-}
-
-/**
- * What a key does on an Item: the Item to focus, `"toggle"` or `"press"` the Item, `undefined` for
- * a key with nothing to reach, or `null` for a key the Tree leaves alone.
- */
-function keyTarget(event: KeyboardEvent<HTMLElement>, item: TreeItemState) {
-  const tree = event.currentTarget.closest('[role="tree"]');
-
-  if (tree === null) return null;
-
-  const items = shownItems(tree);
-  const index = items.indexOf(event.currentTarget);
-  const rtl = event.currentTarget.matches(":dir(rtl)");
-  const group = event.currentTarget.parentElement;
-  const parent = group instanceof HTMLFieldSetElement ? group.previousElementSibling : undefined;
-  const targets: Record<string, Element | "toggle" | "press" | null | undefined> = {
-    ArrowDown: items[index + 1],
-    ArrowUp: items[index - 1],
-    Home: items[0],
-    End: items.at(-1),
-    [rtl ? "ArrowLeft" : "ArrowRight"]: item.expanded
-      ? items[index + 1]
-      : item.branch
-        ? "toggle"
-        : undefined,
-    [rtl ? "ArrowRight" : "ArrowLeft"]: item.expanded ? "toggle" : parent,
-    Enter: "press",
-    " ": "press",
-  };
-
-  if (event.key in targets) return targets[event.key];
-
-  if (event.key.length !== 1 || event.ctrlKey || event.metaKey || event.altKey) return null;
-
-  return typeahead(tree, event.key, items, event.currentTarget) ?? null;
-}
-
-/** Keys held by the Tree or the app; a change is requested first and dispatches `ab-toggle`. */
-function useKeys<Reason extends string>(
-  keys: ReadonlyArray<string> | undefined,
-  defaultKeys: ReadonlyArray<string>,
-  onChange: ((keys: string[], details: Details<Reason>) => void) | undefined,
-) {
-  const [current, request] = useControllableState(keys, defaultKeys, onChange);
-
-  function change(next: string[], reason: Reason, event: ItemEvent) {
-    if (request(next, reason, event.nativeEvent)) {
-      dispatchFeedback(event.currentTarget, "ab-toggle", {
-        component: "Tree",
-        userInitiated: true,
-      });
-    }
+function press(tree: TreeState, event: ItemEvent, item: TreeItemState) {
+  if (tree.selectedKeys === null || onChevron(event, item)) {
+    if (item.branch) tree.toggle(item.id, "item-press", event);
+  } else {
+    tree.select(item.id, event);
   }
-
-  return [current, change] as const;
 }
 
-export type RootProps = Omit<ComponentProps<"div">, "role"> & {
+function keyDown(tree: TreeState, event: KeyboardEvent<HTMLElement>, item: TreeItemState) {
+  const target = keyTarget(event, item);
+
+  if (target === null) return;
+
+  event.preventDefault();
+
+  if (target === "toggle") tree.toggle(item.id, "arrow-key", event);
+  else if (target === "press") press(tree, event, item);
+  else if (target instanceof HTMLElement) target.focus();
+}
+
+export type RootProps = Omit<ComponentProps<"div">, "role" | "aria-label" | "aria-labelledby"> & {
   /** The `id`s of the expanded Items, when your state holds them. */
   expandedKeys?: ReadonlyArray<string>;
   /** The Items expanded on the first render when it holds its own state. */
@@ -141,7 +95,7 @@ export type RootProps = Omit<ComponentProps<"div">, "role"> & {
   defaultSelectedKeys?: ReadonlyArray<string>;
   /** Called before the selection changes, with the `id`s that would be selected. */
   onSelectionChange?: (keys: string[], details: SelectionChangeEventDetails) => void;
-} & ({ "aria-label": string } | { "aria-labelledby": string }) &
+} & AccessibleName &
   (
     | { expandedKeys: ReadonlyArray<string>; defaultExpandedKeys?: never }
     | { defaultExpandedKeys?: ReadonlyArray<string>; expandedKeys?: never }
@@ -163,47 +117,38 @@ export type RootProps = Omit<ComponentProps<"div">, "role"> & {
  */
 export function Root({
   expandedKeys,
-  defaultExpandedKeys = [],
+  defaultExpandedKeys,
   onExpandedChange,
   selectionMode,
   selectedKeys,
-  defaultSelectedKeys = [],
+  defaultSelectedKeys,
   onSelectionChange,
   ...props
 }: RootProps) {
-  const [expanded, setExpanded] = useKeys(expandedKeys, defaultExpandedKeys, onExpandedChange);
-  const [selected, setSelected] = useKeys(selectedKeys, defaultSelectedKeys, onSelectionChange);
+  const tree = useTreeState({
+    expandedKeys,
+    defaultExpandedKeys,
+    onExpandedChange,
+    selectionMode,
+    selectedKeys,
+    defaultSelectedKeys,
+    onSelectionChange,
+  });
   const [active, setActive] = useState<string | null>(null);
-  const expandedSet = new Set(expanded);
-  const selectedSet = selectionMode === undefined ? null : new Set(selected);
-
-  function press(event: ItemEvent, item: TreeItemState) {
-    if (selectedSet === null || onChevron(event, item)) {
-      if (item.branch) setExpanded(toggled(expanded, item.id), "item-press", event);
-    } else if (selectionMode === "multiple") {
-      setSelected(toggled(selected, item.id), "item-press", event);
-    } else if (!selectedSet.has(item.id)) {
-      setSelected([item.id], "item-press", event);
-    }
-  }
-
-  function keyDown(event: KeyboardEvent<HTMLElement>, item: TreeItemState) {
-    const target = keyTarget(event, item);
-
-    if (target === null) return;
-
-    event.preventDefault();
-
-    if (target === "toggle") setExpanded(toggled(expanded, item.id), "arrow-key", event);
-    else if (target === "press") press(event, item);
-    else if (target instanceof HTMLElement) target.focus();
-  }
 
   return (
     <TreeContext
       value={{
-        state: { expandedKeys: expandedSet, selectedKeys: selectedSet, active },
-        actions: { focus: setActive, keyDown, press },
+        state: { expandedKeys: tree.expandedKeys, selectedKeys: tree.selectedKeys, active },
+        actions: {
+          focus: setActive,
+          keyDown: (event, item) => {
+            keyDown(tree, event, item);
+          },
+          press: (event, item) => {
+            press(tree, event, item);
+          },
+        },
         meta: { level: 1 },
       }}
     >

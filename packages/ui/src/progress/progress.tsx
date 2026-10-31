@@ -3,21 +3,17 @@ import type { CSSProperties, ComponentProps, ReactNode } from "react";
 
 import "@abereghici/tokens/components/progress.css";
 
+import type { Labelled } from "../internal/accessible-name/accessible-name.ts";
 import { FormattedNumber } from "../internal/locale/formatted-number.tsx";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import styles from "./progress.module.css";
 
-type Name =
-  | { label: ReactNode }
-  | { label?: undefined; "aria-label": string }
-  | { label?: undefined; "aria-labelledby": string };
-
 export type ProgressProps = Omit<
   ComponentProps<"progress">,
   "children" | "className" | "style" | "value" | "max"
 > &
-  Name & {
+  Labelled<"label"> & {
     /** How far the task has got, from 0 to `max`; `null` when it can't be measured yet. */
     value?: number | null;
     /** The value at which the task is done. */

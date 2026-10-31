@@ -10,10 +10,7 @@ import styles from "./link.module.css";
 interface LinkBase extends ComponentProps<"a"> {
   /** Where it goes; with `asChild`, the child carries it instead. */
   href?: string;
-  /**
-   * Gives the Link's look to its one child, such as your router's link, which carries the
-   * `href`.
-   */
+  /** Gives its look to its one child, such as your router's link, which carries the `href`. */
   asChild?: boolean;
 }
 

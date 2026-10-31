@@ -7,13 +7,12 @@ import { PinIcon } from "@abereghici/ui/icons/pin";
 import { Kbd } from "@abereghici/ui/kbd";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
+import { reasons } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Tooltip from "./tooltip.tsx";
 
 const onOpenChange = fn<NonNullable<Tooltip.RootProps["onOpenChange"]>>();
-
-const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const meta = preview.meta({
   title: "Components/Tooltip",
@@ -64,7 +63,7 @@ Default.test(
     await expect(canvas.getByRole("tooltip")).toHaveTextContent(/^Copy link/v);
     await user.unhover(trigger);
     await waitFor(() => expect(canvas.queryByRole("tooltip")).toBeNull());
-    await expect(reasons()).toEqual([
+    await expect(reasons(onOpenChange)).toEqual([
       [true, "trigger-hover"],
       [false, "trigger-hover"],
     ]);
@@ -92,7 +91,7 @@ Default.test(
     await user.keyboard("{Escape}");
     await waitFor(() => expect(canvas.queryByRole("tooltip")).toBeNull());
     await expect(trigger).toHaveFocus();
-    await expect(reasons()).toEqual([
+    await expect(reasons(onOpenChange)).toEqual([
       [true, "trigger-focus"],
       [false, "escape-key"],
     ]);
@@ -106,7 +105,7 @@ Default.test("hides when its Trigger is pressed", async ({ canvas }) => {
   await expect(canvas.getByRole("tooltip")).toBeVisible();
   await user.keyboard("{Enter}");
   await waitFor(() => expect(canvas.queryByRole("tooltip")).toBeNull());
-  await expect(reasons()).toEqual([
+  await expect(reasons(onOpenChange)).toEqual([
     [true, "trigger-focus"],
     [false, "trigger-press"],
   ]);
@@ -120,7 +119,7 @@ Default.test("never opens from a touch", async ({ canvas, userEvent }) => {
   // user-event's touch then focuses the Trigger by script, which the :focus-visible heuristics match
   // though a real tap would not, so the proof checks the pointer path only:
   // https://drafts.csswg.org/selectors-4/#the-focus-visible-pseudo
-  await expect(reasons()).not.toContainEqual([true, "trigger-hover"]);
+  await expect(reasons(onOpenChange)).not.toContainEqual([true, "trigger-hover"]);
 });
 
 Default.test("stays hidden after its Trigger is clicked", async ({ canvas }) => {
@@ -213,7 +212,7 @@ Neighbours.test(
     await expect(canvas.getByRole("tooltip")).toHaveTextContent("Pin");
     await user.keyboard("{Tab}");
     await waitFor(() => expect(canvas.getByRole("tooltip")).toHaveTextContent(/^Copy link/v));
-    await expect(reasons()).toEqual([
+    await expect(reasons(onOpenChange)).toEqual([
       [true, "trigger-focus"],
       [false, "trigger-focus"],
       [true, "trigger-focus"],

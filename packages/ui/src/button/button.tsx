@@ -1,13 +1,14 @@
 "use client";
 
 import { cloneElement, isValidElement } from "react";
-import type { ComponentProps, MouseEvent, MouseEventHandler, ReactNode } from "react";
+import type { ComponentProps, MouseEventHandler, ReactNode } from "react";
 
 import "@abereghici/tokens/components/button.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { Slot } from "../internal/slot/slot.tsx";
+import { useButton } from "../internal/use-button/use-button.ts";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./button.module.css";
@@ -62,31 +63,26 @@ export function Button({
 }: ButtonProps) {
   const blocked = disabled || loading;
   const spinner = loading ? <Spinner aria-hidden className={styles["spinner"]} /> : null;
-
-  function handleClick(event: MouseEvent<HTMLElement>) {
-    if (blocked) {
-      // preventDefault also stops a submit or reset button from acting on its form.
-      event.preventDefault();
-
-      return;
-    }
-
-    onClick?.(event);
-    dispatchFeedback(event.currentTarget, "ab-press", { component: "Button", userInitiated: true });
-  }
-
+  const button = useButton<HTMLElement>({
+    disabled: blocked,
+    onClick: (event) => {
+      onClick?.(event);
+      dispatchFeedback(event.currentTarget, "ab-press", {
+        component: "Button",
+        userInitiated: true,
+      });
+    },
+  });
   const Root = asChild ? Slot : "button";
 
   return (
     <Root
-      {...mergeProps({ className: styles["root"] }, props)}
+      {...mergeProps({ className: styles["root"], ...button }, props)}
       type={asChild ? undefined : type}
-      aria-disabled={blocked ? true : props["aria-disabled"]}
       aria-busy={loading ? true : undefined}
       data-loading={loading ? "" : undefined}
       data-variant={variant}
       data-size={size}
-      onClick={handleClick}
     >
       {asChild ? (
         child(children, blocked, spinner)

@@ -5,6 +5,7 @@ import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/segmented-control.css";
 
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
@@ -23,7 +24,10 @@ interface Group {
 export const [GroupContext, useSegmentedControl] =
   createSafeContext<Group>("SegmentedControl.Root");
 
-export type RootProps = Omit<ComponentProps<"fieldset">, "defaultValue"> & {
+export type RootProps = Omit<
+  ComponentProps<"fieldset">,
+  "defaultValue" | "aria-label" | "aria-labelledby"
+> & {
   /** The chosen segment's `value`, when your state holds it. */
   value?: string;
   /** The segment chosen on the first render when it holds its own state. */
@@ -33,7 +37,7 @@ export type RootProps = Omit<ComponentProps<"fieldset">, "defaultValue"> & {
   /** The form field name the chosen segment submits under, when the view is part of a form. */
   name?: string;
 } & ({ value: string; defaultValue?: never } | { defaultValue: string; value?: never }) &
-  ({ "aria-label": string } | { "aria-labelledby": string });
+  AccessibleName;
 
 /**
  * Switches between 2–5 views or modes of the same content in place, such as List and Board. Name it

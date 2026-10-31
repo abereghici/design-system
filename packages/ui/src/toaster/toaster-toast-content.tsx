@@ -3,23 +3,13 @@ import type { KeyboardEvent, MouseEvent, RefObject } from "react";
 import "@abereghici/tokens/components/toast.css";
 import "@abereghici/tokens/components/kbd.css";
 
-import { CheckCircleIcon } from "../icon/icons/check-circle.tsx";
-import { DangerIcon } from "../icon/icons/danger.tsx";
-import { InfoIcon } from "../icon/icons/info.tsx";
-import { WarningIcon } from "../icon/icons/warning.tsx";
 import { XIcon } from "../icon/icons/x.tsx";
+import { variantIcons } from "../internal/variant-icons/variant-icons.ts";
 import { Kbd } from "../kbd/kbd.tsx";
 import type { ToastRecord } from "../toast/toast.ts";
 
 import { keyNames } from "./use-shortcut.ts";
 import styles from "./toaster.module.css";
-
-const icons = {
-  neutral: InfoIcon,
-  success: CheckCircleIcon,
-  warning: WarningIcon,
-  danger: DangerIcon,
-};
 
 interface ContentProps {
   readonly record: ToastRecord;
@@ -38,7 +28,7 @@ export function ToastContent({
   onDismiss,
   onKeyDown,
 }: ContentProps) {
-  const Icon = icons[record.variant ?? "neutral"];
+  const Icon = variantIcons[record.variant ?? "neutral"];
   const shortcut = record.action?.shortcut;
 
   return (

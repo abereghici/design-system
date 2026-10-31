@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { expect, fn, screen, waitFor } from "storybook/test";
 
-import type { StoryContext } from "@storybook/react-vite";
+import type { UserEventObject } from "storybook/test";
 
 import { UserIcon } from "@abereghici/ui/icons/user";
 
@@ -9,6 +9,7 @@ import { withDialog } from "#.storybook/decorators/with-dialog.tsx";
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
+import { reasons } from "#.storybook/test/listen.ts";
 import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Combobox from "./combobox.tsx";
@@ -16,8 +17,6 @@ import * as Combobox from "./combobox.tsx";
 const onValueChange = fn<NonNullable<Combobox.RootProps["onValueChange"]>>();
 const onInputValueChange = fn<NonNullable<Combobox.RootProps["onInputValueChange"]>>();
 const onOpenChange = fn<NonNullable<Combobox.RootProps["onOpenChange"]>>();
-const reasons = (callback: { mock: { calls: [unknown, { reason: string }][] } }) =>
-  callback.mock.calls.map(([value, { reason }]) => [value, reason]);
 const field = (name = "Assignee") => screen.getByRole<HTMLInputElement>("combobox", { name });
 const highlighted = () => screen.queryByRole("option", { selected: true });
 const names = () => screen.queryAllByRole("option").map((option) => option.textContent);
@@ -282,7 +281,7 @@ Default.test(
 
 export const Open = meta.story({
   parameters: { docs: { description: { story: "Open, with the first option highlighted." } } },
-  play: ({ userEvent }: StoryContext) => userEvent.click(field()),
+  play: ({ userEvent }: { userEvent: UserEventObject }) => userEvent.click(field()),
 });
 
 export const ServerSearchResults = meta.story({

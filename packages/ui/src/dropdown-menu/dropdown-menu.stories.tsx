@@ -7,7 +7,7 @@ import { TrashIcon } from "@abereghici/ui/icons/trash";
 import { Kbd } from "@abereghici/ui/kbd";
 
 import preview, { partsOf } from "#.storybook/preview.tsx";
-import { listen } from "#.storybook/test/listen.ts";
+import { listen, reasons } from "#.storybook/test/listen.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as DropdownMenu from "./dropdown-menu.tsx";
@@ -24,8 +24,6 @@ async function openWithKeyboard() {
 
   await waitFor(() => expect(within(document.body).getAllByRole("menuitem")[0]).toHaveFocus());
 }
-
-const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open, reason]);
 
 const meta = preview.meta({
   title: "Components/DropdownMenu",
@@ -130,7 +128,7 @@ Default.test(
     await expect(dismissals.events.map(({ detail }) => detail)).toEqual([
       { component: "DropdownMenu", userInitiated: true },
     ]);
-    await expect(reasons()).toEqual([
+    await expect(reasons(onOpenChange)).toEqual([
       [true, "trigger-press"],
       [false, "escape-key"],
     ]);
@@ -143,7 +141,7 @@ Default.test("closes on a press outside", async ({ canvas }) => {
   await user.click(canvas.getByRole("button", { name: "Actions" }));
   await user.click(document.body, { position: { x: 600, y: 5 } });
   await waitFor(() => expect(canvas.queryByRole("menu")).toBeNull());
-  await expect(reasons().at(-1)).toEqual([false, "outside-press"]);
+  await expect(reasons(onOpenChange).at(-1)).toEqual([false, "outside-press"]);
 });
 
 Default.test(
@@ -165,7 +163,7 @@ Default.test(
       component: "DropdownMenu",
       userInitiated: true,
     });
-    await expect(reasons().at(-1)).toEqual([false, "item-press"]);
+    await expect(reasons(onOpenChange).at(-1)).toEqual([false, "item-press"]);
   },
 );
 
@@ -214,9 +212,7 @@ Default.test("chooses a RadioItem and closes on Enter", async ({ canvas }) => {
   await user.keyboard("o");
   await user.keyboard("{Enter}");
   await waitFor(() => expect(canvas.queryByRole("menu")).toBeNull());
-  await expect(onSortChange.mock.calls.map(([value, { reason }]) => [value, reason])).toEqual([
-    ["oldest", "item-press"],
-  ]);
+  await expect(reasons(onSortChange)).toEqual([["oldest", "item-press"]]);
   await user.keyboard("{Enter}");
   await expect(canvas.getByRole("menuitemradio", { name: "Oldest" })).toHaveAttribute(
     "aria-checked",
@@ -249,7 +245,7 @@ Default.test("keeps the choices and stays open when a change is cancelled", asyn
     "aria-expanded",
     "true",
   );
-  await expect(reasons()).toEqual([[true, "trigger-press"]]);
+  await expect(reasons(onOpenChange)).toEqual([[true, "trigger-press"]]);
 });
 
 Default.test("closes when Tab moves focus on", async ({ canvas }) => {
@@ -258,7 +254,7 @@ Default.test("closes when Tab moves focus on", async ({ canvas }) => {
   await openWithKeyboard();
   await user.keyboard("{Tab}");
   await waitFor(() => expect(canvas.queryByRole("menu")).toBeNull());
-  await expect(reasons().at(-1)).toEqual([false, "focus-out"]);
+  await expect(reasons(onOpenChange).at(-1)).toEqual([false, "focus-out"]);
 });
 
 Default.test("highlights the item under the pointer", async ({ canvas }) => {

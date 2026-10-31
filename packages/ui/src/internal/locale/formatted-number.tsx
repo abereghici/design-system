@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale } from "./use-locale.ts";
+import { useNumberFormatter } from "./use-number-formatter.ts";
 
 export type FormattedNumberProps = Intl.NumberFormatOptions & { value: number };
 
@@ -9,5 +9,5 @@ export type FormattedNumberProps = Intl.NumberFormatOptions & { value: number };
  * the browser and hydration matches.
  */
 export function FormattedNumber({ value, ...options }: FormattedNumberProps) {
-  return new Intl.NumberFormat(useLocale(), options).format(value);
+  return useNumberFormatter(options).format(value);
 }
