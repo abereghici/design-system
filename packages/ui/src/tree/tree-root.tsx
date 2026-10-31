@@ -5,6 +5,7 @@ import type { ComponentProps, KeyboardEvent, SyntheticEvent } from "react";
 
 import "@abereghici/tokens/components/tree.css";
 
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
@@ -76,7 +77,7 @@ function keyDown(tree: TreeState, event: KeyboardEvent<HTMLElement>, item: TreeI
   else if (target instanceof HTMLElement) target.focus();
 }
 
-export type RootProps = Omit<ComponentProps<"div">, "role"> & {
+export type RootProps = Omit<ComponentProps<"div">, "role" | "aria-label" | "aria-labelledby"> & {
   /** The `id`s of the expanded Items, when your state holds them. */
   expandedKeys?: ReadonlyArray<string>;
   /** The Items expanded on the first render when it holds its own state. */
@@ -94,7 +95,7 @@ export type RootProps = Omit<ComponentProps<"div">, "role"> & {
   defaultSelectedKeys?: ReadonlyArray<string>;
   /** Called before the selection changes, with the `id`s that would be selected. */
   onSelectionChange?: (keys: string[], details: SelectionChangeEventDetails) => void;
-} & ({ "aria-label": string } | { "aria-labelledby": string }) &
+} & AccessibleName &
   (
     | { expandedKeys: ReadonlyArray<string>; defaultExpandedKeys?: never }
     | { defaultExpandedKeys?: ReadonlyArray<string>; expandedKeys?: never }

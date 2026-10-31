@@ -6,6 +6,7 @@ import type { ComponentProps, MouseEvent } from "react";
 import "@abereghici/tokens/components/command.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { Listbox } from "../internal/listbox/listbox.tsx";
 import { enabled, optionAt } from "../internal/listbox/options.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
@@ -20,11 +21,9 @@ interface Name {
   "aria-labelledby"?: string;
 }
 
-type Naming = { "aria-label": string } | { "aria-labelledby": string };
-
 export type ListProps = Omit<ComponentProps<"div">, "aria-label" | "aria-labelledby"> &
   Name &
-  Naming;
+  AccessibleName;
 
 /** The list of Groups and Items, filtered as people type. */
 export function List(props: ListProps) {
