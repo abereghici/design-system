@@ -234,7 +234,6 @@ test.describe("Tier 2 before hydration", () => {
 
 // Tier 2 bugs, kept failing until fixed: these controls show with JavaScript off and do nothing.
 const shownWithoutScript = new Set([
-  "copy-button",
   "splitter",
   "toggle-button",
   "toggle-button-group",

@@ -1,4 +1,11 @@
 @layer ab.components {
+  @media (scripting: none) {
+    /* Doubled to outrank Button's display whichever stylesheet loads first. */
+    .button.button {
+      display: none;
+    }
+  }
+
   .status {
     margin-inline-start: var(--ab-space-inline-sm);
     color: var(--ab-color-text-subtle);
