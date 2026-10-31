@@ -13,9 +13,10 @@ import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import { Control } from "./combobox-control.tsx";
 import type { ItemProps } from "./combobox-item.tsx";
-import { listProps, part } from "./combobox-state.ts";
-import type { ComboboxState, Options } from "./combobox-state.ts";
+import type { Options } from "./use-combobox-state.ts";
+import { part } from "./use-combobox-state.ts";
 import { useCombobox } from "./use-combobox.ts";
+import type { Combobox } from "./use-combobox.ts";
 import styles from "./combobox.module.css";
 
 type Loading =
@@ -92,7 +93,7 @@ function labelsOf(children: ReactNode, labels = new Map<string, string>()) {
 }
 
 interface ListProps {
-  c: ComboboxState;
+  c: Combobox;
   naming: Pick<ComponentProps<"div">, "aria-labelledby" | "aria-label">;
   empty: string;
   children: ReactNode;
@@ -104,7 +105,7 @@ function List({ c, naming, empty, children }: ListProps) {
   return (
     <Listbox
       navigator={c.listbox}
-      {...listProps(c)}
+      {...c.listProps}
       {...naming}
       aria-multiselectable={multiple || undefined}
       className={styles["list"]}
@@ -121,7 +122,7 @@ function List({ c, naming, empty, children }: ListProps) {
  * One hidden input per chosen value. A single choice names its input only once hydrated: until
  * then the typed text submits under the name.
  */
-function Values({ c, name, form }: { c: ComboboxState } & Pick<InputProps, "name" | "form">) {
+function Values({ c, name, form }: { c: Combobox } & Pick<InputProps, "name" | "form">) {
   const hydrated = useHydrated();
   const named = c.multiple || hydrated ? name : undefined;
 

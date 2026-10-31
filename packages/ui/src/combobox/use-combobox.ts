@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useState } from "react";
+import { useLayoutEffect } from "react";
 
 import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
 import { getById } from "../internal/get-by-id/get-by-id.ts";
@@ -7,8 +7,8 @@ import { useLocale } from "../internal/locale/use-locale.ts";
 import { isOpen, sourceOf } from "../internal/overlay/overlay.ts";
 import { valuesOf } from "../internal/selection/selection.ts";
 import { textOf } from "../internal/typeahead/text-of.ts";
-import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
+import { boxProps, inputProps, listProps } from "./combobox-props.ts";
 import {
   chosenOf,
   chosenValue,
@@ -17,12 +17,11 @@ import {
   listOf,
   memoryOf,
   part,
-} from "./combobox-state.ts";
-import type { ComboboxState, Options } from "./combobox-state.ts";
+  useComboboxState,
+} from "./use-combobox-state.ts";
+import type { ComboboxState, Options } from "./use-combobox-state.ts";
 
-type OwnState = Omit<ComboboxState, "listbox">;
-
-function applyText(c: OwnState, list: Element, input: HTMLInputElement) {
+function applyText(c: ComboboxState, list: Element, input: HTMLInputElement) {
   const { inputValue, defaultInputValue } = c.options;
   const memory = memoryOf(c);
 
@@ -35,7 +34,7 @@ function applyText(c: OwnState, list: Element, input: HTMLInputElement) {
   memory.text = input.value;
 }
 
-function placePopover(c: OwnState, list: HTMLElement) {
+function placePopover(c: ComboboxState, list: HTMLElement) {
   if (c.open === isOpen(list)) return;
 
   list.toggleAttribute("data-pointer", memoryOf(c).pointer);
@@ -44,7 +43,7 @@ function placePopover(c: OwnState, list: HTMLElement) {
   else list.hidePopover();
 }
 
-function sync(c: OwnState) {
+function sync(c: ComboboxState) {
   const list = listOf(c);
   const input = inputOf(c);
 
@@ -90,41 +89,32 @@ function useListeners(c: ComboboxState) {
   );
 }
 
-/** The Combobox's state. The open list, the input's text and the highlight live in the DOM. */
-export function useCombobox(options: Options): ComboboxState {
-  const id = useId();
-  const [value, , setValue] = useControllableState(
-    options.value === undefined ? undefined : valuesOf(options.value),
-    valuesOf(options.defaultValue),
-    undefined,
-    () => inputOf({ id })?.form,
-  );
-  const [ownOpen, setOpen] = useState(options.defaultOpen ?? false);
-  const [query, setQuery] = useState("");
+/**
+ * The Combobox's state, the props its input, field box and list spread, and the DOM kept in step:
+ * the input shows the chosen text, the list opens and closes as its popover, a press outside
+ * closes it and a form reset restores the text.
+ */
+export function useCombobox(options: Options) {
+  const state = useComboboxState(options);
   const locale = useLocale();
-  const own: OwnState = {
-    options,
-    id,
-    multiple: options.selectionMode === "multiple",
-    value,
-    open: options.open ?? ownOpen,
-    query,
-    setValue,
-    setOpen,
-    setQuery,
-  };
 
   // The list must be open before the Listbox navigator's effect scrolls its highlight into view.
   useLayoutEffect(() => {
-    sync(own);
+    sync(state);
   });
 
-  const c = {
-    ...own,
-    listbox: useListbox(query, options.filter === null ? null : locale, own.open),
+  const listbox = useListbox(state.query, options.filter === null ? null : locale, state.open);
+
+  const c = { ...state, listbox };
+
+  useListeners(state);
+
+  return {
+    ...c,
+    inputProps: <Props extends object>(consumer: Props) => inputProps(c, consumer),
+    boxProps: boxProps(c),
+    listProps: listProps(c),
   };
-
-  useListeners(c);
-
-  return c;
 }
+
+export type Combobox = ReturnType<typeof useCombobox>;

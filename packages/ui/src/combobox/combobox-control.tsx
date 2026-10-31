@@ -10,8 +10,8 @@ import { useHydrated } from "../internal/hydration/use-hydrated.ts";
 import * as TagGroup from "../tag-group/tag-group.tsx";
 import { InputGroup } from "../text-field/text-field-input-group.tsx";
 
-import { changeValues, inputOf, inputProps, part, press } from "./combobox-state.ts";
-import type { ComboboxState } from "./combobox-state.ts";
+import { changeValues, inputOf } from "./use-combobox-state.ts";
+import type { Combobox } from "./use-combobox.ts";
 import textFieldStyles from "../text-field/text-field.module.css";
 import styles from "./combobox.module.css";
 
@@ -42,7 +42,7 @@ function Input({
 type Naming = Pick<ComponentProps<"ul">, "aria-labelledby" | "aria-label">;
 
 interface TagsProps {
-  c: ComboboxState;
+  c: Combobox;
   naming: Naming;
   labels: ReadonlyMap<string, string>;
 }
@@ -74,7 +74,7 @@ function Tags({ c, naming, labels }: TagsProps) {
 }
 
 interface ControlProps extends Omit<TagsProps, "c"> {
-  c: ComboboxState;
+  c: Combobox;
   input: Field.ControlProps;
 }
 
@@ -87,29 +87,22 @@ export function Control({ c, input, naming, labels }: ControlProps) {
   const hydrated = useHydrated();
   const field = (
     <Input
-      {...inputProps(c, input)}
+      {...c.inputProps(input)}
       // Until hydration the input is a plain text field, so one choice submits what is typed;
       // several choices submit their tags, since typing only filters.
       submitsText={!multiple && !hydrated}
       // With several choices the text is empty once chosen, so only the choices meet `required`.
       required={multiple ? input.required === true && c.value.length === 0 : input.required}
       className={multiple ? styles["input"] : undefined}
-      aria-expanded={c.open}
-      aria-controls={part(c, "list")}
     />
   );
 
   return (
     <InputGroup
-      id={part(c, "box")}
+      {...c.boxProps}
       className={multiple ? styles["multiple"] : undefined}
       start={<SearchIcon />}
       end={undefined}
-      onPointerDown={(event) => {
-        if (!(event.target instanceof Element && event.target.closest("button, [tabindex]"))) {
-          press(c, event.nativeEvent);
-        }
-      }}
     >
       {multiple ? (
         <span className={styles["values"]}>
