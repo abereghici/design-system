@@ -24,24 +24,6 @@ export default defineConfig({
       },
     },
     {
-      // Parts find each other by useId ids, whose «» need CSS.escape in a selector; spec #53 makes
-      // these lookups document.getElementById, which takes them as they are.
-      files: [
-        "src/combobox/combobox-state.ts",
-        "src/combobox/use-combobox.ts",
-        "src/command/command-root.tsx",
-        "src/context-menu/context-menu-root.tsx",
-        "src/context-menu/context-menu-trigger.tsx",
-        "src/dropdown-menu/dropdown-menu-trigger.tsx",
-        "src/internal/overlay/overlay.ts",
-        "src/internal/picker/picker.ts",
-        "src/internal/menu/menu.tsx",
-        "src/tooltip/tooltip-root.tsx",
-        "src/tooltip/tooltip-trigger.tsx",
-      ],
-      rules: { "unicorn/prefer-query-selector": "off" },
-    },
-    {
       // Oxlint lacks eslint-plugin-jsx-a11y's exemption for input[type=checkbox][role=switch], and ARIA
       // in HTML forbids aria-checked there: https://github.com/oxc-project/oxc/issues/24838
       files: ["src/switch/switch.tsx"],

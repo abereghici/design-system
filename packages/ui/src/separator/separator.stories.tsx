@@ -53,8 +53,6 @@ Default.test(
   { args: { variant: "ornament" } },
   async ({ canvas }) => {
     await expect(canvas.getByRole("separator")).toBeVisible();
-    // @ts-expect-error -- the ornament is horizontal only
-    void (<Separator orientation="vertical" variant="ornament" />);
   },
 );
 

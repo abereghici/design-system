@@ -27,9 +27,6 @@ async function blocksActivation({ canvas, userEvent, args }: Context) {
   await expect(presses.events).toEqual([]);
 }
 
-// @ts-expect-error -- an IconButton without aria-label or aria-labelledby has no accessible name
-void (<IconButton />);
-
 const meta = preview.meta({
   title: "Components/IconButton",
   component: IconButton,

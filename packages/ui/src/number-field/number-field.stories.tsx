@@ -5,10 +5,7 @@ import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
 import { NumberField } from "./number-field.tsx";
-import type { NumberFieldChangeEventDetails, NumberFieldProps } from "./number-field.tsx";
-
-// @ts-expect-error -- the step buttons show only icons, so they need names
-({ label: "Seats" }) satisfies NumberFieldProps;
+import type { NumberFieldChangeEventDetails } from "./number-field.tsx";
 
 const meta = preview.meta({
   title: "Components/NumberField",

@@ -2,6 +2,7 @@ import { expect } from "storybook/test";
 
 import { CheckIcon } from "@abereghici/ui/icons/check";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { Tag } from "./tag.tsx";
@@ -46,26 +47,15 @@ Default.test(
   },
 );
 
-Default.test(
-  "wraps a long label instead of overflowing its container",
-  {
-    args: { children: "Awaitingsecondreviewerapproval" },
-    decorators: [
-      (Story) => (
-        <div style={{ inlineSize: "8rem" }}>
-          <Story />
-        </div>
-      ),
-    ],
+export const LongLabel = meta.story({
+  args: { children: "Awaitingsecondreviewerapproval" },
+  decorators: [withWidth("8rem")],
+  parameters: {
+    docs: {
+      description: { story: "A label longer than its container wraps instead of overflowing." },
+    },
   },
-  async ({ canvas }) => {
-    const tag = canvas.getByText("Awaitingsecondreviewerapproval");
-
-    await expect(tag.getBoundingClientRect().width).toBeLessThanOrEqual(
-      tag.parentElement?.getBoundingClientRect().width ?? 0,
-    );
-  },
-);
+});
 
 export const WithIcon = meta.story({
   args: {

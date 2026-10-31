@@ -350,8 +350,8 @@
   },
   {
     "name": "page-layout",
-    "tokens": ["navbar", "sidebar"],
-    "client": [],
+    "tokens": ["disclosure", "icon", "navbar", "sidebar"],
+    "client": ["sidebar/sidebar-collapsible-group"],
     "html": "<aside"
   },
   {

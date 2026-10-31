@@ -33,7 +33,7 @@ export function Trigger({ asChild = false, ...props }: TriggerProps) {
 
         event.preventDefault();
 
-        const content = document.getElementById(overlay.contentId);
+        const content = event.currentTarget.commandForElement;
 
         if (content === null) return;
 

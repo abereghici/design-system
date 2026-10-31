@@ -45,13 +45,7 @@
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .root:where(
-        :not(
-          [aria-disabled="true"],
-          [aria-busy="true"],
-          [aria-expanded="true"]
-        )
-      ):hover {
+    .root:where(:not([aria-disabled="true"], [aria-busy="true"], [aria-expanded="true"])):hover {
       background-color: var(--ab-icon-button-background-color-hovered);
       color: var(--ab-icon-button-icon-color-hovered);
       transition-duration:

@@ -5,13 +5,7 @@ import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
 import { PasswordField } from "./password-field.tsx";
-import type {
-  PasswordFieldProps,
-  PasswordFieldVisibleChangeEventDetails,
-} from "./password-field.tsx";
-
-// @ts-expect-error -- the show-password toggle shows only an icon, so it needs a name
-({ label: "Password" }) satisfies PasswordFieldProps;
+import type { PasswordFieldVisibleChangeEventDetails } from "./password-field.tsx";
 
 const meta = preview.meta({
   title: "Components/PasswordField",

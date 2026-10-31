@@ -9,6 +9,7 @@ import * as Slider from "./slider.tsx";
 
 const volume = (
   <>
+    {/* A test id: the track has no role or name, and the range input is only thumb-sized. */}
     <Slider.Track data-testid="track">
       <Slider.Range />
       <Slider.Thumb aria-label="Volume" />

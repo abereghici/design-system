@@ -19,7 +19,7 @@ export interface TriggerProps extends ComponentProps<"button"> {
   asChild?: boolean;
 }
 
-function handlers({ contentId, change }: ReturnType<typeof useTooltip>) {
+function handlers({ contentRef, change }: ReturnType<typeof useTooltip>) {
   const press = (event: SyntheticEvent<HTMLElement>) => {
     pressed.add(event.currentTarget);
     change(false, "trigger-press", event);
@@ -34,7 +34,7 @@ function handlers({ contentId, change }: ReturnType<typeof useTooltip>) {
     onPointerLeave: (event: PointerEvent<HTMLElement>) => {
       pressed.delete(event.currentTarget);
 
-      if (outside(event, document.getElementById(contentId))) change(false, "trigger-hover", event);
+      if (outside(event, contentRef.current)) change(false, "trigger-hover", event);
     },
     onFocus: (event: FocusEvent<HTMLElement>) => {
       if (pressed.has(event.currentTarget) || !event.currentTarget.matches(":focus-visible"))

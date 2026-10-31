@@ -1,8 +1,16 @@
 import { expect } from "storybook/test";
 
+import type { Decorator } from "@storybook/react-vite";
+
 import preview from "#.storybook/preview.tsx";
 
 import { Heading } from "./heading.tsx";
+
+const withOverdueSection: Decorator = (Story) => (
+  <section aria-labelledby="overdue">
+    <Story />
+  </section>
+);
 
 const meta = preview.meta({
   title: "Components/Heading",
@@ -21,9 +29,12 @@ Default.test(
 );
 
 Default.test(
-  "passes native attributes through",
-  { args: { id: "overdue" } },
+  "names the section it titles through its id",
+  {
+    args: { id: "overdue" },
+    decorators: [withOverdueSection],
+  },
   async ({ canvas }) => {
-    await expect(canvas.getByRole("heading")).toHaveAttribute("id", "overdue");
+    await expect(canvas.getByRole("region", { name: "Overdue invoices" })).toBeVisible();
   },
 );

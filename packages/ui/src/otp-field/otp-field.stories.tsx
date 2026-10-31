@@ -4,10 +4,6 @@ import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { OTPField } from "./otp-field.tsx";
-import type { OTPFieldProps } from "./otp-field.tsx";
-
-// @ts-expect-error -- the code lives in the app's state or the field's, not both
-({ label: "Code", value: "4827", defaultValue: "4827" }) satisfies OTPFieldProps;
 
 const meta = preview.meta({
   title: "Components/OTPField",

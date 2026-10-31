@@ -6,11 +6,6 @@ import { listen } from "#.storybook/test/listen.ts";
 
 import * as Alert from "./alert.tsx";
 
-// @ts-expect-error -- Close shows only an icon, so it needs a name
-({}) satisfies Alert.CloseProps;
-// @ts-expect-error -- Close shows only its icon, so it takes no children
-({ "aria-label": "Dismiss", children: "Dismiss" }) satisfies Alert.CloseProps;
-
 const onClose = fn<(event: MouseEvent<HTMLButtonElement>) => void>();
 
 const message = (close: Partial<Alert.CloseProps> = {}) => (

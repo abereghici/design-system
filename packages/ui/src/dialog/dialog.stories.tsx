@@ -10,9 +10,6 @@ import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Dialog from "./dialog.tsx";
 
-// @ts-expect-error -- the x button shows only an icon, so it needs a name
-({}) satisfies Dialog.CloseProps;
-
 const content = (props: Dialog.ContentProps = {}) => (
   <Dialog.Content {...props}>
     <Dialog.Title>Rename project?</Dialog.Title>

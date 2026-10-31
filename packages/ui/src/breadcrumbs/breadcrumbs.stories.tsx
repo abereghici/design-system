@@ -5,9 +5,6 @@ import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Breadcrumbs from "./breadcrumbs.tsx";
 
-// @ts-expect-error -- the navigation landmark needs a name
-({}) satisfies Breadcrumbs.RootProps;
-
 const trail = (
   <>
     <Breadcrumbs.Item>

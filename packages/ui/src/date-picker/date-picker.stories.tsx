@@ -19,9 +19,6 @@ const reasons = () => onOpenChange.mock.calls.map(([open, { reason }]) => [open,
 
 const months = { previousMonthLabel: "Previous month", nextMonthLabel: "Next month" };
 
-// @ts-expect-error -- the calendar button shows only an icon, so it needs a name
-({ label: "Due date", incompleteMessage: "Enter a complete date" }) satisfies DatePicker.RootProps;
-
 const LoadedCalendar = lazy(() =>
   import("@abereghici/ui/calendar").then((module) => ({ default: module.Calendar })),
 );

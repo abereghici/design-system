@@ -4,6 +4,10 @@ exports[`Default   > base story 1`] = `
 - text: Draft
 `;
 
+exports[`Long Label 1`] = `
+- text: Awaitingsecondreviewerapproval
+`;
+
 exports[`With Icon   > base story 1`] = `
 - text: Live
 `;

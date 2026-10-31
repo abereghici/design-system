@@ -65,6 +65,42 @@ test.describe("Tier 1 works with JavaScript off", () => {
   }
 });
 
+test.describe("with JavaScript off, the server has rendered", () => {
+  test("the root layout's language, and its direction from getDirection", async ({ page }) => {
+    await page.goto("/");
+
+    await expect(page.locator("html")).toHaveAttribute("lang", "ro-RO");
+    await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+  });
+
+  test("a Spinner's status message", async ({ page }) => {
+    await page.goto("/spinner");
+
+    await expect(page.getByRole("status")).toHaveText("Loading");
+  });
+
+  test("a completed step's word for screen readers", async ({ page }) => {
+    await page.goto("/stepper");
+
+    await expect(page.getByRole("link", { name: "Account Completed" })).toBeVisible();
+  });
+
+  test("a sorted Table header's sort state", async ({ page }) => {
+    await page.goto("/table");
+
+    await expect(page.getByRole("columnheader", { name: "Invoice" })).toHaveAttribute(
+      "aria-sort",
+      "ascending",
+    );
+  });
+
+  test("the button that loads Command", async ({ page }) => {
+    await page.goto("/command");
+
+    await expect(page.getByRole("button", { name: "Search" })).toBeVisible();
+  });
+});
+
 test.describe("with JavaScript off, ContextualHelp opens from its button", () => {
   test("Escape and a press outside close it", async ({ page }) => {
     await page.goto("/contextual-help");

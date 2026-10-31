@@ -15,7 +15,13 @@ export function Toggle({
   pressed: boolean;
 }) {
   return (
-    <ToggleButton {...props} value="visible" size="sm" className={styles["toggle"]} pressed={pressed}>
+    <ToggleButton
+      {...props}
+      value="visible"
+      size="sm"
+      className={styles["toggle"]}
+      pressed={pressed}
+    >
       {pressed ? <EyeIcon /> : <EyeOffIcon />}
     </ToggleButton>
   );

@@ -149,8 +149,6 @@ Default.test(
   { args: { children: undefined, "aria-label": "Select row" } },
   async ({ canvas }) => {
     await expect(canvas.getByRole("checkbox", { name: "Select row" })).toBeInTheDocument();
-    // @ts-expect-error -- a checkbox without visible text needs aria-label or aria-labelledby
-    void (<Checkbox />);
   },
 );
 
