@@ -55,7 +55,10 @@ export function OTPField({ length = 6, ...props }: OTPFieldProps) {
       <div
         className={`${fieldStyles["control"]} ${styles["cells"]}`}
         style={{ "--length": length }}
+        dir="ltr"
       >
+        {/* Sizes the boxes from the digits' own advance, so the reader's letter spacing moves both. */}
+        <span className={styles["ruler"]}>{"0".repeat(length)}</span>
         <TextInput
           {...control}
           className={styles["input"]}

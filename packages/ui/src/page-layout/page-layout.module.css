@@ -4,17 +4,17 @@
   }
 
   /* A container query styles the container's descendants, never the container itself, so the grid
-     is a child of the queried element: https://www.w3.org/TR/css-contain-3/#container-queries */
-  .grid {
-    display: grid;
-    gap: var(--ab-space-stack-lg);
+     is a child of the queried element: https://www.w3.org/TR/css-contain-3/#container-queries
+     Doubled, here and below, to outrank Grid's columns and gap whichever stylesheet loads first. */
+  .grid.grid {
+    grid-template-columns: minmax(0, 1fr);
     padding: var(--ab-layout-gutter);
   }
 
   /* The breakpoint is in em, so a larger default font size reaches the narrow arrangement too; a
      container query can't read a custom property. */
   @container (inline-size >= 47.5em) {
-    .grid {
+    .grid.grid {
       grid-template-areas:
         "header     header"
         "navigation content";
@@ -22,7 +22,7 @@
       column-gap: var(--ab-layout-gutter);
     }
 
-    .grid:has(> .aside) {
+    .grid.grid:has(> .aside) {
       grid-template-areas:
         "header     header  header"
         "navigation content aside";

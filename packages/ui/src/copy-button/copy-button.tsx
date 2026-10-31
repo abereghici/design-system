@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import type { MouseEvent, ReactNode } from "react";
 
 import { Button } from "../button/button.tsx";
@@ -35,7 +35,7 @@ export function CopyButton({
   onClick,
   ...props
 }: CopyButtonProps) {
-  const [message, setMessage] = useState("");
+  const [{ message, copies }, setStatus] = useState({ message: "", copies: 0 });
 
   function handleClick(event: MouseEvent<HTMLElement>) {
     onClick?.(event);
@@ -49,7 +49,7 @@ export function CopyButton({
         () => failedLabel,
       )
       .then((announcement) => {
-        setMessage(announcement);
+        setStatus((status) => ({ message: announcement, copies: status.copies + 1 }));
 
         return announcement;
       });
@@ -62,8 +62,11 @@ export function CopyButton({
         data-copied={message === copiedLabel ? "" : undefined}
         onClick={handleClick}
       />
-      {/* An <output> is a status live region, so screen readers announce the message it receives. */}
-      <output className={styles["status"]}>{message}</output>
+      {/* An <output> is a status live region, so screen readers announce the message it receives;
+          a new key adds the message afresh, so a second copy is announced too. */}
+      <output className={styles["status"]}>
+        <Fragment key={copies}>{message}</Fragment>
+      </output>
     </>
   );
 }

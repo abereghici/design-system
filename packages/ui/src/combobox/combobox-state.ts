@@ -72,17 +72,24 @@ export type Selection =
       onValueChange?: Callback<string | null, ValueReason> | undefined;
       removeLabel?: undefined;
     }
-  | {
+  | ({
       selectionMode: "multiple";
-      /** The chosen Items' `value`s, when your state holds them. */
-      value?: ReadonlyArray<string> | undefined;
-      /** The Items chosen on the first render when it holds its own state. */
-      defaultValue?: ReadonlyArray<string> | undefined;
       /** Called before the choices change; `details.cancel()` keeps the current ones. */
       onValueChange?: Callback<string[], ValuesReason> | undefined;
       /** The action each tag's remove button reads before the tag's text, such as "Remove". */
       removeLabel: string;
-    };
+    } & (
+      | {
+          /** The chosen Items' `value`s, when your state holds them. */
+          value: ReadonlyArray<string>;
+          defaultValue?: never;
+        }
+      | {
+          value?: never;
+          /** The Items chosen on the first render when it holds its own state. */
+          defaultValue?: ReadonlyArray<string> | undefined;
+        }
+    ));
 
 export type Options = Selection & {
   /** The typed text, when your state holds it; pair it with `onInputValueChange`. */
@@ -133,10 +140,9 @@ export interface ComboboxState {
 
 const memories = new WeakMap<Element, Memory>();
 
-export const part = (
-  c: Pick<ComboboxState, "id">,
-  name: "root" | "box" | "list" | "label" | "empty" | "status",
-) => `${c.id}${name}`;
+type PartName = "root" | "box" | "list" | "label" | "empty" | "status";
+
+export const part = (c: Pick<ComboboxState, "id">, name: PartName) => `${c.id}${name}`;
 
 export const listOf = (c: ComboboxState) => document.getElementById(part(c, "list"));
 

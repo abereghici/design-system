@@ -1,5 +1,6 @@
 import type { ComponentProps } from "react";
 
+import { Grid } from "../grid/grid.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./page-layout.module.css";
@@ -17,7 +18,9 @@ export type RootProps = ComponentProps<"div">;
 export function Root({ children, ...props }: RootProps) {
   return (
     <div {...mergeProps({ className: styles["root"] }, props)}>
-      <div className={styles["grid"]}>{children}</div>
+      <Grid gap="stack-lg" className={styles["grid"]}>
+        {children}
+      </Grid>
     </div>
   );
 }
