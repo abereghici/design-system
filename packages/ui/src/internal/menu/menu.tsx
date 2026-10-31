@@ -1,14 +1,14 @@
 "use client";
 
-import type { ComponentProps, KeyboardEvent, MouseEvent, PointerEvent } from "react";
+import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
 import type { ChangeEventDetails as Details } from "../change-request/change-request.ts";
 import { createSafeContext } from "../create-safe-context/create-safe-context.ts";
-import { typeahead } from "../listbox/typeahead.ts";
 import { mergeProps } from "../merge-props/merge-props.ts";
 import { returnFocus } from "../overlay/overlay.ts";
 import type { Overlay } from "../overlay/overlay.ts";
 
+import { menuNavigation } from "./menu-navigation.ts";
 import styles from "./menu.module.css";
 
 /** `cancel()`: keeps the previous value; a menu `closeOnClick` would close stays open too. */
@@ -23,77 +23,32 @@ export const [MenuContext, useMenu] = createSafeContext<Menu>(
   "DropdownMenu.Root or ContextMenu.Root",
 );
 
-export const focusLast = new WeakSet<Element>();
-
 const enterPressed = new WeakSet<Element>();
-
-const isDisabled = (item: Element) => item.getAttribute("aria-disabled") === "true";
-
-export const itemsOf = (menu: Element) => [
-  ...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]'),
-];
-
-function navigate(event: KeyboardEvent<HTMLElement>) {
-  const items = itemsOf(event.currentTarget);
-  const from = event.target instanceof HTMLElement ? items.indexOf(event.target) : -1;
-  const steps: Record<string, number | undefined> = {
-    ArrowDown: from + 1,
-    ArrowUp: from < 0 ? -1 : from - 1,
-    Home: 0,
-    End: -1,
-  };
-  const to = steps[event.key];
-
-  if (to === undefined) return false;
-
-  items.at(to % items.length)?.focus();
-
-  return true;
-}
 
 /**
  * The menu's keyboard, pointer highlight and initial focus; DropdownMenu and ContextMenu add
  * placement.
  */
 export function menuContentProps(menu: Menu) {
-  return {
-    ...menu.overlay.contentProps({
-      onToggle: (event) => {
-        if (event.newState !== "open") return;
+  const { onToggle, ...navigation } = menuNavigation;
 
-        const items = itemsOf(event.currentTarget);
+  return mergeProps(
+    {
+      ...menu.overlay.contentProps({ onToggle }),
+      role: "menu",
+      tabIndex: -1,
+      ...navigation,
+    } as const,
+    {
+      onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
+        if (event.key !== "Tab") return;
 
-        (focusLast.delete(event.currentTarget) ? items.at(-1) : items[0])?.focus();
-      },
-    }),
-    role: "menu",
-    tabIndex: -1,
-    onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
-      if (navigate(event)) {
-        event.preventDefault();
-      } else if (event.key === "Tab") {
         setTimeout(() => {
           menu.overlay.toggle(false, "focus-out", event.nativeEvent);
         });
-      } else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-        const from = event.target instanceof Element ? event.target : null;
-        const items = itemsOf(event.currentTarget).filter((item) => !isDisabled(item));
-
-        typeahead(event.currentTarget, event.key, items, from)?.focus();
-      }
+      },
     },
-    onPointerMove: (event: PointerEvent<HTMLElement>) => {
-      if (event.pointerType === "touch") return;
-
-      const item =
-        event.target instanceof Element
-          ? event.target.closest<HTMLElement>('[role^="menuitem"]')
-          : null;
-      const target = item !== null && !isDisabled(item) ? item : event.currentTarget;
-
-      if (document.activeElement !== target) target.focus({ preventScroll: true });
-    },
-  } as const;
+  );
 }
 
 export interface ItemBaseProps extends ComponentProps<"button"> {
