@@ -7,6 +7,7 @@ import "@abereghici/tokens/components/kbd.css";
 
 import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import { composeRefs } from "../internal/compose-refs/compose-refs.ts";
+import { useMove } from "../internal/interaction/use-move.ts";
 import { close, mark, progressOf, remove } from "../toast/toast.ts";
 import type { ToastRecord } from "../toast/toast.ts";
 
@@ -68,34 +69,29 @@ function useSwipe(onFling: () => void) {
     );
   };
 
-  const end = (node: HTMLElement, flung: boolean) => {
-    start.current = null;
-    delete node.dataset["swiping"];
+  return useMove<HTMLElement>({
+    onMoveStart: (event) => {
+      if (event.target instanceof Element && event.target.closest("button") !== null) return false;
 
-    if (flung) onFling();
-    else resetSwipe(node);
-  };
-
-  return {
-    onPointerDown: (event: PointerEvent<HTMLElement>) => {
-      if (event.button !== 0) return;
-
-      if (event.target instanceof Element && event.target.closest("button") !== null) return;
-
-      const node = event.currentTarget;
-
-      node.setPointerCapture(event.pointerId);
-      node.dataset["swiping"] = "";
+      event.currentTarget.dataset["swiping"] = "";
       start.current = { x: event.clientX, y: event.clientY, time: event.timeStamp };
+
+      return true;
     },
-    onPointerMove: follow,
-    onPointerUp: (event: PointerEvent<HTMLElement>) => {
-      if (start.current !== null) end(event.currentTarget, follow(event));
+    onMove: (event) => {
+      follow(event);
     },
-    onPointerCancel: (event: PointerEvent<HTMLElement>) => {
-      if (start.current !== null) end(event.currentTarget, false);
+    onMoveEnd: (event) => {
+      const node = event.currentTarget;
+      const flung = event.type === "pointerup" && follow(event);
+
+      start.current = null;
+      delete node.dataset["swiping"];
+
+      if (flung) onFling();
+      else resetSwipe(node);
     },
-  };
+  });
 }
 
 const appearRef = (id: string) => (node: HTMLLIElement | null) => {

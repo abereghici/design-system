@@ -5,6 +5,7 @@ import type { ComponentProps, KeyboardEvent, PointerEvent } from "react";
 import "@abereghici/tokens/components/splitter.css";
 
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
+import { useMove } from "../internal/interaction/use-move.ts";
 import { useNumberFormatter } from "../internal/locale/use-number-formatter.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
@@ -55,8 +56,25 @@ export function Handle(props: HandleProps) {
   const { state, actions, meta } = splitter;
   const horizontal = meta.orientation === "horizontal";
   const percent = useNumberFormatter(wholePercent);
+  const move = useMove<HTMLHRElement>({
+    onMoveStart: (event) => {
+      // Keeps a drag from selecting the panels' text; the handle still takes focus.
+      event.preventDefault();
+      event.currentTarget.focus();
+      actions.setDragging(true);
+
+      return true;
+    },
+    onMove: (event) => {
+      actions.resize(positionAt(event, horizontal), "drag", event.nativeEvent);
+    },
+    onMoveEnd: () => {
+      actions.setDragging(false);
+    },
+  });
 
   const own = {
+    ...move,
     className: styles["handle"],
     ref: controlPrevious,
     onKeyDown: (event: KeyboardEvent<HTMLHRElement>) => {
@@ -68,23 +86,6 @@ export function Handle(props: HandleProps) {
 
       if (next === null) actions.toggle(event);
       else actions.resize(next, "keyboard", event.nativeEvent);
-    },
-    onPointerDown: (event: PointerEvent<HTMLHRElement>) => {
-      if (event.button !== 0) return;
-
-      // Keeps a drag from selecting the panels' text; the handle still takes focus.
-      event.preventDefault();
-      event.currentTarget.focus();
-      event.currentTarget.setPointerCapture(event.pointerId);
-      actions.setDragging(true);
-    },
-    onPointerMove: (event: PointerEvent<HTMLHRElement>) => {
-      if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
-
-      actions.resize(positionAt(event, horizontal), "drag", event.nativeEvent);
-    },
-    onLostPointerCapture: () => {
-      actions.setDragging(false);
     },
   };
 

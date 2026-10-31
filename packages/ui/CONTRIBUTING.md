@@ -33,7 +33,7 @@ Setup, checks and releases are in the repository's [CONTRIBUTING.md](../../CONTR
 | Giving one element to two refs                                                 | `internal/compose-refs/compose-refs.ts`                                                                                  |
 | Running ours after the consumer's handler, unless it called `preventDefault()` | `internal/compose-event-handlers/compose-event-handlers.ts`                                                              |
 | DOM event listeners                                                            | `internal/dom-event/` (`use-event.ts`, `shared-listener.ts`)                                                             |
-| Pointer modality and IME composition                                           | `internal/interaction/` (`pointer-marker.ts`, `composition.ts`)                                                          |
+| Pointer modality, pointer drags and IME composition                            | `internal/interaction/` (`pointer-marker.ts`, `use-move.ts`, `composition.ts`)                                           |
 | Finding an element by id                                                       | `internal/get-by-id/get-by-id.ts`                                                                                        |
 | A button that stays focusable while disabled                                   | `internal/use-button/use-button.ts`                                                                                      |
 | A native checkbox's click                                                      | `internal/toggle-click/toggle-click.ts`                                                                                  |
