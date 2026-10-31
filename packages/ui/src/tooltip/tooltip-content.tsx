@@ -18,11 +18,11 @@ export interface ContentProps extends Omit<ComponentProps<"div">, "id" | "role" 
 
 /** The short label, optionally followed by an `aria-hidden` Kbd. */
 export function Content({ side = "top", align = "center", ...props }: ContentProps) {
-  const { contentId, change } = useTooltip();
+  const { contentId, contentRef, change } = useTooltip();
 
   return (
     <div
-      {...mergeProps({ className: styles["content"] }, props)}
+      {...mergeProps({ className: styles["content"], ref: contentRef }, props)}
       id={contentId}
       role="tooltip"
       popover="manual"

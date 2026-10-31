@@ -7,6 +7,8 @@ import { invoiceIds, SortableInvoices } from "#.storybook/components/sortable-in
 import { withScroll } from "#.storybook/decorators/with-scroll.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
+import { atCentre } from "#.storybook/test/pointer.ts";
+import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Table from "./table.tsx";
 
@@ -108,17 +110,20 @@ InAScrollArea.test(
   },
 );
 
-InAScrollArea.test("keeps the header in view while the rows scroll", async ({ canvas }) => {
-  const box = canvas.getByRole("region", { name: "Invoices, 2026" });
-  const columnHeader = canvas.getByRole("columnheader", { name: "Invoice" });
-  const offset = () => columnHeader.getBoundingClientRect().top - box.getBoundingClientRect().top;
+InAScrollArea.test(
+  "keeps the header in view while the rows scroll",
+  async ({ canvas, userEvent }) => {
+    const columnHeader = canvas.getByRole("columnheader", { name: "Invoice" });
+    const lastRow = canvas.getByRole("rowheader", { name: "INV-003" });
+    const user = await trusted();
 
-  await expect(offset()).toBeGreaterThan(0);
-
-  box.scrollTop = 48;
-
-  await waitFor(() => expect(offset()).toBeCloseTo(0, 0));
-});
+    await expect(atCentre(lastRow)).not.toBe(lastRow);
+    await userEvent.tab();
+    await user.keyboard("{End}");
+    await waitFor(() => expect(atCentre(lastRow)).toBe(lastRow));
+    await expect(atCentre(columnHeader)).toBe(columnHeader);
+  },
+);
 
 export const SortedOnTheServer = meta.story({
   parameters: {

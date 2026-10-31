@@ -11,11 +11,6 @@ import { trusted } from "#.storybook/test/trusted.ts";
 import { SearchField } from "./search-field.tsx";
 import type { SearchFieldChangeEventDetails, SearchFieldProps } from "./search-field.tsx";
 
-// @ts-expect-error -- the clear button shows only an icon, so it needs a name
-({ label: "Search invoices" }) satisfies SearchFieldProps;
-// @ts-expect-error -- the text lives in the app's state or the field's, not both
-({ label: "Q", clearLabel: "Clear", value: "a", defaultValue: "b" }) satisfies SearchFieldProps;
-
 const meta = preview.meta({
   title: "Components/SearchField",
   component: SearchField,

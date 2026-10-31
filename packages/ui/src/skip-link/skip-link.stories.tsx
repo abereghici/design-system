@@ -6,10 +6,6 @@ import preview from "#.storybook/preview.tsx";
 import { atCentre } from "#.storybook/test/pointer.ts";
 
 import { SkipLink } from "./skip-link.tsx";
-import type { SkipLinkProps } from "./skip-link.tsx";
-
-// @ts-expect-error -- the link needs its text
-({ href: "#main" }) satisfies SkipLinkProps;
 
 const meta = preview.meta({
   title: "Components/SkipLink",

@@ -1,6 +1,6 @@
-import type { ComponentProps, ElementType, Ref } from "react";
+import type { ComponentProps, Ref } from "react";
 
-import { mergeProps } from "../internal/slot/slot.tsx";
+import { mergeProps, Slot } from "../internal/slot/slot.tsx";
 
 import styles from "./text.module.css";
 
@@ -33,15 +33,24 @@ export type TextProps = Omit<ComponentProps<"p">, "color" | "ref"> &
  *
  * Tier 1: works before hydration.
  */
-export function Text({ variant = "body", size, color = "default", as, ...props }: TextProps) {
-  const Element = (as ?? (variant === "code" ? "code" : "p")) as ElementType;
+export function Text({
+  variant = "body",
+  size,
+  color = "default",
+  as,
+  children,
+  ...props
+}: TextProps) {
+  const Element = as ?? (variant === "code" ? "code" : "p");
 
   return (
-    <Element
+    <Slot
       {...mergeProps({ className: styles["root"] }, props)}
       data-variant={variant}
       data-size={size ?? (variant === "overline" ? "sm" : "md")}
       data-color={color}
-    />
+    >
+      <Element>{children}</Element>
+    </Slot>
   );
 }

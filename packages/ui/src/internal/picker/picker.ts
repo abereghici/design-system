@@ -41,13 +41,13 @@ interface PickerValue<Value> {
 }
 
 /** Whether focus is still where the open left it (the trigger, the panel or nowhere). */
-const focusStayed = (overlay: Overlay) => {
+const focusStayed = (trigger: HTMLButtonElement | null) => {
   const focus = document.activeElement;
 
   return (
     focus === document.body ||
-    focus?.getAttribute("commandfor") === overlay.contentId ||
-    document.getElementById(overlay.contentId)?.contains(focus) === true
+    focus === trigger ||
+    trigger?.commandForElement?.contains(focus) === true
   );
 };
 
@@ -82,7 +82,7 @@ export function usePicker(options: PickerOptions) {
           overlay.toggle(false, "day-press", event);
         }
       },
-      canFocus: () => focusStayed(overlay),
+      canFocus: () => focusStayed(trigger.current),
     }),
   };
 }

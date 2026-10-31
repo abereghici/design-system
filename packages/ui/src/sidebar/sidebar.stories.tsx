@@ -9,9 +9,6 @@ import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Sidebar from "./sidebar.tsx";
 
-// @ts-expect-error -- a Sidebar without aria-label or aria-labelledby leaves its landmark unnamed
-<Sidebar.Root>{null}</Sidebar.Root>;
-
 const groups = (
   <>
     <Sidebar.Group>

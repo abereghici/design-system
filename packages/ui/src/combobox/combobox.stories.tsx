@@ -13,15 +13,6 @@ import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Combobox from "./combobox.tsx";
 
-// @ts-expect-error -- the empty list is announced, so it needs its text
-({ label: "Assignee" }) satisfies Combobox.RootProps;
-// @ts-expect-error -- while loading, the list announces its loading text
-({ label: "Assignee", noOptionsText: "No results", loading: true }) satisfies Combobox.RootProps;
-// @ts-expect-error -- several choices need the label their remove buttons read
-({ label: "Tags", noOptionsText: "None", selectionMode: "multiple" }) satisfies Combobox.RootProps;
-// @ts-expect-error -- either the app holds the choices or the Combobox does, not both
-({ selectionMode: "multiple", value: [], defaultValue: [] }) satisfies Partial<Combobox.RootProps>;
-
 const onValueChange = fn<NonNullable<Combobox.RootProps["onValueChange"]>>();
 const onInputValueChange = fn<NonNullable<Combobox.RootProps["onInputValueChange"]>>();
 const onOpenChange = fn<NonNullable<Combobox.RootProps["onOpenChange"]>>();

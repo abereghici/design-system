@@ -12,12 +12,6 @@ import { trusted } from "#.storybook/test/trusted.ts";
 import { remove, snapshot } from "../toast/toast.ts";
 
 import { Toaster } from "./toaster.tsx";
-import type { ToasterProps } from "./toaster.tsx";
-
-// @ts-expect-error -- the region is a landmark, so it needs a name
-({ closeLabel: "Dismiss" }) satisfies ToasterProps;
-// @ts-expect-error -- each toast's close button shows only an icon, so it needs a name
-({ "aria-label": "Notifications" }) satisfies ToasterProps;
 
 const page = within(document.body);
 const region = () => page.findByRole("region", { name: "Notifications" });

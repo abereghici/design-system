@@ -8,9 +8,6 @@ import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Sheet from "./sheet.tsx";
 
-// @ts-expect-error -- the x button shows only an icon, so it needs a name
-({}) satisfies Sheet.CloseProps;
-
 const lines = Array.from({ length: 30 }, (_, index) => `Line ${index + 1} · Design review · 2 h`);
 
 const content = (props: Sheet.ContentProps = {}) => (

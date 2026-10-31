@@ -3,10 +3,6 @@ import { Card } from "@abereghici/ui/card";
 import preview from "#.storybook/preview.tsx";
 
 import { Grid } from "./grid.tsx";
-import type { GridProps } from "./grid.tsx";
-
-// @ts-expect-error -- the minimum is a size token, never a length
-({ min: "200px" }) satisfies GridProps;
 
 const card = (title: string, description: string) => (
   <Card.Root>

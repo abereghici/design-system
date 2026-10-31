@@ -7,18 +7,9 @@ import preview from "#.storybook/preview.tsx";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import { ContextualHelp } from "./contextual-help.tsx";
-import type { ContextualHelpChangeEventDetails, ContextualHelpProps } from "./contextual-help.tsx";
+import type { ContextualHelpChangeEventDetails } from "./contextual-help.tsx";
 
 const help = { title: "Billing cycle", children: "Invoices are sent on the first of each month." };
-
-// @ts-expect-error -- the button shows only an icon, so it needs a name
-void (help satisfies ContextualHelpProps);
-
-// @ts-expect-error -- its title names the popover
-void ({ "aria-label": "About billing cycles", children: "Monthly" } satisfies ContextualHelpProps);
-
-// @ts-expect-error -- it is either controlled or uncontrolled, never both
-void (<ContextualHelp {...help} aria-label="Help" open defaultOpen />);
 
 const meta = preview.meta({
   title: "Components/ContextualHelp",

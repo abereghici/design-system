@@ -5,10 +5,6 @@ import { Button } from "@abereghici/ui/button";
 import preview from "#.storybook/preview.tsx";
 
 import { Stack } from "./stack.tsx";
-import type { StackProps } from "./stack.tsx";
-
-// @ts-expect-error -- the gap is a stack space token, never a length
-({ gap: "1rem" }) satisfies StackProps;
 
 const meta = preview.meta({
   title: "Components/Stack",

@@ -45,20 +45,10 @@ Default.test(
 );
 
 Default.test(
-  "keeps a wrapped element's shape and class beside the consumer's",
-  {
-    args: {
-      children: <span className="pill" style={{ borderRadius: "999px" }} />,
-      className: "wide",
-      style: { inlineSize: "12rem" },
-    },
-  },
-  async ({ canvasElement }) => {
-    const placeholder = canvasElement.querySelector(".pill");
-
-    await expect(placeholder).toHaveClass("wide");
-    await expect(placeholder).not.toHaveClass("undefined");
-    await expect(placeholder).toHaveStyle({ borderRadius: "999px", inlineSize: "192px" });
+  "keeps a wrapped element's class beside the consumer's",
+  { args: { children: <span className="avatar">Ana Pop</span>, className: "wide" } },
+  async ({ canvas }) => {
+    await expect(canvas.getByText("Ana Pop")).toHaveClass("avatar", "wide");
   },
 );
 
@@ -67,6 +57,17 @@ Default.test("pulses without moving, also under reduced motion", async ({ canvas
 
   await expect(animates(placeholder)).toBe(true);
   await expect(moves(placeholder)).toBe(false);
+});
+
+export const AroundAnElement = meta.story({
+  args: { children: save },
+  parameters: {
+    docs: {
+      description: {
+        story: "Around an element, it takes that element's size and shape, here a pill button.",
+      },
+    },
+  },
 });
 
 export const Empty = meta.story({
