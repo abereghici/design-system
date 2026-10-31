@@ -49,7 +49,7 @@ const budgets: Readonly<Record<string, string>> = {
   separator: "1 kB",
   skeleton: "900 B",
   sidebar: "1.8 kB",
-  slider: "3.4 kB",
+  slider: "3.5 kB",
   "skip-link": "810 B",
   spinner: "1.1 kB",
   stack: "700 B",

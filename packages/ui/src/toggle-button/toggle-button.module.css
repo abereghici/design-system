@@ -31,6 +31,12 @@
       var(--ab-motion-easing-enter);
   }
 
+  @media (scripting: none) {
+    .root {
+      display: none;
+    }
+  }
+
   .root:where([data-size="sm"]) {
     min-block-size: var(--ab-toggle-button-sm-height);
     padding-inline: var(--ab-toggle-button-sm-padding-inline);

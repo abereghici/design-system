@@ -5,6 +5,7 @@ import type { MouseEvent, ReactNode } from "react";
 
 import { Button } from "../button/button.tsx";
 import type { ButtonProps } from "../button/button.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./copy-button.module.css";
 
@@ -22,8 +23,8 @@ export type CopyButtonProps = Omit<ButtonProps, "children"> & {
 /**
  * Copies a text, such as an ID, a token or a snippet, to the clipboard in one press, and says so in
  * a status message screen readers announce; a refused copy says that too, so a press is never
- * silent. It needs script, so it copies after hydration (Tier 2). For a message that goes away on
- * its own, answer `onClick` with a Toast.
+ * silent. It needs script, so it copies after hydration and is hidden while scripting is off
+ * (Tier 2). For a message that goes away on its own, answer `onClick` with a Toast.
  */
 export function CopyButton({
   value,
@@ -55,7 +56,7 @@ export function CopyButton({
   return (
     <>
       <Button
-        {...props}
+        {...mergeProps({ className: styles["button"] }, props)}
         data-copied={message === copiedLabel ? "" : undefined}
         onClick={handleClick}
       />

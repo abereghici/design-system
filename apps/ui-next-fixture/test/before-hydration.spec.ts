@@ -186,6 +186,29 @@ test.describe("with JavaScript off, a Tier 1 Field control submits its form", ()
   });
 });
 
+test.describe("with JavaScript off, a Slider", () => {
+  test("moves where it is pressed", async ({ page }) => {
+    await page.goto("/slider");
+
+    const slider = page.getByRole("slider", { name: "Volume" });
+    const { width, height } = (await slider.boundingBox()) ?? { width: 0, height: 0 };
+
+    await slider.click({ position: { x: width - 1, y: height / 2 } });
+    await page.getByRole("button", { name: "Submit" }).click();
+
+    await expect(page).toHaveURL("/slider?volume=100");
+  });
+
+  test("shows no value it can't keep up with", async ({ page }) => {
+    await page.goto("/slider");
+    await page.getByRole("slider", { name: "Volume" }).press("ArrowRight");
+
+    expect(await page.getByRole("main").ariaSnapshot()).toBe(
+      '- main:\n  - slider "Volume": "41"\n  - button "Submit"',
+    );
+  });
+});
+
 const tier2 = [
   "calendar",
   "code-block",
@@ -217,9 +240,6 @@ test.describe("Tier 2 before hydration", () => {
 
   for (const route of tier2) {
     test(`${route}: renders what hydration renders, and passes axe`, async ({ page, context }) => {
-      // A Tier 2 bug, kept failing until fixed: once hydrated, Tabs sets hidden="until-found" on its
-      // inactive panels, and Chrome then exposes them in the accessibility tree.
-      test.fail(route === "tabs");
       await page.route("**/*.js", (request) => request.abort());
       await page.goto(`/${route}`);
 
@@ -236,14 +256,6 @@ test.describe("Tier 2 before hydration", () => {
     });
   }
 });
-
-// Tier 2 bugs, kept failing until fixed: these controls show with JavaScript off and do nothing.
-const shownWithoutScript = new Set([
-  "copy-button",
-  "splitter",
-  "toggle-button",
-  "toggle-button-group",
-]);
 
 test.describe("with JavaScript off, a control only script can run is hidden", () => {
   for (const [route, role, name] of [
@@ -264,7 +276,6 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
     ["splitter", "separator", "Resize folders"],
   ] as const) {
     test(`${route}: ${name}`, async ({ page }) => {
-      test.fail(shownWithoutScript.has(route));
       await page.goto(`/${route}`);
 
       const control = page.getByRole(role, { name, includeHidden: true });
