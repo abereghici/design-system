@@ -456,18 +456,8 @@
   },
   {
     "name": "table",
-    "tokens": ["table"],
-    "client": [],
-    "html": "aria-sort=\"ascending\""
-  },
-  {
-    "name": "table-selection",
     "tokens": ["table", "checkbox"],
-    "client": [
-      "table-selection/table-selection-root",
-      "table-selection/table-selection-select-all",
-      "table-selection/table-selection-select-row"
-    ],
+    "client": ["table/table-select-all", "table/table-select-row", "table/table-selection"],
     "html": "aria-label=\"Select all invoices\""
   },
   {
