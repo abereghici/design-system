@@ -67,7 +67,8 @@ export function useSplitter(part: string) {
  * `Splitter.Panel`, and give the handle a name such as "Resize folders". On the focused handle,
  * the arrow keys move it, Home and End move it to the first panel's smallest and largest size, and
  * Enter collapses the first panel or restores it. Interactive after hydration (Tier 2): the panels
- * render at their size on the server, and the handle moves once the page's JavaScript has loaded.
+ * render at their size on the server, and the handle moves once the page's JavaScript has loaded;
+ * while scripting is off, the handle is hidden.
  */
 export function Root({
   value,

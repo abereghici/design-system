@@ -49,6 +49,13 @@
     cursor: row-resize;
   }
 
+  /* Hidden in place, so the panels keep their grid tracks. */
+  @media (scripting: none) {
+    .handle {
+      visibility: hidden;
+    }
+  }
+
   /* The line is thinner than a finger, so a wider, invisible area takes the presses. */
   .handle::before {
     content: "";
