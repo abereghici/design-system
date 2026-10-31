@@ -26,6 +26,13 @@
     color: var(--ab-stepper-label-text-color);
   }
 
+  @container style(--ab-density: compact) {
+    .step {
+      --ab-stepper-indicator-size: var(--ab-size-icon-md);
+      --ab-stepper-connector-min-height: var(--ab-space-stack-sm);
+    }
+  }
+
   .root[data-orientation="vertical"] .step {
     flex: none;
     grid-template-areas:

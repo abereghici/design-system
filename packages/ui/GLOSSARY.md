@@ -65,7 +65,7 @@ The component an app mounts once at its root. It brings every global style the d
 _Avoid_: Root, app shell, LocaleProvider, ThemeProvider
 
 **Density**:
-How tightly controls are packed, `comfortable` (the default) or `compact`, set with `data-density` on any element for everything inside it; the nearest setting wins, and touch screens keep their touch size in both.
+How tightly controls and the items of collections are packed, `comfortable` (the default) or `compact`, set with `data-density` on any element for everything inside it; the nearest setting wins, and touch screens keep their touch size in both.
 _Avoid_: Size, scale, spacing mode, compact mode prop
 
 **Locale**:

@@ -1,5 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Compact 1`] = `
+- button "Report.pdf"
+- menu "File actions":
+  - menuitem "Duplicate"
+  - menuitemcheckbox "Pinned"
+  - separator
+  - menuitem "Delete"
+`;
+
 exports[`Default   > base story 1`] = `
 - button "Report.pdf"
 `;

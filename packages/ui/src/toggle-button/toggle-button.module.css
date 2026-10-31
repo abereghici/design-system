@@ -42,6 +42,14 @@
     font: var(--ab-toggle-button-lg-font);
   }
 
+  @container style(--ab-density: compact) {
+    .root {
+      --ab-toggle-button-sm-height: var(--ab-size-control-compact-sm);
+      --ab-toggle-button-md-height: var(--ab-size-control-compact-md);
+      --ab-toggle-button-lg-height: var(--ab-size-control-compact-lg);
+    }
+  }
+
   @media (hover: hover) and (pointer: fine) {
     .root:where(:not([aria-disabled="true"], [aria-pressed="true"])):hover {
       background-color: var(--ab-toggle-button-background-color-hovered);

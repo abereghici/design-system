@@ -1,5 +1,15 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Compact 1`] = `
+- tablist "Project":
+  - tab "Overview" [selected]
+  - tab "Activity 3"
+  - tab "Settings"
+- tabpanel "Overview": Selection glides on a spring.
+- tabpanel "Activity 3": Three new comments.
+- tabpanel "Settings": Project settings.
+`;
+
 exports[`Default   > base story 1`] = `
 - tablist "Project":
   - tab "Overview" [selected]

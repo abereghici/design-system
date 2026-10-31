@@ -167,6 +167,13 @@
     vertical-align: baseline;
   }
 
+  @container style(--ab-density: compact) {
+    .column-header,
+    .cell {
+      --ab-table-padding-block: var(--ab-space-inset-xs);
+    }
+  }
+
   .column-header {
     font: var(--ab-table-header-font);
     color: var(--ab-table-header-text-color);
