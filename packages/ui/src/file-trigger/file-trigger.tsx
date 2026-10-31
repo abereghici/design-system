@@ -6,9 +6,10 @@ import type { MouseEvent, ReactElement } from "react";
 import { useField } from "../field/use-field.ts";
 import { requestChange } from "../internal/change-request/change-request.ts";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
+import { DropZoneContext } from "../internal/drop-zone-context/drop-zone-context.ts";
 import { Slot } from "../internal/slot/slot.tsx";
 
-import { Input, PickerContext } from "./file-trigger-input.tsx";
+import { Input } from "./file-trigger-input.tsx";
 import type { NativeProps } from "./file-trigger-input.tsx";
 import { useFiles } from "./use-files.ts";
 import styles from "./file-trigger.module.css";
@@ -69,7 +70,7 @@ export function FileTrigger({
   clearLabel,
   ...props
 }: FileTriggerProps) {
-  const zone = use(PickerContext);
+  const zone = use(DropZoneContext);
   const { field, blocked, invalid } = useField(disabled || zone?.disabled);
   const files = useFiles();
   const trigger = useRef<HTMLElement>(null);

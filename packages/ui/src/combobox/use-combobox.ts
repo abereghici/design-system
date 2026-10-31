@@ -1,4 +1,4 @@
-import { createContext, useId, useLayoutEffect, useState } from "react";
+import { useId, useLayoutEffect, useState } from "react";
 
 import { getDocument, useEvent } from "../internal/dom-event/use-event.ts";
 import { getById } from "../internal/get-by-id/get-by-id.ts";
@@ -19,12 +19,6 @@ import {
   part,
 } from "./combobox-state.ts";
 import type { ComboboxState, Options } from "./combobox-state.ts";
-
-/** The chosen values, and whether the list marks them selected (several) or marks the highlight. */
-export const ValueContext = createContext<{ chosen: readonly string[]; multiple: boolean }>({
-  chosen: [],
-  multiple: false,
-});
 
 type OwnState = Omit<ComboboxState, "listbox">;
 
