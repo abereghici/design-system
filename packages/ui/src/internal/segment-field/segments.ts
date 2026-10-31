@@ -1,4 +1,4 @@
-export type Segments<Part extends string> = Readonly<Partial<Record<Part, number>>>;
+export type Segments<Part extends string> = Readonly<Partial<Record<Part, number | undefined>>>;
 
 /** A value typed in segments, as DateField's date and TimeField's time. */
 export interface SegmentModel<Part extends string, Value> {
@@ -38,7 +38,7 @@ const set = <Part extends string>(
   segments: Segments<Part>,
   part: Part,
   value: number | undefined,
-) => ({ ...segments, [part]: value }) as Segments<Part>;
+): Segments<Part> => ({ ...segments, [part]: value });
 
 /** Adds a typed digit; `done` means the segment can take no more digits and focus moves on. */
 export function typeDigit<Part extends string, Value>(
