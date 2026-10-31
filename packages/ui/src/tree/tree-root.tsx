@@ -5,15 +5,13 @@ import type { ComponentProps, KeyboardEvent, SyntheticEvent } from "react";
 
 import "@abereghici/tokens/components/tree.css";
 
-import { dispatchFeedback } from "../feedback-event/feedback-event.ts";
 import type { ChangeEventDetails as Details } from "../internal/change-request/change-request.ts";
 import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import { pointerMarker } from "../internal/interaction/pointer-marker.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
-import { toggled } from "../internal/selection/selection.ts";
-import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import { enter, keyTarget } from "./tree-navigation.ts";
+import { useTreeState } from "./use-tree-state.ts";
 import styles from "./tree.module.css";
 
 /**
@@ -56,24 +54,26 @@ const onChevron = (event: ItemEvent, item: TreeItemState) =>
   event.target instanceof Node &&
   event.currentTarget.firstElementChild?.contains(event.target) === true;
 
-/** Keys held by the Tree or the app; a change is requested first and dispatches `ab-toggle`. */
-function useKeys<Reason extends string>(
-  keys: ReadonlyArray<string> | undefined,
-  defaultKeys: ReadonlyArray<string>,
-  onChange: ((keys: string[], details: Details<Reason>) => void) | undefined,
-) {
-  const [current, request] = useControllableState(keys, defaultKeys, onChange);
+type TreeState = ReturnType<typeof useTreeState>;
 
-  function change(next: string[], reason: Reason, event: ItemEvent) {
-    if (request(next, reason, event.nativeEvent)) {
-      dispatchFeedback(event.currentTarget, "ab-toggle", {
-        component: "Tree",
-        userInitiated: true,
-      });
-    }
+function press(tree: TreeState, event: ItemEvent, item: TreeItemState) {
+  if (tree.selectedKeys === null || onChevron(event, item)) {
+    if (item.branch) tree.toggle(item.id, "item-press", event);
+  } else {
+    tree.select(item.id, event);
   }
+}
 
-  return [current, change] as const;
+function keyDown(tree: TreeState, event: KeyboardEvent<HTMLElement>, item: TreeItemState) {
+  const target = keyTarget(event, item);
+
+  if (target === null) return;
+
+  event.preventDefault();
+
+  if (target === "toggle") tree.toggle(item.id, "arrow-key", event);
+  else if (target === "press") press(tree, event, item);
+  else if (target instanceof HTMLElement) target.focus();
 }
 
 export type RootProps = Omit<ComponentProps<"div">, "role"> & {
@@ -116,47 +116,38 @@ export type RootProps = Omit<ComponentProps<"div">, "role"> & {
  */
 export function Root({
   expandedKeys,
-  defaultExpandedKeys = [],
+  defaultExpandedKeys,
   onExpandedChange,
   selectionMode,
   selectedKeys,
-  defaultSelectedKeys = [],
+  defaultSelectedKeys,
   onSelectionChange,
   ...props
 }: RootProps) {
-  const [expanded, setExpanded] = useKeys(expandedKeys, defaultExpandedKeys, onExpandedChange);
-  const [selected, setSelected] = useKeys(selectedKeys, defaultSelectedKeys, onSelectionChange);
+  const tree = useTreeState({
+    expandedKeys,
+    defaultExpandedKeys,
+    onExpandedChange,
+    selectionMode,
+    selectedKeys,
+    defaultSelectedKeys,
+    onSelectionChange,
+  });
   const [active, setActive] = useState<string | null>(null);
-  const expandedSet = new Set(expanded);
-  const selectedSet = selectionMode === undefined ? null : new Set(selected);
-
-  function press(event: ItemEvent, item: TreeItemState) {
-    if (selectedSet === null || onChevron(event, item)) {
-      if (item.branch) setExpanded(toggled(expanded, item.id), "item-press", event);
-    } else if (selectionMode === "multiple") {
-      setSelected(toggled(selected, item.id), "item-press", event);
-    } else if (!selectedSet.has(item.id)) {
-      setSelected([item.id], "item-press", event);
-    }
-  }
-
-  function keyDown(event: KeyboardEvent<HTMLElement>, item: TreeItemState) {
-    const target = keyTarget(event, item);
-
-    if (target === null) return;
-
-    event.preventDefault();
-
-    if (target === "toggle") setExpanded(toggled(expanded, item.id), "arrow-key", event);
-    else if (target === "press") press(event, item);
-    else if (target instanceof HTMLElement) target.focus();
-  }
 
   return (
     <TreeContext
       value={{
-        state: { expandedKeys: expandedSet, selectedKeys: selectedSet, active },
-        actions: { focus: setActive, keyDown, press },
+        state: { expandedKeys: tree.expandedKeys, selectedKeys: tree.selectedKeys, active },
+        actions: {
+          focus: setActive,
+          keyDown: (event, item) => {
+            keyDown(tree, event, item);
+          },
+          press: (event, item) => {
+            press(tree, event, item);
+          },
+        },
         meta: { level: 1 },
       }}
     >
