@@ -1,12 +1,13 @@
 "use client";
 
-import { use, useState } from "react";
+import { use } from "react";
 import type { ComponentProps, MouseEvent, ReactNode } from "react";
 
 import "@abereghici/tokens/components/toggle-button.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { ToggleGroupContext } from "../internal/toggle/toggle-group.ts";
 
@@ -57,8 +58,8 @@ export function ToggleButton({
   ...props
 }: ToggleButtonProps) {
   const group = use(ToggleGroupContext);
-  const [uncontrolled, setUncontrolled] = useState(defaultPressed ?? false);
-  const current = group?.pressed(value) ?? pressed ?? uncontrolled;
+  const [own, request] = useControllableState(pressed, defaultPressed ?? false, onPressedChange);
+  const current = group?.pressed(value) ?? own;
 
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     if (disabled) {
@@ -70,9 +71,7 @@ export function ToggleButton({
     onClick?.(event);
 
     if (group === null) {
-      if (!requestChange(onPressedChange, !current, "none", event)) return;
-
-      setUncontrolled(!current);
+      if (!request(!current, "none", event)) return;
     } else if (!group.toggle(value, event)) return;
 
     dispatchFeedback(event.currentTarget, "ab-toggle", {

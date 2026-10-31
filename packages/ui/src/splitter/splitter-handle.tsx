@@ -4,16 +4,13 @@ import type { ComponentProps, KeyboardEvent, PointerEvent } from "react";
 
 import "@abereghici/tokens/components/splitter.css";
 
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import { useSplitter } from "./splitter-root.tsx";
 import type { SplitterContextValue } from "./splitter-root.tsx";
 import styles from "./splitter.module.css";
-
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
 
 export type HandleProps = Omit<ComponentProps<"hr">, "aria-label" | "aria-labelledby"> &
   AccessibleName;

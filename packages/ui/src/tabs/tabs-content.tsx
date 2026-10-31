@@ -20,7 +20,7 @@ export interface ContentProps extends ComponentProps<"div"> {
 export function Content({ value, ref, ...props }: ContentProps) {
   const tabs = useTabs("Content");
   const panel = useRef<HTMLDivElement>(null);
-  const hidden = value !== tabs.value;
+  const hidden = value !== tabs.state.value;
 
   // react-dom writes any truthy `hidden` as `hidden=""`, so the server sends plain hidden panels.
   useLayoutEffect(() => {
@@ -32,7 +32,7 @@ export function Content({ value, ref, ...props }: ContentProps) {
     (event) => {
       const element = panel.current;
 
-      if (element === null || event.target !== element || tabs.reveal(value, event)) return;
+      if (element === null || event.target !== element || tabs.actions.reveal(value, event)) return;
 
       // The browser removes `hidden` once `beforematch` returns.
       requestAnimationFrame(() => {
@@ -48,8 +48,8 @@ export function Content({ value, ref, ...props }: ContentProps) {
       {...mergeProps({ className: styles["content"] }, props)}
       ref={composeRefs(panel, ref)}
       role="tabpanel"
-      id={`${tabs.id}-content-${value}`}
-      aria-labelledby={`${tabs.id}-trigger-${value}`}
+      id={`${tabs.meta.id}-content-${value}`}
+      aria-labelledby={`${tabs.meta.id}-trigger-${value}`}
       // A panel hidden until found keeps its box, which Chrome exposes; find-in-page ignores `aria-hidden`.
       aria-hidden={hidden || undefined}
       hidden={hidden}

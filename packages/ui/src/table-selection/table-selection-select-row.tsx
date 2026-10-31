@@ -7,6 +7,7 @@ import "@abereghici/tokens/components/table.css";
 import { Checkbox } from "../checkbox/checkbox.tsx";
 import { dispatchFeedback } from "../events/events.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
+import { toggled } from "../internal/toggle/toggle.ts";
 import { Cell } from "../table/table-cell.tsx";
 
 import { useSelection } from "./table-selection-root.tsx";
@@ -50,10 +51,8 @@ export function SelectRow({ value, selectRowLabel, ...props }: SelectRowProps) {
         <Checkbox
           aria-label={selectRowLabel}
           checked={selected}
-          onCheckedChange={(checked, details) => {
-            const next = checked
-              ? [...state.selectedKeys, value]
-              : state.selectedKeys.filter((key) => key !== value);
+          onCheckedChange={(_checked, details) => {
+            const next = toggled(state.selectedKeys, value);
 
             if (!actions.select(next, "row-press", details.event)) details.cancel();
           }}

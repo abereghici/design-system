@@ -1,10 +1,10 @@
 "use client";
 
-import { use, useState } from "react";
+import { use } from "react";
 import type { ComponentProps } from "react";
 
-import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { DatePickerContext } from "../internal/date/date.ts";
 import type { Temporal } from "../internal/date/date.ts";
 
@@ -53,8 +53,8 @@ export function Calendar({
   ...rest
 }: CalendarProps) {
   const picker = use(DatePickerContext);
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
-  const own = { value: value === undefined ? uncontrolled : value, min, max, isDateUnavailable };
+  const [current, request] = useControllableState(value, defaultValue, onValueChange);
+  const own = { value: current, min, max, isDateUnavailable };
   const limits = picker ?? own;
   const selected = limits.value;
 
@@ -66,12 +66,7 @@ export function Calendar({
       picker={picker}
       choose={(date, event) => {
         if (picker !== null) picker.choose(date, event);
-        else if (
-          selected?.equals(date) !== true &&
-          requestChange(onValueChange, date, "day-press", event)
-        ) {
-          setUncontrolled(date);
-        }
+        else if (selected?.equals(date) !== true) request(date, "day-press", event);
       }}
     />
   );

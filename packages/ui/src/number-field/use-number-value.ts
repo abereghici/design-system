@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import type { KeyboardEvent, SyntheticEvent } from "react";
 
-import { requestChange } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { useEvent } from "../events/use-event.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
 
@@ -90,26 +90,22 @@ function useNumber({
   defaultValue = null,
   onValueChange,
 }: Pick<ControlProps, "value" | "defaultValue" | "onValueChange">) {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
+  const hidden = useRef<HTMLInputElement>(null);
+  const form = () => hidden.current?.form;
+  const [committed, change] = useControllableState(value, defaultValue, onValueChange, form);
   const [text, setText] = useState<string | null>(null);
-  const committed = value === undefined ? uncontrolled : value;
   const commit = (next: number | null, reason: Reason, event: SyntheticEvent) => {
     setText(null);
 
-    if (next === committed) return;
-
-    if (requestChange(onValueChange, next, reason, event)) setUncontrolled(next);
+    if (next !== committed) change(next, reason, event);
   };
-
-  const hidden = useRef<HTMLInputElement>(null);
 
   useEvent(
     "reset",
     () => {
-      setUncontrolled(defaultValue);
       setText(null);
     },
-    () => hidden.current?.form,
+    form,
   );
 
   return { committed, text, setText, commit, hidden };

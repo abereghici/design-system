@@ -7,6 +7,7 @@ import { mergeProps } from "../slot/slot.tsx";
 import { erasePart, stepKey, typeDigit, typeLetter } from "./segments.ts";
 import type { Comparable, SegmentModel, Segments } from "./segments.ts";
 import type { Buffer, Reason, useSegmentValue } from "./use-segment-value.ts";
+import fieldStyles from "../../field/field.module.css";
 
 interface Validity<Part extends string, Value> {
   readonly apply: (segments: Segments<Part>, value: Value | null) => void;
@@ -41,8 +42,8 @@ function useFocus<Part extends string, Value>(
     },
     move: (part: Part, delta: number) => {
       const segment = elements.current.get(part);
-      // In the field box's DOM order, so a DateRangePicker's end date follows its start date.
-      const box = segment?.parentElement?.parentElement;
+      // In the field box's order, so a DateRangePicker's end date follows its start date.
+      const box = segment?.closest(`.${CSS.escape(fieldStyles["control"] ?? "")}`);
       const all = [...(box?.querySelectorAll<HTMLElement>('[role="spinbutton"]') ?? [])];
 
       if (segment !== undefined) all[all.indexOf(segment) + delta]?.focus();

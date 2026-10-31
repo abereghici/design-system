@@ -54,10 +54,10 @@ function useServerError(name: string | undefined, control: FormControl | null) {
 
     if (first !== control || document.activeElement === control) return;
 
-    // DateField renders its native input only without script; a press on it, as from its label,
-    // moves focus to the segments.
-    if (getComputedStyle(control).display === "none") control.click();
-    else control.focus();
+    control.focus();
+
+    // As a click on its label would: a control that can't take focus itself is pressed instead.
+    if (document.activeElement !== control) control.click();
   }, [errors, server, control]);
 
   return {

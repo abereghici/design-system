@@ -1,10 +1,10 @@
 "use client";
 
-import { createContext, use, useId, useState } from "react";
+import { createContext, use, useId } from "react";
 import type { ReactNode } from "react";
 
-import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 
 /** `cancel()`: keeps the rows that were selected. */
 export type ChangeEventDetails = Details<"row-press" | "select-all-press">;
@@ -72,20 +72,16 @@ export function Root({
   children,
 }: RootProps) {
   const name = useId();
-  const [uncontrolled, setUncontrolled] = useState(defaultSelectedKeys);
-
-  function select(next: string[], reason: ChangeEventDetails["reason"], event: Event): boolean {
-    if (!requestChange(onSelectionChange, next, reason, event)) return false;
-
-    setUncontrolled(next);
-
-    return true;
-  }
+  const [current, select] = useControllableState(
+    selectedKeys,
+    defaultSelectedKeys,
+    onSelectionChange,
+  );
 
   return (
     <Context
       value={{
-        state: { selectionMode, selectedKeys: selectedKeys ?? uncontrolled },
+        state: { selectionMode, selectedKeys: current },
         actions: { select },
         meta: { name },
       }}

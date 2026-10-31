@@ -2,11 +2,9 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/breadcrumbs.css";
 
-import styles from "./breadcrumbs.module.css";
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
+import styles from "./breadcrumbs.module.css";
 
 export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelledby"> &
   AccessibleName;

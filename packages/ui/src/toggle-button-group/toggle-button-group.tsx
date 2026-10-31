@@ -1,22 +1,20 @@
 "use client";
 
-import { useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/toggle-button-group.css";
 
 import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { ToggleGroupContext } from "../internal/toggle/toggle-group.ts";
+import { toggled, valuesOf } from "../internal/toggle/toggle.ts";
 
 import styles from "./toggle-button-group.module.css";
 
 export type ToggleButtonGroupChangeEventDetails = Details<"none", MouseEvent<HTMLButtonElement>>;
-
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
 
 interface Single {
   /** How many buttons can be pressed at once. */
@@ -48,9 +46,6 @@ export type ToggleButtonGroupProps = Omit<
   (Single | Multiple) &
   ({ value?: never } | { defaultValue?: never });
 
-const list = (value: string | readonly string[] | undefined) =>
-  value === undefined ? [] : typeof value === "string" ? (value === "" ? [] : [value]) : [...value];
-
 /**
  * Holds the pressed state of the ToggleButtons inside it, one at a time or several with
  * `selectionMode="multiple"`. Name it with `aria-label`. Each button keeps its own Tab stop; inside
@@ -70,16 +65,14 @@ export function ToggleButtonGroup(props: ToggleButtonGroupProps) {
     onValueChange: _onValueChange,
     ...rest
   } = props;
-  const [uncontrolled, setUncontrolled] = useState(() => list(defaultValue));
-  const current = value === undefined ? uncontrolled : list(value);
+  const [current, , set] = useControllableState(
+    value === undefined ? undefined : valuesOf(value),
+    valuesOf(defaultValue),
+  );
   const multiple = selectionMode === "multiple";
 
   function toggle(item: string, event: MouseEvent<HTMLButtonElement>) {
-    const next = current.includes(item)
-      ? current.filter((each) => each !== item)
-      : multiple
-        ? [...current, item]
-        : [item];
+    const next = multiple || current.includes(item) ? toggled(current, item) : [item];
     const accepted =
       props.selectionMode === "multiple"
         ? requestChange(props.onValueChange, next, "none", event)
@@ -87,7 +80,7 @@ export function ToggleButtonGroup(props: ToggleButtonGroupProps) {
 
     if (!accepted) return false;
 
-    setUncontrolled(next);
+    set(next);
 
     return true;
   }

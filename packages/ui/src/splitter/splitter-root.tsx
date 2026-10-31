@@ -5,8 +5,9 @@ import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/splitter.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./splitter.module.css";
@@ -81,19 +82,14 @@ export function Root({
   orientation = "horizontal",
   ...props
 }: RootProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
-  const current = value ?? uncontrolled;
+  const [current, request] = useControllableState(value, defaultValue, onValueChange);
   const [expanded, setExpanded] = useState(current);
   const [dragging, setDragging] = useState(false);
 
   function resize(raw: number, reason: Reason, event: Event) {
     const next = Math.min(Math.max(raw, min), max);
 
-    if (next === current || !requestChange(onValueChange, next, reason, event)) return false;
-
-    setUncontrolled(next);
-
-    return true;
+    return next !== current && request(next, reason, event);
   }
 
   function toggle(event: KeyboardEvent<HTMLElement>) {

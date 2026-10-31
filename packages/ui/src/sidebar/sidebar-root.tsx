@@ -2,13 +2,10 @@ import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/sidebar.css";
 
+import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./sidebar.module.css";
-
-type AccessibleName =
-  | { "aria-label": string; "aria-labelledby"?: string }
-  | { "aria-label"?: string; "aria-labelledby": string };
 
 /** Name every navigation landmark: a Sidebar usually sits beside a Navbar. */
 export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelledby"> &

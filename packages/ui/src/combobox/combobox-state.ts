@@ -11,6 +11,7 @@ import { isComposing, requestChange, trackComposition } from "../events/events.t
 import type { ChangeEventDetails as Details } from "../events/events.ts";
 import { enabled, navigate, optionAt, textOf } from "../internal/listbox/listbox.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
+import { toggled } from "../internal/toggle/toggle.ts";
 
 export const chosenOf = (list: Element, value: string | null) =>
   value === null ? null : list.querySelector(`[role="option"][data-value="${CSS.escape(value)}"]`);
@@ -133,13 +134,13 @@ export interface ComboboxState {
 const memories = new WeakMap<Element, Memory>();
 
 export const part = (
-  c: ComboboxState,
+  c: Pick<ComboboxState, "id">,
   name: "root" | "box" | "list" | "label" | "empty" | "status",
 ) => `${c.id}${name}`;
 
 export const listOf = (c: ComboboxState) => document.getElementById(part(c, "list"));
 
-export const inputOf = (c: ComboboxState) =>
+export const inputOf = (c: Pick<ComboboxState, "id">) =>
   document.getElementById(part(c, "root"))?.querySelector<HTMLInputElement>('[role="combobox"]') ??
   null;
 
@@ -245,9 +246,7 @@ function choose(c: ComboboxState, option: HTMLElement, event: Event) {
   if (!enabled(option)) return;
 
   if (c.multiple) {
-    const next = c.value.includes(value)
-      ? c.value.filter((each) => each !== value)
-      : [...c.value, value];
+    const next = toggled(c.value, value);
 
     if (changeValues(c, next, "item-press", event) && changeText(c, "", "item-press", event)) {
       memoryOf(c).edge = "kept";

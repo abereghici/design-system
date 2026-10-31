@@ -1,16 +1,9 @@
 import type { ComponentProps } from "react";
 
-import { Slot, mergeProps } from "../internal/slot/slot.tsx";
+import { Flex } from "../internal/flex/flex.tsx";
+import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./inline.module.css";
-
-declare module "react" {
-  interface CSSProperties {
-    "--gap"?: string;
-    "--align"?: string;
-    "--justify"?: string;
-  }
-}
 
 export interface InlineProps extends ComponentProps<"div"> {
   /** The space between children, and between the lines they wrap onto. */
@@ -36,17 +29,13 @@ export function Inline({
   asChild = false,
   ...props
 }: InlineProps) {
-  const Element = asChild ? Slot : "div";
-
   return (
-    <Element
-      {...mergeProps(
-        {
-          className: styles["root"],
-          style: { "--gap": `var(--ab-space-${gap})`, "--align": align, "--justify": justify },
-        },
-        props,
-      )}
+    <Flex
+      {...mergeProps({ className: styles["root"] }, props)}
+      gap={gap}
+      align={align}
+      justify={justify}
+      asChild={asChild}
     />
   );
 }

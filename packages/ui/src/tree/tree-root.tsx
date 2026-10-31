@@ -5,10 +5,12 @@ import type { ComponentProps, FocusEvent, KeyboardEvent, SyntheticEvent } from "
 
 import "@abereghici/tokens/components/tree.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { typeahead } from "../internal/listbox/listbox.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
+import { toggled } from "../internal/toggle/toggle.ts";
 
 /**
  * `"arrow-key"`: Right or Left on an Item. `"item-press"`: a click on an Item's chevron, or a
@@ -56,9 +58,6 @@ const shownItems = (tree: Element) =>
   [...tree.querySelectorAll<HTMLElement>('[role="treeitem"]')].filter((item) =>
     item.checkVisibility(),
   );
-
-const toggled = (keys: readonly string[], id: string) =>
-  keys.includes(id) ? keys.filter((key) => key !== id) : [...keys, id];
 
 /** Whether a click landed on the chevron, the Item's first child, rather than its label. */
 const onChevron = (event: ItemEvent, item: TreeItemState) =>
@@ -117,16 +116,15 @@ function useKeys<Reason extends string>(
   defaultKeys: ReadonlyArray<string>,
   onChange: ((keys: string[], details: Details<Reason>) => void) | undefined,
 ) {
-  const [uncontrolled, setUncontrolled] = useState(defaultKeys);
+  const [current, request] = useControllableState(keys, defaultKeys, onChange);
 
   function change(next: string[], reason: Reason, event: ItemEvent) {
-    if (!requestChange(onChange, next, reason, event.nativeEvent)) return;
-
-    setUncontrolled(next);
-    dispatchFeedback(event.currentTarget, "ab-toggle", { component: "Tree", reason: "user" });
+    if (request(next, reason, event.nativeEvent)) {
+      dispatchFeedback(event.currentTarget, "ab-toggle", { component: "Tree", reason: "user" });
+    }
   }
 
-  return [keys ?? uncontrolled, change] as const;
+  return [current, change] as const;
 }
 
 export type RootProps = Omit<ComponentProps<"div">, "role"> & {

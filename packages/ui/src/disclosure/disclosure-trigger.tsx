@@ -25,7 +25,7 @@ export function Trigger({ children, onClick, ...props }: TriggerProps) {
       {...mergeProps({ className: styles["trigger"], ...pointerMarker }, props)}
       onClick={composeEventHandlers(onClick, (event: MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        disclosure.change(!disclosure.open, event);
+        disclosure.actions.change(!disclosure.state.open, event);
       })}
     >
       {children}

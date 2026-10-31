@@ -1,12 +1,13 @@
 "use client";
 
-import { createContext, use, useState } from "react";
+import { createContext, use } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/tag-group.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./tag-group.module.css";
@@ -70,16 +71,14 @@ export function Root({
   disabled = false,
   ...props
 }: RootProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue ?? []);
-  const current = value ?? uncontrolled;
+  const [current, request] = useControllableState(value, defaultValue ?? [], onValueChange);
 
   function remove(tag: string, event: MouseEvent<HTMLButtonElement>) {
     const button = event.currentTarget;
     const next = current.filter((v) => v !== tag);
 
-    if (disabled || !requestChange(onValueChange, next, "remove-press", event.nativeEvent)) return;
+    if (disabled || !request(next, "remove-press", event.nativeEvent)) return;
 
-    setUncontrolled(next);
     dispatchFeedback(button, "ab-dismiss", { component: "TagGroup", reason: "user" });
 
     // Only focus that would be lost moves: onValueChange may have sent it elsewhere.
