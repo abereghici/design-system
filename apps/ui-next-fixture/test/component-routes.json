@@ -178,7 +178,7 @@
   },
   {
     "name": "password-field",
-    "tokens": ["field", "icon", "icon-button", "spinner"],
+    "tokens": ["field", "icon", "toggle-button"],
     "client": [
       "field/field-description",
       "field/field-error",

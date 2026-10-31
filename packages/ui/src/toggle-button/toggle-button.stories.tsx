@@ -1,5 +1,7 @@
 import { expect, fn } from "storybook/test";
 
+import { PinIcon } from "@abereghici/ui/icons/pin";
+
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -98,3 +100,15 @@ Default.test(
     await expect(args.onPressedChange).not.toHaveBeenCalled();
   },
 );
+
+export const IconOnly = meta.story({
+  args: { value: "pin", "aria-label": "Pin", children: <PinIcon /> },
+  parameters: {
+    docs: { description: { story: "An icon alone, named by `aria-label`, in a square." } },
+  },
+});
+
+IconOnly.test("is named by its aria-label and turns on and off", async ({ canvas, userEvent }) => {
+  await userEvent.click(canvas.getByRole("button", { name: "Pin", pressed: false }));
+  await expect(canvas.getByRole("button", { name: "Pin", pressed: true })).toBeVisible();
+});

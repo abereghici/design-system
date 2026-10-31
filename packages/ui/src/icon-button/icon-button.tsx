@@ -5,15 +5,11 @@ import type { ComponentProps, MouseEvent } from "react";
 import "@abereghici/tokens/components/icon-button.css";
 
 import { dispatchFeedback } from "../events/events.ts";
-import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { useControllableState } from "../events/use-controllable-state.ts";
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./icon-button.module.css";
-
-export type IconButtonChangeEventDetails = Details<"none", MouseEvent<HTMLButtonElement>>;
 
 export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "aria-labelledby"> &
   AccessibleName & {
@@ -22,12 +18,6 @@ export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "ari
      * on their own.
      */
     size?: "sm" | "md" | "lg";
-    /** Makes it a toggle that stays on or off, such as Pin or Bold, held by your state. */
-    pressed?: boolean;
-    /** Makes it a toggle that holds its own on or off state, starting with this one. */
-    defaultPressed?: boolean;
-    /** Called before the change commits; `details.cancel()` keeps the current state. */
-    onPressedChange?: (pressed: boolean, details: IconButtonChangeEventDetails) => void;
     /** Shows a spinner and blocks presses while the action runs, keeping focus. */
     loading?: boolean;
     /**
@@ -41,21 +31,16 @@ export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "ari
     asChild?: boolean;
   };
 
-const feedback = { component: "IconButton", reason: "user" } as const;
-
 /**
  * An action shown as an icon alone, for toolbars and tight rows. Give it a name with `aria-label`
- * (or `aria-labelledby`), since the icon says nothing to a screen reader. With `pressed` or
- * `defaultPressed` it is a toggle. A press dispatches `ab-press`, a toggle `ab-toggle`. Use a Button
- * with a visible label whenever space allows.
+ * (or `aria-labelledby`), since the icon says nothing to a screen reader. A press dispatches
+ * `ab-press`. For an icon that stays on or off, such as Pin or Bold, use a ToggleButton; use a
+ * Button with a visible label whenever space allows.
  *
  * Tier 1: works before hydration.
  */
 export function IconButton({
   size = "md",
-  pressed,
-  defaultPressed,
-  onPressedChange,
   loading = false,
   disabled = false,
   asChild = false,
@@ -63,8 +48,6 @@ export function IconButton({
   onClick,
   ...props
 }: IconButtonProps) {
-  const [current, request] = useControllableState(pressed, defaultPressed, onPressedChange);
-
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     if (disabled || loading) {
       event.preventDefault();
@@ -73,16 +56,10 @@ export function IconButton({
     }
 
     onClick?.(event);
-
-    if (current === undefined) {
-      dispatchFeedback(event.currentTarget, "ab-press", feedback);
-
-      return;
-    }
-
-    if (!request(!current, "none", event)) return;
-
-    dispatchFeedback(event.currentTarget, "ab-toggle", feedback);
+    dispatchFeedback(event.currentTarget, "ab-press", {
+      component: "IconButton",
+      reason: "user",
+    });
   }
 
   const Root = asChild ? Slot : "button";
@@ -91,7 +68,6 @@ export function IconButton({
     <Root
       {...mergeProps({ className: styles["root"] }, props)}
       type={asChild ? undefined : type}
-      aria-pressed={current}
       aria-disabled={disabled ? true : undefined}
       aria-busy={loading ? true : undefined}
       data-loading={loading ? "" : undefined}

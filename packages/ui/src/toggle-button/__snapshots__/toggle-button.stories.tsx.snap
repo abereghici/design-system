@@ -3,3 +3,7 @@
 exports[`Default   > base story 1`] = `
 - button "Bold"
 `;
+
+exports[`Icon Only   > base story 1`] = `
+- button "Pin"
+`;

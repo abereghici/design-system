@@ -101,7 +101,6 @@ export type PressFeedbackEvent = CustomEvent<
 /** Not `ToggleEvent`, which would shadow the DOM's popover and `<details>` event type. */
 export type ToggleFeedbackEvent = CustomEvent<
   FeedbackEventDetail<
-    | "IconButton"
     | "Checkbox"
     | "Switch"
     | "RadioGroup"
