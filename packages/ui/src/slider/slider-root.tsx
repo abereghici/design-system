@@ -9,7 +9,7 @@ import type { ChangeEventDetails as Details } from "../internal/change-request/c
 import { composeRefs } from "../internal/compose-refs/compose-refs.ts";
 import { createSafeContext } from "../internal/create-safe-context/create-safe-context.ts";
 import type { EventTargetSource } from "../internal/dom-event/use-event.ts";
-import { useLocale } from "../internal/locale/use-locale.ts";
+import { useNumberFormatter } from "../internal/locale/use-number-formatter.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 import { snapValueToStep } from "../internal/snap-value-to-step/snap-value-to-step.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
@@ -68,7 +68,7 @@ function useSliderState(options: Options, scale: Scale, form: EventTargetSource)
     form,
   );
   const [dragging, setDragging] = useState<number | null>(null);
-  const formatter = new Intl.NumberFormat(useLocale(), options.format);
+  const formatter = useNumberFormatter(options.format);
   const values = typeof current === "number" ? [current] : current;
   const output = (next: readonly number[]) =>
     typeof current === "number" ? (next[0] ?? min) : [...next];

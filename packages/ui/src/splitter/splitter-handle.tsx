@@ -5,7 +5,7 @@ import type { ComponentProps, KeyboardEvent, PointerEvent } from "react";
 import "@abereghici/tokens/components/splitter.css";
 
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
-import { useLocale } from "../internal/locale/use-locale.ts";
+import { useNumberFormatter } from "../internal/locale/use-number-formatter.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
 
 import { useSplitter } from "./splitter-root.tsx";
@@ -47,15 +47,14 @@ function positionAt(event: PointerEvent<HTMLHRElement>, horizontal: boolean) {
   return ((offset - handle.width / 2) / (root.width - handle.width)) * 100;
 }
 
+const wholePercent: Intl.NumberFormatOptions = { style: "percent", maximumFractionDigits: 0 };
+
 /** The line between the panels that people drag, or focus and move with the keyboard. */
 export function Handle(props: HandleProps) {
   const splitter = useSplitter("Splitter.Handle");
   const { state, actions, meta } = splitter;
   const horizontal = meta.orientation === "horizontal";
-  const percent = new Intl.NumberFormat(useLocale(), {
-    style: "percent",
-    maximumFractionDigits: 0,
-  });
+  const percent = useNumberFormatter(wholePercent);
 
   const own = {
     className: styles["handle"],

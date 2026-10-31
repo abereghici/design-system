@@ -2,56 +2,15 @@ import { useRef, useState } from "react";
 import type { KeyboardEvent, SyntheticEvent } from "react";
 
 import { useEvent } from "../internal/dom-event/use-event.ts";
-import { useLocale } from "../internal/locale/use-locale.ts";
+import { useNumberFormatter } from "../internal/locale/use-number-formatter.ts";
 import { snapValueToStep } from "../internal/snap-value-to-step/snap-value-to-step.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import type { Direction } from "./number-field-step-buttons.tsx";
 import type { ControlProps, NumberFieldChangeEventDetails } from "./number-field.tsx";
+import { parseNumber } from "./parse-number.ts";
 
 type Bounds = Partial<Record<"min" | "max", number | undefined>>;
-
-function buildNumberFormat(
-  locale: Intl.LocalesArgument,
-  options: Intl.NumberFormatOptions | undefined,
-) {
-  const format = new Intl.NumberFormat(locale, options);
-  const parts = format.formatToParts(-1234567.89);
-  const symbol = (type: Intl.NumberFormatPartTypes) =>
-    parts.find((part) => part.type === type)?.value;
-  const digitFormat = new Intl.NumberFormat(locale, { useGrouping: false });
-  const digits = Array.from({ length: 10 }, (_, digit) => digitFormat.format(digit));
-  const parse = (text: string) => {
-    let raw = "";
-
-    for (const char of text) {
-      const digit = digits.indexOf(char);
-
-      if (digit !== -1) raw += String(digit);
-      else if (char === symbol("decimal")) raw += ".";
-      else if (char === "-" || char === symbol("minusSign")) raw += "-";
-    }
-
-    if (raw === "") return text.trim() === "" ? null : Number.NaN;
-
-    const value = Number(raw);
-
-    return options?.style === "percent" ? value / 100 : value;
-  };
-
-  return { format: (value: number) => format.format(value), parse };
-}
-
-const numberFormats = new Map<string, ReturnType<typeof buildNumberFormat>>();
-
-function numberFormat(locale: Intl.LocalesArgument, options: Intl.NumberFormatOptions | undefined) {
-  const key = `${String(locale)} ${JSON.stringify(options)}`;
-  const cached = numberFormats.get(key) ?? buildNumberFormat(locale, options);
-
-  numberFormats.set(key, cached);
-
-  return cached;
-}
 
 function stepKey(event: KeyboardEvent, step: number, largeStep: number, { min, max }: Bounds) {
   const large = event.shiftKey ? largeStep : step;
@@ -114,14 +73,14 @@ export function useNumberValue({
   largeStep,
   ...rest
 }: Omit<ControlProps, "startElement" | "incrementLabel" | "decrementLabel">) {
-  const { format, parse } = numberFormat(useLocale(), formatOptions);
+  const formatter = useNumberFormatter(formatOptions);
   const { committed, text, setText, commit, hidden } = useNumber({
     value,
     defaultValue,
     onValueChange,
   });
   const current = () => {
-    const parsed = text === null ? committed : parse(text);
+    const parsed = text === null ? committed : parseNumber(text, formatter);
 
     return parsed !== null && Number.isNaN(parsed) ? committed : parsed;
   };
@@ -135,7 +94,7 @@ export function useNumberValue({
     hidden,
     inputMode: inputMode(step, min),
     committed,
-    display: text ?? (committed === null ? "" : format(committed)),
+    display: text ?? (committed === null ? "" : formatter.format(committed)),
     setText,
     atBound: (direction: Direction) =>
       committed !== null && committed === (direction === 1 ? max : min),

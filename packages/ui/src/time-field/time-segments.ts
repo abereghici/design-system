@@ -1,4 +1,5 @@
-import { perLocale, Temporal } from "../internal/date/date.ts";
+import { Temporal } from "../internal/date/date.ts";
+import { perLocale } from "../internal/locale/per-locale.ts";
 import type { SegmentModel } from "../internal/segment-field/segments.ts";
 
 export type TimePart = "hour" | "minute" | "dayPeriod";
