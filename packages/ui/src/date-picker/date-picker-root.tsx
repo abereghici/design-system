@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import type { ReactNode } from "react";
 
 import { Root as DateFieldRoot } from "../date-field/date-field-root.tsx";
 import type { DateFieldChangeEventDetails, DateFieldProps } from "../date-field/date-field.tsx";
-import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { DatePickerContext, useDateFormats } from "../internal/date/date.ts";
 import type { PickerContextValue, Temporal } from "../internal/date/date.ts";
 import { useOverlay } from "../internal/overlay/overlay.ts";
@@ -55,31 +55,18 @@ export type RootProps = Omit<DateFieldProps, "value" | "defaultValue" | "onValue
     children?: ReactNode;
   };
 
-function useValue({ value, defaultValue = null, onValueChange }: RootProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
-  const current = value === undefined ? uncontrolled : value;
-  const change = (
+interface DateValue {
+  readonly current: Temporal.PlainDate | null;
+  readonly change: (
     date: Temporal.PlainDate | null,
     reason: ChangeEventDetails["reason"],
     event: Event,
-  ) => {
-    const accepted = requestChange(onValueChange, date, reason, event);
-
-    if (accepted) setUncontrolled(date);
-
-    return accepted;
-  };
-
-  const reset = () => {
-    setUncontrolled(defaultValue);
-  };
-
-  return { current, change, reset };
+  ) => boolean;
 }
 
 function pickerOf(
   overlay: Overlay,
-  date: ReturnType<typeof useValue>,
+  date: DateValue,
   { min, max, isDateUnavailable }: RootProps,
 ): PickerContextValue<Temporal.PlainDate> {
   return {
@@ -107,10 +94,16 @@ function pickerOf(
  * browser's own date input takes its place.
  */
 export function Root(props: RootProps) {
-  const { defaultValue, open, defaultOpen, onOpenChange, isDateUnavailable, ...rest } = props;
-  const { triggerLabel: name, disabled, children, ...field } = rest;
-  const date = useValue(props);
+  const { value, defaultValue, onValueChange, open, defaultOpen, onOpenChange, ...rest } = props;
+  const { triggerLabel: name, disabled, isDateUnavailable, children, ...field } = rest;
   const trigger = useRef<HTMLButtonElement>(null);
+  const [current, change] = useControllableState(
+    value,
+    defaultValue ?? null,
+    onValueChange,
+    () => trigger.current?.form,
+  );
+  const date = { current, change };
   const overlay = useOverlay("Popover", { open, defaultOpen, onOpenChange });
   const panel = { overlay, name, trigger };
   const formats = useDateFormats();
@@ -120,15 +113,14 @@ export function Root(props: RootProps) {
       {...field}
       disabled={disabled}
       value={date.current}
-      defaultValue={defaultValue}
       onValueChange={(next, details) => {
         if (!date.change(next, details.reason, details.event)) details.cancel();
       }}
       isDateUnavailable={isDateUnavailable}
-      onFormReset={date.reset}
       end={
         <Trigger
           panel={panel}
+          form={field.form}
           description={date.current === null ? undefined : formats.full(date.current)}
           disabled={disabled === true}
         />

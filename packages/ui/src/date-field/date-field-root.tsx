@@ -16,7 +16,6 @@ export type RootProps = DateFieldProps & {
   end?: ReactNode;
   isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
   unavailableMessage?: string | undefined;
-  onFormReset?: (() => void) | undefined;
   children?: ReactNode;
 };
 

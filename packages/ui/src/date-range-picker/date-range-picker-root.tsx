@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, ReactNode, RefObject } from "react";
 
 import "@abereghici/tokens/components/date-range-picker.css";
 
@@ -90,9 +90,18 @@ export type RootProps = Omit<SizedWrapperProps, "validate"> &
 
 const empty: Halves = { start: null, end: null };
 
-function useRange({ value, defaultValue = null, onValueChange }: RootProps): Range {
-  const [current, request, set] = useControllableState(value, defaultValue, onValueChange);
-  const [partial, setPartial] = useState<Halves>(current ?? empty);
+function useRange(
+  { value, defaultValue = null, onValueChange }: RootProps,
+  form: () => HTMLFormElement | null | undefined,
+): Range {
+  const [current, request] = useControllableState(value, defaultValue, onValueChange, form);
+  // The dates typed so far are never the app's, but they too return to the default on reset.
+  const [partial, , setPartial] = useControllableState(
+    undefined,
+    defaultValue ?? empty,
+    undefined,
+    form,
+  );
 
   return {
     current,
@@ -107,16 +116,15 @@ function useRange({ value, defaultValue = null, onValueChange }: RootProps): Ran
 
       return true;
     },
-    reset: () => {
-      set(defaultValue);
-      setPartial(defaultValue ?? empty);
-    },
   };
 }
 
-function usePicker(props: RootProps, range: ReturnType<typeof useRange>) {
+function usePicker(
+  props: RootProps,
+  range: ReturnType<typeof useRange>,
+  trigger: RefObject<HTMLButtonElement | null>,
+) {
   const { open, defaultOpen, onOpenChange, triggerLabel, min, max, isDateUnavailable } = props;
-  const trigger = useRef<HTMLButtonElement>(null);
   const overlay = useOverlay("Popover", { open, defaultOpen, onOpenChange });
   const picker: PickerContextValue<DateRange> = {
     open: overlay.open,
@@ -148,8 +156,9 @@ const valid = { invalid: false, message: "" };
  */
 export function Root(props: RootProps) {
   const { label, description, errorMessage, invalid, size, className, style, disabled } = props;
-  const range = useRange(props);
-  const { panel, picker } = usePicker(props, range);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const range = useRange(props, () => trigger.current?.form);
+  const { panel, picker } = usePicker(props, range, trigger);
   const [validity, setValidity] = useState({ start: valid, end: valid });
   const shown = validity.start.invalid ? validity.start : validity.end;
 

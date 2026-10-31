@@ -24,13 +24,11 @@ export interface Range {
   readonly halves: Halves;
   /** Asks for the dates to change; `false` when the change is refused. */
   readonly change: (next: Halves, reason: ChangeEventDetails["reason"], event: Event) => boolean;
-  readonly reset: () => void;
 }
 
 type BoxProps = Pick<
   RootProps,
   | "aria-label"
-  | "defaultValue"
   | "min"
   | "max"
   | "isDateUnavailable"
@@ -70,13 +68,11 @@ function halfOptions(
     isUnavailable: props.isDateUnavailable,
     unavailableMessage: props.unavailableMessage,
     value: range.halves[key],
-    defaultValue: props.defaultValue?.[key] ?? null,
     onValueChange: (date, details) => {
       if (!range.change({ ...range.halves, [key]: date }, details.reason, details.event)) {
         details.cancel();
       }
     },
-    onFormReset: range.reset,
     validate: (iso) =>
       key === "end" && iso !== "" && start !== null && Temporal.PlainDate.compare(iso, start) < 0
         ? props.reversedMessage
@@ -123,6 +119,7 @@ export function Box(props: BoxProps) {
         panel={props.panel}
         description={current === null ? undefined : formats.fullRange(current)}
         disabled={blocked}
+        form={props.form}
       />
     </fieldset>
   );

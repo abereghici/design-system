@@ -20,7 +20,6 @@ interface Wiring {
   readonly incomplete: string;
   readonly unavailable: string;
   readonly onValidity: (validity: Validity) => void;
-  readonly reset: () => void;
 }
 
 function write(node: { value: string }, value: string) {
@@ -31,7 +30,7 @@ function write(node: { value: string }, value: string) {
 export function useValidity<Part extends string, Value>(
   model: SegmentModel<Part, Value>,
   { validate, isUnavailable }: Options<Value>,
-  { incomplete, unavailable, onValidity, reset }: Wiring,
+  { incomplete, unavailable, onValidity }: Wiring,
 ) {
   const { field } = useField();
   const server = field?.serverError;
@@ -62,7 +61,6 @@ export function useValidity<Part extends string, Value>(
   useEvent(
     "reset",
     () => {
-      reset();
       touched.current = false;
       onValidity({ invalid: false, message: "" });
     },

@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import type { ComponentProps } from "react";
 
-import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { useEvent } from "../events/use-event.ts";
 import { useField } from "../field/use-field.ts";
 import type { FormControl } from "../field/use-field.ts";
@@ -41,8 +40,6 @@ export type ControlProps = Omit<
   startElement?: TextFieldProps["startElement"];
 };
 
-type Reason = PasswordFieldVisibleChangeEventDetails["reason"];
-
 function mask(input: Element) {
   input.setAttribute("type", "password");
 }
@@ -53,15 +50,7 @@ function useVisibility(
   defaultVisible: boolean | undefined,
   onVisibleChange: ControlProps["onVisibleChange"],
 ) {
-  const [uncontrolled, setUncontrolled] = useState(defaultVisible ?? false);
-  const current = visible ?? uncontrolled;
-  const change = (next: boolean, reason: Reason, event: Event) => {
-    const accepted = requestChange(onVisibleChange, next, reason, event);
-
-    if (accepted) setUncontrolled(next);
-
-    return accepted;
-  };
+  const [current, change] = useControllableState(visible, defaultVisible ?? false, onVisibleChange);
 
   useEvent(
     "submit",

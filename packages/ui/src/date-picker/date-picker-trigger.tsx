@@ -13,9 +13,11 @@ interface TriggerProps {
   /** The chosen date or range, in full words. */
   readonly description: string | undefined;
   readonly disabled: boolean;
+  /** The `form` of the field's inputs: the picker's value resets with that form. */
+  readonly form: string | undefined;
 }
 
-export function Trigger({ panel, description, disabled }: TriggerProps) {
+export function Trigger({ panel, description, disabled, form }: TriggerProps) {
   const { overlay, name, trigger } = panel;
   const descriptionId = useId();
 
@@ -30,6 +32,7 @@ export function Trigger({ panel, description, disabled }: TriggerProps) {
         aria-haspopup="dialog"
         aria-describedby={description === undefined ? undefined : descriptionId}
         disabled={disabled}
+        form={form}
         className={styles["trigger"]}
       >
         <CalendarIcon size="sm" />

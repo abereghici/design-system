@@ -40,12 +40,11 @@ function useControl<Part extends string, Value extends Comparable<Value>>(
   onValidity: (validity: Validity) => void,
 ) {
   const { field, blocked, invalid } = useField(options.disabled);
-  const state = useSegmentValue(model, options);
+  const state = useSegmentValue(model, options, field?.control?.form ?? null);
   const validity = useValidity(model, options, {
     incomplete: options.incompleteMessage,
     unavailable: options.unavailableMessage ?? "",
     onValidity,
-    reset: state.reset,
   });
 
   useLayoutEffect(() => {
@@ -239,13 +238,12 @@ function splitOptions<Part extends string, Value, Rest>({
   placeholders,
   isUnavailable,
   unavailableMessage,
-  onFormReset,
   ...rest
 }: SegmentFieldOptions<Part, Value> & Rest) {
   const values = { value, defaultValue, onValueChange, min, max, name, form, required, disabled };
   const checks = { validate, incompleteMessage, placeholders, isUnavailable, unavailableMessage };
 
-  return [{ ...values, ...checks, onFormReset }, rest] as const;
+  return [{ ...values, ...checks }, rest] as const;
 }
 
 /** A Field around a value's segments; it shows the native input's error once the user has edited. */
