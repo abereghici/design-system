@@ -368,9 +368,9 @@
   },
   {
     "name": "sidebar",
-    "tokens": ["sidebar"],
-    "client": [],
-    "html": "Settings</summary>"
+    "tokens": ["disclosure", "icon", "sidebar"],
+    "client": ["sidebar/sidebar-collapsible-group"],
+    "html": "<summary"
   },
   {
     "name": "tooltip",

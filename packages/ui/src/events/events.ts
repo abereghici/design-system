@@ -115,6 +115,7 @@ export type ToggleFeedbackEvent = CustomEvent<
     | "ContextMenu"
     | "Splitter"
     | "Tree"
+    | "Sidebar"
   >
 >;
 

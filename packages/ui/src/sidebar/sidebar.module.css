@@ -18,37 +18,19 @@
     color: var(--ab-sidebar-group-label-text-color);
   }
 
+  /* A Disclosure Trigger, restyled through its tokens so neither stylesheet has to outrank the other. */
   .summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    --ab-disclosure-trigger-font: var(--ab-sidebar-group-label-font);
+    --ab-disclosure-trigger-text-color: var(--ab-sidebar-group-label-text-color);
+    --ab-disclosure-trigger-padding-block: 0;
+
     min-block-size: var(--ab-sidebar-item-min-height);
-    border-radius: var(--ab-sidebar-item-border-radius);
-    list-style: none;
-    cursor: pointer;
+    padding-inline: var(--ab-sidebar-group-label-padding-inline);
   }
 
-  /* WebKit draws its disclosure triangle from this pseudo-element, not from list-style:
-     https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary#changing_the_summarys_icon */
-  .summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .summary::after {
-    content: "";
-    inline-size: var(--ab-size-icon-sm);
-    block-size: var(--ab-size-icon-sm);
-    background-color: currentColor;
-    mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>')
-      center / 100% no-repeat;
-  }
-
-  .collapsible[open] .summary {
-    margin-block-end: var(--ab-sidebar-group-gap);
-  }
-
-  .collapsible[open] .summary::after {
-    rotate: 180deg;
+  /* Inside the folding content, so the gap grows and shrinks with it. */
+  .collapsible > .list {
+    padding-block-start: var(--ab-sidebar-group-gap);
   }
 
   .list {

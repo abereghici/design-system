@@ -87,6 +87,7 @@ test.describe("with JavaScript off, a <details> section opens and closes", () =>
   for (const [route, summary, content] of [
     ["accordion", "Billing", "Invoices are sent monthly."],
     ["disclosure", "Advanced settings", "Retries stop after five attempts."],
+    ["sidebar", "Settings", "Billing"],
   ] as const) {
     test(route, async ({ page }) => {
       await page.goto(`/${route}`);
