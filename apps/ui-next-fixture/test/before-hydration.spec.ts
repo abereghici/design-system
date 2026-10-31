@@ -215,9 +215,6 @@ test.describe("Tier 2 before hydration", () => {
 
   for (const route of tier2) {
     test(`${route}: renders what hydration renders, and passes axe`, async ({ page, context }) => {
-      // A Tier 2 bug, kept failing until fixed: once hydrated, Tabs sets hidden="until-found" on its
-      // inactive panels, and Chrome then exposes them in the accessibility tree.
-      test.fail(route === "tabs");
       await page.route("**/*.js", (request) => request.abort());
       await page.goto(`/${route}`);
 
