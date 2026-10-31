@@ -18,8 +18,6 @@ function moveSelection(event: KeyboardEvent<HTMLButtonElement>) {
 
   if (list === null) return;
 
-  delete list.dataset["pointer"];
-
   const tabs = [...list.querySelectorAll<HTMLButtonElement>('[role="tab"]:enabled')];
   const from = tabs.indexOf(event.currentTarget);
   const step = (steps[event.key] ?? 0) * (list.matches(":dir(rtl)") ? -1 : 1);
@@ -44,7 +42,7 @@ export interface TriggerProps extends Omit<ComponentProps<"button">, "type" | "r
 }
 
 /** A tab that shows the Content with the same `value`. */
-export function Trigger({ value, onClick, onPointerDown, onKeyDown, ...props }: TriggerProps) {
+export function Trigger({ value, onClick, onKeyDown, ...props }: TriggerProps) {
   const tabs = useTabs("Tabs.Trigger");
   const selected = value === tabs.state.value;
 
@@ -57,13 +55,6 @@ export function Trigger({ value, onClick, onPointerDown, onKeyDown, ...props }: 
       aria-controls={`${tabs.meta.id}-content-${value}`}
       aria-selected={selected}
       tabIndex={selected ? 0 : -1}
-      onPointerDown={(event) => {
-        onPointerDown?.(event);
-
-        const list = listOf(event.currentTarget);
-
-        if (list !== null) list.dataset["pointer"] = "";
-      }}
       onKeyDown={(event) => {
         onKeyDown?.(event);
         moveSelection(event);
