@@ -1,52 +1,16 @@
 import { flushSync } from "react-dom";
-import type {
-  ChangeEvent,
-  FocusEvent,
-  KeyboardEvent,
-  MouseEvent,
-  PointerEvent as ReactPointerEvent,
-} from "react";
+import type { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent } from "react";
 
 import { isComposing, requestChange, trackComposition } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { enabled, navigate, optionAt, textOf } from "../internal/listbox/listbox.tsx";
+import { enabled, optionAt } from "../internal/listbox/options.ts";
+import { textOf } from "../internal/listbox/text-of.ts";
+import type { ListboxNavigator } from "../internal/listbox/use-listbox.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 import { toggled } from "../internal/toggle/toggle.ts";
 
 export const chosenOf = (list: Element, value: string | null) =>
   value === null ? null : list.querySelector(`[role="option"][data-value="${CSS.escape(value)}"]`);
-
-export function highlightedOf(input: Element) {
-  const id = input.getAttribute("aria-activedescendant");
-
-  return id === null ? null : document.getElementById(id);
-}
-
-export function highlight(
-  list: Element,
-  input: Element,
-  option: HTMLElement | null | undefined,
-  scroll: boolean,
-) {
-  // A single-select list marks the highlighted option selected; a multi-select one, the chosen ones.
-  const single = list.getAttribute("aria-multiselectable") !== "true";
-
-  for (const each of list.querySelectorAll('[role="option"]')) {
-    if (single) each.setAttribute("aria-selected", String(each === option));
-
-    each.toggleAttribute("data-highlighted", each === option);
-  }
-
-  if (option === null || option === undefined) {
-    input.removeAttribute("aria-activedescendant");
-
-    return;
-  }
-
-  input.setAttribute("aria-activedescendant", option.id);
-
-  if (scroll) option.scrollIntoView({ block: "nearest" });
-}
 
 export type ChangeEventDetails<Reason extends string = string> = Details<Reason, Event | undefined>;
 
@@ -112,14 +76,9 @@ export type Options = Selection & {
   disabled?: boolean | undefined;
 };
 
-/** Where the highlight goes when the shown options change; `"kept"` leaves it on the same option. */
-type Edge = "chosen" | "first" | "last" | "kept";
-
 interface Memory {
   pointer: boolean;
-  edge: Edge;
   text: string | null;
-  shown: string;
   value: string | undefined;
 }
 
@@ -136,29 +95,24 @@ export interface ComboboxState {
   readonly setValue: (value: readonly string[]) => void;
   readonly setOpen: (open: boolean) => void;
   readonly setQuery: (query: string) => void;
+  readonly listbox: ListboxNavigator;
 }
 
 const memories = new WeakMap<Element, Memory>();
 
-type PartName = "root" | "box" | "list" | "label" | "empty" | "status";
+type PartName = "root" | "box" | "list" | "label";
 
 export const part = (c: Pick<ComboboxState, "id">, name: PartName) => `${c.id}${name}`;
 
-export const listOf = (c: ComboboxState) => document.getElementById(part(c, "list"));
+export const listOf = (c: Pick<ComboboxState, "id">) => document.getElementById(part(c, "list"));
 
 export const inputOf = (c: Pick<ComboboxState, "id">) =>
   document.getElementById(part(c, "root"))?.querySelector<HTMLInputElement>('[role="combobox"]') ??
   null;
 
-export function memoryOf(c: ComboboxState): Memory {
+export function memoryOf(c: Pick<ComboboxState, "id">): Memory {
   const root = document.getElementById(part(c, "root"));
-  const memory = (root && memories.get(root)) ?? {
-    pointer: false,
-    edge: "first",
-    text: null,
-    shown: "",
-    value: undefined,
-  };
+  const memory = (root && memories.get(root)) ?? { pointer: false, text: null, value: undefined };
 
   if (root !== null) memories.set(root, memory);
 
@@ -186,7 +140,8 @@ function changeText(c: ComboboxState, next: string, reason: InputReason, event?:
 }
 
 /** The single choice the input shows as text; `null` while none, or when several can be chosen. */
-export const chosenValue = (c: ComboboxState) => (c.multiple ? null : (c.value[0] ?? null));
+export const chosenValue = (c: Pick<ComboboxState, "multiple" | "value">) =>
+  c.multiple ? null : (c.value[0] ?? null);
 
 /** A single choice; several choices change through `changeValues` only. */
 function changeValue(c: ComboboxState, next: string | null, reason: ValueReason, event?: Event) {
@@ -228,13 +183,17 @@ function changeOpen(c: ComboboxState, next: boolean, reason: OpenReason, event?:
   return true;
 }
 
+function landOnChosen(c: ComboboxState) {
+  c.listbox.land((option) => c.value.includes(option.dataset["value"] ?? ""));
+}
+
 /** A primary press anywhere on the field box opens the list; the motion is the pointer's. */
 export function press(c: ComboboxState, event: PointerEvent) {
   memoryOf(c).pointer = true;
 
   if (event.button !== 0 || !changeOpen(c, true, "input-press", event)) return;
 
-  memoryOf(c).edge = "chosen";
+  landOnChosen(c);
   c.setQuery("");
 }
 
@@ -255,7 +214,7 @@ function choose(c: ComboboxState, option: HTMLElement, event: Event) {
     const next = toggled(c.value, value);
 
     if (changeValues(c, next, "item-press", event) && changeText(c, "", "item-press", event)) {
-      memoryOf(c).edge = "kept";
+      c.listbox.land("kept");
       c.setQuery("");
     }
 
@@ -272,7 +231,9 @@ function open(c: ComboboxState, event: KeyboardEvent<HTMLInputElement>) {
   event.preventDefault();
 
   if (changeOpen(c, true, "list-navigation", event.nativeEvent)) {
-    memoryOf(c).edge = event.key === "ArrowDown" ? "chosen" : "last";
+    if (event.key === "ArrowDown") landOnChosen(c);
+    else c.listbox.land("last");
+
     c.setQuery("");
   }
 }
@@ -280,24 +241,19 @@ function open(c: ComboboxState, event: KeyboardEvent<HTMLInputElement>) {
 function keyDown(c: ComboboxState, event: KeyboardEvent<HTMLInputElement>) {
   memoryOf(c).pointer = false;
 
-  const list = listOf(c);
   const input = event.currentTarget;
   const { nativeEvent: native, key } = event;
 
   if (event.defaultPrevented || isComposing(event) || c.options.disabled === true) return;
 
-  if (list === null) return;
+  if (c.listbox.keyDown(event)) return;
 
-  const next = c.open ? navigate(event, list, highlightedOf(input)?.id ?? null) : null;
-
-  if (next !== null) {
-    highlight(list, input, next, false);
-  } else if (key === "ArrowDown" || key === "ArrowUp") {
+  if (key === "ArrowDown" || key === "ArrowUp") {
     open(c, event);
   } else if (key === "Enter" && c.open) {
     event.preventDefault();
 
-    const option = highlightedOf(input);
+    const option = c.listbox.highlighted();
 
     if (option !== null) choose(c, option, native);
   } else if (key === "Escape" && c.open) {
@@ -322,7 +278,7 @@ function inputChange(c: ComboboxState, event: ChangeEvent<HTMLInputElement>) {
 
   if (next === "") changeValue(c, null, "input-clear", native);
 
-  memoryOf(c).edge = "first";
+  c.listbox.land("first");
   changeOpen(c, true, "input-change", native);
 }
 
@@ -343,6 +299,7 @@ function blur(c: ComboboxState, event: FocusEvent<HTMLInputElement>) {
 export function inputProps<Props extends object>(c: ComboboxState, consumer: Props) {
   return mergeProps(
     {
+      ref: c.listbox.input,
       onCompositionEnd: trackComposition(),
       onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => {
         keyDown(c, event);
@@ -358,28 +315,15 @@ export function inputProps<Props extends object>(c: ComboboxState, consumer: Pro
   );
 }
 
-/** The listbox: presses choose without taking focus from the input; the pointer highlights. */
+/** The listbox: a press chooses. */
 export function listProps(c: ComboboxState) {
   return {
     id: part(c, "list"),
     popover: "manual",
-    onMouseDown: (event: MouseEvent) => {
-      event.preventDefault();
-    },
     onClick: (event: MouseEvent) => {
       const option = optionAt(event.target);
 
       if (option !== null) choose(c, option, event.nativeEvent);
-    },
-    onPointerMove: (event: ReactPointerEvent<HTMLElement>) => {
-      const option = optionAt(event.target);
-      const input = inputOf(c);
-
-      if (event.pointerType === "touch" || option === null || !enabled(option)) return;
-
-      if (input !== null && option !== highlightedOf(input)) {
-        highlight(event.currentTarget, input, option, false);
-      }
     },
   } as const;
 }

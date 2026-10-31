@@ -1,6 +1,5 @@
 "use client";
 
-import { useId } from "react";
 import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/command.css";
@@ -8,7 +7,6 @@ import "@abereghici/tokens/components/command.css";
 import { Option } from "../internal/listbox/listbox.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
-import { useCommand } from "./command-root.tsx";
 import styles from "./command.module.css";
 
 export interface ItemProps extends ComponentProps<"div"> {
@@ -21,19 +19,6 @@ export interface ItemProps extends ComponentProps<"div"> {
 }
 
 /** A command; pressing it or Enter while highlighted runs its `onClick`. */
-export function Item({ value, keywords = [], disabled = false, ...props }: ItemProps) {
-  const { highlighted } = useCommand();
-  const id = useId();
-
-  return (
-    <Option
-      {...mergeProps({ className: styles["item"] }, props)}
-      id={id}
-      aria-selected={highlighted === id || undefined}
-      aria-disabled={disabled || undefined}
-      data-highlighted={highlighted === id ? "" : undefined}
-      data-label={value}
-      data-keywords={keywords.length === 0 ? undefined : keywords.join("\n")}
-    />
-  );
+export function Item({ value, ...props }: ItemProps) {
+  return <Option {...mergeProps({ className: styles["item"] }, props)} label={value} />;
 }

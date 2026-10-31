@@ -1,13 +1,14 @@
 "use client";
 
-import { createContext, use, useId, useLayoutEffect, useRef, useState } from "react";
-import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction } from "react";
+import { createContext, use, useId, useState } from "react";
+import type { ComponentProps, KeyboardEvent } from "react";
 
 import "@abereghici/tokens/components/command.css";
 
 import { isComposing, requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
-import { filterOptions, enabled, navigate, reveal } from "../internal/listbox/listbox.tsx";
+import { useListbox } from "../internal/listbox/use-listbox.ts";
+import type { ListboxNavigator } from "../internal/listbox/use-listbox.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
@@ -23,12 +24,9 @@ export type Callback<Value, Reason extends string> = (
 interface CommandContext {
   readonly query: string;
   readonly change: (query: string, event: Event) => void;
-  readonly highlighted: string | null;
-  readonly highlight: (id: string) => void;
   readonly keyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
-  readonly list: RefObject<HTMLDivElement | null>;
+  readonly listbox: ListboxNavigator;
   readonly listId: string;
-  readonly empty: boolean;
 }
 
 const Context = createContext<CommandContext | null>(null);
@@ -47,80 +45,20 @@ export function useCommand(): CommandContext {
   return context;
 }
 
-function keyDown(
-  event: KeyboardEvent<HTMLInputElement>,
-  list: HTMLElement | null,
-  highlighted: string | null,
-  highlight: (id: string) => void,
-) {
-  if (event.key === "Enter") {
-    const option = highlighted === null ? null : document.getElementById(highlighted);
-
-    if (isComposing(event) || option === null) return;
-
-    event.preventDefault();
-    option.click();
+/** Enter runs the highlighted command; the other keys go to the Listbox navigator. */
+function keyDown(event: KeyboardEvent<HTMLInputElement>, listbox: ListboxNavigator) {
+  if (event.key !== "Enter") {
+    listbox.keyDown(event);
 
     return;
   }
 
-  const next = navigate(event, list, highlighted);
+  const option = listbox.highlighted();
 
-  if (next !== null) highlight(next.id);
-}
+  if (isComposing(event) || option === null) return;
 
-/**
- * Ranks the Items, then keeps the highlight on a shown, enabled Item: the first one after a new
- * query.
- */
-function useFilter(
-  list: RefObject<HTMLDivElement | null>,
-  query: string,
-  locale: Intl.LocalesArgument | null,
-  setHighlighted: Dispatch<SetStateAction<string | null>>,
-) {
-  const [empty, setEmpty] = useState(false);
-  const searched = useRef(query);
-
-  useLayoutEffect(() => {
-    const node = list.current;
-    const run = (fresh: boolean) => {
-      const shown = filterOptions(node, query, locale);
-
-      setEmpty(shown.length === 0);
-
-      const [first] = shown.filter((option) => enabled(option));
-
-      setHighlighted((current) =>
-        !fresh && shown.some((option) => option.id === current && enabled(option))
-          ? current
-          : (first?.id ?? null),
-      );
-
-      if (fresh && first !== undefined) reveal(first, shown);
-    };
-
-    run(searched.current !== query);
-    searched.current = query;
-
-    const observer = new MutationObserver(() => {
-      run(false);
-    });
-
-    if (node !== null)
-      observer.observe(node, {
-        subtree: true,
-        childList: true,
-        characterData: true,
-        attributeFilter: ["aria-disabled", "data-label", "data-keywords"],
-      });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [list, query, locale, setHighlighted]);
-
-  return empty;
+  event.preventDefault();
+  option.click();
 }
 
 export interface RootProps extends ComponentProps<"div"> {
@@ -153,23 +91,18 @@ export function Root({
 }: RootProps) {
   const [uncontrolled, setUncontrolled] = useState(defaultInputValue);
   const query = inputValue ?? uncontrolled;
-  const [highlighted, setHighlighted] = useState<string | null>(null);
-  const list = useRef<HTMLDivElement>(null);
   const locale = useLocale();
-  const empty = useFilter(list, query, filtering === null ? null : locale, setHighlighted);
+  const listbox = useListbox(query, filtering === null ? null : locale);
   const context: CommandContext = {
     query,
     change: (next, event) => {
       if (requestChange(onInputValueChange, next, "input-change", event)) setUncontrolled(next);
     },
-    highlighted,
-    highlight: setHighlighted,
     keyDown: (event) => {
-      keyDown(event, list.current, highlighted, setHighlighted);
+      keyDown(event, listbox);
     },
-    list,
+    listbox,
     listId: useId(),
-    empty,
   };
 
   return (

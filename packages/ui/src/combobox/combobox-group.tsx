@@ -1,10 +1,10 @@
 "use client";
 
-import { useId } from "react";
 import type { ComponentProps } from "react";
 
 import "@abereghici/tokens/components/combobox.css";
 
+import { OptionGroup } from "../internal/listbox/listbox.tsx";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./combobox.module.css";
@@ -15,15 +15,12 @@ export interface GroupProps extends ComponentProps<"fieldset"> {
 }
 
 /** Items under a label; it hides while none of its Items match. */
-export function Group({ label, children, ...props }: GroupProps) {
-  const id = useId();
-
+export function Group({ label, ...props }: GroupProps) {
   return (
-    <fieldset {...mergeProps({ className: styles["group"] }, props)} aria-labelledby={id}>
-      <div role="presentation" id={id} className={styles["label"]}>
-        {label}
-      </div>
-      {children}
-    </fieldset>
+    <OptionGroup
+      {...mergeProps({ className: styles["group"] }, props)}
+      heading={label}
+      headingClassName={styles["label"]}
+    />
   );
 }
