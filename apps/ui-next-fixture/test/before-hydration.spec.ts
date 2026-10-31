@@ -51,17 +51,6 @@ test.describe("Tier 1 works with JavaScript off", () => {
     await expect(page.getByRole("main")).toBeFocused();
   });
 
-  test("accordion: an item opens and closes", async ({ page }) => {
-    await page.goto("/accordion");
-    await page.getByText("Billing").click();
-
-    await expect(page.getByText("Invoices are sent monthly.")).toBeHidden();
-
-    await page.getByText("Billing").click();
-
-    await expect(page.getByText("Invoices are sent monthly.")).toBeVisible();
-  });
-
   for (const [route, trigger, overlay, close] of [
     ["dialog", "Rename", "Rename project?", "Close"],
     ["alert-dialog", "Delete", "Delete project?", "Cancel"],
@@ -81,6 +70,42 @@ test.describe("Tier 1 works with JavaScript off", () => {
       await dialog.getByRole("button", { name: close }).click();
 
       await expect(dialog).toBeHidden();
+    });
+  }
+});
+
+test.describe("with JavaScript off, ContextualHelp opens from its button", () => {
+  test("Escape and a press outside close it", async ({ page }) => {
+    await page.goto("/contextual-help");
+
+    const button = page.getByRole("button", { name: "About billing cycles" });
+    const dialog = page.getByRole("dialog", { name: "Billing cycle" });
+
+    await button.click();
+    await expect(dialog).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await button.click();
+    await expect(dialog).toBeVisible();
+    await page.mouse.click(400, 5);
+    await expect(dialog).toBeHidden();
+  });
+});
+
+test.describe("with JavaScript off, a <details> section opens and closes", () => {
+  for (const [route, summary, content] of [
+    ["accordion", "Billing", "Invoices are sent monthly."],
+    ["disclosure", "Advanced settings", "Retries stop after five attempts."],
+  ] as const) {
+    test(route, async ({ page }) => {
+      await page.goto(`/${route}`);
+      await page.getByText(summary).click();
+
+      await expect(page.getByText(content)).toBeHidden();
+
+      await page.getByText(summary).click();
+
+      await expect(page.getByText(content)).toBeVisible();
     });
   }
 });
