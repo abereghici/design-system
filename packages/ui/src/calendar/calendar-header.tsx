@@ -23,6 +23,7 @@ export function Header(props: HeaderProps) {
     <div className={styles["header"]}>
       <IconButton
         size="sm"
+        className={styles["page"]}
         aria-label={previousMonthLabel}
         disabled={!before}
         onClick={() => {
@@ -36,6 +37,7 @@ export function Header(props: HeaderProps) {
       </h2>
       <IconButton
         size="sm"
+        className={styles["page"]}
         aria-label={nextMonthLabel}
         disabled={!after}
         onClick={() => {

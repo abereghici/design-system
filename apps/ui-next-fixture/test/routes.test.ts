@@ -225,6 +225,7 @@ describe("per-component JS", () => {
     expect(route("progress").html).toContain("40\u00A0%");
     expect(route("meter").html).toContain("42\u00A0%");
     expect(route("skip-link").html).toContain(">Skip to main content</a>");
+    expect(route("stepper").html).toContain(">Completed</span></a>");
     expect(route("link").html).toMatch(/<a class="[^"]+" href="\/">Home<\/a>/v);
   });
 });
@@ -234,9 +235,13 @@ describe("interface text and direction", () => {
     expect(button.html).toContain('<html lang="ro-RO" dir="ltr"');
   });
 
+  test("the root layout opts into the operating system's text size", () => {
+    expect(button.html).toContain('<meta name="text-scale" content="scale"/>');
+  });
+
   test("a sorted Table header renders aria-sort and its sort link on the server", () => {
     expect(route("table").html).toMatch(
-      /<th scope="col" aria-sort="ascending" class="[^"]+"><a href="\?sort=invoice" class="[^"]+">Invoice<\/a>/v,
+      /<th scope="col" aria-sort="ascending" class="[^"]+"><a class="[^"]+" href="\?sort=invoice">Invoice<\/a>/v,
     );
   });
 

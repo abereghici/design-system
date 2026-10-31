@@ -3,7 +3,10 @@ import { Checkbox } from "@abereghici/ui/checkbox";
 export default function Page() {
   return (
     <main>
-      <Checkbox defaultChecked>Email me updates</Checkbox>
+      <form>
+        <Checkbox name="updates">Email me updates</Checkbox>
+        <button>Submit</button>
+      </form>
     </main>
   );
 }

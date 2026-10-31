@@ -24,10 +24,12 @@ jobs:
         with:
           require-lockfile: true
           cache: true
-      - run: pnpm turbo run test:screenshots --filter=@abereghici/ui
+      - run: pnpm turbo run test:screenshots --filter=@abereghici/ui --filter=@repo/ui-next-fixture
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ !cancelled() }}
         with:
-          name: story-screenshots-report
-          path: packages/ui/.vitest/
+          name: screenshots-report
+          path: |
+            packages/ui/.vitest/
+            apps/ui-next-fixture/test-results/
           include-hidden-files: true

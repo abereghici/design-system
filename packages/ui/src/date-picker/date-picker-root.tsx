@@ -108,6 +108,8 @@ function pickerOf(
  * A date field with a button that opens a month: type the date, or pick it. Put a `<Calendar />` in
  * `DatePicker.Content`; it follows the DatePicker's value and limits. For dates people type from
  * memory (birth dates), use DateField; for an always visible month, Calendar.
+ *
+ * Tier 2: shows its final content before hydration and works after it.
  */
 export function Root(props: RootProps) {
   const { defaultValue, open, defaultOpen, onOpenChange, isDateUnavailable, ...rest } = props;

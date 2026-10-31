@@ -1,0 +1,20 @@
+{
+  "component": {
+    "splitter-handle-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-default}"
+    },
+    "splitter-handle-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default}"
+    },
+    "splitter-handle-border-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default-hovered}"
+    },
+    "splitter-handle-border-color-pressed": {
+      "$type": "color",
+      "$value": "{semantic.color-border-accent}"
+    }
+  }
+}

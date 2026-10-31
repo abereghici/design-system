@@ -177,6 +177,13 @@
     color: var(--ab-table-body-text-color);
   }
 
+  /* Selecting needs script: without it the rows stay readable but offer no control that does nothing. */
+  @media (scripting: none) {
+    .select {
+      display: none;
+    }
+  }
+
   @media (prefers-contrast: more) {
     .column-header,
     .cell {

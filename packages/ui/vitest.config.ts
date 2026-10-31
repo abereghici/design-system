@@ -8,6 +8,8 @@ import { screenshotProjects } from "#.storybook/screenshots/projects.ts";
 
 import viteConfig from "./vite.config.ts";
 
+const clipboard = ["clipboard-read", "clipboard-write"];
+
 export default mergeConfig(
   viteConfig,
   defineConfig({
@@ -33,14 +35,17 @@ export default mergeConfig(
             browser: {
               enabled: true,
               headless: true,
-              provider: playwright(),
+              // CopyButton's proofs read and write the real clipboard, which Chromium guards by permission.
+              provider: playwright({ contextOptions: { permissions: clipboard } }),
               instances: [
                 { browser: "chromium" },
                 {
                   browser: "chromium",
                   name: "chromium-reduced-motion",
                   provide: { reducedMotion: true },
-                  provider: playwright({ contextOptions: { reducedMotion: "reduce" } }),
+                  provider: playwright({
+                    contextOptions: { permissions: clipboard, reducedMotion: "reduce" },
+                  }),
                 },
               ],
             },

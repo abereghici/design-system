@@ -64,6 +64,10 @@ _Avoid_: Divider, rule, hr
 The component an app mounts once at its root. It brings every global style the design system needs, so apps add none, and the app's Locale; it holds no other state and no text.
 _Avoid_: Root, app shell, LocaleProvider, ThemeProvider
 
+**Density**:
+How tightly controls are packed, `comfortable` (the default) or `compact`, set with `data-density` on any element for everything inside it; the nearest setting wins, and touch screens keep their touch size in both.
+_Avoid_: Size, scale, spacing mode, compact mode prop
+
 **Locale**:
 The language an app formats numbers and dates in, a BCP 47 tag such as `"ro-RO"`, set once on the UIProvider; every component that formats follows it. Dates are Gregorian in every Locale.
 _Avoid_: Per-component locale, locale object, translations, i18n bundle
@@ -71,3 +75,7 @@ _Avoid_: Per-component locale, locale object, translations, i18n bundle
 **Author-written text**:
 Every name, label and message a component shows or announces comes from the app, as children or a named prop (`aria-label`, `closeLabel`, `noOptionsText`); the library ships none. Where a part would otherwise have no accessible name, its prop type requires the text.
 _Avoid_: Built-in label, default text, i18n key
+
+**Tier**:
+What a Component does before hydration (ADR 0008). Tier 1 works from the server HTML alone, with JavaScript off too; Tier 2 shows its final content and becomes usable after hydration. A Tier 1 Component that fails before hydration has a bug; it is never moved to Tier 2.
+_Avoid_: No-JS mode, SSR support, progressive enhancement level

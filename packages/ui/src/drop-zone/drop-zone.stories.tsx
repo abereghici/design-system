@@ -123,6 +123,20 @@ Default.test(
 );
 
 Default.test(
+  "drops its files and their names when its form resets",
+  { decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+
+    drop(canvas.getByText("Drop CSV files here, or"), january);
+    await expect(canvas.getByRole("status")).toHaveTextContent("january.csv");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(canvas.getByRole("status")).toBeEmptyDOMElement();
+    await expect(submitted(form)).toEqual([""]);
+  },
+);
+
+Default.test(
   "submits files picked through its FileTrigger",
   { decorators: [withForm] },
   async ({ canvas, canvasElement, userEvent }) => {

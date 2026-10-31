@@ -86,6 +86,8 @@ function handleFocus(event: FocusEvent<HTMLDivElement>) {
  * stop, so keyboard users skip the group in one press; the arrow keys move between them. Name it
  * with `aria-label`. For one or two controls, place them directly; never put text fields, Selects or
  * Sliders inside, since they need the arrow keys themselves.
+ *
+ * Tier 1: works before hydration, except moving with the arrow keys (Tier 2), which works after it.
  */
 export function Toolbar(props: ToolbarProps) {
   return (

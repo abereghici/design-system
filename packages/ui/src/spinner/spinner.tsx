@@ -26,6 +26,8 @@ export type SpinnerProps = Omit<ComponentProps<"span">, "children" | "aria-hidde
  * Show it only once a wait passes about 400 ms, so quick answers don't flash, and set `aria-busy`
  * on the region it stands in. For measurable progress use Progress; for content of known shape,
  * Skeleton; inside a busy Button, its `loading`.
+ *
+ * Tier 1: works before hydration.
  */
 export function Spinner({ size = "sm", children, ...props }: SpinnerProps) {
   return (

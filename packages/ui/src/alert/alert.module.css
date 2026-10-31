@@ -64,6 +64,12 @@
     margin-block: calc((1lh - var(--ab-icon-button-sm-size)) / 2);
   }
 
+  @media (scripting: none) {
+    .root .close {
+      display: none;
+    }
+  }
+
   @media (prefers-contrast: more) {
     .root {
       border-color: var(--icon-color);

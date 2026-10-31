@@ -106,11 +106,14 @@ export type ToggleFeedbackEvent = CustomEvent<
     | "Switch"
     | "RadioGroup"
     | "Tabs"
+    | "ToggleButton"
     | "SegmentedControl"
     | "Accordion"
     | "Table"
     | "DropdownMenu"
     | "ContextMenu"
+    | "Splitter"
+    | "Tree"
   >
 >;
 
@@ -123,6 +126,7 @@ export type DismissFeedbackEvent = CustomEvent<
     | "Popover"
     | "DropdownMenu"
     | "ContextMenu"
+    | "TagGroup"
     | "Toast"
   >
 >;

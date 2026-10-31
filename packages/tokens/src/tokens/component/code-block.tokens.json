@@ -1,0 +1,24 @@
+{
+  "component": {
+    "code-block-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-md}"
+    },
+    "code-block-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-md}"
+    },
+    "code-block-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-code-md}"
+    },
+    "code-block-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-nested}"
+    },
+    "code-block-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    }
+  }
+}

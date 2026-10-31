@@ -62,8 +62,7 @@ export type RootProps = ComponentProps<"table"> & {
  * an EmptyState when there is no data. Put a wide or tall table in a ScrollArea, and page long data
  * with Pagination. For a short list of labelled values, use a description list.
  *
- * Before the page's JavaScript loads, the rows, sort links and Pagination already work; row
- * selection becomes interactive on hydration.
+ * Tier 1: works before hydration, except row selection (Tier 2), which works after it.
  */
 export function Root({
   selectionMode,

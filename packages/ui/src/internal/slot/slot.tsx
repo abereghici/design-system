@@ -58,23 +58,6 @@ export function composeRefs<T>(own: Ref<T>, consumer: Ref<T> | undefined): Ref<T
   return ref;
 }
 
-const presences = new WeakMap<(present: boolean) => void, RefCallback<Element>>();
-
-/** A ref that tells `set` whether its element is mounted, so a part can announce itself to its Root. */
-export function presenceRef(set: (present: boolean) => void): RefCallback<Element> {
-  const cached = presences.get(set);
-
-  if (cached) return cached;
-
-  const ref: RefCallback<Element> = (node) => {
-    set(node !== null);
-  };
-
-  presences.set(set, ref);
-
-  return ref;
-}
-
 /**
  * Merges a component's own props with the consumer's, as React Aria and Base UI do: the consumer's
  * win and `undefined` never overrides, classes join, styles merge, both handlers run (the consumer's

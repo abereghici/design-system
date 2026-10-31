@@ -4,6 +4,7 @@ import { MoonIcon } from "@abereghici/ui/icons/moon";
 import { SunIcon } from "@abereghici/ui/icons/sun";
 import { Toolbar } from "@abereghici/ui/toolbar";
 
+import { withForm } from "#.storybook/decorators/with-form.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -28,6 +29,22 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({});
+
+Default.test(
+  "submits the chosen view under its name, and returns to its default when its form resets",
+  { args: { name: "view" }, decorators: [withForm] },
+  async ({ args, canvas, userEvent }) => {
+    const form = canvas.getByRole<HTMLFormElement>("form", { name: "Profile" });
+    const board = canvas.getByRole("radio", { name: "Board" });
+
+    await userEvent.click(board);
+    await expect([...new FormData(form)]).toEqual([["view", "board"]]);
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(canvas.getByRole("radio", { name: "List" })).toBeChecked();
+    await userEvent.click(board);
+    await expect(args.onValueChange).toHaveBeenCalledTimes(2);
+  },
+);
 
 Default.test(
   "chooses a view on click and dispatches one ab-toggle",

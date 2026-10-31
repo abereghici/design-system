@@ -206,6 +206,18 @@ Default.test(
   },
 );
 
+Default.test(
+  "returns to its default value when its form resets",
+  { args: { defaultValue: "sg" }, decorators: [withForm] },
+  async ({ canvas, userEvent }) => {
+    const select = canvas.getByRole("combobox", { name: "Region" });
+
+    await userEvent.selectOptions(select, "jp");
+    await userEvent.click(canvas.getByRole("button", { name: "Reset" }));
+    await expect(select).toHaveDisplayValue("Singapore");
+  },
+);
+
 function ControlledSelect(args: Select.RootProps) {
   const [value, setValue] = useState(args.value ?? "recent");
 
@@ -248,6 +260,24 @@ Default.test(
     await expect(canvas.getByRole("option", { name: "Japan" }).checkVisibility()).toBe(false);
   },
 );
+
+export const Open = meta.story({
+  args: { defaultValue: "eu" },
+  parameters: {
+    docs: {
+      description: { story: "Open, with focus on the chosen option and the pointer over another." },
+    },
+  },
+  play: async ({ canvas }) => {
+    const user = await trusted().catch(() => null);
+
+    if (user === null || !basePicker()) return;
+
+    await user.tab();
+    await user.keyboard(" ");
+    await user.hover(canvas.getByRole("option", { name: "Japan" }));
+  },
+});
 
 export const Controlled = meta.story({
   args: {

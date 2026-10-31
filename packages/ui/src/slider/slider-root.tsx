@@ -103,6 +103,9 @@ function useSliderState(options: Options, scale: Scale) {
     change,
     commit,
     format: (entry: number) => formatter.format(entry),
+    reset: () => {
+      setUncontrolled(options.defaultValue ?? min);
+    },
     percent: (entry: number) => ((entry - min) / (max - min)) * 100,
   };
 }
@@ -119,7 +122,11 @@ export function useSlider() {
   return slider;
 }
 
-/** A value or range picked by feel (volume, price). For an exact number, use NumberField. */
+/**
+ * A value or range picked by feel (volume, price). For an exact number, use NumberField.
+ *
+ * Tier 1: works before hydration.
+ */
 export function Root({
   value,
   defaultValue,

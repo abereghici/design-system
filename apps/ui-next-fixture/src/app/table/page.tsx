@@ -1,3 +1,5 @@
+import NextLink from "next/link";
+
 import { Table } from "@abereghici/ui/table";
 
 const invoices = [
@@ -8,7 +10,11 @@ const invoices = [
 export default function Page() {
   return (
     <main>
-      <Table.Root selectionMode="multiple" defaultSelectedKeys={new Set(["INV-002"])} stickyHeader>
+      <Table.Root
+        selectionMode="multiple"
+        defaultSelectedKeys={new Set(invoices.map((invoice) => invoice.id))}
+        stickyHeader
+      >
         <Table.Caption>Invoices</Table.Caption>
         <Table.Header>
           <Table.Row>
@@ -18,7 +24,7 @@ export default function Page() {
             />
             <Table.ColumnHeader sortDirection="ascending">
               <Table.SortLabel asChild>
-                <a href="?sort=invoice">Invoice</a>
+                <NextLink href="?sort=invoice">Invoice</NextLink>
               </Table.SortLabel>
             </Table.ColumnHeader>
             <Table.ColumnHeader>Amount</Table.ColumnHeader>

@@ -19,6 +19,8 @@ export interface FormProps extends ComponentProps<"form"> {
  * A form that shows each error inside its Field instead of the browser's bubbles, moves focus to the
  * first invalid field after a blocked submit, and puts server errors on their fields. Submitting
  * works as with any form: `action`, `method`, `FormData` and React actions are unchanged.
+ *
+ * Tier 1: works before hydration.
  */
 export function Form({ errors, onInvalidCapture, ...props }: FormProps) {
   return (

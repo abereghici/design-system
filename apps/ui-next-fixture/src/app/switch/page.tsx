@@ -3,7 +3,10 @@ import { Switch } from "@abereghici/ui/switch";
 export default function Page() {
   return (
     <main>
-      <Switch>Sound</Switch>
+      <form>
+        <Switch name="sound">Sound</Switch>
+        <button>Submit</button>
+      </form>
     </main>
   );
 }

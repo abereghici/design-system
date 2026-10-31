@@ -52,6 +52,8 @@ export interface RootProps extends OverlayOptions<ChangeReason> {
  * The same menu as DropdownMenu, opened by a right click or a long press on an area, or by the
  * keyboard's context-menu key. It is a shortcut, never the only way to an action: put the same items
  * in a visible control too.
+ *
+ * Tier 2: shows its final content before hydration and works after it.
  */
 export function Root({ children, ...options }: RootProps) {
   const overlay = useOverlay("ContextMenu", options, cornerAnchor);
