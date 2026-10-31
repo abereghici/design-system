@@ -1,15 +1,15 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import type { ComponentProps, RefObject } from "react";
 
-import { useEvent } from "../events/use-event.ts";
 import { useField, useFieldControl } from "../field/use-field.ts";
 import { useHydrated } from "../internal/hydration/use-hydrated.ts";
 import { composeRefs } from "../internal/slot/slot.tsx";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import { Selection } from "./file-trigger-selection.tsx";
+import type { useFiles } from "./use-files.ts";
 import styles from "./file-trigger.module.css";
 
 export type NativeProps = Pick<
@@ -27,36 +27,12 @@ interface Picker {
 export const PickerContext = createContext<Picker | undefined>(undefined);
 
 interface InputProps extends NativeProps {
-  readonly inputRef: Picker["input"];
   readonly triggerRef: Picker["trigger"];
   readonly triggerId: string;
   readonly disabled: boolean;
   readonly directory?: boolean;
   readonly clearLabel: string | undefined;
-}
-
-function clear(input: HTMLInputElement | null, trigger: HTMLElement | null) {
-  if (input === null) return;
-
-  input.value = "";
-  input.dispatchEvent(new Event("input", { bubbles: true }));
-  input.dispatchEvent(new Event("change", { bubbles: true }));
-  trigger?.focus();
-}
-
-/** The chosen file names, emptied when the form resets. */
-function useNames(inputRef: Picker["input"]) {
-  const [names, setNames] = useState<string[]>([]);
-
-  useEvent(
-    "reset",
-    () => {
-      setNames([]);
-    },
-    () => inputRef.current?.form,
-  );
-
-  return [names, setNames] as const;
+  readonly files: ReturnType<typeof useFiles>;
 }
 
 /**
@@ -64,16 +40,15 @@ function useNames(inputRef: Picker["input"]) {
  * chosen file names and a Clear button. Without script it stands in for the trigger, named by it.
  */
 export function Input({
-  inputRef,
   triggerRef,
   triggerId,
   directory = false,
   clearLabel,
+  files,
   ...props
 }: InputProps) {
   const { field } = useField();
   const bindings = useFieldControl<HTMLInputElement, NativeProps & { disabled: boolean }>(props);
-  const [names, setNames] = useNames(inputRef);
   // The server HTML keeps the input in the tab order and the accessibility tree for when script
   // never runs; once hydrated, the trigger takes over both.
   const hydrated = useHydrated();
@@ -84,7 +59,7 @@ export function Input({
         <input
           {...bindings}
           {...{ webkitdirectory: directory ? "" : undefined }}
-          ref={composeRefs(inputRef, bindings.ref)}
+          ref={composeRefs(files.inputRef, bindings.ref)}
           className={styles["input"]}
           type="file"
           tabIndex={hydrated ? -1 : undefined}
@@ -94,7 +69,7 @@ export function Input({
           onFocus={() => triggerRef.current?.focus()}
           onChange={undefined}
           onInput={(event) => {
-            setNames([...(event.currentTarget.files ?? [])].map((file) => file.name));
+            files.show(event.currentTarget.files);
           }}
           onClick={(event) => {
             if (bindings["aria-disabled"] === true) event.preventDefault();
@@ -102,11 +77,12 @@ export function Input({
         />
       </VisuallyHidden>
       <Selection
-        names={names}
+        names={files.names}
         clearLabel={clearLabel}
         disabled={props.disabled}
         onClear={() => {
-          clear(inputRef.current, triggerRef.current);
+          files.assign([]);
+          triggerRef.current?.focus();
         }}
       />
     </>

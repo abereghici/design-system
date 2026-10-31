@@ -1,9 +1,9 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
-import { requestChange } from "../../events/events.ts";
+import { useControllableState } from "../../events/use-controllable-state.ts";
 
 import { Group } from "./menu-group.tsx";
 import type { ItemChangeEventDetails } from "./menu.tsx";
@@ -31,15 +31,10 @@ export function RadioGroup({
   onValueChange,
   ...props
 }: RadioGroupProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
-  const current = value === undefined ? uncontrolled : value;
+  const [current, request] = useControllableState(value, defaultValue, onValueChange);
 
   function select(next: string, event: MouseEvent<HTMLButtonElement>) {
-    if (!requestChange(onValueChange, next, "item-press", event.nativeEvent)) return false;
-
-    setUncontrolled(next);
-
-    return true;
+    return request(next, "item-press", event.nativeEvent);
   }
 
   return (

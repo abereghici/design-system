@@ -5,8 +5,9 @@ import type { ComponentProps, Dispatch, KeyboardEvent, RefObject, SetStateAction
 
 import "@abereghici/tokens/components/command.css";
 
-import { isComposing, requestChange } from "../events/events.ts";
+import { isComposing } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { filterOptions, enabled, navigate, reveal } from "../internal/listbox/listbox.tsx";
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
@@ -151,8 +152,7 @@ export function Root({
   children,
   ...props
 }: RootProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultInputValue);
-  const query = inputValue ?? uncontrolled;
+  const [query, request] = useControllableState(inputValue, defaultInputValue, onInputValueChange);
   const [highlighted, setHighlighted] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
   const locale = useLocale();
@@ -160,7 +160,7 @@ export function Root({
   const context: CommandContext = {
     query,
     change: (next, event) => {
-      if (requestChange(onInputValueChange, next, "input-change", event)) setUncontrolled(next);
+      request(next, "input-change", event);
     },
     highlighted,
     highlight: setHighlighted,

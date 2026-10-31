@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import type { ComponentProps, MouseEvent } from "react";
 
 import "@abereghici/tokens/components/icon-button.css";
 
-import { dispatchFeedback, requestChange } from "../events/events.ts";
+import { dispatchFeedback } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import type { AccessibleName } from "../internal/accessible-name/accessible-name.ts";
 import { Slot, mergeProps } from "../internal/slot/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
@@ -63,8 +63,7 @@ export function IconButton({
   onClick,
   ...props
 }: IconButtonProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultPressed);
-  const current = pressed ?? uncontrolled;
+  const [current, request] = useControllableState(pressed, defaultPressed, onPressedChange);
 
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     if (disabled || loading) {
@@ -81,9 +80,8 @@ export function IconButton({
       return;
     }
 
-    if (!requestChange(onPressedChange, !current, "none", event)) return;
+    if (!request(!current, "none", event)) return;
 
-    setUncontrolled(!current);
     dispatchFeedback(event.currentTarget, "ab-toggle", feedback);
   }
 

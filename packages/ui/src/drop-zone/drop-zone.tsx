@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import type { ComponentProps, DragEvent, RefObject } from "react";
+import type { ComponentProps, DragEvent } from "react";
 
 import "@abereghici/tokens/components/drop-zone.css";
 
@@ -9,6 +9,7 @@ import { requestChange } from "../events/events.ts";
 import { useEvent } from "../events/use-event.ts";
 import { useField } from "../field/use-field.ts";
 import { Input as FileInput, PickerContext } from "../file-trigger/file-trigger-input.tsx";
+import { useFiles } from "../file-trigger/use-files.ts";
 import { mergeProps } from "../internal/slot/slot.tsx";
 
 import styles from "./drop-zone.module.css";
@@ -81,29 +82,19 @@ function usePreventDocumentDrop() {
   useEvent("drop", preventDrop, getWindow);
 }
 
-function setFiles(input: HTMLInputElement, files: File[]) {
-  const transfer = new DataTransfer();
-
-  for (const file of files) transfer.items.add(file);
-
-  input.files = transfer.files;
-  input.dispatchEvent(new Event("input", { bubbles: true }));
-  input.dispatchEvent(new Event("change", { bubbles: true }));
-}
-
 interface DropTargetOptions {
   readonly accept: string | undefined;
   readonly multiple: boolean;
   readonly onDrop: DropZoneProps["onDrop"];
   readonly blocked: boolean;
-  readonly input: RefObject<HTMLInputElement | null>;
+  readonly assign: (files: readonly File[]) => void;
 }
 
 /**
  * Tracks files dragged over the zone (`dragleave` fires at every child boundary) and takes the
  * drop.
  */
-function useDropTarget({ accept, multiple, onDrop, blocked, input }: DropTargetOptions) {
+function useDropTarget({ accept, multiple, onDrop, blocked, assign }: DropTargetOptions) {
   const depth = useRef(0);
   const [target, setTarget] = useState<"" | "rejected">();
   const { couldAccept, accepts } = matcher(accept);
@@ -138,7 +129,7 @@ function useDropTarget({ accept, multiple, onDrop, blocked, input }: DropTargetO
 
       const files = [...event.dataTransfer.files];
 
-      if (blocked || input.current === null) return;
+      if (blocked) return;
 
       const accepted = files.filter((file) => accepts(file)).slice(0, multiple ? undefined : 1);
       const rejected = files.filter((file) => !accepts(file));
@@ -146,7 +137,7 @@ function useDropTarget({ accept, multiple, onDrop, blocked, input }: DropTargetO
         onDrop?.(value, { ...details, rejected });
 
       if (requestChange(report, accepted, "none", event) && accepted.length > 0) {
-        setFiles(input.current, accepted);
+        assign(accepted);
       }
     },
   };
@@ -175,11 +166,17 @@ export function DropZone({
   ...props
 }: DropZoneProps) {
   const { blocked, invalid } = useField(disabled);
-  const input = useRef<HTMLInputElement>(null);
   const trigger = useRef<HTMLElement>(null);
   const triggerId = useId();
-  const { target, ...handlers } = useDropTarget({ accept, multiple, onDrop, blocked, input });
-  const picker = { input, trigger, triggerId, disabled: blocked };
+  const files = useFiles();
+  const { target, ...handlers } = useDropTarget({
+    accept,
+    multiple,
+    onDrop,
+    blocked,
+    assign: files.assign,
+  });
+  const picker = { input: files.inputRef, trigger, triggerId, disabled: blocked };
 
   usePreventDocumentDrop();
 
@@ -195,11 +192,11 @@ export function DropZone({
         {children}
         <FileInput
           {...{ accept, multiple, name, required, form }}
-          inputRef={input}
           triggerRef={trigger}
           triggerId={triggerId}
           disabled={blocked}
           clearLabel={clearLabel}
+          files={files}
         />
       </div>
     </PickerContext>

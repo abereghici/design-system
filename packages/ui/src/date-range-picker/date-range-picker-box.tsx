@@ -1,12 +1,11 @@
 "use client";
 
-import type { Panel } from "../date-picker/date-picker-panel.tsx";
-import { Trigger } from "../date-picker/date-picker-trigger.tsx";
 import { useField } from "../field/use-field.ts";
 import { Temporal, useDateFormats } from "../internal/date/date.ts";
 import type { DatePart, DateRange } from "../internal/date/date.ts";
+import { Trigger } from "../internal/picker/picker-trigger.tsx";
+import type { Panel } from "../internal/picker/picker.ts";
 import type { SegmentFieldOptions } from "../internal/segment-field/segment-field.tsx";
-import type { Validity } from "../internal/segment-field/use-validity.ts";
 
 import { Half } from "./date-range-picker-half.tsx";
 import type { ChangeEventDetails, RootProps } from "./date-range-picker-root.tsx";
@@ -24,13 +23,11 @@ export interface Range {
   readonly halves: Halves;
   /** Asks for the dates to change; `false` when the change is refused. */
   readonly change: (next: Halves, reason: ChangeEventDetails["reason"], event: Event) => boolean;
-  readonly reset: () => void;
 }
 
 type BoxProps = Pick<
   RootProps,
   | "aria-label"
-  | "defaultValue"
   | "min"
   | "max"
   | "isDateUnavailable"
@@ -47,7 +44,6 @@ type BoxProps = Pick<
   | "endLabel"
 > & {
   readonly range: Range;
-  readonly onValidity: (half: keyof Halves, validity: Validity) => void;
   /** The calendar button's popover. */
   readonly panel: Panel;
 };
@@ -58,6 +54,8 @@ function halfOptions(
 ): SegmentFieldOptions<DatePart, Temporal.PlainDate> {
   const { range, min, max, form, required, disabled, incompleteMessage, placeholders } = props;
   const start = range.halves.start;
+  const reversed = (day: Temporal.PlainDate) =>
+    key === "end" && start !== null && Temporal.PlainDate.compare(day, start) < 0;
 
   return {
     min,
@@ -67,20 +65,18 @@ function halfOptions(
     disabled,
     incompleteMessage,
     placeholders,
-    isUnavailable: props.isDateUnavailable,
-    unavailableMessage: props.unavailableMessage,
+    name: key === "start" ? props.startName : props.endName,
     value: range.halves[key],
-    defaultValue: props.defaultValue?.[key] ?? null,
     onValueChange: (date, details) => {
       if (!range.change({ ...range.halves, [key]: date }, details.reason, details.event)) {
         details.cancel();
       }
     },
-    onFormReset: range.reset,
-    validate: (iso) =>
-      key === "end" && iso !== "" && start !== null && Temporal.PlainDate.compare(iso, start) < 0
-        ? props.reversedMessage
-        : undefined,
+    check: (day) => {
+      if (props.isDateUnavailable?.(day) === true) return props.unavailableMessage;
+
+      return reversed(day) ? props.reversedMessage : undefined;
+    },
   };
 }
 
@@ -98,31 +94,16 @@ export function Box(props: BoxProps) {
       aria-disabled={blocked || undefined}
       className={`${fieldStyles["control"]} ${styles["box"]}`}
     >
-      <Half
-        label={props.startLabel}
-        name={props.startName}
-        first
-        options={halfOptions(props, "start")}
-        onValidity={(validity) => {
-          props.onValidity("start", validity);
-        }}
-      />
+      <Half label={props.startLabel} first options={halfOptions(props, "start")} />
       <span aria-hidden="true" className={styles["separator"]}>
         {formats.rangeSeparator}
       </span>
-      <Half
-        label={props.endLabel}
-        name={props.endName}
-        first={false}
-        options={halfOptions(props, "end")}
-        onValidity={(validity) => {
-          props.onValidity("end", validity);
-        }}
-      />
+      <Half label={props.endLabel} first={false} options={halfOptions(props, "end")} />
       <Trigger
         panel={props.panel}
         description={current === null ? undefined : formats.fullRange(current)}
         disabled={blocked}
+        form={props.form}
       />
     </fieldset>
   );

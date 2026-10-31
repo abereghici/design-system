@@ -1,26 +1,21 @@
 "use client";
 
-import { useRef, useState } from "react";
 import type { ReactNode } from "react";
 
 import { Root as DateFieldRoot } from "../date-field/date-field-root.tsx";
 import type { DateFieldChangeEventDetails, DateFieldProps } from "../date-field/date-field.tsx";
-import { requestChange } from "../events/events.ts";
 import type { ChangeEventDetails as Details } from "../events/events.ts";
+import { useControllableState } from "../events/use-controllable-state.ts";
 import { DatePickerContext, useDateFormats } from "../internal/date/date.ts";
-import type { PickerContextValue, Temporal } from "../internal/date/date.ts";
-import { useOverlay } from "../internal/overlay/overlay.ts";
-import type { ChangeEventDetails as OverlayDetails, Overlay } from "../internal/overlay/overlay.ts";
+import type { Temporal } from "../internal/date/date.ts";
+import { Trigger } from "../internal/picker/picker-trigger.tsx";
+import { PanelContext, usePicker } from "../internal/picker/picker.ts";
+import type { OpenChangeEventDetails } from "../internal/picker/picker.ts";
 
-import { focusStayed, PanelContext } from "./date-picker-panel.tsx";
-import { Trigger } from "./date-picker-trigger.tsx";
+export type { OpenChangeEventDetails } from "../internal/picker/picker.ts";
 
 /** `cancel()`: keeps the previous value; after a day press the panel stays open. */
 export type ChangeEventDetails = Details<DateFieldChangeEventDetails["reason"] | "day-press">;
-
-export type OpenChangeEventDetails = OverlayDetails<
-  "trigger-press" | "outside-press" | "escape-key" | "focus-out" | "day-press" | "none"
->;
 
 type Unavailable =
   | { isDateUnavailable?: undefined; unavailableMessage?: undefined }
@@ -55,47 +50,8 @@ export type RootProps = Omit<DateFieldProps, "value" | "defaultValue" | "onValue
     children?: ReactNode;
   };
 
-function useValue({ value, defaultValue = null, onValueChange }: RootProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
-  const current = value === undefined ? uncontrolled : value;
-  const change = (
-    date: Temporal.PlainDate | null,
-    reason: ChangeEventDetails["reason"],
-    event: Event,
-  ) => {
-    const accepted = requestChange(onValueChange, date, reason, event);
-
-    if (accepted) setUncontrolled(date);
-
-    return accepted;
-  };
-
-  const reset = () => {
-    setUncontrolled(defaultValue);
-  };
-
-  return { current, change, reset };
-}
-
-function pickerOf(
-  overlay: Overlay,
-  date: ReturnType<typeof useValue>,
-  { min, max, isDateUnavailable }: RootProps,
-): PickerContextValue<Temporal.PlainDate> {
-  return {
-    open: overlay.open,
-    value: date.current,
-    min,
-    max,
-    isDateUnavailable,
-    choose: (day, event) => {
-      if (date.current?.equals(day) === true || date.change(day, "day-press", event)) {
-        overlay.toggle(false, "day-press", event);
-      }
-    },
-    canFocus: () => focusStayed(overlay),
-  };
-}
+const sameDay = (current: Temporal.PlainDate | null, day: Temporal.PlainDate) =>
+  current?.equals(day) === true;
 
 /**
  * A date field with a button that opens a month: type the date, or pick it. Put a `<Calendar />` in
@@ -107,35 +63,42 @@ function pickerOf(
  * browser's own date input takes its place.
  */
 export function Root(props: RootProps) {
-  const { defaultValue, open, defaultOpen, onOpenChange, isDateUnavailable, ...rest } = props;
-  const { triggerLabel: name, disabled, children, ...field } = rest;
-  const date = useValue(props);
-  const trigger = useRef<HTMLButtonElement>(null);
-  const overlay = useOverlay("Popover", { open, defaultOpen, onOpenChange });
-  const panel = { overlay, name, trigger };
+  const { value, defaultValue, onValueChange, open, defaultOpen, onOpenChange, ...rest } = props;
+  const { triggerLabel, disabled, isDateUnavailable, children, ...field } = rest;
+  const { min, max } = field;
+  const overlay = { open, defaultOpen, onOpenChange };
+  const { panel, form, calendar } = usePicker({
+    ...overlay,
+    triggerLabel,
+    min,
+    max,
+    isDateUnavailable,
+  });
+  const [current, change] = useControllableState(value, defaultValue ?? null, onValueChange, form);
   const formats = useDateFormats();
 
   return (
     <DateFieldRoot
       {...field}
       disabled={disabled}
-      value={date.current}
-      defaultValue={defaultValue}
+      value={current}
       onValueChange={(next, details) => {
-        if (!date.change(next, details.reason, details.event)) details.cancel();
+        if (!change(next, details.reason, details.event)) details.cancel();
       }}
       isDateUnavailable={isDateUnavailable}
-      onFormReset={date.reset}
       end={
         <Trigger
           panel={panel}
-          description={date.current === null ? undefined : formats.full(date.current)}
+          form={field.form}
+          description={current === null ? undefined : formats.full(current)}
           disabled={disabled === true}
         />
       }
     >
       <PanelContext value={panel}>
-        <DatePickerContext value={pickerOf(overlay, date, props)}>{children}</DatePickerContext>
+        <DatePickerContext value={calendar({ current, change }, sameDay)}>
+          {children}
+        </DatePickerContext>
       </PanelContext>
     </DateFieldRoot>
   );

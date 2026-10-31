@@ -16,17 +16,16 @@ export type RootProps = DateFieldProps & {
   end?: ReactNode;
   isDateUnavailable?: ((date: Temporal.PlainDate) => boolean) | undefined;
   unavailableMessage?: string | undefined;
-  onFormReset?: (() => void) | undefined;
   children?: ReactNode;
 };
 
 /** DateField with a slot in its field box and one after it, for the DatePicker. */
-export function Root({ isDateUnavailable, ...props }: RootProps) {
+export function Root({ isDateUnavailable, unavailableMessage, ...props }: RootProps) {
   return (
     <SegmentField
       {...props}
       model={useDateSegments()}
-      isUnavailable={isDateUnavailable}
+      check={(day) => (isDateUnavailable?.(day) === true ? unavailableMessage : undefined)}
       classNames={{ root: styles["root"], group: styles["group"] }}
     />
   );
