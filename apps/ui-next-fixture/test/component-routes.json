@@ -67,7 +67,7 @@
   },
   {
     "name": "alert",
-    "tokens": ["alert", "icon", "icon-button", "spinner"],
+    "tokens": ["alert", "icon", "icon-button"],
     "client": ["alert/alert-close"],
     "html": "aria-label=\"Dismiss\""
   },
@@ -305,7 +305,7 @@
   },
   {
     "name": "dialog",
-    "tokens": ["dialog", "icon", "icon-button", "spinner"],
+    "tokens": ["dialog", "icon", "icon-button"],
     "client": [
       "dialog/dialog-close",
       "dialog/dialog-content",
@@ -332,7 +332,7 @@
   },
   {
     "name": "sheet",
-    "tokens": ["sheet", "icon", "icon-button", "spinner"],
+    "tokens": ["sheet", "icon", "icon-button"],
     "client": [
       "dialog/dialog-close",
       "dialog/dialog-content",
@@ -385,7 +385,7 @@
   },
   {
     "name": "popover",
-    "tokens": ["popover", "icon", "icon-button", "spinner"],
+    "tokens": ["popover", "icon", "icon-button"],
     "client": [
       "popover/popover-close",
       "popover/popover-content",

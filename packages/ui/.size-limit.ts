@@ -4,7 +4,7 @@ import { globSync } from "node:fs";
 import type { SizeLimitConfig } from "size-limit";
 
 const budgets: Readonly<Record<string, string>> = {
-  alert: "3.1 kB",
+  alert: "2.5 kB",
   avatar: "1.8 kB",
   badge: "1.15 kB",
   breadcrumbs: "1.7 kB",
@@ -45,7 +45,7 @@ const budgets: Readonly<Record<string, string>> = {
   progress: "1.55 kB",
   "scroll-area": "850 B",
   "password-field": "5.05 kB",
-  popover: "4.7 kB",
+  popover: "4.2 kB",
   "radio-group": "2.7 kB",
   "ui-provider": "5.4 kB",
   "search-field": "5.35 kB",
@@ -83,9 +83,9 @@ const budgets: Readonly<Record<string, string>> = {
   "text-area": "3.15 kB",
   "text-field": "3.3 kB",
   "visually-hidden": "650 B",
-  dialog: "4.3 kB",
+  dialog: "3.75 kB",
   "alert-dialog": "4.2 kB",
-  sheet: "4.5 kB",
+  sheet: "3.95 kB",
   command: "7.6 kB",
 };
 
