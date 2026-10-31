@@ -3,12 +3,13 @@ import type { KeyboardEvent, SyntheticEvent } from "react";
 
 import { useEvent } from "../internal/dom-event/use-event.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
+import { snapValueToStep } from "../internal/snap-value-to-step/snap-value-to-step.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import type { Direction } from "./number-field-step-buttons.tsx";
 import type { ControlProps, NumberFieldChangeEventDetails } from "./number-field.tsx";
 
-type Bounds = { min?: number | undefined; max?: number | undefined; step: number };
+type Bounds = Partial<Record<"min" | "max", number | undefined>>;
 
 function buildNumberFormat(
   locale: Intl.LocalesArgument,
@@ -50,16 +51,6 @@ function numberFormat(locale: Intl.LocalesArgument, options: Intl.NumberFormatOp
   numberFormats.set(key, cached);
 
   return cached;
-}
-
-const decimals = (value: number) => (String(value).split(".")[1] ?? "").length;
-
-function fit(value: number, { min, max, step }: Bounds) {
-  const base = min ?? 0;
-  const snapped = base + Math.round((value - base) / step) * step;
-  const rounded = Number(snapped.toFixed(Math.max(decimals(step), decimals(base))));
-
-  return Math.min(max ?? Infinity, Math.max(min ?? -Infinity, rounded));
 }
 
 function stepKey(event: KeyboardEvent, step: number, largeStep: number, { min, max }: Bounds) {
@@ -136,7 +127,7 @@ export function useNumberValue({
   };
 
   const settle = (next: number | null, reason: Reason, event: SyntheticEvent) => {
-    commit(next === null ? null : fit(next, { min, max, step }), reason, event);
+    commit(next === null ? null : snapValueToStep(next, min, max, step), reason, event);
   };
 
   return {
@@ -157,7 +148,7 @@ export function useNumberValue({
       settle(current(), reason, event);
     },
     keyStep: (event: KeyboardEvent) => {
-      const to = stepKey(event, step, largeStep ?? step * 10, { min, max, step });
+      const to = stepKey(event, step, largeStep ?? step * 10, { min, max });
 
       if (to === null) return;
 

@@ -11,6 +11,7 @@ import { createSafeContext } from "../internal/create-safe-context/create-safe-c
 import type { EventTargetSource } from "../internal/dom-event/use-event.ts";
 import { useLocale } from "../internal/locale/use-locale.ts";
 import { mergeProps } from "../internal/merge-props/merge-props.ts";
+import { snapValueToStep } from "../internal/snap-value-to-step/snap-value-to-step.ts";
 import { useControllableState } from "../internal/uncontrolled-state/use-controllable-state.ts";
 
 import styles from "./slider.module.css";
@@ -48,12 +49,6 @@ export interface RootProps extends Omit<ComponentProps<"div">, "defaultValue"> {
   disabled?: boolean;
 }
 
-function snap(raw: number, min: number, step: number) {
-  const decimals = String(step).split(".")[1]?.length ?? 0;
-
-  return Number((Math.round((raw - min) / step) * step + min).toFixed(decimals));
-}
-
 type Options = {
   readonly [
     Key in "value" | "defaultValue" | "onValueChange" | "onValueCommitted" | "format" | "name"
@@ -82,7 +77,7 @@ function useSliderState(options: Options, scale: Scale, form: EventTargetSource)
 
   function change(index: number, raw: number, reason: Reason, event: Event, from = values) {
     const [lo, hi] = bounds(index, from);
-    const next = from.with(index, Math.min(Math.max(snap(raw, min, step), lo), hi));
+    const next = from.with(index, Math.min(Math.max(snapValueToStep(raw, min, max, step), lo), hi));
 
     if (next[index] === from[index]) return from;
 

@@ -73,6 +73,20 @@ Default.test(
 );
 
 Default.test(
+  "steps from its minimum when the minimum is finer than the step",
+  { args: { defaultValue: 0.05, min: 0.05, max: 1, step: 0.1 } },
+  async ({ canvas, userEvent }) => {
+    const slider = canvas.getByRole("slider", { name: "Volume" });
+
+    await userEvent.tab();
+    await userEvent.keyboard("{ArrowRight}");
+    await expect(slider).toHaveValue("0.15");
+    await userEvent.keyboard("{ArrowRight}");
+    await expect(slider).toHaveValue("0.25");
+  },
+);
+
+Default.test(
   "takes large steps with Page Up, Page Down and Shift, and jumps with Home and End",
   async ({ canvas, userEvent }) => {
     const slider = canvas.getByRole("slider", { name: "Volume" });
