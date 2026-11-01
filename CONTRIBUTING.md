@@ -25,11 +25,15 @@ The Node.js and pnpm versions are pinned in `package.json` under `devEngines`.
 pnpm install
 pnpm build                              # build every package
 pnpm test                               # unit, browser and size-budget tests
+pnpm test:packed                        # the fixture app against the packed tarballs
 pnpm lint && pnpm format && pnpm check-types
+pnpm lint:fix && pnpm format:fix        # apply the fixes they can make
 pnpm --filter @abereghici/ui storybook  # Storybook on http://localhost:6006
 ```
 
 Storybook is deployed to Cloudflare Workers: `main` to [ui.bereghici.dev](https://ui.bereghici.dev), and every pull request from this repository to its own preview, linked from the pull request and deleted when it closes.
+
+Every root script but `format`, `format:fix` and `lint:root`, which run once over the whole repository, runs one task across the workspace through Turborepo, so a new package only needs scripts with the same names (`build`, `check-types`, `lint`, `test`) to take part; its `turbo.json` declares what differs.
 
 Screenshot tests run on Linux only: the stories', and each fixture route's with JavaScript off. `pnpm --filter @abereghici/ui test:screenshots:docker` runs both in the Playwright container image that CI uses.
 

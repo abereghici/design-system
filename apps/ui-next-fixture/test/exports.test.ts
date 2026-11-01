@@ -15,20 +15,20 @@ function resolve(specifier: string): string | undefined {
 
 describe("@abereghici/ui exports", () => {
   test("a component subpath resolves to its directory's index.ts", () => {
-    expect(resolve("@abereghici/ui/button")).toBe(join(uiDir, "src/button/index.ts"));
+    expect(resolve("@abereghici/ui/button")).toBe(join(uiDir, "src/components/button/index.ts"));
   });
 
-  test("every src/<name>/index.ts is the subpath @abereghici/ui/<name>", () => {
-    for (const entry of globSync("src/*/index.ts", { cwd: uiDir })) {
+  test("every <name>/index.ts in src/ or src/components/ is the subpath @abereghici/ui/<name>", () => {
+    for (const entry of globSync(["src/*/index.ts", "src/components/*/index.ts"], { cwd: uiDir })) {
       const name = basename(dirname(entry));
 
       expect(resolve(`@abereghici/ui/${name}`)).toBe(join(uiDir, entry));
     }
   });
 
-  test("every src/icon/icons/<name>.tsx is the subpath @abereghici/ui/icons/<name>", () => {
-    for (const entry of globSync("src/icon/icons/*.tsx", { cwd: uiDir })) {
-      const name = entry.slice("src/icon/icons/".length, -".tsx".length);
+  test("every src/components/icon/icons/<name>.tsx is the subpath @abereghici/ui/icons/<name>", () => {
+    for (const entry of globSync("src/components/icon/icons/*.tsx", { cwd: uiDir })) {
+      const name = entry.slice("src/components/icon/icons/".length, -".tsx".length);
 
       expect(resolve(`@abereghici/ui/icons/${name}`)).toBe(join(uiDir, entry));
     }
@@ -41,12 +41,8 @@ describe("@abereghici/ui exports", () => {
   });
 
   test("the shared internals are not exported", () => {
-    expect(() => resolve("@abereghici/ui/internal/slot")).toThrow(
-      expect.objectContaining({ code: "ERR_PACKAGE_PATH_NOT_EXPORTED" }),
-    );
-    expect(() => resolve("@abereghici/ui/internal/slot/slot.tsx")).toThrow(
-      expect.objectContaining({ code: "ERR_PACKAGE_PATH_NOT_EXPORTED" }),
-    );
+    expect(resolve("@abereghici/ui/internal/utils")).toBeUndefined();
+    expect(resolve("@abereghici/ui/internal/utils/slot.tsx")).toBeUndefined();
   });
 
   test("the package root is not importable (Vite, through Vitest)", async () => {
@@ -58,7 +54,7 @@ describe("@abereghici/ui exports", () => {
   test("module files, glyph folders and the Storybook harness have no subpath", () => {
     expect(resolve("@abereghici/ui/button/button.tsx")).toBeUndefined();
     expect(resolve("@abereghici/ui/button/button.module.css")).toBeUndefined();
-    expect(resolve("@abereghici/ui/src/button/button.tsx")).toBeUndefined();
+    expect(resolve("@abereghici/ui/src/components/button/button.tsx")).toBeUndefined();
     expect(resolve("@abereghici/ui/icon/icons/x")).toBeUndefined();
     expect(resolve("@abereghici/ui/.storybook/preview")).toBeUndefined();
   });

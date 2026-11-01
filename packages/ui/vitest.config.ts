@@ -10,19 +10,21 @@ import viteConfig from "./vite.config.ts";
 
 const clipboard = ["clipboard-read", "clipboard-write"];
 
+const takesAriaSnapshots = (project = "") =>
+  project !== "chromium-reduced-motion" && !project.startsWith("screenshot:");
+
 export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
       maxWorkers: "50%",
-      // Snapshot paths resolve from this root option only. Reduced motion and the screenshot projects
-      // take no aria snapshots, so on chromium's files they would report every one obsolete, and `-u`
-      // would delete them.
+      // resolveSnapshotPath is a root-only option. Projects that take no aria snapshots get their own,
+      // empty file, else they would report chromium's snapshots obsolete and `-u` would delete them.
       resolveSnapshotPath: (testPath, extension, { config }) =>
         resolve(
           dirname(testPath),
           "__snapshots__",
-          `${basename(testPath)}${config.name === "chromium-reduced-motion" || config.name?.startsWith("screenshot:") === true ? ".none" : ""}${extension}`,
+          `${basename(testPath)}${takesAriaSnapshots(config.name) ? "" : ".none"}${extension}`,
         ),
       projects: [
         { test: { name: "node", include: ["scripts/**/*.test.ts"] } },

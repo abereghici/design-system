@@ -11,8 +11,7 @@
   },
   "scripts": {
     "check-types": "tsc",
-    "lint": "oxlint",
-    "lint:fix": "oxlint --fix"
+    "lint": "oxlint"
   },
   "dependencies": {
     "@stylistic/eslint-plugin": "catalog:"

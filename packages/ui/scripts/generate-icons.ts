@@ -7,7 +7,7 @@ import type { XastElement, XastRoot } from "svgo";
 
 import formatConfig from "../../../oxfmt.config.ts";
 
-const root = new URL("../", import.meta.url);
+const root = new URL("..", import.meta.url);
 const iconSources = new URL("assets/icons/", root);
 
 // A source that strokes differently from Icon would be redrawn wrong, so generation stops.
@@ -111,7 +111,7 @@ export async function generateGlyphs() {
   const modules = new Map<string, string>();
 
   for (const name of await iconSourceNames()) {
-    modules.set(`src/icon/icons/${name}.tsx`, await iconModule(name));
+    modules.set(`src/components/icon/icons/${name}.tsx`, await iconModule(name));
   }
 
   for (const [path, text] of modules) {

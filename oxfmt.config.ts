@@ -1,16 +1,14 @@
 import { defineConfig } from "oxfmt";
 
 const react = ["react", "react/**", "react-dom", "react-dom/**"];
-const workspace = ["@abereghici/**", "@repo/**"];
 
 export default defineConfig({
   ignorePatterns: [".claude/"],
   sortImports: {
+    internalPattern: ["@abereghici/", "@repo/"],
     customGroups: [
       { groupName: "react", elementNamePattern: react, modifiers: ["value"] },
       { groupName: "react-type", elementNamePattern: react, modifiers: ["type"] },
-      { groupName: "workspace", elementNamePattern: workspace, modifiers: ["value"] },
-      { groupName: "workspace-type", elementNamePattern: workspace, modifiers: ["type"] },
     ],
     groups: [
       "builtin",
@@ -21,11 +19,11 @@ export default defineConfig({
       { newlinesBetween: false },
       "external",
       ["type-builtin", "type-external"],
-      "workspace",
+      "internal",
       { newlinesBetween: false },
-      "workspace-type",
-      ["internal", "subpath"],
-      ["type-internal", "type-subpath"],
+      "type-internal",
+      "subpath",
+      "type-subpath",
       ["parent", "type-parent"],
       ["sibling", "index", "type-sibling", "type-index"],
       { newlinesBetween: false },

@@ -13,9 +13,12 @@ import styles from "./icon-explorer.module.css";
 type Size = (typeof sizes)[number];
 
 const icons: readonly Glyph[] = Object.entries(
-  import.meta.glob<Record<string, ComponentType<IconProps>>>("../../../src/icon/icons/*.tsx", {
-    eager: true,
-  }),
+  import.meta.glob<Record<string, ComponentType<IconProps>>>(
+    "../../../src/components/icon/icons/*.tsx",
+    {
+      eager: true,
+    },
+  ),
 ).flatMap(([file, module]) =>
   Object.entries(module).map(([name, Icon]) => ({
     path: file.slice(file.lastIndexOf("/") + 1, -".tsx".length),

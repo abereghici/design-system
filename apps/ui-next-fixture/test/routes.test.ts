@@ -52,8 +52,8 @@ const logo = route("logo");
 const iconButton = route("icon-button");
 
 // UIProvider, in the root layout, hands its locale to client components; every route carries it.
-const localeProvider = "internal/locale/locale-provider";
-const formattedNumber = "internal/locale/formatted-number";
+const localeProvider = "internal/i18n/locale-provider";
+const formattedNumber = "internal/i18n/formatted-number";
 
 // Source modules in the workspace, built ones once installed from the packed package (`test:packed`); compared without extension.
 const allClientModules = (r: Route) =>
@@ -187,12 +187,12 @@ describe("DatePicker and Calendar", () => {
 
 describe("per-component JS", () => {
   test("only the Button route loads Button's client code", () => {
-    expect(uiClientModules(button)).toEqual(["button/button"]);
+    expect(uiClientModules(button)).toEqual(["components/button/button"]);
     expect(button.js).toContain("ab-press");
     expect(uiClientModules(logo)).toEqual([]);
     expect(allClientModules(logo)).toEqual([localeProvider]);
     expect(logo.js).not.toContain("ab-press");
-    expect(uiClientModules(iconButton)).toEqual(["icon-button/icon-button"]);
+    expect(uiClientModules(iconButton)).toEqual(["components/icon-button/icon-button"]);
   });
 
   test.each([
@@ -262,7 +262,7 @@ describe("a client leaf inside a Server Component", () => {
   test("Kbd renders its platform keys as Ctrl on the server and resolves them on the client", () => {
     const kbd = route("kbd");
 
-    expect(uiClientModules(kbd)).toEqual(["kbd/kbd-key"]);
+    expect(uiClientModules(kbd)).toEqual(["components/kbd/kbd-key"]);
     expect(kbd.html).toContain("Ctrl");
     expect(kbd.html).toContain("Enter");
 

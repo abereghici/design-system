@@ -1,0 +1,32 @@
+"use client";
+
+import "@abereghici/tokens/components/command.css";
+
+import type { ComponentProps, ReactNode } from "react";
+
+import { mergeProps } from "../../internal/utils/merge-props.ts";
+import { SearchIcon } from "../icon/icons/search.tsx";
+
+import { useCommand } from "./command-root.tsx";
+import styles from "./command.module.css";
+
+export interface EmptyProps extends Omit<ComponentProps<"output">, "children"> {
+  /** The text shown and announced while nothing matches, such as "No results". */
+  children: ReactNode;
+}
+
+/** What to show while nothing matches; screen readers announce it. */
+export function Empty({ children, ...props }: EmptyProps) {
+  const { listbox } = useCommand("Command.Empty");
+
+  return (
+    <output {...mergeProps({ className: styles["empty"] }, props)}>
+      {listbox.empty && (
+        <>
+          <SearchIcon size="xl" className={styles["emptyIcon"]} />
+          <span>{children}</span>
+        </>
+      )}
+    </output>
+  );
+}

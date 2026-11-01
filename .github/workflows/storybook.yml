@@ -35,7 +35,7 @@ jobs:
         with:
           require-lockfile: true
           cache: true
-      - run: pnpm turbo run build-storybook --filter=@abereghici/ui
+      - run: pnpm turbo run build-storybook
       - id: deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

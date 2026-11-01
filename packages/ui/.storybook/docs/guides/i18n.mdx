@@ -12,14 +12,14 @@ Give `UIProvider` the same language as `<html lang>`, and set `dir` for right-to
 
 ```tsx
 // app/[lang]/layout.tsx
-import { getDirection } from "@abereghici/ui/direction";
+import { getTextDirection } from "@abereghici/ui/text-direction";
 import { UIProvider } from "@abereghici/ui/ui-provider";
 
 export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {
   const { lang } = await params;
 
   return (
-    <html lang={lang} dir={getDirection(lang)}>
+    <html lang={lang} dir={getTextDirection(lang)}>
       <body>
         <UIProvider locale={lang}>{children}</UIProvider>
       </body>
@@ -28,13 +28,13 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
 }
 ```
 
-| What                                                         | Follows                                     |
-| ------------------------------------------------------------ | ------------------------------------------- |
-| Month and weekday names, date and time segments, date ranges | `locale`, through `Intl`                    |
-| The first day of the week, the 12- or 24-hour clock          | `locale`, through `Intl`                    |
-| Numbers and percentages                                      | `locale`, through `Intl`                    |
-| Typing to jump in lists                                      | `locale`, through `Intl`                    |
-| Layout direction                                             | `dir`; `getDirection` reads it from the tag |
+| What                                                         | Follows                                                  |
+| ------------------------------------------------------------ | -------------------------------------------------------- |
+| Month and weekday names, date and time segments, date ranges | `locale`, through `Intl`                                 |
+| The first day of the week, the 12- or 24-hour clock          | `locale`, through `Intl`                                 |
+| Numbers and percentages                                      | `locale`, through `Intl`                                 |
+| Typing to jump in lists                                      | `locale`, through `Intl`                                 |
+| Layout direction                                             | `dir`; `getTextDirection` reads it from the language tag |
 
 The server and the browser then format alike, so hydration matches. Dates are Gregorian in every language.
 

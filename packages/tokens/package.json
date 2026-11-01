@@ -56,7 +56,6 @@
     "check-types": "tsc",
     "fonts": "node scripts/fonts.ts",
     "lint": "oxlint",
-    "lint:fix": "oxlint --fix",
     "test": "vitest run"
   },
   "devDependencies": {

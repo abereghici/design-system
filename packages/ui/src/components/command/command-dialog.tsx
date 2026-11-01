@@ -1,0 +1,96 @@
+"use client";
+
+import "@abereghici/tokens/components/command.css";
+
+import { useState } from "react";
+import type { ComponentProps, RefObject, SyntheticEvent } from "react";
+
+import { returnFocus } from "../../internal/overlays/overlay.ts";
+import { requestChange } from "../../internal/state/change-request.ts";
+import { useControllableState } from "../../internal/state/use-controllable-state.ts";
+import { chain } from "../../internal/utils/chain.ts";
+import { Content } from "../dialog/dialog-content.tsx";
+import { Modal } from "../dialog/dialog-modal.tsx";
+
+import { DialogContext, Root } from "./command-root.tsx";
+import type { Callback, RootProps } from "./command-root.tsx";
+import styles from "./command.module.css";
+
+type Reason = "outside-press" | "escape-key" | "item-press" | "none";
+
+export interface DialogProps
+  extends
+    Omit<ComponentProps<"dialog">, "open" | "id" | "aria-label">,
+    Pick<RootProps, "inputValue" | "defaultInputValue" | "onInputValueChange" | "filter"> {
+  /** The palette's name, such as "Command palette". */
+  "aria-label": string;
+  /** Whether it is open, when your state holds it; pair it with `onOpenChange`. */
+  open?: boolean;
+  /** Opens it on the first render when it holds its own state. */
+  defaultOpen?: boolean;
+  /** Called before it opens or closes; `details.cancel()` keeps it as it is. */
+  onOpenChange?: Callback<boolean, Reason>;
+  /**
+   * Your opener (the ⌘K button), which gets focus back on close, so keyboard users keep their
+   * place.
+   */
+  finalFocus?: RefObject<HTMLElement | null>;
+}
+
+function handleClose(
+  event: SyntheticEvent<HTMLDialogElement>,
+  { onInputValueChange, finalFocus }: DialogProps,
+) {
+  if ((event.currentTarget.querySelector("input")?.value ?? "") !== "") {
+    requestChange(onInputValueChange, "", "input-clear", event.nativeEvent);
+  }
+
+  returnFocus(event.currentTarget, finalFocus?.current);
+}
+
+/** The ⌘K palette: a top-anchored modal Command. The app binds ⌘K / Ctrl K and holds `open`. */
+export function Dialog(props: DialogProps) {
+  const { open, defaultOpen = false, onOpenChange, finalFocus: _, ...rest } = props;
+  const { inputValue, defaultInputValue, onInputValueChange, filter, children, ...native } = rest;
+  const [current, request] = useControllableState(open, defaultOpen, onOpenChange);
+  const [closes, setCloses] = useState(0);
+  const close = (reason: Exclude<Reason, "none">, event: Event) => request(false, reason, event);
+
+  return (
+    <Modal
+      open={current}
+      styles={styles}
+      component="Dialog"
+      onOpenChange={(_open, details) => {
+        const { reason, event } = details;
+
+        if ((reason === "outside-press" || reason === "escape-key") && !close(reason, event))
+          details.cancel();
+      }}
+    >
+      <Content
+        {...native}
+        onClose={chain(props.onClose, (event) => {
+          handleClose(event, props);
+          setCloses((count) => count + 1);
+        })}
+      >
+        <DialogContext
+          value={(event, option) => {
+            if (close("item-press", event)) option.closest("dialog")?.close();
+          }}
+        >
+          <Root
+            key={closes}
+            inputValue={inputValue}
+            defaultInputValue={closes === 0 ? defaultInputValue : ""}
+            onInputValueChange={onInputValueChange}
+            filter={filter}
+          >
+            {children}
+          </Root>
+        </DialogContext>
+      </Content>
+    </Modal>
+  );
+}
