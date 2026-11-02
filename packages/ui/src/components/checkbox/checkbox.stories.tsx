@@ -2,6 +2,7 @@ import { expect, fn } from "storybook/test";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import { withInvalidField } from "#.storybook/decorators/with-invalid-field.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -186,4 +187,22 @@ export const Invalid = meta.story({
   parameters: {
     docs: { description: { story: "Inside an invalid Field the box shows the error state." } },
   },
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  decorators: [withWidth("16rem")],
+  render: (args) => (
+    <>
+      <Checkbox {...args}>
+        Envoyer une copie à bartholomew.fitzgerald@northwind-industries-holdings.example.com
+      </Checkbox>
+      <Checkbox {...args} indeterminate>
+        Jo
+      </Checkbox>
+      <Checkbox {...args} defaultChecked disabled>
+        Partager avec les 1 284 membres de l’espace de travail Northwind Industries Holdings
+      </Checkbox>
+    </>
+  ),
 });

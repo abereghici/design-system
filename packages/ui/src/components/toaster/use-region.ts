@@ -12,6 +12,8 @@ function stack(node: HTMLElement) {
   for (const item of node.querySelectorAll<HTMLElement>(`.${styles["toast"]}`)) {
     if (item.dataset["exiting"] !== undefined) continue;
 
+    if (index === 0) node.style.setProperty("--front-height", `${item.offsetHeight}px`);
+
     item.style.setProperty("--index", String(index));
     item.style.setProperty("--offset", `${offset}px`);
     index += 1;

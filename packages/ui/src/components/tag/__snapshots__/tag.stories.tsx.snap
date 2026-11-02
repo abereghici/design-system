@@ -11,3 +11,7 @@ exports[`Long Label 1`] = `
 exports[`With Icon   > base story 1`] = `
 - text: Live
 `;
+
+exports[`Worst Case 1`] = `
+- text: En attente de bartholomew.fitzgerald@northwind-industries-holdings.example.com 1 🚀 Lancé Approuvé par Aleksandra Wiśniewska-Kowalczyk
+`;

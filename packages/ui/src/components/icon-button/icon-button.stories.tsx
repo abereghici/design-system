@@ -5,6 +5,7 @@ import type { StoryContext } from "@storybook/react-vite";
 
 import { PinIcon } from "@abereghici/ui/icons/pin";
 
+import { withRow } from "#.storybook/decorators/with-row.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { onTouchScreen, pressJustBelow } from "#.storybook/test/pointer.ts";
@@ -173,3 +174,24 @@ Default.test(
     await expect(args.onClick).not.toHaveBeenCalled();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  decorators: [withRow],
+  render: (args) => (
+    <>
+      <IconButton
+        {...args}
+        size="sm"
+        aria-label="Épingler la facture INV-2026-0042 pour toute l’équipe"
+      />
+      <IconButton {...args} loading />
+      <IconButton {...args} size="lg" disabled />
+      <IconButton asChild aria-label="Ouvrir la facture">
+        <a href="#invoice">
+          <PinIcon />
+        </a>
+      </IconButton>
+    </>
+  ),
+});

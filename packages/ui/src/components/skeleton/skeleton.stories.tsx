@@ -1,5 +1,6 @@
 import { expect, isInaccessible } from "storybook/test";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { animates, moves } from "#.storybook/test/motion.ts";
 
@@ -87,4 +88,13 @@ export const AroundAnElement = meta.story({
 export const Empty = meta.story({
   parameters: { docs: { description: { story: "With no children it holds one line of space." } } },
   args: { children: undefined, style: { inlineSize: "12rem" } },
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  decorators: [withWidth("12rem")],
+  args: {
+    children:
+      "Aleksandra Wiśniewska-Kowalczyk, bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+  },
 });

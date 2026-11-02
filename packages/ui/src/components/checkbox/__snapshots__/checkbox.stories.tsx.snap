@@ -14,3 +14,12 @@ exports[`Long Label 1`] = `
 - checkbox "Send a copy of every report to reports-archive@platform-production.example.com"
 - text: Send a copy of every report to reports-archive@platform-production.example.com
 `;
+
+exports[`Worst Case 1`] = `
+- checkbox "Envoyer une copie à bartholomew.fitzgerald@northwind-industries-holdings.example.com"
+- text: Envoyer une copie à bartholomew.fitzgerald@northwind-industries-holdings.example.com
+- checkbox "Jo" [checked=mixed]
+- text: Jo
+- checkbox "Partager avec les 1 284 membres de l’espace de travail Northwind Industries Holdings" [checked] [disabled]
+- text: Partager avec les 1 284 membres de l’espace de travail Northwind Industries Holdings
+`;

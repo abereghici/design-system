@@ -200,3 +200,17 @@ Stacked.test(
     await expect(dismisses[2]).toHaveFocus();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  beforeEach: () => {
+    toast({ title: "Jo a rejoint l’espace de travail", duration: Infinity });
+    toast({
+      title:
+        "Impossible d’inviter bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+      description: "L’espace de travail a atteint sa limite de 1 284 membres.",
+      duration: Infinity,
+    });
+    toast({ title: "✓", duration: Infinity });
+  },
+});

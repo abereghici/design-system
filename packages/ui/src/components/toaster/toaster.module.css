@@ -18,6 +18,9 @@
   }
 
   .list {
+    /* Lets a toast behind the front one grow back to its own height. */
+    interpolate-size: allow-keywords;
+
     display: grid;
     margin: 0;
     padding: 0;
@@ -26,6 +29,8 @@
   .toast {
     --stack-y: calc(var(--index, 0) * var(--ab-toast-stack-gap) * -1);
     --content-opacity: 0;
+    /* A toast behind the front one is cut to its height, so a taller one only peeks by the gap. */
+    --block-size: var(--front-height, auto);
 
     grid-area: 1 / 1;
     align-self: end;
@@ -36,7 +41,9 @@
     column-gap: var(--ab-toast-gap);
     z-index: calc(10 - var(--index, 0));
     box-sizing: border-box;
+    block-size: var(--block-size);
     padding: var(--ab-toast-padding);
+    overflow: clip;
     border-radius: var(--ab-toast-border-radius);
     background-color: var(--ab-toast-background-color);
     box-shadow: var(--ab-toast-shadow);
@@ -45,15 +52,18 @@
     translate: var(--swipe-x, 0px) calc(var(--stack-y) + var(--swipe-y, 0px));
     scale: calc(1 - var(--index, 0) * (1 - var(--ab-toast-stack-scale)));
     transform-origin: bottom center;
-    transition-property: translate, scale, opacity;
+    transition-property: translate, scale, block-size, opacity;
     transition-duration:
-      var(--ab-toast-stack-duration), var(--ab-toast-stack-duration), var(--ab-motion-duration-swap);
+      var(--ab-toast-stack-duration), var(--ab-toast-stack-duration),
+      var(--ab-toast-stack-duration), var(--ab-motion-duration-swap);
     transition-timing-function:
-      var(--ab-toast-stack-easing), var(--ab-toast-stack-easing), var(--ab-motion-easing-color);
+      var(--ab-toast-stack-easing), var(--ab-toast-stack-easing), var(--ab-toast-stack-easing),
+      var(--ab-motion-easing-color);
   }
 
   .toast[data-front] {
     --content-opacity: 1;
+    --block-size: auto;
   }
 
   .toast[data-entering] {
@@ -72,6 +82,7 @@
   .region:focus-within .toast {
     --stack-y: calc((var(--offset, 0px) + var(--index, 0) * var(--ab-toast-stack-gap)) * -1);
     --content-opacity: 1;
+    --block-size: auto;
 
     scale: 1;
   }
@@ -80,6 +91,7 @@
     .region:hover .toast {
       --stack-y: calc((var(--offset, 0px) + var(--index, 0) * var(--ab-toast-stack-gap)) * -1);
       --content-opacity: 1;
+      --block-size: auto;
 
       scale: 1;
     }
@@ -247,6 +259,7 @@
     .toast {
       --stack-y: calc((var(--offset, 0px) + var(--index, 0) * var(--ab-toast-stack-gap)) * -1);
       --content-opacity: 1;
+      --block-size: auto;
     }
 
     @starting-style {

@@ -3,3 +3,11 @@
 exports[`Default   > base story 1`] = `
 - button "Pin"
 `;
+
+exports[`Worst Case 1`] = `
+- button "Épingler la facture INV-2026-0042 pour toute l’équipe"
+- button "Pin" [disabled]
+- button "Pin" [disabled]
+- link "Ouvrir la facture":
+  - /url: "#invoice"
+`;
