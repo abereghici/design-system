@@ -31,7 +31,9 @@
   .list {
     position-anchor: auto;
     inset: auto;
-    inset-block-start: anchor(self-end);
+    /* On a whole pixel: text in a composited layer on a fractional one rasterizes differently from
+       frame to frame. */
+    inset-block-start: round(anchor(self-end), 1px);
     inset-inline-start: anchor(self-start);
     position-try-fallbacks: flip-block;
     box-sizing: border-box;
