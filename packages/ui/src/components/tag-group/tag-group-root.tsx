@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/tag-group.css";
-
 import type { ComponentProps, MouseEvent } from "react";
 
 import type { ChangeEventDetails as Details } from "../../internal/state/change-request.ts";

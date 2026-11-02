@@ -1,3 +1,5 @@
+@import "@abereghici/tokens/components/progress.css";
+
 @layer ab.components {
   .root {
     position: relative;

@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/calendar.css";
-
 import type { FocusEvent, KeyboardEvent, MouseEvent, RefObject } from "react";
 
 import { Temporal } from "../../internal/i18n/date.ts";

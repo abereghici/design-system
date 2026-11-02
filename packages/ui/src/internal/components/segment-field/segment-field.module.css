@@ -16,7 +16,7 @@
     font: inherit;
     padding-inline: var(--ab-space-inset-xs);
     border-radius: var(--segment-border-radius);
-    color: var(--ab-field-text-color);
+    color: var(--ab-input-base-text-color);
     font-variant-numeric: tabular-nums;
     text-align: center;
     caret-color: transparent;
@@ -34,15 +34,15 @@
   }
 
   .separator {
-    color: var(--ab-field-placeholder-color);
+    color: var(--ab-input-base-placeholder-color);
   }
 
   .separator[data-filled] {
-    color: var(--ab-field-text-color);
+    color: var(--ab-input-base-text-color);
   }
 
   [aria-disabled="true"] > :is(.segment, .separator) {
-    color: var(--ab-field-text-color-disabled);
+    color: var(--ab-input-base-text-color-disabled);
   }
 
   .native {

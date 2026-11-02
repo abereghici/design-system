@@ -1,3 +1,5 @@
+@import "@abereghici/tokens/components/card.css";
+
 @layer ab.components {
   .root {
     position: relative;

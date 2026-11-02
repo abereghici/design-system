@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/date-field.css";
-
 import type { ReactNode } from "react";
 
 import { SegmentField } from "../../internal/components/segment-field/segment-field.tsx";

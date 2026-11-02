@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/card.css";
-
 import { cloneElement, isValidElement } from "react";
 import type { ComponentProps, ReactNode } from "react";
 

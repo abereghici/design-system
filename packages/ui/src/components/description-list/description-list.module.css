@@ -1,3 +1,5 @@
+@import "@abereghici/tokens/components/description-list.css";
+
 @layer ab.components {
   .root {
     container-type: inline-size;

@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/tree.css";
-
 import { useState } from "react";
 import type { ComponentProps, KeyboardEvent, SyntheticEvent } from "react";
 

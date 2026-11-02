@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/tabs.css";
-
 import type { ComponentProps } from "react";
 
 import { pointerMarker } from "../../internal/interactions/pointer-marker.ts";

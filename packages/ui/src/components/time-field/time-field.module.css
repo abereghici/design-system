@@ -1,3 +1,5 @@
+@import "@abereghici/tokens/components/time-field.css";
+
 @layer ab.components {
   .group {
     --segment-border-radius: var(--ab-time-field-segment-border-radius);

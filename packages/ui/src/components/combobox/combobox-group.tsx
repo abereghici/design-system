@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/combobox.css";
-
 import type { ComponentProps } from "react";
 
 import { OptionGroup } from "../../internal/components/listbox/listbox.tsx";

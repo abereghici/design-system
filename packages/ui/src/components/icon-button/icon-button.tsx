@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/icon-button.css";
-
 import type { ComponentProps } from "react";
 
 import { useButton } from "../../internal/interactions/use-button.ts";

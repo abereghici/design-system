@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/drop-zone.css";
-
 import { useId, useRef } from "react";
 import type { ComponentProps, DragEvent } from "react";
 

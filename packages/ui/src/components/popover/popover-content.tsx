@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/popover.css";
-
 import type { ComponentProps, RefObject } from "react";
 
 import { mergeProps } from "../../internal/utils/merge-props.ts";

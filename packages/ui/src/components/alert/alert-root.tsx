@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/alert.css";
-
 import type { ComponentProps } from "react";
 
 import { variantIcons } from "../../internal/components/variant-icons.ts";

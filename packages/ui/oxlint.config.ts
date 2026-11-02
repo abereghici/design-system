@@ -21,6 +21,11 @@ export default defineConfig({
                 message: "Import Storybook helpers as #.storybook/<path>.",
               },
               {
+                regex: "^@abereghici/tokens/components/",
+                message:
+                  "Import the token sheet from the Component's CSS Module, next to the classes that read it.",
+              },
+              {
                 regex: "^\\.\\./.*\\.module\\.css$",
                 message:
                   "Render the component that owns these styles instead of reusing its CSS Module.",

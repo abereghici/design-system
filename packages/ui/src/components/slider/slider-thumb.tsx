@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/slider.css";
-
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import { chain } from "../../internal/utils/chain.ts";

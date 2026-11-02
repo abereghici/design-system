@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/button.css";
-
 import type { ComponentProps, MouseEventHandler } from "react";
 
 import { useButton } from "../../internal/interactions/use-button.ts";

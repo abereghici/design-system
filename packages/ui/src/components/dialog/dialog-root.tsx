@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/dialog.css";
-
 import type { ComponentProps } from "react";
 
 import { Modal } from "./dialog-modal.tsx";

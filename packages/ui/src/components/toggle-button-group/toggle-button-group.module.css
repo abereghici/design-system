@@ -1,3 +1,5 @@
+@import "@abereghici/tokens/components/toggle-button-group.css";
+
 @layer ab.components {
   .root {
     display: inline-flex;

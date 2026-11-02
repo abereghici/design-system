@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/slider.css";
-
 import { useRef } from "react";
 import type { ComponentProps, PointerEvent } from "react";
 

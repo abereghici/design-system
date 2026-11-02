@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/date-range-picker.css";
-
 import type { CSSProperties, ReactNode } from "react";
 
 import { DateRangePickerContext } from "../../internal/components/picker/picker-context.ts";

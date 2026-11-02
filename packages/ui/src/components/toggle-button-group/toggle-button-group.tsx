@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/toggle-button-group.css";
-
 import type { ComponentProps, MouseEvent } from "react";
 
 import { toggled, valuesOf } from "../../internal/selection/selection.ts";

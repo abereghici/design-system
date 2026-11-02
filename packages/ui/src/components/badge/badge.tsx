@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/badge.css";
-
 import type { ComponentProps } from "react";
 
 import { FormattedNumber } from "../../internal/i18n/formatted-number.tsx";

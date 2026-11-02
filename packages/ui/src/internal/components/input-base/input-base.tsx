@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/field.css";
-
 import type { ReactElement } from "react";
 
 import { Slot } from "../../utils/slot.tsx";

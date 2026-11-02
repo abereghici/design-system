@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/select.css";
-
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import { InputBase } from "../../internal/components/input-base/input-base.tsx";

@@ -113,13 +113,13 @@
   },
   {
     "name": "select",
-    "tokens": ["field", "select", "icon"],
+    "tokens": ["field", "input-base", "select", "icon"],
     "client": ["components/select/select-root"],
     "html": "label=\"Asia Pacific\""
   },
   {
     "name": "combobox",
-    "tokens": ["field", "combobox", "icon", "tag", "tag-group"],
+    "tokens": ["field", "input-base", "combobox", "icon", "tag", "tag-group"],
     "client": [
       "components/combobox/combobox-group",
       "components/combobox/combobox-item",
@@ -141,13 +141,13 @@
   },
   {
     "name": "field",
-    "tokens": ["field"],
+    "tokens": ["field", "input-base"],
     "client": ["components/field/field"],
     "html": "Letters and digits."
   },
   {
     "name": "text-field",
-    "tokens": ["field"],
+    "tokens": ["field", "input-base"],
     "client": [
       "components/field/field-description",
       "components/field/field-error",
@@ -160,7 +160,7 @@
   },
   {
     "name": "form-fields",
-    "tokens": ["field", "icon", "icon-button", "select", "spinner"],
+    "tokens": ["field", "input-base", "icon", "icon-button", "select", "spinner"],
     "client": [
       "components/field/field-description",
       "components/field/field-error",
@@ -176,13 +176,13 @@
   },
   {
     "name": "text-area",
-    "tokens": ["field"],
+    "tokens": ["field", "input-base"],
     "client": ["components/text-area/text-area"],
     "html": "<textarea"
   },
   {
     "name": "password-field",
-    "tokens": ["field", "icon", "toggle-button"],
+    "tokens": ["field", "input-base", "icon", "toggle-button"],
     "client": [
       "components/field/field-description",
       "components/field/field-error",
@@ -194,7 +194,7 @@
   },
   {
     "name": "search-field",
-    "tokens": ["field", "icon", "icon-button", "spinner"],
+    "tokens": ["field", "input-base", "icon", "icon-button", "spinner"],
     "client": [
       "components/field/field-description",
       "components/field/field-error",
@@ -206,7 +206,7 @@
   },
   {
     "name": "otp-field",
-    "tokens": ["field"],
+    "tokens": ["field", "input-base"],
     "client": [
       "components/field/field-description",
       "components/field/field-error",
@@ -234,7 +234,7 @@
   },
   {
     "name": "number-field",
-    "tokens": ["field", "icon", "icon-button", "spinner"],
+    "tokens": ["field", "input-base", "icon", "icon-button", "spinner"],
     "client": ["components/number-field/number-field"],
     "html": "aria-label=\"Increase\""
   },
@@ -459,13 +459,13 @@
   },
   {
     "name": "date-field",
-    "tokens": ["field", "date-field"],
+    "tokens": ["field", "input-base", "date-field"],
     "client": ["components/date-field/date-field-root"],
     "html": "role=\"spinbutton\""
   },
   {
     "name": "time-field",
-    "tokens": ["field", "time-field"],
+    "tokens": ["field", "input-base", "time-field"],
     "client": ["components/time-field/time-field"],
     "html": "role=\"spinbutton\""
   },
@@ -487,7 +487,7 @@
   },
   {
     "name": "date-picker",
-    "tokens": ["field", "date-field", "popover", "icon", "icon-button", "spinner"],
+    "tokens": ["field", "input-base", "date-field", "popover", "icon", "icon-button", "spinner"],
     "client": [],
     "html": "aria-haspopup=\"dialog\""
   },
@@ -501,6 +501,7 @@
     "name": "date-range-picker",
     "tokens": [
       "field",
+      "input-base",
       "date-range-picker",
       "popover",
       "calendar",

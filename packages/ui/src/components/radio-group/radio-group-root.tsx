@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/radio-group.css";
-
 import { useId } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 

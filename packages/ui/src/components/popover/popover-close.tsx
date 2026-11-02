@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/popover.css";
-
 import type { ComponentProps, MouseEvent, ReactElement } from "react";
 
 import { CloseButton } from "../../internal/components/close-button.tsx";

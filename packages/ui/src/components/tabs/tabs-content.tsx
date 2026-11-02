@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/tabs.css";
-
 import { useLayoutEffect, useRef } from "react";
 import type { ComponentProps } from "react";
 

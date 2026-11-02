@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/alert.css";
-
 import type { ComponentProps } from "react";
 
 import { CloseButton } from "../../internal/components/close-button.tsx";

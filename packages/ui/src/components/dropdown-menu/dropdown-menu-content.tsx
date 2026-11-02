@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/dropdown-menu.css";
-
 import type { ComponentProps } from "react";
 
 import { MenuContent } from "../../internal/components/menu/menu-content.tsx";

@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/toast.css";
-
 import type { KeyboardEvent, MouseEvent, RefObject } from "react";
 
 import { variantIcons } from "../../internal/components/variant-icons.ts";

@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/disclosure.css";
-
 import type { ComponentProps, MouseEvent, ReactNode } from "react";
 
 import { pointerMarker } from "../../internal/interactions/pointer-marker.ts";

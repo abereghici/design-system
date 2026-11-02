@@ -2,7 +2,7 @@
   .group {
     display: flex;
     align-items: center;
-    gap: var(--ab-field-padding-inline);
+    gap: var(--ab-input-base-padding-inline);
     cursor: text;
   }
 
@@ -29,13 +29,13 @@
 
   /* The source measures start and end content from the border edge, the text from the padding edge. */
   .start {
-    --ab-icon-size: var(--ab-field-icon-size);
+    --ab-icon-size: var(--ab-input-base-icon-size);
 
-    margin-inline: calc(var(--ab-field-border-width) * -1) var(--ab-field-border-width);
-    color: var(--ab-field-icon-color);
+    margin-inline: calc(var(--ab-input-base-border-width) * -1) var(--ab-input-base-border-width);
+    color: var(--ab-input-base-icon-color);
   }
 
   .end {
-    margin-inline-end: calc(var(--ab-field-border-width) * -1);
+    margin-inline-end: calc(var(--ab-input-base-border-width) * -1);
   }
 }

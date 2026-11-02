@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/pagination.css";
-
 import type { ComponentProps, ElementType, ReactElement } from "react";
 
 import { FormattedNumber } from "../../internal/i18n/formatted-number.tsx";

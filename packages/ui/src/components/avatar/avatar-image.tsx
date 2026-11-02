@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/avatar.css";
-
 import { useCallback, useState } from "react";
 import type { ComponentProps } from "react";
 

@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/table.css";
-
 import type { ChangeEvent, ComponentProps } from "react";
 
 import { dispatchFeedback } from "../../internal/utils/dispatch-feedback.ts";

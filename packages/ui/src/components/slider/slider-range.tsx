@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/slider.css";
-
 import type { ComponentProps } from "react";
 
 import { mergeProps } from "../../internal/utils/merge-props.ts";
