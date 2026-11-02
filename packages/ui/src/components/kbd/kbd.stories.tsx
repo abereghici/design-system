@@ -99,4 +99,5 @@ InAButton.test("leaves the button's name to its label", async ({ canvas }) => {
 export const WorstCase = meta.story({
   tags: ["!autodocs"],
   args: { keys: "mod+alt+shift+down" },
+  beforeEach: onPlatform("Linux x86_64"),
 });

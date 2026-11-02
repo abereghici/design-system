@@ -9,5 +9,5 @@ exports[`In A Button   > base story 1`] = `
 `;
 
 exports[`Worst Case 1`] = `
-- text: ⌘ ⌥ ⇧ ↓
+- text: Ctrl Alt Shift ↓
 `;
