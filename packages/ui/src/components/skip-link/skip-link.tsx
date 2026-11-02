@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/skip-link.css";
-
 import type { ComponentProps, ReactNode } from "react";
 
 import { mergeProps } from "../../internal/utils/merge-props.ts";

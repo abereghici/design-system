@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/tabs.css";
-
 import type { ComponentProps, KeyboardEvent } from "react";
 
 import type { InvokerCommands } from "../../internal/types/invoker-commands.ts";

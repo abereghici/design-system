@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/calendar.css";
-
 import { useEffect, useEffectEvent, useId, useRef, useState, useSyncExternalStore } from "react";
 import { flushSync } from "react-dom";
 import type { ComponentProps, FocusEvent, KeyboardEvent, MouseEvent } from "react";

@@ -1,3 +1,5 @@
+@import "@abereghici/tokens/components/table.css";
+
 @layer ab.components {
   .root {
     inline-size: 100%;

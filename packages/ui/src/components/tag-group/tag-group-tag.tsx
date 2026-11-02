@@ -1,17 +1,13 @@
 "use client";
 
-import "@abereghici/tokens/components/tag.css";
-import "@abereghici/tokens/components/tag-group.css";
-
 import { useId } from "react";
 import type { ComponentProps } from "react";
 
-import { mergeProps } from "../../internal/utils/merge-props.ts";
 import { XIcon } from "../icon/icons/x.tsx";
+import { Tag as StaticTag } from "../tag/tag.tsx";
 import type { TagProps as StaticTagProps } from "../tag/tag.tsx";
 
 import { useTagGroup } from "./tag-group-root.tsx";
-import tag from "../tag/tag.module.css";
 import styles from "./tag-group.module.css";
 
 export interface TagProps extends Omit<ComponentProps<"li">, "value"> {
@@ -29,21 +25,23 @@ export function Tag({ value, variant = "neutral", children, ...props }: TagProps
   if (!state.value.includes(value)) return null;
 
   return (
-    <li {...mergeProps({ className: tag["root"] }, props)} data-variant={variant}>
-      <span id={`${id}-text`}>{children}</span>
-      <button
-        type="button"
-        id={`${id}-remove`}
-        className={styles["remove"]}
-        aria-label={meta.removeLabel}
-        aria-labelledby={`${id}-remove ${id}-text`}
-        aria-disabled={state.disabled ? true : undefined}
-        onClick={(event) => {
-          actions.remove(value, event);
-        }}
-      >
-        <XIcon size="sm" />
-      </button>
-    </li>
+    <StaticTag asChild variant={variant}>
+      <li {...props}>
+        <span id={`${id}-text`}>{children}</span>
+        <button
+          type="button"
+          id={`${id}-remove`}
+          className={styles["remove"]}
+          aria-label={meta.removeLabel}
+          aria-labelledby={`${id}-remove ${id}-text`}
+          aria-disabled={state.disabled ? true : undefined}
+          onClick={(event) => {
+            actions.remove(value, event);
+          }}
+        >
+          <XIcon size="sm" />
+        </button>
+      </li>
+    </StaticTag>
   );
 }

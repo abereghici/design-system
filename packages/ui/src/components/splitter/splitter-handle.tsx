@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/splitter.css";
-
 import type { ComponentProps, KeyboardEvent, PointerEvent } from "react";
 
 import { useNumberFormatter } from "../../internal/i18n/use-number-formatter.ts";

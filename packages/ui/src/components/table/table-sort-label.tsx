@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/table.css";
-
 import type { ComponentProps } from "react";
 
 import type { InvokerCommands } from "../../internal/types/invoker-commands.ts";

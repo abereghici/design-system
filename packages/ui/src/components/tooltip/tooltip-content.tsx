@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/tooltip.css";
-
 import type { ComponentProps } from "react";
 
 import { chain } from "../../internal/utils/chain.ts";

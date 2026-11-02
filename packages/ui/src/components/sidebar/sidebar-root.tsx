@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/sidebar.css";
-
 import type { ComponentProps } from "react";
 
 import type { AccessibleName } from "../../internal/types/accessible-name.ts";

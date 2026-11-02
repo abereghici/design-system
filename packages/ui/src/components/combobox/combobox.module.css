@@ -1,13 +1,15 @@
+@import "@abereghici/tokens/components/combobox.css";
+
 @layer ab.components {
   /* With several choices the box grows a line at a time as its tags wrap. */
   .multiple {
     block-size: auto;
-    min-block-size: var(--ab-field-height);
+    min-block-size: var(--ab-input-base-height);
   }
 
   [data-size="lg"] .multiple {
     block-size: auto;
-    min-block-size: var(--ab-field-lg-height);
+    min-block-size: var(--ab-input-base-lg-height);
   }
 
   .values {
@@ -17,7 +19,7 @@
     align-items: center;
     gap: var(--ab-tag-group-gap);
     min-inline-size: 0;
-    padding-block: var(--ab-field-padding-block);
+    padding-block: var(--ab-input-base-padding-block);
   }
 
   /* Sized to its text, so it moves to its own line only once the tags leave it no room. */

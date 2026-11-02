@@ -25,7 +25,7 @@ src/
 ├── feedback-event/      # @abereghici/ui/feedback-event: the types of the ab-* feedback events
 ├── text-direction/      # @abereghici/ui/text-direction: getTextDirection, a language's ltr or rtl for <html dir>
 └── internal/            # shared by Components, never exported
-    ├── components/      # private Components and their Parts: Flex, Listbox, Menu, Picker, SegmentField
+    ├── components/      # private Components and their Parts: CloseButton, Flex, InputBase, InputGroup, Listbox, Menu, Picker, SegmentField
     ├── i18n/            # locale, dates and numbers
     ├── interactions/    # pointer, keyboard and IME input; a button that stays focusable while disabled
     ├── overlays/        # popover layers: opening, anchoring, returning focus
@@ -63,53 +63,57 @@ A single-part Component exports itself instead (`button/button.tsx` exports `But
 
 1. **One module, one job, named after its main export**, or after the concept its exports serve: `merge-props.ts` exports `mergeProps`, `use-hydrated.ts` exports `useHydrated`, `i18n/date.ts` holds the date helpers.
 2. **Compose, don't bundle.** A module that needs another imports it: `slot.tsx` imports `merge-props.ts`, which imports `chain.ts` and `compose-refs.ts`. Two jobs never share a file because they share a caller.
-3. **Code moves to `internal/<group>/` when a second Component needs it**, into the group that names its concern. A module made of several files gets its own folder (`internal/components/menu/`). `internal/` has no index files: import the module's file.
-4. **A context lives with the Component that provides it**: `TabsContext` is in `tabs/tabs-root.tsx`. When the provider builds on the Component that reads it, the context moves to `internal/` so the reader never imports its provider: DropZone builds on FileTrigger (`internal/components/drop-zone-context.ts`), DatePicker on Calendar (`internal/components/picker/picker-context.ts`). A context its Parts can't work without comes from `createSafeContext`, whose hook throws outside the Root.
-5. **Split by the deletion test.** Split a piece out when it hides real logic behind a small interface, so deleting it would push that logic back into its callers. A piece whose interface is as big as its body stays inline.
-6. **Names follow the major libraries.** A hook takes react-use's name and signature where react-use has one (`useEvent`), else Radix's, React Aria's or Mantine's (`useControllableState`, `createSafeContext`); a prop or Part takes the name Radix, React Aria or Base UI give it (`asChild`, `Slottable`).
-7. **Write JSX, not element-returning calls**, except in stories: Storybook's dynamic snippet prints a local component by its name, so a story inlines markup through a plain function to show the code a consumer writes.
-8. **Comments are TSDoc or a critical why.** Every public export and prop has TSDoc, which the docs page renders. Anything else gets a comment only for what the code can't say, backed by a link or a test: a spec, a browser bug, an ADR.
+3. **Styles come with their Component.** A file imports only its own folder's CSS Module, and that Module `@import`s its Component's token sheet, so no two Modules share one. To look like another Component, render it: Dialog.Close renders an IconButton, RadioGroup.Root a Fieldset.Root. A look several Components share is a private Component in `internal/components/`, such as InputBase, the box every Field control draws. The lint rejects a CSS Module imported from another folder and a token sheet imported from JS. Your class sits on the same element as the rendered Component's, in the same layer and at the same specificity (`:where()` for state), so it wins by loading after it: the formatter sorts your own CSS Module after every other import.
+4. **Code moves to `internal/<group>/` when a second Component needs it**, into the group that names its concern. A module made of several files gets its own folder (`internal/components/menu/`). `internal/` has no index files: import the module's file.
+5. **A context lives with the Component that provides it**: `TabsContext` is in `tabs/tabs-root.tsx`. When the provider builds on the Component that reads it, the context moves to `internal/` so the reader never imports its provider: DropZone builds on FileTrigger (`internal/components/drop-zone-context.ts`), DatePicker on Calendar (`internal/components/picker/picker-context.ts`). A context its Parts can't work without comes from `createSafeContext`, whose hook throws outside the Root.
+6. **Split by the deletion test.** Split a piece out when it hides real logic behind a small interface, so deleting it would push that logic back into its callers. A piece whose interface is as big as its body stays inline.
+7. **Names follow the major libraries.** A hook takes react-use's name and signature where react-use has one (`useEvent`), else Radix's, React Aria's or Mantine's (`useControllableState`, `createSafeContext`); a prop or Part takes the name Radix, React Aria or Base UI give it (`asChild`, `Slottable`).
+8. **Write JSX, not element-returning calls**, except in stories: Storybook's dynamic snippet prints a local component by its name, so a story inlines markup through a plain function to show the code a consumer writes.
+9. **Comments are TSDoc or a critical why.** Every public export and prop has TSDoc, which the docs page renders. Anything else gets a comment only for what the code can't say, backed by a link or a test: a spec, a browser bug, an ADR.
 
 ## Where each concern lives
 
-| Concern                                                                        | Home                                                                                 |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
-| `asChild` rendering, and content added inside the child (`Slottable`)          | `internal/utils/slot.tsx`                                                            |
-| Merging a Part's props with the consumer's                                     | `internal/utils/merge-props.ts`                                                      |
-| Running both handlers in order, the consumer's first                           | `internal/utils/chain.ts`                                                            |
-| Running ours after the consumer's handler, unless it called `preventDefault()` | `internal/utils/compose-event-handlers.ts`                                           |
-| Giving one element to two refs                                                 | `internal/utils/compose-refs.ts`                                                     |
-| A Part's context and its "must be inside" error                                | `internal/utils/create-safe-context.ts`                                              |
-| DOM event listeners                                                            | `internal/utils/use-event.ts`, `internal/utils/shared-listener.ts`                   |
-| Whether React has hydrated                                                     | `internal/utils/use-hydrated.ts`                                                     |
-| Finding an element by id                                                       | `internal/utils/get-by-id.ts`                                                        |
-| An accessible name the props require (`AccessibleName`, `Labelled`)            | `internal/types/accessible-name.ts`                                                  |
-| `command` and `commandfor` in a button's types                                 | `internal/types/invoker-commands.ts`                                                 |
-| A button that stays focusable while disabled                                   | `internal/interactions/use-button.ts`                                                |
-| A native checkbox's click                                                      | `internal/interactions/toggle-click.ts`                                              |
-| Pointer modality, pointer drags and IME composition                            | `internal/interactions/` (`pointer-marker.ts`, `use-move.ts`, `composition.ts`)      |
-| Typeahead, and the text an Item is matched by                                  | `internal/selection/typeahead.ts`, `internal/selection/text-of.ts`                   |
-| A native radio group                                                           | `internal/selection/use-radio-choice.ts`, `follow-visual-direction.ts`               |
-| A list of chosen values                                                        | `internal/selection/selection.ts`                                                    |
-| _Uncontrolled state_                                                           | `internal/state/use-controllable-state.ts`                                           |
-| _Change request_; a Component's public details type aliases it                 | `internal/state/change-request.ts`                                                   |
-| Snapping a number to its steps                                                 | `internal/state/snap-value-to-step.ts`                                               |
-| _Overlay_                                                                      | `internal/overlays/overlay.ts`                                                       |
-| _Locale_ and number formatting                                                 | `internal/i18n/` (`locale-provider.tsx`, `use-locale.ts`, `use-number-formatter.ts`) |
-| Dates: the one Temporal import (ADR-0004), ranges, and their formats           | `internal/i18n/date.ts`, `internal/i18n/use-date-formats.ts`                         |
-| The flex layout Inline and Stack share                                         | `internal/components/flex.tsx`                                                       |
-| The icon of each status _Variant_                                              | `internal/components/variant-icons.ts`                                               |
-| _Listbox navigator_                                                            | `internal/components/listbox/`                                                       |
-| DropdownMenu's and ContextMenu's Items and focus movement                      | `internal/components/menu/`                                                          |
-| A date picker's trigger and panel, and the context its Calendar reads          | `internal/components/picker/`                                                        |
-| A date or time field's segments                                                | `internal/components/segment-field/`                                                 |
-| _Feedback event_: its public types, and dispatching one                        | `feedback-event/feedback-event.ts`, `internal/utils/dispatch-feedback.ts`            |
-| _Field control_                                                                | `components/field/use-field.ts`                                                      |
+| Concern                                                                              | Home                                                                                 |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| `asChild` rendering, and content added inside the child (`Slottable`)                | `internal/utils/slot.tsx`                                                            |
+| Merging a Part's props with the consumer's                                           | `internal/utils/merge-props.ts`                                                      |
+| Running both handlers in order, the consumer's first                                 | `internal/utils/chain.ts`                                                            |
+| Running ours after the consumer's handler, unless it called `preventDefault()`       | `internal/utils/compose-event-handlers.ts`                                           |
+| Giving one element to two refs                                                       | `internal/utils/compose-refs.ts`                                                     |
+| A Part's context and its "must be inside" error                                      | `internal/utils/create-safe-context.ts`                                              |
+| DOM event listeners                                                                  | `internal/utils/use-event.ts`, `internal/utils/shared-listener.ts`                   |
+| Whether React has hydrated                                                           | `internal/utils/use-hydrated.ts`                                                     |
+| Finding an element by id                                                             | `internal/utils/get-by-id.ts`                                                        |
+| An accessible name the props require (`AccessibleName`, `Labelled`)                  | `internal/types/accessible-name.ts`                                                  |
+| `command` and `commandfor` in a button's types                                       | `internal/types/invoker-commands.ts`                                                 |
+| A button that stays focusable while disabled                                         | `internal/interactions/use-button.ts`                                                |
+| A Button's `ab-press`, which a Part that reports its own Feedback event turns off    | `internal/interactions/use-press-feedback.ts`                                        |
+| A native checkbox's click                                                            | `internal/interactions/toggle-click.ts`                                              |
+| Pointer modality, pointer drags and IME composition                                  | `internal/interactions/` (`pointer-marker.ts`, `use-move.ts`, `composition.ts`)      |
+| Typeahead, and the text an Item is matched by                                        | `internal/selection/typeahead.ts`, `internal/selection/text-of.ts`                   |
+| A native radio group                                                                 | `internal/selection/use-radio-choice.ts`, `follow-visual-direction.ts`               |
+| A list of chosen values                                                              | `internal/selection/selection.ts`                                                    |
+| _Uncontrolled state_                                                                 | `internal/state/use-controllable-state.ts`                                           |
+| _Change request_; a Component's public details type aliases it                       | `internal/state/change-request.ts`                                                   |
+| Snapping a number to its steps                                                       | `internal/state/snap-value-to-step.ts`                                               |
+| _Overlay_                                                                            | `internal/overlays/overlay.ts`                                                       |
+| _Locale_ and number formatting                                                       | `internal/i18n/` (`locale-provider.tsx`, `use-locale.ts`, `use-number-formatter.ts`) |
+| Dates: the one Temporal import (ADR-0004), ranges, and their formats                 | `internal/i18n/date.ts`, `internal/i18n/use-date-formats.ts`                         |
+| The flex layout Inline and Stack share                                               | `internal/components/flex.tsx`                                                       |
+| The box every Field control draws, and the input inside a box with content around it | `internal/components/input-base/`, `internal/components/input-group/`                |
+| The `x` button of Alert, Dialog and Popover                                          | `internal/components/close-button.tsx`                                               |
+| The icon of each status _Variant_                                                    | `internal/components/variant-icons.ts`                                               |
+| _Listbox navigator_                                                                  | `internal/components/listbox/`                                                       |
+| DropdownMenu's and ContextMenu's panel, Items and focus movement                     | `internal/components/menu/`                                                          |
+| A date picker's trigger and panel, and the context its Calendar reads                | `internal/components/picker/`                                                        |
+| A date or time field's segments                                                      | `internal/components/segment-field/`                                                 |
+| _Feedback event_: its public types, and dispatching one                              | `feedback-event/feedback-event.ts`, `internal/utils/dispatch-feedback.ts`            |
+| _Field control_                                                                      | `components/field/use-field.ts`                                                      |
 
 ## Adding a Component
 
 1. **Check precedent.** Name it, its Parts and its props as Radix, React Aria or Base UI do, and build on the platform first (ADR-0001, ADR-0002).
-2. **Tokens.** Add `packages/tokens/src/tokens/component/<name>.tokens.json` and import its sheet from the Component: `import "@abereghici/tokens/components/<name>.css"`.
+2. **Tokens.** Add `packages/tokens/src/tokens/component/<name>.tokens.json` and import its sheet at the top of the Component's CSS Module: `@import "@abereghici/tokens/components/<name>.css";`.
 3. **Code.** Create `src/components/<name>/` as above. Mark a module that needs the client `"use client"`; everything else stays a Server Component.
 4. **TSDoc.** One paragraph on the Component (what it is for, what a consumer must provide, the keyboard behaviour, when to use a sibling instead), ending with its _Tier_ line (ADR-0008); one line per prop.
 5. **Stories and tests.** Follow the rules in [`.claude/skills/ui-stories/SKILL.md`](../../.claude/skills/ui-stories/SKILL.md): a `Default` story driven by `args`, proofs as `.test()` on stories, asserting only what users and assistive technology perceive. Add `<name>.test-d.ts` for the props contract.

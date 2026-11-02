@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/toolbar.css";
-
 import type { ComponentProps, FocusEvent, KeyboardEvent } from "react";
 
 import type { AccessibleName } from "../../internal/types/accessible-name.ts";

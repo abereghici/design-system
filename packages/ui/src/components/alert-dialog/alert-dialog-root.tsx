@@ -1,17 +1,14 @@
 "use client";
 
-import "@abereghici/tokens/components/dialog.css";
-
 import type { ComponentProps, MouseEvent } from "react";
 
 import { chain } from "../../internal/utils/chain.ts";
 import { composeEventHandlers } from "../../internal/utils/compose-event-handlers.ts";
 import { dispatchFeedback } from "../../internal/utils/dispatch-feedback.ts";
 import type { Reason } from "../dialog/dialog-controller.ts";
-import { Modal, useModal } from "../dialog/dialog-modal.tsx";
+import { useModal } from "../dialog/dialog-modal.tsx";
 import type { RootProps as ModalProps } from "../dialog/dialog-modal.tsx";
-
-import styles from "../dialog/dialog.module.css";
+import { DialogModal } from "../dialog/dialog-root.tsx";
 
 export type RootProps = ModalProps<Exclude<Reason, "outside-press">>;
 
@@ -21,7 +18,7 @@ export type RootProps = ModalProps<Exclude<Reason, "outside-press">>;
  * Tier 1: works before hydration.
  */
 export function Root(props: RootProps) {
-  return <Modal {...props} styles={styles} component="AlertDialog" />;
+  return <DialogModal {...props} component="AlertDialog" />;
 }
 
 export type ButtonProps = Omit<ComponentProps<"button">, "command" | "commandfor">;

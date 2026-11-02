@@ -1,11 +1,11 @@
 import type { ComponentProps } from "react";
 
+import { InputBase } from "../../internal/components/input-base/input-base.tsx";
 import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import type { ChangeEventDetails } from "../field/use-field.ts";
 
 import { Input } from "./otp-field-input.tsx";
-import fieldStyles from "../field/field.module.css";
 import styles from "./otp-field.module.css";
 
 declare module "react" {
@@ -52,24 +52,22 @@ export function OTPField({ length = 6, ...props }: OTPFieldProps) {
 
   return (
     <Wrapper {...wrapper}>
-      <div
-        className={`${fieldStyles["control"]} ${styles["cells"]}`}
-        style={{ "--length": length }}
-        dir="ltr"
-      >
-        {/* Sizes the boxes from the digits' own advance, so the reader's letter spacing moves both. */}
-        <span className={styles["ruler"]}>{"0".repeat(length)}</span>
-        <Input
-          {...control}
-          className={styles["input"]}
-          dir="ltr"
-          type="text"
-          inputMode="numeric"
-          autoComplete="one-time-code"
-          pattern={`\\d{${length}}`}
-          maxLength={length}
-        />
-      </div>
+      <InputBase>
+        <div className={styles["cells"]} style={{ "--length": length }} dir="ltr">
+          {/* Sizes the boxes from the digits' own advance, so the reader's letter spacing moves both. */}
+          <span className={styles["ruler"]}>{"0".repeat(length)}</span>
+          <Input
+            {...control}
+            className={styles["input"]}
+            dir="ltr"
+            type="text"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            pattern={`\\d{${length}}`}
+            maxLength={length}
+          />
+        </div>
+      </InputBase>
     </Wrapper>
   );
 }

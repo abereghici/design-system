@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/splitter.css";
-
 import { useState } from "react";
 import type { ComponentProps, KeyboardEvent } from "react";
 

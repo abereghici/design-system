@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/tree.css";
-
 import { useId } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent, ReactNode } from "react";
 

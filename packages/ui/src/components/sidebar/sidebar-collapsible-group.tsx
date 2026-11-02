@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/sidebar.css";
-
 import { useId } from "react";
 import type { ReactNode } from "react";
 

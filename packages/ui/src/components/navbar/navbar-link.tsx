@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/navbar.css";
-
 import { mergeProps } from "../../internal/utils/merge-props.ts";
 import { Slot } from "../../internal/utils/slot.tsx";
 import type { LinkProps } from "../link/link.tsx";

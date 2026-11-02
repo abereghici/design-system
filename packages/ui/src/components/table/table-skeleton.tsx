@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/table.css";
-
 import { Skeleton as Placeholder } from "../skeleton/skeleton.tsx";
 
 import { Cell } from "./table-cell.tsx";

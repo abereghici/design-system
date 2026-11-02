@@ -1,8 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/fieldset.css";
-import "@abereghici/tokens/components/radio-group.css";
-
 import { useId } from "react";
 import type { ComponentProps } from "react";
 

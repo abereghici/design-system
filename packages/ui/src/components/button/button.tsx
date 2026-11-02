@@ -1,13 +1,11 @@
 "use client";
 
-import "@abereghici/tokens/components/button.css";
-
 import type { ComponentProps, MouseEventHandler } from "react";
 
 import { useButton } from "../../internal/interactions/use-button.ts";
+import { usePressFeedback } from "../../internal/interactions/use-press-feedback.ts";
 import type { InvokerCommands } from "../../internal/types/invoker-commands.ts";
 import { chain } from "../../internal/utils/chain.ts";
-import { dispatchFeedback } from "../../internal/utils/dispatch-feedback.ts";
 import { mergeProps } from "../../internal/utils/merge-props.ts";
 import { Slot, Slottable } from "../../internal/utils/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
@@ -35,9 +33,9 @@ export interface ButtonProps extends Omit<ComponentProps<"button">, "onClick">, 
    * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
    * nearby why it is unavailable.
    */
-  disabled?: boolean;
+  disabled?: boolean | undefined;
   /** `submit` sends its form; the default, `button`, does nothing on its own. */
-  type?: "button" | "submit" | "reset";
+  type?: "button" | "submit" | "reset" | undefined;
   /**
    * Gives the Button's look to its one child, such as a router link that should look like a button.
    */
@@ -66,12 +64,7 @@ export function Button({
   const spinner = loading ? <Spinner aria-hidden className={styles["spinner"]} /> : null;
   const button = useButton<HTMLElement>({
     disabled: blocked,
-    onClick: chain(onClick, (event) => {
-      dispatchFeedback(event.currentTarget, "ab-press", {
-        component: "Button",
-        userInitiated: true,
-      });
-    }),
+    onClick: chain(onClick, usePressFeedback("Button")),
   });
   const Root = asChild ? Slot : "button";
 

@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/accordion.css";
-
 import { useId, useState } from "react";
 import type { ComponentProps } from "react";
 

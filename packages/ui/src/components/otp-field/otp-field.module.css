@@ -2,7 +2,7 @@
   /* Doubled, here and on .input, to outrank the field box's and TextField's input's size and
      padding whichever stylesheet loads first. */
   .cells.cells {
-    --cell: var(--ab-field-height);
+    --cell: var(--ab-input-base-height);
 
     position: relative;
     /* Not hidden: Chromium scrolls a hidden box to show the caret after the last digit. */
@@ -13,15 +13,15 @@
     /* A line between the digits' boxes. */
     background-image: repeating-linear-gradient(
       to right,
-      transparent 0 calc(100% / (var(--length) - 1) - var(--ab-field-border-width)),
-      var(--ab-field-border-color) 0 calc(100% / (var(--length) - 1))
+      transparent 0 calc(100% / (var(--length) - 1) - var(--ab-input-base-border-width)),
+      var(--ab-input-base-border-color) 0 calc(100% / (var(--length) - 1))
     );
     background-repeat: no-repeat;
     background-size: calc(100% / var(--length) * (var(--length) - 1)) 100%;
   }
 
   [data-size="lg"] .cells.cells {
-    --cell: var(--ab-field-lg-height);
+    --cell: var(--ab-input-base-lg-height);
   }
 
   /* A box per digit: each digit advances by its width and the letter spacing after it, so a

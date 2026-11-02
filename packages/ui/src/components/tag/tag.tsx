@@ -1,14 +1,15 @@
-import "@abereghici/tokens/components/tag.css";
-
 import type { ComponentProps } from "react";
 
 import { mergeProps } from "../../internal/utils/merge-props.ts";
+import { Slot } from "../../internal/utils/slot.tsx";
 
 import styles from "./tag.module.css";
 
 export interface TagProps extends ComponentProps<"span"> {
   /** The meaning, kept the same across the product, such as `success` for every "Live". */
   variant?: "neutral" | "accent" | "success" | "warning" | "danger";
+  /** Gives the Tag's look to its one child, such as a list item. */
+  asChild?: boolean;
 }
 
 /**
@@ -19,6 +20,8 @@ export interface TagProps extends ComponentProps<"span"> {
  *
  * Tier 1: works before hydration.
  */
-export function Tag({ variant = "neutral", ...props }: TagProps) {
-  return <span {...mergeProps({ className: styles["root"] }, props)} data-variant={variant} />;
+export function Tag({ variant = "neutral", asChild = false, ...props }: TagProps) {
+  const Root = asChild ? Slot : "span";
+
+  return <Root {...mergeProps({ className: styles["root"] }, props)} data-variant={variant} />;
 }

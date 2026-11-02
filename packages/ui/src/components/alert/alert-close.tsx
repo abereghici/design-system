@@ -1,18 +1,13 @@
 "use client";
 
-import "@abereghici/tokens/components/icon-button.css";
-import "@abereghici/tokens/components/alert.css";
-
 import type { ComponentProps } from "react";
 
-import { useButton } from "../../internal/interactions/use-button.ts";
+import { CloseButton } from "../../internal/components/close-button.tsx";
 import type { InvokerCommands } from "../../internal/types/invoker-commands.ts";
 import { chain } from "../../internal/utils/chain.ts";
 import { dispatchFeedback } from "../../internal/utils/dispatch-feedback.ts";
 import { mergeProps } from "../../internal/utils/merge-props.ts";
-import { XIcon } from "../icon/icons/x.tsx";
 
-import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./alert.module.css";
 
 export interface CloseProps
@@ -27,24 +22,16 @@ export interface CloseProps
 }
 
 /** The dismiss button; your `onClick` removes the Alert. */
-export function Close({ disabled = false, onClick, ...props }: CloseProps) {
-  const button = useButton<HTMLButtonElement>({
-    disabled,
-    onClick: chain(onClick, (event) => {
-      dispatchFeedback(event.currentTarget, "ab-dismiss", {
-        component: "Alert",
-        userInitiated: true,
-      });
-    }),
-  });
-
+export function Close({ onClick, ...props }: CloseProps) {
   return (
-    <button
-      type="button"
-      {...mergeProps({ className: `${iconButton["root"]} ${styles["close"]}`, ...button }, props)}
-      data-size="sm"
-    >
-      <XIcon size="sm" />
-    </button>
+    <CloseButton
+      {...mergeProps({ className: styles["close"] }, props)}
+      onClick={chain(onClick, (event) => {
+        dispatchFeedback(event.currentTarget, "ab-dismiss", {
+          component: "Alert",
+          userInitiated: true,
+        });
+      })}
+    />
   );
 }

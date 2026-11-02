@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/command.css";
-
 import { createContext, useId } from "react";
 import type { ComponentProps, KeyboardEvent } from "react";
 

@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/field.css";
-
 import { use } from "react";
 import type { ComponentProps } from "react";
 

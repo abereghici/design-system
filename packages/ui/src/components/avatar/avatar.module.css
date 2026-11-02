@@ -1,3 +1,5 @@
+@import "@abereghici/tokens/components/avatar.css";
+
 @layer ab.components {
   .root {
     isolation: isolate;

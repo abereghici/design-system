@@ -1,6 +1,3 @@
-import "@abereghici/tokens/components/field.css";
-import "@abereghici/tokens/components/select.css";
-
 import type { ComponentProps } from "react";
 
 import { mergeProps } from "../../internal/utils/merge-props.ts";

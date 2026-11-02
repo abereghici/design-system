@@ -1,10 +1,8 @@
 "use client";
 
-import "@abereghici/tokens/components/field.css";
-import "@abereghici/tokens/components/select.css";
-
 import type { ComponentProps, KeyboardEvent } from "react";
 
+import { InputBase } from "../../internal/components/input-base/input-base.tsx";
 import { pointerMarker } from "../../internal/interactions/pointer-marker.ts";
 import { isTypeaheadKey } from "../../internal/selection/typeahead.ts";
 import { chain } from "../../internal/utils/chain.ts";
@@ -14,7 +12,6 @@ import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
 import { ChevronDownIcon } from "../icon/icons/chevron-down.tsx";
 
-import fieldStyles from "../field/field.module.css";
 import styles from "./select.module.css";
 
 export type ChangeEventDetails = Field.ChangeEventDetails<HTMLSelectElement>;
@@ -49,33 +46,35 @@ function Control({ placeholder, defaultValue, children, ...props }: ControlProps
 
   return (
     <div className={styles["control"]}>
-      <select
-        {...bindings}
-        defaultValue={
-          props.value === undefined
-            ? (defaultValue ?? (placeholder === undefined ? undefined : ""))
-            : undefined
-        }
-        className={`${fieldStyles["control"]} ${styles["select"]}`}
-        onPointerDown={composeEventHandlers(props.onPointerDown, pointerMarker.onPointerDown)}
-        onKeyDown={chain(
-          pointerMarker.onKeyDown,
-          (event) => {
-            if (disabled && blocked(event)) event.preventDefault();
-          },
-          props.onKeyDown,
-        )}
-        onMouseDown={chain((event) => {
-          if (disabled) event.preventDefault();
-        }, props.onMouseDown)}
-      >
-        {placeholder !== undefined && (
-          <option value="" disabled hidden className={styles["placeholder"]}>
-            {placeholder}
-          </option>
-        )}
-        {children}
-      </select>
+      <InputBase>
+        <select
+          {...bindings}
+          defaultValue={
+            props.value === undefined
+              ? (defaultValue ?? (placeholder === undefined ? undefined : ""))
+              : undefined
+          }
+          className={styles["select"]}
+          onPointerDown={composeEventHandlers(props.onPointerDown, pointerMarker.onPointerDown)}
+          onKeyDown={chain(
+            pointerMarker.onKeyDown,
+            (event) => {
+              if (disabled && blocked(event)) event.preventDefault();
+            },
+            props.onKeyDown,
+          )}
+          onMouseDown={chain((event) => {
+            if (disabled) event.preventDefault();
+          }, props.onMouseDown)}
+        >
+          {placeholder !== undefined && (
+            <option value="" disabled hidden className={styles["placeholder"]}>
+              {placeholder}
+            </option>
+          )}
+          {children}
+        </select>
+      </InputBase>
       <ChevronDownIcon size="sm" className={styles["icon"]} />
     </div>
   );

@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/toggle-button.css";
-
 import { use } from "react";
 import type { ComponentProps, MouseEvent, ReactNode } from "react";
 

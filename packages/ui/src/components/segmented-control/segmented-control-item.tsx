@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/segmented-control.css";
-
 import type { ComponentProps } from "react";
 
 import { composeEventHandlers } from "../../internal/utils/compose-event-handlers.ts";

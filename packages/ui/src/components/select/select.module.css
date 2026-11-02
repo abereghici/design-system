@@ -1,3 +1,5 @@
+@import "@abereghici/tokens/components/select.css";
+
 @layer ab.components {
   .control {
     position: relative;
@@ -11,17 +13,17 @@
   }
 
   .control > .select {
-    padding-inline: var(--ab-field-padding-inline)
-      calc(var(--ab-field-padding-inline) * 2 + var(--ab-icon-sm-size));
+    padding-inline: var(--ab-input-base-padding-inline)
+      calc(var(--ab-input-base-padding-inline) * 2 + var(--ab-icon-sm-size));
   }
 
   .select:has(.placeholder:checked) {
-    color: var(--ab-field-placeholder-color);
+    color: var(--ab-input-base-placeholder-color);
   }
 
   .icon {
     position: absolute;
-    inset-inline-end: var(--ab-field-padding-inline);
+    inset-inline-end: var(--ab-input-base-padding-inline);
     color: var(--ab-select-icon-color);
     pointer-events: none;
   }

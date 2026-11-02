@@ -1,10 +1,10 @@
 import type { ComponentProps, ReactNode } from "react";
 
+import { InputGroup } from "../../internal/components/input-group/input-group.tsx";
 import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
 
-import { InputGroup } from "./text-field-input-group.tsx";
 import { Input } from "./text-field-input.tsx";
 
 export type TextFieldChangeEventDetails = Field.ChangeEventDetails;

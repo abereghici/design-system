@@ -78,6 +78,7 @@ const COMPONENTS = [
   "icon-button",
   "button",
   "field",
+  "input-base",
   "link",
   "tag-group",
   "tag",

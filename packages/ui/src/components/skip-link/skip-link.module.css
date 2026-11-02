@@ -1,3 +1,5 @@
+@import "@abereghici/tokens/components/skip-link.css";
+
 @layer ab.components {
   .root {
     position: fixed;

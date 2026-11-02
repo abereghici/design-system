@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/switch.css";
-
 import { useId } from "react";
 import type { ComponentProps } from "react";
 

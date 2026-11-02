@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/meter.css";
-
 import { useId } from "react";
 import type { CSSProperties, ComponentProps, ReactNode } from "react";
 

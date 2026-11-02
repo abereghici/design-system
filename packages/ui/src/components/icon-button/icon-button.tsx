@@ -1,14 +1,12 @@
 "use client";
 
-import "@abereghici/tokens/components/icon-button.css";
-
 import type { ComponentProps } from "react";
 
 import { useButton } from "../../internal/interactions/use-button.ts";
+import { usePressFeedback } from "../../internal/interactions/use-press-feedback.ts";
 import type { AccessibleName } from "../../internal/types/accessible-name.ts";
 import type { InvokerCommands } from "../../internal/types/invoker-commands.ts";
 import { chain } from "../../internal/utils/chain.ts";
-import { dispatchFeedback } from "../../internal/utils/dispatch-feedback.ts";
 import { mergeProps } from "../../internal/utils/merge-props.ts";
 import { Slot } from "../../internal/utils/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
@@ -29,9 +27,9 @@ export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "ari
      * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
      * nearby why it is unavailable.
      */
-    disabled?: boolean;
+    disabled?: boolean | undefined;
     /** `submit` sends its form; the default, `button`, does nothing on its own. */
-    type?: "button" | "submit" | "reset";
+    type?: "button" | "submit" | "reset" | undefined;
     /** Gives the IconButton's look to its one child, such as a link. */
     asChild?: boolean;
   };
@@ -55,12 +53,7 @@ export function IconButton({
 }: IconButtonProps) {
   const button = useButton<HTMLButtonElement>({
     disabled: disabled || loading,
-    onClick: chain(onClick, (event) => {
-      dispatchFeedback(event.currentTarget, "ab-press", {
-        component: "IconButton",
-        userInitiated: true,
-      });
-    }),
+    onClick: chain(onClick, usePressFeedback("IconButton")),
   });
   const Root = asChild ? Slot : "button";
 

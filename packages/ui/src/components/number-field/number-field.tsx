@@ -1,19 +1,17 @@
 "use client";
 
-import "@abereghici/tokens/components/field.css";
-
 import type { ComponentProps, ReactNode, SyntheticEvent } from "react";
 
+import { InputGroupInput } from "../../internal/components/input-group/input-group-input.tsx";
+import { InputGroup } from "../../internal/components/input-group/input-group.tsx";
 import type { ChangeEventDetails as Details } from "../../internal/state/change-request.ts";
 import { chain } from "../../internal/utils/chain.ts";
 import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
 import type { Naming, SizedWrapperProps } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
-import { InputGroup } from "../text-field/text-field-input-group.tsx";
 
 import { StepButtons } from "./number-field-step-buttons.tsx";
 import { useNumberValue } from "./use-number-value.ts";
-import textFieldStyles from "../text-field/text-field.module.css";
 import styles from "./number-field.module.css";
 
 export type NumberFieldChangeEventDetails = Details<
@@ -87,8 +85,7 @@ function Control({ startElement, incrementLabel, decrementLabel, ...options }: C
 
   return (
     <InputGroup start={startElement} end={steppers}>
-      <input
-        dir="auto"
+      <InputGroupInput
         inputMode={number.inputMode}
         autoComplete="off"
         {...bindings}
@@ -96,7 +93,7 @@ function Control({ startElement, incrementLabel, decrementLabel, ...options }: C
         type="text"
         value={number.display}
         readOnly={blocked}
-        className={`${textFieldStyles["input"]} ${styles["input"]}`}
+        className={styles["input"]}
         onBlur={chain(props.onBlur, (event) => {
           number.commitTyped(event, "input-blur");
         })}

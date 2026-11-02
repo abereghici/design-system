@@ -6,6 +6,8 @@ import react from "@repo/oxlint-config/react";
 export default defineConfig({
   extends: [base, react],
   ignorePatterns: ["storybook-static/**"],
+  // Checks InputGroupInput as the input it renders: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y#configurations
+  settings: { "jsx-a11y": { components: { InputGroupInput: "input" } } },
   overrides: [
     {
       files: ["src/**"],
@@ -17,6 +19,16 @@ export default defineConfig({
               {
                 regex: "^\\.\\.?/.*\\.storybook",
                 message: "Import Storybook helpers as #.storybook/<path>.",
+              },
+              {
+                regex: "^@abereghici/tokens/components/",
+                message:
+                  "Import the token sheet from the Component's CSS Module, next to the classes that read it.",
+              },
+              {
+                regex: "^\\.\\./.*\\.module\\.css$",
+                message:
+                  "Render the component that owns these styles instead of reusing its CSS Module.",
               },
             ],
           },

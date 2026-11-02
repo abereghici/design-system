@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/field.css";
-
 import { useEffectEvent, useLayoutEffect, useRef } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
@@ -8,13 +6,13 @@ import type { SizedWrapperProps } from "../../../components/field/field-wrapper.
 import { useField } from "../../../components/field/use-field.ts";
 import { composeRefs } from "../../utils/compose-refs.ts";
 import { mergeProps } from "../../utils/merge-props.ts";
+import { InputBase } from "../input-base/input-base.tsx";
 
 import { display } from "./segments.ts";
 import type { Comparable, SegmentModel, Segments } from "./segments.ts";
 import { useSegmentEditing } from "./use-segment-editing.ts";
 import { useSegmentValue } from "./use-segment-value.ts";
 import type { ValueOptions } from "./use-segment-value.ts";
-import fieldStyles from "../../../components/field/field.module.css";
 import styles from "./segment-field.module.css";
 
 /** What DateField and TimeField take; each documents its own props. */
@@ -319,11 +317,9 @@ export function SegmentField<Part extends string, Value extends Comparable<Value
       disabled={options.disabled}
       after={children}
     >
-      <Control
-        {...rest}
-        className={`${fieldStyles["control"]} ${classNames.group ?? ""}`}
-        options={options}
-      />
+      <InputBase>
+        <Control {...rest} className={classNames.group} options={options} />
+      </InputBase>
     </Wrapper>
   );
 }

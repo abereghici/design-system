@@ -6,7 +6,7 @@ export { Content } from "./alert-dialog-content.tsx";
 
 export type { ContentProps } from "./alert-dialog-content.tsx";
 
-export { Footer } from "./alert-dialog-footer.tsx";
+export { Footer } from "../dialog/dialog-footer.tsx";
 
 export { Cancel } from "./alert-dialog-cancel.tsx";
 

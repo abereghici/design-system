@@ -1,3 +1,5 @@
+@import "@abereghici/tokens/components/splitter.css";
+
 /* Neither is inherited, so each drag step restyles the Root alone, not every element in its panels. */
 @property --splitter-position {
   syntax: "<number>";

@@ -1,8 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/toast.css";
-import "@abereghici/tokens/components/kbd.css";
-
 import { createPortal } from "react-dom";
 import type { ComponentProps } from "react";
 

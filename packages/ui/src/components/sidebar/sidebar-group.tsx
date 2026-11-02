@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/sidebar.css";
-
 import { useId } from "react";
 import type { ComponentProps, ReactNode } from "react";
 

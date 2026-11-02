@@ -128,7 +128,23 @@ describe.each([...pages])("%s", (_, text) => {
   });
 });
 
+// Toaster's tokens are named after the Toasts it shows.
+const owners = new Map([["toaster", "toast"]]);
+const sheetOf = (folder: string) => owners.get(folder) ?? folder;
+
 describe("claims the docs make about the code", () => {
+  test("each CSS Module imports only its own Component's token sheet (Contributing, Rule 3)", () => {
+    const foreign = files("src/**/*.module.css").flatMap((file) => {
+      const folder = basename(resolve(ui, file, ".."));
+
+      return captures(read(file), /"@abereghici\/tokens\/components\/([\w\-]+)\.css"/gv)
+        .filter((sheet) => sheet !== sheetOf(folder))
+        .map((sheet) => `${file} imports ${sheet}.css`);
+    });
+
+    expect(foreign).toEqual([]);
+  });
+
   test("only Spinner, Progress and Skeleton loop (Accessibility)", () => {
     const looping = files("src/**/*.css").filter((file) => /\binfinite\b/v.test(read(file)));
 

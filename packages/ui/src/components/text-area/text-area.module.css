@@ -1,13 +1,15 @@
 @layer ab.components {
   .textarea {
     block-size: auto;
-    padding-block: var(--ab-field-padding-block);
+    padding-block: var(--ab-input-base-padding-block);
     line-height: var(--ab-type-body-xs-line-height);
     min-block-size: calc(
-      var(--min-rows) * 1lh + 2 * var(--ab-field-padding-block) + 2 * var(--ab-field-border-width)
+      var(--min-rows) * 1lh + 2 * var(--ab-input-base-padding-block) + 2 *
+        var(--ab-input-base-border-width)
     );
     max-block-size: calc(
-      var(--max-rows) * 1lh + 2 * var(--ab-field-padding-block) + 2 * var(--ab-field-border-width)
+      var(--max-rows) * 1lh + 2 * var(--ab-input-base-padding-block) + 2 *
+        var(--ab-input-base-border-width)
     );
     field-sizing: content;
     resize: vertical;

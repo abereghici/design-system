@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/combobox.css";
-
 import { use } from "react";
 import type { ComponentProps } from "react";
 

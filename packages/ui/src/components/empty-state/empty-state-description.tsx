@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/empty-state.css";
-
 import type { ComponentProps } from "react";
 
 import { mergeProps } from "../../internal/utils/merge-props.ts";

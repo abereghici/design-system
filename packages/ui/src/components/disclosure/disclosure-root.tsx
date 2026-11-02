@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/disclosure.css";
-
 import type { ComponentProps, SyntheticEvent } from "react";
 
 import type { ToggleFeedbackEvent } from "../../feedback-event/feedback-event.ts";

@@ -1,3 +1,5 @@
+@import "@abereghici/tokens/components/breadcrumbs.css";
+
 @layer ab.components {
   .list {
     display: flex;

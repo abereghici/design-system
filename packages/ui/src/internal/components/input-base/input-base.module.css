@@ -1,0 +1,75 @@
+@import "@abereghici/tokens/components/input-base.css";
+
+@layer ab.components {
+  .root {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--ab-input-base-height);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--ab-input-base-padding-inline);
+    border: var(--ab-input-base-border-width) solid var(--ab-input-base-border-color);
+    border-radius: var(--ab-input-base-border-radius);
+    background-color: var(--ab-input-base-background-color);
+    box-shadow: var(--ab-input-base-shadow);
+    color: var(--ab-input-base-text-color);
+    font: var(--ab-input-base-font);
+    transition:
+      border-color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color),
+      outline-color var(--ab-motion-duration-hover-in) var(--ab-motion-easing-color);
+  }
+
+  [data-size="lg"] .root {
+    block-size: var(--ab-input-base-lg-height);
+  }
+
+  @container style(--ab-density: compact) {
+    .root {
+      --ab-input-base-height: var(--ab-size-control-compact-md);
+      --ab-input-base-lg-height: var(--ab-size-control-compact-lg);
+    }
+  }
+
+  .root::placeholder,
+  .root ::placeholder {
+    color: var(--ab-input-base-placeholder-color);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .root:hover:not(
+        :disabled,
+        [aria-disabled="true"],
+        :focus-within,
+        :has(> [aria-disabled="true"]),
+        :disabled *
+      ) {
+      border-color: var(--ab-input-base-border-color-hovered);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+
+  .root:is(:focus-visible, :has(> :focus-visible)) {
+    border-color: var(--ab-input-base-border-color-focused);
+    outline: var(--ab-focus-ring-width) solid var(--ab-input-base-border-color-focused);
+    outline-offset: 0;
+  }
+
+  .root:is(
+    :user-invalid,
+    [aria-invalid="true"],
+    :has(> :is(:user-invalid, [aria-invalid="true"]))
+  ) {
+    border-color: var(--ab-input-base-border-color-invalid);
+    outline-color: var(--ab-input-base-border-color-invalid);
+  }
+
+  .root:is(:disabled, [aria-disabled="true"], :has(> [aria-disabled="true"])),
+  :disabled .root {
+    border-color: var(--ab-input-base-border-color-disabled);
+    background-color: var(--ab-input-base-background-color-disabled);
+    box-shadow: none;
+    color: var(--ab-input-base-text-color-disabled);
+    cursor: not-allowed;
+  }
+}

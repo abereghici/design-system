@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/tabs.css";
-
 import { useId } from "react";
 import { flushSync } from "react-dom";
 import type { ComponentProps, MouseEvent } from "react";

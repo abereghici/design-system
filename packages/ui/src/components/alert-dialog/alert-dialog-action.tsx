@@ -1,12 +1,10 @@
 "use client";
 
-import "@abereghici/tokens/components/button.css";
-
-import { mergeProps } from "../../internal/utils/merge-props.ts";
+import { PressFeedbackContext } from "../../internal/interactions/use-press-feedback.ts";
+import { Button } from "../button/button.tsx";
 
 import type { ButtonProps } from "./alert-dialog-root.tsx";
 import { useClose } from "./alert-dialog-root.tsx";
-import button from "../button/button.module.css";
 
 export interface ActionProps extends ButtonProps {
   /** `danger` for destructive actions (Delete, Discard, Revoke). */
@@ -19,11 +17,8 @@ export interface ActionProps extends ButtonProps {
  */
 export function Action({ variant = "primary", onClick, ...props }: ActionProps) {
   return (
-    <button
-      {...mergeProps({ className: button["root"] }, props)}
-      {...useClose(onClick, false)}
-      data-variant={variant}
-      data-size="md"
-    />
+    <PressFeedbackContext value={false}>
+      <Button {...props} {...useClose(onClick, false)} variant={variant} />
+    </PressFeedbackContext>
   );
 }

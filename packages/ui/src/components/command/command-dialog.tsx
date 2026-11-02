@@ -1,7 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/command.css";
-
 import { useState } from "react";
 import type { ComponentProps, RefObject, SyntheticEvent } from "react";
 

@@ -1,6 +1,3 @@
-import "@abereghici/tokens/components/toast.css";
-import "@abereghici/tokens/components/kbd.css";
-
 import { useEffect, useRef } from "react";
 import { flushSync } from "react-dom";
 import type { RefObject } from "react";

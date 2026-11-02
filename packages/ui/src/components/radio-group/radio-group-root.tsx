@@ -1,8 +1,5 @@
 "use client";
 
-import "@abereghici/tokens/components/fieldset.css";
-import "@abereghici/tokens/components/radio-group.css";
-
 import { useId } from "react";
 import type { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
@@ -12,6 +9,7 @@ import { useRadioChoice } from "../../internal/selection/use-radio-choice.ts";
 import type { ChangeEventDetails as Details } from "../../internal/state/change-request.ts";
 import { createSafeContext } from "../../internal/utils/create-safe-context.ts";
 import { mergeProps } from "../../internal/utils/merge-props.ts";
+import * as Fieldset from "../fieldset/fieldset.tsx";
 
 import styles from "./radio-group.module.css";
 
@@ -77,7 +75,7 @@ export function Root({
     <GroupContext
       value={{ name: name ?? fallbackName, value: current, required, disabled, select }}
     >
-      <fieldset
+      <Fieldset.Root
         {...mergeProps(
           {
             ref: setRoot,

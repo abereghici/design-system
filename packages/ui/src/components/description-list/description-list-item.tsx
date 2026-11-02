@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/description-list.css";
-
 import type { ComponentProps } from "react";
 
 import { mergeProps } from "../../internal/utils/merge-props.ts";

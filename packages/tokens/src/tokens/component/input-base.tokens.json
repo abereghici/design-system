@@ -1,0 +1,84 @@
+{
+  "component": {
+    "input-base-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-md}"
+    },
+    "input-base-lg-height": {
+      "$type": "dimension",
+      "$value": "{semantic.size-control-lg}"
+    },
+    "input-base-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-sm}"
+    },
+    "input-base-padding-block": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-xs}"
+    },
+    "input-base-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-sm}"
+    },
+    "input-base-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-default}"
+    },
+    "input-base-font": {
+      "$type": "typography",
+      "$value": "{semantic.type-body-xs}"
+    },
+    "input-base-shadow": {
+      "$type": "shadow",
+      "$value": "{semantic.elevation-raised}"
+    },
+    "input-base-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-overlay}"
+    },
+    "input-base-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "input-base-placeholder-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-subtlest}"
+    },
+    "input-base-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtlest}"
+    },
+    "input-base-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default}"
+    },
+    "input-base-border-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default-hovered}"
+    },
+    "input-base-border-color-focused": {
+      "$type": "color",
+      "$value": "{semantic.color-border-focused}"
+    },
+    "input-base-border-color-invalid": {
+      "$type": "color",
+      "$value": "{semantic.color-border-danger}"
+    },
+    "input-base-background-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-background-disabled}"
+    },
+    "input-base-text-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-text-disabled}"
+    },
+    "input-base-border-color-disabled": {
+      "$type": "color",
+      "$value": "{semantic.color-border-disabled}"
+    },
+    "input-base-icon-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-sm}"
+    }
+  }
+}

@@ -1,3 +1,5 @@
+@import "@abereghici/tokens/components/tree.css";
+
 @layer ab.components {
   /* Indents each level so its chevrons line up under the parent's label. */
   .group {

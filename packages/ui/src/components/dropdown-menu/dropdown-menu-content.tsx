@@ -1,13 +1,11 @@
 "use client";
 
-import "@abereghici/tokens/components/dropdown-menu.css";
-
 import type { ComponentProps } from "react";
 
-import { menuContentProps, useMenu } from "../../internal/components/menu/menu.tsx";
+import { MenuContent } from "../../internal/components/menu/menu-content.tsx";
+import { useMenu } from "../../internal/components/menu/menu.tsx";
 import { mergeProps } from "../../internal/utils/merge-props.ts";
 
-import menuStyles from "../../internal/components/menu/menu.module.css";
 import styles from "./dropdown-menu.module.css";
 
 export interface ContentProps extends Omit<ComponentProps<"div">, "id" | "role" | "popover"> {
@@ -22,11 +20,9 @@ export function Content({ side = "bottom", align = "start", ...props }: ContentP
   const menu = useMenu("DropdownMenu.Content");
 
   return (
-    <div
-      {...mergeProps(
-        { className: `${menuStyles["content"]} ${styles["content"]}`, ...menuContentProps(menu) },
-        props,
-      )}
+    <MenuContent
+      {...mergeProps({ className: styles["content"] }, props)}
+      menu={menu}
       aria-labelledby={`${menu.overlay.contentId}-trigger`}
       data-side={side}
       data-align={align}

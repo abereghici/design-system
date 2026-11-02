@@ -1,12 +1,8 @@
+@import "@abereghici/tokens/components/radio-group.css";
+
 @layer ab.components {
   .root {
-    display: grid;
     justify-items: start;
-    gap: var(--ab-fieldset-gap);
-    min-inline-size: 0;
-    margin: 0;
-    border: 0;
-    padding: 0;
   }
 
   .root:where([data-orientation="horizontal"]) {
@@ -16,11 +12,7 @@
   }
 
   .label {
-    margin-block-end: var(--ab-fieldset-gap);
-    padding: 0;
-    font: var(--ab-fieldset-legend-font);
     letter-spacing: var(--ab-type-label-sm-letter-spacing);
-    color: var(--ab-fieldset-legend-text-color);
   }
 
   .item {

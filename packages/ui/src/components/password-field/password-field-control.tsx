@@ -2,12 +2,12 @@
 
 import type { ComponentProps } from "react";
 
+import { InputGroup } from "../../internal/components/input-group/input-group.tsx";
 import type { ChangeEventDetails as Details } from "../../internal/state/change-request.ts";
 import { useControllableState } from "../../internal/state/use-controllable-state.ts";
 import { useEvent } from "../../internal/utils/use-event.ts";
 import { useField } from "../field/use-field.ts";
 import type { FormControl } from "../field/use-field.ts";
-import { InputGroup } from "../text-field/text-field-input-group.tsx";
 import { Input as TextInput } from "../text-field/text-field-input.tsx";
 import type { TextFieldProps } from "../text-field/text-field.tsx";
 

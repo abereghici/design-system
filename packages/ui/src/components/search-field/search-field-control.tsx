@@ -2,12 +2,12 @@
 
 import type { ComponentProps, ReactNode } from "react";
 
+import { InputGroup } from "../../internal/components/input-group/input-group.tsx";
 import { isComposing, trackComposition } from "../../internal/interactions/composition.ts";
 import { composeEventHandlers } from "../../internal/utils/compose-event-handlers.ts";
 import { mergeProps } from "../../internal/utils/merge-props.ts";
 import { IconButton } from "../icon-button/icon-button.tsx";
 import { XIcon } from "../icon/icons/x.tsx";
-import { InputGroup } from "../text-field/text-field-input-group.tsx";
 import { Input as TextInput } from "../text-field/text-field-input.tsx";
 
 import { useSearchFieldState } from "./use-search-field-state.ts";

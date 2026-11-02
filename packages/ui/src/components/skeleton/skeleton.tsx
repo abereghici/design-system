@@ -1,5 +1,3 @@
-import "@abereghici/tokens/components/skeleton.css";
-
 import { cloneElement, isValidElement } from "react";
 import type { ComponentProps } from "react";
 
