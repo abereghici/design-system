@@ -8,7 +8,7 @@ import { catalog } from "@abereghici/tokens/catalog";
 
 const ui = resolve(import.meta.dirname, "..");
 const read = (path: string) => readFileSync(resolve(ui, path), "utf8");
-const files = (pattern: string) => globSync(pattern, { cwd: ui });
+const files = (pattern: string, exclude: string[] = []) => globSync(pattern, { cwd: ui, exclude });
 const captures = (text: string, regex: RegExp) =>
   [...text.matchAll(regex)].map(([, match = ""]) => match);
 const sorted = (names: Iterable<string>) =>
@@ -128,7 +128,26 @@ describe.each([...pages])("%s", (_, text) => {
   });
 });
 
+// InputBase draws the Field box with Field's tokens; Toaster's are named after its Toasts.
+const owners = new Map([
+  ["input-base", "field"],
+  ["toaster", "toast"],
+]);
+const sheetOf = (folder: string) => owners.get(folder) ?? folder;
+
 describe("claims the docs make about the code", () => {
+  test("each file imports only its own Component's token sheet (Contributing, Rule 3)", () => {
+    const foreign = files("src/**/*.{ts,tsx}", ["**/__screenshots__/**"]).flatMap((file) => {
+      const folder = basename(resolve(ui, file, ".."));
+
+      return captures(read(file), /"@abereghici\/tokens\/components\/([\w\-]+)\.css"/gv)
+        .filter((sheet) => sheet !== sheetOf(folder))
+        .map((sheet) => `${file} imports ${sheet}.css`);
+    });
+
+    expect(foreign).toEqual([]);
+  });
+
   test("only Spinner, Progress and Skeleton loop (Accessibility)", () => {
     const looping = files("src/**/*.css").filter((file) => /\binfinite\b/v.test(read(file)));
 

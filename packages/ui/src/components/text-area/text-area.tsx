@@ -1,14 +1,12 @@
 "use client";
 
-import "@abereghici/tokens/components/field.css";
-
 import type { ComponentProps } from "react";
 
+import { InputBase } from "../../internal/components/input-base/input-base.tsx";
 import { Wrapper, splitWrapperProps } from "../field/field-wrapper.tsx";
 import type { WrapperProps, Naming } from "../field/field-wrapper.tsx";
 import * as Field from "../field/field.tsx";
 
-import fieldStyles from "../field/field.module.css";
 import styles from "./text-area.module.css";
 
 declare module "react" {
@@ -42,13 +40,15 @@ function Control({ minRows = 3, maxRows = 12, readOnly, ...props }: ControlProps
   const bindings = Field.useFieldControl<HTMLTextAreaElement, typeof props>(props);
 
   return (
-    <textarea
-      dir="auto"
-      {...bindings}
-      readOnly={bindings["aria-disabled"] ?? readOnly}
-      className={`${fieldStyles["control"]} ${styles["textarea"]}`}
-      style={{ "--min-rows": minRows, "--max-rows": maxRows }}
-    />
+    <InputBase>
+      <textarea
+        dir="auto"
+        {...bindings}
+        readOnly={bindings["aria-disabled"] ?? readOnly}
+        className={styles["textarea"]}
+        style={{ "--min-rows": minRows, "--max-rows": maxRows }}
+      />
+    </InputBase>
   );
 }
 

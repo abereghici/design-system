@@ -75,6 +75,22 @@ Default.test(
   },
 );
 
+Default.test("dispatches one ab-press for a press on Next", async ({ canvas, userEvent }) => {
+  const next = canvas.getByRole("link", { name: "Next page" });
+  const presses = listen("ab-press");
+
+  next.addEventListener(
+    "click",
+    (event) => {
+      event.preventDefault();
+    },
+    { once: true },
+  );
+  await userEvent.click(next);
+  presses.stop();
+  await expect(presses.events).toHaveLength(1);
+});
+
 Default.test(
   "on the last page, Next is disabled",
   { args: { page: 10 } },

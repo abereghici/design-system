@@ -1,14 +1,13 @@
-import "@abereghici/tokens/components/icon-button.css";
 import "@abereghici/tokens/components/pagination.css";
 
 import type { ComponentProps, ElementType, ReactElement } from "react";
 
 import { FormattedNumber } from "../../internal/i18n/formatted-number.tsx";
 import type { AccessibleName } from "../../internal/types/accessible-name.ts";
+import { IconButton } from "../icon-button/icon-button.tsx";
 import { ChevronRightIcon } from "../icon/icons/chevron-right.tsx";
 import { MoreIcon } from "../icon/icons/more.tsx";
 
-import iconButton from "../icon-button/icon-button.module.css";
 import styles from "./pagination.module.css";
 
 export type PaginationProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelledby"> &
@@ -53,19 +52,13 @@ function Step({ href, label, Anchor, children }: StepProps) {
   return (
     <li>
       {href === undefined ? (
-        <button
-          type="button"
-          aria-label={label}
-          aria-disabled
-          data-size="md"
-          className={iconButton["root"]}
-        >
+        <IconButton aria-label={label} disabled>
           {children}
-        </button>
+        </IconButton>
       ) : (
-        <Anchor href={href} aria-label={label} data-size="md" className={iconButton["root"]}>
-          {children}
-        </Anchor>
+        <IconButton asChild aria-label={label}>
+          <Anchor href={href}>{children}</Anchor>
+        </IconButton>
       )}
     </li>
   );

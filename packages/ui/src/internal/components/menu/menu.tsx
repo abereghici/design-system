@@ -8,7 +8,6 @@ import type { ChangeEventDetails as Details } from "../../state/change-request.t
 import { createSafeContext } from "../../utils/create-safe-context.ts";
 import { mergeProps } from "../../utils/merge-props.ts";
 
-import { menuNavigation } from "./menu-navigation.ts";
 import styles from "./menu.module.css";
 
 /** `cancel()`: keeps the previous value; a menu `closeOnClick` would close stays open too. */
@@ -24,32 +23,6 @@ export const [MenuContext, useMenu] = createSafeContext<Menu>(
 );
 
 const enterPressed = new WeakSet<Element>();
-
-/**
- * The menu's keyboard, pointer highlight and initial focus; DropdownMenu and ContextMenu add
- * placement.
- */
-export function menuContentProps(menu: Menu) {
-  const { onToggle, ...navigation } = menuNavigation;
-
-  return mergeProps(
-    {
-      ...menu.overlay.contentProps({ onToggle }),
-      role: "menu",
-      tabIndex: -1,
-      ...navigation,
-    } as const,
-    {
-      onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
-        if (event.key !== "Tab") return;
-
-        setTimeout(() => {
-          menu.overlay.toggle(false, "focus-out", event.nativeEvent);
-        });
-      },
-    },
-  );
-}
 
 export interface ItemBaseProps extends ComponentProps<"button"> {
   /** Closes the menu once the item is chosen; turn it off to let people choose several in a row. */

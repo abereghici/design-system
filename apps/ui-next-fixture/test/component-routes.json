@@ -67,7 +67,7 @@
   },
   {
     "name": "alert",
-    "tokens": ["alert", "icon", "icon-button"],
+    "tokens": ["alert", "icon", "icon-button", "spinner"],
     "client": ["components/alert/alert-close"],
     "html": "aria-label=\"Dismiss\""
   },
@@ -153,7 +153,7 @@
       "components/field/field-error",
       "components/field/field-label",
       "components/field/field-root",
-      "components/text-field/text-field-input-group",
+      "internal/components/input-group/input-group",
       "components/text-field/text-field-input"
     ],
     "html": "dir=\"auto\""
@@ -169,7 +169,7 @@
       "components/number-field/number-field",
       "components/select/select-root",
       "components/text-area/text-area",
-      "components/text-field/text-field-input-group",
+      "internal/components/input-group/input-group",
       "components/text-field/text-field-input"
     ],
     "html": "<textarea"
@@ -282,8 +282,8 @@
   },
   {
     "name": "pagination",
-    "tokens": ["pagination", "icon", "icon-button"],
-    "client": ["internal/i18n/formatted-number"],
+    "tokens": ["icon", "icon-button", "pagination", "spinner"],
+    "client": ["components/icon-button/icon-button", "internal/i18n/formatted-number"],
     "html": "href=\"/pagination?page=3\">3</a>"
   },
   {
@@ -321,7 +321,7 @@
   },
   {
     "name": "dialog",
-    "tokens": ["dialog", "icon", "icon-button"],
+    "tokens": ["dialog", "icon", "icon-button", "spinner"],
     "client": [
       "components/dialog/dialog-close",
       "components/dialog/dialog-content",
@@ -333,12 +333,11 @@
   },
   {
     "name": "alert-dialog",
-    "tokens": ["dialog", "button"],
+    "tokens": ["button", "dialog", "spinner"],
     "client": [
       "components/alert-dialog/alert-dialog-action",
       "components/alert-dialog/alert-dialog-cancel",
       "components/alert-dialog/alert-dialog-content",
-      "components/alert-dialog/alert-dialog-footer",
       "components/alert-dialog/alert-dialog-root",
       "components/dialog/dialog-description",
       "components/dialog/dialog-title",
@@ -348,7 +347,7 @@
   },
   {
     "name": "sheet",
-    "tokens": ["sheet", "icon", "icon-button"],
+    "tokens": ["icon", "icon-button", "sheet", "spinner"],
     "client": [
       "components/dialog/dialog-close",
       "components/dialog/dialog-content",
@@ -401,7 +400,7 @@
   },
   {
     "name": "popover",
-    "tokens": ["popover", "icon", "icon-button"],
+    "tokens": ["icon", "icon-button", "popover", "spinner"],
     "client": [
       "components/popover/popover-close",
       "components/popover/popover-content",

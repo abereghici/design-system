@@ -1,18 +1,16 @@
 "use client";
 
-import "@abereghici/tokens/components/field.css";
-
 import type { ComponentProps } from "react";
 
+import { InputGroupInput } from "../../internal/components/input-group/input-group-input.tsx";
+import { InputGroup } from "../../internal/components/input-group/input-group.tsx";
 import { useHydrated } from "../../internal/utils/use-hydrated.ts";
 import * as Field from "../field/field.tsx";
 import { SearchIcon } from "../icon/icons/search.tsx";
 import * as TagGroup from "../tag-group/tag-group.tsx";
-import { InputGroup } from "../text-field/text-field-input-group.tsx";
 
 import { changeValues, inputOf } from "./use-combobox-state.ts";
 import type { Combobox } from "./use-combobox.ts";
-import textFieldStyles from "../text-field/text-field.module.css";
 import styles from "./combobox.module.css";
 
 function Input({
@@ -24,8 +22,7 @@ function Input({
   const bindings = Field.useFieldControl<HTMLInputElement, typeof props>(props);
 
   return (
-    <input
-      dir="auto"
+    <InputGroupInput
       autoComplete="off"
       {...bindings}
       name={submitsText ? bindings.name : undefined}
@@ -34,7 +31,7 @@ function Input({
       aria-expanded={props["aria-expanded"]}
       aria-controls={props["aria-controls"]}
       readOnly={bindings["aria-disabled"] ?? readOnly}
-      className={[textFieldStyles["input"], className].filter(Boolean).join(" ")}
+      className={className}
     />
   );
 }

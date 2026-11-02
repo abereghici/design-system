@@ -1,0 +1,73 @@
+@layer ab.components {
+  .root {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--ab-field-height);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--ab-field-padding-inline);
+    border: var(--ab-field-border-width) solid var(--ab-field-border-color);
+    border-radius: var(--ab-field-border-radius);
+    background-color: var(--ab-field-background-color);
+    box-shadow: var(--ab-field-shadow);
+    color: var(--ab-field-text-color);
+    font: var(--ab-field-font);
+    transition:
+      border-color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color),
+      outline-color var(--ab-motion-duration-hover-in) var(--ab-motion-easing-color);
+  }
+
+  [data-size="lg"] .root {
+    block-size: var(--ab-field-lg-height);
+  }
+
+  @container style(--ab-density: compact) {
+    .root {
+      --ab-field-height: var(--ab-size-control-compact-md);
+      --ab-field-lg-height: var(--ab-size-control-compact-lg);
+    }
+  }
+
+  .root::placeholder,
+  .root ::placeholder {
+    color: var(--ab-field-placeholder-color);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .root:hover:not(
+        :disabled,
+        [aria-disabled="true"],
+        :focus-within,
+        :has(> [aria-disabled="true"]),
+        :disabled *
+      ) {
+      border-color: var(--ab-field-border-color-hovered);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+
+  .root:is(:focus-visible, :has(> :focus-visible)) {
+    border-color: var(--ab-field-border-color-focused);
+    outline: var(--ab-focus-ring-width) solid var(--ab-field-border-color-focused);
+    outline-offset: 0;
+  }
+
+  .root:is(
+    :user-invalid,
+    [aria-invalid="true"],
+    :has(> :is(:user-invalid, [aria-invalid="true"]))
+  ) {
+    border-color: var(--ab-field-border-color-invalid);
+    outline-color: var(--ab-field-border-color-invalid);
+  }
+
+  .root:is(:disabled, [aria-disabled="true"], :has(> [aria-disabled="true"])),
+  :disabled .root {
+    border-color: var(--ab-field-border-color-disabled);
+    background-color: var(--ab-field-background-color-disabled);
+    box-shadow: none;
+    color: var(--ab-field-text-color-disabled);
+    cursor: not-allowed;
+  }
+}

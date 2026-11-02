@@ -1,14 +1,13 @@
 "use client";
 
-import "@abereghici/tokens/components/popover.css";
-
 import { useState } from "react";
 import type { ComponentProps } from "react";
 
+import { Content as PopoverContent } from "../../../components/popover/popover-content.tsx";
+import { PopoverContext } from "../../../components/popover/popover-root.tsx";
 import { mergeProps } from "../../utils/merge-props.ts";
 
 import { usePanel } from "./picker.ts";
-import popoverStyles from "../../../components/popover/popover.module.css";
 import styles from "./picker.module.css";
 
 export type ContentProps = Omit<
@@ -23,14 +22,11 @@ export function Content({ children, ...props }: ContentProps) {
 
   if (overlay.open && !mounted) setMounted(true);
 
-  const base = `${popoverStyles["content"]} ${styles["content"]}`;
-
   return (
-    <dialog
-      {...mergeProps({ className: base, ...overlay.contentProps() }, props)}
-      aria-label={name}
-    >
-      {mounted && children}
-    </dialog>
+    <PopoverContext value={overlay}>
+      <PopoverContent {...mergeProps({ className: styles["content"] }, props)} aria-label={name}>
+        {mounted && children}
+      </PopoverContent>
+    </PopoverContext>
   );
 }

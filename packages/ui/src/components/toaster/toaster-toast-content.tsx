@@ -1,5 +1,4 @@
 import "@abereghici/tokens/components/toast.css";
-import "@abereghici/tokens/components/kbd.css";
 
 import type { KeyboardEvent, MouseEvent, RefObject } from "react";
 

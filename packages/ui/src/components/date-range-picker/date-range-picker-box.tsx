@@ -1,5 +1,6 @@
 "use client";
 
+import { InputBase } from "../../internal/components/input-base/input-base.tsx";
 import { Trigger } from "../../internal/components/picker/picker-trigger.tsx";
 import type { Panel } from "../../internal/components/picker/picker.ts";
 import type { SegmentFieldOptions } from "../../internal/components/segment-field/segment-field.tsx";
@@ -10,7 +11,6 @@ import { useField } from "../field/use-field.ts";
 
 import { Half } from "./date-range-picker-half.tsx";
 import type { ChangeEventDetails, RootProps } from "./date-range-picker-root.tsx";
-import fieldStyles from "../field/field.module.css";
 import styles from "./date-range-picker.module.css";
 
 export interface Halves {
@@ -88,24 +88,26 @@ export function Box(props: BoxProps) {
   const { current } = props.range;
 
   return (
-    <fieldset
-      aria-label={props["aria-label"]}
-      aria-labelledby={field?.labelId}
-      aria-describedby={field?.describedBy}
-      aria-disabled={blocked || undefined}
-      className={`${fieldStyles["control"]} ${styles["box"]}`}
-    >
-      <Half label={props.startLabel} first options={halfOptions(props, "start")} />
-      <span aria-hidden="true" className={styles["separator"]}>
-        {formats.rangeSeparator}
-      </span>
-      <Half label={props.endLabel} first={false} options={halfOptions(props, "end")} />
-      <Trigger
-        panel={props.panel}
-        description={current === null ? undefined : formats.fullRange(current)}
-        disabled={blocked}
-        form={props.form}
-      />
-    </fieldset>
+    <InputBase>
+      <fieldset
+        aria-label={props["aria-label"]}
+        aria-labelledby={field?.labelId}
+        aria-describedby={field?.describedBy}
+        aria-disabled={blocked || undefined}
+        className={styles["box"]}
+      >
+        <Half label={props.startLabel} first options={halfOptions(props, "start")} />
+        <span aria-hidden="true" className={styles["separator"]}>
+          {formats.rangeSeparator}
+        </span>
+        <Half label={props.endLabel} first={false} options={halfOptions(props, "end")} />
+        <Trigger
+          panel={props.panel}
+          description={current === null ? undefined : formats.fullRange(current)}
+          disabled={blocked}
+          form={props.form}
+        />
+      </fieldset>
+    </InputBase>
   );
 }

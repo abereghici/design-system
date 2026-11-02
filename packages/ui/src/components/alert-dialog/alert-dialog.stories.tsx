@@ -102,6 +102,41 @@ Default.test(
   },
 );
 
+Default.test(
+  "keeps a disabled Action focusable and announced as unavailable, and a press does nothing",
+  {
+    args: {
+      children: (
+        <>
+          <AlertDialog.Trigger asChild>
+            <Button variant="danger">Delete project</Button>
+          </AlertDialog.Trigger>
+          <AlertDialog.Content>
+            <AlertDialog.Title>Delete project?</AlertDialog.Title>
+            <AlertDialog.Footer>
+              <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+              <AlertDialog.Action disabled>Delete</AlertDialog.Action>
+            </AlertDialog.Footer>
+          </AlertDialog.Content>
+        </>
+      ),
+    },
+  },
+  async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: "Delete project" }));
+
+    const dialog = canvas.getByRole("alertdialog");
+    const action = canvas.getByRole("button", { name: "Delete" });
+
+    await expect(action).toHaveAttribute("aria-disabled", "true");
+    await userEvent.tab();
+    await expect(action).toHaveFocus();
+    await userEvent.click(action);
+    await expect(canvas.getByRole("alertdialog")).toBe(dialog);
+    await expect(args.onOpenChange).toHaveBeenCalledOnce();
+  },
+);
+
 Default.test("closes with Cancel and dispatches ab-dismiss", async ({ canvas, userEvent }) => {
   await userEvent.click(canvas.getByRole("button", { name: "Delete project" }));
 
