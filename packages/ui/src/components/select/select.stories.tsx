@@ -5,7 +5,7 @@ import { withForm } from "#.storybook/decorators/with-form.tsx";
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import { longRegions, manyRegions } from "#.storybook/fixtures/regions.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
-import { listenTurns } from "#.storybook/test/motion.ts";
+import { listenTurns, motionAllowed } from "#.storybook/test/motion.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Select from "./select.tsx";
@@ -256,10 +256,10 @@ Default.test(
   async ({ canvas }) => {
     if (!basePicker()) return;
 
+    using turns = listenTurns();
+
     const user = await trusted();
     const japan = canvas.getByRole("option", { name: "Japan" });
-    const turns = listenTurns();
-    const turnsOnOpen = Number(!matchMedia("(prefers-reduced-motion: reduce)").matches);
 
     await user.tab();
     await user.keyboard(" ");
@@ -268,8 +268,7 @@ Default.test(
     await waitFor(() => expect(japan.checkVisibility()).toBe(false));
     await expect(turns.count()).toBe(0);
     await user.click(canvas.getByRole("combobox", { name: "Region" }));
-    await waitFor(() => expect(turns.count()).toBe(turnsOnOpen));
-    turns.stop();
+    await waitFor(() => expect(turns.count()).toBe(Number(motionAllowed())));
   },
 );
 

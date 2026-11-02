@@ -2,7 +2,7 @@ import { expect } from "storybook/test";
 
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
-import { moves } from "#.storybook/test/motion.ts";
+import { motionAllowed, moves } from "#.storybook/test/motion.ts";
 
 import { Progress } from "./progress.tsx";
 
@@ -48,9 +48,7 @@ Default.test(
   "sweeps only when motion is allowed",
   { args: { value: null } },
   async ({ canvasElement }) => {
-    await expect(moves(canvasElement)).toBe(
-      !matchMedia("(prefers-reduced-motion: reduce)").matches,
-    );
+    await expect(moves(canvasElement)).toBe(motionAllowed());
   },
 );
 
