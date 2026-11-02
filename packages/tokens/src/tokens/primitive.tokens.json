@@ -624,6 +624,273 @@
         "hex": "#041c0c"
       }
     },
+    "palette-lake-50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9373, 0.9725, 1],
+        "hex": "#eff8ff"
+      }
+    },
+    "palette-lake-100": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.8667, 0.9294, 0.9961],
+        "hex": "#ddedfe"
+      }
+    },
+    "palette-lake-200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.7451, 0.8588, 0.9725],
+        "hex": "#bedbf8"
+      }
+    },
+    "palette-lake-300": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.5922, 0.749, 0.902],
+        "hex": "#97bfe6"
+      }
+    },
+    "palette-lake-400": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.4549, 0.6392, 0.8196],
+        "hex": "#74a3d1"
+      }
+    },
+    "palette-lake-500": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.3137, 0.5373, 0.7412],
+        "hex": "#5089bd"
+      },
+      "$description": "Dusty slate blue"
+    },
+    "palette-lake-600": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.1843, 0.4275, 0.6431],
+        "hex": "#2f6da4"
+      }
+    },
+    "palette-lake-700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.1255, 0.3255, 0.498],
+        "hex": "#20537f"
+      }
+    },
+    "palette-lake-800": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0824, 0.2392, 0.3725],
+        "hex": "#153d5f"
+      }
+    },
+    "palette-lake-900": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0392, 0.1569, 0.2588],
+        "hex": "#0a2842"
+      }
+    },
+    "palette-lake-950": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.0157, 0.0902, 0.1608],
+        "hex": "#041729"
+      }
+    },
+    "palette-spruce-50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9255, 0.9804, 0.9843],
+        "hex": "#ecfafb"
+      }
+    },
+    "palette-spruce-100": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.8471, 0.9451, 0.949],
+        "hex": "#d8f1f2"
+      }
+    },
+    "palette-spruce-200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.702, 0.8863, 0.8941],
+        "hex": "#b3e2e4"
+      }
+    },
+    "palette-spruce-300": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.5294, 0.7843, 0.7961],
+        "hex": "#87c8cb"
+      }
+    },
+    "palette-spruce-400": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.3647, 0.6824, 0.698],
+        "hex": "#5daeb2"
+      }
+    },
+    "palette-spruce-500": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.1569, 0.5843, 0.6039],
+        "hex": "#28959a"
+      },
+      "$description": "Muted blue-green teal"
+    },
+    "palette-spruce-600": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0, 0.4784, 0.502],
+        "hex": "#007a80"
+      }
+    },
+    "palette-spruce-700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0, 0.3686, 0.3882],
+        "hex": "#005e63"
+      }
+    },
+    "palette-spruce-800": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0, 0.2706, 0.2863],
+        "hex": "#004549"
+      }
+    },
+    "palette-spruce-900": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0, 0.1804, 0.1922],
+        "hex": "#002e31"
+      }
+    },
+    "palette-spruce-950": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0, 0.1098, 0.1176],
+        "hex": "#001c1e"
+      }
+    },
+    "palette-heather-50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9922, 0.9569, 0.9843],
+        "hex": "#fdf4fb"
+      }
+    },
+    "palette-heather-100": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9686, 0.898, 0.949],
+        "hex": "#f7e5f2"
+      }
+    },
+    "palette-heather-200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.9216, 0.8039, 0.8902],
+        "hex": "#ebcde3"
+      }
+    },
+    "palette-heather-300": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.8314, 0.6745, 0.7922],
+        "hex": "#d4acca"
+      }
+    },
+    "palette-heather-400": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.7373, 0.5529, 0.6941],
+        "hex": "#bc8db1"
+      }
+    },
+    "palette-heather-500": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.6471, 0.4353, 0.6],
+        "hex": "#a56f99"
+      },
+      "$description": "Muted mauve plum"
+    },
+    "palette-heather-600": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.5451, 0.3255, 0.498],
+        "hex": "#8b537f"
+      }
+    },
+    "palette-heather-700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.4196, 0.2431, 0.3843],
+        "hex": "#6b3e62"
+      }
+    },
+    "palette-heather-800": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.3137, 0.1765, 0.2824],
+        "hex": "#502d48"
+      }
+    },
+    "palette-heather-900": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.2118, 0.1098, 0.1922],
+        "hex": "#361c31"
+      }
+    },
+    "palette-heather-950": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.1294, 0.0588, 0.1137],
+        "hex": "#210f1d"
+      }
+    },
     "palette-night-950-a64": {
       "$type": "color",
       "$value": {
