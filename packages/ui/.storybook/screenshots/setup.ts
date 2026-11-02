@@ -4,6 +4,7 @@ import { cdp, page } from "vitest/browser";
 
 import { renderedCanvas } from "../test/snapshots.ts";
 
+import { gatedStyles } from "./gated-styles.ts";
 import type { ScreenshotVariant } from "./projects.ts";
 
 declare module "vitest" {
@@ -17,7 +18,7 @@ declare module "vitest" {
 }
 
 const variant = inject("screenshotVariant");
-const { matches = [], emulatedMedia, defaultFontSize, textSpacing } = variant ?? {};
+const { matches = [], emulatedMedia, defaultFontSize, textSpacing, gates } = variant ?? {};
 const px = (length: string) => Number(length.replace("px", ""));
 
 beforeAll(async () => {
@@ -97,6 +98,8 @@ afterEach(async ({ story, task }) => {
       )
       .map((animation) => animation.finished),
   );
+
+  if (gates !== undefined && !gatedStyles(gates)) return;
 
   const topLayer = document.querySelector(":modal, :popover-open, select:open") !== null;
   const height = document.documentElement.scrollHeight;

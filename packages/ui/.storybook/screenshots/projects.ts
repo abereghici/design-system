@@ -14,6 +14,8 @@ export interface ScreenshotVariant {
   defaultFontSize?: number;
   /** Applies the WCAG 1.4.12 text spacing overrides to the page. */
   textSpacing?: boolean;
+  /** Condition text of the rules this variant turns on or off; a story none of them styles is skipped. */
+  gates?: string[];
 }
 
 const variants: ScreenshotVariant[] = [
@@ -36,24 +38,22 @@ const variants: ScreenshotVariant[] = [
     name: "contrast-more",
     contextOptions: { contrast: "more" },
     matches: ["(prefers-contrast: more)"],
-  },
-  {
-    name: "reduced-motion",
-    contextOptions: { reducedMotion: "reduce" },
-    matches: ["(prefers-reduced-motion: reduce)"],
+    gates: ["(prefers-contrast"],
   },
   {
     name: "reduced-transparency",
     emulatedMedia: [{ name: "prefers-reduced-transparency", value: "reduce" }],
+    gates: ["(prefers-reduced-transparency"],
   },
   // CDP can't emulate pointer or hover; touch emulation sets both.
   {
     name: "touch",
     contextOptions: { hasTouch: true },
     matches: ["(pointer: coarse)", "(hover: none)"],
+    gates: ["pointer:", "hover:"],
   },
   { name: "rtl", initialGlobals: { dir: "rtl" } },
-  { name: "compact", initialGlobals: { density: "compact" } },
+  { name: "compact", initialGlobals: { density: "compact" }, gates: ["--ab-density"] },
   // After a scale-in under backdrop-filter, Chromium snaps resized or respaced text a pixel either way
   // from launch to launch (Combobox Open); light already covers the end state of motion.
   { name: "text-200", defaultFontSize: 32, contextOptions: { reducedMotion: "reduce" } },
