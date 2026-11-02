@@ -10,7 +10,8 @@ interface Rule {
   declarations: Declaration[];
 }
 
-// cssText, not the declaration's items: a longhand set through a shorthand with var() reads "".
+// cssText, not the declaration's items: a longhand set through a shorthand with var() reads "":
+// https://www.w3.org/TR/css-variables-1/#variables-in-shorthands
 const declaration = /([\w\-]+)\s*:\s*((?:[^;"']|"[^"]*"|'[^']*')*)/gv;
 const reference = /var\(\s*(--[\w\-]+)/gv;
 // The originating element stands in for its pseudo-elements, which selectors can't match.
@@ -137,7 +138,6 @@ export function gatedStyles(gates: readonly string[]) {
     }
   }
 
-  // Only a rule that reads a flipped property is matched against the page.
   const readers = [...rules.filter(({ gated }) => !gated), ...inlineStyles(roots)];
 
   for (let grew = flipped.size > 0; grew;) {

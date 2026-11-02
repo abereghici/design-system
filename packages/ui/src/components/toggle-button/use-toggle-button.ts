@@ -22,8 +22,8 @@ interface ToggleButtonOptions {
 }
 
 /**
- * A ToggleButton's state, its own or its ToggleButtonGroup's, and its button props, as React Aria
- * splits `useToggleButton` from the component. A press dispatches `ab-toggle`.
+ * A ToggleButton's state, its own or its ToggleButtonGroup's, and its button props. A press
+ * dispatches `ab-toggle`.
  */
 export function useToggleButton({
   value,

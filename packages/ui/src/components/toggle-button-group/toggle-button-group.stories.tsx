@@ -59,6 +59,10 @@ Default.test(
     // A position counts from inside the border, which joined buttons share.
     await user.click(pin, { position: { x: pin.clientWidth - 1, y: pin.clientHeight / 2 } });
     await expect(pin).toHaveAttribute("aria-pressed", "true");
+    await expect(canvas.getByRole("button", { name: "Unpin" })).toHaveAttribute(
+      "aria-pressed",
+      "false",
+    );
   },
 );
 

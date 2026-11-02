@@ -5,8 +5,8 @@
 
   /* A finger covers more than a cursor, so on touch screens this invisible area takes presses up to
      a comfortable height while the control stays the size it is with a mouse. It grows only up and
-     down, so controls side by side never take each other's presses, and stacked ones closer than
-     that share the gap between them. */
+     down, so controls side by side never take each other's presses; a container that stacks them
+     closer sets --ab-touch-target-gap, and they share the gap between them. */
   @media (pointer: coarse) {
     .root {
       display: block;
@@ -16,7 +16,7 @@
       block-size: clamp(
         100%,
         var(--ab-size-target-recommended),
-        100% + var(--ab-touch-target-gap, 100vh)
+        100% + var(--ab-touch-target-gap, infinity * 1px)
       );
       translate: 0 -50%;
     }
