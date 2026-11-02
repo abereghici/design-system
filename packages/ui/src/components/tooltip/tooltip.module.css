@@ -16,7 +16,8 @@
 
     position-anchor: auto;
     inset: auto;
-    inset-block-end: anchor(self-start);
+    /* Whole pixels, so the text on its layer renders the same every time. */
+    inset-block-end: round(anchor(self-start), 1px);
     justify-self: anchor-center;
     position-try-fallbacks: flip-block;
     box-sizing: border-box;
@@ -79,17 +80,17 @@
   }
 
   .content:where([data-side="bottom"]) {
-    inset-block: anchor(self-end) auto;
+    inset-block: round(anchor(self-end), 1px) auto;
     transform-origin: top center;
   }
 
   .content:where([data-align="start"]) {
-    inset-inline: anchor(self-start) auto;
+    inset-inline: round(anchor(self-start), 1px) auto;
     justify-self: auto;
   }
 
   .content:where([data-align="end"]) {
-    inset-inline: auto anchor(self-end);
+    inset-inline: auto round(anchor(self-end), 1px);
     justify-self: auto;
   }
 

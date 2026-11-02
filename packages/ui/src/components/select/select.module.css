@@ -72,9 +72,13 @@
 
     .select::picker(select) {
       position-anchor: auto;
+      /* The browser's position-area would start the picker's containing block at the select's
+         fractional edge, leaving these insets nothing to round. */
+      position-area: none;
       inset: auto;
-      inset-block-start: anchor(self-end);
-      inset-inline-start: anchor(self-start);
+      /* Whole pixels, so the text on its layer renders the same every time. */
+      inset-block-start: round(anchor(self-end), 1px);
+      inset-inline-start: round(anchor(self-start), 1px);
       position-try-fallbacks: flip-block;
       box-sizing: border-box;
       min-inline-size: anchor-size(inline);
