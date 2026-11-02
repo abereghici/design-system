@@ -30,3 +30,47 @@ exports[`Default   > base story 1`] = `
       - link "Next page":
         - /url: "#page-6"
 `;
+
+exports[`One 1`] = `
+- navigation "Pagination":
+  - list:
+    - listitem:
+      - button "Previous page" [disabled]
+    - listitem:
+      - link "Page 1":
+        - /url: "#page-1"
+        - text: "1"
+    - listitem:
+      - button "Next page" [disabled]
+`;
+
+exports[`Worst Case 1`] = `
+- navigation "Pagination":
+  - list:
+    - listitem:
+      - link "Previous page":
+        - /url: "#page-641"
+    - listitem:
+      - link "Page 1":
+        - /url: "#page-1"
+        - text: "1"
+    - listitem:
+      - link "Page 641":
+        - /url: "#page-641"
+        - text: "641"
+    - listitem:
+      - link "Page 642":
+        - /url: "#page-642"
+        - text: "642"
+    - listitem:
+      - link "Page 643":
+        - /url: "#page-643"
+        - text: "643"
+    - listitem:
+      - link "Page 1,284":
+        - /url: "#page-1284"
+        - text: 1,284
+    - listitem:
+      - link "Next page":
+        - /url: "#page-643"
+`;

@@ -1,6 +1,7 @@
 import { expect, fn } from "storybook/test";
 
 import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { OTPField } from "./otp-field.tsx";
@@ -95,3 +96,14 @@ Default.test(
     await expect(input).toHaveValue("482719");
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    label: "Code de vérification envoyé au +33 6 12 34 56 78",
+    length: 8,
+    errorMessage: "Ce code a expiré. Demandez-en un nouveau.",
+    invalid: true,
+  },
+  decorators: [withWidth("18rem")],
+});

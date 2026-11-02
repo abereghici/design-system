@@ -59,3 +59,22 @@ Default.test(
     ]);
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: [
+      "Accueil",
+      "Tableaux de bord",
+      "Factures et paiements",
+      "Paramètres de l’espace",
+      "Aide",
+    ].map((name, index) => (
+      <Navbar.Item key={name}>
+        <Navbar.Link href={`#${index}`} {...(index === 2 && { "aria-current": "page" as const })}>
+          {name}
+        </Navbar.Link>
+      </Navbar.Item>
+    )),
+  },
+});

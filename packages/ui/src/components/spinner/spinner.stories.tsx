@@ -1,5 +1,6 @@
 import { expect } from "storybook/test";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { moves } from "#.storybook/test/motion.ts";
 
@@ -25,4 +26,10 @@ Default.test("turns only when motion is allowed", async ({ canvas }) => {
   await expect(moves(canvas.getByRole("status"))).toBe(
     !matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: { children: "Synchronisation de 1 284 documents depuis Northwind Industries Holdings…" },
+  decorators: [withWidth("18rem")],
 });

@@ -2,6 +2,7 @@
 
 @layer ab.components {
   .region {
+    container-type: inline-size;
     position: fixed;
     inset: auto 0 var(--ab-toast-offset);
     inline-size: min(var(--ab-toast-width), 100% - 2 * var(--ab-space-inset-lg));
@@ -29,7 +30,7 @@
     grid-area: 1 / 1;
     align-self: end;
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr) fit-content(50%);
     grid-template-rows: minmax(var(--ab-toast-action-height), auto) auto;
     align-items: center;
     column-gap: var(--ab-toast-gap);
@@ -142,6 +143,7 @@
     margin-block-start: var(--ab-toast-body-gap);
     color: var(--ab-toast-description-text-color);
     font: var(--ab-toast-description-font);
+    overflow-wrap: anywhere;
     text-wrap: pretty;
   }
 
@@ -153,11 +155,20 @@
     margin-inline-end: calc(var(--ab-space-inset-xs) * -1);
   }
 
+  /* Enlarged text leaves the title no room beside the actions, so they move below the description.
+     Units in a container query resolve against the container's own font size. */
+  @container (inline-size < 15em) {
+    .actions {
+      grid-area: 3 / 2 / auto / 4;
+      justify-self: start;
+      margin-block-start: var(--ab-toast-body-gap);
+    }
+  }
+
   .action,
   .close {
     display: inline-flex;
     align-items: center;
-    block-size: var(--ab-toast-action-height);
     margin: 0;
     border: 0;
     border-radius: var(--ab-toast-action-border-radius);
@@ -173,8 +184,9 @@
     gap: var(--ab-toast-action-gap);
     padding-inline: var(--ab-toast-action-padding-inline);
     color: var(--ab-toast-action-text-color);
+    min-block-size: var(--ab-toast-action-height);
     font: var(--ab-toast-action-font);
-    white-space: nowrap;
+    text-align: start;
   }
 
   .kbd {
@@ -194,6 +206,7 @@
 
     justify-content: center;
     inline-size: var(--ab-toast-action-height);
+    block-size: var(--ab-toast-action-height);
     padding: 0;
     color: var(--ab-toast-close-icon-color);
   }

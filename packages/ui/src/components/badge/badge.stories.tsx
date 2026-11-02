@@ -4,6 +4,7 @@ import type { StoryContext } from "@storybook/react-vite";
 
 import { Link } from "@abereghici/ui/link";
 
+import { withRow } from "#.storybook/decorators/with-row.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { Badge } from "./badge.tsx";
@@ -64,4 +65,16 @@ export const InALink = meta.story({
 
 InALink.test("joins its owner's accessible name", async ({ canvas }) => {
   await expect(canvas.getByRole("link", { name: "Inbox 3" })).toBeVisible();
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  decorators: [withRow],
+  render: () => (
+    <>
+      <Badge>{1284}</Badge>
+      <Badge>{0}</Badge>
+      <Badge>Nouveau</Badge>
+    </>
+  ),
 });

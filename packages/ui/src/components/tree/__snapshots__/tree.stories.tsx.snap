@@ -26,3 +26,21 @@ exports[`Lazy Children   > base story 1`] = `
 - tree "Remotes":
   - treeitem "origin" [level=1]
 `;
+
+exports[`Worst Case 1`] = `
+- tree "Files":
+  - treeitem "northwind-industries-holdings" [level=1] [expanded]:
+    - text: northwind-industries-holdings
+    - group:
+      - treeitem "workspaces" [level=2] [expanded]:
+        - text: workspaces
+        - group:
+          - treeitem "1284" [level=3] [expanded]:
+            - text: "1284"
+            - group:
+              - treeitem "documents" [level=4] [expanded]:
+                - text: documents
+                - group:
+                  - treeitem "q3-2026-board-pack-final-revised-v12-with-appendices.pdf" [level=5]
+                  - treeitem "Datenschutzgrundverordnungsbeauftragte.docx" [level=5]
+`;

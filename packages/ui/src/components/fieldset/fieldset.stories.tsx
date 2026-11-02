@@ -3,6 +3,7 @@ import { expect } from "storybook/test";
 import { TextField } from "@abereghici/ui/text-field";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Fieldset from "./fieldset.tsx";
@@ -42,3 +43,23 @@ Default.test(
     await expect(new FormData(form).has("street")).toBe(false);
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <Fieldset.Legend>
+          Adresse de facturation et coordonnées fiscales de Northwind Industries Holdings
+        </Fieldset.Legend>
+        <TextField label="Rue" name="street" defaultValue="Aleja Jana Pawła II 1284, lokal 12" />
+        <TextField
+          label="Contact"
+          name="contact"
+          defaultValue="bartholomew.fitzgerald@northwind-industries-holdings.example.com"
+        />
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
+});

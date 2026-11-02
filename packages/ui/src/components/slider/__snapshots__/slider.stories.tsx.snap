@@ -10,3 +10,8 @@ exports[`Invalid   > base story 1`] = `
 - status: "40"
 - text: Keep the volume below 30 at night.
 `;
+
+exports[`Worst Case 1`] = `
+- slider "Volume": "9999999"
+- status: 9,999,999
+`;

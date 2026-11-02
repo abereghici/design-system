@@ -13,6 +13,7 @@ import * as ContextMenu from "./context-menu.tsx";
 
 const onOpenChange = fn<NonNullable<ContextMenu.RootProps["onOpenChange"]>>();
 const onDuplicate = fn<() => void>();
+const triggerArea = { padding: "2rem", border: "1px dashed" };
 
 const meta = preview.meta({
   title: "Components/ContextMenu",
@@ -22,7 +23,7 @@ const meta = preview.meta({
     onOpenChange,
     children: (
       <>
-        <ContextMenu.Trigger style={{ padding: "2rem", border: "1px dashed" }}>
+        <ContextMenu.Trigger style={triggerArea}>
           <Button variant="secondary">Report.pdf</Button>
         </ContextMenu.Trigger>
         <ContextMenu.Content aria-label="File actions">
@@ -184,6 +185,31 @@ export const Open = Default.extend({
   play: async ({ canvas }) => {
     const user = await trusted().catch(() => null);
 
-    await user?.click(canvas.getByRole("button", { name: "Report.pdf" }), { button: "right" });
+    await user?.click(canvas.getByRole("button"), { button: "right" });
   },
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <ContextMenu.Trigger style={triggerArea}>
+          <Button variant="secondary">q3-2026-board-pack-final-revised-v12.pdf</Button>
+        </ContextMenu.Trigger>
+        <ContextMenu.Content aria-label="File actions">
+          <ContextMenu.Item aria-keyshortcuts="Meta+Shift+D Control+Shift+D">
+            <CopyIcon />
+            Dupliquer vers l’espace de travail de Northwind Industries Holdings
+            <Kbd keys="mod+shift+d" aria-hidden />
+          </ContextMenu.Item>
+          <ContextMenu.Item variant="danger">
+            <TrashIcon />
+            Supprimer définitivement
+          </ContextMenu.Item>
+        </ContextMenu.Content>
+      </>
+    ),
+  },
+  play: Open.play,
 });

@@ -16,3 +16,9 @@ exports[`In A Search Landmark   > base story 1`] = `
 - searchbox "Search invoices"
 - button "Search"
 `;
+
+exports[`Worst Case 1`] = `
+- text: Rechercher dans les factures de Northwind Industries Holdings
+- searchbox "Rechercher dans les factures de Northwind Industries Holdings": bartholomew.fitzgerald@northwind-industries-holdings.example.com
+- button "Effacer la recherche"
+`;

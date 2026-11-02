@@ -9,6 +9,16 @@ exports[`Default   > base story 1`] = `
   - button "Reset"
 `;
 
+exports[`Empty 1`] = `
+- form "Profile":
+  - text: Assignee
+  - combobox "Assignee" [expanded]
+  - listbox "Assignee"
+  - status: Aucune personne ne correspond à cette recherche
+  - button "Save"
+  - button "Reset"
+`;
+
 exports[`Multiple   > base story 1`] = `
 - form "Profile":
   - text: Assignee
@@ -42,6 +52,37 @@ exports[`Server Search Results   > base story 1`] = `
 - form "Profile":
   - text: Repository
   - combobox "Repository"
+  - status
+  - button "Save"
+  - button "Reset"
+`;
+
+exports[`Worst Case 1`] = `
+- form "Profile":
+  - text: Assignee
+  - list "Assignee":
+    - listitem:
+      - text: Alexandru Bereghici
+      - button "Retirer Alexandru Bereghici"
+    - listitem:
+      - text: Aleksandra Wiśniewska-Kowalczyk
+      - button "Retirer Aleksandra Wiśniewska-Kowalczyk"
+    - listitem:
+      - text: bartholomew.fitzgerald@northwind-industries-holdings.example.com
+      - button "Retirer bartholomew.fitzgerald@northwind-industries-holdings.example.com"
+    - listitem:
+      - text: Jo
+      - button "Retirer Jo"
+    - listitem:
+      - text: Nguyễn Thị Ánh
+      - button "Retirer Nguyễn Thị Ánh"
+  - combobox "Assignee" [expanded]
+  - listbox "Assignee":
+    - option "Alexandru Bereghici" [selected]
+    - option "Aleksandra Wiśniewska-Kowalczyk" [selected]
+    - option "bartholomew.fitzgerald@northwind-industries-holdings.example.com" [selected]
+    - option "Jo" [selected]
+    - option "Nguyễn Thị Ánh" [selected]
   - status
   - button "Save"
   - button "Reset"

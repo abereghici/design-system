@@ -2,6 +2,8 @@ import { useState } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
+import { longRegions, manyRegions } from "#.storybook/fixtures/regions.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { turns } from "#.storybook/test/motion.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
@@ -324,4 +326,22 @@ Controlled.test("follows the value the app holds", async ({ canvas, userEvent })
   await expect(select).toHaveDisplayValue("Most recent");
   await userEvent.selectOptions(select, "name");
   await expect(select).toHaveDisplayValue("Name");
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    label: "Région de résidence des données pour Northwind Industries Holdings",
+    defaultValue: "ba",
+    children: longRegions,
+  },
+  decorators: [withWidth("18rem")],
+});
+
+export const Huge = meta.story({
+  tags: ["!autodocs", "!screenshot"],
+  parameters: { ariaSnapshot: { disable: true } },
+  args: {
+    children: manyRegions,
+  },
 });

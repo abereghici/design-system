@@ -123,3 +123,34 @@ Default.test(
     );
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    defaultOpen: true,
+    children: (
+      <>
+        <Sheet.Trigger asChild>
+          <Button>Open details</Button>
+        </Sheet.Trigger>
+        <Sheet.Content>
+          <Sheet.Title>Facture INV-2026-000001284 — Northwind Industries Holdings</Sheet.Title>
+          <Sheet.Description>
+            Émise le 3 octobre à bartholomew.fitzgerald@northwind-industries-holdings.example.com
+          </Sheet.Description>
+          <Sheet.Body>
+            <p>
+              https://files.northwind-industries-holdings.example.com/workspaces/1284/documents/q3-2026-board-pack-final-revised-v12.pdf
+            </p>
+          </Sheet.Body>
+          <Sheet.Footer>
+            <Sheet.Close asChild>
+              <Button variant="primary">Marquer comme traitée</Button>
+            </Sheet.Close>
+          </Sheet.Footer>
+          <Sheet.Close aria-label="Fermer" />
+        </Sheet.Content>
+      </>
+    ),
+  },
+});

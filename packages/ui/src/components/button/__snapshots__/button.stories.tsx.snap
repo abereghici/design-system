@@ -19,3 +19,7 @@ exports[`Loading   > base story 1`] = `
 exports[`Long Label 1`] = `
 - button "Save changes and notify everyone who follows this project"
 `;
+
+exports[`Worst Case 1`] = `
+- button "Datenschutzgrundverordnungsbeauftragte benachrichtigen"
+`;

@@ -9,6 +9,13 @@ exports[`Default   > base story 1`] = `
 exports[`With Files 1`] = `
 - text: Drop CSV files here, or
 - button "Choose files"
-- status: january.csv, february.csv
+- status "january.csv, february.csv"
+- button "Clear files"
+`;
+
+exports[`Worst Case 1`] = `
+- text: Drop CSV files here, or
+- button "Choose files"
+- status
 - button "Clear files"
 `;

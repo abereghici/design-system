@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { expect, fn, within } from "storybook/test";
 
+import { deepFolders } from "#.storybook/fixtures/folders.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { turns } from "#.storybook/test/motion.ts";
@@ -339,3 +340,5 @@ LazyChildren.test(
     await expect(origin).not.toHaveAttribute("aria-busy");
   },
 );
+
+export const WorstCase = meta.story({ tags: ["!autodocs"], args: deepFolders });

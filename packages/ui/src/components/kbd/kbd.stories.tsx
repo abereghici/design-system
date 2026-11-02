@@ -95,3 +95,8 @@ InAButton.test("leaves the button's name to its label", async ({ canvas }) => {
     "Meta+Enter Control+Enter",
   );
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: { keys: "mod+alt+shift+down" },
+});

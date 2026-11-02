@@ -3,6 +3,7 @@ import { expect } from "storybook/test";
 import { Checkbox } from "@abereghici/ui/checkbox";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Field from "./field.tsx";
@@ -210,3 +211,20 @@ Default.test(
     await expect(box).not.toHaveAttribute("aria-invalid");
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <Field.Label>
+          Identifiant public de l’espace de travail Northwind Industries Holdings
+        </Field.Label>
+        <Field.Control defaultValue="bartholomew.fitzgerald@northwind-industries-holdings.example.com" />
+        <Field.Description>Visible par les 1 284 membres de l’espace de travail.</Field.Description>
+        <Field.Error />
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
+});

@@ -4,3 +4,8 @@ exports[`Default   > base story 1`] = `
 - button "Copy invoice number"
 - status
 `;
+
+exports[`Worst Case 1`] = `
+- button "Copier le numéro de facture"
+- status
+`;

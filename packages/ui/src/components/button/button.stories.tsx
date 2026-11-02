@@ -5,6 +5,7 @@ import type { StoryContext } from "@storybook/react-vite";
 
 import { PlusIcon } from "@abereghici/ui/icons/plus";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -307,4 +308,10 @@ export const LongLabel = meta.story({
   parameters: {
     docs: { description: { story: "A long or translated label wraps on narrow screens." } },
   },
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: { children: "Datenschutzgrundverordnungsbeauftragte benachrichtigen" },
+  decorators: [withWidth("12rem")],
 });

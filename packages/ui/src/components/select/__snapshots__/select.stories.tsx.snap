@@ -23,3 +23,10 @@ exports[`Open 1`] = `
     - option "Japan"
     - option "Singapore"
 `;
+
+exports[`Worst Case 1`] = `
+- text: Région de résidence des données pour Northwind Industries Holdings
+- combobox "Région de résidence des données pour Northwind Industries Holdings":
+  - option "Bosnia and Herzegovina — Federation of Bosnia and Herzegovina (Sarajevo data centre)" [selected]
+  - option "Europe"
+`;

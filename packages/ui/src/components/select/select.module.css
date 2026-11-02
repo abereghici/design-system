@@ -53,6 +53,19 @@
       align-items: center;
     }
 
+    .trigger {
+      all: unset;
+      flex: 1;
+      min-inline-size: 0;
+    }
+
+    .value {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .select::picker-icon {
       display: none;
     }

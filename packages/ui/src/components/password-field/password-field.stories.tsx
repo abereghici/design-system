@@ -1,6 +1,7 @@
 import { expect, fn } from "storybook/test";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -128,3 +129,17 @@ Default.test(
     await expect(canvas.getByLabelText("Password")).toHaveAttribute("aria-disabled", "true");
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    label: "Mot de passe de l’administrateur de l’espace de travail",
+    description: "Au moins 12 caractères, dont un chiffre et un symbole.",
+    errorMessage:
+      "Ce mot de passe figure dans une fuite de données connue ; choisissez-en un autre.",
+    invalid: true,
+    defaultValue: "correct-horse-battery-staple-northwind-2026!",
+    toggleLabel: "Afficher le mot de passe",
+  },
+  decorators: [withWidth("18rem")],
+});

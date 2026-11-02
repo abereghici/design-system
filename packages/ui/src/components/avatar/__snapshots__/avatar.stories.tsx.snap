@@ -3,3 +3,13 @@
 exports[`Default   > base story 1`] = `
 - img "Alexandru Bereghici"
 `;
+
+exports[`Worst Case 1`] = `
+- img "Jo"
+- img "Charles Montgomery Burns III"
+- img "Aleksandra Wiśniewska-Kowalczyk"
+- img "🦊 Fox Mulder"
+- img "李小龙"
+- img "Nguyễn Thị Ánh"
+- img
+`;

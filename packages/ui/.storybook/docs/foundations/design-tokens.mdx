@@ -29,7 +29,7 @@ The palette and the scales: every color step, size, duration and easing the syst
 What a value is **for**: the page surface, secondary text, a danger border, the gap between fields. Semantic tokens are the only tier that changes with context:
 
 - **Theme.** Each themed color resolves to a different primitive in light and in dark.
-- **User settings.** Increased contrast, reduced transparency and reduced motion swap in other primitives.
+- **User settings.** Increased contrast swaps in the next stronger semantic color; reduced transparency and reduced motion swap in other primitives.
 - **Screen.** Control heights grow on touch screens, and section spacing shrinks on narrow windows.
 
 So code that uses a semantic token is right in every Theme and setting, with no extra work.

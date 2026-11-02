@@ -12,3 +12,8 @@ exports[`In Text 1`] = `
     - /url: "#token-guide"
   - text: first.
 `;
+
+exports[`Worst Case 1`] = `
+- link "https://files.northwind-industries-holdings.example.com/workspaces/1284/documents/q3-2026-board-pack-final-revised-v12.pdf":
+  - /url: "#board-pack"
+`;

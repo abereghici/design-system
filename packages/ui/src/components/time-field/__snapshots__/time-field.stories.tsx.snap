@@ -18,3 +18,10 @@ exports[`In A Form   > base story 1`] = `
   - button "Save"
   - button "Reset"
 `;
+
+exports[`Worst Case 1`] = `
+- text: วันที่ครบกำหนดชำระใบแจ้งหนี้ของ Northwind Industries Holdings
+- group "วันที่ครบกำหนดชำระใบแจ้งหนี้ของ Northwind Industries Holdings":
+  - spinbutton "ชั่วโมง"
+  - spinbutton "นาที"
+`;

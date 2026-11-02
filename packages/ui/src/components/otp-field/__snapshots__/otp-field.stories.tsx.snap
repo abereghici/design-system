@@ -14,3 +14,9 @@ exports[`Partly Entered   > base story 1`] = `
 - text: Verification code
 - textbox "Verification code": "48"
 `;
+
+exports[`Worst Case 1`] = `
+- text: Code de vérification envoyé au +33 6 12 34 56 78
+- textbox "Code de vérification envoyé au +33 6 12 34 56 78"
+- text: Ce code a expiré. Demandez-en un nouveau.
+`;

@@ -4,6 +4,7 @@ import { FilesIcon } from "@abereghici/ui/icons/files";
 import { LayersIcon } from "@abereghici/ui/icons/layers";
 import { MailIcon } from "@abereghici/ui/icons/mail";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
@@ -162,4 +163,30 @@ Collapsible.test("opens and folds a group from the keyboard", async ({ canvas, u
   await expect(canvas.getByRole("link", { name: "Billing" })).toBeVisible();
   await (await trusted()).keyboard("{Enter}");
   await expect(canvas.getByRole("link", { name: "Billing" })).not.toBeVisible();
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <Sidebar.Group label="Projets partagés avec Northwind Industries Holdings">
+        {[
+          "Q3 2026 board pack (final, revised)",
+          "UI",
+          "Datenschutzgrundverordnungsbeauftragte",
+          "Migration de l’entrepôt de données vers EU-West",
+        ].map((name, index) => (
+          <Sidebar.Item key={name}>
+            <Sidebar.Link
+              href={`#${index}`}
+              {...(index === 0 && { "aria-current": "page" as const })}
+            >
+              <FilesIcon /> {name}
+            </Sidebar.Link>
+          </Sidebar.Item>
+        ))}
+      </Sidebar.Group>
+    ),
+  },
+  decorators: [withWidth("16rem")],
 });

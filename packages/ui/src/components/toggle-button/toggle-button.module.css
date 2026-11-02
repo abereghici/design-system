@@ -105,6 +105,50 @@
     cursor: not-allowed;
   }
 
+  /* In a ToggleButtonGroup the buttons join into one shape: shared edges, rounded only at its ends.
+     The pressed or focused button draws its edge over its neighbours'. */
+  .root:where([data-grouped]) {
+    min-inline-size: 0;
+  }
+
+  .root:where([data-grouped]:not(:first-child)) {
+    margin-inline-start: calc(var(--ab-toggle-button-border-width) * -1);
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+  }
+
+  .root:where([data-grouped]:not(:last-child)) {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .root:where([data-grouped][aria-pressed="true"]) {
+    z-index: 1;
+  }
+
+  .root:where([data-grouped]):focus-visible {
+    z-index: 2;
+  }
+
+  /* Shrinking one joined button would open gaps at its seams; the pressed fill is the feedback. */
+  .root:where([data-grouped]:not([aria-disabled="true"])):active {
+    scale: none;
+  }
+
+  /* Quiet, as in a Toolbar: no edge or fill until pressed, and a group's buttons stand apart. */
+  @container style(--ab-toggle-button-appearance: quiet) {
+    .root {
+      --ab-toggle-button-border-color: transparent;
+      --ab-toggle-button-border-color-disabled: transparent;
+      --ab-toggle-button-background-color: transparent;
+    }
+
+    .root:where([data-grouped]) {
+      margin-inline-start: 0;
+      border-radius: var(--ab-toggle-button-border-radius);
+    }
+  }
+
   @media (forced-colors: active) {
     .root {
       border-color: ButtonText;

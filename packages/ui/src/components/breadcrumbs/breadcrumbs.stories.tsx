@@ -82,3 +82,27 @@ LongTrail.test("keeps every crumb's full name", async ({ canvas }) => {
     }),
   ).toBeVisible();
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <Breadcrumbs.Item>
+          <Breadcrumbs.Link href="#workspace">Northwind Industries Holdings</Breadcrumbs.Link>
+        </Breadcrumbs.Item>
+        <Breadcrumbs.Item>
+          <Breadcrumbs.Link href="#member">
+            bartholomew.fitzgerald@northwind-industries-holdings.example.com
+          </Breadcrumbs.Link>
+        </Breadcrumbs.Item>
+        <Breadcrumbs.Item>
+          <Breadcrumbs.Link href="#current" aria-current="page">
+            Datenschutzgrundverordnungsbeauftragte
+          </Breadcrumbs.Link>
+        </Breadcrumbs.Item>
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
+});

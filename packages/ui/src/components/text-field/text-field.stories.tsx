@@ -5,6 +5,7 @@ import { SearchIcon } from "@abereghici/ui/icons/search";
 import { Kbd } from "@abereghici/ui/kbd";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { trusted } from "#.storybook/test/trusted.ts";
 
@@ -305,4 +306,18 @@ export const Controlled = meta.story({
 Controlled.test("follows the value the app holds", async ({ canvas, userEvent }) => {
   await userEvent.type(canvas.getByRole("textbox", { name: "Name" }), "-Maria");
   await expect(canvas.getByRole("status")).toHaveTextContent("Hello, Ana-Maria");
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    label: "Adresse e-mail professionnelle de facturation (utilisée pour les relances)",
+    description:
+      "Nous envoyons les factures et les rappels de paiement à cette adresse ; elle doit appartenir à votre organisation.",
+    errorMessage:
+      "Saisissez une adresse e-mail valide, par exemple bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+    invalid: true,
+    defaultValue: "bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+  },
+  decorators: [withWidth("18rem")],
 });

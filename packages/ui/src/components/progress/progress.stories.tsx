@@ -1,5 +1,6 @@
 import { expect } from "storybook/test";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { moves } from "#.storybook/test/motion.ts";
 
@@ -77,3 +78,15 @@ Default.test(
     await expect(canvas.getByText("3")).toBeVisible();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    value: 1,
+    max: 1284,
+    label:
+      "Importing invoices from bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+    valueLabel: "1 of 1,284 files",
+  },
+  decorators: [withWidth("18rem")],
+});

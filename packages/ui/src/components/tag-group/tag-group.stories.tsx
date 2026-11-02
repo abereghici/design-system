@@ -2,6 +2,7 @@ import { useState } from "react";
 import { expect, fn } from "storybook/test";
 
 import { withInputBefore } from "#.storybook/decorators/with-input-before.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
@@ -13,6 +14,15 @@ const statuses: Readonly<Record<string, string>> = {
   review: "In review",
   live: "Live",
 };
+
+const longTags = [
+  "En attente de validation juridique",
+  "bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+  "Q3",
+  "Datenschutzgrundverordnung",
+  "Nguyễn Thị Ánh",
+  "Haute priorité",
+];
 
 const meta = preview.meta({
   title: "Components/TagGroup",
@@ -165,4 +175,21 @@ Controlled.test("follows the value the app holds", async ({ canvas, userEvent, a
   await userEvent.click(canvas.getByRole("button", { name: "Remove Draft" }));
   await expect(canvas.queryByText("Draft")).toBeNull();
   await expect(args.onValueChange).toHaveBeenCalledWith(["review"], expect.anything());
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    defaultValue: longTags,
+    children: (
+      <>
+        {longTags.map((name) => (
+          <TagGroup.Tag key={name} value={name}>
+            {name}
+          </TagGroup.Tag>
+        ))}
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
 });

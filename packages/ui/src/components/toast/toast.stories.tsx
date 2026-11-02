@@ -236,3 +236,14 @@ Default.test("keeps a danger toast for its longer default duration", async () =>
   await expect(title).toBeVisible();
   await gone("Couldn't sync");
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  beforeEach: showing({
+    title:
+      "Impossible de synchroniser « Northwind Industries Holdings — Q3 2026 board pack (final, revised) »",
+    description:
+      "Demandez l’accès en écriture à bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+    action: { label: "Réessayer la synchronisation", onClick: undo },
+  }),
+});

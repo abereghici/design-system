@@ -150,3 +150,10 @@ Default.test("marks an end date before the start date invalid", async ({ canvas 
   await user.keyboard("05{Tab}");
   await expect(await canvas.findByText("The end date is before the start date")).toBeVisible();
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: { label: "Période de séjour pour l’équipe de Northwind Industries Holdings" },
+  globals: { locale: "th-TH" },
+  decorators: [withWidth("18rem")],
+});

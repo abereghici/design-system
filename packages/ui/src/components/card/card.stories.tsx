@@ -145,3 +145,26 @@ Linked.test("keeps its footer actions clickable", async ({ canvas }) => {
 
   await expect(atCentre(share)).toBe(share);
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <Card.Header>
+          <Card.Title>
+            Northwind Industries Holdings — production API keys for the EU-West data residency
+            region
+          </Card.Title>
+          <Card.Description>
+            1 active · rotated by bartholomew.fitzgerald@northwind-industries-holdings.example.com
+          </Card.Description>
+        </Card.Header>
+        <Card.Footer>
+          <Button>Gérer les clés d’accès</Button>
+        </Card.Footer>
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
+});

@@ -9,3 +9,10 @@ exports[`Next To A Label 1`] = `
 - button "About billing cycles"
 - textbox "Billing cycle": Monthly
 `;
+
+exports[`Worst Case 1`] = `
+- button "About billing cycles" [expanded]
+- dialog "Cycle de facturation de Northwind Industries Holdings":
+  - heading "Cycle de facturation de Northwind Industries Holdings" [level=2]
+  - paragraph: Les factures sont envoyées le premier jour ouvré à bartholomew.fitzgerald@northwind-industries-holdings.example.com
+`;

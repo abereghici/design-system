@@ -53,5 +53,11 @@ export default defineConfig({
       files: ["src/internal/components/listbox/listbox.tsx"],
       rules: { "jsx-a11y/prefer-tag-over-role": "off" },
     },
+    {
+      // A select's first-child button is inert: not focusable, not clickable and hidden from
+      // assistive technology, so it isn't a control. The select is, and its label names it.
+      files: ["src/components/select/select-root.tsx"],
+      rules: { "jsx-a11y/control-has-associated-label": "off" },
+    },
   ],
 });

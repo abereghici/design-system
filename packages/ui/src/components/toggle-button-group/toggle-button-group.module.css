@@ -1,12 +1,8 @@
-@import "@abereghici/tokens/components/toggle-button-group.css";
-
 @layer ab.components {
   .root {
     display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--ab-toggle-button-group-gap);
     min-inline-size: 0;
+    max-inline-size: 100%;
     margin: 0;
     padding: 0;
     border: 0;

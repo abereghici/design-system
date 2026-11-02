@@ -1,10 +1,24 @@
 @import "@abereghici/tokens/components/toolbar.css";
 
 @layer ab.components {
+  /* ToggleButtons rest quiet here, as the IconButtons and tertiary Buttons beside them do. */
   .root {
+    --ab-toggle-button-appearance: quiet;
+
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--ab-toolbar-gap);
+    box-sizing: border-box;
+    max-inline-size: 100%;
+    padding: var(--ab-toolbar-padding);
+    border-radius: var(--ab-toolbar-border-radius);
+    background-color: var(--ab-toolbar-background-color);
+  }
+
+  @media (forced-colors: active) {
+    .root {
+      border: var(--ab-border-width-default) solid CanvasText;
+    }
   }
 }

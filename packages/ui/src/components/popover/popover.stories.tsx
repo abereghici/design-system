@@ -220,3 +220,27 @@ InitialFocus.test("focuses the field it names", async ({ canvas }) => {
   await user.keyboard("{Escape}");
   await waitFor(() => expect(canvas.getByRole("button", { name: "Rename" })).toHaveFocus());
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    defaultOpen: true,
+    children: (
+      <>
+        <Popover.Trigger asChild>
+          <Button variant="secondary">Filtres</Button>
+        </Popover.Trigger>
+        <Popover.Content>
+          <Popover.Title>
+            Filtres avancés pour les factures de Northwind Industries Holdings
+          </Popover.Title>
+          <Popover.Description>
+            Afficher uniquement les lignes assignées à
+            bartholomew.fitzgerald@northwind-industries-holdings.example.com
+          </Popover.Description>
+          <Popover.Close aria-label="Fermer" />
+        </Popover.Content>
+      </>
+    ),
+  },
+});

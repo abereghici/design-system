@@ -3,6 +3,7 @@ import { expect, fn } from "storybook/test";
 import { ToggleButton } from "@abereghici/ui/toggle-button";
 
 import { withToolbar } from "#.storybook/decorators/with-toolbar.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { ToggleButtonGroup } from "./toggle-button-group.tsx";
@@ -152,3 +153,18 @@ InAToolbar.test(
     await expect(document.body).toHaveFocus();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <ToggleButton value="bold">Gras</ToggleButton>
+        <ToggleButton value="italic">Italique</ToggleButton>
+        <ToggleButton value="underline">Souligné</ToggleButton>
+        <ToggleButton value="strike">Durchgestrichen</ToggleButton>
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
+});

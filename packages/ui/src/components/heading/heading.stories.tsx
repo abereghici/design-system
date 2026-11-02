@@ -2,6 +2,7 @@ import { expect } from "storybook/test";
 
 import type { Decorator } from "@storybook/react-vite";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { Heading } from "./heading.tsx";
@@ -38,3 +39,12 @@ Default.test(
     await expect(canvas.getByRole("region", { name: "Overdue invoices" })).toBeVisible();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    as: "h1" as const,
+    children: "Datenschutzgrundverordnungsbeauftragtenbestellung für Northwind Industries Holdings",
+  },
+  decorators: [withWidth("18rem")],
+});

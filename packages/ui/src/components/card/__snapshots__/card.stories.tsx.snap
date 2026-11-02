@@ -19,3 +19,9 @@ exports[`Linked   > base story 1`] = `
 - paragraph: Updated 2 hours ago
 - button "Share"
 `;
+
+exports[`Worst Case 1`] = `
+- heading "Northwind Industries Holdings — production API keys for the EU-West data residency region" [level=3]
+- paragraph: 1 active · rotated by bartholomew.fitzgerald@northwind-industries-holdings.example.com
+- button "Gérer les clés d’accès"
+`;

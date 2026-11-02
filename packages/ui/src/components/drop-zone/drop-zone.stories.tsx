@@ -6,6 +6,7 @@ import { Field } from "@abereghici/ui/field";
 import { FileTrigger } from "@abereghici/ui/file-trigger";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { pick } from "#.storybook/test/files.ts";
 
@@ -236,4 +237,25 @@ export const WithFiles = meta.story({
   play: ({ canvas }) => {
     drop(canvas.getByText("Drop CSV files here, or"), january, february);
   },
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  play: ({ canvas }) => {
+    drop(
+      canvas.getByText("Drop CSV files here, or"),
+      ...Array.from(
+        { length: 30 },
+        (_, index) =>
+          new File(
+            ["a,b"],
+            `Northwind Industries Holdings — Q3 2026 board pack (final, revised) v${index + 1}.csv`,
+            {
+              type: "text/csv",
+            },
+          ),
+      ),
+    );
+  },
+  decorators: [withWidth("18rem")],
 });

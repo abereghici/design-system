@@ -20,15 +20,15 @@ Components target **WCAG 2.2 Level AA** in both Themes. This page lists what the
 
 ## What is built in
 
-| WCAG criterion                          | How the system meets it                                                                                                                   |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| 1.4.3 Contrast (Minimum)                | Every text role is at least 4.5:1 on every background it may sit on; the token build fails otherwise                                      |
-| 1.4.11 Non-text Contrast                | Every icon and control-border role is at least 3:1; the token build fails otherwise                                                       |
-| 1.4.4 Resize Text                       | Font sizes are in `rem`, so text follows the reader's text size                                                                           |
-| 2.4.7 Focus Visible                     | The base styles draw a focus ring on every `:focus-visible` element                                                                       |
-| 2.5.8 Target Size (Minimum)             | The smallest control is <Value of="size-control-xs" />, the minimum of <Value of="size-target-min" />, and controls grow on touch screens |
-| 2.2.2 Pause, Stop, Hide                 | Only Spinner, Progress and Skeleton loop                                                                                                  |
-| 2.3.3 Animation from Interactions (AAA) | Reduced motion removes movement; see [Motion](?path=/docs/foundations-motion--docs)                                                       |
+| WCAG criterion                          | How the system meets it                                                                                                                                               |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.4.3 Contrast (Minimum)                | Every text role is at least 4.5:1 on every background it may sit on; the token build fails otherwise                                                                  |
+| 1.4.11 Non-text Contrast                | Every icon and control-border role is at least 3:1; the token build fails otherwise                                                                                   |
+| 1.4.4 Resize Text                       | Font sizes are in `rem`, so text follows the reader's text size                                                                                                       |
+| 2.4.7 Focus Visible                     | The base styles ring every `:focus-visible` element; where a component drops that ring, a field rings its box, a Card its surface, and the Command search its divider |
+| 2.5.8 Target Size (Minimum)             | The smallest control is <Value of="size-control-xs" />, the minimum of <Value of="size-target-min" />, and controls grow on touch screens                             |
+| 2.2.2 Pause, Stop, Hide                 | Only Spinner, Progress and Skeleton loop                                                                                                                              |
+| 2.3.3 Animation from Interactions (AAA) | Reduced motion removes movement; see [Motion](?path=/docs/foundations-motion--docs)                                                                                   |
 
 ## Focus
 

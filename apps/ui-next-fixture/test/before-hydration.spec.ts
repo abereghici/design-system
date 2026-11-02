@@ -1,5 +1,11 @@
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { AxeBuilder } from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+
+import type { Page } from "@playwright/test";
 
 import { fieldRoutes } from "./field-routes.ts";
 import { routes, serve } from "./static-export.ts";
@@ -8,7 +14,41 @@ test.beforeEach(async ({ context }) => {
   await serve(context);
 });
 
-test.describe("Tier 1 works with JavaScript off", () => {
+const componentsDir = fileURLToPath(new URL("..", import.meta.resolve("@abereghici/ui/button")));
+
+// Read from each component's TSDoc, so the docs and this suite can't disagree about a tier.
+const tier2 = routes.filter(
+  (route) =>
+    existsSync(join(componentsDir, route)) &&
+    readdirSync(join(componentsDir, route)).some(
+      (file) =>
+        /^[\w\-]+\.tsx?$/v.test(file) &&
+        readFileSync(join(componentsDir, route, file), "utf8").includes("Tier 2"),
+    ),
+);
+
+const blockScripts = async ({ page }: { page: Page }) => {
+  await page.route("**/*.js", (request) => request.abort());
+};
+
+// Before hydration, scripting is on but no script has run, so `(scripting: none)` does not match:
+// Tier 1 is proven there and with JavaScript off.
+function withoutScripts(title: string, body: (javaScriptEnabled: boolean) => void) {
+  for (const [state, javaScriptEnabled] of [
+    ["with JavaScript off", false],
+    ["before hydration", true],
+  ] as const) {
+    test.describe(`${state}, ${title}`, () => {
+      test.use({ javaScriptEnabled });
+
+      test.beforeEach(blockScripts);
+
+      body(javaScriptEnabled);
+    });
+  }
+}
+
+withoutScripts("Tier 1 works", () => {
   for (const [route, name, url] of [
     ["link", "Home", "/"],
     ["breadcrumbs", "Home", "/"],
@@ -103,7 +143,7 @@ test.describe("with JavaScript off, the server has rendered", () => {
   });
 });
 
-test.describe("with JavaScript off, ContextualHelp opens from its button", () => {
+withoutScripts("ContextualHelp opens from its button", () => {
   test("Escape and a press outside close it", async ({ page }) => {
     await page.goto("/contextual-help");
 
@@ -121,7 +161,7 @@ test.describe("with JavaScript off, ContextualHelp opens from its button", () =>
   });
 });
 
-test.describe("with JavaScript off, a <details> section opens and closes", () => {
+withoutScripts("a <details> section opens and closes", () => {
   for (const [route, summary, content] of [
     ["accordion", "Billing", "Invoices are sent monthly."],
     ["disclosure", "Advanced settings", "Retries stop after five attempts."],
@@ -140,7 +180,7 @@ test.describe("with JavaScript off, a <details> section opens and closes", () =>
   }
 });
 
-test.describe("with JavaScript off, a Field control is described by its description", () => {
+withoutScripts("a Field control is described by its description", () => {
   for (const [route, name, description] of [
     ["text-field", "Email", "We reply within a day."],
     ["text-area", "Message", "Grows with your text."],
@@ -154,8 +194,11 @@ test.describe("with JavaScript off, a Field control is described by its descript
   }
 });
 
-test.describe("with JavaScript off, a Field control submits its form", () => {
-  for (const [route, fill, url] of fieldRoutes) {
+withoutScripts("a Field control submits its form", (javaScriptEnabled) => {
+  // A Tier 2 control falls back to the native one only with JavaScript off.
+  for (const [route, fill, url] of fieldRoutes.filter(
+    ([name]) => !javaScriptEnabled || !tier2.includes(name),
+  )) {
     test(route, async ({ page }) => {
       await page.goto(`/${route}`);
       await fill(page);
@@ -164,8 +207,10 @@ test.describe("with JavaScript off, a Field control submits its form", () => {
       await expect(page).toHaveURL(url);
     });
   }
+});
 
-  // With JavaScript off, the native file input stands in for the trigger, named by its text.
+test.describe("with JavaScript off, the browser's file input submits its files", () => {
+  // The native file input stands in for the trigger, named by its text.
   for (const [route, trigger, file, url] of [
     ["file-trigger", "Choose image", "photo.png", "/file-trigger?avatar=photo.png"],
     ["drop-zone", "Choose files", "rates.csv", "/drop-zone?files=rates.csv"],
@@ -211,41 +256,39 @@ test.describe("with JavaScript off, a Slider", () => {
   });
 });
 
-const tier2 = [
-  "calendar",
-  "combobox",
-  "command",
-  "context-menu",
-  "copy-button",
-  "date-field",
-  "date-picker",
-  "date-range-picker",
-  "drop-zone",
-  "dropdown-menu",
-  "number-field",
-  "password-field",
-  "range-calendar",
-  "search-field",
-  "splitter",
-  "table",
-  "tabs",
-  "tag-group",
-  "time-field",
-  "toast",
-  "toaster",
-  "toggle-button",
-  "toggle-button-group",
-  "toolbar",
-  "tooltip",
-  "tree",
-];
+const boxes = (page: Page) =>
+  page.getByRole("main").evaluate((main) =>
+    [...main.querySelectorAll("*")]
+      .filter((element) => element.checkVisibility())
+      .map((element) => element.getBoundingClientRect())
+      // An empty box moves nothing.
+      .filter(({ width, height }) => width * height > 0)
+      .map(({ x, y, width, height }) => `${x} ${y} ${width} ${height}`),
+  );
 
 test.describe("Tier 2 before hydration", () => {
   test.use({ javaScriptEnabled: true });
+  test.beforeEach(blockScripts);
+
+  for (const [route, fill, url] of [
+    [
+      "combobox",
+      (page: Page) => page.getByRole("combobox", { name: "Assignee" }).fill("Erik"),
+      "/combobox?assignee=Erik&reviewers=ab&reviewers=eh",
+    ],
+    ["number-field", async () => {}, "/number-field?seats=5"],
+  ] as const) {
+    test(`${route}: submits what the server rendered`, async ({ page }) => {
+      await page.goto(`/${route}`);
+      await fill(page);
+      await page.getByRole("button", { name: "Submit" }).click();
+
+      await expect(page).toHaveURL(url);
+    });
+  }
 
   for (const route of tier2) {
     test(`${route}: renders what hydration renders, and passes axe`, async ({ page, context }) => {
-      await page.route("**/*.js", (request) => request.abort());
       await page.goto(`/${route}`);
 
       const hydrated = await context.newPage();
@@ -257,6 +300,7 @@ test.describe("Tier 2 before hydration", () => {
       expect(await hydrated.getByRole("main").ariaSnapshot()).toBe(
         await page.getByRole("main").ariaSnapshot(),
       );
+      expect(await boxes(hydrated)).toEqual(await boxes(page));
       expect((await new AxeBuilder({ page }).include("body").analyze()).violations).toEqual([]);
     });
   }

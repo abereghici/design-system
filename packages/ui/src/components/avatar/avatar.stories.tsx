@@ -3,6 +3,7 @@ import { hydrateRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import { expect, fn, isInaccessible, waitFor, within } from "storybook/test";
 
+import { withRow } from "#.storybook/decorators/with-row.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Avatar from "./avatar.tsx";
@@ -145,6 +146,22 @@ Initials.test(
   },
 );
 
+Initials.test(
+  "skips a generational suffix",
+  { args: { children: <Avatar.Fallback name="Charles Montgomery Burns III" /> } },
+  async ({ canvas }) => {
+    await expect(canvas.getByText("CB")).toBeVisible();
+  },
+);
+
+Initials.test(
+  "skips a word that starts with an emoji",
+  { args: { children: <Avatar.Fallback name="🦊 Fox Mulder" /> } },
+  async ({ canvas }) => {
+    await expect(canvas.getByText("FM")).toBeVisible();
+  },
+);
+
 Initials.test("is not announced", async ({ canvas }) => {
   await expect(isInaccessible(canvas.getByText("AP"))).toBe(true);
 });
@@ -156,4 +173,27 @@ export const Anonymous = meta.story({
     ariaSnapshot: { disable: true },
     docs: { description: { story: "Without a name, the Fallback shows a generic person glyph." } },
   },
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  decorators: [withRow],
+  render: () => (
+    <>
+      {[
+        "Jo",
+        "Charles Montgomery Burns III",
+        "Aleksandra Wiśniewska-Kowalczyk",
+        "🦊 Fox Mulder",
+        "李小龙",
+        "Nguyễn Thị Ánh",
+        "   ",
+      ].map((name) => (
+        <Avatar.Root key={name}>
+          <Avatar.Image src={broken} alt={name.trim() || "Unnamed member"} />
+          <Avatar.Fallback name={name} />
+        </Avatar.Root>
+      ))}
+    </>
+  ),
 });

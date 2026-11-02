@@ -19,3 +19,12 @@ exports[`Linked   > base story 1`] = `
   - listitem: Payment
   - listitem: Review
 `;
+
+exports[`Worst Case 1`] = `
+- list "Checkout":
+  - listitem: Informations sur l’entreprise Terminé
+  - listitem: Adresse de facturation et coordonnées fiscales
+  - listitem: Moyen de paiement
+  - listitem: Vérification
+  - listitem: Confirmation
+`;

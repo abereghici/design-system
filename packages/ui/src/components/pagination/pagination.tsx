@@ -22,7 +22,10 @@ export type PaginationProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-l
     previousLabel: string;
     /** The name of the Next button, such as "Next page": it shows only an icon. */
     nextLabel: string;
-    /** A page link's name, given its number ("Page 3"); without it the number names it. */
+    /**
+     * A page link's name, given its number ("Page 1,284"); without it the number names it. Format
+     * the number in your locale, as the link shows it, so speech users can say what they see.
+     */
     getPageLabel?: (page: number) => string;
   };
 

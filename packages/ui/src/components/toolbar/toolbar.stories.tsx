@@ -203,3 +203,22 @@ Default.test(
     await expect(canvas.getByRole("button", { name: "Copy link" })).toHaveFocus();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <ToggleButton value="pin" aria-label="Épingler">
+          <PinIcon />
+        </ToggleButton>
+        <IconButton aria-label="Copier le lien">
+          <CopyIcon />
+        </IconButton>
+        <Button variant="tertiary">Télécharger le rapport</Button>
+        <Separator orientation="vertical" />
+        <Button variant="tertiary">Partager avec l’équipe</Button>
+      </>
+    ),
+  },
+});

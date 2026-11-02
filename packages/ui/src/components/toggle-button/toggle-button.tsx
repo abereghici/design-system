@@ -87,6 +87,7 @@ export function ToggleButton({
       type="button"
       aria-pressed={current}
       data-size={size}
+      data-grouped={group === null ? undefined : ""}
       data-icon-only={
         props["aria-label"] === undefined && props["aria-labelledby"] === undefined ? undefined : ""
       }

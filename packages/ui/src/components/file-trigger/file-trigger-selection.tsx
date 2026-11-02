@@ -12,10 +12,14 @@ interface SelectionProps {
 
 /** The chosen file names, announced as they change, and, with a `clearLabel`, the Clear IconButton while files are chosen. */
 export function Selection({ names, clearLabel, disabled, onClear }: SelectionProps) {
+  const text = names.join(", ");
+
   return (
     <span className={styles["selection"]}>
       {/* Always rendered: a live region must exist before its text changes: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions */}
-      <output className={styles["names"]}>{names.join(", ")}</output>
+      <output className={styles["names"]} title={text}>
+        {text}
+      </output>
       {names.length > 0 && clearLabel !== undefined && (
         <IconButton size="sm" aria-label={clearLabel} disabled={disabled} onClick={onClear}>
           <XIcon />

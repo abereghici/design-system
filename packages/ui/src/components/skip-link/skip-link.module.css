@@ -5,6 +5,8 @@
     position: fixed;
     inset-block-start: var(--ab-skip-link-offset);
     inset-inline-start: var(--ab-skip-link-offset);
+    /* The same gap at its end, so a long label wraps before its focus ring meets the edge. */
+    max-inline-size: calc(100% - 2 * var(--ab-skip-link-offset));
     z-index: var(--ab-z-index-tooltip);
     padding-block: var(--ab-skip-link-padding-block);
     padding-inline: var(--ab-skip-link-padding-inline);

@@ -1,6 +1,7 @@
 import { expect, fn } from "storybook/test";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { TextArea } from "./text-area.tsx";
@@ -92,3 +93,18 @@ Default.test(
     await expect(new FormData(form).get("message")).toBe("Draft");
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    label: "Adresse e-mail professionnelle de facturation (utilisée pour les relances)",
+    description:
+      "Nous envoyons les factures et les rappels de paiement à cette adresse ; elle doit appartenir à votre organisation.",
+    errorMessage:
+      "Saisissez une adresse e-mail valide, par exemple bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+    invalid: true,
+    defaultValue:
+      "Please forward https://files.northwind-industries-holdings.example.com/workspaces/1284/documents/q3-2026-board-pack-final-revised-v12.pdf to the board before Friday.",
+  },
+  decorators: [withWidth("18rem")],
+});

@@ -306,7 +306,7 @@
   },
   {
     "name": "toggle-button-group",
-    "tokens": ["toggle-button", "toggle-button-group"],
+    "tokens": ["toggle-button"],
     "client": [
       "components/toggle-button-group/toggle-button-group",
       "components/toggle-button/toggle-button"

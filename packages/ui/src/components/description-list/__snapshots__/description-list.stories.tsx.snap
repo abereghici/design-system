@@ -17,3 +17,10 @@ exports[`Narrow 1`] = `
 - term: Shipping address
 - definition: Strada Lipscani 23, Bucharest
 `;
+
+exports[`Worst Case 1`] = `
+- term: Contact de facturation principal
+- definition: bartholomew.fitzgerald@northwind-industries-holdings.example.com
+- term: Montant
+- definition: €1,284,567.89
+`;

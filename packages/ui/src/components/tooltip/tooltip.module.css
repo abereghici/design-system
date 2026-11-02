@@ -29,6 +29,7 @@
     background-color: var(--ab-tooltip-background-color);
     color: var(--ab-tooltip-text-color);
     font: var(--ab-tooltip-font);
+    overflow-wrap: anywhere;
     text-wrap: pretty;
     opacity: 0;
     visibility: hidden;

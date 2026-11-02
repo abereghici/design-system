@@ -2,6 +2,7 @@ import { expect, fn, screen, waitFor } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
 import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { confirmComposition } from "#.storybook/test/trusted.ts";
 
@@ -297,3 +298,10 @@ InAForm.test(
     await expect(submitted).not.toHaveBeenCalled();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: { label: "วันที่ครบกำหนดชำระใบแจ้งหนี้ของ Northwind Industries Holdings" },
+  globals: { locale: "th-TH" },
+  decorators: [withWidth("18rem")],
+});

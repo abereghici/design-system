@@ -22,3 +22,25 @@ exports[`Default   > base story 1`] = `
     - text: Live
     - button "Remove Live"
 `;
+
+exports[`Worst Case 1`] = `
+- list "Filters":
+  - listitem:
+    - text: En attente de validation juridique
+    - button "Remove En attente de validation juridique"
+  - listitem:
+    - text: bartholomew.fitzgerald@northwind-industries-holdings.example.com
+    - button "Remove bartholomew.fitzgerald@northwind-industries-holdings.example.com"
+  - listitem:
+    - text: Q3
+    - button "Remove Q3"
+  - listitem:
+    - text: Datenschutzgrundverordnung
+    - button "Remove Datenschutzgrundverordnung"
+  - listitem:
+    - text: Nguyễn Thị Ánh
+    - button "Remove Nguyễn Thị Ánh"
+  - listitem:
+    - text: Haute priorité
+    - button "Remove Haute priorité"
+`;

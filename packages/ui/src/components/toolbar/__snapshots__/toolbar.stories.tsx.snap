@@ -8,3 +8,12 @@ exports[`Default   > base story 1`] = `
   - separator
   - button "Share"
 `;
+
+exports[`Worst Case 1`] = `
+- toolbar "Report":
+  - button "Épingler"
+  - button "Copier le lien"
+  - button "Télécharger le rapport"
+  - separator
+  - button "Partager avec l’équipe"
+`;

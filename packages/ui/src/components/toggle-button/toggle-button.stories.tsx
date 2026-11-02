@@ -2,6 +2,7 @@ import { expect, fn } from "storybook/test";
 
 import { PinIcon } from "@abereghici/ui/icons/pin";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -103,4 +104,10 @@ export const IconOnly = meta.story({
 IconOnly.test("is named by its aria-label and turns on and off", async ({ canvas, userEvent }) => {
   await userEvent.click(canvas.getByRole("button", { name: "Pin", pressed: false }));
   await expect(canvas.getByRole("button", { name: "Pin", pressed: true })).toBeVisible();
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: { children: "Afficher les éléments archivés de Northwind Industries Holdings" },
+  decorators: [withWidth("18rem")],
 });

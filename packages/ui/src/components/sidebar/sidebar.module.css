@@ -56,6 +56,7 @@
     padding-inline: var(--ab-sidebar-item-padding-inline);
     border-radius: var(--ab-sidebar-item-border-radius);
     font: var(--ab-sidebar-item-font);
+    overflow-wrap: anywhere;
     color: var(--ab-sidebar-item-text-color);
     text-decoration-line: none;
     -webkit-tap-highlight-color: transparent;

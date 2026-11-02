@@ -3,3 +3,7 @@
 exports[`Default   > base story 1`] = `
 - paragraph: Invoices are sent on the first working day of the month.
 `;
+
+exports[`Worst Case 1`] = `
+- paragraph: Send questions to bartholomew.fitzgerald@northwind-industries-holdings.example.com or see https://files.northwind-industries-holdings.example.com/workspaces/1284/documents/q3-2026-board-pack-final-revised-v12.pdf
+`;

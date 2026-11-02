@@ -4,3 +4,8 @@ exports[`Default   > base story 1`] = `
 - text: Uploading 3 files 40%
 - progressbar "Uploading 3 files"
 `;
+
+exports[`Worst Case 1`] = `
+- text: Importing invoices from bartholomew.fitzgerald@northwind-industries-holdings.example.com 1 of 1,284 files
+- progressbar "Importing invoices from bartholomew.fitzgerald@northwind-industries-holdings.example.com"
+`;

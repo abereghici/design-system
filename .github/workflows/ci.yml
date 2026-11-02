@@ -19,7 +19,7 @@ jobs:
         with:
           require-lockfile: true
           cache: true
-      - run: pnpm --filter @abereghici/ui exec playwright install --with-deps --only-shell chromium
+      - run: pnpm --filter @abereghici/ui exec playwright install --with-deps chromium firefox webkit
       - run: pnpm lint
       - run: pnpm format
       - run: pnpm check-types

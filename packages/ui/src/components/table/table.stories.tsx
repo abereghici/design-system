@@ -31,9 +31,9 @@ const columns = (invoice: ReactNode = "Invoice", sort?: "ascending") => (
   </Table.Header>
 );
 
-const body = (
+const rowsOf = (rows: readonly (typeof invoices)[number][]) => (
   <Table.Body>
-    {invoices.map((invoice) => (
+    {rows.map((invoice) => (
       <Table.Row key={invoice.id}>
         <Table.RowHeader>{invoice.id}</Table.RowHeader>
         <Table.Cell>{invoice.status}</Table.Cell>
@@ -46,6 +46,8 @@ const body = (
   </Table.Body>
 );
 
+const body = rowsOf(invoices);
+
 const captioned = (rows: ReactNode, captionId?: string, head: ReactNode = columns()) => (
   <>
     <Table.Caption id={captionId}>Invoices, 2026</Table.Caption>
@@ -57,6 +59,24 @@ const captioned = (rows: ReactNode, captionId?: string, head: ReactNode = column
 const cancel = (_keys: unknown, details: { cancel: () => void }) => {
   details.cancel();
 };
+
+const paid = { status: "Paid", date: "2026-01-05", amount: "€250.00" };
+
+const longRows = [
+  {
+    id: "INV-2026-000001284",
+    status: "En attente de validation par le service juridique",
+    date: "2026-12-31",
+    amount: "€1,284,567.89",
+  },
+  { ...paid, id: "INV-7", amount: "€0.00" },
+  {
+    id: "bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+    status: "Overdue",
+    date: "2026-03-05",
+    amount: "€74.10",
+  },
+];
 
 const meta = preview.meta({
   title: "Components/Table",
@@ -293,6 +313,21 @@ export const Empty = meta.story({
           </EmptyState.Root>
         </Table.Empty>
       </Table.Body>,
+    ),
+  },
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: { children: captioned(rowsOf(longRows)) },
+});
+
+export const Huge = meta.story({
+  tags: ["!autodocs", "!screenshot"],
+  parameters: { ariaSnapshot: { disable: true } },
+  args: {
+    children: captioned(
+      rowsOf(Array.from({ length: 1000 }, (_, index) => ({ ...paid, id: `INV-${index + 1}` }))),
     ),
   },
 });

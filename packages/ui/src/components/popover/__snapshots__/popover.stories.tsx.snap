@@ -15,3 +15,12 @@ exports[`Initial Focus   > base story 1`] = `
 - button "Rename"
 - button "After"
 `;
+
+exports[`Worst Case 1`] = `
+- button "Filtres" [expanded]
+- dialog "Filtres avancés pour les factures de Northwind Industries Holdings":
+  - heading "Filtres avancés pour les factures de Northwind Industries Holdings" [level=2]
+  - paragraph: Afficher uniquement les lignes assignées à bartholomew.fitzgerald@northwind-industries-holdings.example.com
+  - button "Fermer"
+- button "After"
+`;

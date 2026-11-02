@@ -5,6 +5,7 @@ import { Field } from "@abereghici/ui/field";
 import { PlusIcon } from "@abereghici/ui/icons/plus";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { pick } from "#.storybook/test/files.ts";
 
@@ -205,3 +206,23 @@ InAField.test(
     await expect(trigger).not.toHaveAttribute("aria-invalid");
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  decorators: [withWidth("18rem")],
+  play: ({ canvasElement }) => {
+    pick(
+      canvasElement,
+      ...["v12", "v13"].map(
+        (version) =>
+          new File(
+            ["png"],
+            `Northwind Industries Holdings — Q3 2026 board pack (final, revised) ${version}.png`,
+            {
+              type: "image/png",
+            },
+          ),
+      ),
+    );
+  },
+});

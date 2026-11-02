@@ -12,4 +12,12 @@ export default defineConfig({
   expect: { timeout: 15_000 },
   // Nothing listens on this origin: the spec answers every request from the static export.
   use: { baseURL: "http://fixture.test", javaScriptEnabled: false },
+  projects: [
+    { name: "chromium", testIgnore: "hydration.spec.ts" },
+    // Full Chromium, not the headless shell: only it parses customizable select's markup, which the
+    // browser fills in before React hydrates. Firefox and WebKit show the system select instead.
+    { name: "hydration-chromium", testMatch: "hydration.spec.ts", use: { channel: "chromium" } },
+    { name: "hydration-firefox", testMatch: "hydration.spec.ts", use: { browserName: "firefox" } },
+    { name: "hydration-webkit", testMatch: "hydration.spec.ts", use: { browserName: "webkit" } },
+  ],
 });

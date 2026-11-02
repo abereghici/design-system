@@ -4,3 +4,8 @@ exports[`Default   > base story 1`] = `
 - switch "Sound"
 - text: Sound
 `;
+
+exports[`Worst Case 1`] = `
+- switch "Envoyer un e-mail à bartholomew.fitzgerald@northwind-industries-holdings.example.com quand quelqu’un me mentionne"
+- text: Envoyer un e-mail à bartholomew.fitzgerald@northwind-industries-holdings.example.com quand quelqu’un me mentionne
+`;

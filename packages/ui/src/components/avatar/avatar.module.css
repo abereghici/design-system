@@ -7,9 +7,11 @@
     grid-template: 100% / 100%;
     flex-shrink: 0;
     vertical-align: middle;
+    container-type: size;
     inline-size: var(--ab-avatar-md-size);
     block-size: var(--ab-avatar-md-size);
     overflow: clip;
+    font: var(--ab-avatar-font);
     border-radius: var(--ab-avatar-border-radius);
     background-color: var(--ab-avatar-background-color);
   }
@@ -17,6 +19,7 @@
   .root[data-size="sm"] {
     inline-size: var(--ab-avatar-sm-size);
     block-size: var(--ab-avatar-sm-size);
+    font: var(--ab-avatar-sm-font);
   }
 
   .image,
@@ -43,7 +46,9 @@
     display: grid;
     place-items: center;
     color: var(--ab-avatar-text-color);
-    font: var(--ab-avatar-font);
+    /* The circle keeps its size as text grows, so the initials stop growing at half its width. */
+    font-size: min(1em, 50cqi);
+    white-space: nowrap;
     text-transform: uppercase;
     /* Hidden only once the image has faded in over it. */
     transition: visibility 0s var(--ab-motion-duration-swap);
@@ -51,8 +56,6 @@
 
   .root[data-size="sm"] > .fallback {
     --ab-icon-size: var(--ab-avatar-sm-icon-size);
-
-    font: var(--ab-avatar-sm-font);
   }
 
   .root:has(> .image:not([data-loading], [data-error])) > .fallback {
