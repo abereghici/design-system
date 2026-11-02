@@ -1,12 +1,17 @@
 @import "@abereghici/tokens/components/toggle-button.css";
 
 @layer ab.components {
+  /* Contains its touch target, at no specificity so a part that places the button keeps its own
+     position. */
+  :where(.root) {
+    position: relative;
+  }
+
   .root {
     --ab-icon-size: var(--ab-toggle-button-icon-size);
     --ab-icon-stroke-width: var(--ab-stroke-width-lg);
     --ab-icon-color: var(--ab-toggle-button-icon-color);
 
-    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;

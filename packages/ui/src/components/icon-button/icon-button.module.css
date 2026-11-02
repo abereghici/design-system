@@ -1,12 +1,17 @@
 @import "@abereghici/tokens/components/icon-button.css";
 
 @layer ab.components {
+  /* Contains its touch target, at no specificity so a part that places the button keeps its own
+     position. */
+  :where(.root) {
+    position: relative;
+  }
+
   .root {
     --ab-icon-size: var(--ab-icon-button-icon-size);
     --ab-icon-stroke-width: var(--ab-stroke-width-lg);
     --ab-spinner-color: currentColor;
 
-    position: relative;
     display: inline-grid;
     place-items: center;
     flex-shrink: 0;
