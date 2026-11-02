@@ -1,6 +1,6 @@
 {
   "name": "@abereghici/tokens",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Design tokens as CSS custom properties, and fonts, for the Bereghici Design System.",
   "keywords": [
     "css-custom-properties",
