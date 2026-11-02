@@ -66,7 +66,9 @@ test.describe("Tier 1 works with JavaScript off", () => {
 });
 
 test.describe("with JavaScript off, the server has rendered", () => {
-  test("the root layout's language, and its direction from getDirection", async ({ page }) => {
+  test("the root layout's language, and its text direction from getTextDirection", async ({
+    page,
+  }) => {
     await page.goto("/");
 
     await expect(page.locator("html")).toHaveAttribute("lang", "ro-RO");

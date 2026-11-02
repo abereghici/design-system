@@ -37,20 +37,28 @@
     "#.storybook/*": "./.storybook/*"
   },
   "exports": {
-    "./*": "./src/*/index.ts",
-    "./internal/*": null,
-    "./icons/*": "./src/icon/icons/*.tsx"
+    "./*": "./src/components/*/index.ts",
+    "./feedback-event": "./src/feedback-event/index.ts",
+    "./text-direction": "./src/text-direction/index.ts",
+    "./icons/*": "./src/components/icon/icons/*.tsx"
   },
   "publishConfig": {
     "exports": {
       "./*": {
-        "types": "./dist/*/index.d.ts",
-        "default": "./dist/*/index.js"
+        "types": "./dist/components/*/index.d.ts",
+        "default": "./dist/components/*/index.js"
       },
-      "./internal/*": null,
+      "./feedback-event": {
+        "types": "./dist/feedback-event/index.d.ts",
+        "default": "./dist/feedback-event/index.js"
+      },
+      "./text-direction": {
+        "types": "./dist/text-direction/index.d.ts",
+        "default": "./dist/text-direction/index.js"
+      },
       "./icons/*": {
-        "types": "./dist/icon/icons/*.d.ts",
-        "default": "./dist/icon/icons/*.js"
+        "types": "./dist/components/icon/icons/*.d.ts",
+        "default": "./dist/components/icon/icons/*.js"
       }
     },
     "access": "public"
@@ -61,7 +69,6 @@
     "build-storybook": "storybook build",
     "check-types": "tsc && tsc -p scripts",
     "lint": "oxlint",
-    "lint:fix": "oxlint --fix",
     "size": "size-limit",
     "test": "vitest run --project \"!screenshot:*\"",
     "test:watch": "vitest --project \"!screenshot:*\"",

@@ -4,12 +4,14 @@ import { describe, expect, test } from "vitest";
 
 import { generateGlyphs } from "./generate-icons.ts";
 
-const root = new URL("../", import.meta.url);
+const root = new URL("..", import.meta.url);
 
 async function committedGeneratedFiles() {
-  const paths = (await readdir(new URL("src/icon/icons/", root), { withFileTypes: true }))
+  const paths = (
+    await readdir(new URL("src/components/icon/icons/", root), { withFileTypes: true })
+  )
     .filter((entry) => entry.isFile())
-    .map(({ name }) => `src/icon/icons/${name}`);
+    .map(({ name }) => `src/components/icon/icons/${name}`);
 
   return new Map(
     await Promise.all(

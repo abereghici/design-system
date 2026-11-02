@@ -1,0 +1,71 @@
+"use client";
+
+import "@abereghici/tokens/components/switch.css";
+
+import { useId } from "react";
+import type { ComponentProps } from "react";
+
+import { pointerMarker } from "../../internal/interactions/pointer-marker.ts";
+import { toggleClick } from "../../internal/interactions/toggle-click.ts";
+import type { ChangeEventDetails as Details } from "../../internal/state/change-request.ts";
+import type { Labelled } from "../../internal/types/accessible-name.ts";
+import { mergeProps } from "../../internal/utils/merge-props.ts";
+import { useFieldControl } from "../field/use-field.ts";
+
+import styles from "./switch.module.css";
+
+/** `cancel()`: keeps the previous state: the browser restores it once the click is cancelled. */
+export type SwitchChangeEventDetails = Details<"none">;
+
+export type SwitchProps = Omit<ComponentProps<"input">, "type" | "role" | "children"> &
+  Labelled<"children"> & {
+    /** Called before the switch flips; `details.cancel()` keeps the old state. */
+    onCheckedChange?: (checked: boolean, details: SwitchChangeEventDetails) => void;
+    /**
+     * Blocks interaction but keeps it focusable and announced, so everyone can still find it; say
+     * nearby why it is unavailable.
+     */
+    disabled?: boolean;
+  };
+
+/**
+ * An on/off setting that takes effect at once, such as notifications. Its children are its label,
+ * which names the setting, never the state. Every change dispatches a bubbling `ab-toggle`. Inside a
+ * form that needs Save, use Checkbox.
+ *
+ * Tier 1: works before hydration.
+ */
+export function Switch({
+  children,
+  onCheckedChange,
+  className,
+  style,
+  onClick,
+  ...props
+}: SwitchProps) {
+  const fallbackId = useId();
+  const bindings = useFieldControl<HTMLInputElement, ComponentProps<"input">>(props);
+
+  return (
+    <label
+      {...pointerMarker}
+      htmlFor={bindings.id ?? fallbackId}
+      {...mergeProps({ className: styles["root"] }, { className, style })}
+    >
+      <input
+        {...bindings}
+        id={bindings.id ?? fallbackId}
+        type="checkbox"
+        role="switch"
+        className={styles["track"]}
+        onClick={toggleClick(
+          "Switch",
+          bindings["aria-disabled"] === true,
+          onClick,
+          onCheckedChange,
+        )}
+      />
+      {children}
+    </label>
+  );
+}

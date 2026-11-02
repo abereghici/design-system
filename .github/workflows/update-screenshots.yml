@@ -26,7 +26,7 @@ jobs:
           cache: true
       - run: find packages/ui/src apps/ui-next-fixture/test -name __screenshots__ -prune -exec rm -rf {} +
       # Vitest and Playwright both read -u as "update the baselines".
-      - run: pnpm turbo run test:screenshots --filter=@abereghici/ui --filter=@repo/ui-next-fixture -- -u
+      - run: pnpm turbo run test:screenshots -- -u
       - run: |
           # The container's user doesn't own the checkout, so git refuses it: https://github.com/actions/checkout/issues/760
           git config --global --add safe.directory "$GITHUB_WORKSPACE"

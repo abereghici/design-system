@@ -2,9 +2,6 @@
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "tui",
   "tasks": {
-    "transit": {
-      "dependsOn": ["^transit"]
-    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "!.next/dev/**", "out/**"]
@@ -14,19 +11,26 @@
       "outputs": ["storybook-static/**"]
     },
     "check-types": {
-      "dependsOn": ["transit"]
+      "dependsOn": ["^build"]
     },
     "lint": {
-      "dependsOn": ["transit"]
+      "dependsOn": ["^build"]
     },
-    "lint:fix": {
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "size": {
+      "dependsOn": ["^build"]
+    },
+    "test:packed": {
+      "dependsOn": ["^build"],
       "cache": false
     },
-    "test": {},
-    "size": {},
-    "//#lint:root": {},
-    "//#lint:root:fix": {
+    "test:screenshots": {
+      "dependsOn": ["^build"],
+      "passThroughEnv": ["PLAYWRIGHT_BROWSERS_PATH"],
       "cache": false
-    }
+    },
+    "//#lint:root": {}
   }
 }

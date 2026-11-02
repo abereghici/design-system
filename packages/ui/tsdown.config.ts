@@ -9,7 +9,8 @@ import type { Plugin } from "rolldown";
 
 const compiler = reactCompilerPreset({ panicThreshold: "all_errors" });
 
-// Server Components can't run compiled code, so only client modules are compiled, as Vite does for its client environment.
+// Server Components render once per request, so memoizing them only adds code: compile client modules only, as
+// reactCompilerPreset does in Vite, where it applies to the client environment alone.
 compiler.rolldown = { ...compiler.rolldown, filter: { code: /^["']use client["']/v } };
 
 const isReexport = (node: { type: string; source?: unknown }) =>
@@ -45,11 +46,9 @@ export default defineConfig({
   entry: ["src/**/*.{ts,tsx,js}", "!src/**/*.{stories,test,test-d}.{ts,tsx}", "!src/**/*.d.ts"],
   unbundle: true,
   platform: "neutral",
-  // A lower target makes Lightning CSS lower light-dark(), which breaks data-theme subtrees.
-  target: "esnext",
   dts: true,
   css: { inject: true },
-  // Every file is its own output, so a "use client" directive is never merged away.
+  // Every file is its own output, so a "use client" directive is never merged away as this check warns.
   checks: { moduleLevelDirective: false },
   plugins: [preserveModules, babel({ presets: [compiler] })],
 });

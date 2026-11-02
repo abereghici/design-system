@@ -8,14 +8,8 @@
     "test": {
       "dependsOn": ["build"]
     },
-    "test:packed": {
-      "dependsOn": ["^build"],
-      "cache": false
-    },
     "test:screenshots": {
-      "dependsOn": ["build"],
-      "passThroughEnv": ["PLAYWRIGHT_BROWSERS_PATH"],
-      "cache": false
+      "dependsOn": ["$TURBO_EXTENDS$", "build"]
     }
   }
 }

@@ -148,19 +148,30 @@ export function ElevationScale() {
   );
 }
 
-const layer = (name: string, children?: ReactNode) => (
-  <div className={styles["surface"]} style={{ backgroundColor: `var(--ab-color-surface-${name})` }}>
-    <code>surface-{name}</code>
-    {children}
-  </div>
-);
+function Surface({ name, children }: { name: string; children?: ReactNode }) {
+  return (
+    <div
+      className={styles["surface"]}
+      style={{ backgroundColor: `var(--ab-color-surface-${name})` }}
+    >
+      <code>surface-{name}</code>
+      {children}
+    </div>
+  );
+}
 
 /** The four surfaces, each inside the one it sits on. */
 export function Surfaces() {
   return (
     <div className={`sb-unstyled ${styles["surfaces"]}`}>
-      {layer("default", layer("raised", layer("nested")))}
-      <div className={styles["overlay"]}>{layer("overlay")}</div>
+      <Surface name="default">
+        <Surface name="raised">
+          <Surface name="nested" />
+        </Surface>
+      </Surface>
+      <div className={styles["overlay"]}>
+        <Surface name="overlay" />
+      </div>
     </div>
   );
 }

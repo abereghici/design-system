@@ -1,5 +1,6 @@
 import { existsSync, globSync, readFileSync } from "node:fs";
 import { basename, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { describe, expect, test } from "vitest";
 
@@ -79,7 +80,7 @@ const unknownTokens = (text: string) =>
 const docsIds = new Set(
   [
     ...[...pages.values()].map((text) => captures(text, /<Meta title="([^"]+)"/gv)[0] ?? ""),
-    ...files("src/*/*.stories.tsx").map(
+    ...files("src/components/*/*.stories.tsx").map(
       (story) => captures(read(story), /title: "([^"]+)"/gv)[0] ?? "",
     ),
   ].map((title) => `${title.toLowerCase().replaceAll(/[^a-z0-9]+/gv, "-")}--docs`),
@@ -89,8 +90,9 @@ const docsIds = new Set(
 const brokenImports = (text: string) =>
   [...text.matchAll(/import \{([^\}]+)\} from "@abereghici\/ui\/([\w\/\-]+)"/gv)].flatMap(
     ([, imported = "", path = ""]) => {
-      const file = path.startsWith("icons/") ? `src/icon/${path}.tsx` : `src/${path}/index.ts`;
-      const source = existsSync(resolve(ui, file)) ? read(file) : "";
+      // import.meta.resolve applies `exports` but doesn't check that the target exists.
+      const file = fileURLToPath(import.meta.resolve(`@abereghici/ui/${path}`));
+      const source = existsSync(file) ? readFileSync(file, "utf8") : "";
 
       return imported
         .split(",")
@@ -128,7 +130,7 @@ describe.each([...pages])("%s", (_, text) => {
 
 describe("claims the docs make about the code", () => {
   test("only Spinner, Progress and Skeleton loop (Accessibility)", () => {
-    const looping = files("src/*/*.css").filter((file) => /\binfinite\b/v.test(read(file)));
+    const looping = files("src/**/*.css").filter((file) => /\binfinite\b/v.test(read(file)));
 
     expect(sorted(looping.map((file) => stem(file)))).toEqual(["progress", "skeleton", "spinner"]);
   });
@@ -158,7 +160,7 @@ describe("claims the docs make about the code", () => {
   });
 
   test("the base styles ring every :focus-visible element (Accessibility)", () => {
-    expect(read("src/ui-provider/base.css")).toMatch(
+    expect(read("src/components/ui-provider/base.css")).toMatch(
       /:focus-visible \{\s*outline: var\(--ab-focus-ring-width\) solid var\(--ab-color-border-focused\);/v,
     );
   });
@@ -168,7 +170,7 @@ describe("claims the docs make about the code", () => {
   });
 
   test("icons are straight strokes, with no curves or circles (Iconography)", () => {
-    const icons = files("src/icon/icons/*.tsx");
+    const icons = files("src/components/icon/icons/*.tsx");
 
     expect(icons.length).toBeGreaterThan(0);
     expect(icons.filter((file) => curved(read(file)))).toEqual([]);

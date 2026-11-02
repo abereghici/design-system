@@ -1,15 +1,15 @@
-// Every file in src/icon/icons/ is a public subpath (`"./icons/*"`), so stale generated files are deleted.
+// Every file in src/components/icon/icons/ is a public subpath (`"./icons/*"`), so stale generated files are deleted.
 import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
 
 import { generateGlyphs } from "./generate-icons.ts";
 
-const root = new URL("../", import.meta.url);
+const root = new URL("..", import.meta.url);
 const modules = await generateGlyphs();
 
-await mkdir(new URL("src/icon/icons/", root), { recursive: true });
+await mkdir(new URL("src/components/icon/icons/", root), { recursive: true });
 
-for (const name of await readdir(new URL("src/icon/icons/", root))) {
-  const path = `src/icon/icons/${name}`;
+for (const name of await readdir(new URL("src/components/icon/icons/", root))) {
+  const path = `src/components/icon/icons/${name}`;
 
   if (!modules.has(path)) await rm(new URL(path, root));
 }

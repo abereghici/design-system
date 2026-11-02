@@ -49,7 +49,7 @@ function theme(scheme: Scheme) {
     inputBorder: color("color-border-default"),
     inputTextColor: color("color-text-default"),
     inputBorderRadius: radius,
-    brandUrl: "./",
+    brandUrl: ".",
     brandTarget: "_self",
     // Without brandImage, Storybook renders brandTitle as HTML, so the Logo can sit beside the name.
     brandTitle: `<img src="./logo-${scheme === "dark" ? "lichen" : "moss"}.svg" alt="" width="20" height="20" style="vertical-align: middle; margin-inline-end: 8px">Bereghici Design System`,

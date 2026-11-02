@@ -2,7 +2,7 @@
   {
     "name": "badge",
     "tokens": ["badge"],
-    "client": ["internal/locale/formatted-number"],
+    "client": ["internal/i18n/formatted-number"],
     "html": "12.345"
   },
   {
@@ -14,7 +14,7 @@
   {
     "name": "tag-group",
     "tokens": ["icon", "tag", "tag-group"],
-    "client": ["tag-group/tag-group-root", "tag-group/tag-group-tag"],
+    "client": ["components/tag-group/tag-group-root", "components/tag-group/tag-group-tag"],
     "html": "aria-label=\"Remove\""
   },
   {
@@ -26,7 +26,7 @@
   {
     "name": "avatar",
     "tokens": ["avatar", "icon"],
-    "client": ["avatar/avatar-image"],
+    "client": ["components/avatar/avatar-image"],
     "html": "alt=\"Ana Popescu\""
   },
   {
@@ -68,7 +68,7 @@
   {
     "name": "alert",
     "tokens": ["alert", "icon", "icon-button"],
-    "client": ["alert/alert-close"],
+    "client": ["components/alert/alert-close"],
     "html": "aria-label=\"Dismiss\""
   },
   {
@@ -80,22 +80,22 @@
   {
     "name": "checkbox",
     "tokens": ["checkbox"],
-    "client": ["checkbox/checkbox"],
+    "client": ["components/checkbox/checkbox"],
     "html": "Email me updates"
   },
   {
     "name": "switch",
     "tokens": ["switch"],
-    "client": ["switch/switch"],
+    "client": ["components/switch/switch"],
     "html": "role=\"switch\""
   },
   {
     "name": "radio-group",
     "tokens": ["fieldset", "radio-group"],
     "client": [
-      "radio-group/radio-group-item",
-      "radio-group/radio-group-label",
-      "radio-group/radio-group-root"
+      "components/radio-group/radio-group-item",
+      "components/radio-group/radio-group-label",
+      "components/radio-group/radio-group-root"
     ],
     "html": "role=\"radiogroup\""
   },
@@ -103,30 +103,34 @@
     "name": "slider",
     "tokens": ["slider"],
     "client": [
-      "slider/slider-range",
-      "slider/slider-root",
-      "slider/slider-thumb",
-      "slider/slider-track",
-      "slider/slider-value"
+      "components/slider/slider-range",
+      "components/slider/slider-root",
+      "components/slider/slider-thumb",
+      "components/slider/slider-track",
+      "components/slider/slider-value"
     ],
     "html": "type=\"range\""
   },
   {
     "name": "select",
     "tokens": ["field", "select", "icon"],
-    "client": ["select/select-root"],
+    "client": ["components/select/select-root"],
     "html": "label=\"Asia Pacific\""
   },
   {
     "name": "combobox",
     "tokens": ["field", "combobox", "icon", "tag", "tag-group"],
-    "client": ["combobox/combobox-group", "combobox/combobox-item", "combobox/combobox-root"],
+    "client": [
+      "components/combobox/combobox-group",
+      "components/combobox/combobox-item",
+      "components/combobox/combobox-root"
+    ],
     "html": "name=\"reviewers\" value=\"eh\""
   },
   {
     "name": "form",
     "tokens": [],
-    "client": ["form/form"],
+    "client": ["components/form/form"],
     "html": "<form"
   },
   {
@@ -138,19 +142,19 @@
   {
     "name": "field",
     "tokens": ["field"],
-    "client": ["field/field"],
+    "client": ["components/field/field"],
     "html": "Letters and digits."
   },
   {
     "name": "text-field",
     "tokens": ["field"],
     "client": [
-      "field/field-description",
-      "field/field-error",
-      "field/field-label",
-      "field/field-root",
-      "text-field/text-field-input-group",
-      "text-field/text-field-input"
+      "components/field/field-description",
+      "components/field/field-error",
+      "components/field/field-label",
+      "components/field/field-root",
+      "components/text-field/text-field-input-group",
+      "components/text-field/text-field-input"
     ],
     "html": "dir=\"auto\""
   },
@@ -158,33 +162,33 @@
     "name": "form-fields",
     "tokens": ["field", "icon", "icon-button", "select", "spinner"],
     "client": [
-      "field/field-description",
-      "field/field-error",
-      "field/field-label",
-      "field/field-root",
-      "number-field/number-field",
-      "select/select-root",
-      "text-area/text-area",
-      "text-field/text-field-input-group",
-      "text-field/text-field-input"
+      "components/field/field-description",
+      "components/field/field-error",
+      "components/field/field-label",
+      "components/field/field-root",
+      "components/number-field/number-field",
+      "components/select/select-root",
+      "components/text-area/text-area",
+      "components/text-field/text-field-input-group",
+      "components/text-field/text-field-input"
     ],
     "html": "<textarea"
   },
   {
     "name": "text-area",
     "tokens": ["field"],
-    "client": ["text-area/text-area"],
+    "client": ["components/text-area/text-area"],
     "html": "<textarea"
   },
   {
     "name": "password-field",
     "tokens": ["field", "icon", "toggle-button"],
     "client": [
-      "field/field-description",
-      "field/field-error",
-      "field/field-label",
-      "field/field-root",
-      "password-field/password-field-control"
+      "components/field/field-description",
+      "components/field/field-error",
+      "components/field/field-label",
+      "components/field/field-root",
+      "components/password-field/password-field-control"
     ],
     "html": "aria-label=\"Show password\""
   },
@@ -192,11 +196,11 @@
     "name": "search-field",
     "tokens": ["field", "icon", "icon-button", "spinner"],
     "client": [
-      "field/field-description",
-      "field/field-error",
-      "field/field-label",
-      "field/field-root",
-      "search-field/search-field-control"
+      "components/field/field-description",
+      "components/field/field-error",
+      "components/field/field-label",
+      "components/field/field-root",
+      "components/search-field/search-field-control"
     ],
     "html": "enterKeyHint=\"search\""
   },
@@ -204,44 +208,53 @@
     "name": "otp-field",
     "tokens": ["field"],
     "client": [
-      "field/field-description",
-      "field/field-error",
-      "field/field-label",
-      "field/field-root",
-      "otp-field/otp-field-input"
+      "components/field/field-description",
+      "components/field/field-error",
+      "components/field/field-label",
+      "components/field/field-root",
+      "components/otp-field/otp-field-input"
     ],
     "html": "autoComplete=\"one-time-code\""
   },
   {
     "name": "file-trigger",
     "tokens": ["button", "spinner", "icon", "icon-button"],
-    "client": ["button/button", "file-trigger/file-trigger"],
+    "client": ["components/button/button", "components/file-trigger/file-trigger"],
     "html": "type=\"file\""
   },
   {
     "name": "drop-zone",
     "tokens": ["drop-zone", "button", "spinner", "icon", "icon-button"],
-    "client": ["button/button", "drop-zone/drop-zone", "file-trigger/file-trigger"],
+    "client": [
+      "components/button/button",
+      "components/drop-zone/drop-zone",
+      "components/file-trigger/file-trigger"
+    ],
     "html": "Drop CSV files here"
   },
   {
     "name": "number-field",
     "tokens": ["field", "icon", "icon-button", "spinner"],
-    "client": ["number-field/number-field"],
+    "client": ["components/number-field/number-field"],
     "html": "aria-label=\"Increase\""
   },
   {
     "name": "tabs",
     "tokens": ["tabs"],
-    "client": ["tabs/tabs-content", "tabs/tabs-list", "tabs/tabs-root", "tabs/tabs-trigger"],
+    "client": [
+      "components/tabs/tabs-content",
+      "components/tabs/tabs-list",
+      "components/tabs/tabs-root",
+      "components/tabs/tabs-trigger"
+    ],
     "html": "hidden=\"\">Settings</div>"
   },
   {
     "name": "segmented-control",
     "tokens": ["segmented-control"],
     "client": [
-      "segmented-control/segmented-control-item",
-      "segmented-control/segmented-control-root"
+      "components/segmented-control/segmented-control-item",
+      "components/segmented-control/segmented-control-root"
     ],
     "html": "aria-label=\"View\""
   },
@@ -249,16 +262,16 @@
     "name": "accordion",
     "tokens": ["accordion", "disclosure", "icon"],
     "client": [
-      "accordion/accordion-item",
-      "accordion/accordion-root",
-      "accordion/accordion-trigger"
+      "components/accordion/accordion-item",
+      "components/accordion/accordion-root",
+      "components/accordion/accordion-trigger"
     ],
     "html": "<summary"
   },
   {
     "name": "disclosure",
     "tokens": ["disclosure", "icon"],
-    "client": ["disclosure/disclosure-root", "disclosure/disclosure-trigger"],
+    "client": ["components/disclosure/disclosure-root", "components/disclosure/disclosure-trigger"],
     "html": "Retries stop after five attempts.</div></details>"
   },
   {
@@ -270,7 +283,7 @@
   {
     "name": "pagination",
     "tokens": ["pagination", "icon", "icon-button"],
-    "client": ["internal/locale/formatted-number"],
+    "client": ["internal/i18n/formatted-number"],
     "html": "href=\"/pagination?page=3\">3</a>"
   },
   {
@@ -282,36 +295,39 @@
   {
     "name": "copy-button",
     "tokens": ["button", "spinner"],
-    "client": ["copy-button/copy-button"],
+    "client": ["components/copy-button/copy-button"],
     "html": "Copy invoice number</button><output"
   },
   {
     "name": "toggle-button",
     "tokens": ["toggle-button"],
-    "client": ["toggle-button/toggle-button"],
+    "client": ["components/toggle-button/toggle-button"],
     "html": "aria-pressed=\"true\""
   },
   {
     "name": "toggle-button-group",
     "tokens": ["toggle-button", "toggle-button-group"],
-    "client": ["toggle-button-group/toggle-button-group", "toggle-button/toggle-button"],
+    "client": [
+      "components/toggle-button-group/toggle-button-group",
+      "components/toggle-button/toggle-button"
+    ],
     "html": "aria-label=\"Text style\""
   },
   {
     "name": "toolbar",
     "tokens": ["toolbar", "icon", "icon-button", "spinner"],
-    "client": ["icon-button/icon-button", "toolbar/toolbar"],
+    "client": ["components/icon-button/icon-button", "components/toolbar/toolbar"],
     "html": "role=\"toolbar\""
   },
   {
     "name": "dialog",
     "tokens": ["dialog", "icon", "icon-button"],
     "client": [
-      "dialog/dialog-close",
-      "dialog/dialog-content",
-      "dialog/dialog-modal",
-      "dialog/dialog-title",
-      "dialog/dialog-trigger"
+      "components/dialog/dialog-close",
+      "components/dialog/dialog-content",
+      "components/dialog/dialog-modal",
+      "components/dialog/dialog-title",
+      "components/dialog/dialog-trigger"
     ],
     "html": "command=\"show-modal\""
   },
@@ -319,14 +335,14 @@
     "name": "alert-dialog",
     "tokens": ["dialog", "button"],
     "client": [
-      "alert-dialog/alert-dialog-action",
-      "alert-dialog/alert-dialog-cancel",
-      "alert-dialog/alert-dialog-content",
-      "alert-dialog/alert-dialog-footer",
-      "alert-dialog/alert-dialog-root",
-      "dialog/dialog-description",
-      "dialog/dialog-title",
-      "dialog/dialog-trigger"
+      "components/alert-dialog/alert-dialog-action",
+      "components/alert-dialog/alert-dialog-cancel",
+      "components/alert-dialog/alert-dialog-content",
+      "components/alert-dialog/alert-dialog-footer",
+      "components/alert-dialog/alert-dialog-root",
+      "components/dialog/dialog-description",
+      "components/dialog/dialog-title",
+      "components/dialog/dialog-trigger"
     ],
     "html": "role=\"alertdialog\""
   },
@@ -334,11 +350,11 @@
     "name": "sheet",
     "tokens": ["sheet", "icon", "icon-button"],
     "client": [
-      "dialog/dialog-close",
-      "dialog/dialog-content",
-      "dialog/dialog-modal",
-      "dialog/dialog-title",
-      "dialog/dialog-trigger"
+      "components/dialog/dialog-close",
+      "components/dialog/dialog-content",
+      "components/dialog/dialog-modal",
+      "components/dialog/dialog-title",
+      "components/dialog/dialog-trigger"
     ],
     "html": "data-side=\"end\""
   },
@@ -351,13 +367,13 @@
   {
     "name": "page-layout",
     "tokens": ["disclosure", "icon", "navbar", "sidebar"],
-    "client": ["sidebar/sidebar-collapsible-group"],
+    "client": ["components/sidebar/sidebar-collapsible-group"],
     "html": "<aside"
   },
   {
     "name": "splitter",
     "tokens": ["splitter"],
-    "client": ["splitter/splitter-handle", "splitter/splitter-root"],
+    "client": ["components/splitter/splitter-handle", "components/splitter/splitter-root"],
     "html": "aria-valuenow=\"30\""
   },
   {
@@ -369,17 +385,17 @@
   {
     "name": "sidebar",
     "tokens": ["disclosure", "icon", "sidebar"],
-    "client": ["sidebar/sidebar-collapsible-group"],
+    "client": ["components/sidebar/sidebar-collapsible-group"],
     "html": "<summary"
   },
   {
     "name": "tooltip",
     "tokens": ["tooltip", "icon", "icon-button", "spinner"],
     "client": [
-      "icon-button/icon-button",
-      "tooltip/tooltip-content",
-      "tooltip/tooltip-root",
-      "tooltip/tooltip-trigger"
+      "components/icon-button/icon-button",
+      "components/tooltip/tooltip-content",
+      "components/tooltip/tooltip-root",
+      "components/tooltip/tooltip-trigger"
     ],
     "html": "role=\"tooltip\""
   },
@@ -387,11 +403,11 @@
     "name": "popover",
     "tokens": ["popover", "icon", "icon-button"],
     "client": [
-      "popover/popover-close",
-      "popover/popover-content",
-      "popover/popover-root",
-      "popover/popover-title",
-      "popover/popover-trigger"
+      "components/popover/popover-close",
+      "components/popover/popover-content",
+      "components/popover/popover-root",
+      "components/popover/popover-title",
+      "components/popover/popover-trigger"
     ],
     "html": "command=\"toggle-popover\""
   },
@@ -399,11 +415,11 @@
     "name": "contextual-help",
     "tokens": ["popover", "icon", "icon-button", "spinner"],
     "client": [
-      "icon-button/icon-button",
-      "popover/popover-content",
-      "popover/popover-root",
-      "popover/popover-title",
-      "popover/popover-trigger"
+      "components/icon-button/icon-button",
+      "components/popover/popover-content",
+      "components/popover/popover-root",
+      "components/popover/popover-title",
+      "components/popover/popover-trigger"
     ],
     "html": "Billing cycle</h2><p class=\""
   },
@@ -411,11 +427,11 @@
     "name": "dropdown-menu",
     "tokens": ["dropdown-menu", "icon"],
     "client": [
-      "dropdown-menu/dropdown-menu-content",
-      "dropdown-menu/dropdown-menu-root",
-      "dropdown-menu/dropdown-menu-trigger",
-      "internal/menu/menu-checkbox-item",
-      "internal/menu/menu-item"
+      "components/dropdown-menu/dropdown-menu-content",
+      "components/dropdown-menu/dropdown-menu-root",
+      "components/dropdown-menu/dropdown-menu-trigger",
+      "internal/components/menu/menu-checkbox-item",
+      "internal/components/menu/menu-item"
     ],
     "html": "aria-haspopup=\"menu\""
   },
@@ -423,10 +439,10 @@
     "name": "context-menu",
     "tokens": ["context-menu", "icon"],
     "client": [
-      "context-menu/context-menu-content",
-      "context-menu/context-menu-root",
-      "context-menu/context-menu-trigger",
-      "internal/menu/menu-item"
+      "components/context-menu/context-menu-content",
+      "components/context-menu/context-menu-root",
+      "components/context-menu/context-menu-trigger",
+      "internal/components/menu/menu-item"
     ],
     "html": "role=\"menu\""
   },
@@ -439,25 +455,29 @@
   {
     "name": "toaster",
     "tokens": ["toast", "kbd", "icon"],
-    "client": ["toaster/toaster"],
+    "client": ["components/toaster/toaster"],
     "html": "Copy link"
   },
   {
     "name": "date-field",
     "tokens": ["field", "date-field"],
-    "client": ["date-field/date-field-root"],
+    "client": ["components/date-field/date-field-root"],
     "html": "role=\"spinbutton\""
   },
   {
     "name": "time-field",
     "tokens": ["field", "time-field"],
-    "client": ["time-field/time-field"],
+    "client": ["components/time-field/time-field"],
     "html": "role=\"spinbutton\""
   },
   {
     "name": "table",
     "tokens": ["table", "checkbox"],
-    "client": ["table/table-select-all", "table/table-select-row", "table/table-selection"],
+    "client": [
+      "components/table/table-select-all",
+      "components/table/table-select-row",
+      "components/table/table-selection"
+    ],
     "html": "aria-label=\"Select all invoices\""
   },
   {
@@ -491,16 +511,16 @@
       "spinner"
     ],
     "client": [
-      "date-range-picker/date-range-picker-root",
-      "internal/picker/picker-content",
-      "range-calendar/range-calendar"
+      "components/date-range-picker/date-range-picker-root",
+      "internal/components/picker/picker-content",
+      "components/range-calendar/range-calendar"
     ],
     "html": "aria-haspopup=\"dialog\""
   },
   {
     "name": "tree",
     "tokens": ["icon", "spinner", "tree"],
-    "client": ["tree/tree-item", "tree/tree-root"],
+    "client": ["components/tree/tree-item", "components/tree/tree-root"],
     "html": "role=\"tree\""
   }
 ]

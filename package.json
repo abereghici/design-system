@@ -5,15 +5,14 @@
   "scripts": {
     "build": "turbo run build",
     "check-types": "turbo run check-types",
-    "size": "turbo run size",
-    "test": "turbo run test size",
-    "lint": "turbo run lint lint:root",
-    "lint:fix": "turbo run lint:fix lint:root:fix",
+    "lint": "turbo run lint //#lint:root",
+    "lint:fix": "turbo run lint //#lint:root -- --fix",
     "lint:root": "oxlint --disable-nested-config",
-    "lint:root:fix": "oxlint --disable-nested-config --fix",
     "format": "oxfmt --check",
     "format:fix": "oxfmt",
-    "release": "turbo run build --filter='@abereghici/*' && changeset publish"
+    "test": "turbo run test size",
+    "test:packed": "turbo run test:packed",
+    "test:screenshots": "turbo run test:screenshots"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",

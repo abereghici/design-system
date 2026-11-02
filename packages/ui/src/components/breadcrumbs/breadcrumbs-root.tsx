@@ -1,0 +1,26 @@
+import "@abereghici/tokens/components/breadcrumbs.css";
+
+import type { ComponentProps } from "react";
+
+import type { AccessibleName } from "../../internal/types/accessible-name.ts";
+
+import styles from "./breadcrumbs.module.css";
+
+export type RootProps = Omit<ComponentProps<"nav">, "aria-label" | "aria-labelledby"> &
+  AccessibleName;
+
+/**
+ * The trail of links from the site's root to the current page, so people see where they are and
+ * can step back up. Give it a name such as "Breadcrumb", place it before the main content on pages
+ * two or more levels deep, and mark the current page's link with `aria-current="page"`. For the
+ * site's main sections, use a Navbar or a Sidebar.
+ *
+ * Tier 1: works before hydration.
+ */
+export function Root({ children, ...props }: RootProps) {
+  return (
+    <nav {...props}>
+      <ol className={styles["list"]}>{children}</ol>
+    </nav>
+  );
+}
