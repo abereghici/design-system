@@ -49,6 +49,7 @@ The app must target Baseline newly available, for example with `"browserslist": 
 | `@abereghici/tokens/fonts.css`                  | The `@font-face` rules for Figtree and Noto Serif.                                                                                                |
 | `@abereghici/tokens/fonts/*`                    | The variable woff2 files and their licence texts.                                                                                                 |
 | `@abereghici/tokens/tokens.json`                | The primitive and semantic tokens as literal values, in the claude.ai Design System artifact's token shape.                                       |
+| `@abereghici/tokens/source/<file>.tokens.json`  | The DTCG 2025.10 source (`primitive`, `semantic`, `component/<component>`), for tools that resolve the tokens themselves.                         |
 
 ## Documentation
 

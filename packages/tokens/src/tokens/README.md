@@ -75,12 +75,11 @@ The build stops with a `TokenCheckError` that lists every problem when:
 
 `pnpm fonts` downloads the pinned upstream files (the commit and release google/fonts ships), checks their sha256, subsets them with HarfBuzz and rewrites `fonts/`. Run it only to move to a new upstream release, then commit the result. The subset ranges and `@font-face` descriptors live in `src/fonts.ts`.
 
-## Repository-only exports
+## Source exports
 
-Two exports exist only in this repository, for the Storybook foundations pages in `@abereghici/ui`, and aren't published:
+`@abereghici/tokens/source/<file>.tokens.json` publishes these source files (`primitive`, `semantic`, `component/<component>`) as DTCG 2025.10 JSON, for tools that resolve tokens themselves, such as the Bereghici editor and terminal themes.
 
-- `@abereghici/tokens/source/{primitive,semantic,component}.tokens.json`: these source files.
-- `@abereghici/tokens/contrast-matrix`: the contrast pairs and the WCAG ratio formula the build check uses.
+`@abereghici/tokens/contrast-matrix`, the contrast pairs and the WCAG ratio formula the build check uses, exists only in this repository, for the Storybook foundations pages in `@abereghici/ui`, and isn't published.
 
 ## Scripts
 
