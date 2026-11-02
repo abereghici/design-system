@@ -2,10 +2,9 @@
 
 import type { ComponentProps, MouseEventHandler } from "react";
 
-import { useButton } from "../../internal/interactions/use-button.ts";
-import { usePressFeedback } from "../../internal/interactions/use-press-feedback.ts";
+import { TouchTarget } from "../../internal/components/touch-target/touch-target.tsx";
+import { usePressButton } from "../../internal/interactions/use-press-button.ts";
 import type { InvokerCommands } from "../../internal/types/invoker-commands.ts";
-import { chain } from "../../internal/utils/chain.ts";
 import { mergeProps } from "../../internal/utils/merge-props.ts";
 import { Slot, Slottable } from "../../internal/utils/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
@@ -21,8 +20,7 @@ export interface ButtonProps extends Omit<ComponentProps<"button">, "onClick">, 
    */
   variant?: "primary" | "secondary" | "tertiary" | "danger";
   /**
-   * `lg` for prominent or spacious layouts, `sm` for dense ones. Touch screens get larger targets
-   * on their own.
+   * `lg` for prominent or spacious layouts, `sm` for dense ones.
    */
   size?: "sm" | "md" | "lg";
   /**
@@ -62,10 +60,7 @@ export function Button({
 }: ButtonProps) {
   const blocked = disabled || loading;
   const spinner = loading ? <Spinner aria-hidden className={styles["spinner"]} /> : null;
-  const button = useButton<HTMLElement>({
-    disabled: blocked,
-    onClick: chain(onClick, usePressFeedback("Button")),
-  });
+  const button = usePressButton<HTMLElement>("Button", { disabled: blocked, onClick });
   const Root = asChild ? Slot : "button";
 
   return (
@@ -79,6 +74,7 @@ export function Button({
     >
       <Slottable>{children}</Slottable>
       {spinner}
+      <TouchTarget />
     </Root>
   );
 }

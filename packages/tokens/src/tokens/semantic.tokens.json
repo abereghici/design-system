@@ -1509,69 +1509,34 @@
     },
     "size-control-xs": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-24}",
-      "$extensions": {
-        "com.bereghici.media": {
-          "(pointer: coarse)": "{primitive.dimension-32}"
-        }
-      }
+      "$value": "{primitive.dimension-24}"
     },
     "size-control-sm": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-28}",
-      "$extensions": {
-        "com.bereghici.media": {
-          "(pointer: coarse)": "{primitive.dimension-40}"
-        }
-      }
+      "$value": "{primitive.dimension-28}"
     },
     "size-control-md": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-32}",
-      "$extensions": {
-        "com.bereghici.media": {
-          "(pointer: coarse)": "{primitive.dimension-44}"
-        }
-      }
+      "$value": "{primitive.dimension-32}"
     },
     "size-control-lg": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-40}",
-      "$extensions": {
-        "com.bereghici.media": {
-          "(pointer: coarse)": "{primitive.dimension-48}"
-        }
-      }
+      "$value": "{primitive.dimension-40}"
     },
     "size-control-compact-sm": {
       "$type": "dimension",
       "$value": "{primitive.dimension-24}",
-      "$extensions": {
-        "com.bereghici.media": {
-          "(pointer: coarse)": "{semantic.size-control-sm}"
-        }
-      },
-      "$description": "The sm control height in compact density. Touch screens keep the comfortable height."
+      "$description": "The sm control height in compact density."
     },
     "size-control-compact-md": {
       "$type": "dimension",
       "$value": "{primitive.dimension-28}",
-      "$extensions": {
-        "com.bereghici.media": {
-          "(pointer: coarse)": "{semantic.size-control-md}"
-        }
-      },
-      "$description": "The md control height in compact density. Touch screens keep the comfortable height."
+      "$description": "The md control height in compact density."
     },
     "size-control-compact-lg": {
       "$type": "dimension",
       "$value": "{primitive.dimension-32}",
-      "$extensions": {
-        "com.bereghici.media": {
-          "(pointer: coarse)": "{semantic.size-control-lg}"
-        }
-      },
-      "$description": "The lg control height in compact density. Touch screens keep the comfortable height."
+      "$description": "The lg control height in compact density."
     },
     "size-toggle": {
       "$type": "dimension",

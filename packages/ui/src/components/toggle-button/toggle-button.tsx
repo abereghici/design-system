@@ -1,20 +1,16 @@
 "use client";
 
-import { use } from "react";
-import type { ComponentProps, MouseEvent, ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
-import { useButton } from "../../internal/interactions/use-button.ts";
-import type { ChangeEventDetails as Details } from "../../internal/state/change-request.ts";
-import { useControllableState } from "../../internal/state/use-controllable-state.ts";
+import { TouchTarget } from "../../internal/components/touch-target/touch-target.tsx";
 import type { InvokerCommands } from "../../internal/types/invoker-commands.ts";
-import { chain } from "../../internal/utils/chain.ts";
-import { dispatchFeedback } from "../../internal/utils/dispatch-feedback.ts";
 import { mergeProps } from "../../internal/utils/merge-props.ts";
-import { ToggleButtonGroupContext } from "../toggle-button-group/toggle-button-group-context.ts";
 
+import { useToggleButton } from "./use-toggle-button.ts";
+import type { ToggleButtonChangeEventDetails } from "./use-toggle-button.ts";
 import styles from "./toggle-button.module.css";
 
-export type ToggleButtonChangeEventDetails = Details<"none", MouseEvent<HTMLButtonElement>>;
+export type { ToggleButtonChangeEventDetails } from "./use-toggle-button.ts";
 
 export type ToggleButtonProps = Omit<ComponentProps<"button">, "type" | "value" | "children"> &
   InvokerCommands & {
@@ -32,8 +28,7 @@ export type ToggleButtonProps = Omit<ComponentProps<"button">, "type" | "value" 
     /** Called before it turns on or off; `details.cancel()` keeps the current state. */
     onPressedChange?: (pressed: boolean, details: ToggleButtonChangeEventDetails) => void;
     /**
-     * `lg` for prominent or spacious layouts, `sm` for dense ones. Touch screens get larger targets
-     * on their own.
+     * `lg` for prominent or spacious layouts, `sm` for dense ones.
      */
     size?: "sm" | "md" | "lg";
     /**
@@ -63,22 +58,13 @@ export function ToggleButton({
   onClick,
   ...props
 }: ToggleButtonProps) {
-  const group = use(ToggleButtonGroupContext);
-  const [own, request] = useControllableState(pressed, defaultPressed ?? false, onPressedChange);
-  const current = group?.pressed(value) ?? own;
-
-  const button = useButton<HTMLButtonElement>({
+  const { current, grouped, button } = useToggleButton({
+    value,
+    pressed,
+    defaultPressed,
+    onPressedChange,
     disabled,
-    onClick: chain(onClick, (event) => {
-      if (group === null) {
-        if (!request(!current, "none", event)) return;
-      } else if (!group.toggle(value, event)) return;
-
-      dispatchFeedback(event.currentTarget, "ab-toggle", {
-        component: "ToggleButton",
-        userInitiated: true,
-      });
-    }),
+    onClick,
   });
 
   return (
@@ -87,10 +73,13 @@ export function ToggleButton({
       type="button"
       aria-pressed={current}
       data-size={size}
-      data-grouped={group === null ? undefined : ""}
+      data-grouped={grouped ? "" : undefined}
       data-icon-only={
         props["aria-label"] === undefined && props["aria-labelledby"] === undefined ? undefined : ""
       }
-    />
+    >
+      {props.children}
+      <TouchTarget />
+    </button>
   );
 }

@@ -4,6 +4,7 @@
   /* ToggleButtons rest quiet here, as the IconButtons and tertiary Buttons beside them do. */
   .root {
     --ab-toggle-button-appearance: quiet;
+    --ab-touch-target-gap: var(--ab-toolbar-gap);
 
     display: inline-flex;
     flex-wrap: wrap;

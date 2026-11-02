@@ -2,13 +2,12 @@
 
 import type { ComponentProps } from "react";
 
-import { useButton } from "../../internal/interactions/use-button.ts";
-import { usePressFeedback } from "../../internal/interactions/use-press-feedback.ts";
+import { TouchTarget } from "../../internal/components/touch-target/touch-target.tsx";
+import { usePressButton } from "../../internal/interactions/use-press-button.ts";
 import type { AccessibleName } from "../../internal/types/accessible-name.ts";
 import type { InvokerCommands } from "../../internal/types/invoker-commands.ts";
-import { chain } from "../../internal/utils/chain.ts";
 import { mergeProps } from "../../internal/utils/merge-props.ts";
-import { Slot } from "../../internal/utils/slot.tsx";
+import { Slot, Slottable } from "../../internal/utils/slot.tsx";
 import { Spinner } from "../spinner/spinner.tsx";
 
 import styles from "./icon-button.module.css";
@@ -17,8 +16,7 @@ export type IconButtonProps = Omit<ComponentProps<"button">, "aria-label" | "ari
   AccessibleName &
   InvokerCommands & {
     /**
-     * `lg` for prominent or spacious layouts, `sm` for dense ones. Touch screens get larger targets
-     * on their own.
+     * `lg` for prominent or spacious layouts, `sm` for dense ones.
      */
     size?: "sm" | "md" | "lg";
     /** Shows a spinner and blocks presses while the action runs, keeping focus. */
@@ -51,9 +49,9 @@ export function IconButton({
   onClick,
   ...props
 }: IconButtonProps) {
-  const button = useButton<HTMLButtonElement>({
+  const button = usePressButton<HTMLButtonElement>("IconButton", {
     disabled: disabled || loading,
-    onClick: chain(onClick, usePressFeedback("IconButton")),
+    onClick,
   });
   const Root = asChild ? Slot : "button";
 
@@ -65,7 +63,8 @@ export function IconButton({
       data-loading={loading ? "" : undefined}
       data-size={size}
     >
-      {loading && !asChild ? <Spinner aria-hidden /> : props.children}
+      <Slottable>{loading && !asChild ? <Spinner aria-hidden /> : props.children}</Slottable>
+      <TouchTarget />
     </Root>
   );
 }

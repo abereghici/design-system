@@ -9,7 +9,7 @@ import { Value } from "../blocks/values.tsx";
 
 # Space and shape
 
-Compact with a mouse, comfortable on touch: the same tokens grow on touch screens, so no component needs a touch variant.
+Controls are the same size with a mouse and on a touch screen, so a layout never changes between the two.
 
 ## Space
 
@@ -28,18 +28,18 @@ Below <Value of="breakpoint-md" /> wide, `space-section` and `layout-gutter` shr
 
 ## Size
 
-Controls share four heights, so a button, a field and a select line up in a row. On touch screens every control height grows to a comfortable target.
+Controls share four heights, so a button, a field and a select line up in a row. On a touch screen, a Button, IconButton or ToggleButton also takes presses in an invisible area above and below itself, up to <Value of="size-target-recommended" /> tall, so buttons side by side never take each other's presses.
 
-| Control height | Mouse                          | Touch                                                   |
-| -------------- | ------------------------------ | ------------------------------------------------------- |
-| `xs`           | <Value of="size-control-xs" /> | <Value of="size-control-xs" when="(pointer: coarse)" /> |
-| `sm`           | <Value of="size-control-sm" /> | <Value of="size-control-sm" when="(pointer: coarse)" /> |
-| `md`           | <Value of="size-control-md" /> | <Value of="size-control-md" when="(pointer: coarse)" /> |
-| `lg`           | <Value of="size-control-lg" /> | <Value of="size-control-lg" when="(pointer: coarse)" /> |
+| Control height | Value                          |
+| -------------- | ------------------------------ |
+| `xs`           | <Value of="size-control-xs" /> |
+| `sm`           | <Value of="size-control-sm" /> |
+| `md`           | <Value of="size-control-md" /> |
+| `lg`           | <Value of="size-control-lg" /> |
 
 ## Density
 
-Comfortable is the default. For a dense screen, set `data-density="compact"` on any element, and the buttons, icon buttons, toggle buttons, segmented controls and single-line fields inside it take the compact heights, as do the options of a Select, Combobox or Command, the items of a menu or Tree, the Tabs and the Steps of a Stepper, while a Table's rows get shorter; `data-density="comfortable"` goes back inside a compact region. The nearest setting wins, and touch screens keep the touch heights in both.
+Comfortable is the default. For a dense screen, set `data-density="compact"` on any element, and the buttons, icon buttons, toggle buttons, segmented controls and single-line fields inside it take the compact heights, as do the options of a Select, Combobox or Command, the items of a menu or Tree, the Tabs and the Steps of a Stepper, while a Table's rows get shorter; `data-density="comfortable"` goes back inside a compact region. The nearest setting wins.
 
 | Control height | Comfortable                    | Compact                                |
 | -------------- | ------------------------------ | -------------------------------------- |
@@ -68,7 +68,7 @@ Nested corners share a centre: the inner radius is the outer radius minus the pa
 <Dont>
 
 - Use `dimension-*` primitives for spacing.
-- Give touch screens their own component variant; the tokens already grow.
+- Give touch screens their own component variant; Buttons, IconButtons and ToggleButtons already take presses up to a comfortable height there.
 - Read a custom property in a media query; CSS can't. Write the breakpoint's value.
 
 </Dont>

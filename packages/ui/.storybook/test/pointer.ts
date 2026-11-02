@@ -1,3 +1,5 @@
+import { trusted } from "./trusted.ts";
+
 /** What a pointer pressed at the element's centre would hit: the element itself when the user can see and reach it. */
 export function atCentre(element: Element) {
   const { x, y, width, height } = element.getBoundingClientRect();
@@ -27,4 +29,28 @@ export async function touchDrag(element: Element, x: number, y: number) {
   }
 
   await cdp().send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+}
+
+/**
+ * Emulates a touch screen for one proof, so `(pointer: coarse)` matches as on a phone. A
+ * `beforeEach`; it turns the emulation off again after the proof.
+ */
+export async function onTouchScreen() {
+  const { cdp } = await import("vitest/browser");
+
+  await cdp().send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 1 });
+
+  return async () => {
+    await cdp().send("Emulation.setTouchEmulationEnabled", { enabled: false });
+  };
+}
+
+/** Presses 4px below the element's bottom edge, as trusted input, where only a larger target reaches. */
+export async function pressJustBelow(element: Element) {
+  const user = await trusted();
+
+  // A position counts from inside the border.
+  await user.click(element, {
+    position: { x: element.clientWidth / 2, y: element.clientHeight + 4 },
+  });
 }

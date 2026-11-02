@@ -6,6 +6,7 @@
     --ab-icon-stroke-width: var(--ab-stroke-width-lg);
     --ab-spinner-color: currentColor;
 
+    position: relative;
     display: inline-grid;
     place-items: center;
     flex-shrink: 0;

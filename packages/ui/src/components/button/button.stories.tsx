@@ -8,6 +8,7 @@ import { PlusIcon } from "@abereghici/ui/icons/plus";
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
+import { onTouchScreen, pressJustBelow } from "#.storybook/test/pointer.ts";
 
 import { Button } from "./button.tsx";
 
@@ -48,6 +49,17 @@ Default.test("activates with a press, Enter and Space", async ({ canvas, userEve
   await userEvent.keyboard(" ");
   await expect(args.onClick).toHaveBeenCalledTimes(3);
 });
+
+Default.test(
+  "on a touch screen, takes a press just outside its edge",
+  { beforeEach: onTouchScreen },
+  async ({ canvas, args }) => {
+    const button = canvas.getByRole("button");
+
+    await pressJustBelow(button);
+    await expect(args.onClick).toHaveBeenCalledOnce();
+  },
+);
 
 Default.test("dispatches a bubbling ab-press after a press", async ({ canvas, userEvent }) => {
   const button = canvas.getByRole("button", { name: "Save changes" });

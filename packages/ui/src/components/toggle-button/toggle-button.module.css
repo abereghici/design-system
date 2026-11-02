@@ -6,6 +6,7 @@
     --ab-icon-stroke-width: var(--ab-stroke-width-lg);
     --ab-icon-color: var(--ab-toggle-button-icon-color);
 
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;

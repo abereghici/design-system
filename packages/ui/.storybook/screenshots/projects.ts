@@ -45,13 +45,6 @@ const variants: ScreenshotVariant[] = [
     emulatedMedia: [{ name: "prefers-reduced-transparency", value: "reduce" }],
     gates: ["(prefers-reduced-transparency"],
   },
-  // CDP can't emulate pointer or hover; touch emulation sets both.
-  {
-    name: "touch",
-    contextOptions: { hasTouch: true },
-    matches: ["(pointer: coarse)", "(hover: none)"],
-    gates: ["pointer:", "hover:"],
-  },
   { name: "rtl", initialGlobals: { dir: "rtl" } },
   { name: "compact", initialGlobals: { density: "compact" }, gates: ["--ab-density"] },
   // After a scale-in under backdrop-filter, Chromium snaps resized or respaced text a pixel either way
