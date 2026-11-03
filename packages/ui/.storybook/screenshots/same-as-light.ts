@@ -30,7 +30,15 @@ export async function sameAsLight(target: Locator, story: string) {
   if (light === null) return false;
 
   const [drawn, stored] = await Promise.all([
-    pixels(await target.screenshot({ save: false })),
+    // toMatchScreenshot's own capture options, so both draw the same frame.
+    pixels(
+      await target.screenshot({
+        save: false,
+        animations: "disabled",
+        caret: "hide",
+        scale: "device",
+      }),
+    ),
     pixels(light),
   ]);
 
