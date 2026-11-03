@@ -1,5 +1,46 @@
 # @abereghici/ui
 
+## 0.3.0
+
+### Minor Changes
+
+- 1692f04: AlertDialog: Render `AlertDialog.Action` and `AlertDialog.Cancel` as Buttons. While `disabled`, they stay focusable and are announced as unavailable, like any Button.
+- c1dccca: Rename the `--ab-field-*` tokens that draw the box of every Field control to `--ab-input-base-*`, in `@abereghici/tokens/components/input-base.css`. For example, `--ab-field-height` is now `--ab-input-base-height`. `components/field.css` keeps the label, description and error tokens.
+- 1692f04: Pagination: Render Previous and Next as IconButtons, so pressing one dispatches `ab-press`.
+- 1692f04: Tag: Add `asChild`, to render the tag as your own element, such as a link.
+- 1692f04: ToggleButtonGroup: Join the buttons into one shape on one line, with shared edges and rounded ends. Remove `--ab-toggle-button-group-gap` and `@abereghici/tokens/components/toggle-button-group.css`.
+- 1692f04: Toolbar: Draw a track around the controls, styled by `--ab-toolbar-padding`, `--ab-toolbar-border-radius` and `--ab-toolbar-background-color`, with a border in forced colors mode. ToggleButtons inside it show an edge only when pressed.
+- 1692f04: Button, IconButton and ToggleButton: On touch screens, take presses in an invisible area above and below the button, up to `size-target-recommended` tall, while the button keeps its size. Inside a wrapping Toolbar, the area stops halfway to the next row. The area is a hidden `<span>` rendered last inside the button, or inside your element with `asChild`.
+- d7cd780: Keep controls the same size on touch screens as with a mouse: `size-control-*` and `size-control-compact-*` no longer grow under `(pointer: coarse)`. The smallest, `size-control-xs`, is 24px, the minimum target size of WCAG 2.5.8.
+
+### Patch Changes
+
+- 1692f04: Avatar: Keep the initials inside the circle when text is enlarged, and skip a trailing generational suffix ("Jr.", "III") and words that start with an emoji.
+- 1692f04: Link, Sidebar and Tooltip: Break long URLs and emails instead of overflowing.
+- 1692f04: Button: Break a word too long for the button instead of overflowing, and draw no border or fill on a disabled `tertiary` Button.
+- 1692f04: Calendar and RangeCalendar: Head the columns with narrow weekday names ("M"), keeping the full names for screen readers.
+- 1692f04: Alert, Dialog and Popover: Render the `x` of `Alert.Close`, `Dialog.Close` and `Popover.Close` as an IconButton. Pressing it still dispatches only `ab-dismiss`.
+- 71fd744: CodeBlock: Show a tab as 4 spaces wide instead of the browser's 8.
+- 1692f04: Combobox: With `selectionMode="multiple"`, draw the focus ring and the invalid border around the whole box when its text input is focused or invalid.
+- 1692f04: Command: Mark the divider under the search in the focus color while the search has focus.
+- 1692f04: DateRangePicker: Separate the range with plain spaces, so the server renders the same text as the browser.
+- 1692f04: Dialog and AlertDialog: Wrap long titles, descriptions and emails inside the dialog instead of scrolling sideways.
+- 1692f04: FileTrigger and DropZone: Show every chosen file name on hover.
+- 1692f04: SegmentedControl: Scroll sideways when the items don't fit, with faded edges in browsers that support scroll-driven animations.
+- 1692f04: Select: Show a long chosen option on one line, ending in "…", in browsers that support customizable selects.
+- 1692f04: SkipLink: Wrap a long label instead of running the focus ring off the screen.
+- 1692f04: Splitter: Break a word too long for a panel instead of overflowing.
+- 1692f04: Stepper: Stack a horizontal Stepper like a vertical one when its container is too narrow for its labels.
+- 1692f04: Slider and FileTrigger: Document them as Tier 2. They show their final content before hydration and work once hydrated.
+- 1692f04: Toast: Keep the title's width beside a long action, let a long action label wrap, and move the actions below the description when text is enlarged.
+- 7164353: Toaster: Cut each toast behind the front one to the front toast's height, so a taller toast no longer sticks out above a short one, and grow it back to its own height when the stack expands.
+- 1692f04: Combobox, ContextMenu, DropdownMenu, Popover, Select and Tooltip: Place popups on whole pixels, so their text renders the same every time they open.
+- Updated dependencies [c1dccca]
+- Updated dependencies [1692f04]
+- Updated dependencies [1692f04]
+- Updated dependencies [d7cd780]
+  - @abereghici/tokens@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes
