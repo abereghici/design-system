@@ -1,6 +1,6 @@
 /// <reference types="@vitest/browser-playwright" />
 import { expect } from "vitest";
-import { commands } from "vitest/browser";
+import { commands, server } from "vitest/browser";
 
 import type { Locator } from "vitest/browser";
 
@@ -16,20 +16,23 @@ const pixels = async (base64: string) => {
 };
 
 /**
- * Whether `target` draws exactly the pixels of the story's light screenshot, so another variant's
- * screenshot of it would only repeat that one. A story without a light screenshot yet draws its own.
+ * Whether `target` draws exactly the pixels of the screenshot `toMatchScreenshot(name)` stored for
+ * this test file. A name with no stored screenshot matches nothing.
  */
-export async function sameAsLight(target: Locator, story: string) {
+export async function matchesScreenshot(target: Locator, name: string) {
   const test = expect.getState().testPath ?? "";
   const folder = test.slice(0, test.lastIndexOf("/"));
   const file = test.slice(folder.length + 1);
-  const light = await commands
-    .readFile(`${folder}/__screenshots__/${file}/${story}-light-chromium-linux.png`, "base64")
+  const stored = await commands
+    .readFile(
+      `${folder}/__screenshots__/${file}/${name}-${server.browser}-${server.platform}.png`,
+      "base64",
+    )
     .catch(() => null);
 
-  if (light === null) return false;
+  if (stored === null) return false;
 
-  const [drawn, stored] = await Promise.all([
+  const [actual, expected] = await Promise.all([
     // toMatchScreenshot's own capture options, so both draw the same frame.
     pixels(
       await target.screenshot({
@@ -39,10 +42,11 @@ export async function sameAsLight(target: Locator, story: string) {
         scale: "device",
       }),
     ),
-    pixels(light),
+    pixels(stored),
   ]);
 
   return (
-    drawn?.length === stored?.length && drawn?.every((value, at) => value === stored?.[at]) === true
+    actual?.length === expected?.length &&
+    actual?.every((value, at) => value === expected?.[at]) === true
   );
 }

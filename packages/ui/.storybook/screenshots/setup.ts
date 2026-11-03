@@ -4,8 +4,8 @@ import { cdp, page } from "vitest/browser";
 
 import { renderedCanvas } from "../test/snapshots.ts";
 
+import { matchesScreenshot } from "./matches-screenshot.ts";
 import type { ScreenshotVariant } from "./projects.ts";
-import { sameAsLight } from "./same-as-light.ts";
 
 declare module "vitest" {
   export interface TestContext {
@@ -106,8 +106,11 @@ afterEach(async ({ story, task }) => {
 
   const target = page.elementLocator(topLayer ? document.documentElement : canvas);
 
-  // A variant that draws a story exactly as the light screenshot does would only repeat it.
-  if (variant.name !== "light" && (await sameAsLight(target, story.id))) return;
+  // toMatchScreenshot files a name with its runs of dashes collapsed; story ids have one.
+  const screenshot = (name: string) => `${story.id.replaceAll("--", "-")}-${name}`;
 
-  await expect(target).toMatchScreenshot(`${story.id}-${variant.name}`);
+  // A variant that draws a story exactly as the light screenshot does would only repeat it.
+  if (variant.name !== "light" && (await matchesScreenshot(target, screenshot("light")))) return;
+
+  await expect(target).toMatchScreenshot(screenshot(variant.name));
 });
