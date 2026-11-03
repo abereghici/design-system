@@ -234,3 +234,37 @@ Controlled.test("opens and closes through open", async ({ args, canvas, userEven
     expect.objectContaining({ reason: "close-press" }),
   );
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    defaultOpen: true,
+    children: (
+      <>
+        <Dialog.Trigger asChild>
+          <Button>Renommer…</Button>
+        </Dialog.Trigger>
+        <Dialog.Content>
+          <Dialog.Title>
+            Renommer « Northwind Industries Holdings — Q3 2026 board pack (final, revised) » ?
+          </Dialog.Title>
+          <Dialog.Description>
+            Les liens partagés avec bartholomew.fitzgerald@northwind-industries-holdings.example.com
+            continueront de fonctionner.
+          </Dialog.Description>
+          <TextField
+            label="Nom"
+            defaultValue="Northwind Industries Holdings — Q3 2026 board pack (final, revised) v12"
+          />
+          <Dialog.Footer>
+            <Dialog.Close asChild>
+              <Button>Annuler les modifications</Button>
+            </Dialog.Close>
+            <Button variant="primary">Renommer le document</Button>
+          </Dialog.Footer>
+          <Dialog.Close aria-label="Fermer" />
+        </Dialog.Content>
+      </>
+    ),
+  },
+});

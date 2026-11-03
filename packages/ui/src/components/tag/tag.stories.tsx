@@ -4,6 +4,7 @@ import type { StoryContext } from "@storybook/react-vite";
 
 import { CheckIcon } from "@abereghici/ui/icons/check";
 
+import { withRow } from "#.storybook/decorators/with-row.tsx";
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 
@@ -60,4 +61,21 @@ export const WithIcon = meta.story({
 WithIcon.test("hides its icon from assistive technology", async ({ canvas }) => {
   await expect(canvas.queryByRole("img")).toBeNull();
   await expect(canvas.getByText("Live")).toBeVisible();
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  decorators: [withRow, withWidth("16rem")],
+  render: () => (
+    <>
+      <Tag variant="warning">
+        En attente de bartholomew.fitzgerald@northwind-industries-holdings.example.com
+      </Tag>
+      <Tag>1</Tag>
+      <Tag variant="success">🚀 Lancé</Tag>
+      <Tag variant="accent">
+        <CheckIcon /> Approuvé par Aleksandra Wiśniewska-Kowalczyk
+      </Tag>
+    </>
+  ),
 });

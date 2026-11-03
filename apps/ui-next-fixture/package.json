@@ -16,7 +16,7 @@
     "lint": "oxlint",
     "test": "vitest run && playwright test --grep-invert @screenshot",
     "test:packed": "node scripts/test-packed.ts",
-    "test:screenshots": "playwright test --grep @screenshot"
+    "test:screenshots": "playwright test --project chromium --grep @screenshot"
   },
   "dependencies": {
     "@abereghici/tokens": "workspace:*",

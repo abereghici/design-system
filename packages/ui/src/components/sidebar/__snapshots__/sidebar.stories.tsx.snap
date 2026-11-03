@@ -34,3 +34,22 @@ exports[`Default   > base story 1`] = `
         - link "UI":
           - /url: "#ui"
 `;
+
+exports[`Worst Case 1`] = `
+- navigation "Workspace":
+  - group "Projets partagés avec Northwind Industries Holdings":
+    - text: Projets partagés avec Northwind Industries Holdings
+    - list:
+      - listitem:
+        - link "Q3 2026 board pack (final, revised)":
+          - /url: "#0"
+      - listitem:
+        - link "UI":
+          - /url: "#1"
+      - listitem:
+        - link "Datenschutzgrundverordnungsbeauftragte":
+          - /url: "#2"
+      - listitem:
+        - link "Migration de l’entrepôt de données vers EU-West":
+          - /url: "#3"
+`;

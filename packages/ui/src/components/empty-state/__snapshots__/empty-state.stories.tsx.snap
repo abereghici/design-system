@@ -21,3 +21,9 @@ exports[`In A Table   > base story 1`] = `
         - paragraph: Upload a file or create one to get started.
         - button "New file"
 `;
+
+exports[`Worst Case 1`] = `
+- heading "Aucun document partagé avec Northwind Industries Holdings pour le moment" [level=3]
+- paragraph: Importez un fichier ou demandez à bartholomew.fitzgerald@northwind-industries-holdings.example.com de vous en partager un.
+- button "Importer des documents depuis votre ordinateur"
+`;

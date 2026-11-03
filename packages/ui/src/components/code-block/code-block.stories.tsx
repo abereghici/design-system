@@ -44,3 +44,21 @@ Scrolling.test("is a Tab stop, so keyboard users can scroll it", async () => {
   await user.keyboard("{ArrowRight}");
   await waitFor(() => expect(focused?.scrollLeft).toBeGreaterThan(0));
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  decorators: [withWidth("20rem")],
+  args: {
+    children: [
+      "// https://northwind-industries-holdings.example.com/api/v2/invoices?status=overdue&page=1284",
+      'const greeting = { ar: "مرحبا بكم", ja: "ようこそ", emoji: "👋🏽" };',
+      "",
+      '\tif (invoice.total > 1_284_000.5) notify("bartholomew.fitzgerald@northwind.example.com");',
+    ].join("\n"),
+  },
+});
+
+export const Empty = meta.story({
+  tags: ["!autodocs"],
+  args: { children: "" },
+});

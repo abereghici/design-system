@@ -1,7 +1,8 @@
 import { expect } from "storybook/test";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
-import { moves } from "#.storybook/test/motion.ts";
+import { motionAllowed, moves } from "#.storybook/test/motion.ts";
 
 import { Progress } from "./progress.tsx";
 
@@ -47,9 +48,7 @@ Default.test(
   "sweeps only when motion is allowed",
   { args: { value: null } },
   async ({ canvasElement }) => {
-    await expect(moves(canvasElement)).toBe(
-      !matchMedia("(prefers-reduced-motion: reduce)").matches,
-    );
+    await expect(moves(canvasElement)).toBe(motionAllowed());
   },
 );
 
@@ -77,3 +76,15 @@ Default.test(
     await expect(canvas.getByText("3")).toBeVisible();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    value: 1,
+    max: 1284,
+    label:
+      "Importing invoices from bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+    valueLabel: "1 of 1,284 files",
+  },
+  decorators: [withWidth("18rem")],
+});

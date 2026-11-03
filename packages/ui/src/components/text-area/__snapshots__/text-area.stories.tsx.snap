@@ -6,3 +6,11 @@ exports[`Default   > base story 1`] = `
   - /placeholder: Write something…
 - paragraph: Grows with your text.
 `;
+
+exports[`Worst Case 1`] = `
+- text: Adresse e-mail professionnelle de facturation (utilisée pour les relances)
+- textbox "Adresse e-mail professionnelle de facturation (utilisée pour les relances)":
+  - /placeholder: Write something…
+  - text: Please forward https://files.northwind-industries-holdings.example.com/workspaces/1284/documents/q3-2026-board-pack-final-revised-v12.pdf to the board before Friday.
+- text: Saisissez une adresse e-mail valide, par exemple bartholomew.fitzgerald@northwind-industries-holdings.example.com
+`;

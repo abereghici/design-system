@@ -1,8 +1,12 @@
 @import "@abereghici/tokens/components/stepper.css";
 
 @layer ab.components {
+  /* A container query can't style its container, so the wrap lives here; it only takes effect when
+     the narrow query gives each step a full-width basis (a step's basis is 0 otherwise). */
   .root {
+    container-type: inline-size;
     display: flex;
+    flex-wrap: wrap;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -65,6 +69,29 @@
 
   .step:last-child::after {
     content: none;
+  }
+
+  /* Too narrow for its labels side by side, a horizontal Stepper stacks like a vertical one. */
+  @container (inline-size < 30em) {
+    .root[data-orientation="horizontal"] > .step {
+      flex-basis: 100%;
+      grid-template-areas:
+        "indicator label"
+        "connector .";
+    }
+
+    .root[data-orientation="horizontal"] > .step:last-child {
+      grid-template-areas: "indicator label";
+    }
+
+    .root[data-orientation="horizontal"] > .step::after {
+      justify-self: center;
+      min-block-size: var(--ab-stepper-connector-min-height);
+      margin-inline-end: 0;
+      border-block-start: none;
+      border-inline-start: var(--ab-stepper-connector-border-width) solid
+        var(--ab-stepper-connector-border-color);
+    }
   }
 
   .indicator {

@@ -46,3 +46,11 @@ Default.test("is the first tab stop, shown while it has focus", async ({ canvas,
   await expect(canvas.getByRole("link", { name: "Home" })).toHaveFocus();
   await expect(atCentre(link)).not.toBe(link);
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: "Direkt zum Hauptinhalt der Rechnungsübersicht von Northwind Industries springen",
+  },
+  play: ({ userEvent }) => userEvent.tab(),
+});

@@ -29,7 +29,7 @@ export interface WrapperProps {
 }
 
 export interface SizedWrapperProps extends WrapperProps {
-  /** `lg` for prominent or spacious forms. Touch screens get larger targets on their own. */
+  /** `lg` for prominent or spacious forms. */
   size?: "md" | "lg";
 }
 

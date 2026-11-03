@@ -17,3 +17,12 @@ exports[`Default   > base story 1`] = `
 exports[`In A Dialog   > base story 1`] = `
 - button "Search"
 `;
+
+exports[`Worst Case 1`] = `
+- combobox "Search commands" [expanded]
+- status
+- listbox "Commands":
+  - group "Documents partagés avec Northwind Industries Holdings":
+    - option "Ouvrir « Q3 2026 board pack (final, revised) v12 » dans un nouvel onglet" [selected]
+    - option "bartholomew.fitzgerald@northwind-industries-holdings.example.com"
+`;

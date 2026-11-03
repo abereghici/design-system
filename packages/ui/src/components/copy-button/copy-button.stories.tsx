@@ -1,5 +1,6 @@
 import { expect, fn, waitFor } from "storybook/test";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { trusted } from "#.storybook/test/trusted.ts";
 
@@ -72,4 +73,14 @@ Default.test("says so when copying fails", async ({ canvas, userEvent }) => {
   } finally {
     navigator.clipboard.writeText = clipboard;
   }
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    value: "NW-HOLDINGS-EU-WEST-2026-000001284",
+    children: "Copier le numéro de facture",
+    copiedLabel: "Copié dans le presse-papiers",
+  },
+  decorators: [withWidth("18rem")],
 });

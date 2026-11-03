@@ -58,10 +58,10 @@ function selectOnce(input: HTMLInputElement, onSelect: FileTriggerProps["onSelec
 /**
  * Opens the system file picker from its one child (usually a Button), and the chosen files submit
  * with the form; their names show next to it with a Clear button. To also accept files dragged onto
- * an area, put it inside a DropZone. With JavaScript off, the browser's own file input takes the
- * trigger's place.
+ * an area, put it inside a DropZone.
  *
- * Tier 1: works before hydration.
+ * Tier 2: shows its final content before hydration and works after it; with JavaScript off, the
+ * browser's own file input takes the trigger's place.
  */
 export function FileTrigger({
   children,

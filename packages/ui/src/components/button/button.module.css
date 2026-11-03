@@ -16,6 +16,8 @@
     --background-color-hovered: var(--ab-button-secondary-background-color-hovered);
     --background-color-pressed: var(--ab-button-secondary-background-color-pressed);
     --text-color-hovered: var(--ab-button-secondary-text-color);
+    --border-color-disabled: var(--ab-button-border-color-disabled);
+    --background-color-disabled: var(--ab-button-background-color-disabled);
 
     position: relative;
     display: inline-flex;
@@ -34,6 +36,7 @@
     font: var(--ab-button-font);
     text-decoration: none;
     text-wrap: balance;
+    overflow-wrap: anywhere;
     user-select: none;
     cursor: pointer;
     touch-action: manipulation;
@@ -93,6 +96,8 @@
     --background-color-hovered: var(--ab-button-tertiary-background-color-hovered);
     --background-color-pressed: var(--ab-button-tertiary-background-color-pressed);
     --text-color-hovered: var(--ab-button-tertiary-text-color-hovered);
+    --border-color-disabled: transparent;
+    --background-color-disabled: var(--ab-button-tertiary-background-color);
 
     border-color: transparent;
     background-color: var(--ab-button-tertiary-background-color);
@@ -130,8 +135,8 @@
   .root:where([aria-disabled="true"], :disabled):where(:not([aria-busy="true"])) {
     --ab-icon-color: currentColor;
 
-    border-color: var(--ab-button-border-color-disabled);
-    background-color: var(--ab-button-background-color-disabled);
+    border-color: var(--border-color-disabled);
+    background-color: var(--background-color-disabled);
     box-shadow: none;
     color: var(--ab-button-text-color-disabled);
     cursor: not-allowed;

@@ -23,3 +23,15 @@ exports[`Lazy Calendar   > base story 1`] = `
   - button "Save"
   - button "Reset"
 `;
+
+exports[`Worst Case 1`] = `
+- form "Profile":
+  - text: วันที่ครบกำหนดชำระใบแจ้งหนี้ของ Northwind Industries Holdings
+  - group "วันที่ครบกำหนดชำระใบแจ้งหนี้ของ Northwind Industries Holdings":
+    - spinbutton "วัน": "12"
+    - spinbutton "เดือน": "03"
+    - spinbutton "ปี": "2025"
+    - button "Choose date"
+  - button "Save"
+  - button "Reset"
+`;

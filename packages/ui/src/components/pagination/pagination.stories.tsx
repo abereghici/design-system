@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 import { expect, within } from "storybook/test";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -25,7 +26,7 @@ const meta = preview.meta({
     "aria-label": "Pagination",
     previousLabel: "Previous page",
     nextLabel: "Next page",
-    getPageLabel: (page: number) => `Page ${page}`,
+    getPageLabel: (page: number) => `Page ${page.toLocaleString("en-US")}`,
     page: 5,
     count: 10,
     getPageUrl: (page: number) => `#page-${page}`,
@@ -160,3 +161,14 @@ Default.test(
     }
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: { page: 642, count: 1284 },
+  decorators: [withWidth("18rem")],
+});
+
+export const One = meta.story({
+  tags: ["!autodocs"],
+  args: { page: 1, count: 1 },
+});

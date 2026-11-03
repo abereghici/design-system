@@ -1,9 +1,13 @@
 import { expect, fn } from "storybook/test";
 
+import { PinIcon } from "@abereghici/ui/icons/pin";
 import { ToggleButton } from "@abereghici/ui/toggle-button";
 
 import { withToolbar } from "#.storybook/decorators/with-toolbar.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
+import { onTouchScreen } from "#.storybook/test/pointer.ts";
+import { trusted } from "#.storybook/test/trusted.ts";
 
 import { ToggleButtonGroup } from "./toggle-button-group.tsx";
 import type { ToggleButtonGroupChangeEventDetails } from "./toggle-button-group.tsx";
@@ -29,6 +33,38 @@ export const Default = meta.story({
     onValueChange: fn<(value: string[], details: ToggleButtonGroupChangeEventDetails) => void>(),
   },
 });
+
+Default.test(
+  "on a touch screen, a press at a button's edge goes to that button, not its neighbour",
+  {
+    args: {
+      defaultValue: [],
+      children: (
+        <>
+          <ToggleButton value="pin" aria-label="Pin">
+            <PinIcon />
+          </ToggleButton>
+          <ToggleButton value="unpin" aria-label="Unpin">
+            <PinIcon />
+          </ToggleButton>
+        </>
+      ),
+    },
+    beforeEach: onTouchScreen,
+  },
+  async ({ canvas }) => {
+    const pin = canvas.getByRole("button", { name: "Pin" });
+    const user = await trusted();
+
+    // A position counts from inside the border, which joined buttons share.
+    await user.click(pin, { position: { x: pin.clientWidth - 1, y: pin.clientHeight / 2 } });
+    await expect(pin).toHaveAttribute("aria-pressed", "true");
+    await expect(canvas.getByRole("button", { name: "Unpin" })).toHaveAttribute(
+      "aria-pressed",
+      "false",
+    );
+  },
+);
 
 Default.test(
   "is a named group whose buttons each report their own pressed state",
@@ -152,3 +188,18 @@ InAToolbar.test(
     await expect(document.body).toHaveFocus();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <ToggleButton value="bold">Gras</ToggleButton>
+        <ToggleButton value="italic">Italique</ToggleButton>
+        <ToggleButton value="underline">Souligné</ToggleButton>
+        <ToggleButton value="strike">Durchgestrichen</ToggleButton>
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
+});

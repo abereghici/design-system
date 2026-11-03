@@ -17,8 +17,14 @@ const graphemes = new Intl.Segmenter();
 
 const firstGrapheme = (word = "") => graphemes.segment(word).containing(0)?.segment ?? "";
 
+// Neither an emoji nor a generational suffix ("Jr.", "III") is anyone's initial.
+const emoji = /^\p{Extended_Pictographic}/v;
+const generationalSuffix = /^(?:jr|sr|ii|iii|iv)\.?$/iv;
+
 function initials(name: string) {
-  const words = name.split(/\s+/v).filter(Boolean);
+  const words = name.split(/\s+/v).filter((word) => word !== "" && !emoji.test(word));
+
+  if (words.length > 1 && generationalSuffix.test(words.at(-1)!)) words.pop();
 
   return firstGrapheme(words[0]) + (words.length > 1 ? firstGrapheme(words.at(-1)) : "");
 }

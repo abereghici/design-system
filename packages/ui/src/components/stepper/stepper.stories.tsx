@@ -2,6 +2,7 @@ import { expect } from "storybook/test";
 
 import { Link } from "@abereghici/ui/link";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as Stepper from "./stepper.tsx";
@@ -66,4 +67,22 @@ Linked.test("names each completed step's link with its completed label", async (
     "#shipping",
   );
   await expect(canvas.getByRole("listitem", { current: "step" })).toHaveTextContent("Payment");
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <Stepper.Step status="complete" completedLabel="Terminé">
+          Informations sur l’entreprise
+        </Stepper.Step>
+        <Stepper.Step status="current">Adresse de facturation et coordonnées fiscales</Stepper.Step>
+        <Stepper.Step>Moyen de paiement</Stepper.Step>
+        <Stepper.Step>Vérification</Stepper.Step>
+        <Stepper.Step>Confirmation</Stepper.Step>
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
 });

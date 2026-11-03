@@ -5,6 +5,7 @@ import { SunIcon } from "@abereghici/ui/icons/sun";
 import { Toolbar } from "@abereghici/ui/toolbar";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -187,4 +188,19 @@ export const IconOnly = meta.story({
 IconOnly.test("names each icon-only view by its aria-label", async ({ canvas }) => {
   await expect(canvas.getByRole("radio", { name: "Light" })).toBeChecked();
   await expect(canvas.getByRole("radio", { name: "Dark" })).not.toBeChecked();
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <SegmentedControl.Item value="list">Liste</SegmentedControl.Item>
+        <SegmentedControl.Item value="board">Tableau Kanban</SegmentedControl.Item>
+        <SegmentedControl.Item value="calendar">Calendrier</SegmentedControl.Item>
+        <SegmentedControl.Item value="timeline">Chronologie</SegmentedControl.Item>
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
 });

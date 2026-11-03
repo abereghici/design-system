@@ -5,8 +5,10 @@ import type { StoryContext } from "@storybook/react-vite";
 
 import { PinIcon } from "@abereghici/ui/icons/pin";
 
+import { withRow } from "#.storybook/decorators/with-row.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
+import { onTouchScreen, pressJustBelow } from "#.storybook/test/pointer.ts";
 
 import { IconButton } from "./icon-button.tsx";
 
@@ -46,6 +48,17 @@ Default.test("is a plain button that reports a press", async ({ canvas, userEven
   await userEvent.click(button);
   await expect(args.onClick).toHaveBeenCalledOnce();
 });
+
+Default.test(
+  "on a touch screen, takes a press just outside its edge",
+  { beforeEach: onTouchScreen },
+  async ({ canvas, args }) => {
+    const button = canvas.getByRole("button");
+
+    await pressJustBelow(button);
+    await expect(args.onClick).toHaveBeenCalledOnce();
+  },
+);
 
 Default.test("dispatches a bubbling ab-press after a press", async ({ canvas, userEvent }) => {
   const button = canvas.getByRole("button", { name: "Pin" });
@@ -161,3 +174,24 @@ Default.test(
     await expect(args.onClick).not.toHaveBeenCalled();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  decorators: [withRow],
+  render: (args) => (
+    <>
+      <IconButton
+        {...args}
+        size="sm"
+        aria-label="Épingler la facture INV-2026-0042 pour toute l’équipe"
+      />
+      <IconButton {...args} loading />
+      <IconButton {...args} size="lg" disabled />
+      <IconButton asChild aria-label="Ouvrir la facture">
+        <a href="#invoice">
+          <PinIcon />
+        </a>
+      </IconButton>
+    </>
+  ),
+});

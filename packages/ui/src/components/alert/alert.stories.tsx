@@ -94,3 +94,22 @@ Default.test(
     await expect(dismissals.events).toEqual([]);
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <Alert.Title>
+          Couldn’t sync “Northwind Industries Holdings — Q3 2026 board pack (final, revised)”
+        </Alert.Title>
+        <Alert.Description>
+          Ask bartholomew.fitzgerald@northwind-industries-holdings.example.com for edit access, or
+          open
+          https://files.northwind-industries-holdings.example.com/workspaces/1284/documents/q3-2026-board-pack-final-revised-v12.pdf
+        </Alert.Description>
+        <Alert.Close aria-label="Dismiss" onClick={onClose} />
+      </>
+    ),
+  },
+});

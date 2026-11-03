@@ -15,3 +15,15 @@ exports[`Icon Only   > base story 1`] = `
   - radio "Light" [checked]
   - radio "Dark"
 `;
+
+exports[`Worst Case 1`] = `
+- radiogroup "View":
+  - radio "Liste" [checked]
+  - text: Liste
+  - radio "Tableau Kanban"
+  - text: Tableau Kanban
+  - radio "Calendrier"
+  - text: Calendrier
+  - radio "Chronologie"
+  - text: Chronologie
+`;

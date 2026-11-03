@@ -4,6 +4,8 @@ import { expect, fn, waitFor } from "storybook/test";
 import { PlusIcon } from "@abereghici/ui/icons/plus";
 import { Kbd } from "@abereghici/ui/kbd";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
+import { longCommands, manyCommands } from "#.storybook/fixtures/commands.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
@@ -312,3 +314,20 @@ InADialog.test(
     await waitFor(() => expect(highlighted(input)).toHaveTextContent("New document"));
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: longCommands,
+  },
+  decorators: [withWidth("18rem")],
+  play: ({ canvas, userEvent }) => userEvent.click(canvas.getByRole("combobox")),
+});
+
+export const Huge = meta.story({
+  tags: ["!autodocs", "!screenshot"],
+  parameters: { ariaSnapshot: { disable: true } },
+  args: {
+    children: manyCommands,
+  },
+});

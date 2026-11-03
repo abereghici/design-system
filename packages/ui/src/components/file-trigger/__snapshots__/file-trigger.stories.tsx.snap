@@ -16,6 +16,12 @@ exports[`In A Field   > base story 1`] = `
 
 exports[`With Files 1`] = `
 - button "Choose image"
-- status: photo.png
+- status "photo.png"
+- button "Clear files"
+`;
+
+exports[`Worst Case 1`] = `
+- button "Choose image"
+- status "Northwind Industries Holdings — Q3 2026 board pack (final, revised) v12.png, Northwind Industries Holdings — Q3 2026 board pack (final, revised) v13.png"
 - button "Clear files"
 `;

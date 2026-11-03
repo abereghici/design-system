@@ -48,6 +48,10 @@ A story file has three readers: the docs page, the Vitest run (every story is a 
 - A veto is `details.cancel()` in the `on…Change` callback; prove it there. A consumer's `preventDefault()` in `onClick` keeps only its native meaning, so a proof never uses it to stop a change.
 - Prove each proof can fail: break the code once and watch it go red.
 
+## Data-state stories
+
+The screenshots' worst-case data: `WorstCase` (realistic long, unbreakable, translated and non-Latin values at once), `Empty`, `One` and `Huge` (the realistic upper bound for a list), each only where it applies. They change the data, never the component: args alone are fine, since their value is the combined data, not one control. Long data a file can't hold lives in `.storybook/fixtures/`, one file per subject. They stay out of the docs page.
+
 ## Tags
 
 | Story                                     | Annotation                                         |
@@ -55,6 +59,8 @@ A story file has three readers: the docs page, the Vitest run (every story is a 
 | docs story                                | none                                               |
 | a story the screenshot projects must skip | `tags: ["!screenshot"]`                            |
 | a story whose accessibility tree is empty | `parameters: { ariaSnapshot: { disable: true } }` |
+| a data-state story                        | `tags: ["!autodocs"]`                              |
+| a `Huge` story                            | `tags: ["!autodocs", "!screenshot"]` and `parameters: { ariaSnapshot: { disable: true } }`: a page-long screenshot and a thousand-line tree prove nothing more |
 
 Write them inline where the story is declared. Preview gives every story the `autodocs` and `screenshot` tags, and its `afterEach` takes each story's aria snapshot; an empty aria snapshot matches any tree, so it proves nothing. `.test()` proofs are hidden from the sidebar by `main.ts` `tags._test` (exclude); never tag a proof `!dev`.
 

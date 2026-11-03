@@ -1,5 +1,6 @@
 import { expect } from "storybook/test";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { Meter } from "./meter.tsx";
@@ -70,3 +71,14 @@ Default.test(
     await expect(canvas.getByText("42 %")).toBeVisible();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    value: 2300,
+    max: 2048,
+    label: "Storage used by the Northwind Industries Holdings shared drives",
+    valueLabel: "2,300 GB of 2,048 GB",
+  },
+  decorators: [withWidth("18rem")],
+});

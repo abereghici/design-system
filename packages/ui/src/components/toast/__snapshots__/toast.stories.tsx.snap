@@ -11,3 +11,15 @@ exports[`Default   > base story 1`] = `
       - button "Undo"
       - button "Dismiss"
 `;
+
+exports[`Worst Case 1`] = `
+- status:
+  - paragraph: Impossible de synchroniser « Northwind Industries Holdings — Q3 2026 board pack (final, revised) » Demandez l’accès en écriture à bartholomew.fitzgerald@northwind-industries-holdings.example.com
+- alert
+- region "Notifications":
+  - list:
+    - listitem:
+      - text: Impossible de synchroniser « Northwind Industries Holdings — Q3 2026 board pack (final, revised) » Demandez l’accès en écriture à bartholomew.fitzgerald@northwind-industries-holdings.example.com
+      - button "Réessayer la synchronisation"
+      - button "Dismiss"
+`;

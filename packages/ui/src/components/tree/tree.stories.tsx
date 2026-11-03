@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, waitFor, within } from "storybook/test";
 
+import { deepFolders } from "#.storybook/fixtures/folders.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
-import { turns } from "#.storybook/test/motion.ts";
+import { listenTurns, motionAllowed } from "#.storybook/test/motion.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
 import { Tree } from "./index.ts";
@@ -65,15 +66,18 @@ Default.test("moves through the shown items with Up, Down, Home and End", async 
 
 Default.test(
   "expands with Right without turning the chevron, enters with Right and goes up with Left",
-  async ({ canvas, canvasElement, args }) => {
+  async ({ canvas, args }) => {
+    using turns = listenTurns();
+
     const user = await trusted();
     const toggles = listen("ab-toggle");
 
     await user.keyboard("{Tab}{ArrowDown}{ArrowRight}");
     toggles.stop();
-    await expect(turns(canvasElement)).toBe(false);
 
     const components = canvas.getByRole("treeitem", { name: "components", expanded: true });
+
+    await expect(turns.count()).toBe(0);
 
     await expect(args.onExpandedChange).toHaveBeenCalledWith(
       ["src", "components"],
@@ -139,7 +143,9 @@ Default.test(
 
 Default.test(
   "expands with a click on the chevron, which turns when motion is allowed, leaving the selection",
-  async ({ canvas, canvasElement, args }) => {
+  async ({ canvas, args }) => {
+    using turns = listenTurns();
+
     const user = await trusted();
     const components = canvas.getByRole("treeitem", { name: "components" });
     const row = components.getBoundingClientRect();
@@ -147,9 +153,7 @@ Default.test(
 
     // The chevron has no role or name: it is pressed where it is drawn, before the label.
     await user.click(components, { position: { x: (left - row.left) / 2, y: row.height / 2 } });
-    await expect(turns(canvasElement)).toBe(
-      !matchMedia("(prefers-reduced-motion: reduce)").matches,
-    );
+    await waitFor(() => expect(turns.count()).toBe(Number(motionAllowed())));
     await expect(
       canvas.getByRole("treeitem", { name: "components", expanded: true, selected: false }),
     ).toBe(components);
@@ -339,3 +343,5 @@ LazyChildren.test(
     await expect(origin).not.toHaveAttribute("aria-busy");
   },
 );
+
+export const WorstCase = meta.story({ tags: ["!autodocs"], args: deepFolders });

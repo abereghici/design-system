@@ -28,3 +28,41 @@ exports[`Default 1`] = `
 - complementary "Activity":
   - heading "Activity" [level=2]
 `;
+
+exports[`Empty 1`] = `
+- main:
+  - heading "Revenue" [level=1]
+`;
+
+exports[`Worst Case 1`] = `
+- banner:
+  - img "Northwind Industries Holdings"
+  - navigation "Main":
+    - list:
+      - listitem:
+        - link "Commandes":
+          - /url: "#0"
+      - listitem:
+        - link "Clients":
+          - /url: "#1"
+      - listitem:
+        - link "Rapports":
+          - /url: "#2"
+      - listitem:
+        - link "Intégrations":
+          - /url: "#3"
+      - listitem:
+        - link "Paramètres de l’organisation":
+          - /url: "#4"
+- navigation "Workspace":
+  - group "Rapports":
+    - text: Rapports
+    - list:
+      - listitem:
+        - link "Chiffre d’affaires par région et par trimestre":
+          - /url: "#revenue"
+- main:
+  - heading "Rapport de bartholomew.fitzgerald@northwind-industries-holdings.example.com" [level=1]
+- complementary "Activity":
+  - heading "Activité" [level=2]
+`;

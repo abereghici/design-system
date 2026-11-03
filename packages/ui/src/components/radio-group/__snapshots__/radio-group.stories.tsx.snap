@@ -22,3 +22,12 @@ exports[`Invalid   > base story 1`] = `
   - text: Lifetime
 - text: Choose a plan.
 `;
+
+exports[`Worst Case 1`] = `
+- radiogroup "Formule de facturation pour Northwind Industries Holdings":
+  - text: Formule de facturation pour Northwind Industries Holdings
+  - radio "Mensuelle, facturée le premier jour ouvré du mois, sans engagement" [checked]
+  - text: Mensuelle, facturée le premier jour ouvré du mois, sans engagement
+  - radio "Annuelle"
+  - text: Annuelle
+`;

@@ -9,3 +9,13 @@ exports[`Default   > base story 1`] = `
 - main:
   - button "First control"
 `;
+
+exports[`Worst Case 1`] = `
+- link "Direkt zum Hauptinhalt der Rechnungsübersicht von Northwind Industries springen":
+  - /url: "#main"
+- navigation "Primary":
+  - link "Home":
+    - /url: "#home"
+- main:
+  - button "First control"
+`;

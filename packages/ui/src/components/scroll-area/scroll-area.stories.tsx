@@ -77,3 +77,19 @@ Default.test(
     await expect(canvas.getByRole("link", { name: first })).toHaveFocus();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: [
+      ...terms,
+      "Questions: bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+      "https://northwind-industries-holdings.example.com/legal/terms/2026/workspace-agreement-v12-final",
+    ].map((term) => <p key={term}>{term}</p>),
+  },
+});
+
+export const Empty = meta.story({
+  tags: ["!autodocs"],
+  args: { children: <p>{first}</p> },
+});

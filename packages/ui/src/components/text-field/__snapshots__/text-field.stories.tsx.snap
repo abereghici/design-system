@@ -15,3 +15,11 @@ exports[`Default   > base story 1`] = `
 exports[`With Icon And Shortcut   > base story 1`] = `
 - searchbox "Search"
 `;
+
+exports[`Worst Case 1`] = `
+- text: Adresse e-mail professionnelle de facturation (utilisée pour les relances)
+- textbox "Adresse e-mail professionnelle de facturation (utilisée pour les relances)":
+  - /placeholder: name@domain.com
+  - text: bartholomew.fitzgerald@northwind-industries-holdings.example.com
+- text: Saisissez une adresse e-mail valide, par exemple bartholomew.fitzgerald@northwind-industries-holdings.example.com
+`;

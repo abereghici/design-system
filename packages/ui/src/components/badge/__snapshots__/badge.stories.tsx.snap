@@ -8,3 +8,7 @@ exports[`In A Link   > base story 1`] = `
 - link "Inbox 3":
   - /url: "#inbox"
 `;
+
+exports[`Worst Case 1`] = `
+- text: 99+ 0 Nouveau
+`;

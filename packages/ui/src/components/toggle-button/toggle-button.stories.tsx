@@ -2,8 +2,10 @@ import { expect, fn } from "storybook/test";
 
 import { PinIcon } from "@abereghici/ui/icons/pin";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
+import { onTouchScreen, pressJustBelow } from "#.storybook/test/pointer.ts";
 
 import { ToggleButton } from "./toggle-button.tsx";
 import type { ToggleButtonChangeEventDetails } from "./toggle-button.tsx";
@@ -19,6 +21,17 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({});
+
+Default.test(
+  "on a touch screen, takes a press just outside its edge",
+  { beforeEach: onTouchScreen },
+  async ({ canvas }) => {
+    const button = canvas.getByRole("button");
+
+    await pressJustBelow(button);
+    await expect(button).toHaveAttribute("aria-pressed", "true");
+  },
+);
 
 Default.test(
   "turns on and off, reporting each change once",
@@ -103,4 +116,10 @@ export const IconOnly = meta.story({
 IconOnly.test("is named by its aria-label and turns on and off", async ({ canvas, userEvent }) => {
   await userEvent.click(canvas.getByRole("button", { name: "Pin", pressed: false }));
   await expect(canvas.getByRole("button", { name: "Pin", pressed: true })).toBeVisible();
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: { children: "Afficher les éléments archivés de Northwind Industries Holdings" },
+  decorators: [withWidth("18rem")],
 });

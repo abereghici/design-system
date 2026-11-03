@@ -303,3 +303,9 @@ Invalid.test("marks the thumb invalid and describes it with the error", async ({
   await expect(slider).toBeInvalid();
   await expect(slider).toHaveAccessibleDescription("Keep the volume below 30 at night.");
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: { min: 0, max: 10000000, defaultValue: 9999999 },
+  decorators: [withWidth("18rem")],
+});

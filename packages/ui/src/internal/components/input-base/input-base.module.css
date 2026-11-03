@@ -49,7 +49,8 @@
     }
   }
 
-  .root:is(:focus-visible, :has(> :focus-visible)) {
+  /* The box rings for its own text input too, which may sit inside a wrapper (Combobox's tags). */
+  .root:is(:focus-visible, :has(> :focus-visible, input:focus-visible)) {
     border-color: var(--ab-input-base-border-color-focused);
     outline: var(--ab-focus-ring-width) solid var(--ab-input-base-border-color-focused);
     outline-offset: 0;
@@ -58,7 +59,10 @@
   .root:is(
     :user-invalid,
     [aria-invalid="true"],
-    :has(> :is(:user-invalid, [aria-invalid="true"]))
+    :has(
+      > :is(:user-invalid, [aria-invalid="true"]),
+      input:is(:user-invalid, [aria-invalid="true"])
+    )
   ) {
     border-color: var(--ab-input-base-border-color-invalid);
     outline-color: var(--ab-input-base-border-color-invalid);

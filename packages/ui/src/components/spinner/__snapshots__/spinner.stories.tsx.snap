@@ -3,3 +3,7 @@
 exports[`Default   > base story 1`] = `
 - status: Loading
 `;
+
+exports[`Worst Case 1`] = `
+- status: Synchronisation de 1 284 documents depuis Northwind Industries Holdings…
+`;

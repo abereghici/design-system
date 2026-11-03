@@ -3,4 +3,4 @@
 "@abereghici/ui": minor
 ---
 
-The box every Field control draws has its own tokens, `--ab-input-base-*` in `components/input-base.css`, renamed from the `--ab-field-*` tokens that drew it (`--ab-field-height` is now `--ab-input-base-height`). `components/field.css` keeps the label, description and error tokens. Each component's CSS Module now `@import`s its own token sheet.
+Rename the `--ab-field-*` tokens that draw the box of every Field control to `--ab-input-base-*`, in `@abereghici/tokens/components/input-base.css`. For example, `--ab-field-height` is now `--ab-input-base-height`. `components/field.css` keeps the label, description and error tokens.

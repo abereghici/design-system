@@ -16,3 +16,23 @@ exports[`Default   > base story 1`] = `
       - link "About":
         - /url: "#about"
 `;
+
+exports[`Worst Case 1`] = `
+- navigation "Main":
+  - list:
+    - listitem:
+      - link "Accueil":
+        - /url: "#0"
+    - listitem:
+      - link "Tableaux de bord":
+        - /url: "#1"
+    - listitem:
+      - link "Factures et paiements":
+        - /url: "#2"
+    - listitem:
+      - link "Paramètres de l’espace":
+        - /url: "#3"
+    - listitem:
+      - link "Aide":
+        - /url: "#4"
+`;

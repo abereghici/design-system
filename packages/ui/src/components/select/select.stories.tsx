@@ -2,8 +2,10 @@ import { useState } from "react";
 import { expect, fn, waitFor } from "storybook/test";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
+import { longRegions, manyRegions } from "#.storybook/fixtures/regions.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
-import { turns } from "#.storybook/test/motion.ts";
+import { listenTurns, motionAllowed } from "#.storybook/test/motion.ts";
 import { parkPointer, trusted } from "#.storybook/test/trusted.ts";
 
 import * as Select from "./select.tsx";
@@ -251,19 +253,22 @@ Default.test("opens its picker on click and chooses an option", async ({ args, c
 
 Default.test(
   "turns its chevron only when a pointer opens it and motion is allowed",
-  async ({ canvas, canvasElement }) => {
+  async ({ canvas }) => {
     if (!basePicker()) return;
 
+    using turns = listenTurns();
+
     const user = await trusted();
+    const japan = canvas.getByRole("option", { name: "Japan" });
 
     await user.tab();
     await user.keyboard(" ");
-    await expect(turns(canvasElement)).toBe(false);
+    await waitFor(() => expect(japan.checkVisibility()).toBe(true));
     await user.keyboard("{Escape}");
+    await waitFor(() => expect(japan.checkVisibility()).toBe(false));
+    await expect(turns.count()).toBe(0);
     await user.click(canvas.getByRole("combobox", { name: "Region" }));
-    await expect(turns(canvasElement)).toBe(
-      !matchMedia("(prefers-reduced-motion: reduce)").matches,
-    );
+    await waitFor(() => expect(turns.count()).toBe(Number(motionAllowed())));
   },
 );
 
@@ -324,4 +329,22 @@ Controlled.test("follows the value the app holds", async ({ canvas, userEvent })
   await expect(select).toHaveDisplayValue("Most recent");
   await userEvent.selectOptions(select, "name");
   await expect(select).toHaveDisplayValue("Name");
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    label: "Région de résidence des données pour Northwind Industries Holdings",
+    defaultValue: "ba",
+    children: longRegions,
+  },
+  decorators: [withWidth("18rem")],
+});
+
+export const Huge = meta.story({
+  tags: ["!autodocs", "!screenshot"],
+  parameters: { ariaSnapshot: { disable: true } },
+  args: {
+    children: manyRegions,
+  },
 });

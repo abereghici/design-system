@@ -3,3 +3,7 @@
 exports[`Default   > base story 1`] = `
 - group: Advanced settings
 `;
+
+exports[`Worst Case 1`] = `
+- group: Paramètres avancés de synchronisation pour Northwind Industries Holdings Les erreurs sont envoyées à bartholomew.fitzgerald@northwind-industries-holdings.example.com
+`;

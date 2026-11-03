@@ -29,8 +29,10 @@
     --exit-duration: var(--ab-dropdown-menu-exit-duration);
     --easing: var(--ab-dropdown-menu-easing);
 
-    inset-block-start: anchor(self-end);
-    inset-inline-start: anchor(self-start);
+    /* Whole pixels, so the text on its layer renders the same every time. */
+
+    inset-block-start: round(anchor(self-end), 1px);
+    inset-inline-start: round(anchor(self-start), 1px);
     position-try-fallbacks: flip-block;
     min-inline-size: max(var(--ab-dropdown-menu-min-width), anchor-size(self-inline));
     margin: var(--ab-dropdown-menu-offset);
@@ -45,13 +47,13 @@
   .content:where([data-side="top"]) {
     --origin-block: bottom;
 
-    inset-block: auto anchor(self-start);
+    inset-block: auto round(anchor(self-start), 1px);
   }
 
   .content:where([data-align="end"]) {
     --origin-inline: var(--end);
 
-    inset-inline: auto anchor(self-end);
+    inset-inline: auto round(anchor(self-end), 1px);
   }
 
   /* Only script runs the items, so without it the trigger would open a menu that does nothing.

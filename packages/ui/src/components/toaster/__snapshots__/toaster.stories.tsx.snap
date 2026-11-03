@@ -28,3 +28,22 @@ exports[`Stacked   > base story 1`] = `
       - text: Uploaded 1 file
       - button "Dismiss"
 `;
+
+exports[`Worst Case 1`] = `
+- status:
+  - paragraph: ✓
+  - paragraph: Impossible d’inviter bartholomew.fitzgerald@northwind-industries-holdings.example.com L’espace de travail a atteint sa limite de 1 284 membres.
+  - paragraph: Jo a rejoint l’espace de travail
+- alert
+- region "Notifications":
+  - list:
+    - listitem:
+      - text: ✓
+      - button "Dismiss"
+    - listitem:
+      - text: Impossible d’inviter bartholomew.fitzgerald@northwind-industries-holdings.example.com L’espace de travail a atteint sa limite de 1 284 membres.
+      - button "Dismiss"
+    - listitem:
+      - text: Jo a rejoint l’espace de travail
+      - button "Dismiss"
+`;

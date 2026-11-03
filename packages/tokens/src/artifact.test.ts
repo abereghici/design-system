@@ -186,3 +186,19 @@ test("never carries var(), light-dark(), color-mix() or named colors", async () 
 
   expect(values.filter((value) => banned.test(value))).toEqual([]);
 });
+
+test("a larger icon gets a stroke no heavier, so its lines never thicken faster than it grows", async () => {
+  const { artifact, components } = await buildTokens({ tokens: validTokens() });
+  const values = new Map(
+    artifact.strokeWidth.tokens.map(({ name, value }) => [name, Number(value)]),
+  );
+  // Icon tokens reference one semantic token each, which the artifact lists as a literal.
+  const strokeToken = (size: string) =>
+    new RegExp(`--ab-icon-${size}-stroke-width: var\\(--(ab-[\\w\\-]+)\\)`, "v").exec(
+      components["icon"]!,
+    )![1]!;
+  const strokes = ["sm", "md", "lg", "xl"].map((size) => values.get(strokeToken(size))!);
+
+  // The stroke is in viewBox units, so a line's rendered width grows with the icon times its stroke.
+  expect(strokes).toEqual(strokes.toSorted((a, b) => b - a));
+});

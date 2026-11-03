@@ -3,11 +3,10 @@ import { expect, fn, screen, waitFor } from "storybook/test";
 
 import type { UserEventObject } from "storybook/test";
 
-import { UserIcon } from "@abereghici/ui/icons/user";
-
 import { withDialog } from "#.storybook/decorators/with-dialog.tsx";
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
+import { longPeople, person } from "#.storybook/fixtures/people.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { reasons } from "#.storybook/test/listen.ts";
 import { confirmComposition, trusted } from "#.storybook/test/trusted.ts";
@@ -32,13 +31,6 @@ const inView = async (element: HTMLElement) =>
 const cancel = (_value: unknown, details: { cancel: () => void }) => {
   details.cancel();
 };
-
-const person = (value: string, name: string, keywords?: string[]) => (
-  <Combobox.Item key={value} value={value} {...(keywords && { keywords })}>
-    <UserIcon />
-    {name}
-  </Combobox.Item>
-);
 
 let receive: (crew: readonly string[]) => void;
 
@@ -324,4 +316,21 @@ Multiple.test("toggles options, clearing the text, and removes tags", async ({ c
   ]);
   await (await trusted()).click(canvas.getByRole("button", { name: "Reset" }));
   await waitFor(() => expect(entries()).toEqual(["ab"]));
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    selectionMode: "multiple",
+    removeLabel: "Retirer",
+    defaultValue: ["ab", "aw", "bf", "jo", "nt"],
+    children: longPeople,
+  },
+  play: Open.play,
+});
+
+export const Empty = meta.story({
+  tags: ["!autodocs"],
+  args: { children: null, noOptionsText: "Aucune personne ne correspond à cette recherche" },
+  play: Open.play,
 });

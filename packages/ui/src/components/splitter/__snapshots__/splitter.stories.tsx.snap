@@ -13,3 +13,9 @@ exports[`Nested   > base story 1`] = `
 - separator "Resize editor"
 - text: Terminal
 `;
+
+exports[`Worst Case 1`] = `
+- text: Datenschutzgrundverordnungsbeauftragte
+- separator "Resize folders"
+- text: bartholomew.fitzgerald@northwind-industries-holdings.example.com
+`;

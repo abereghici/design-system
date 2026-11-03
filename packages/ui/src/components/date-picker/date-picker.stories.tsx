@@ -329,3 +329,9 @@ LazyCalendar.test("focuses the selected day once the Calendar loads", async ({ c
   await user.click(canvas.getByRole("button", { name: "Choose date" }));
   await waitFor(() => expect(canvas.getByLabelText("Wednesday, March 12, 2025")).toHaveFocus());
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: { label: "วันที่ครบกำหนดชำระใบแจ้งหนี้ของ Northwind Industries Holdings" },
+  globals: { locale: "th-TH" },
+});

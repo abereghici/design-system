@@ -304,3 +304,28 @@ Default.test(
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <DropdownMenu.Trigger asChild>
+          <Button>Actions</Button>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Item aria-keyshortcuts="Meta+Shift+D Control+Shift+D">
+            <CopyIcon />
+            Dupliquer vers l’espace de travail de Northwind Industries Holdings
+            <Kbd keys="mod+shift+d" aria-hidden />
+          </DropdownMenu.Item>
+          <DropdownMenu.Item variant="danger">
+            <TrashIcon />
+            Supprimer définitivement
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </>
+    ),
+  },
+  play: ({ canvas, userEvent }) => userEvent.click(canvas.getByRole("button", { name: "Actions" })),
+});

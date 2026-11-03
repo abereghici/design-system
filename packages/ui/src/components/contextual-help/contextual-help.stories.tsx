@@ -82,3 +82,14 @@ export const NextToALabel = meta.story({
     },
   },
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    title: "Cycle de facturation de Northwind Industries Holdings",
+    children:
+      "Les factures sont envoyées le premier jour ouvré à bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+  },
+  play: ({ canvas, userEvent }) =>
+    userEvent.click(canvas.getByRole("button", { name: "About billing cycles" })),
+});

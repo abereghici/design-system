@@ -2,6 +2,7 @@ import { expect } from "storybook/test";
 
 import { ArrowUpRightIcon } from "@abereghici/ui/icons/arrow-up-right";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { Link } from "./link.tsx";
@@ -53,4 +54,14 @@ export const InText = meta.story({
   parameters: {
     docs: { description: { story: "A link in running text takes the paragraph's type." } },
   },
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    href: "#board-pack",
+    children:
+      "https://files.northwind-industries-holdings.example.com/workspaces/1284/documents/q3-2026-board-pack-final-revised-v12.pdf",
+  },
+  decorators: [withWidth("18rem")],
 });

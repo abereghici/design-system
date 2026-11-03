@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 
 import { IconButton } from "../../components/icon-button/icon-button.tsx";
 import { XIcon } from "../../components/icon/icons/x.tsx";
-import { PressFeedbackContext } from "../interactions/use-press-feedback.ts";
+import { PressFeedbackContext } from "../interactions/use-press-button.ts";
 import type { InvokerCommands } from "../types/invoker-commands.ts";
 
 export type CloseButtonProps = Omit<ComponentProps<"button">, "aria-label" | "children"> &

@@ -25,6 +25,9 @@ jobs:
           require-lockfile: true
           cache: true
       - run: find packages/ui/src apps/ui-next-fixture/test -name __screenshots__ -prune -exec rm -rf {} +
+      # Light first: every other variant keeps a screenshot only where it differs from light's.
+      - run: pnpm turbo run build --filter=@abereghici/ui^...
+      - run: pnpm --filter @abereghici/ui exec vitest run --project screenshot:light -u
       # Vitest and Playwright both read -u as "update the baselines".
       - run: pnpm turbo run test:screenshots -- -u
       - run: |

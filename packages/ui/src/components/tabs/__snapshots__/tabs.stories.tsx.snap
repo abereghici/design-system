@@ -8,10 +8,24 @@ exports[`Default   > base story 1`] = `
 - tabpanel "Overview": Selection glides on a spring.
 `;
 
+exports[`One 1`] = `
+- tablist "Project":
+  - tab "Overview" [selected]
+- tabpanel "Overview": Selection glides on a spring.
+`;
+
 exports[`Overflowing   > base story 1`] = `
 - tablist "Project":
   - tab "Overview" [selected]
   - tab "Activity 3"
   - tab "Settings"
 - tabpanel "Overview": Selection glides on a spring.
+`;
+
+exports[`Worst Case 1`] = `
+- tablist "Espace de travail":
+  - tab "Membres 99+" [selected]
+  - tab "Invitations en attente"
+  - tab "X"
+- tabpanel "Membres 99+": bartholomew.fitzgerald@northwind-industries-holdings.example.com et 1 283 autres.
 `;

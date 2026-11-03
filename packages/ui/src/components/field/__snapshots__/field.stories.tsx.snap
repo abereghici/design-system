@@ -6,3 +6,9 @@ exports[`Default   > base story 1`] = `
   - /placeholder: "@ana"
 - paragraph: Letters, digits and underscores.
 `;
+
+exports[`Worst Case 1`] = `
+- text: Identifiant public de l’espace de travail Northwind Industries Holdings
+- textbox "Identifiant public de l’espace de travail Northwind Industries Holdings": bartholomew.fitzgerald@northwind-industries-holdings.example.com
+- paragraph: Visible par les 1 284 membres de l’espace de travail.
+`;

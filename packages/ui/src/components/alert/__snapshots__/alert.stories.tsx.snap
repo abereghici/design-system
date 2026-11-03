@@ -4,3 +4,8 @@ exports[`Default   > base story 1`] = `
 - text: Couldn’t save changes The file is read-only. Duplicate it to edit.
 - button "Dismiss"
 `;
+
+exports[`Worst Case 1`] = `
+- text: Couldn’t sync “Northwind Industries Holdings — Q3 2026 board pack (final, revised)” Ask bartholomew.fitzgerald@northwind-industries-holdings.example.com for edit access, or open https://files.northwind-industries-holdings.example.com/workspaces/1284/documents/q3-2026-board-pack-final-revised-v12.pdf
+- button "Dismiss"
+`;

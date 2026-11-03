@@ -2,6 +2,7 @@ import { expect, fn, waitFor } from "storybook/test";
 
 import { Badge } from "@abereghici/ui/badge";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { followLinkTo } from "#.storybook/test/follow-link.ts";
 import { listen } from "#.storybook/test/listen.ts";
@@ -254,4 +255,42 @@ Overflowing.test("scrolls a partly hidden tab into view", async ({ canvas, userE
   await expect(atCentre(settings)).not.toBe(settings);
   await userEvent.click(settings);
   await expect(atCentre(settings)).toBe(settings);
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    defaultValue: "members",
+    children: (
+      <>
+        <Tabs.List aria-label="Espace de travail">
+          <Tabs.Trigger value="members">
+            Membres <Badge>{1284}</Badge>
+          </Tabs.Trigger>
+          <Tabs.Trigger value="invitations">Invitations en attente</Tabs.Trigger>
+          <Tabs.Trigger value="x">X</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="members">
+          bartholomew.fitzgerald@northwind-industries-holdings.example.com et 1 283 autres.
+        </Tabs.Content>
+        <Tabs.Content value="invitations">Aucune invitation.</Tabs.Content>
+        <Tabs.Content value="x">Jo</Tabs.Content>
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
+});
+
+export const One = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <Tabs.List aria-label="Project">
+          <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="overview">Selection glides on a spring.</Tabs.Content>
+      </>
+    ),
+  },
 });

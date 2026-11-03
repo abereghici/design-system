@@ -12,3 +12,10 @@ exports[`Open 1`] = `
   - separator
   - menuitem "Delete"
 `;
+
+exports[`Worst Case 1`] = `
+- button "q3-2026-board-pack-final-revised-v12.pdf"
+- menu "File actions":
+  - menuitem "Dupliquer vers l’espace de travail de Northwind Industries Holdings"
+  - menuitem "Supprimer définitivement"
+`;

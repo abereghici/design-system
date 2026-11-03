@@ -184,3 +184,32 @@ Default.test(
     await expect(confirmations.events).toHaveLength(1);
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    defaultOpen: true,
+    children: (
+      <>
+        <AlertDialog.Trigger asChild>
+          <Button variant="danger">Delete project</Button>
+        </AlertDialog.Trigger>
+        <AlertDialog.Content>
+          <AlertDialog.Title>
+            Supprimer définitivement « Northwind Industries Holdings — Q3 2026 board pack » ?
+          </AlertDialog.Title>
+          <AlertDialog.Description>
+            Cela supprime 1 284 fichiers partagés avec
+            bartholomew.fitzgerald@northwind-industries-holdings.example.com. Action irréversible.
+          </AlertDialog.Description>
+          <AlertDialog.Footer>
+            <AlertDialog.Cancel>Conserver le projet</AlertDialog.Cancel>
+            <AlertDialog.Action variant="danger">
+              Supprimer définitivement le projet
+            </AlertDialog.Action>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </>
+    ),
+  },
+});

@@ -1,6 +1,7 @@
 import { expect, fn } from "storybook/test";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -121,3 +122,12 @@ Default.test(
     await expect(toggles.events).toEqual([]);
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children:
+      "Envoyer un e-mail à bartholomew.fitzgerald@northwind-industries-holdings.example.com quand quelqu’un me mentionne",
+  },
+  decorators: [withWidth("18rem")],
+});

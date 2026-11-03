@@ -1,6 +1,6 @@
 "use client";
 
-import { PressFeedbackContext } from "../../internal/interactions/use-press-feedback.ts";
+import { PressFeedbackContext } from "../../internal/interactions/use-press-button.ts";
 import { Button } from "../button/button.tsx";
 
 import type { ButtonProps } from "./alert-dialog-root.tsx";

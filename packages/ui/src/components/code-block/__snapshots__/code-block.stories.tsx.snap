@@ -4,6 +4,14 @@ exports[`Default   > base story 1`] = `
 - code: "import { Button } from \\"@abereghici/ui/button\\";"
 `;
 
+exports[`Empty 1`] = `
+- code
+`;
+
 exports[`Scrolling   > base story 1`] = `
 - code: "const invoice = await client.invoices.create({ customer, currency: \\"EUR\\", lines });"
+`;
+
+exports[`Worst Case 1`] = `
+- code: "// https://northwind-industries-holdings.example.com/api/v2/invoices?status=overdue&page=1284 const greeting = { ar: \\"مرحبا بكم\\", ja: \\"ようこそ\\", emoji: \\"👋🏽\\" }; if (invoice.total > 1_284_000.5) notify(\\"bartholomew.fitzgerald@northwind.example.com\\");"
 `;

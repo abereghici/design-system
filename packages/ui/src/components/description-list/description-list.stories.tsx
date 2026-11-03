@@ -40,3 +40,24 @@ export const Narrow = meta.story({
     },
   },
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <DescriptionList.Item>
+          <DescriptionList.Term>Contact de facturation principal</DescriptionList.Term>
+          <DescriptionList.Details>
+            bartholomew.fitzgerald@northwind-industries-holdings.example.com
+          </DescriptionList.Details>
+        </DescriptionList.Item>
+        <DescriptionList.Item>
+          <DescriptionList.Term>Montant</DescriptionList.Term>
+          <DescriptionList.Details>€1,284,567.89</DescriptionList.Details>
+        </DescriptionList.Item>
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
+});

@@ -229,3 +229,26 @@ Neighbours.test("shows the neighbour at once while warm", async ({ canvas }) => 
   await expect(canvas.getByRole("tooltip")).toBeVisible();
   await expect(canvas.getByRole("tooltip")).toHaveTextContent(/^Copy link/v);
 });
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <Tooltip.Trigger asChild>
+          <IconButton aria-label="Copier le lien de partage">
+            <CopyIcon />
+          </IconButton>
+        </Tooltip.Trigger>
+        <Tooltip.Content>
+          Copier le lien de partage vers
+          https://files.northwind-industries-holdings.example.com/workspaces/1284{" "}
+          <Kbd keys="mod+shift+c" aria-hidden />
+        </Tooltip.Content>
+      </>
+    ),
+  },
+  play: ({ canvas }) => {
+    canvas.getByRole("button", { name: "Copier le lien de partage" }).focus();
+  },
+});

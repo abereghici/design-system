@@ -1,6 +1,7 @@
 import { expect, fn } from "storybook/test";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -236,3 +237,16 @@ Default.test(
     await expect(new FormData(form).getAll("seats")).toEqual(["5"]);
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    label: "Sièges facturés pour Northwind Industries Holdings (toutes les régions)",
+    defaultValue: 1284567,
+    max: 99999999,
+    formatOptions: { style: "currency", currency: "EUR" },
+    incrementLabel: "Augmenter",
+    decrementLabel: "Diminuer",
+  },
+  decorators: [withWidth("18rem")],
+});

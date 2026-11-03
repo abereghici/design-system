@@ -1,6 +1,7 @@
 import { expect, fn, spyOn } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { RangeCalendar } from "./range-calendar.tsx";
@@ -100,6 +101,13 @@ Default.test(
   "starts the week on Monday for ro-RO",
   { globals: { locale: "ro-RO" } },
   async ({ canvas }) => {
-    await expect(canvas.getAllByRole("columnheader")[0]).toHaveTextContent("lun.");
+    await expect(canvas.getAllByRole("columnheader")[0]).toHaveTextContent("L");
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: { "aria-label": "วันที่เดินทาง" },
+  globals: { locale: "th-TH" },
+  decorators: [withWidth("18rem")],
+});

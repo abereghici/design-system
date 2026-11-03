@@ -2,6 +2,7 @@ import { expect, fn } from "storybook/test";
 
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import { withInvalidField } from "#.storybook/decorators/with-invalid-field.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 
@@ -221,4 +222,22 @@ Invalid.test("marks every radio invalid and describes it with the error", async 
     await expect(radio).toBeInvalid();
     await expect(radio).toHaveAccessibleDescription("Choose a plan.");
   }
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <RadioGroup.Label>
+          Formule de facturation pour Northwind Industries Holdings
+        </RadioGroup.Label>
+        <RadioGroup.Item value="monthly">
+          Mensuelle, facturée le premier jour ouvré du mois, sans engagement
+        </RadioGroup.Item>
+        <RadioGroup.Item value="yearly">Annuelle</RadioGroup.Item>
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
 });

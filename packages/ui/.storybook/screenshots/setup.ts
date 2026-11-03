@@ -4,6 +4,7 @@ import { cdp, page } from "vitest/browser";
 
 import { renderedCanvas } from "../test/snapshots.ts";
 
+import { matchesScreenshot } from "./matches-screenshot.ts";
 import type { ScreenshotVariant } from "./projects.ts";
 
 declare module "vitest" {
@@ -103,7 +104,12 @@ afterEach(async ({ story, task }) => {
 
   if (!topLayer && height > innerHeight) await page.viewport(innerWidth, height);
 
-  await expect(page.elementLocator(topLayer ? document.documentElement : canvas)).toMatchScreenshot(
-    `${story.id}-${variant.name}`,
-  );
+  const target = page.elementLocator(topLayer ? document.documentElement : canvas);
+
+  // toMatchScreenshot files a name with its runs of dashes collapsed; story ids have one.
+  const screenshot = (name: string) => `${story.id.replaceAll("--", "-")}-${name}`;
+
+  if (variant.name !== "light" && (await matchesScreenshot(target, screenshot("light")))) return;
+
+  await expect(target).toMatchScreenshot(screenshot(variant.name));
 });

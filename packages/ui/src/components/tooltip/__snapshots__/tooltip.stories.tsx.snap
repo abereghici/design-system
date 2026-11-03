@@ -8,3 +8,8 @@ exports[`Neighbours   > base story 1`] = `
 - button "Pin"
 - button "Copy link"
 `;
+
+exports[`Worst Case 1`] = `
+- button "Copier le lien de partage"
+- tooltip "Copier le lien de partage vers https://files.northwind-industries-holdings.example.com/workspaces/1284"
+`;

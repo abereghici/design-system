@@ -1,5 +1,6 @@
 import { expect, fn, waitFor } from "storybook/test";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
@@ -111,3 +112,22 @@ Default.test(
     await expect(canvas.getByText(limits)).not.toBeVisible();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    defaultOpen: true,
+    children: (
+      <>
+        <Disclosure.Trigger>
+          Paramètres avancés de synchronisation pour Northwind Industries Holdings
+        </Disclosure.Trigger>
+        <Disclosure.Content id="sync-errors">
+          Les erreurs sont envoyées à
+          bartholomew.fitzgerald@northwind-industries-holdings.example.com
+        </Disclosure.Content>
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
+});

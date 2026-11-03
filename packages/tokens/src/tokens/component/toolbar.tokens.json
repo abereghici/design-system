@@ -3,6 +3,18 @@
     "toolbar-gap": {
       "$type": "dimension",
       "$value": "{semantic.space-inline-xs}"
+    },
+    "toolbar-padding": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inset-2xs}"
+    },
+    "toolbar-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-md}"
+    },
+    "toolbar-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-nested}"
     }
   }
 }

@@ -1,6 +1,7 @@
 import { expect, fn } from "storybook/test";
 
 import { withHeight } from "#.storybook/decorators/with-height.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { touchDrag } from "#.storybook/test/pointer.ts";
@@ -213,4 +214,20 @@ Nested.test("moves each handle on its own", async ({ canvas, userEvent }) => {
     "aria-valuenow",
     "30",
   );
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <Splitter.Panel style={inset}>Datenschutzgrundverordnungsbeauftragte</Splitter.Panel>
+        <Splitter.Handle aria-label="Resize folders" />
+        <Splitter.Panel style={inset}>
+          bartholomew.fitzgerald@northwind-industries-holdings.example.com
+        </Splitter.Panel>
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
 });

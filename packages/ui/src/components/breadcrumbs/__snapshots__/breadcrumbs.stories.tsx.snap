@@ -36,3 +36,17 @@ exports[`Long Trail   > base story 1`] = `
       - link "Breadcrumbs and pagination guidelines for dense data views":
         - /url: "#current"
 `;
+
+exports[`Worst Case 1`] = `
+- navigation "Breadcrumb":
+  - list:
+    - listitem:
+      - link "Northwind Industries Holdings":
+        - /url: "#workspace"
+    - listitem:
+      - link "bartholomew.fitzgerald@northwind-industries-holdings.example.com":
+        - /url: "#member"
+    - listitem:
+      - link "Datenschutzgrundverordnungsbeauftragte":
+        - /url: "#current"
+`;

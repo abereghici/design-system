@@ -4,3 +4,8 @@ exports[`Default   > base story 1`] = `
 - text: Storage 42%
 - meter "Storage"
 `;
+
+exports[`Worst Case 1`] = `
+- text: Storage used by the Northwind Industries Holdings shared drives 2,300 GB of 2,048 GB
+- meter "Storage used by the Northwind Industries Holdings shared drives"
+`;

@@ -4,6 +4,7 @@ import { Button } from "@abereghici/ui/button";
 import { FilesIcon } from "@abereghici/ui/icons/files";
 import { Table } from "@abereghici/ui/table";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 
 import * as EmptyState from "./empty-state.tsx";
@@ -86,4 +87,26 @@ export const InATable = meta.story({
 InATable.test("keeps the column headers and says why it is empty", async ({ canvas }) => {
   await expect(canvas.getAllByRole("columnheader")).toHaveLength(3);
   await expect(canvas.getByRole("cell", { name: /No files yet/v })).toBeVisible();
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <EmptyState.Media>
+          <FilesIcon />
+        </EmptyState.Media>
+        <EmptyState.Title>
+          Aucun document partagé avec Northwind Industries Holdings pour le moment
+        </EmptyState.Title>
+        <EmptyState.Description>
+          Importez un fichier ou demandez à
+          bartholomew.fitzgerald@northwind-industries-holdings.example.com de vous en partager un.
+        </EmptyState.Description>
+        <Button>Importer des documents depuis votre ordinateur</Button>
+      </>
+    ),
+  },
+  decorators: [withWidth("18rem")],
 });

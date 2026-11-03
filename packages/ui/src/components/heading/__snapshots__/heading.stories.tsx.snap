@@ -3,3 +3,7 @@
 exports[`Default   > base story 1`] = `
 - heading "Overdue invoices" [level=2]
 `;
+
+exports[`Worst Case 1`] = `
+- heading "Datenschutzgrundverordnungsbeauftragtenbestellung für Northwind Industries Holdings" [level=1]
+`;

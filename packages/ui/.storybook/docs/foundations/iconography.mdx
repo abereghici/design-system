@@ -7,7 +7,7 @@ import { Value } from "../blocks/values.tsx";
 
 # Iconography
 
-A custom set on a 24-unit grid, drawn with straight strokes and square ends. Icons take the color of the text they sit in.
+A custom set in a 24 × 24 viewBox, drawn with straight strokes and square ends. Icons take the color of the text they sit in.
 
 ```tsx
 import { BellIcon } from "@abereghici/ui/icons/bell";
@@ -26,7 +26,7 @@ Browse and copy imports in the [icon explorer](?path=/docs/reference-icons--docs
 | `lg` | <Value of="icon-lg-size" /> |
 | `xl` | <Value of="icon-xl-size" /> |
 
-Match the size to the text beside it; `md` is the default. The stroke changes with the size, so lines look equally heavy at every size.
+Match the size to the text beside it; `md` is the default. A larger size never gets a heavier stroke, so its lines never thicken faster than the icon grows.
 
 ## Meaning
 

@@ -7,3 +7,7 @@ exports[`Default   > base story 1`] = `
 exports[`Icon Only   > base story 1`] = `
 - button "Pin"
 `;
+
+exports[`Worst Case 1`] = `
+- button "Afficher les éléments archivés de Northwind Industries Holdings"
+`;

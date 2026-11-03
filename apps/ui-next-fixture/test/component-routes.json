@@ -296,7 +296,7 @@
     "name": "copy-button",
     "tokens": ["button", "spinner"],
     "client": ["components/copy-button/copy-button"],
-    "html": "Copy invoice number</button><output"
+    "html": "</button><output"
   },
   {
     "name": "toggle-button",
@@ -306,7 +306,7 @@
   },
   {
     "name": "toggle-button-group",
-    "tokens": ["toggle-button", "toggle-button-group"],
+    "tokens": ["toggle-button"],
     "client": [
       "components/toggle-button-group/toggle-button-group",
       "components/toggle-button/toggle-button"

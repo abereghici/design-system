@@ -1,5 +1,6 @@
 import { expect, fn, waitFor } from "storybook/test";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen } from "#.storybook/test/listen.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
@@ -176,5 +177,50 @@ export const LongTrigger = meta.story({
   },
   parameters: {
     docs: { description: { story: "A long trigger wraps, with the chevron kept in view." } },
+  },
+});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    defaultValue: ["access", "?"],
+    children: (
+      <>
+        <Accordion.Item value="access">
+          <Accordion.Trigger>
+            Pourquoi bartholomew.fitzgerald@northwind-industries-holdings.example.com n’a-t-il pas
+            accès ?
+          </Accordion.Trigger>
+          <Accordion.Content>
+            Demandez à Aleksandra Wiśniewska-Kowalczyk d’ouvrir
+            https://platform.example.com/settings/organization/members?filter=pending
+          </Accordion.Content>
+        </Accordion.Item>
+        <Accordion.Item value="?">
+          <Accordion.Trigger>?</Accordion.Trigger>
+          <Accordion.Content>Jo</Accordion.Content>
+        </Accordion.Item>
+        <Accordion.Item value="limits">
+          <Accordion.Trigger>
+            Combien de membres un espace de travail peut-il avoir ?
+          </Accordion.Trigger>
+          <Accordion.Content>1 284</Accordion.Content>
+        </Accordion.Item>
+      </>
+    ),
+  },
+  decorators: [withWidth("20rem")],
+});
+
+export const One = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    defaultValue: [],
+    children: (
+      <Accordion.Item value="tokens">
+        <Accordion.Trigger>How are tokens versioned?</Accordion.Trigger>
+        <Accordion.Content>{tokens}</Accordion.Content>
+      </Accordion.Item>
+    ),
   },
 });

@@ -7,3 +7,11 @@ exports[`Default   > base story 1`] = `
   - text: City
   - textbox "City"
 `;
+
+exports[`Worst Case 1`] = `
+- group "Adresse de facturation et coordonnées fiscales de Northwind Industries Holdings":
+  - text: Adresse de facturation et coordonnées fiscales de Northwind Industries Holdings Rue
+  - textbox "Rue": Aleja Jana Pawła II 1284, lokal 12
+  - text: Contact
+  - textbox "Contact": bartholomew.fitzgerald@northwind-industries-holdings.example.com
+`;

@@ -11,6 +11,9 @@
     padding: calc(var(--ab-focus-ring-width) + var(--ab-focus-ring-offset));
     list-style: none;
     overflow-x: auto;
+    /* Its IconButtons take presses past its edge on touch screens, which mustn't scroll it up and
+       down. */
+    overflow-y: hidden;
   }
 
   .page,

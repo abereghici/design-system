@@ -82,6 +82,7 @@
   },
   "devDependencies": {
     "@babel/core": "catalog:",
+    "@blazediff/core": "catalog:",
     "@repo/oxlint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@rolldown/plugin-babel": "catalog:",

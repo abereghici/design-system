@@ -6,3 +6,10 @@ exports[`Default   > base story 1`] = `
 - button "Decrease"
 - button "Increase"
 `;
+
+exports[`Worst Case 1`] = `
+- text: Sièges facturés pour Northwind Industries Holdings (toutes les régions)
+- textbox "Sièges facturés pour Northwind Industries Holdings (toutes les régions)": €1,284,567.00
+- button "Diminuer"
+- button "Augmenter"
+`;

@@ -21,3 +21,11 @@ exports[`Single Selection   > base story 1`] = `
   - button "Center"
   - button "End"
 `;
+
+exports[`Worst Case 1`] = `
+- group "Text style":
+  - button "Gras"
+  - button "Italique"
+  - button "Souligné"
+  - button "Durchgestrichen"
+`;

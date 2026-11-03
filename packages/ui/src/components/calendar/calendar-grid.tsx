@@ -93,7 +93,7 @@ export function Grid(props: GridProps) {
               abbr={formats.weekday(day, "long")}
               className={styles["weekday"]}
             >
-              {formats.weekday(day, "short")}
+              {formats.weekday(day, "narrow")}
             </th>
           ))}
         </tr>

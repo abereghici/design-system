@@ -62,3 +62,61 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({});
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <>
+        <PageLayout.Header>
+          <Logo label="Northwind Industries Holdings" />
+          <Navbar.Root aria-label="Main">
+            {[
+              "Commandes",
+              "Clients",
+              "Rapports",
+              "Intégrations",
+              "Paramètres de l’organisation",
+            ].map((label, index) => (
+              <Navbar.Item key={label}>
+                <Navbar.Link href={`#${index}`} {...(index === 0 && { "aria-current": "page" })}>
+                  {label}
+                </Navbar.Link>
+              </Navbar.Item>
+            ))}
+          </Navbar.Root>
+        </PageLayout.Header>
+        <PageLayout.Navigation>
+          <Sidebar.Root aria-label="Workspace">
+            <Sidebar.Group label="Rapports">
+              <Sidebar.Item>
+                <Sidebar.Link href="#revenue" aria-current="page">
+                  Chiffre d’affaires par région et par trimestre
+                </Sidebar.Link>
+              </Sidebar.Item>
+            </Sidebar.Group>
+          </Sidebar.Root>
+        </PageLayout.Navigation>
+        <PageLayout.Content>
+          <Heading as="h1">
+            Rapport de bartholomew.fitzgerald@northwind-industries-holdings.example.com
+          </Heading>
+        </PageLayout.Content>
+        <PageLayout.Aside aria-label="Activity">
+          <Heading as="h2">Activité</Heading>
+        </PageLayout.Aside>
+      </>
+    ),
+  },
+});
+
+export const Empty = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    children: (
+      <PageLayout.Content>
+        <Heading as="h1">Revenue</Heading>
+      </PageLayout.Content>
+    ),
+  },
+});

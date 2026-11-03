@@ -5,6 +5,7 @@ import { SearchIcon } from "@abereghici/ui/icons/search";
 
 import { submitted, withForm } from "#.storybook/decorators/with-form.tsx";
 import { withSearch } from "#.storybook/decorators/with-search.tsx";
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 import { trusted } from "#.storybook/test/trusted.ts";
 
@@ -217,3 +218,13 @@ InASearchLandmark.test(
     await expect(submitted).not.toHaveBeenCalled();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  args: {
+    label: "Rechercher dans les factures de Northwind Industries Holdings",
+    defaultValue: "bartholomew.fitzgerald@northwind-industries-holdings.example.com",
+    clearLabel: "Effacer la recherche",
+  },
+  decorators: [withWidth("18rem")],
+});

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { expect, fn, spyOn } from "storybook/test";
 import { Temporal } from "temporal-polyfill";
 
+import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
 
 import { Calendar } from "./calendar.tsx";
@@ -57,13 +58,13 @@ Default.test("names the grid by its month and selects the value", async ({ canva
 
   await expect(grid).toBeVisible();
   await expect(canvas.getAllByRole("columnheader").map((header) => header.textContent)).toEqual([
-    "Sun",
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat",
+    "S",
+    "M",
+    "T",
+    "W",
+    "T",
+    "F",
+    "S",
   ]);
   await expect(canvas.getByLabelText("Saturday, October 24, 2026")).toHaveAttribute(
     "aria-selected",
@@ -220,7 +221,7 @@ Default.test(
   { globals: { locale: "ro-RO" } },
   async ({ canvas }) => {
     await expect(canvas.getByRole("grid", { name: "octombrie 2026" })).toBeVisible();
-    await expect(canvas.getAllByRole("columnheader")[0]).toHaveTextContent("lun.");
+    await expect(canvas.getAllByRole("columnheader")[0]).toHaveTextContent("L");
   },
 );
 
@@ -231,3 +232,9 @@ Default.test(
     await expect(canvas.getByRole("grid", { name: "ตุลาคม 2026" })).toBeVisible();
   },
 );
+
+export const WorstCase = meta.story({
+  tags: ["!autodocs"],
+  globals: { locale: "th-TH" },
+  decorators: [withWidth("18rem")],
+});

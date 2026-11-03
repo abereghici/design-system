@@ -16,3 +16,20 @@ exports[`Default   > base story 1`] = `
   - button "Save"
   - button "Reset"
 `;
+
+exports[`Worst Case 1`] = `
+- form "Profile":
+  - text: Période de séjour pour l’équipe de Northwind Industries Holdings
+  - group "Période de séjour pour l’équipe de Northwind Industries Holdings":
+    - group "Start date":
+      - spinbutton "วัน": "12"
+      - spinbutton "เดือน": "10"
+      - spinbutton "ปี": "2026"
+    - group "End date":
+      - spinbutton "วัน": "16"
+      - spinbutton "เดือน": "10"
+      - spinbutton "ปี": "2026"
+    - button "Choose dates"
+  - button "Save"
+  - button "Reset"
+`;

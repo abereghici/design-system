@@ -3,3 +3,13 @@
 exports[`Default   > base story 1`] = `
 - button "Open details"
 `;
+
+exports[`Worst Case 1`] = `
+- button "Open details"
+- dialog "Facture INV-2026-000001284 — Northwind Industries Holdings":
+  - heading "Facture INV-2026-000001284 — Northwind Industries Holdings" [level=2]
+  - paragraph: Émise le 3 octobre à bartholomew.fitzgerald@northwind-industries-holdings.example.com
+  - paragraph: https://files.northwind-industries-holdings.example.com/workspaces/1284/documents/q3-2026-board-pack-final-revised-v12.pdf
+  - button "Marquer comme traitée"
+  - button "Fermer"
+`;

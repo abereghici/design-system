@@ -38,19 +38,8 @@ const variants: ScreenshotVariant[] = [
     matches: ["(prefers-contrast: more)"],
   },
   {
-    name: "reduced-motion",
-    contextOptions: { reducedMotion: "reduce" },
-    matches: ["(prefers-reduced-motion: reduce)"],
-  },
-  {
     name: "reduced-transparency",
     emulatedMedia: [{ name: "prefers-reduced-transparency", value: "reduce" }],
-  },
-  // CDP can't emulate pointer or hover; touch emulation sets both.
-  {
-    name: "touch",
-    contextOptions: { hasTouch: true },
-    matches: ["(pointer: coarse)", "(hover: none)"],
   },
   { name: "rtl", initialGlobals: { dir: "rtl" } },
   { name: "compact", initialGlobals: { density: "compact" } },
@@ -65,7 +54,10 @@ const instance = (variant: ScreenshotVariant) => ({
   browser: "chromium" as const,
   name: `screenshot:${variant.name}`,
   provide: { screenshotVariant: variant },
-  provider: playwright({ contextOptions: { ...variant.contextOptions, deviceScaleFactor: 1 } }),
+  provider: playwright({
+    launchOptions: { args: ["--disable-lcd-text"] },
+    contextOptions: { ...variant.contextOptions, deviceScaleFactor: 1 },
+  }),
 });
 
 // Variants that differ only in their browser context share a project, so one Vite server serves

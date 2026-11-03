@@ -87,7 +87,7 @@ A single-part Component exports itself instead (`button/button.tsx` exports `But
 | An accessible name the props require (`AccessibleName`, `Labelled`)                  | `internal/types/accessible-name.ts`                                                  |
 | `command` and `commandfor` in a button's types                                       | `internal/types/invoker-commands.ts`                                                 |
 | A button that stays focusable while disabled                                         | `internal/interactions/use-button.ts`                                                |
-| A Button's `ab-press`, which a Part that reports its own Feedback event turns off    | `internal/interactions/use-press-feedback.ts`                                        |
+| A Button's `ab-press`, which a Part that reports its own Feedback event turns off    | `internal/interactions/use-press-button.ts`                                          |
 | A native checkbox's click                                                            | `internal/interactions/toggle-click.ts`                                              |
 | Pointer modality, pointer drags and IME composition                                  | `internal/interactions/` (`pointer-marker.ts`, `use-move.ts`, `composition.ts`)      |
 | Typeahead, and the text an Item is matched by                                        | `internal/selection/typeahead.ts`, `internal/selection/text-of.ts`                   |

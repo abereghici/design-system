@@ -4,3 +4,11 @@ exports[`Default   > base story 1`] = `
 - button "Actions"
 - button "After"
 `;
+
+exports[`Worst Case 1`] = `
+- button "Actions" [expanded]
+- menu "Actions":
+  - menuitem "Dupliquer vers l’espace de travail de Northwind Industries Holdings"
+  - menuitem "Supprimer définitivement"
+- button "After"
+`;

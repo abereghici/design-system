@@ -67,6 +67,17 @@ function Control({ placeholder, defaultValue, children, ...props }: ControlProps
             if (disabled) event.preventDefault();
           }, props.onMouseDown)}
         >
+          {/* The customizable select's own button shows the chosen option in <selectedcontent>, the
+              one box text-overflow reaches; other browsers drop both and show the system select. The
+              browser fills it while parsing and on every change, so React must not own its children: an
+              unchanging `__html` keeps React out, and `suppressHydrationWarning` skips its dev check. */}
+          <button type="button" className={styles["trigger"]}>
+            <selectedcontent
+              className={styles["value"]}
+              dangerouslySetInnerHTML={{ __html: "" }}
+              suppressHydrationWarning
+            />
+          </button>
           {placeholder !== undefined && (
             <option value="" disabled hidden className={styles["placeholder"]}>
               {placeholder}
