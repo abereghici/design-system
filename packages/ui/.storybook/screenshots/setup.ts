@@ -4,8 +4,8 @@ import { cdp, page } from "vitest/browser";
 
 import { renderedCanvas } from "../test/snapshots.ts";
 
-import { gatedStyles } from "./gated-styles.ts";
 import type { ScreenshotVariant } from "./projects.ts";
+import { sameAsLight } from "./same-as-light.ts";
 
 declare module "vitest" {
   export interface TestContext {
@@ -18,7 +18,7 @@ declare module "vitest" {
 }
 
 const variant = inject("screenshotVariant");
-const { matches = [], emulatedMedia, defaultFontSize, textSpacing, gates } = variant ?? {};
+const { matches = [], emulatedMedia, defaultFontSize, textSpacing } = variant ?? {};
 const px = (length: string) => Number(length.replace("px", ""));
 
 beforeAll(async () => {
@@ -99,14 +99,15 @@ afterEach(async ({ story, task }) => {
       .map((animation) => animation.finished),
   );
 
-  if (gates !== undefined && !gatedStyles(gates)) return;
-
   const topLayer = document.querySelector(":modal, :popover-open, select:open") !== null;
   const height = document.documentElement.scrollHeight;
 
   if (!topLayer && height > innerHeight) await page.viewport(innerWidth, height);
 
-  await expect(page.elementLocator(topLayer ? document.documentElement : canvas)).toMatchScreenshot(
-    `${story.id}-${variant.name}`,
-  );
+  const target = page.elementLocator(topLayer ? document.documentElement : canvas);
+
+  // A variant that draws a story exactly as the light screenshot does would only repeat it.
+  if (variant.name !== "light" && (await sameAsLight(target, story.id))) return;
+
+  await expect(target).toMatchScreenshot(`${story.id}-${variant.name}`);
 });
