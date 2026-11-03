@@ -20,9 +20,11 @@ const pixels = async (base64: string) => {
  * screenshot of it would only repeat that one. A story without a light screenshot yet draws its own.
  */
 export async function sameAsLight(target: Locator, story: string) {
-  const file = expect.getState().testPath?.split("/").at(-1) ?? "";
+  const test = expect.getState().testPath ?? "";
+  const folder = test.slice(0, test.lastIndexOf("/"));
+  const file = test.slice(folder.length + 1);
   const light = await commands
-    .readFile(`__screenshots__/${file}/${story}-light-chromium-linux.png`, "base64")
+    .readFile(`${folder}/__screenshots__/${file}/${story}-light-chromium-linux.png`, "base64")
     .catch(() => null);
 
   if (light === null) return false;
