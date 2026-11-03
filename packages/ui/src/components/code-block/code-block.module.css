@@ -12,5 +12,6 @@
 
   .code {
     font: var(--ab-code-block-font);
+    tab-size: 4;
   }
 }
