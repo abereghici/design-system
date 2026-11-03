@@ -1,5 +1,14 @@
 # @abereghici/tokens
 
+## 0.3.0
+
+### Minor Changes
+
+- c1dccca: Rename the `--ab-field-*` tokens that draw the box of every Field control to `--ab-input-base-*`, in `@abereghici/tokens/components/input-base.css`. For example, `--ab-field-height` is now `--ab-input-base-height`. `components/field.css` keeps the label, description and error tokens.
+- 1692f04: ToggleButtonGroup: Join the buttons into one shape on one line, with shared edges and rounded ends. Remove `--ab-toggle-button-group-gap` and `@abereghici/tokens/components/toggle-button-group.css`.
+- 1692f04: Toolbar: Draw a track around the controls, styled by `--ab-toolbar-padding`, `--ab-toolbar-border-radius` and `--ab-toolbar-background-color`, with a border in forced colors mode. ToggleButtons inside it show an edge only when pressed.
+- d7cd780: Keep controls the same size on touch screens as with a mouse: `size-control-*` and `size-control-compact-*` no longer grow under `(pointer: coarse)`. The smallest, `size-control-xs`, is 24px, the minimum target size of WCAG 2.5.8.
+
 ## 0.2.0
 
 ### Minor Changes
