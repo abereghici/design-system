@@ -16,6 +16,7 @@ allowBuilds:
 
 catalog:
   "@axe-core/playwright": 4.14.0
+  "@blazediff/core": 1.10.0
   "@stylistic/eslint-plugin": 5.10.0
   "@size-limit/esbuild": 14.3.0
   "@size-limit/file": 14.3.0
