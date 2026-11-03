@@ -54,7 +54,12 @@ const instance = (variant: ScreenshotVariant) => ({
   browser: "chromium" as const,
   name: `screenshot:${variant.name}`,
   provide: { screenshotVariant: variant },
-  provider: playwright({ contextOptions: { ...variant.contextOptions, deviceScaleFactor: 1 } }),
+  provider: playwright({
+    // Chromium picks LCD or greyscale anti-aliasing for some text from launch to launch (PageLayout
+    // Worst Case); greyscale everywhere draws it the same every time.
+    launchOptions: { args: ["--disable-lcd-text"] },
+    contextOptions: { ...variant.contextOptions, deviceScaleFactor: 1 },
+  }),
 });
 
 // Variants that differ only in their browser context share a project, so one Vite server serves

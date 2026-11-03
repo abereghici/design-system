@@ -13,7 +13,13 @@ export default defineConfig({
   // Nothing listens on this origin: the spec answers every request from the static export.
   use: { baseURL: "http://fixture.test", javaScriptEnabled: false },
   projects: [
-    { name: "chromium", testIgnore: "hydration.spec.ts" },
+    {
+      name: "chromium",
+      testIgnore: "hydration.spec.ts",
+      // Chromium picks LCD or greyscale anti-aliasing for some text from launch to launch; greyscale
+      // everywhere draws it the same every time.
+      use: { launchOptions: { args: ["--disable-lcd-text"] } },
+    },
     // Full Chromium, not the headless shell: only it parses customizable select's markup, which the
     // browser fills in before React hydrates. Firefox and WebKit show the system select instead.
     { name: "hydration-chromium", testMatch: "hydration.spec.ts", use: { channel: "chromium" } },
