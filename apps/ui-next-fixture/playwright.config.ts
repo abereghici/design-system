@@ -16,8 +16,6 @@ export default defineConfig({
     {
       name: "chromium",
       testIgnore: "hydration.spec.ts",
-      // Chromium picks LCD or greyscale anti-aliasing for some text from launch to launch; greyscale
-      // everywhere draws it the same every time.
       use: { launchOptions: { args: ["--disable-lcd-text"] } },
     },
     // Full Chromium, not the headless shell: only it parses customizable select's markup, which the

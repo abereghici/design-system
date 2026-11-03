@@ -109,7 +109,6 @@ afterEach(async ({ story, task }) => {
   // toMatchScreenshot files a name with its runs of dashes collapsed; story ids have one.
   const screenshot = (name: string) => `${story.id.replaceAll("--", "-")}-${name}`;
 
-  // A variant that draws a story exactly as the light screenshot does would only repeat it.
   if (variant.name !== "light" && (await matchesScreenshot(target, screenshot("light")))) return;
 
   await expect(target).toMatchScreenshot(screenshot(variant.name));
