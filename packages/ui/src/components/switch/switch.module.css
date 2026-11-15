@@ -17,7 +17,6 @@
     letter-spacing: var(--ab-type-label-sm-letter-spacing);
     color: var(--ab-color-text-default);
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
   }
   .root:has(.track:is([aria-disabled="true"], :disabled)) {
     color: var(--ab-color-text-disabled);

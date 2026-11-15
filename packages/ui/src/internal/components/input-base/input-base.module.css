@@ -20,6 +20,14 @@
       outline-color var(--ab-motion-duration-hover-in) var(--ab-motion-easing-color);
   }
 
+  /* iOS Safari zooms the page into a focused field whose text is under 16px; dense 14px text
+     stays for a mouse, as in shadcn/ui's Input. */
+  @media (pointer: coarse) {
+    .root {
+      --ab-input-base-font: var(--ab-type-body-md);
+    }
+  }
+
   [data-size="lg"] .root {
     block-size: var(--ab-input-base-lg-height);
   }

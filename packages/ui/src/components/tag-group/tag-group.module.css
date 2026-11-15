@@ -25,7 +25,6 @@
     background-color: transparent;
     color: inherit;
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
     transition-property: background-color, scale;
     transition-duration: var(--ab-motion-duration-hover-out), var(--ab-motion-duration-press);
     transition-timing-function: var(--ab-motion-easing-color), var(--ab-motion-easing-enter);

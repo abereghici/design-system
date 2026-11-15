@@ -10,3 +10,30 @@ exports[`Default 1`] = `
 - heading "Customers" [level=3]
 - paragraph: 312 new this month
 `;
+
+exports[`Named Areas 1`] = `
+- heading "Alexandru Bereghici" [level=3]
+- paragraph: Software engineer building design systems
+- heading "Work" [level=3]
+- paragraph: Twelve years on the web
+- heading "Links" [level=3]
+- paragraph: GitHub, LinkedIn and the blog
+- heading "Contact" [level=3]
+- paragraph: Write to me about a project
+- heading "Alexandru Bereghici" [level=3]
+- paragraph: Software engineer building design systems
+- heading "Work" [level=3]
+- paragraph: Twelve years on the web
+- heading "Links" [level=3]
+- paragraph: GitHub, LinkedIn and the blog
+- heading "Contact" [level=3]
+- paragraph: Write to me about a project
+- heading "Alexandru Bereghici" [level=3]
+- paragraph: Software engineer building design systems
+- heading "Work" [level=3]
+- paragraph: Twelve years on the web
+- heading "Links" [level=3]
+- paragraph: GitHub, LinkedIn and the blog
+- heading "Contact" [level=3]
+- paragraph: Write to me about a project
+`;

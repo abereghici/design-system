@@ -49,6 +49,12 @@ jobs:
             pnpm dlx wrangler@4.155.0 preview --name "pr-$PR" --json > "$RUNNER_TEMP/preview.json"
             echo "url=$(sed -n '/^{/,$p' "$RUNNER_TEMP/preview.json" | jq -r '.preview.urls[0]')" >> "$GITHUB_OUTPUT"
           fi
+      # Preview URLs answer with Cloudflare's own `X-Robots-Tag: noindex` in place of _headers' value.
+      - if: github.event_name == 'push'
+        env:
+          URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          curl -fsSI "$URL" | grep -i '^x-robots-tag: noindex, nofollow'
 
   delete-preview:
     if: github.event.action == 'closed' && github.event.pull_request.head.repo.full_name == github.repository
