@@ -382,6 +382,12 @@
     "html": "aria-current=\"step\""
   },
   {
+    "name": "timeline",
+    "tokens": ["timeline"],
+    "client": [],
+    "html": "data-reached"
+  },
+  {
     "name": "sidebar",
     "tokens": ["disclosure", "icon", "sidebar"],
     "client": ["components/sidebar/sidebar-collapsible-group"],

@@ -56,6 +56,10 @@ _Avoid_: Data flag, state class
 The state a component holds itself when the consumer gives only a starting value; a value the consumer controls always wins.
 _Avoid_: Own state, internal state, local value
 
+**Timeline**:
+Events in the order they happened, such as a work history, each a marker on a rail; how far it has been reached is a position, not a user action. Unlike a Stepper, which shows where people are in a process they move through.
+_Avoid_: History list, activity feed, steps
+
 **Icon**:
 A glyph from the carved icon set on the 24-unit grid, stroked in the surrounding text colour; decorative unless it has a label. Each one is its own component (`SearchIcon`).
 _Avoid_: Glyph (as a component name), symbol, pictogram

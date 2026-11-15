@@ -143,6 +143,8 @@ export * from "./components/text/index.ts";
 
 export * from "./components/time-field/index.ts";
 
+export * from "./components/timeline/index.ts";
+
 export * from "./components/toast/index.ts";
 
 export * from "./components/toaster/index.ts";

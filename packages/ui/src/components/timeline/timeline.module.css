@@ -1,0 +1,75 @@
+@import "@abereghici/tokens/components/timeline.css";
+
+@layer ab.components {
+  .root {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* The content spans both rows, so the second row runs from the marker to the entry's end, and the
+     rail drawn in it meets the next marker. */
+  .item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap: var(--ab-timeline-gap);
+  }
+
+  .marker {
+    grid-area: 1 / 1;
+    display: grid;
+    place-items: center;
+    min-block-size: 1lh;
+    color: var(--ab-timeline-indicator-icon-color);
+  }
+
+  .dot {
+    inline-size: var(--ab-timeline-indicator-size);
+    block-size: var(--ab-timeline-indicator-size);
+    border: var(--ab-timeline-indicator-border-width) solid
+      var(--ab-timeline-indicator-border-color);
+    border-radius: var(--ab-timeline-indicator-border-radius);
+    background-color: var(--ab-timeline-indicator-background-color);
+  }
+
+  .content {
+    grid-area: 1 / 2 / span 2;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .item:not(:last-child) > .content {
+    padding-block-end: var(--ab-timeline-item-gap);
+  }
+
+  .item:not(:last-child)::after {
+    content: "";
+    grid-area: 2 / 1;
+    justify-self: center;
+    border-inline-start: var(--ab-timeline-connector-border-width) solid
+      var(--ab-timeline-connector-border-color);
+  }
+
+  .item[data-reached] > .marker {
+    color: var(--ab-timeline-indicator-icon-color-reached);
+  }
+
+  .item[data-reached] > .marker > .dot {
+    border-color: var(--ab-timeline-indicator-border-color-reached);
+    background-color: var(--ab-timeline-indicator-background-color-reached);
+  }
+
+  .item[data-reached]:has(+ [data-reached])::after {
+    border-color: var(--ab-timeline-connector-border-color-reached);
+  }
+
+  /* Forced colours drop backgrounds, which alone tell a reached dot from the others. */
+  @media (forced-colors: active) {
+    .item[data-reached] > .marker > .dot {
+      forced-color-adjust: none;
+      border-color: CanvasText;
+      background-color: CanvasText;
+    }
+  }
+}

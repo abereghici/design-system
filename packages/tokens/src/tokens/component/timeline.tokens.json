@@ -1,0 +1,60 @@
+{
+  "component": {
+    "timeline-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-md}"
+    },
+    "timeline-item-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-stack-lg}"
+    },
+    "timeline-indicator-size": {
+      "$type": "dimension",
+      "$value": "{semantic.size-icon-xs}"
+    },
+    "timeline-indicator-border-radius": {
+      "$type": "dimension",
+      "$value": "{semantic.radius-full}"
+    },
+    "timeline-indicator-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-thick}"
+    },
+    "timeline-indicator-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-default}"
+    },
+    "timeline-indicator-border-color-reached": {
+      "$type": "color",
+      "$value": "{semantic.color-border-accent}"
+    },
+    "timeline-indicator-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle}"
+    },
+    "timeline-indicator-background-color-reached": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold}"
+    },
+    "timeline-indicator-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
+    },
+    "timeline-indicator-icon-color-reached": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-accent}"
+    },
+    "timeline-connector-border-width": {
+      "$type": "dimension",
+      "$value": "{semantic.border-width-default}"
+    },
+    "timeline-connector-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-subtle}"
+    },
+    "timeline-connector-border-color-reached": {
+      "$type": "color",
+      "$value": "{semantic.color-border-accent}"
+    }
+  }
+}

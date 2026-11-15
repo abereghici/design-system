@@ -128,6 +128,7 @@ const COMPONENTS = [
   "calendar",
   "description-list",
   "stepper",
+  "timeline",
   "splitter",
   "tree",
 ];
@@ -178,6 +179,7 @@ const STATES = [
   "disabled",
   "current",
   "complete",
+  "reached",
 ];
 
 const MODIFIERS = new Set([
