@@ -35,3 +35,14 @@ test("files a component token under its component and every other token under a 
     type: "color",
   });
 });
+
+test("offers a large data role at the heading-lg size, with tabular figures, in every output", () => {
+  const valueOf = (name: string) => built.catalog.find((token) => token.name === name)?.value;
+
+  expect(valueOf("ab-type-data-lg-font-size")).toBe("var(--ab-font-size-29-33)");
+  expect(valueOf("ab-type-data-lg-font-variant-numeric")).toBe(
+    "var(--ab-font-variant-numeric-tabular-nums)",
+  );
+  expect(built.css).toContain("--ab-type-data-lg: ");
+  expect(JSON.stringify(built.artifact)).toContain('"name":"ab-type-data-lg"');
+});

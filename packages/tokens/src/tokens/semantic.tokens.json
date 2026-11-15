@@ -1270,6 +1270,41 @@
         "letterSpacing": "{primitive.letter-spacing-0}"
       }
     },
+    "type-data-lg-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-data-lg-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-29-33}"
+    },
+    "type-data-lg-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-500}"
+    },
+    "type-data-lg-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-115}"
+    },
+    "type-data-lg-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-minus-10}"
+    },
+    "type-data-lg-font-variant-numeric": {
+      "$type": "string",
+      "$value": "{primitive.font-variant-numeric-tabular-nums}"
+    },
+    "type-data-lg": {
+      "$type": "typography",
+      "$description": "A key number, such as a stat or a clock, with tabular figures. Grows from 29px to 33px with the viewport.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{primitive.font-size-29-33}",
+        "fontWeight": "{primitive.font-weight-500}",
+        "lineHeight": "{primitive.line-height-115}",
+        "letterSpacing": "{primitive.letter-spacing-minus-10}"
+      }
+    },
     "type-data-md-font-family": {
       "$type": "fontFamily",
       "$value": "{primitive.font-family-figtree}"
