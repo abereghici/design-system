@@ -48,6 +48,7 @@ function route(name: string): Route {
 }
 
 const button = route("index");
+const rootButton = route("root-import");
 const logo = route("logo");
 const iconButton = route("icon-button");
 
@@ -82,6 +83,7 @@ const shippedComponentTokens = (css: string) => {
 describe("the UIProvider owns the global CSS", () => {
   test.each([
     ["button", button],
+    ["root-import", rootButton],
     ["logo", logo],
   ])("the %s route starts with the layer order, then the shared tokens, fonts and base", (_, r) => {
     expect(r.css.trimStart()).toMatch(
@@ -94,17 +96,23 @@ describe("the UIProvider owns the global CSS", () => {
     expect(r.css).not.toContain("--lightningcss");
   });
 
-  test("it preloads one font, Figtree latin, at the URL its @font-face requests", () => {
-    const files = [
-      ...button.html.matchAll(
-        /<link rel="preload" href="\/_next\/static\/media\/([^"]+)" as="font"/gv,
-      ),
-    ].map(([, file]) => String(file));
+  test.each([
+    ["button", button],
+    ["root-import", rootButton],
+  ])(
+    "the %s route preloads one font, Figtree latin, at the URL its @font-face requests",
+    (_, r) => {
+      const files = [
+        ...r.html.matchAll(
+          /<link rel="preload" href="\/_next\/static\/media\/([^"]+)" as="font"/gv,
+        ),
+      ].map(([, file]) => String(file));
 
-    expect(button.html.match(/as="font"/gv)).toHaveLength(1);
-    expect(files).toEqual([expect.stringMatching(/^Figtree-latin\./v)]);
-    expect(button.css).toContain(`src:url(../media/${String(files[0])})`);
-  });
+      expect(r.html.match(/as="font"/gv)).toHaveLength(1);
+      expect(files).toEqual([expect.stringMatching(/^Figtree-latin\./v)]);
+      expect(r.css).toContain(`src:url(../media/${String(files[0])})`);
+    },
+  );
 });
 
 describe("per-component CSS", () => {
@@ -114,6 +122,10 @@ describe("per-component CSS", () => {
     expect(
       shippedComponentTokens(button.css).filter((t) => !/^--ab-(button|spinner)-/v.test(t)),
     ).toEqual([]);
+  });
+
+  test("a route that imports Button from the package root ships the same CSS as the Button subpath", () => {
+    expect(rootButton.css).toBe(button.css);
   });
 
   test("a route that imports Logo ships Logo's tokens and none of Button's", () => {
@@ -193,6 +205,10 @@ describe("per-component JS", () => {
     expect(allClientModules(logo)).toEqual([localeProvider]);
     expect(logo.js).not.toContain("ab-press");
     expect(uiClientModules(iconButton)).toEqual(["components/icon-button/icon-button"]);
+  });
+
+  test("a route that imports Button from the package root loads only Button's client code", () => {
+    expect(uiClientModules(rootButton)).toEqual(uiClientModules(button));
   });
 
   test.each([

@@ -8,6 +8,10 @@ The Bereghici design system's React components: the controls, overlays and layou
 A named, documented building block of the interface (Button, Dialog, Select), named after the term the major UI libraries agree on. Each one is a single entry, `@abereghici/ui/<name>`; a capability it offers, such as a Table's row selection, is its props and Parts, never a Component of its own.
 _Avoid_: Widget, element, control (as a generic name)
 
+**Root entry**:
+`@abereghici/ui` itself, generated to re-export every Component's entry, the icons and the shared modules, for tools that need one entry. Apps import the Components' entries.
+_Avoid_: Barrel, index, main entry
+
 **Part**:
 A named piece of a compound component that the consumer composes (`Dialog.Trigger`, `Dialog.Content`).
 _Avoid_: Slot, sub-component, child

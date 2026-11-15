@@ -37,6 +37,7 @@
     "#.storybook/*": "./.storybook/*"
   },
   "exports": {
+    ".": "./src/index.ts",
     "./*": "./src/components/*/index.ts",
     "./feedback-event": "./src/feedback-event/index.ts",
     "./text-direction": "./src/text-direction/index.ts",
@@ -44,6 +45,10 @@
   },
   "publishConfig": {
     "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
       "./*": {
         "types": "./dist/components/*/index.d.ts",
         "default": "./dist/components/*/index.js"
@@ -72,7 +77,8 @@
     "size": "size-limit",
     "test": "vitest run --project \"!screenshot:*\"",
     "test:watch": "vitest --project \"!screenshot:*\"",
-    "icons": "node scripts/icons.ts",
+    "icons": "node scripts/icons.ts && node scripts/entry.ts",
+    "entry": "node scripts/entry.ts",
     "test:screenshots": "vitest run --project \"screenshot:*\" --reporter=default --reporter=html",
     "test:screenshots:docker": "sh scripts/screenshots-docker.sh"
   },
