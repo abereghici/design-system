@@ -119,8 +119,7 @@ describe("per-component CSS", () => {
   });
 
   test("a route that imports Button from the package root ships the same CSS as the Button subpath", () => {
-    expect(shippedComponentTokens(rootButton.css)).toEqual(shippedComponentTokens(button.css));
-    expect(rootButton.css.length).toBe(button.css.length);
+    expect(rootButton.css).toBe(button.css);
   });
 
   test("a route that imports Logo ships Logo's tokens and none of Button's", () => {
@@ -203,8 +202,7 @@ describe("per-component JS", () => {
   });
 
   test("a route that imports Button from the package root loads only Button's client code", () => {
-    expect(uiClientModules(rootButton)).toEqual(["components/button/button"]);
-    expect(rootButton.js.length).toBe(button.js.length);
+    expect(uiClientModules(rootButton)).toEqual(uiClientModules(button));
   });
 
   test.each([

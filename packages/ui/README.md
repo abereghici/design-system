@@ -43,7 +43,7 @@ import { Button } from "@abereghici/ui/button";
 <Button variant="primary">Save</Button>;
 ```
 
-`@abereghici/ui` also exports everything from its root. Next and Vite tree-shake it to the same code, but each import parses the whole library, and esbuild keeps every component's CSS, so prefer the subpaths.
+`@abereghici/ui` also re-exports everything from its root, for tools that need one entry. Prefer the subpaths: from the root, esbuild keeps every component's CSS.
 
 The app must target Baseline newly available, for example with `"browserslist": ["baseline newly available"]` in `package.json`. With an older target, Lightning CSS lowers `light-dark()`, and `data-theme` subtrees stop switching.
 

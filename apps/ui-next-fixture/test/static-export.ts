@@ -5,9 +5,12 @@ import type { BrowserContext } from "@playwright/test";
 
 const out = join(import.meta.dirname, "..", "out");
 
+// root-import renders the index route's Button from the package root; routes.test.ts compares the two builds.
+const skipped = new Set(["404.html", "_not-found.html", "root-import.html"]);
+
 /** Every page of the static export, by route. */
 export const routes = readdirSync(out)
-  .filter((file) => file.endsWith(".html") && !["404.html", "_not-found.html"].includes(file))
+  .filter((file) => file.endsWith(".html") && !skipped.has(file))
   .map((file) => file.slice(0, -".html".length));
 
 /** Answers every request from the static export, as a static host does: `/name` is `name.html`. */

@@ -77,7 +77,8 @@
     "size": "size-limit",
     "test": "vitest run --project \"!screenshot:*\"",
     "test:watch": "vitest --project \"!screenshot:*\"",
-    "icons": "node scripts/icons.ts",
+    "icons": "node scripts/icons.ts && node scripts/entry.ts",
+    "entry": "node scripts/entry.ts",
     "test:screenshots": "vitest run --project \"screenshot:*\" --reporter=default --reporter=html",
     "test:screenshots:docker": "sh scripts/screenshots-docker.sh"
   },

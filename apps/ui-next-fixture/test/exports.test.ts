@@ -5,6 +5,8 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
 
 const uiDir = join(import.meta.dirname, "..", "..", "..", "packages", "ui");
+const subpaths = ["src/*/index.ts", "src/components/*/index.ts"];
+const icons = "src/components/icon/icons/*.tsx";
 
 // import.meta.resolve applies `exports` but doesn't check that the target exists.
 function resolve(specifier: string): string | undefined {
@@ -25,7 +27,7 @@ describe("@abereghici/ui exports", () => {
   });
 
   test("every <name>/index.ts in src/ or src/components/ is the subpath @abereghici/ui/<name>", () => {
-    for (const entry of globSync(["src/*/index.ts", "src/components/*/index.ts"], { cwd: uiDir })) {
+    for (const entry of globSync(subpaths, { cwd: uiDir })) {
       const name = basename(dirname(entry));
 
       expect(resolve(`@abereghici/ui/${name}`)).toBe(join(uiDir, entry));
@@ -33,7 +35,7 @@ describe("@abereghici/ui exports", () => {
   });
 
   test("every src/components/icon/icons/<name>.tsx is the subpath @abereghici/ui/icons/<name>", () => {
-    for (const entry of globSync("src/components/icon/icons/*.tsx", { cwd: uiDir })) {
+    for (const entry of globSync(icons, { cwd: uiDir })) {
       const name = entry.slice("src/components/icon/icons/".length, -".tsx".length);
 
       expect(resolve(`@abereghici/ui/icons/${name}`)).toBe(join(uiDir, entry));
@@ -51,10 +53,7 @@ describe("@abereghici/ui exports", () => {
 
   test("the package root exports every subpath's exports, as the same values", async () => {
     const root: Record<string, unknown> = await import("@abereghici/ui");
-    const entries = globSync(
-      ["src/*/index.ts", "src/components/*/index.ts", "src/components/icon/icons/*.tsx"],
-      { cwd: uiDir },
-    );
+    const entries = globSync([...subpaths, icons], { cwd: uiDir });
 
     for (const entry of entries) {
       for (const [name, value] of await exportsOf(join(uiDir, entry))) {
