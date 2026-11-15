@@ -70,6 +70,25 @@ Default.test(
 
 Default.test("shows one key from its children", { render: () => <Kbd>Esc</Kbd> }, reads("Esc"));
 
+export const Sequence = meta.story({
+  args: { keys: "g i", thenLabel: "then" },
+  parameters: {
+    docs: {
+      description: {
+        story: "Keys pressed one after another, apart from the keys of a chord pressed together.",
+      },
+    },
+  },
+});
+
+Sequence.test("reads the steps in order, with the words between them", reads("G then I"));
+
+Sequence.test(
+  "keeps each step's chord",
+  { args: { keys: "mod+k mod+s", platform: "other" } },
+  reads("CtrlK then CtrlS"),
+);
+
 export const InAButton = meta.story({
   args: { keys: "mod+enter", "aria-hidden": true },
   decorators: [

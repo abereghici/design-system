@@ -3,11 +3,16 @@
 @layer ab.components {
   .root {
     display: inline-flex;
-    gap: var(--ab-kbd-gap);
+    gap: var(--ab-kbd-group-gap);
     margin-inline-start: var(--ab-kbd-margin-inline-start, 0);
     vertical-align: middle;
     font: var(--ab-kbd-font);
     font-variant-numeric: var(--ab-kbd-font-variant-numeric);
+  }
+
+  .group {
+    display: inline-flex;
+    gap: var(--ab-kbd-gap);
   }
 
   .key {
