@@ -1,0 +1,57 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Default   > base story 1`] = `
+- list "Elsewhere":
+  - listitem:
+    - link "GitHub":
+      - /url: "#github"
+    - text: "@abereghici"
+  - listitem:
+    - link "Email":
+      - /url: "#email"
+    - text: hello@example.com
+  - listitem:
+    - link "CV":
+      - /url: "#cv"
+`;
+
+exports[`Focused 1`] = `
+- list "Elsewhere":
+  - listitem:
+    - link "GitHub":
+      - /url: "#github"
+    - text: "@abereghici"
+  - listitem:
+    - link "Email":
+      - /url: "#email"
+    - text: hello@example.com
+  - listitem:
+    - link "CV":
+      - /url: "#cv"
+`;
+
+exports[`Hovered 1`] = `
+- list "Elsewhere":
+  - listitem:
+    - link "GitHub":
+      - /url: "#github"
+    - text: "@abereghici"
+  - listitem:
+    - link "Email":
+      - /url: "#email"
+    - text: hello@example.com
+  - listitem:
+    - link "CV":
+      - /url: "#cv"
+`;
+
+exports[`Worst Case 1`] = `
+- list "Elsewhere":
+  - listitem:
+    - link "Adresse e-mail professionnelle de facturation":
+      - /url: "#northwind"
+    - text: bartholomew.fitzgerald@northwind-industries-holdings.example.com
+  - listitem:
+    - link "设计系统笔记":
+      - /url: "#weibo"
+`;

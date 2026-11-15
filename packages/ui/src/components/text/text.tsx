@@ -8,7 +8,7 @@ import styles from "./text.module.css";
 type Role =
   | { variant?: "body"; size?: "xs" | "sm" | "md" | "lg" }
   | { variant: "label"; size?: "sm" | "md" | "lg" }
-  | { variant: "data"; size?: "sm" | "md" }
+  | { variant: "data"; size?: "sm" | "md" | "lg" }
   | { variant: "code" | "display"; size?: "md" }
   | { variant: "overline"; size?: "sm" };
 
@@ -18,9 +18,9 @@ export type TextProps = Omit<ComponentProps<"p">, "color" | "ref"> &
     color?: "default" | "subtle" | "subtlest";
     /**
      * The element, chosen for meaning, never for looks: `p` by default, `code` for
-     * `variant="code"`.
+     * `variant="code"`, a heading level for a title set in a text style, such as an overline.
      */
-    as?: "p" | "span" | "div" | "label" | "code";
+    as?: "p" | "span" | "div" | "label" | "code" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
     /** The control it labels, with `as="label"`. */
     htmlFor?: string;
     /** The rendered element, for focus or measuring. */
@@ -29,8 +29,8 @@ export type TextProps = Omit<ComponentProps<"p">, "color" | "ref"> &
 
 /**
  * Sets a run of text in one style: body, label, data, code, overline or display, so text looks the
- * same across the product. A paragraph by default. For a section title use Heading, for a keyboard
- * key Kbd, and for a link Link.
+ * same across the product. A paragraph by default. For a serif section title use Heading, for a
+ * keyboard key Kbd, and for a link Link.
  *
  * Tier 1: works before hydration.
  */

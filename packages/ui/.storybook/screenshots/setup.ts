@@ -24,6 +24,14 @@ const px = (length: string) => Number(length.replace("px", ""));
 beforeAll(async () => {
   for (const query of matches) expect(matchMedia(query).matches, query).toBe(true);
 
+  // Screenshots hide the caret with caret-color, which forced colours override, so a focused
+  // field's caret would blink in and out of them; a caret that doesn't blink is drawn the same in
+  // every frame: https://drafts.csswg.org/css-ui-4/#caret-animation
+  const caret = new CSSStyleSheet();
+
+  caret.replaceSync("* { caret-animation: manual !important; }");
+  document.adoptedStyleSheets.push(caret);
+
   if (textSpacing === true) {
     const sheet = new CSSStyleSheet();
 

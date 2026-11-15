@@ -3,7 +3,7 @@ import type { Tier } from "./tiers.ts";
 // Departs from the source validator on purpose: spec #1's component renames, and stroke-width-2xl is allowed.
 
 const PRIMITIVE =
-  /^(palette-[a-z]+-(0|50|[1-9]00|950)(-a\d{2})?|palette-transparent|blur-\d+|saturate-\d+|opacity-\d+|dimension-\d+|stroke-width-\d+|scale-\d+|z-index-\d+|font-family-[a-z]+(-[a-z]+)*|font-size-\d+(-\d+)?|font-weight-[1-9]00|line-height-\d+|letter-spacing-(minus-)?\d+|font-variant-numeric-[a-z\-]+|text-transform-[a-z]+|duration-\d+|easing-[a-z]+(-[a-z]+)*)$/v;
+  /^(palette-[a-z]+-(0|50|[1-9]00|950)(-a\d{2})?|palette-transparent|blur-\d+|saturate-\d+|opacity-\d+|dimension-\d+|breakpoint-\d+|stroke-width-\d+|scale-\d+|z-index-\d+|font-family-[a-z]+(-[a-z]+)*|font-size-\d+(-\d+)?|font-weight-[1-9]00|line-height-\d+|letter-spacing-(minus-)?\d+|font-variant-numeric-[a-z\-]+|text-transform-[a-z]+|duration-\d+|easing-[a-z]+(-[a-z]+)*)$/v;
 
 const SEMANTIC = [
   /^color-(surface|background|text|icon|border|brand|material|shadow)(-[a-z]+)+$/v,
@@ -19,7 +19,7 @@ const SEMANTIC = [
   /^size-(icon|control)-(xs|sm|md|lg|xl)$/v,
   /^size-control-compact-(sm|md|lg)$/v,
   /^size-target-(min|recommended)$/v,
-  /^size-container-(2xs|xs|sm|md|lg)$/v,
+  /^size-container-(2xs|xs|sm|md|lg|xl)$/v,
   /^size-(toggle|indicator)$/v,
   /^size-logo-min$/v,
   /^radius-(xs|sm|md|lg|xl|full)$/v,
@@ -71,6 +71,7 @@ const COLOR_WORDS = new Set([
 ]);
 
 const COMPONENTS = [
+  "action-list",
   "status-dot",
   "code-block",
   "toggle-button",
@@ -128,6 +129,7 @@ const COMPONENTS = [
   "calendar",
   "description-list",
   "stepper",
+  "timeline",
   "splitter",
   "tree",
 ];
@@ -178,6 +180,7 @@ const STATES = [
   "disabled",
   "current",
   "complete",
+  "reached",
 ];
 
 const MODIFIERS = new Set([

@@ -23,7 +23,6 @@
     background-color: transparent;
     color: var(--ab-icon-button-icon-color);
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
     transition-property: background-color, color, scale;
     transition-duration:
       var(--ab-motion-duration-hover-out), var(--ab-motion-duration-hover-out),

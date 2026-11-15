@@ -14,8 +14,9 @@ export interface HeadingProps extends ComponentProps<"h1"> {
   as: keyof typeof sizeOfLevel;
   /**
    * The look, when it should differ from the level's own: h1 `lg`, h2 `md`, h3 `sm`, h4–h6 `xs`.
+   * `display` is the largest, for the one title that opens a landing page.
    */
-  size?: "xs" | "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg" | "display";
 }
 
 /**

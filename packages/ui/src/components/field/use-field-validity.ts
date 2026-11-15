@@ -56,8 +56,10 @@ function useServerError(name: string | undefined, control: FormControl | null) {
 /**
  * The only writer of the controls' custom validity: each control's own check (a composite
  * control's report), then the server's error (on the first control), then the app's rule. The error
- * shown is the first one the user has committed: by the browser's user validity for a native
- * control, by `commit` for a composite one, whose native element the user never edits.
+ * shown is the first one the user has committed: by the browser's user validity, or by the Field
+ * once the user changed the control, tried to submit it or committed a composite control's value.
+ * Firefox drops a textarea's user validity whenever its default value is set, as React does on
+ * every render (#131).
  */
 function useCustomValidity(controls: readonly FormControl[], validate: Validate | undefined) {
   const [failure, setFailure] = useState<Failure>(null);
@@ -66,7 +68,9 @@ function useCustomValidity(controls: readonly FormControl[], validate: Validate 
 
   return {
     failure,
-    revalidate: (serverError: string | null | undefined) => {
+    revalidate: (serverError: string | null | undefined, changed?: FormControl) => {
+      if (changed !== undefined) committed.current.add(changed);
+
       for (const each of controls) {
         const rule = validate?.(each.value, new FormData(each.form ?? undefined));
         const server = each === controls[0] ? serverError : null;
@@ -111,12 +115,12 @@ export function useFieldValidity(name: string | undefined, validate: Validate | 
   };
 
   // Only the Field's own controls: a nested Field's are its own.
-  const on = (handle: () => void) => (event: Pick<Event, "target">) => {
-    if (controls.some((each) => each === event.target)) handle();
+  const on = (handle: (control: FormControl) => void) => (event: Pick<Event, "target">) => {
+    for (const each of controls) if (each === event.target) handle(each);
   };
 
-  const reread = on(() => {
-    revalidate(server);
+  const reread = on((target) => {
+    revalidate(server, target);
   });
 
   // A composite control's value, and a render's server error or rule, change without an event.

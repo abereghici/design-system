@@ -6,6 +6,11 @@
     letter-spacing: var(--ab-type-heading-md-letter-spacing);
   }
 
+  .root:where([data-size="display"]) {
+    font: var(--ab-type-display-lg);
+    letter-spacing: var(--ab-type-display-lg-letter-spacing);
+  }
+
   .root:where([data-size="lg"]) {
     font: var(--ab-type-heading-lg);
     letter-spacing: var(--ab-type-heading-lg-letter-spacing);

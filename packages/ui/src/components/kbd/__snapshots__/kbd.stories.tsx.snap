@@ -8,6 +8,10 @@ exports[`In A Button   > base story 1`] = `
 - button "Publish"
 `;
 
+exports[`Sequence   > base story 1`] = `
+- text: G then I
+`;
+
 exports[`Worst Case 1`] = `
 - text: Ctrl Alt Shift ↓
 `;

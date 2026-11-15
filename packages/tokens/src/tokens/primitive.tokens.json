@@ -1243,9 +1243,24 @@
         "unit": "px"
       }
     },
-    "dimension-760": {
+    "dimension-1280": {
+      "$type": "dimension",
+      "$value": {
+        "value": 1280,
+        "unit": "px"
+      }
+    },
+    "breakpoint-560": {
+      "$type": "dimension",
+      "$value": "35em"
+    },
+    "breakpoint-760": {
       "$type": "dimension",
       "$value": "47.5em"
+    },
+    "breakpoint-900": {
+      "$type": "dimension",
+      "$value": "56.25em"
     },
     "dimension-7": {
       "$type": "dimension",
@@ -1428,7 +1443,7 @@
     },
     "font-family-noto-serif": {
       "$type": "fontFamily",
-      "$value": ["Noto Serif", "Georgia", "serif"]
+      "$value": ["Noto Serif", "Noto Serif Fallback", "Georgia", "serif"]
     },
     "font-family-figtree": {
       "$type": "fontFamily",
@@ -1491,6 +1506,10 @@
     "font-size-29-33": {
       "$type": "string",
       "$value": "clamp(1.8125rem, 1.7147rem + 0.4348vi, 2.0625rem)"
+    },
+    "font-size-40-96": {
+      "$type": "string",
+      "$value": "clamp(2.5rem, 1.1304rem + 6.087vi, 6rem)"
     },
     "font-weight-400": {
       "$type": "fontWeight",

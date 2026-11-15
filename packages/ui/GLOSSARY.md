@@ -20,6 +20,10 @@ _Avoid_: Slot, sub-component, child
 One of a component's enumerated visual treatments (primary, secondary, tertiary, danger), or the Role a status component shows (neutral, success, warning, danger).
 _Avoid_: Kind, type, appearance, tone, intent
 
+**Accent zone**:
+The inside of an accent Card (`variant="accent"`), filled with the accent colour: the text, icons, borders, links and buttons the design system draws there take colours made for that fill, so the app re-points no tokens.
+_Avoid_: Inverse card, theme override, brand card
+
 **Overlay**:
 UI that renders above the page flow: menus, popovers, tooltips, toasts, dialogs and sheets. The only UI that takes elevation or material.
 _Avoid_: Floating layer, popup (as a generic term), portal, modal (unless it blocks the page)
@@ -51,6 +55,14 @@ _Avoid_: Data flag, state class
 **Uncontrolled state**:
 The state a component holds itself when the consumer gives only a starting value; a value the consumer controls always wins.
 _Avoid_: Own state, internal state, local value
+
+**ActionList**:
+A list of rows, each one link that covers the row, named by its text and described by its Description, with an optional visual before and after. Only link rows for now; for links inside running text, a Link.
+_Avoid_: Link list, menu, nav list
+
+**Timeline**:
+Events in the order they happened, such as a work history, each a marker on a rail; how far it has been reached is a position, not a user action. Unlike a Stepper, which shows where people are in a process they move through.
+_Avoid_: History list, activity feed, steps
 
 **Icon**:
 A glyph from the carved icon set on the 24-unit grid, stroked in the surrounding text colour; decorative unless it has a label. Each one is its own component (`SearchIcon`).

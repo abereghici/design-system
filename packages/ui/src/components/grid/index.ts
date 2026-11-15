@@ -1,3 +1,1 @@
-export { Grid } from "./grid.tsx";
-
-export type { GridProps } from "./grid.tsx";
+export * as Grid from "./grid.tsx";

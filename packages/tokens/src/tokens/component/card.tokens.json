@@ -51,6 +51,54 @@
     "card-footer-gap": {
       "$type": "dimension",
       "$value": "{semantic.space-inline-sm}"
+    },
+    "card-accent-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold}"
+    },
+    "card-accent-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold-hovered}"
+    },
+    "card-accent-background-color-pressed": {
+      "$type": "color",
+      "$value": "{semantic.color-background-accent-bold-pressed}"
+    },
+    "card-accent-border-color": {
+      "$type": "color",
+      "$value": "{semantic.color-border-on-accent}"
+    },
+    "card-accent-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-on-accent}"
+    },
+    "card-accent-description-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-on-accent-subtle}"
+    },
+    "card-accent-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-on-accent}"
+    },
+    "card-accent-action-background-color": {
+      "$type": "color",
+      "$value": "{semantic.color-surface-overlay}"
+    },
+    "card-accent-action-background-color-hovered": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-hovered}"
+    },
+    "card-accent-action-background-color-pressed": {
+      "$type": "color",
+      "$value": "{semantic.color-background-neutral-subtle-pressed}"
+    },
+    "card-accent-action-text-color": {
+      "$type": "color",
+      "$value": "{semantic.color-text-default}"
+    },
+    "card-accent-action-icon-color": {
+      "$type": "color",
+      "$value": "{semantic.color-icon-subtle}"
     }
   }
 }

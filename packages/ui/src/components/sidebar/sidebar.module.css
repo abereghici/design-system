@@ -59,7 +59,6 @@
     overflow-wrap: anywhere;
     color: var(--ab-sidebar-item-text-color);
     text-decoration-line: none;
-    -webkit-tap-highlight-color: transparent;
     transition-property: color, background-color;
     transition-duration: var(--ab-motion-duration-hover-out);
     transition-timing-function: var(--ab-motion-easing-color);

@@ -32,7 +32,6 @@
     border-radius: var(--ab-pagination-item-border-radius);
     font: var(--ab-pagination-item-font);
     text-decoration-line: none;
-    -webkit-tap-highlight-color: transparent;
     transition-property: background-color, color, scale;
     transition-duration:
       var(--ab-motion-duration-hover-out), var(--ab-motion-duration-hover-out),

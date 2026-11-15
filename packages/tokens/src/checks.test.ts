@@ -120,6 +120,18 @@ test("a primitive name outside the tier grammar fails the build", async () => {
   );
 });
 
+test("a container size outside the scale fails the build", async () => {
+  const tokens = validTokens();
+
+  tokens.semantic["size-container-huge"] = {
+    $type: "dimension",
+    $value: "{primitive.dimension-680}",
+  };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-size-container-huge: does not match the semantic grammar",
+  );
+});
+
 test("component tokens use the spec's component names", async () => {
   const tokens = validTokens();
 
@@ -284,6 +296,19 @@ test("an on-{role} pair is checked against its bold fill", async () => {
   tokens.semantic["color-text-on-accent"] = themed("palette-sage-0", "palette-night-50");
   await expect(buildTokens({ tokens })).rejects.toThrow(
     "[dark] --ab-color-text-on-accent on --ab-color-background-accent-bold: 1.00:1, needs 4.5:1",
+  );
+});
+
+test("the accent Card's secondary text and edges are checked against the accent fill", async () => {
+  const tokens = validTokens();
+
+  tokens.semantic["color-text-on-accent-subtle"] = themed("palette-sage-300", "palette-lichen-200");
+  tokens.semantic["color-border-on-accent"] = themed("palette-moss-900", "palette-sage-600");
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "[dark] --ab-color-text-on-accent-subtle on --ab-color-background-accent-bold: 1.00:1, needs 4.5:1",
+  );
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "[light] --ab-color-border-on-accent on --ab-color-background-accent-bold: 1.00:1, needs 3:1",
   );
 });
 

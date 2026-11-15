@@ -70,7 +70,6 @@
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
-    -webkit-tap-highlight-color: transparent;
     transition: color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color);
   }
 

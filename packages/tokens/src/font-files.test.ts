@@ -30,15 +30,15 @@ test.each(styled("Figtree"))("%s is variable on wght 300–900", async (file) =>
   expect(variationAxes).toMatchObject({ wght: { min: 300, max: 900 } });
 });
 
-test.each(styled("NotoSerif"))("%s is variable on wght 100–900 and wdth 62.5–100", async (file) => {
-  const { variationAxes } = await openFont(file);
+test.each(styled("NotoSerif"))(
+  "%s is variable on wght 400–500 only, at its normal width",
+  async (file) => {
+    const { variationAxes } = await openFont(file);
 
-  expect(Object.keys(variationAxes).toSorted()).toEqual(["wdth", "wght"]);
-  expect(variationAxes).toMatchObject({
-    wght: { min: 100, max: 900 },
-    wdth: { min: 62.5, max: 100 },
-  });
-});
+    expect(Object.keys(variationAxes)).toEqual(["wght"]);
+    expect(variationAxes).toMatchObject({ wght: { min: 400, max: 500 } });
+  },
+);
 
 test.each([...styled("Figtree"), ...styled("NotoSerif")])(
   "%s slants only if it is an italic file",
