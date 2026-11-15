@@ -1,5 +1,22 @@
 # @abereghici/tokens
 
+## 0.3.0
+
+### Minor Changes
+
+- 4666f69: ActionList: Add an ActionList of link rows, after Primer's: `ActionList.LinkItem` is one link that covers its row, with an optional `Description` as its accessible description and a `LeadingVisual` and `TrailingVisual`; `asChild` takes your router's link. Tokens: Add the `action-list` component tokens.
+- d552a4d: Card: Add `variant="accent"`, a card filled with the accent colour whose text, icons, borders, links and buttons, CopyButton's message included, adapt to it. Tokens: Add `color-text-on-accent-subtle` and `color-border-on-accent`, checked against `background-accent-bold` in both Themes, and the accent Card's component tokens.
+- c1dccca: Rename the `--ab-field-*` tokens that draw the box of every Field control to `--ab-input-base-*`, in `@abereghici/tokens/components/input-base.css`. For example, `--ab-field-height` is now `--ab-input-base-height`. `components/field.css` keeps the label, description and error tokens.
+- dda74e3: Kbd: Show key sequences. A space in `keys` separates keys pressed one after another (`"g i"`), and `+` still joins keys pressed together. The steps sit `--ab-kbd-group-gap` apart, and screen readers hear `thenLabel`, such as "then", between them.
+- 61e9e02: Noto Serif: Ship the font cut to the weights the type roles use (400–500) at its normal width, so `NotoSerif-latin.woff2` drops from 101 KB to 34 KB; its `@font-face` rules now declare `font-weight: 400 500` and no `font-stretch`. `--ab-font-family-noto-serif` gains a metric-matched `"Noto Serif Fallback"` (Times New Roman or Liberation Serif, resized to Noto Serif's metrics) before Georgia, so text doesn't shift when the font arrives.
+- 6712a3a: Add `--ab-size-container-xl` (1280px), the container step for a page shell, and the container-query breakpoints `--ab-breakpoint-sm` (35em) and `--ab-breakpoint-lg` (56.25em) beside `--ab-breakpoint-md` (47.5em). Each breakpoint's description gives the value to write in `@container` and `@media` queries. The `em` primitive behind `--ab-breakpoint-md` is renamed from `--ab-dimension-760` to `--ab-breakpoint-760`.
+- d180dd9: Timeline: Add a Timeline, an ordered list of events on a rail, such as a work history. `active` marks how far it has been reached, and an item's `marker` replaces its dot with your own. Tokens: Add the `timeline` component tokens.
+- 1692f04: ToggleButtonGroup: Join the buttons into one shape on one line, with shared edges and rounded ends. Remove `--ab-toggle-button-group-gap` and `@abereghici/tokens/components/toggle-button-group.css`.
+- 1692f04: Toolbar: Draw a track around the controls, styled by `--ab-toolbar-padding`, `--ab-toolbar-border-radius` and `--ab-toolbar-background-color`, with a border in forced colors mode. ToggleButtons inside it show an edge only when pressed.
+- df78576: Add `type-data-lg`, a key number such as a stat or a clock: Figtree at the `heading-lg` size, with tabular figures.
+- ec27de1: Add `type-display-lg`, the largest type and the only one above `heading-lg`: Noto Serif growing from 40px to 96px with the viewport, for the title that opens a landing page.
+- d7cd780: Keep controls the same size on touch screens as with a mouse: `size-control-*` and `size-control-compact-*` no longer grow under `(pointer: coarse)`. The smallest, `size-control-xs`, is 24px, the minimum target size of WCAG 2.5.8.
+
 ## 0.2.0
 
 ### Minor Changes

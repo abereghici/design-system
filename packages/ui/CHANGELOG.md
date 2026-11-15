@@ -1,5 +1,68 @@
 # @abereghici/ui
 
+## 0.3.0
+
+### Minor Changes
+
+- 4666f69: ActionList: Add an ActionList of link rows, after Primer's: `ActionList.LinkItem` is one link that covers its row, with an optional `Description` as its accessible description and a `LeadingVisual` and `TrailingVisual`; `asChild` takes your router's link. Tokens: Add the `action-list` component tokens.
+- 1692f04: AlertDialog: Render `AlertDialog.Action` and `AlertDialog.Cancel` as Buttons. While `disabled`, they stay focusable and are announced as unavailable, like any Button.
+- 98d0a09: Button: Add `shortcut`, a slot after the label for the keys that trigger it, such as `<Kbd keys="mod+k" aria-hidden />`. Set `aria-keyshortcuts` on the Button so screen readers hear the shortcut.
+- d552a4d: Card: Add `variant="accent"`, a card filled with the accent colour whose text, icons, borders, links and buttons, CopyButton's message included, adapt to it. Tokens: Add `color-text-on-accent-subtle` and `color-border-on-accent`, checked against `background-accent-bold` in both Themes, and the accent Card's component tokens.
+- 5e9fd33: Grid: Add `columns` and `areas`, each one value or one per breakpoint (`initial`, `sm`, `md`, `lg`), resolved with container queries at the `breakpoint-*` values. `Grid.Item` places a child in a named area; `Grid.Item<typeof areas>` rejects an area the layout doesn't declare. Grid is now a compound: render `Grid.Root` where you rendered `Grid`. Without `columns` or `areas`, it keeps fitting as many columns as `min` allows.
+- ec27de1: Heading: Add `size="display"`, the largest title, for the one that opens a landing page. `as` still sets its level.
+- c1dccca: Rename the `--ab-field-*` tokens that draw the box of every Field control to `--ab-input-base-*`, in `@abereghici/tokens/components/input-base.css`. For example, `--ab-field-height` is now `--ab-input-base-height`. `components/field.css` keeps the label, description and error tokens.
+- dda74e3: Kbd: Show key sequences. A space in `keys` separates keys pressed one after another (`"g i"`), and `+` still joins keys pressed together. The steps sit `--ab-kbd-group-gap` apart, and screen readers hear `thenLabel`, such as "then", between them.
+- 1692f04: Pagination: Render Previous and Next as IconButtons, so pressing one dispatches `ab-press`.
+- c0dae42: Icon: Add `RefreshIcon` (`@abereghici/ui/icons/refresh`), for an action that reloads or resets.
+- 1692f04: Tag: Add `asChild`, to render the tag as your own element, such as a link.
+- df78576: Text: `as` also takes `h1`–`h6`, so a title set in a text style, such as `variant="overline"`, is a real heading. `variant="data"` takes `size="lg"`, for a key number.
+- d180dd9: Timeline: Add a Timeline, an ordered list of events on a rail, such as a work history. `active` marks how far it has been reached, and an item's `marker` replaces its dot with your own. Tokens: Add the `timeline` component tokens.
+- 1692f04: ToggleButtonGroup: Join the buttons into one shape on one line, with shared edges and rounded ends. Remove `--ab-toggle-button-group-gap` and `@abereghici/tokens/components/toggle-button-group.css`.
+- 1692f04: Toolbar: Draw a track around the controls, styled by `--ab-toolbar-padding`, `--ab-toolbar-border-radius` and `--ab-toolbar-background-color`, with a border in forced colors mode. ToggleButtons inside it show an edge only when pressed.
+- 1692f04: Button, IconButton and ToggleButton: On touch screens, take presses in an invisible area above and below the button, up to `size-target-recommended` tall, while the button keeps its size. Inside a wrapping Toolbar, the area stops halfway to the next row. The area is a hidden `<span>` rendered last inside the button, or inside your element with `asChild`.
+- 0e10f8d: Adds a root entry: `import { Button } from "@abereghici/ui"` works, and re-exports every component, icon, `feedback-event` and `text-direction`. The per-component subpaths stay the recommended imports.
+- d7cd780: Keep controls the same size on touch screens as with a mouse: `size-control-*` and `size-control-compact-*` no longer grow under `(pointer: coarse)`. The smallest, `size-control-xs`, is 24px, the minimum target size of WCAG 2.5.8.
+
+### Patch Changes
+
+- 1692f04: Avatar: Keep the initials inside the circle when text is enlarged, and skip a trailing generational suffix ("Jr.", "III") and words that start with an emoji.
+- 1692f04: Link, Sidebar and Tooltip: Break long URLs and emails instead of overflowing.
+- 1692f04: Button: Break a word too long for the button instead of overflowing, and draw no border or fill on a disabled `tertiary` Button.
+- 1692f04: Calendar and RangeCalendar: Head the columns with narrow weekday names ("M"), keeping the full names for screen readers.
+- 1692f04: Alert, Dialog and Popover: Render the `x` of `Alert.Close`, `Dialog.Close` and `Popover.Close` as an IconButton. Pressing it still dispatches only `ab-dismiss`.
+- 71fd744: CodeBlock: Show a tab as 4 spaces wide instead of the browser's 8.
+- 1692f04: Combobox: With `selectionMode="multiple"`, draw the focus ring and the invalid border around the whole box when its text input is focused or invalid.
+- 1692f04: Command: Mark the divider under the search in the focus color while the search has focus.
+- 1692f04: DateRangePicker: Separate the range with plain spaces, so the server renders the same text as the browser.
+- c0dae42: Dialog: Keep the page's scrollbar while a Dialog is open; the wheel or a finger over the backdrop no longer scrolls the page. The open and close transitions now run in engines that don't accept `allow-discrete` inside the `transition` shorthand.
+- 1692f04: Dialog and AlertDialog: Wrap long titles, descriptions and emails inside the dialog instead of scrolling sideways.
+- 9c6508d: Field controls: Set their text in `body-md` (17px) on a touch screen, so iOS Safari no longer zooms the page when one gets focus. With a mouse, it stays `body-xs` (14px).
+- 1692f04: FileTrigger and DropZone: Show every chosen file name on hover.
+- 1692f04: SegmentedControl: Scroll sideways when the items don't fit, with faded edges in browsers that support scroll-driven animations.
+- 1692f04: Select: Show a long chosen option on one line, ending in "…", in browsers that support customizable selects.
+- 1692f04: SkipLink: Wrap a long label instead of running the focus ring off the screen.
+- 1692f04: Splitter: Break a word too long for a panel instead of overflowing.
+- 1692f04: Stepper: Stack a horizontal Stepper like a vertical one when its container is too narrow for its labels.
+- c0dae42: UIProvider: Turn off the grey tap highlight once, for the whole page, in its base styles instead of in each component's CSS, so the app's own tappable elements lose it too.
+- 8fd7098: TextArea: Show the error after a blocked submit in Firefox too, without waiting for an edit.
+- 1692f04: Slider and FileTrigger: Document them as Tier 2. They show their final content before hydration and work once hydrated.
+- 1692f04: Toast: Keep the title's width beside a long action, let a long action label wrap, and move the actions below the description when text is enlarged.
+- 7164353: Toaster: Cut each toast behind the front one to the front toast's height, so a taller toast no longer sticks out above a short one, and grow it back to its own height when the stack expands.
+- 1692f04: Combobox, ContextMenu, DropdownMenu, Popover, Select and Tooltip: Place popups on whole pixels, so their text renders the same every time they open.
+- Updated dependencies [4666f69]
+- Updated dependencies [d552a4d]
+- Updated dependencies [c1dccca]
+- Updated dependencies [dda74e3]
+- Updated dependencies [61e9e02]
+- Updated dependencies [6712a3a]
+- Updated dependencies [d180dd9]
+- Updated dependencies [1692f04]
+- Updated dependencies [1692f04]
+- Updated dependencies [df78576]
+- Updated dependencies [ec27de1]
+- Updated dependencies [d7cd780]
+  - @abereghici/tokens@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes
