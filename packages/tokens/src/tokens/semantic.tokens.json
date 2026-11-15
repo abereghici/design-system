@@ -987,6 +987,37 @@
         "letterSpacing": "{primitive.letter-spacing-minus-10}"
       }
     },
+    "type-display-lg-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-noto-serif}"
+    },
+    "type-display-lg-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-40-96}"
+    },
+    "type-display-lg-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-400}"
+    },
+    "type-display-lg-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-100}"
+    },
+    "type-display-lg-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-minus-20}"
+    },
+    "type-display-lg": {
+      "$type": "typography",
+      "$description": "Serif display title, the largest type, such as a hero's name. Grows from 40px to 96px with the viewport.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-noto-serif}",
+        "fontSize": "{primitive.font-size-40-96}",
+        "fontWeight": "{primitive.font-weight-400}",
+        "lineHeight": "{primitive.line-height-100}",
+        "letterSpacing": "{primitive.letter-spacing-minus-20}"
+      }
+    },
     "type-display-md-font-family": {
       "$type": "fontFamily",
       "$value": "{primitive.font-family-noto-serif}"

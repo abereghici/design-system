@@ -1492,6 +1492,10 @@
       "$type": "string",
       "$value": "clamp(1.8125rem, 1.7147rem + 0.4348vi, 2.0625rem)"
     },
+    "font-size-40-96": {
+      "$type": "string",
+      "$value": "clamp(2.5rem, 1.1304rem + 6.087vi, 6rem)"
+    },
     "font-weight-400": {
       "$type": "fontWeight",
       "$value": 400

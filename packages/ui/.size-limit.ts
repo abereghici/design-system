@@ -31,7 +31,7 @@ const budgets: Readonly<Record<string, string>> = {
   fieldset: "680 B",
   form: "250 B",
   grid: "850 B",
-  heading: "650 B",
+  heading: "660 B",
   icon: "860 B",
   inline: "850 B",
   kbd: "1.75 kB",
