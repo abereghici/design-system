@@ -54,12 +54,9 @@ describe("@abereghici/ui exports", () => {
   test("the package root exports every subpath's exports, as the same values", async () => {
     const root: Record<string, unknown> = await import("@abereghici/ui");
     const entries = globSync([...subpaths, icons], { cwd: uiDir });
+    const modules = await Promise.all(entries.map((entry) => exportsOf(join(uiDir, entry))));
 
-    for (const entry of entries) {
-      for (const [name, value] of await exportsOf(join(uiDir, entry))) {
-        expect(root[name]).toBe(value);
-      }
-    }
+    for (const [name, value] of modules.flat()) expect(root[name]).toBe(value);
   });
 
   test("module files, glyph folders and the Storybook harness have no subpath", () => {
