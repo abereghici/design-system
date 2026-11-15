@@ -11,7 +11,7 @@ const budgets: Readonly<Record<string, string>> = {
   breadcrumbs: "1.7 kB",
   button: "2.8 kB",
   calendar: "24.5 kB",
-  card: "1.55 kB",
+  card: "1.9 kB",
   checkbox: "2.15 kB",
   "date-field": "25.6 kB",
   "date-picker": "30.4 kB",

@@ -1,5 +1,37 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Accent   > base story 1`] = `
+- heading "Let’s work together" [level=3]
+- paragraph: Replies within two working days.
+- paragraph: Open to design system and front-end roles.
+- paragraph: Based in Chișinău, working remotely.
+- paragraph: Last updated in November.
+- link "Read the CV":
+  - /url: "#cv"
+- button "Email me"
+- button "Book a call"
+- button "Later"
+- button "Unsubscribe"
+- button "Copy email"
+- status: Copied
+`;
+
+exports[`Accent 1`] = `
+- heading "Let’s work together" [level=3]
+- paragraph: Replies within two working days.
+- paragraph: Open to design system and front-end roles.
+- paragraph: Based in Chișinău, working remotely.
+- paragraph: Last updated in November.
+- link "Read the CV":
+  - /url: "#cv"
+- button "Email me"
+- button "Book a call"
+- button "Later"
+- button "Unsubscribe"
+- button "Copy email"
+- status: Copied
+`;
+
 exports[`Default   > base story 1`] = `
 - heading "API keys" [level=3]
 - paragraph: 2 active

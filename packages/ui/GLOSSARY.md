@@ -20,6 +20,10 @@ _Avoid_: Slot, sub-component, child
 One of a component's enumerated visual treatments (primary, secondary, tertiary, danger), or the Role a status component shows (neutral, success, warning, danger).
 _Avoid_: Kind, type, appearance, tone, intent
 
+**Accent zone**:
+The inside of an accent Card (`variant="accent"`), filled with the accent colour: the text, icons, borders, links and buttons the design system draws there take colours made for that fill, so the app re-points no tokens.
+_Avoid_: Inverse card, theme override, brand card
+
 **Overlay**:
 UI that renders above the page flow: menus, popovers, tooltips, toasts, dialogs and sheets. The only UI that takes elevation or material.
 _Avoid_: Floating layer, popup (as a generic term), portal, modal (unless it blocks the page)

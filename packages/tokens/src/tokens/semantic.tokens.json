@@ -378,6 +378,16 @@
         }
       }
     },
+    "color-text-on-accent-subtle": {
+      "$type": "color",
+      "$description": "Secondary content on background-accent-bold, such as a description.",
+      "$value": "{primitive.palette-sage-300}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-sage-700}"
+        }
+      }
+    },
     "color-text-on-success": {
       "$type": "color",
       "$description": "Content on background-success-bold.",
@@ -561,6 +571,16 @@
       "$extensions": {
         "com.bereghici.theme": {
           "dark": "{primitive.palette-lichen-200}"
+        }
+      }
+    },
+    "color-border-on-accent": {
+      "$type": "color",
+      "$description": "An edge or focus ring on background-accent-bold, and around a control filled with surface-overlay on it.",
+      "$value": "{primitive.palette-sage-500}",
+      "$extensions": {
+        "com.bereghici.theme": {
+          "dark": "{primitive.palette-sage-600}"
         }
       }
     },

@@ -13,6 +13,55 @@
     transition-timing-function: var(--ab-motion-easing-color);
   }
 
+  .root:where([data-variant="accent"]) {
+    --ab-card-background-color: var(--ab-card-accent-background-color);
+    --ab-card-border-color: var(--ab-card-accent-background-color);
+    --ab-card-border-color-hovered: var(--ab-card-accent-border-color);
+    --ab-card-title-text-color: var(--ab-card-accent-text-color);
+    --ab-card-description-text-color: var(--ab-card-accent-description-text-color);
+
+    color: var(--ab-card-accent-text-color);
+  }
+
+  /* An accent zone, as Carbon's theme zones: the colours the design system draws inside resolve
+     against the accent fill. On the layout, so the focus ring outside the card keeps its own. */
+  .root:where([data-variant="accent"]) > .layout {
+    --ab-color-text-default: var(--ab-card-accent-text-color);
+    --ab-color-text-subtle: var(--ab-card-accent-description-text-color);
+    --ab-color-text-subtlest: var(--ab-card-accent-description-text-color);
+    --ab-color-icon-default: var(--ab-card-accent-icon-color);
+    --ab-color-icon-subtle: var(--ab-card-accent-icon-color);
+    --ab-color-icon-subtlest: var(--ab-card-accent-icon-color);
+    --ab-color-border-subtle: var(--ab-card-accent-border-color);
+    --ab-color-border-default: var(--ab-card-accent-border-color);
+    --ab-color-border-focused: var(--ab-card-accent-border-color);
+    --ab-separator-border-color: var(--ab-card-accent-border-color);
+    --ab-link-text-color: var(--ab-card-accent-text-color);
+    --ab-link-underline-color: var(--ab-card-accent-border-color);
+    --ab-link-underline-color-hovered: var(--ab-card-accent-text-color);
+    --ab-button-primary-background-color: var(--ab-card-accent-action-background-color);
+    --ab-button-primary-background-color-hovered: var(
+      --ab-card-accent-action-background-color-hovered
+    );
+    --ab-button-primary-background-color-pressed: var(
+      --ab-card-accent-action-background-color-pressed
+    );
+    --ab-button-primary-text-color: var(--ab-card-accent-action-text-color);
+    --ab-button-primary-icon-color: var(--ab-card-accent-action-icon-color);
+    --ab-button-secondary-background-color: var(--ab-card-accent-background-color);
+    --ab-button-secondary-background-color-hovered: var(--ab-card-accent-background-color-hovered);
+    --ab-button-secondary-background-color-pressed: var(--ab-card-accent-background-color-pressed);
+    --ab-button-secondary-text-color: var(--ab-card-accent-text-color);
+    --ab-button-secondary-icon-color: var(--ab-card-accent-icon-color);
+    --ab-button-secondary-border-color: var(--ab-card-accent-border-color);
+    --ab-button-secondary-border-color-hovered: var(--ab-card-accent-text-color);
+    --ab-button-tertiary-background-color-hovered: var(--ab-card-accent-background-color-hovered);
+    --ab-button-tertiary-background-color-pressed: var(--ab-card-accent-background-color-pressed);
+    --ab-button-tertiary-text-color: var(--ab-card-accent-description-text-color);
+    --ab-button-tertiary-text-color-hovered: var(--ab-card-accent-text-color);
+    --ab-button-tertiary-icon-color: var(--ab-card-accent-icon-color);
+  }
+
   /* A container query styles the container's descendants, never the container itself:
      https://www.w3.org/TR/css-contain-3/#container-queries */
   .layout {

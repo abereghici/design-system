@@ -8,6 +8,11 @@ import styles from "./card.module.css";
 
 export interface RootProps extends ComponentProps<"div"> {
   /**
+   * `"accent"` fills the card with the accent colour to make it the one call to action on a page;
+   * the text, icons, links and buttons inside adapt to it.
+   */
+  variant?: "default" | "accent";
+  /**
    * `"horizontal"` moves the Footer beside the content once the card is wide enough, for list-like
    * cards.
    */
@@ -24,9 +29,16 @@ export interface RootProps extends ComponentProps<"div"> {
  *
  * Tier 1: works before hydration.
  */
-export function Root({ orientation = "vertical", asChild = false, children, ...props }: RootProps) {
+export function Root({
+  variant = "default",
+  orientation = "vertical",
+  asChild = false,
+  children,
+  ...props
+}: RootProps) {
   const root = {
     ...mergeProps({ className: styles["root"] }, props),
+    "data-variant": variant,
     "data-orientation": orientation,
   };
 

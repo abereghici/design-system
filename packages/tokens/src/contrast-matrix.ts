@@ -43,6 +43,9 @@ export const CONTRAST_PAIRS = [
   ["text-on-accent", "background-accent-bold"],
   ["text-on-accent", "background-accent-bold-hovered"],
   ["text-on-accent", "background-accent-bold-pressed"],
+  ["text-on-accent-subtle", "background-accent-bold"],
+  ["text-on-accent-subtle", "background-accent-bold-hovered"],
+  ["text-on-accent-subtle", "background-accent-bold-pressed"],
   ["icon-on-accent", "background-accent-bold"],
   ["text-on-success", "background-success-bold"],
   ["text-on-warning", "background-warning-bold"],
@@ -69,6 +72,8 @@ export const CONTRAST_NON_TEXT_PAIRS = [
   ["background-accent-bold", "surface-nested"],
   ["background-accent-bold", "surface-overlay"],
   ["surface-overlay", "background-accent-bold"],
+  ["border-on-accent", "background-accent-bold"],
+  ["border-on-accent", "surface-overlay"],
 ] as const;
 
 export interface ContrastRequirement {

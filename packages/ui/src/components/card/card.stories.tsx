@@ -1,10 +1,16 @@
 import { expect } from "storybook/test";
 
+import type { screen } from "storybook/test";
+
 import { Button } from "@abereghici/ui/button";
+import { CopyButton } from "@abereghici/ui/copy-button";
+import { Link } from "@abereghici/ui/link";
+import { Text } from "@abereghici/ui/text";
 
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { atCentre } from "#.storybook/test/pointer.ts";
+import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Card from "./card.tsx";
 
@@ -145,6 +151,98 @@ Linked.test("keeps its footer actions clickable", async ({ canvas }) => {
 
   await expect(atCentre(share)).toBe(share);
 });
+
+export const Accent = meta.story({
+  args: {
+    variant: "accent",
+    children: (
+      <>
+        <Card.Header>
+          <Card.Title>Let’s work together</Card.Title>
+          <Card.Description>Replies within two working days.</Card.Description>
+        </Card.Header>
+        <Card.Content>
+          <Text>Open to design system and front-end roles.</Text>
+          <Text color="subtle">Based in Chișinău, working remotely.</Text>
+          <Text color="subtlest">Last updated in November.</Text>
+          <Link href="#cv">Read the CV</Link>
+        </Card.Content>
+        <Card.Footer>
+          <Button variant="primary">Email me</Button>
+          <Button>Book a call</Button>
+          <Button variant="tertiary">Later</Button>
+          <Button variant="danger">Unsubscribe</Button>
+          <CopyButton value="hello@example.com" copiedLabel="Copied" failedLabel="Copying failed">
+            Copy email
+          </CopyButton>
+        </Card.Footer>
+      </>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "An accent card is the one call to action on a page: its text, links and buttons take colours drawn for the accent fill.",
+      },
+    },
+  },
+  play: async ({ canvas }) => {
+    const user = await trusted().catch(() => null);
+
+    await user?.click(canvas.getByRole("button", { name: "Copy email" }));
+  },
+});
+
+// WCAG 2.2 relative luminance of a computed `rgb()` colour.
+const luminance = (color: string) => {
+  const [r = 0, g = 0, b = 0] = (color.match(/[\d.]+/gv) ?? []).map((channel) => {
+    const value = Number(channel) / 255;
+
+    return value <= 0.040_45 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+  });
+
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+
+const contrast = (a: string, b: string) => {
+  const [dark = 0, light = 0] = [luminance(a), luminance(b)].toSorted((x, y) => x - y);
+
+  return (light + 0.05) / (dark + 0.05);
+};
+
+const ringStandsOut = async ({
+  canvas,
+}: {
+  canvas: Pick<typeof screen, "getByRole" | "getByText">;
+}) => {
+  const user = await trusted();
+  const button = canvas.getByRole("button", { name: "Email me" });
+
+  // From the description, past the link: the story's play has pressed Copy email.
+  await user.click(canvas.getByText("Replies within two working days."));
+  await user.keyboard("{Tab}{Tab}");
+  await expect(button).toHaveFocus();
+
+  const ring = getComputedStyle(button);
+  const fill = getComputedStyle(button.closest("[data-variant='accent']") ?? document.body);
+
+  await expect(ring.outlineStyle).toBe("solid");
+  await expect(contrast(ring.outlineColor, fill.backgroundColor)).toBeGreaterThanOrEqual(3);
+  await expect(contrast(ring.outlineColor, ring.backgroundColor)).toBeGreaterThanOrEqual(3);
+};
+
+Accent.test(
+  "draws the focus ring at 3:1 against the accent fill and the button it surrounds",
+  { globals: { theme: "light" } },
+  ringStandsOut,
+);
+
+Accent.test(
+  "draws the focus ring at 3:1 against the accent fill and the button it surrounds, dark",
+  { globals: { theme: "dark" } },
+  ringStandsOut,
+);
 
 export const WorstCase = meta.story({
   tags: ["!autodocs"],
