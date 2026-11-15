@@ -62,6 +62,24 @@ Default.test(
 );
 
 Default.test(
+  "shows the message from validate after a submit with nothing entered",
+  {
+    args: {
+      required: true,
+      validate: (value: string) => (value.trim() === "" ? "Add a message first." : undefined),
+    },
+    decorators: [withForm],
+  },
+  async ({ canvas, userEvent }) => {
+    const textarea = canvas.getByRole("textbox", { name: "Message" });
+
+    await userEvent.click(canvas.getByRole("button", { name: "Save" }));
+    await expect(textarea).toHaveAttribute("aria-invalid", "true");
+    await expect(textarea).toHaveAccessibleDescription("Add a message first.");
+  },
+);
+
+Default.test(
   "stays focusable and keeps its value when disabled",
   { args: { disabled: true, defaultValue: "Draft" } },
   async ({ args, canvas, userEvent }) => {
