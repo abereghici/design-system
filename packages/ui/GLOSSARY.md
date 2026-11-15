@@ -56,6 +56,10 @@ _Avoid_: Data flag, state class
 The state a component holds itself when the consumer gives only a starting value; a value the consumer controls always wins.
 _Avoid_: Own state, internal state, local value
 
+**ActionList**:
+A list of rows, each one link that covers the row, named by its text and described by its Description, with an optional visual before and after. Only link rows for now; for links inside running text, a Link.
+_Avoid_: Link list, menu, nav list
+
 **Timeline**:
 Events in the order they happened, such as a work history, each a marker on a rail; how far it has been reached is a position, not a user action. Unlike a Stepper, which shows where people are in a process they move through.
 _Avoid_: History list, activity feed, steps

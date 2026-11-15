@@ -71,6 +71,7 @@ const COLOR_WORDS = new Set([
 ]);
 
 const COMPONENTS = [
+  "action-list",
   "status-dot",
   "code-block",
   "toggle-button",

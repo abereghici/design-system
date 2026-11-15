@@ -1,0 +1,85 @@
+@import "@abereghici/tokens/components/action-list.css";
+
+@layer ab.components {
+  .root {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Packed to the centre, so a row with no description centres its name. */
+  .item {
+    --ab-icon-color: var(--ab-action-list-item-icon-color);
+
+    position: relative;
+    display: grid;
+    grid-template-areas:
+      "leading label trailing"
+      "leading description trailing";
+    grid-template-columns: auto 1fr auto;
+    align-content: center;
+    align-items: center;
+    min-block-size: var(--ab-action-list-item-min-height);
+    padding-block: var(--ab-action-list-item-padding-block);
+    padding-inline: var(--ab-action-list-item-padding-inline);
+    border-radius: var(--ab-action-list-item-border-radius);
+    font: var(--ab-action-list-item-font);
+    overflow-wrap: anywhere;
+    color: var(--ab-action-list-item-text-color);
+    transition: background-color var(--ab-motion-duration-hover-out) var(--ab-motion-easing-color);
+  }
+
+  .link {
+    grid-area: label;
+    color: inherit;
+    text-decoration-line: none;
+    outline: none;
+  }
+
+  /* Positioned, it paints above the visuals and the description, so the whole row is the link:
+     https://www.w3.org/TR/CSS22/zindex.html */
+  .link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .item:has(.link:hover) {
+      background-color: var(--ab-action-list-item-background-color-hovered);
+      transition-duration: var(--ab-motion-duration-hover-in);
+    }
+  }
+
+  .item:has(.link:active) {
+    background-color: var(--ab-action-list-item-background-color-pressed);
+  }
+
+  .item:has(.link:focus-visible) {
+    outline: var(--ab-focus-ring-width) solid var(--ab-color-border-focused);
+    outline-offset: calc(var(--ab-focus-ring-width) * -1);
+  }
+
+  .description {
+    grid-area: description;
+    font: var(--ab-action-list-description-font);
+    color: var(--ab-action-list-description-text-color);
+  }
+
+  .leading-visual,
+  .trailing-visual {
+    display: flex;
+  }
+
+  /* Margins, not a column gap, so a row without a visual leaves no gap for it. */
+  .leading-visual {
+    grid-area: leading;
+    margin-inline-end: var(--ab-action-list-item-gap);
+  }
+
+  .trailing-visual {
+    grid-area: trailing;
+    margin-inline-start: var(--ab-action-list-item-gap);
+  }
+}

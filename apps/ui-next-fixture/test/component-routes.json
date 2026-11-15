@@ -382,6 +382,12 @@
     "html": "aria-current=\"step\""
   },
   {
+    "name": "action-list",
+    "tokens": ["action-list"],
+    "client": [],
+    "html": "aria-describedby"
+  },
+  {
     "name": "timeline",
     "tokens": ["timeline"],
     "client": [],

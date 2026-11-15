@@ -5,6 +5,7 @@ import { basename, dirname } from "node:path";
 import type { SizeLimitConfig } from "size-limit";
 
 const budgets: Readonly<Record<string, string>> = {
+  "action-list": "2 kB",
   alert: "3.45 kB",
   avatar: "1.85 kB",
   badge: "1.15 kB",
