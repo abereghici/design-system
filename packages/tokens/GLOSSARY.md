@@ -76,3 +76,13 @@ _Avoid_: Text style, font style, type scale step
 **Subset**:
 One file of a typeface that covers one script range (Latin or Latin Extended), fetched only when the page uses a character in it.
 _Avoid_: Font slice, charset
+
+### Layout
+
+**Page shell**:
+The outermost frame of a page, capped at `size-container-xl`, the top step of the container scale; reading text inside it keeps to `layout-column-width`.
+_Avoid_: Wrapper, max-width container
+
+**Breakpoint**:
+A width at which a layout changes arrangement: `sm`, `md` or `lg`, in `em` so a larger default text size reaches the narrower arrangement. Written as a literal in `@container` and `@media` queries, which can't read a custom property.
+_Avoid_: Screen size, viewport size

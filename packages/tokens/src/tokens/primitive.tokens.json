@@ -1243,9 +1243,24 @@
         "unit": "px"
       }
     },
-    "dimension-760": {
+    "dimension-1280": {
+      "$type": "dimension",
+      "$value": {
+        "value": 1280,
+        "unit": "px"
+      }
+    },
+    "breakpoint-560": {
+      "$type": "dimension",
+      "$value": "35em"
+    },
+    "breakpoint-760": {
       "$type": "dimension",
       "$value": "47.5em"
+    },
+    "breakpoint-900": {
+      "$type": "dimension",
+      "$value": "56.25em"
     },
     "dimension-7": {
       "$type": "dimension",

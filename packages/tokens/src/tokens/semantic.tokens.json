@@ -1581,6 +1581,11 @@
       "$type": "dimension",
       "$value": "{primitive.dimension-680}"
     },
+    "size-container-xl": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-1280}",
+      "$description": "The widest step: caps a page shell, such as a dashboard or a grid of tiles, wider than the reading column."
+    },
     "radius-xs": {
       "$type": "dimension",
       "$value": "{primitive.dimension-5}"
@@ -1704,10 +1709,20 @@
       "$value": "{primitive.dimension-112}",
       "$description": "The label column of a form laid out side by side."
     },
+    "breakpoint-sm": {
+      "$type": "dimension",
+      "$value": "{primitive.breakpoint-560}",
+      "$description": "From it up, a layout can leave one column. Write `35em` in @container and @media queries; CSS can't read a custom property there."
+    },
     "breakpoint-md": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-760}",
-      "$description": "Below it, space-section and the layout gutter shrink. Write its value in media queries; CSS can't read a custom property there."
+      "$value": "{primitive.breakpoint-760}",
+      "$description": "Below it, space-section and the layout gutter shrink. Write `47.5em` in @container and @media queries; CSS can't read a custom property there."
+    },
+    "breakpoint-lg": {
+      "$type": "dimension",
+      "$value": "{primitive.breakpoint-900}",
+      "$description": "From it up, a layout can take its widest arrangement. Write `56.25em` in @container and @media queries; CSS can't read a custom property there."
     },
     "motion-easing-enter": {
       "$type": "cubicBezier",
