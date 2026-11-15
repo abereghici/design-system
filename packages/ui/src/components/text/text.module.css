@@ -36,6 +36,12 @@
     letter-spacing: var(--ab-type-label-lg-letter-spacing);
   }
 
+  .root:where([data-variant="data"][data-size="lg"]) {
+    font: var(--ab-type-data-lg);
+    letter-spacing: var(--ab-type-data-lg-letter-spacing);
+    font-variant-numeric: var(--ab-type-data-lg-font-variant-numeric);
+  }
+
   .root:where([data-variant="data"][data-size="sm"]) {
     font: var(--ab-type-data-sm);
     letter-spacing: var(--ab-type-data-sm-letter-spacing);

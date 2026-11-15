@@ -40,6 +40,8 @@
     caret-color: var(--ab-color-text-accent);
     background-color: var(--ab-color-surface-default);
     color: var(--ab-color-text-default);
+    /* Every control draws its own pressed state, so the grey tap flash only doubles it. */
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {

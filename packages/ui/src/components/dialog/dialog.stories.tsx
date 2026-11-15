@@ -4,8 +4,10 @@ import { expect, fn, waitFor } from "storybook/test";
 import { Button } from "@abereghici/ui/button";
 import { TextField } from "@abereghici/ui/text-field";
 
+import { withHeight } from "#.storybook/decorators/with-height.tsx";
 import preview, { partsOf } from "#.storybook/preview.tsx";
 import { listen, listenFeedback } from "#.storybook/test/listen.ts";
+import { touchDrag } from "#.storybook/test/pointer.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
 import * as Dialog from "./dialog.tsx";
@@ -127,6 +129,23 @@ Default.test(
       expect.objectContaining({ reason: "outside-press" }),
     );
     await expect(dismissals.events.map(({ target }) => target)).toEqual([dialog]);
+  },
+);
+
+Default.test(
+  "leaves the page where it is when the wheel turns or a finger drags over the backdrop",
+  { decorators: [withHeight("300vh")] },
+  async ({ canvas, userEvent }) => {
+    const trigger = canvas.getByRole("button", { name: "Rename…" });
+
+    await userEvent.click(trigger);
+    await expect(canvas.getByRole("textbox", { name: "Name" })).toHaveFocus();
+
+    const user = await trusted();
+
+    await user.wheel(document.documentElement, { delta: { y: 400 } });
+    await touchDrag(trigger, 0, -200);
+    await expect(document.scrollingElement?.scrollTop).toBe(0);
   },
 );
 

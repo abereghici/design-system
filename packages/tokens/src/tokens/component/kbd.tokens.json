@@ -39,6 +39,10 @@
     "kbd-gap": {
       "$type": "dimension",
       "$value": "{semantic.space-inline-xs}"
+    },
+    "kbd-group-gap": {
+      "$type": "dimension",
+      "$value": "{semantic.space-inline-sm}"
     }
   }
 }

@@ -79,6 +79,25 @@ test("the other families take the source's keys and plain values", async () => {
   );
 });
 
+test("the page-shell container and the breakpoints carry the literal to write in a query", async () => {
+  const artifact = await artifactOf();
+
+  expect(artifact.size.tokens).toContainEqual(
+    expect.objectContaining({ name: "ab-size-container-xl", value: "1280px" }),
+  );
+
+  const breakpoints = artifact.layout.tokens.filter(({ name }) =>
+    /^ab-breakpoint-[a-z]+$/v.test(name),
+  );
+
+  expect(breakpoints.map(({ name, value }) => `${name}: ${value}`)).toEqual([
+    "ab-breakpoint-sm: 35em",
+    "ab-breakpoint-md: 47.5em",
+    "ab-breakpoint-lg: 56.25em",
+  ]);
+  expect(breakpoints.filter(({ value, usage }) => !usage.includes(`\`${value}\``))).toEqual([]);
+});
+
 test("type styles show the 1280px end of a fluid size, grouped by category", async () => {
   const artifact = await artifactOf();
   const heading = artifact.type.groups.find(({ name }) => name === "Heading");
@@ -109,18 +128,20 @@ test("type families and fonts come from the font tokens and the shipped files", 
   const artifact = await artifactOf();
 
   expect(Object.keys(artifact.type.families)).toEqual(["noto-serif", "figtree", "system-mono"]);
-  expect(artifact.type.families["noto-serif"]).toBe("'Noto Serif', Georgia, serif");
+  expect(artifact.type.families["noto-serif"]).toBe(
+    "'Noto Serif', 'Noto Serif Fallback', Georgia, serif",
+  );
   expect(artifact.type.families["system-mono"]).toMatch(/monospace$/v);
   expect(artifact.type.fonts).toContainEqual({
     family: "Noto Serif",
     file: "fonts/NotoSerif-latin.woff2",
-    weight: "100 900",
+    weight: "400 500",
     style: "normal",
   });
   expect(artifact.type.fonts).toContainEqual({
     family: "Noto Serif",
     file: "fonts/NotoSerif-Italic-latin.woff2",
-    weight: "100 900",
+    weight: "400 500",
     style: "italic",
   });
   expect(artifact.type.fonts).toHaveLength(8);

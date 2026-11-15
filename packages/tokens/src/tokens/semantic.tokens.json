@@ -1007,6 +1007,37 @@
         "letterSpacing": "{primitive.letter-spacing-minus-10}"
       }
     },
+    "type-display-lg-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-noto-serif}"
+    },
+    "type-display-lg-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-40-96}"
+    },
+    "type-display-lg-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-400}"
+    },
+    "type-display-lg-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-100}"
+    },
+    "type-display-lg-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-minus-20}"
+    },
+    "type-display-lg": {
+      "$type": "typography",
+      "$description": "Serif display title, the largest type, such as a hero's name. Grows from 40px to 96px with the viewport.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-noto-serif}",
+        "fontSize": "{primitive.font-size-40-96}",
+        "fontWeight": "{primitive.font-weight-400}",
+        "lineHeight": "{primitive.line-height-100}",
+        "letterSpacing": "{primitive.letter-spacing-minus-20}"
+      }
+    },
     "type-display-md-font-family": {
       "$type": "fontFamily",
       "$value": "{primitive.font-family-noto-serif}"
@@ -1288,6 +1319,41 @@
         "fontWeight": "{primitive.font-weight-500}",
         "lineHeight": "{primitive.line-height-160}",
         "letterSpacing": "{primitive.letter-spacing-0}"
+      }
+    },
+    "type-data-lg-font-family": {
+      "$type": "fontFamily",
+      "$value": "{primitive.font-family-figtree}"
+    },
+    "type-data-lg-font-size": {
+      "$type": "dimension",
+      "$value": "{primitive.font-size-29-33}"
+    },
+    "type-data-lg-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{primitive.font-weight-500}"
+    },
+    "type-data-lg-line-height": {
+      "$type": "number",
+      "$value": "{primitive.line-height-115}"
+    },
+    "type-data-lg-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{primitive.letter-spacing-minus-10}"
+    },
+    "type-data-lg-font-variant-numeric": {
+      "$type": "string",
+      "$value": "{primitive.font-variant-numeric-tabular-nums}"
+    },
+    "type-data-lg": {
+      "$type": "typography",
+      "$description": "A key number, such as a stat or a clock, with tabular figures. Grows from 29px to 33px with the viewport.",
+      "$value": {
+        "fontFamily": "{primitive.font-family-figtree}",
+        "fontSize": "{primitive.font-size-29-33}",
+        "fontWeight": "{primitive.font-weight-500}",
+        "lineHeight": "{primitive.line-height-115}",
+        "letterSpacing": "{primitive.letter-spacing-minus-10}"
       }
     },
     "type-data-md-font-family": {
@@ -1601,6 +1667,11 @@
       "$type": "dimension",
       "$value": "{primitive.dimension-680}"
     },
+    "size-container-xl": {
+      "$type": "dimension",
+      "$value": "{primitive.dimension-1280}",
+      "$description": "The widest step: caps a page shell, such as a dashboard or a grid of tiles, wider than the reading column."
+    },
     "radius-xs": {
       "$type": "dimension",
       "$value": "{primitive.dimension-5}"
@@ -1724,10 +1795,20 @@
       "$value": "{primitive.dimension-112}",
       "$description": "The label column of a form laid out side by side."
     },
+    "breakpoint-sm": {
+      "$type": "dimension",
+      "$value": "{primitive.breakpoint-560}",
+      "$description": "From it up, a layout can leave one column. Write `35em` in @container and @media queries; CSS can't read a custom property there."
+    },
     "breakpoint-md": {
       "$type": "dimension",
-      "$value": "{primitive.dimension-760}",
-      "$description": "Below it, space-section and the layout gutter shrink. Write its value in media queries; CSS can't read a custom property there."
+      "$value": "{primitive.breakpoint-760}",
+      "$description": "Below it, space-section and the layout gutter shrink. Write `47.5em` in @container and @media queries; CSS can't read a custom property there."
+    },
+    "breakpoint-lg": {
+      "$type": "dimension",
+      "$value": "{primitive.breakpoint-900}",
+      "$description": "From it up, a layout can take its widest arrangement. Write `56.25em` in @container and @media queries; CSS can't read a custom property there."
     },
     "motion-easing-enter": {
       "$type": "cubicBezier",

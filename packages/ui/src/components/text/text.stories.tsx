@@ -91,6 +91,25 @@ Default.test(
   },
 );
 
+export const Stat = meta.story({
+  args: { as: "h2", variant: "overline", children: "Visitors this week" },
+  render: (args) => (
+    <>
+      <Text {...args} />
+      <Text variant="data" size="lg">
+        12,480
+      </Text>
+    </>
+  ),
+  parameters: {
+    docs: { description: { story: "A heading in the overline style over a key number." } },
+  },
+});
+
+Stat.test("titles the stat as a heading for assistive technology", async ({ canvas }) => {
+  await expect(canvas.getByRole("heading", { level: 2, name: "Visitors this week" })).toBeVisible();
+});
+
 export const WorstCase = meta.story({
   tags: ["!autodocs"],
   args: {

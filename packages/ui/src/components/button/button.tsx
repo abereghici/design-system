@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentProps, MouseEventHandler } from "react";
+import type { ComponentProps, MouseEventHandler, ReactNode } from "react";
 
 import { TouchTarget } from "../../internal/components/touch-target/touch-target.tsx";
 import { usePressButton } from "../../internal/interactions/use-press-button.ts";
@@ -35,6 +35,12 @@ export interface ButtonProps extends Omit<ComponentProps<"button">, "onClick">, 
   /** `submit` sends its form; the default, `button`, does nothing on its own. */
   type?: "button" | "submit" | "reset" | undefined;
   /**
+   * The keys that trigger it, shown after the label: pass a Kbd with `aria-hidden`, and set
+   * `aria-keyshortcuts` on the Button so screen readers hear the shortcut
+   * (https://www.w3.org/TR/wai-aria-1.2/#aria-keyshortcuts). Your app handles the keys.
+   */
+  shortcut?: ReactNode;
+  /**
    * Gives the Button's look to its one child, such as a router link that should look like a button.
    */
   asChild?: boolean;
@@ -55,6 +61,7 @@ export function Button({
   asChild = false,
   type = "button",
   onClick,
+  shortcut,
   children,
   ...props
 }: ButtonProps) {
@@ -73,6 +80,7 @@ export function Button({
       data-size={size}
     >
       <Slottable>{children}</Slottable>
+      {shortcut !== undefined && <span className={styles["shortcut"]}>{shortcut}</span>}
       {spinner}
       <TouchTarget />
     </Root>

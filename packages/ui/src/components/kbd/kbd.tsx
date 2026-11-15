@@ -1,6 +1,8 @@
+import { Fragment } from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import { mergeProps } from "../../internal/utils/merge-props.ts";
+import { VisuallyHidden } from "../visually-hidden/visually-hidden.tsx";
 
 import { Key } from "./kbd-key.tsx";
 import type { KbdFace, KeyLabel } from "./kbd-key.tsx";
@@ -33,8 +35,9 @@ type KeyName = "mod" | "ctrl" | "shift" | "alt" | "enter" | "backspace" | "esc" 
 
 export interface KbdProps extends ComponentProps<"kbd"> {
   /**
-   * `+`-separated key names, case-insensitive: `"mod+k"`, `"shift+enter"`. `mod` is ⌘ on Apple
-   * platforms and Ctrl elsewhere. Other names render as written, a single letter upper-cased.
+   * Key names, case-insensitive: `+` joins keys pressed together (`"mod+k"`, `"shift+enter"`) and a
+   * space separates keys pressed one after another (`"g i"`). `mod` is ⌘ on Apple platforms and
+   * Ctrl elsewhere. Other names render as written, a single letter upper-cased.
    */
   keys?: KeyName | "up" | "down" | "left" | "right" | "plus" | (string & Record<never, never>);
   /**
@@ -47,6 +50,8 @@ export interface KbdProps extends ComponentProps<"kbd"> {
    * they read the symbol.
    */
   keyLabels?: Partial<Record<KeyLabel, string>>;
+  /** The word screen readers say between keys pressed one after another, such as "then". */
+  thenLabel?: string;
 }
 
 function key(
@@ -70,23 +75,34 @@ function key(
 
 /**
  * Shows a keyboard shortcut, one keycap per key: `mod` is ⌘ on Apple platforms and Ctrl elsewhere.
- * It only shows the keys; your app handles them. Inside a control, pass `aria-hidden` and set
- * `aria-keyshortcuts` on the control, so the shortcut isn't read twice.
+ * Keys pressed together sit close, and the steps of a sequence sit apart. It only shows the keys;
+ * your app handles them. On a Button, use its `shortcut`. Inside another control, pass
+ * `aria-hidden` and set `aria-keyshortcuts` on the control, so the shortcut isn't read twice.
  *
  * Tier 1: works before hydration.
  */
-export function Kbd({ keys, platform, keyLabels, children, ...props }: KbdProps) {
-  const content =
+export function Kbd({ keys, platform, keyLabels, thenLabel, children, ...props }: KbdProps) {
+  const steps =
     keys === undefined
-      ? [children]
-      : keys.split("+").map((name) => key(name.trim(), { platform, keyLabels }));
+      ? [[children]]
+      : keys
+          .trim()
+          .split(/\s+/v)
+          .map((step) => step.split("+").map((name) => key(name, { platform, keyLabels })));
 
   return (
     <kbd dir="ltr" {...mergeProps({ className: styles["root"] }, props)}>
-      {content.map((node, index) => (
-        <kbd key={index} className={styles["key"]}>
-          {node}
-        </kbd>
+      {steps.map((step, index) => (
+        <Fragment key={index}>
+          {index > 0 && <VisuallyHidden>{` ${thenLabel ?? ""} `}</VisuallyHidden>}
+          <span className={styles["group"]}>
+            {step.map((node, keyIndex) => (
+              <kbd key={keyIndex} className={styles["key"]}>
+                {node}
+              </kbd>
+            ))}
+          </span>
+        </Fragment>
       ))}
     </kbd>
   );

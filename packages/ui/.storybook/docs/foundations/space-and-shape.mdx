@@ -37,6 +37,18 @@ Controls share four heights, so a button, a field and a select line up in a row.
 | `md`           | <Value of="size-control-md" /> |
 | `lg`           | <Value of="size-control-lg" /> |
 
+## Breakpoints
+
+Write a breakpoint's value in `@container` and `@media` queries; a query can't read a custom property. Grid's `columns` and `areas` change at these values.
+
+| Breakpoint | Value                        |
+| ---------- | ---------------------------- |
+| `sm`       | <Value of="breakpoint-sm" /> |
+| `md`       | <Value of="breakpoint-md" /> |
+| `lg`       | <Value of="breakpoint-lg" /> |
+
+A page shell wider than the reading column is capped at <Value of="size-container-xl" />, the top step of `size-container-*`.
+
 ## Density
 
 Comfortable is the default. For a dense screen, set `data-density="compact"` on any element, and the buttons, icon buttons, toggle buttons, segmented controls and single-line fields inside it take the compact heights, as do the options of a Select, Combobox or Command, the items of a menu or Tree, the Tabs and the Steps of a Stepper, while a Table's rows get shorter; `data-density="comfortable"` goes back inside a compact region. The nearest setting wins.

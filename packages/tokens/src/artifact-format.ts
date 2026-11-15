@@ -69,7 +69,7 @@ export type ArtifactTokens = {
 
 const NOTES: Partial<Record<List, string>> = {
   line: "Border widths, focus rings and underlines.",
-  layout: "Column and label widths, the gutter and the breakpoint.",
+  layout: "Column and label widths, the gutter and the breakpoints.",
   shadow: "The Elevations: a hairline ring, an inner highlight (dark only) and soft shadows.",
 };
 

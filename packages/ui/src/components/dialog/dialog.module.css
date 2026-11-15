@@ -1,10 +1,6 @@
 @import "@abereghici/tokens/components/dialog.css";
 
 @layer ab.components {
-  :root:has(.content:modal) {
-    overflow: hidden;
-  }
-
   .content {
     box-sizing: border-box;
     inline-size: min(var(--ab-dialog-width), calc(100vw - 2 * var(--ab-space-inset-lg)));
@@ -20,11 +16,8 @@
     color: var(--ab-dialog-title-text-color);
     overscroll-behavior: contain;
     opacity: 0;
-    transition:
-      opacity,
-      scale,
-      overlay allow-discrete,
-      display allow-discrete;
+    transition-property: opacity, scale, overlay, display;
+    transition-behavior: allow-discrete;
     transition-duration: var(--ab-dialog-exit-duration);
     transition-timing-function: var(--ab-dialog-easing);
   }
@@ -52,10 +45,12 @@
     background-color: var(--ab-dialog-backdrop-color);
     backdrop-filter: blur(var(--ab-dialog-backdrop-blur));
     opacity: 0;
-    transition:
-      opacity,
-      overlay allow-discrete,
-      display allow-discrete;
+    /* A non-scrolling scroll container, so the wheel or a finger over it can't scroll the page:
+       https://drafts.csswg.org/css-overscroll-1/#overscroll-behavior-properties */
+    overflow: hidden;
+    overscroll-behavior: contain;
+    transition-property: opacity, overlay, display;
+    transition-behavior: allow-discrete;
     transition-duration: var(--ab-dialog-exit-duration);
     transition-timing-function: var(--ab-motion-easing-exit);
   }

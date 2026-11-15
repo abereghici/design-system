@@ -40,6 +40,19 @@ Default.test(
   },
 );
 
+export const Display = meta.story({
+  args: { as: "h1", size: "display", children: "Quiet tools for loud work" },
+  parameters: {
+    docs: { description: { story: "The largest title, for the one that opens a landing page." } },
+  },
+});
+
+Display.test("stays a level 1 heading in the display size", async ({ canvas }) => {
+  await expect(
+    canvas.getByRole("heading", { level: 1, name: "Quiet tools for loud work" }),
+  ).toBeVisible();
+});
+
 export const WorstCase = meta.story({
   tags: ["!autodocs"],
   args: {

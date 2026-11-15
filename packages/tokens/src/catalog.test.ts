@@ -35,3 +35,25 @@ test("files a component token under its component and every other token under a 
     type: "color",
   });
 });
+
+test("offers a large data role at the heading-lg size, with tabular figures, in every output", () => {
+  const valueOf = (name: string) => built.catalog.find((token) => token.name === name)?.value;
+
+  expect(valueOf("ab-type-data-lg-font-size")).toBe("var(--ab-font-size-29-33)");
+  expect(valueOf("ab-type-data-lg-font-variant-numeric")).toBe(
+    "var(--ab-font-variant-numeric-tabular-nums)",
+  );
+  expect(built.css).toContain("--ab-type-data-lg: ");
+  expect(JSON.stringify(built.artifact)).toContain('"name":"ab-type-data-lg"');
+});
+
+test("offers a display title that grows to 96px, above heading-lg's 33px", () => {
+  const styles = built.artifact.type.groups.flatMap((group) => group.styles);
+
+  expect(styles).toContainEqual(
+    expect.objectContaining({ name: "ab-type-display-lg", fontSize: "6rem" }),
+  );
+  expect(styles).toContainEqual(
+    expect.objectContaining({ name: "ab-type-heading-lg", fontSize: "2.0625rem" }),
+  );
+});

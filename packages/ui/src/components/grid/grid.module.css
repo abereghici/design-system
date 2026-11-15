@@ -2,6 +2,49 @@
   .root {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr));
+    grid-auto-columns: minmax(0, 1fr);
     gap: var(--gap);
+  }
+
+  /* Without columns, the areas make the columns, sized by grid-auto-columns:
+     https://www.w3.org/TR/css-grid-2/#implicit-grids */
+  .areas {
+    grid-template-columns: none;
+    grid-template-areas: var(--areas-initial);
+  }
+
+  .columns {
+    grid-template-columns: repeat(var(--columns-initial), minmax(0, 1fr));
+  }
+
+  /* The breakpoint-sm, -md and -lg values: a container query can't read a custom property. */
+  @container (inline-size >= 35em) {
+    .areas {
+      grid-template-areas: var(--areas-sm);
+    }
+
+    .columns {
+      grid-template-columns: repeat(var(--columns-sm), minmax(0, 1fr));
+    }
+  }
+
+  @container (inline-size >= 47.5em) {
+    .areas {
+      grid-template-areas: var(--areas-md);
+    }
+
+    .columns {
+      grid-template-columns: repeat(var(--columns-md), minmax(0, 1fr));
+    }
+  }
+
+  @container (inline-size >= 56.25em) {
+    .areas {
+      grid-template-areas: var(--areas-lg);
+    }
+
+    .columns {
+      grid-template-columns: repeat(var(--columns-lg), minmax(0, 1fr));
+    }
   }
 }

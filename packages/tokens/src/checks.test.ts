@@ -120,6 +120,18 @@ test("a primitive name outside the tier grammar fails the build", async () => {
   );
 });
 
+test("a container size outside the scale fails the build", async () => {
+  const tokens = validTokens();
+
+  tokens.semantic["size-container-huge"] = {
+    $type: "dimension",
+    $value: "{primitive.dimension-680}",
+  };
+  await expect(buildTokens({ tokens })).rejects.toThrow(
+    "--ab-size-container-huge: does not match the semantic grammar",
+  );
+});
+
 test("component tokens use the spec's component names", async () => {
   const tokens = validTokens();
 

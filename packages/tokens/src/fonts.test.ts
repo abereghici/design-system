@@ -10,7 +10,10 @@ const LATIN_EXT =
   "U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF";
 
 function faces(css: string): Map<string, string> {
-  const bodies = css.split("@font-face {").slice(1);
+  const bodies = css
+    .split("@font-face {")
+    .slice(1)
+    .filter((body) => body.includes("url("));
 
   return new Map(bodies.map((body) => [/url\("([^"]+)"\)/v.exec(body)?.[1] ?? "", body]));
 }
@@ -68,9 +71,20 @@ test("faces declare the variable axis ranges as descriptor ranges", () => {
     expect(figtree).toContain("font-weight: 300 900;");
     expect(figtree).not.toContain("font-stretch");
     expect(noto).toContain('font-family: "Noto Serif";');
-    expect(noto).toContain("font-weight: 100 900;");
-    expect(noto).toContain("font-stretch: 62.5% 100%;");
+    expect(noto).toContain("font-weight: 400 500;");
+    expect(noto).not.toContain("font-stretch");
   }
+});
+
+test("Noto Serif falls back to a local serif resized to its metrics, so the swap doesn't shift text", () => {
+  const css = fontFaceCss();
+  const fallback = css.slice(css.indexOf('font-family: "Noto Serif Fallback";'));
+
+  expect(fallback).toContain('src: local("Times New Roman"), local("Liberation Serif");');
+  expect(fallback).toContain("size-adjust: 121%;");
+  expect(fallback).toContain("ascent-override: 88%;");
+  expect(fallback).toContain("descent-override: 24%;");
+  expect(fallback).toContain("line-gap-override: 0%;");
 });
 
 test("every url resolves to a committed font file from dist/", async () => {

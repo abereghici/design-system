@@ -245,6 +245,8 @@ export * from "./components/icon/icons/plus.tsx";
 
 export * from "./components/icon/icons/printer.tsx";
 
+export * from "./components/icon/icons/refresh.tsx";
+
 export * from "./components/icon/icons/search.tsx";
 
 export * from "./components/icon/icons/spark.tsx";
