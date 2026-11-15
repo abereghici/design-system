@@ -37,6 +37,7 @@
     "#.storybook/*": "./.storybook/*"
   },
   "exports": {
+    ".": "./src/index.ts",
     "./*": "./src/components/*/index.ts",
     "./feedback-event": "./src/feedback-event/index.ts",
     "./text-direction": "./src/text-direction/index.ts",
@@ -44,6 +45,10 @@
   },
   "publishConfig": {
     "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
       "./*": {
         "types": "./dist/components/*/index.d.ts",
         "default": "./dist/components/*/index.js"

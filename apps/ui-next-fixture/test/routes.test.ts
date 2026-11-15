@@ -48,6 +48,7 @@ function route(name: string): Route {
 }
 
 const button = route("index");
+const rootButton = route("root-import");
 const logo = route("logo");
 const iconButton = route("icon-button");
 
@@ -82,6 +83,7 @@ const shippedComponentTokens = (css: string) => {
 describe("the UIProvider owns the global CSS", () => {
   test.each([
     ["button", button],
+    ["root-import", rootButton],
     ["logo", logo],
   ])("the %s route starts with the layer order, then the shared tokens, fonts and base", (_, r) => {
     expect(r.css.trimStart()).toMatch(
@@ -114,6 +116,11 @@ describe("per-component CSS", () => {
     expect(
       shippedComponentTokens(button.css).filter((t) => !/^--ab-(button|spinner)-/v.test(t)),
     ).toEqual([]);
+  });
+
+  test("a route that imports Button from the package root ships the same CSS as the Button subpath", () => {
+    expect(shippedComponentTokens(rootButton.css)).toEqual(shippedComponentTokens(button.css));
+    expect(rootButton.css.length).toBe(button.css.length);
   });
 
   test("a route that imports Logo ships Logo's tokens and none of Button's", () => {
@@ -193,6 +200,11 @@ describe("per-component JS", () => {
     expect(allClientModules(logo)).toEqual([localeProvider]);
     expect(logo.js).not.toContain("ab-press");
     expect(uiClientModules(iconButton)).toEqual(["components/icon-button/icon-button"]);
+  });
+
+  test("a route that imports Button from the package root loads only Button's client code", () => {
+    expect(uiClientModules(rootButton)).toEqual(["components/button/button"]);
+    expect(rootButton.js.length).toBe(button.js.length);
   });
 
   test.each([

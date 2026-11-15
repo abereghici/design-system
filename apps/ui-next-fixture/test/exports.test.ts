@@ -13,6 +13,12 @@ function resolve(specifier: string): string | undefined {
   return existsSync(path) ? realpathSync(path) : undefined;
 }
 
+async function exportsOf(path: string): Promise<[string, unknown][]> {
+  const namespace: unknown = await import(path);
+
+  return typeof namespace === "object" && namespace !== null ? Object.entries(namespace) : [];
+}
+
 describe("@abereghici/ui exports", () => {
   test("a component subpath resolves to its directory's index.ts", () => {
     expect(resolve("@abereghici/ui/button")).toBe(join(uiDir, "src/components/button/index.ts"));
@@ -34,10 +40,8 @@ describe("@abereghici/ui exports", () => {
     }
   });
 
-  test("the package root is not exported (Node)", () => {
-    expect(() => resolve("@abereghici/ui")).toThrow(
-      expect.objectContaining({ code: "ERR_PACKAGE_PATH_NOT_EXPORTED" }),
-    );
+  test("the package root resolves to src/index.ts", () => {
+    expect(resolve("@abereghici/ui")).toBe(join(uiDir, "src/index.ts"));
   });
 
   test("the shared internals are not exported", () => {
@@ -45,10 +49,18 @@ describe("@abereghici/ui exports", () => {
     expect(resolve("@abereghici/ui/internal/utils/slot.tsx")).toBeUndefined();
   });
 
-  test("the package root is not importable (Vite, through Vitest)", async () => {
-    const root = "@abereghici/ui";
+  test("the package root exports every subpath's exports, as the same values", async () => {
+    const root: Record<string, unknown> = await import("@abereghici/ui");
+    const entries = globSync(
+      ["src/*/index.ts", "src/components/*/index.ts", "src/components/icon/icons/*.tsx"],
+      { cwd: uiDir },
+    );
 
-    await expect(import(root)).rejects.toThrow(/"\." is not exported/v);
+    for (const entry of entries) {
+      for (const [name, value] of await exportsOf(join(uiDir, entry))) {
+        expect(root[name]).toBe(value);
+      }
+    }
   });
 
   test("module files, glyph folders and the Storybook harness have no subpath", () => {

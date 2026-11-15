@@ -1,0 +1,257 @@
+// Every public subpath, for tools that need one entry, such as /design-sync. Apps import the subpaths: a bundler
+// then never parses the rest of the library.
+export * from "./feedback-event/index.ts";
+
+export * from "./text-direction/index.ts";
+
+export * from "./components/accordion/index.ts";
+
+export * from "./components/alert-dialog/index.ts";
+
+export * from "./components/alert/index.ts";
+
+export * from "./components/avatar/index.ts";
+
+export * from "./components/badge/index.ts";
+
+export * from "./components/breadcrumbs/index.ts";
+
+export * from "./components/button/index.ts";
+
+export * from "./components/calendar/index.ts";
+
+export * from "./components/card/index.ts";
+
+export * from "./components/checkbox/index.ts";
+
+export * from "./components/code-block/index.ts";
+
+export * from "./components/combobox/index.ts";
+
+export * from "./components/command/index.ts";
+
+export * from "./components/context-menu/index.ts";
+
+export * from "./components/contextual-help/index.ts";
+
+export * from "./components/copy-button/index.ts";
+
+export * from "./components/date-field/index.ts";
+
+export * from "./components/date-picker/index.ts";
+
+export * from "./components/date-range-picker/index.ts";
+
+export * from "./components/description-list/index.ts";
+
+export * from "./components/dialog/index.ts";
+
+export * from "./components/disclosure/index.ts";
+
+export * from "./components/drop-zone/index.ts";
+
+export * from "./components/dropdown-menu/index.ts";
+
+export * from "./components/empty-state/index.ts";
+
+export * from "./components/field/index.ts";
+
+export * from "./components/fieldset/index.ts";
+
+export * from "./components/file-trigger/index.ts";
+
+export * from "./components/form/index.ts";
+
+export * from "./components/grid/index.ts";
+
+export * from "./components/heading/index.ts";
+
+export * from "./components/icon-button/index.ts";
+
+export * from "./components/icon/index.ts";
+
+export * from "./components/inline/index.ts";
+
+export * from "./components/kbd/index.ts";
+
+export * from "./components/link/index.ts";
+
+export * from "./components/logo/index.ts";
+
+export * from "./components/meter/index.ts";
+
+export * from "./components/navbar/index.ts";
+
+export * from "./components/number-field/index.ts";
+
+export * from "./components/otp-field/index.ts";
+
+export * from "./components/page-layout/index.ts";
+
+export * from "./components/pagination/index.ts";
+
+export * from "./components/password-field/index.ts";
+
+export * from "./components/popover/index.ts";
+
+export * from "./components/progress/index.ts";
+
+export * from "./components/radio-group/index.ts";
+
+export * from "./components/range-calendar/index.ts";
+
+export * from "./components/scroll-area/index.ts";
+
+export * from "./components/search-field/index.ts";
+
+export * from "./components/segmented-control/index.ts";
+
+export * from "./components/select/index.ts";
+
+export * from "./components/separator/index.ts";
+
+export * from "./components/sheet/index.ts";
+
+export * from "./components/sidebar/index.ts";
+
+export * from "./components/skeleton/index.ts";
+
+export * from "./components/skip-link/index.ts";
+
+export * from "./components/slider/index.ts";
+
+export * from "./components/spinner/index.ts";
+
+export * from "./components/splitter/index.ts";
+
+export * from "./components/stack/index.ts";
+
+export * from "./components/status-dot/index.ts";
+
+export * from "./components/stepper/index.ts";
+
+export * from "./components/switch/index.ts";
+
+export * from "./components/table/index.ts";
+
+export * from "./components/tabs/index.ts";
+
+export * from "./components/tag-group/index.ts";
+
+export * from "./components/tag/index.ts";
+
+export * from "./components/text-area/index.ts";
+
+export * from "./components/text-field/index.ts";
+
+export * from "./components/text/index.ts";
+
+export * from "./components/time-field/index.ts";
+
+export * from "./components/toast/index.ts";
+
+export * from "./components/toaster/index.ts";
+
+export * from "./components/toggle-button-group/index.ts";
+
+export * from "./components/toggle-button/index.ts";
+
+export * from "./components/toolbar/index.ts";
+
+export * from "./components/tooltip/index.ts";
+
+export * from "./components/tree/index.ts";
+
+export * from "./components/ui-provider/index.ts";
+
+export * from "./components/visually-hidden/index.ts";
+
+export * from "./components/icon/icons/activity.tsx";
+
+export * from "./components/icon/icons/arrow-right.tsx";
+
+export * from "./components/icon/icons/arrow-up-right.tsx";
+
+export * from "./components/icon/icons/bell.tsx";
+
+export * from "./components/icon/icons/branch.tsx";
+
+export * from "./components/icon/icons/briefcase.tsx";
+
+export * from "./components/icon/icons/calendar.tsx";
+
+export * from "./components/icon/icons/cap.tsx";
+
+export * from "./components/icon/icons/check-circle.tsx";
+
+export * from "./components/icon/icons/check.tsx";
+
+export * from "./components/icon/icons/chevron-down.tsx";
+
+export * from "./components/icon/icons/chevron-right.tsx";
+
+export * from "./components/icon/icons/clock.tsx";
+
+export * from "./components/icon/icons/code.tsx";
+
+export * from "./components/icon/icons/command.tsx";
+
+export * from "./components/icon/icons/copy.tsx";
+
+export * from "./components/icon/icons/corner-down-left.tsx";
+
+export * from "./components/icon/icons/danger.tsx";
+
+export * from "./components/icon/icons/download.tsx";
+
+export * from "./components/icon/icons/eye-off.tsx";
+
+export * from "./components/icon/icons/eye.tsx";
+
+export * from "./components/icon/icons/file.tsx";
+
+export * from "./components/icon/icons/files.tsx";
+
+export * from "./components/icon/icons/globe.tsx";
+
+export * from "./components/icon/icons/help.tsx";
+
+export * from "./components/icon/icons/home.tsx";
+
+export * from "./components/icon/icons/info.tsx";
+
+export * from "./components/icon/icons/inspect.tsx";
+
+export * from "./components/icon/icons/layers.tsx";
+
+export * from "./components/icon/icons/log-out.tsx";
+
+export * from "./components/icon/icons/mail.tsx";
+
+export * from "./components/icon/icons/menu.tsx";
+
+export * from "./components/icon/icons/minus.tsx";
+
+export * from "./components/icon/icons/moon.tsx";
+
+export * from "./components/icon/icons/more.tsx";
+
+export * from "./components/icon/icons/pin.tsx";
+
+export * from "./components/icon/icons/plus.tsx";
+
+export * from "./components/icon/icons/printer.tsx";
+
+export * from "./components/icon/icons/search.tsx";
+
+export * from "./components/icon/icons/spark.tsx";
+
+export * from "./components/icon/icons/sun.tsx";
+
+export * from "./components/icon/icons/trash.tsx";
+
+export * from "./components/icon/icons/user.tsx";
+
+export * from "./components/icon/icons/warning.tsx";
+
+export * from "./components/icon/icons/x.tsx";
