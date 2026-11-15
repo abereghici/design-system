@@ -186,7 +186,6 @@
     border-radius: var(--ab-toast-action-border-radius);
     background-color: transparent;
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
     transition-property: background-color, color, opacity, scale;
     transition-duration: var(--ab-motion-duration-hover-out);
     transition-timing-function: var(--ab-motion-easing-color);

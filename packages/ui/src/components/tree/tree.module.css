@@ -25,7 +25,6 @@
     font: var(--ab-tree-item-font);
     color: var(--ab-tree-item-text-color);
     overflow-wrap: anywhere;
-    -webkit-tap-highlight-color: transparent;
     transition-property: background-color, color;
     transition-duration: var(--ab-motion-duration-hover-out);
     transition-timing-function: var(--ab-motion-easing-color);

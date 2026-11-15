@@ -55,7 +55,6 @@
     align-items: center;
     min-block-size: var(--ab-size-control-xs);
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
   }
 
   .radio {
