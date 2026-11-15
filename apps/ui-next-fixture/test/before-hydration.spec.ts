@@ -345,7 +345,8 @@ test.describe("with JavaScript off, a control only script can run is hidden", ()
 });
 
 test.describe("every route, with JavaScript off", () => {
-  for (const route of routes) {
+  // root-import renders the index route's page from the package root, so its screenshot would repeat index.png.
+  for (const route of routes.filter((name) => name !== "root-import")) {
     test(route, { tag: "@screenshot" }, async ({ page }) => {
       await page.goto(`/${route}`);
 

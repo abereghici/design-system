@@ -1,5 +1,5 @@
 ---
-status: superseded by ADR-0007
+status: superseded by ADR-0007 and ADR-0009
 ---
 
 # @abereghici/ui ships its source through one subpath per component, with no root entry

@@ -4,10 +4,10 @@ import { format } from "oxfmt";
 
 import formatConfig from "../../../oxfmt.config.ts";
 
-/** The public subpaths' sources, as `exports` maps them. */
-export const SUBPATHS = ["src/*/index.ts", "src/components/*/index.ts"];
+// The sources of the public subpaths, as `exports` maps them.
+const SUBPATHS = ["src/*/index.ts", "src/components/*/index.ts"];
 
-export const ICONS = "src/components/icon/icons/*.tsx";
+const ICONS = "src/components/icon/icons/*.tsx";
 
 /** `src/index.ts`: the root entry, re-exporting every public subpath. */
 export async function generateEntry() {

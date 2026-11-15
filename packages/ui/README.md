@@ -43,7 +43,7 @@ import { Button } from "@abereghici/ui/button";
 <Button variant="primary">Save</Button>;
 ```
 
-`@abereghici/ui` also re-exports everything from its root, for tools that need one entry. Prefer the subpaths: from the root, esbuild keeps every component's CSS.
+`@abereghici/ui` also re-exports everything from its root, for tools that need one entry. Apps import the subpaths (ADR-0009).
 
 The app must target Baseline newly available, for example with `"browserslist": ["baseline newly available"]` in `package.json`. With an older target, Lightning CSS lowers `light-dark()`, and `data-theme` subtrees stop switching.
 
