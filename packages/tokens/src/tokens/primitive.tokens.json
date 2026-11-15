@@ -1443,7 +1443,7 @@
     },
     "font-family-noto-serif": {
       "$type": "fontFamily",
-      "$value": ["Noto Serif", "Georgia", "serif"]
+      "$value": ["Noto Serif", "Noto Serif Fallback", "Georgia", "serif"]
     },
     "font-family-figtree": {
       "$type": "fontFamily",

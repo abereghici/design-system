@@ -100,6 +100,7 @@ async function sources(
 await mkdir(out, { recursive: true });
 
 for (const family of FONT_FAMILIES) {
+  const [min = 0, max = min] = family.weight.split(" ").map(Number);
   const { fonts, licence } = await sources(UPSTREAM[family.stem]);
 
   await writeFile(new URL(`${family.stem}-OFL.txt`, out), licence);
@@ -107,7 +108,10 @@ for (const family of FONT_FAMILIES) {
   for (const style of FONT_STYLES) {
     for (const subset of FONT_SUBSETS) {
       const text = String.fromCodePoint(...codePointsIn(subset.unicodeRange));
-      const woff2 = await subsetFont(Buffer.from(fonts[style]), text, { targetFormat: "woff2" });
+      const woff2 = await subsetFont(Buffer.from(fonts[style]), text, {
+        targetFormat: "woff2",
+        variationAxes: { wght: { min, max }, ...("pinned" in family ? family.pinned : {}) },
+      });
       const file = fontFileName(family, subset, style);
 
       await writeFile(new URL(file, out), woff2);

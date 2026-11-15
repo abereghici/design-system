@@ -128,18 +128,20 @@ test("type families and fonts come from the font tokens and the shipped files", 
   const artifact = await artifactOf();
 
   expect(Object.keys(artifact.type.families)).toEqual(["noto-serif", "figtree", "system-mono"]);
-  expect(artifact.type.families["noto-serif"]).toBe("'Noto Serif', Georgia, serif");
+  expect(artifact.type.families["noto-serif"]).toBe(
+    "'Noto Serif', 'Noto Serif Fallback', Georgia, serif",
+  );
   expect(artifact.type.families["system-mono"]).toMatch(/monospace$/v);
   expect(artifact.type.fonts).toContainEqual({
     family: "Noto Serif",
     file: "fonts/NotoSerif-latin.woff2",
-    weight: "100 900",
+    weight: "400 500",
     style: "normal",
   });
   expect(artifact.type.fonts).toContainEqual({
     family: "Noto Serif",
     file: "fonts/NotoSerif-Italic-latin.woff2",
-    weight: "100 900",
+    weight: "400 500",
     style: "italic",
   });
   expect(artifact.type.fonts).toHaveLength(8);
