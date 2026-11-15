@@ -69,5 +69,7 @@ minimumReleaseAgeExclude:
   - tsdown@0.23.4
 
 # GHSA-3g3m-2fjr-6pw4: glob <= 14.0.1; style-dictionary and @storybook/react-vite still pull glob 13.
+# GHSA-g3hv-75wg-m249: minimatch < 11.0.1; eslint (via @stylistic/eslint-plugin) still pulls minimatch 10.
 overrides:
   glob: 14.0.6
+  minimatch: 11.0.7
