@@ -223,13 +223,22 @@ const ringStandsOut = async ({
   await user.click(canvas.getByText("Replies within two working days."));
   await user.keyboard("{Tab}{Tab}");
   await expect(button).toHaveFocus();
+  // The Theme switch between proofs restyles the mounted story, so the button's fill may still be
+  // fading to the dark one: measure the colours it settles on.
+  await Promise.all(button.getAnimations().map(({ finished }) => finished));
 
   const ring = getComputedStyle(button);
   const fill = getComputedStyle(button.closest("[data-variant='accent']") ?? document.body);
 
   await expect(ring.outlineStyle).toBe("solid");
-  await expect(contrast(ring.outlineColor, fill.backgroundColor)).toBeGreaterThanOrEqual(3);
-  await expect(contrast(ring.outlineColor, ring.backgroundColor)).toBeGreaterThanOrEqual(3);
+  await expect(
+    contrast(ring.outlineColor, fill.backgroundColor),
+    `${ring.outlineColor} on ${fill.backgroundColor}`,
+  ).toBeGreaterThanOrEqual(3);
+  await expect(
+    contrast(ring.outlineColor, ring.backgroundColor),
+    `${ring.outlineColor} on ${ring.backgroundColor}`,
+  ).toBeGreaterThanOrEqual(3);
 };
 
 Accent.test(
