@@ -59,6 +59,10 @@
     --border-color-hovered: transparent;
   }
 
+  .shortcut {
+    display: inline-flex;
+  }
+
   .root:where([data-size="sm"]) {
     min-block-size: var(--ab-button-sm-height);
     padding-inline: var(--ab-button-sm-padding-inline);

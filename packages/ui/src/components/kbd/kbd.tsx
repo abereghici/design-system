@@ -76,8 +76,8 @@ function key(
 /**
  * Shows a keyboard shortcut, one keycap per key: `mod` is ⌘ on Apple platforms and Ctrl elsewhere.
  * Keys pressed together sit close, and the steps of a sequence sit apart. It only shows the keys;
- * your app handles them. Inside a control, pass `aria-hidden` and set `aria-keyshortcuts` on the
- * control, so the shortcut isn't read twice.
+ * your app handles them. On a Button, use its `shortcut`. Inside another control, pass
+ * `aria-hidden` and set `aria-keyshortcuts` on the control, so the shortcut isn't read twice.
  *
  * Tier 1: works before hydration.
  */

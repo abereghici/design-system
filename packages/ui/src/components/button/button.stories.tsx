@@ -4,6 +4,7 @@ import { expect, fn } from "storybook/test";
 import type { StoryContext } from "@storybook/react-vite";
 
 import { PlusIcon } from "@abereghici/ui/icons/plus";
+import { Kbd } from "@abereghici/ui/kbd";
 
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
@@ -273,6 +274,26 @@ Default.test(
     ).toBe("rgb(1, 2, 3)");
   },
 );
+
+export const Shortcut = meta.story({
+  args: {
+    children: "Search",
+    shortcut: <Kbd keys="mod+k" aria-hidden />,
+    "aria-keyshortcuts": "Meta+K Control+K",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The Kbd is `aria-hidden`; [`aria-keyshortcuts`](https://www.w3.org/TR/wai-aria-1.2/#aria-keyshortcuts) on the Button tells screen readers the shortcut.",
+      },
+    },
+  },
+});
+
+Shortcut.test("keeps its label as its name", async ({ canvas }) => {
+  await expect(canvas.getByRole("button", { name: "Search" })).toBeVisible();
+});
 
 export const Loading = meta.story({
   args: { loading: true, variant: "primary" },
