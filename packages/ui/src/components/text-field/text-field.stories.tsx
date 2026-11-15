@@ -7,6 +7,7 @@ import { Kbd } from "@abereghici/ui/kbd";
 import { withForm } from "#.storybook/decorators/with-form.tsx";
 import { withWidth } from "#.storybook/decorators/with-width.tsx";
 import preview from "#.storybook/preview.tsx";
+import { onTouchScreen } from "#.storybook/test/pointer.ts";
 import { trusted } from "#.storybook/test/trusted.ts";
 
 import { TextField } from "./text-field.tsx";
@@ -53,6 +54,19 @@ Default.test(
 
     await userEvent.type(input, "x");
     await expect(input).toHaveValue("ana@example.com");
+  },
+);
+
+// iOS Safari zooms the page into a focused field whose text is under 16px.
+Default.test(
+  "sets its text at 16px or more on a touch screen, so focusing it doesn't zoom the page",
+  { beforeEach: onTouchScreen },
+  async ({ canvas }) => {
+    const input = canvas.getByRole("textbox", { name: "Email" });
+
+    await expect(Number(getComputedStyle(input).fontSize.replace("px", ""))).toBeGreaterThanOrEqual(
+      16,
+    );
   },
 );
 
