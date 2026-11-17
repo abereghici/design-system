@@ -301,7 +301,11 @@ test.describe("Tier 2 before hydration", () => {
         await page.getByRole("main").ariaSnapshot(),
       );
       expect(await boxes(hydrated)).toEqual(await boxes(page));
-      expect((await new AxeBuilder({ page }).include("body").analyze()).violations).toEqual([]);
+
+      // Each route mounts one component, not a document with a heading outline; the rule is axe's best practice, not WCAG.
+      const axe = new AxeBuilder({ page }).disableRules(["page-has-heading-one"]);
+
+      expect((await axe.analyze()).violations).toEqual([]);
     });
   }
 });

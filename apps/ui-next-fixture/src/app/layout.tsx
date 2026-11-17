@@ -7,7 +7,7 @@ import { UIProvider } from "@abereghici/ui/ui-provider";
 
 const lang = "ro-RO";
 
-export const metadata: Metadata = { other: { "text-scale": "scale" } };
+export const metadata: Metadata = { title: "UI fixture", other: { "text-scale": "scale" } };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (

@@ -41,7 +41,7 @@ catalog:
   babel-plugin-react-compiler: 1.0.0
   fflate: 0.8.3
   fontkit: 2.0.4
-  next: 16.4.3
+  next: 16.4.5
   oxfmt: 0.74.0
   oxlint: 1.89.0
   oxlint-tsgolint: 7.0.2004
