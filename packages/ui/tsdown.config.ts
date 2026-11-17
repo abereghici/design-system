@@ -7,7 +7,11 @@ import { defineConfig } from "tsdown";
 
 import type { Plugin } from "rolldown";
 
-const compiler = reactCompilerPreset({ panicThreshold: "all_errors" });
+const compiler = reactCompilerPreset({
+  panicThreshold: "all_errors",
+  // Pinned to the compiler's default: Next.js documents that defaults can differ between compiler implementations.
+  environment: { enablePreserveExistingMemoizationGuarantees: true },
+});
 
 // Server Components render once per request, so memoizing them only adds code: compile client modules only, as
 // reactCompilerPreset does in Vite, where it applies to the client environment alone.
